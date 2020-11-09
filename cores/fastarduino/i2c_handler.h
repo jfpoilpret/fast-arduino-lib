@@ -12,362 +12,156 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-/// @cond notdocumented
+/// @cond api
 
+/**
+ * @file 
+ * Common I2C Manager API. This will automatically include the proper header,
+ * based on target architecture, ATmega or ATtiny.
+ */
 #ifndef I2C_HANDLER_HH
 #define I2C_HANDLER_HH
 
-#include "boards/board_traits.h"
-#include "utilities.h"
-#include "i2c.h"
-#include <util/delay_basic.h>
+#ifdef TWCR
+#include "i2c_handler_atmega.h"
+#else
+#include "i2c_handler_attiny.h"
+#endif
 
-// NOTE: ATtiny implementation provides no pullup, hence you must ensure your
-// I2C bus has pullups where needed
+/**
+ * This namespace defines everything related to I2C.
+ * In FastArduino, I2C communication is centralized by an I2C Manager; 
+ * there are several flavors of I2C Manager defined in FastArduino, with distinct
+ * characteristics such as:
+ * - synchronous (all MCU) or asynchronous (ATmega only)
+ * - I2C mode supported (fast 400kHz or standard 100kHz)
+ * - policy to follow in case of failure during an I2C transaction
+ * - ...
+ * 
+ * I2C devices to connect with must be managed by a dedicated subclass of 
+ * i2c::I2CDevice, which provides a specific API for the interfaced device, 
+ * and handles all communication with an I2C Manager.
+ * 
+ * For any I2C device subclass, the provided  API comes in 2 flavours at a time 
+ * (whatever I2C Manager is used):
+ * - *asynchronous*: the API enqueues a chain of I2C commands for the underlying I2C
+ *   transaction and lets the I2C Manager handle these commands asynchronously if 
+ *   possible (the I2C Manager must support asynchronous operations); when really
+ *   handled asynchronously, the API returns immediately, before the actual I2C 
+ *   transaction is performed. Actual results will be returned through a 
+ *   future::Future instance, passed as input argument of the API.
+ * - *synchronous*: the API blocks until the complete underlying I2C transaction is
+ *   complete. This API is implemented based on the asynchronous API above, but
+ *   simply awaits for the Future result of the I2C transaction.
+ * 
+ * FastArduino defines many specific I2C Manager classes among the following:
+ * - I2CAsyncManager: bare bones asynchronous I2C Manager 
+ * - I2CAsyncLCManager: asynchronous I2C Manager with lifecycle support
+ * - I2CAsyncDebugManager: asynchronous I2C Manager with a debug callback hook
+ * - I2CAsyncStatusManager: asynchronous I2C Manager with an I2C status callback hook
+ * - I2CAsyncStatusDebugManager: asynchronous I2C Manager with both an I2C status 
+ *   callback hook and a debug callback hook
+ * - I2CAsyncLCDebugManager: asynchronous I2C Manager with lifecycle support and 
+ *   a debug callback hook
+ * - I2CAsyncLCStatusManager: asynchronous I2C Manager with lifecycle support and 
+ *   an I2C status callback hook
+ * - I2CAsyncLCStatusDebugManager: asynchronous I2C Manager with lifecycle support
+ *   and both an I2C status callback hook and a debug callback hook
+ * - I2CSyncManager: bare bones synchronous I2C Manager
+ * - I2CSyncLCManager: synchronous I2C Manager with lifecycle support
+ * - I2CSyncDebugManager: synchronous I2C Manager with a debug callback hook
+ * - I2CSyncStatusManager: synchronous I2C Manager with an I2C status callback hook
+ * - I2CSyncStatusDebugManager: synchronous I2C Manager with both an I2C status 
+ *   callback hook and a debug callback hook
+ * - I2CSyncLCDebugManager: synchronous I2C Manager with lifecycle support and 
+ *   a debug callback hook
+ * - I2CSyncLCStatusManager: synchronous I2C Manager with lifecycle support and 
+ *   an I2C status callback hook
+ * - I2CSyncLCStatusDebugManager: synchronous I2C Manager with lifecycle support
+ *   and both an I2C status callback hook and a debug callback hook
+ * 
+ * All these classes are template classes with various arguments (the actual list
+ * of arguments depends on each specific class):
+ * - MODE: i2c::I2CMode (bus frequency) supported (fast 400kHz or standard 100kHz)
+ * - POLICY: i2c::I2CErrorPolicy (behavior in case of an error during a transaction)
+ *   for asynchronous I2C Managers only
+ * - DEBUG_HOOK: the type of callback hook for debug, can be a simple function 
+ *   pointer (type i2c::I2C_DEBUG_HOOK) or a more complex functor class
+ * - STATUS_HOOK: the type of callback hook for I2C status, can be a simple function 
+ *   pointer (type i2c::I2C_STATUS_HOOK) or a more complex functor class
+ * 
+ * All these different flavors of I2C Manager share the same API (except for their 
+ * constructor that may need different arguments).
+ * 
+ * Lifecycle support enables programs to move futures around without losing track
+ * of the right location, thanks to the use of lifecycle::LightProxy. Although not often 
+ * needed, it can prove useful in some situations.
+ * 
+ * All I2C Manager asynchronous flavors operate based on a queue of I2C commands.
+ * It is up to the end program to create the properly sized buffer for that 
+ * command queue, before instantiating the relevant asynchronous I2C Manager; the 
+ * buffer must be passed to the asynchronous I2C Manager constructor.
+ * Asynchronous I2C Manager classes will work fine only if the proper ISR function
+ * is registered, through one of the 3 provided registration macros.
+ * Some of these registration macros also allow registration of a callback hook
+ * that will be called for every single I2C step (as defined in ATmega datasheet). 
+ * 
+ * The following snippet shows the minimal code to operate the I2C RTC device
+ * DS1307 in synchronous mode:
+ * @code
+ * // Define type alias for I2C Manager; here we use the simplest possible synchronous manager
+ * using MANAGER = i2c::I2CSyncManager<i2c::I2CMode::STANDARD>;
+ * using RTC = DS1307<MANAGER>;
+ * ...
+ * // Instantiate and start I2C Manager
+ * MANAGER manager;
+ * manager.begin();
+ * // Instantiate the DS1307 RTC device
+ * RTC rtc{manager};
+ * 
+ * // Call specific DS1307 API to get current date
+ * tm now;
+ * rtc.get_datetime(now);
+ * @endcode
+ * 
+ * The next snippet demonstrates how to do the same but in an asynchronous way:
+ * @code
+ * // Define type alias for I2C Manager; here we use the simplest possible asynchronous manager
+ * using MANAGER = i2c::I2CAsyncManager<i2c::I2CMode::STANDARD>;
+ * using RTC = DS1307<MANAGER>;
+ * 
+ * // Define a buffer for the I2C Manager commands queue
+ * static constexpr uint8_t I2C_BUFFER_SIZE = 32;
+ * static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
+ * 
+ * // Register I2C ISR to allow asynchronous operation with the I2C Manager
+ * REGISTER_I2C_ISR(MANAGER)
+ * ...
+ * // Instantiate and start I2C Manager
+ * MANAGER manager{i2c_buffer};
+ * manager.begin();
+ * // Instantiate the DS1307 RTC device
+ * RTC rtc{manager};
+ * 
+ * // Prepare Future to receive current date
+ * RTC::GetDatetimeFuture future;
+ * // Call specific DS1307 API to get current date
+ * int error = rtc.get_datetime(future);
+ * // Check error here (should be 0)...
+ * 
+ * // When needed, get the Future result (await if needed)
+ * tm now;
+ * bool ok = get_date_future.get(now);
+ * @endcode
+ * 
+ * @sa REGISTER_I2C_ISR()
+ * @sa REGISTER_I2C_ISR_FUNCTION()
+ * @sa REGISTER_I2C_ISR_METHOD()
+ */
 namespace i2c
 {
-	template<I2CMode MODE_> class I2CManager;
-
-	template<I2CMode MODE_> class I2CHandler
-	{
-	private:
-		I2CHandler(const I2CHandler<MODE_>&) = delete;
-		I2CHandler<MODE_>& operator=(const I2CHandler<MODE_>&) = delete;
-
-		using TRAIT = board_traits::TWI_trait;
-
-		explicit inline I2CHandler(I2C_STATUS_HOOK hook) INLINE;
-
-		inline void begin() INLINE;
-		inline void end() INLINE;
-
-	public:
-		static constexpr const I2CMode MODE = MODE_;
-		uint8_t status() const INLINE
-		{
-			return status_;
-		}
-
-		// Low-level methods to handle the bus, used by friend class I2CDevice
-		inline bool start() INLINE;
-		inline bool repeat_start() INLINE;
-		inline bool send_slar(uint8_t address) INLINE;
-		inline bool send_slaw(uint8_t address) INLINE;
-		inline bool send_data(uint8_t data) INLINE;
-		inline bool receive_data(uint8_t& data, bool last_byte = false) INLINE;
-		inline void stop() INLINE;
-
-	private:
-		using REG8 = board_traits::REG8;
-
-		// Implementation part is specific to AVR architecture: ATmega (TWCR) or ATtiny (USICR)
-#if defined(TWCR)
-		static constexpr const REG8 TWBR_{TWBR};
-		static constexpr const REG8 TWSR_{TWSR};
-		static constexpr const REG8 TWCR_{TWCR};
-		static constexpr const REG8 TWDR_{TWDR};
-
-		bool wait_twint(uint8_t expected_status);
-
-		static constexpr const uint32_t STANDARD_RATE = 100'000UL;
-		static constexpr const uint32_t STANDARD_FREQUENCY = (F_CPU / STANDARD_RATE - 16UL) / 2;
-		static constexpr const uint32_t FAST_RATE = 400'000UL;
-		static constexpr const uint32_t FAST_FREQUENCY = (F_CPU / FAST_RATE - 16UL) / 2;
-		static constexpr const uint8_t TWBR_VALUE = (MODE == I2CMode::STANDARD ? STANDARD_FREQUENCY : FAST_FREQUENCY);
-#else
-		static constexpr const REG8 USIDR_{USIDR};
-		static constexpr const REG8 USISR_{USISR};
-		static constexpr const REG8 USICR_{USICR};
-
-		inline void SCL_HIGH() INLINE;
-		inline void SCL_LOW() INLINE;
-		inline void SDA_HIGH() INLINE;
-		inline void SDA_LOW() INLINE;
-		inline void SDA_INPUT() INLINE;
-		inline void SDA_OUTPUT() INLINE;
-
-		bool send_start(uint8_t good_status);
-		bool send_byte(uint8_t data, uint8_t ACK, uint8_t NACK);
-		uint8_t transfer(uint8_t USISR_count);
-		bool callback_hook(bool ok, uint8_t good_status, uint8_t bad_status);
-
-		// Constant values for USISR
-		// For byte transfer, we set counter to 0 (16 ticks => 8 clock cycles)
-		static constexpr const uint8_t USISR_DATA = bits::BV8(USISIF, USIOIF, USIPF, USIDC);
-		// For acknowledge bit, we start counter at 0E (2 ticks: 1 raising and 1 falling edge)
-		static constexpr const uint8_t USISR_ACK = USISR_DATA | (0x0E << USICNT0);
-
-		// Timing constants for current mode (as per I2C specifications)
-		static constexpr const uint8_t T_HD_STA = utils::calculate_delay1_count(MODE == I2CMode::STANDARD ? 4.0 : 0.6);
-		static constexpr const uint8_t T_LOW = utils::calculate_delay1_count(MODE == I2CMode::STANDARD ? 4.7 : 1.3);
-		static constexpr const uint8_t T_HIGH = utils::calculate_delay1_count(MODE == I2CMode::STANDARD ? 4.0 : 0.6);
-		static constexpr const uint8_t T_SU_STA = utils::calculate_delay1_count(MODE == I2CMode::STANDARD ? 4.7 : 0.6);
-		static constexpr const uint8_t T_SU_STO = utils::calculate_delay1_count(MODE == I2CMode::STANDARD ? 4.0 : 0.6);
-		static constexpr const uint8_t T_BUF = utils::calculate_delay1_count(MODE == I2CMode::STANDARD ? 4.7 : 1.3);
-#endif
-
-		uint8_t status_ = 0;
-		const I2C_STATUS_HOOK hook_;
-
-		friend class I2CManager<MODE>;
-	};
-
-	// IMPLEMENTATION
-	//================
-
-#if defined(TWCR)
-
-	// ATmega implementation
-	//----------------------
-	template<I2CMode MODE> I2CHandler<MODE>::I2CHandler(I2C_STATUS_HOOK hook) : hook_{hook} {}
-
-	template<I2CMode MODE> void I2CHandler<MODE>::begin()
-	{
-		// 1. set SDA/SCL pullups TODO is that mandatory? should be optional!
-		TRAIT::PORT |= TRAIT::SCL_SDA_MASK;
-		// 2. set I2C frequency
-		TWBR_ = TWBR_VALUE;
-		TWSR_ = 0;
-		// 3. Enable TWI
-		TWCR_ = bits::BV8(TWEN);
-	}
-	template<I2CMode MODE> void I2CHandler<MODE>::end()
-	{
-		// 1. Disable TWI
-		TWCR_ = 0;
-		// 2. remove SDA/SCL pullups TODO is that mandatory? should be optional!
-		TRAIT::PORT &= bits::COMPL(TRAIT::SCL_SDA_MASK);
-	}
-
-	template<I2CMode MODE> bool I2CHandler<MODE>::start()
-	{
-		TWCR_ = bits::BV8(TWEN, TWINT, TWSTA);
-		return wait_twint(Status::START_TRANSMITTED);
-	}
-	template<I2CMode MODE> bool I2CHandler<MODE>::repeat_start()
-	{
-		TWCR_ = bits::BV8(TWEN, TWINT, TWSTA);
-		return wait_twint(Status::REPEAT_START_TRANSMITTED);
-	}
-	template<I2CMode MODE> bool I2CHandler<MODE>::send_slar(uint8_t address)
-	{
-		TWDR_ = address | 0x01U;
-		TWCR_ = bits::BV8(TWEN, TWINT);
-		return wait_twint(Status::SLA_R_TRANSMITTED_ACK);
-	}
-	template<I2CMode MODE> bool I2CHandler<MODE>::send_slaw(uint8_t address)
-	{
-		TWDR_ = address;
-		TWCR_ = bits::BV8(TWEN, TWINT);
-		return wait_twint(Status::SLA_W_TRANSMITTED_ACK);
-	}
-	template<I2CMode MODE> bool I2CHandler<MODE>::send_data(uint8_t data)
-	{
-		TWDR_ = data;
-		TWCR_ = bits::BV8(TWEN, TWINT);
-		return wait_twint(Status::DATA_TRANSMITTED_ACK);
-	}
-	template<I2CMode MODE> bool I2CHandler<MODE>::receive_data(uint8_t& data, bool last_byte)
-	{
-		// Then a problem occurs for the last byte we want to get, which should have NACK instead!
-		// Send ACK for previous data (including SLA-R)
-		bool ok;
-		if (last_byte)
-		{
-			TWCR_ = bits::BV8(TWEN, TWINT);
-			ok = wait_twint(Status::DATA_RECEIVED_NACK);
-		}
-		else
-		{
-			TWCR_ = bits::BV8(TWEN, TWINT, TWEA);
-			ok = wait_twint(Status::DATA_RECEIVED_ACK);
-		}
-		if (ok) data = TWDR_;
-		return ok;
-	}
-	template<I2CMode MODE> void I2CHandler<MODE>::stop()
-	{
-		TWCR_ = bits::BV8(TWEN, TWINT, TWSTO);
-	}
-
-	template<I2CMode MODE> bool I2CHandler<MODE>::wait_twint(uint8_t expected_status)
-	{
-		TWCR_.loop_until_bit_set(TWINT);
-		status_ = TWSR_ & bits::BV8(TWS3, TWS4, TWS5, TWS6, TWS7);
-		// status_ = TWSR_ & 0xF8;
-		if (hook_) hook_(expected_status, status_);
-		if (status_ == expected_status)
-		{
-			status_ = Status::OK;
-			return true;
-		}
-		else
-			return false;
-	}
-
-#else
-
-	// ATtiny implementation
-	//----------------------
-	template<I2CMode MODE> I2CHandler<MODE>::I2CHandler(I2C_STATUS_HOOK hook) : hook_{hook}
-	{
-		// set SDA/SCL default directions
-		TRAIT::DDR &= bits::CBV8(TRAIT::BIT_SDA);
-		// TRAIT::PORT |= bits::BV8(TRAIT::BIT_SDA);
-		TRAIT::DDR |= bits::BV8(TRAIT::BIT_SCL);
-		TRAIT::PORT |= bits::BV8(TRAIT::BIT_SCL);
-	}
-
-	template<I2CMode MODE> void I2CHandler<MODE>::SCL_HIGH()
-	{
-		TRAIT::PORT |= bits::BV8(TRAIT::BIT_SCL);
-		TRAIT::PIN.loop_until_bit_set(TRAIT::BIT_SCL);
-	}
-	template<I2CMode MODE> void I2CHandler<MODE>::SCL_LOW()
-	{
-		TRAIT::PORT &= bits::CBV8(TRAIT::BIT_SCL);
-	}
-	template<I2CMode MODE> void I2CHandler<MODE>::SDA_HIGH()
-	{
-		TRAIT::PORT |= bits::BV8(TRAIT::BIT_SDA);
-	}
-	template<I2CMode MODE> void I2CHandler<MODE>::SDA_LOW()
-	{
-		TRAIT::PORT &= bits::CBV8(TRAIT::BIT_SDA);
-	}
-	template<I2CMode MODE> void I2CHandler<MODE>::SDA_INPUT()
-	{
-		TRAIT::DDR &= bits::CBV8(TRAIT::BIT_SDA);
-		// TRAIT::PORT |= bits::BV8(TRAIT::BIT_SDA);
-	}
-	template<I2CMode MODE> void I2CHandler<MODE>::SDA_OUTPUT()
-	{
-		TRAIT::DDR |= bits::BV8(TRAIT::BIT_SDA);
-	}
-
-	template<I2CMode MODE> void I2CHandler<MODE>::begin()
-	{
-		// 1. Force 1 to data
-		USIDR_ = UINT8_MAX;
-		// 2. Enable TWI
-		// Set USI I2C mode, enable software clock strobe (USITC)
-		USICR_ = bits::BV8(USIWM1, USICS1, USICLK);
-		// Clear all interrupt flags
-		USISR_ = bits::BV8(USISIF, USIOIF, USIPF, USIDC);
-		// 3. Set SDA as output
-		SDA_OUTPUT();
-	}
-	template<I2CMode MODE> void I2CHandler<MODE>::end()
-	{
-		// Disable TWI
-		USICR_ = 0;
-		//TODO should we set SDA back to INPUT?
-	}
-
-	template<I2CMode MODE> bool I2CHandler<MODE>::start()
-	{
-		return send_start(Status::START_TRANSMITTED);
-	}
-	template<I2CMode MODE> bool I2CHandler<MODE>::repeat_start()
-	{
-		return send_start(Status::REPEAT_START_TRANSMITTED);
-	}
-	template<I2CMode MODE> bool I2CHandler<MODE>::send_slar(uint8_t address)
-	{
-		return send_byte(address | 0x01U, Status::SLA_R_TRANSMITTED_ACK, Status::SLA_R_TRANSMITTED_NACK);
-	}
-	template<I2CMode MODE> bool I2CHandler<MODE>::send_slaw(uint8_t address)
-	{
-		return send_byte(address, Status::SLA_W_TRANSMITTED_ACK, Status::SLA_W_TRANSMITTED_NACK);
-	}
-	template<I2CMode MODE> bool I2CHandler<MODE>::send_data(uint8_t data)
-	{
-		return send_byte(data, Status::DATA_TRANSMITTED_ACK, Status::DATA_TRANSMITTED_NACK);
-	}
-	template<I2CMode MODE> bool I2CHandler<MODE>::receive_data(uint8_t& data, bool last_byte)
-	{
-		SDA_INPUT();
-		data = transfer(USISR_DATA);
-		// Send ACK (or NACK if last byte)
-		USIDR_ = (last_byte ? UINT8_MAX : 0x00);
-		uint8_t good_status = (last_byte ? Status::DATA_RECEIVED_NACK : Status::DATA_RECEIVED_ACK);
-		transfer(USISR_ACK);
-		return callback_hook(true, good_status, good_status);
-	}
-	template<I2CMode MODE> void I2CHandler<MODE>::stop()
-	{
-		// Pull SDA low
-		SDA_LOW();
-		// Release SCL
-		SCL_HIGH();
-		_delay_loop_1(T_SU_STO);
-		// Release SDA
-		SDA_HIGH();
-		_delay_loop_1(T_BUF);
-	}
-
-	template<I2CMode MODE> bool I2CHandler<MODE>::send_start(uint8_t good_status)
-	{
-		// Ensure SCL is HIGH
-		SCL_HIGH();
-		// Wait for Tsu-sta
-		_delay_loop_1(T_SU_STA);
-		// Now we can generate start condition
-		// Force SDA low for Thd-sta
-		SDA_LOW();
-		_delay_loop_1(T_HD_STA);
-		// Pull SCL low
-		SCL_LOW();
-		//			_delay_loop_1(T_LOW());
-		// Release SDA (force high)
-		SDA_HIGH();
-		//TODO check START transmission with USISIF flag?
-		//			return callback_hook(USISR & bits::BV8(USISIF), good_status, Status::ARBITRATION_LOST);
-		return callback_hook(true, good_status, Status::ARBITRATION_LOST);
-	}
-	template<I2CMode MODE> bool I2CHandler<MODE>::send_byte(uint8_t data, uint8_t ACK, uint8_t NACK)
-	{
-		// Set SCL low TODO is this line really needed for every byte transferred?
-		SCL_LOW();
-		// Transfer address byte
-		USIDR_ = data;
-		transfer(USISR_DATA);
-		// For acknowledge, first set SDA as input
-		SDA_INPUT();
-		return callback_hook((transfer(USISR_ACK) & 0x01U) == 0, ACK, NACK);
-	}
-	template<I2CMode MODE> uint8_t I2CHandler<MODE>::transfer(uint8_t USISR_count)
-	{
-		// Init counter (8 bits or 1 bit for acknowledge)
-		USISR_ = USISR_count;
-		do
-		{
-			_delay_loop_1(T_LOW);
-			// clock strobe (SCL raising edge)
-			USICR_ |= bits::BV8(USITC);
-			TRAIT::PIN.loop_until_bit_set(TRAIT::BIT_SCL);
-			_delay_loop_1(T_HIGH);
-			// clock strobe (SCL falling edge)
-			USICR_ |= bits::BV8(USITC);
-		}
-		while ((USISR_ & bits::BV8(USIOIF)) == 0);
-		_delay_loop_1(T_LOW);
-		// Read data
-		uint8_t data = USIDR_;
-		USIDR_ = UINT8_MAX;
-		// Release SDA
-		SDA_OUTPUT();
-		return data;
-	}
-	template<I2CMode MODE> bool I2CHandler<MODE>::callback_hook(bool ok, uint8_t good_status, uint8_t bad_status)
-	{
-		if (hook_) hook_(good_status, (ok ? good_status : bad_status));
-		status_ = (ok ? Status::OK : bad_status);
-		return ok;
-	}
-
-#endif
 }
 
 #endif /* I2C_HANDLER_HH */
+
 /// @endcond

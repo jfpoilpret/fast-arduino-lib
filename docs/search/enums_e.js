@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['weekday',['WeekDay',['../namespacedevices_1_1rtc.html#a765e5fb8599fbfc007de3b47a81593b3',1,'devices::rtc']]]
+  ['unitprefix_2123',['UnitPrefix',['../namespaceutils.html#a6ba012c3dd675cf1eabcf14e55cea0e0',1,'utils']]],
+  ['usart_2124',['USART',['../namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907',1,'board']]]
 ];

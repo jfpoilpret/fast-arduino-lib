@@ -270,7 +270,7 @@ namespace streams
 		static constexpr fmtflags showpos = 0x1000;
 		/** Skip leading spaces on certain extraction (read) operations. */
 		static constexpr fmtflags skipws = 0x2000;
-		/** Flush output after each insertion oepration. */
+		/** Flush output after each insertion operation. */
 		static constexpr fmtflags unitbuf = 0x4000;
 		/** 
 		 * Write uppercase letters instead of lowercase in certain insertion operations.

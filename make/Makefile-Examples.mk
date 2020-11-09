@@ -15,7 +15,7 @@
 # Makefile defining all FastArduino examples to build in various configurations (targets)
 
 # Examples common to all targets (except ATtinyX5)
-COMMON_EXAMPLES=	i2c/AccelGyro1 i2c/AccelGyro2											\
+COMMON_EXAMPLES=	i2c/AccelGyro0 i2c/AccelGyro1 i2c/AccelGyro2							\
 					analog/AnalogPin1 analog/AnalogPin2										\
 					analog/AnalogComparator4												\
 					i2c/DS1307RTC1 i2c/DS1307RTC2											\
@@ -58,7 +58,8 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						misc/UtilsCheck							\
 						pci/PinChangeInterrupt4					\
 						sonar/Sonar10 sonar/Sonar11				\
-						i2c/MultiIO0 i2c/MultiIO3				\
+						i2c/DS1307RTC3 i2c/DS1307RTC4			\
+						i2c/MultiIO3							\
 						i2c/MultiIO4 i2c/MultiIO5				\
 						tones/tones0							\
 						tones/tones1 tones/tones2 tones/tones3	\
@@ -76,6 +77,7 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 
 EXAMPLES_ARDUINO_LEONARDO=	complete/Conway						\
 							int/ExternalInterrupt3				\
+							i2c/DS1307RTC3 i2c/DS1307RTC4		\
 							analog/AnalogComparator3			\
 							analog/AnalogComparator5			\
 							uart/UartApp1						
@@ -84,7 +86,7 @@ EXAMPLES_ARDUINO_MEGA=	int/ExternalInterrupt3					\
 						analog/AnalogComparator6				\
 						pci/PinChangeInterrupt4					\
 						pci/PinChangeInterrupt5MEGA				\
-						i2c/MultiIO0							\
+						i2c/DS1307RTC3 i2c/DS1307RTC4			\
 						uart/UartApp1							\
 						uart/UartApp5							\
 						uart/UartApp6							\
@@ -99,7 +101,8 @@ EXAMPLES_ARDUINO_NANO=	int/ExternalInterrupt3					\
 						analog/AnalogComparator3				\
 						analog/AnalogComparator5				\
 						analog/AnalogComparator6				\
-						i2c/MultiIO0 i2c/MultiIO3				\
+						i2c/DS1307RTC3 i2c/DS1307RTC4			\
+						i2c/MultiIO3							\
 						i2c/MultiIO4 i2c/MultiIO5				\
 						sonar/Sonar10 sonar/Sonar11				\
 						uart/UartApp1							\
@@ -119,7 +122,8 @@ EXAMPLES_BREADBOARD_ATMEGA328P=	int/ExternalInterrupt3					\
 								analog/AnalogComparator3				\
 								analog/AnalogComparator5				\
 								analog/AnalogComparator6				\
-								i2c/MultiIO0 i2c/MultiIO3				\
+								i2c/DS1307RTC3 i2c/DS1307RTC4			\
+								i2c/MultiIO3							\
 								i2c/MultiIO4 i2c/MultiIO5				\
 								sonar/Sonar10 sonar/Sonar11				\
 								uart/UartApp1							\
@@ -132,6 +136,7 @@ EXAMPLES_BREADBOARD_ATMEGA328P=	int/ExternalInterrupt3					\
 								uart/UartApp12							
 
 EXAMPLES_BREADBOARD_ATTINYX4=	complete/Conway					\
+								i2c/MultiIO5					\
 								misc/IOStreams1					\
 								misc/LifeCycleCheck				\
 								analog/AnalogComparator1		\

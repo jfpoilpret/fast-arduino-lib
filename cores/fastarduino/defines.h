@@ -22,6 +22,12 @@
 #define DEFINES_HH
 
 /**
+ * Utility to produce a `nop` instruction in generated code, as a way to debug
+ * (and optimize) generated assembly code from C++ source.
+ */
+#define NOP() __asm__ __volatile__("nop")
+
+/**
  * Specific GCC attribute to declare an argument or variable unused, so that the 
  * compiler does not emit any warning.
  * 
@@ -45,12 +51,15 @@
  * @code
  * void set_PORT(uint8_t port) INLINE {...}
  * 
- * explicit inline I2CHandler(I2C_STATUS_HOOK hook) INLINE;
- * 
  * LinkedListImpl() INLINE = default;
  * @endcode
  */
 #define INLINE __attribute__((always_inline))
+
+//NOTE: SIGNAL is defined (but deprecated) in AVR interrupt.h
+#ifdef SIGNAL
+#undef SIGNAL
+#endif
 
 /**
  * Specific GCC attribute for AVR target, declaring a function as a signal handler

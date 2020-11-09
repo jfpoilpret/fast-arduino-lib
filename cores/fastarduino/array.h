@@ -183,6 +183,30 @@ namespace containers
 			return buffer_[index];
 		}
 
+		/** Return an iterator to the first element of this array. */
+		TPTR begin()
+		{
+			return buffer_;
+		}
+
+		/** Return an iterator to the last element of this array. */
+		TPTR end()
+		{
+			return buffer_ + N;
+		}
+
+		/** Return a const iterator to the first element of this array. */
+		CTPTR begin() const
+		{
+			return buffer_;
+		}
+
+		/** Return a const iterator to the last element of this array. */
+		CTPTR end() const
+		{
+			return buffer_ + N;
+		}
+
 		/**
 		 * Replace @p NN elements of this array, starting at @p index element, with
 		 * elements from @p buffer.

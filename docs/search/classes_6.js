@@ -1,14 +1,8 @@
 var searchData=
 [
-  ['i2cdevice',['I2CDevice',['../classi2c_1_1_i2_c_device.html',1,'i2c']]],
-  ['i2cdevice_3c_20i2c_3a_3ai2cmode_3a_3astandard_20_3e',['I2CDevice&lt; i2c::I2CMode::STANDARD &gt;',['../classi2c_1_1_i2_c_device.html',1,'i2c']]],
-  ['i2cdevice_3c_20mode_20_3e',['I2CDevice&lt; MODE &gt;',['../classi2c_1_1_i2_c_device.html',1,'i2c']]],
-  ['i2cmanager',['I2CManager',['../classi2c_1_1_i2_c_manager.html',1,'i2c']]],
-  ['intsignal',['INTSignal',['../classinterrupt_1_1_i_n_t_signal.html',1,'interrupt']]],
-  ['intsignal_3c_20irq_20_3e',['INTSignal&lt; IRQ &gt;',['../classinterrupt_1_1_i_n_t_signal.html',1,'interrupt']]],
-  ['intstatus',['INTStatus',['../structdevices_1_1magneto_1_1_i_n_t_status.html',1,'devices::magneto']]],
-  ['ios_5fbase',['ios_base',['../classstreams_1_1ios__base.html',1,'streams']]],
-  ['irq_5fnrf24l01',['IRQ_NRF24L01',['../classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01.html',1,'devices::rf']]],
-  ['istream',['istream',['../classstreams_1_1istream.html',1,'streams']]],
-  ['istreambuf',['istreambuf',['../classstreams_1_1istreambuf.html',1,'streams']]]
+  ['getdatetimefuture_1178',['GetDatetimeFuture',['../classdevices_1_1rtc_1_1_d_s1307_1_1_get_datetime_future.html',1,'devices::rtc::DS1307']]],
+  ['getram1future_1179',['GetRam1Future',['../classdevices_1_1rtc_1_1_d_s1307_1_1_get_ram1_future.html',1,'devices::rtc::DS1307']]],
+  ['getramfuture_1180',['GetRamFuture',['../classdevices_1_1rtc_1_1_d_s1307_1_1_get_ram_future.html',1,'devices::rtc::DS1307']]],
+  ['getvaluesfuture_1181',['GetValuesFuture',['../classdevices_1_1mcp230xx_1_1_m_c_p23008_1_1_get_values_future.html',1,'devices::mcp230xx::MCP23008&lt; MANAGER &gt;::GetValuesFuture'],['../classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_get_values_future.html',1,'devices::mcp230xx::MCP23017&lt; MANAGER &gt;::GetValuesFuture&lt; P_ &gt;']]],
+  ['gyrofuture_1182',['GyroFuture',['../classdevices_1_1magneto_1_1_m_p_u6050_1_1_gyro_future.html',1,'devices::magneto::MPU6050']]]
 ];

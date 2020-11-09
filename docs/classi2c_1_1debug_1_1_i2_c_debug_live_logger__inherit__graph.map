@@ -1,0 +1,4 @@
+<map id="i2c::debug::I2CDebugLiveLogger" name="i2c::debug::I2CDebugLiveLogger">
+<area shape="rect" id="node1" title="Class tracing I2C debug notifications live to out." alt="" coords="13,5,199,47"/>
+<area shape="rect" id="node2" href="$classi2c_1_1debug_1_1_i2_c_debug_status_live_logger.html" title="Class tracing I2C status and debug notifications live to out." alt="" coords="5,95,207,136"/>
+</map>

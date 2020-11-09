@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['timer',['Timer',['../classtimer_1_1_timer.html',1,'timer']]],
-  ['timer_3c_20ntimer_20_3e',['Timer&lt; NTIMER &gt;',['../classtimer_1_1_timer.html',1,'timer']]],
-  ['tm',['tm',['../structdevices_1_1rtc_1_1tm.html',1,'devices::rtc']]],
-  ['tonegenerator',['ToneGenerator',['../classdevices_1_1audio_1_1_tone_generator.html',1,'devices::audio']]],
-  ['toneplay',['TonePlay',['../classdevices_1_1audio_1_1_tone_play.html',1,'devices::audio']]],
-  ['toneplayer',['TonePlayer',['../classdevices_1_1audio_1_1_tone_player.html',1,'devices::audio']]],
-  ['type_5ftrait',['Type_trait',['../structtypes__traits_1_1_type__trait.html',1,'types_traits']]]
+  ['remove_5freference_1265',['remove_reference',['../structtypes__traits_1_1remove__reference.html',1,'types_traits']]],
+  ['resetfifofuture_1266',['ResetFifoFuture',['../classdevices_1_1magneto_1_1_m_p_u6050_1_1_reset_fifo_future.html',1,'devices::magneto::MPU6050']]],
+  ['resetfuture_1267',['ResetFuture',['../classdevices_1_1magneto_1_1_m_p_u6050_1_1_reset_future.html',1,'devices::magneto::MPU6050']]],
+  ['rtt_1268',['RTT',['../classtimer_1_1_r_t_t.html',1,'timer']]],
+  ['rtteventcallback_1269',['RTTEventCallback',['../classtimer_1_1_r_t_t_event_callback.html',1,'timer']]],
+  ['rttrawtime_1270',['RTTRawTime',['../classtimer_1_1_r_t_t_raw_time.html',1,'timer']]],
+  ['rtttime_1271',['RTTTime',['../classtime_1_1_r_t_t_time.html',1,'time']]]
 ];

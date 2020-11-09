@@ -1,9 +1,6 @@
 var searchData=
 [
-  ['qtoneplay',['QTonePlay',['../classdevices_1_1audio_1_1_q_tone_play.html',1,'devices::audio']]],
-  ['queue',['Queue',['../classcontainers_1_1_queue.html',1,'containers']]],
-  ['queue_3c_20char_2c_20char_20_3e',['Queue&lt; char, char &gt;',['../classcontainers_1_1_queue.html',1,'containers']]],
-  ['queue_3c_20event_20_3e',['Queue&lt; EVENT &gt;',['../classcontainers_1_1_queue.html',1,'containers']]],
-  ['queue_3c_20uint8_5ft_2c_20uint8_5ft_20_3e',['Queue&lt; uint8_t, uint8_t &gt;',['../classcontainers_1_1_queue.html',1,'containers']]],
-  ['queuedwriter',['QueuedWriter',['../classeeprom_1_1_queued_writer.html',1,'eeprom']]]
+  ['observe_5ftx_5ft_1246',['observe_tx_t',['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1observe__tx__t.html',1,'devices::rf::NRF24L01']]],
+  ['ostream_1247',['ostream',['../classstreams_1_1ostream.html',1,'streams']]],
+  ['ostreambuf_1248',['ostreambuf',['../classstreams_1_1ostreambuf.html',1,'streams']]]
 ];

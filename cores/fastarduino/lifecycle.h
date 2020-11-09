@@ -428,6 +428,20 @@ namespace lifecycle
 		LifeCycle<T>& operator=(LifeCycle<T>&& that) = default;
 	};
 
+	// Forward declarations for Proxy and LightProxy classes
+	/// @cond notdocumented
+	template<typename T> class Proxy;
+	template<typename T> bool operator==(const Proxy<T>& a, const Proxy<T>& b);
+	template<typename T> bool operator!=(const Proxy<T>& a, const Proxy<T>& b);
+	template<typename T> class LightProxy;
+	template<typename T> bool operator==(const LightProxy<T>& a, const LightProxy<T>& b);
+	template<typename T> bool operator!=(const LightProxy<T>& a, const LightProxy<T>& b);
+	template<typename T> class DirectProxy;
+	template<typename T> bool operator==(const DirectProxy<T>& a, const DirectProxy<T>& b);
+	template<typename T> bool operator!=(const DirectProxy<T>& a, const DirectProxy<T>& b);
+	/// @endcond
+
+	//TODO define AbstractProxy to factor out common code?
 	/**
 	 * A proxy class that encapsulates access to a fixed @p T instance, or to
 	 * a dynamic `LifeCycle<T>` instance.
@@ -449,7 +463,7 @@ namespace lifecycle
 		 * @param dest the reference to a @p T instance to proxify.
 		 */
 		Proxy(const T& dest)
-			:	is_dynamic_{false}, ptr_{reinterpret_cast<uintptr_t>(&dest)}, id_{0} {}
+			:	id_{0}, ptr_{reinterpret_cast<uintptr_t>(&dest)}, is_dynamic_{false} {}
 
 		/**
 		 * Create a `Proxy<T>` to a `LifeCycle<U>` instance (dynamic reference).
@@ -463,16 +477,31 @@ namespace lifecycle
 		 */
 		template<typename U>
 		Proxy(const LifeCycle<U>& dest)
-			:	is_dynamic_{true}, ptr_{reinterpret_cast<uintptr_t>(dest.manager())}, id_{dest.id()}
+			:	id_{dest.id()}, ptr_{reinterpret_cast<uintptr_t>(dest.manager())}, is_dynamic_{true}
 		{
 			// Statically check (at compile-time) that U is a subclass of T
 			UNUSED types_traits::derives_from<U, T> check;
 		}
 
 		/// @cond notdocumented
-		Proxy() = default;
-		Proxy(const Proxy&) = default;
-		Proxy& operator=(const Proxy&) = default;
+		constexpr Proxy() = default;
+		template<typename U> Proxy(const Proxy<U>& that)
+			:	id_{that.id_}, ptr_{that.ptr_}, is_dynamic_{that.is_dynamic_}
+		{
+			// Statically check (at compile-time) that U is a subclass of T
+			UNUSED types_traits::derives_from<U, T> check;
+
+		}
+		template<typename U> Proxy& operator=(const Proxy<U>& that)
+		{
+			// Statically check (at compile-time) that U is a subclass of T
+			UNUSED types_traits::derives_from<U, T> check;
+			if (this == &that) return *this;
+			id_ = that.id_;
+			ptr_ = that.ptr_;
+			is_dynamic_ = that.is_dynamic_;
+			return *this;
+		}
 		/// @endcond
 
 		/**
@@ -494,6 +523,7 @@ namespace lifecycle
 
 		/**
 		 * Tell if this Proxy is dynamic or static.
+		 * 
 		 * A dynamic proxy was constructed with a `LifeCycle<T>` instance and thus 
 		 * ensures that the actual instance will aways be referenced even if it gets 
 		 * moved.
@@ -542,11 +572,57 @@ namespace lifecycle
 
 		struct
 		{
-			bool is_dynamic_ : 1;
-			uintptr_t ptr_ : 15;
 			uint8_t id_;
+			uintptr_t ptr_ : 15;
+			bool is_dynamic_ : 1;
 		};
+
+		template<typename U> friend class Proxy;
+		friend bool operator==<T>(const Proxy<T>&, const Proxy<T>&);
+		friend bool operator!=<T>(const Proxy<T>&, const Proxy<T>&);
 	};
+
+	/**
+	 * Utility template function to create a Proxy<T> from @p dest without
+	 * the need to speicify @p T.
+	 * @tparam T the type of proxied instance
+	 * @param dest the instance to proxify
+	 * @return a Proxy to @p dest
+	 * @sa Proxy
+	 */
+	template<typename T> Proxy<T> make_proxy(const T& dest)
+	{
+		return Proxy<T>{dest};
+	}
+
+	/**
+	 * Utility template function to create a Proxy<T> from @p dest without
+	 * the need to speicify @p T.
+	 * @tparam T the type of proxied instance
+	 * @param dest the instance to proxify, wrapped in LifeCycle
+	 * @return a Proxy to @p dest
+	 * @sa Proxy
+	 */
+	template<typename T> Proxy<T> make_proxy(const LifeCycle<T>& dest)
+	{
+		return Proxy<T>{dest};
+	}
+
+	/// @cond notdocumented
+	template<typename T>
+	bool operator==(const Proxy<T>& a, const Proxy<T>& b)
+	{
+		if (&a == &b) return true;
+		return (a.is_dynamic_ == b.is_dynamic_) && (a.ptr_ == b.ptr_) && (a.id_ == b.id_);
+	}
+
+	template<typename T>
+	bool operator!=(const Proxy<T>& a, const Proxy<T>& b)
+	{
+		if (&a == &b) return false;
+		return (a.is_dynamic_ != b.is_dynamic_) || (a.ptr_ != b.ptr_) || (a.id_ != b.id_);
+	}
+	/// @endcond
 
 	/**
 	 * A light proxy class that encapsulates access to a fixed @p T instance, or to
@@ -570,7 +646,7 @@ namespace lifecycle
 		 * Create a `LightProxy<T>` to a static reference.
 		 * @param dest the reference to a @p T instance to proxify.
 		 */
-		LightProxy(const T& dest) : is_dynamic_{false}, ptr_{reinterpret_cast<uintptr_t>(&dest)} {}
+		LightProxy(const T& dest) : ptr_{reinterpret_cast<uintptr_t>(&dest)}, is_dynamic_{false}  {}
 
 		/**
 		 * Create a `LightProxy<T>` to a `LifeCycle<U>` instance (dynamic reference).
@@ -583,7 +659,7 @@ namespace lifecycle
 		 * @sa LifeCycle
 		 */
 		template<typename U>
-		LightProxy(const LifeCycle<U>& dest) : is_dynamic2_{true}, id_{dest.id()}
+		LightProxy(const LifeCycle<U>& dest) : id_{dest.id()}, is_dynamic2_{true}
 		{
 			// Statically check (at compile-time) that U is a subclass of T
 			UNUSED types_traits::derives_from<U, T> check;
@@ -599,20 +675,31 @@ namespace lifecycle
 		{
 			if (proxy.is_dynamic())
 			{
-				is_dynamic2_ = true;
 				id_ = proxy.id();
+				is_dynamic2_ = true;
 			}
 			else
 			{
-				is_dynamic_ = false;
 				ptr_ = reinterpret_cast<uintptr_t>(proxy.destination());
+				is_dynamic_ = false;
 			}
 		}
 
 		/// @cond notdocumented
-		LightProxy() : is_dynamic_{false}, ptr_{0} {}
-		LightProxy(const LightProxy&) = default;
-		LightProxy& operator=(const LightProxy&) = default;
+		constexpr LightProxy() : content_{} {}
+		template<typename U> LightProxy(const LightProxy<U>& that) : content_{that.content_}
+		{
+			// Statically check (at compile-time) that U is a subclass of T
+			UNUSED types_traits::derives_from<U, T> check;
+		}
+		template<typename U> LightProxy& operator=(const LightProxy<U>& that)
+		{
+			// Statically check (at compile-time) that U is a subclass of T
+			UNUSED types_traits::derives_from<U, T> check;
+			if (this == (LightProxy<T>*) &that) return *this;
+			content_ = that.content_;
+			return *this;
+		}
 		/// @endcond
 
 		/**
@@ -622,7 +709,7 @@ namespace lifecycle
 		 * is a static proxy. Behaviour is undefined if `nullptr` and this LightProxy
 		 * is dynamic.
 		 */
-		T* operator()(AbstractLifeCycleManager* manager = nullptr) const
+		T* operator()(const AbstractLifeCycleManager* manager = nullptr) const
 		{
 			if (is_dynamic_)
 				return manager->find_<T>(id_);
@@ -632,6 +719,7 @@ namespace lifecycle
 
 		/**
 		 * Tell if this LightProxy is dynamic or static.
+		 * 
 		 * A dynamic proxy was constructed with a `LifeCycle<T>` instance and thus 
 		 * ensures that the actual instance will aways be referenced even if it gets 
 		 * moved.
@@ -663,19 +751,177 @@ namespace lifecycle
 	private:
 		union
 		{
+			uint16_t content_;
 			struct
 			{
-				uint16_t is_dynamic_ : 1;
 				uintptr_t ptr_ : 15;
+				uint16_t is_dynamic_ : 1;
 			};
 			struct
 			{
-				uint8_t is_dynamic2_ : 1;
-				uint8_t reserved_ : 7;
 				uint8_t id_;
+				uint8_t reserved_ : 7;
+				uint8_t is_dynamic2_ : 1;
 			};
 		};
+
+		template<typename U> friend class LightProxy;
+		friend bool operator==<T>(const LightProxy<T>&, const LightProxy<T>&);
+		friend bool operator!=<T>(const LightProxy<T>&, const LightProxy<T>&);
 	};
+
+	/**
+	 * Utility template function to create a LightProxy<T> from @p dest without
+	 * the need to speicify @p T.
+	 * @tparam T the type of proxied instance
+	 * @param dest the instance to proxify
+	 * @return a LightProxy to @p dest
+	 * @sa LightProxy
+	 */
+	template<typename T> LightProxy<T> make_light_proxy(const T& dest)
+	{
+		return LightProxy<T>{dest};
+	}
+
+	/**
+	 * Utility template function to create a LightProxy<T> from @p dest without
+	 * the need to speicify @p T.
+	 * @tparam T the type of proxied instance
+	 * @param dest the instance to proxify, wrapped in a LifeCycle
+	 * @return a LightProxy to @p dest
+	 * @sa LightProxy
+	 */
+	template<typename T> LightProxy<T> make_light_proxy(const LifeCycle<T>& dest)
+	{
+		return LightProxy<T>{dest};
+	}
+
+	/// @cond notdocumented
+	template<typename T>
+	bool operator==(const LightProxy<T>& a, const LightProxy<T>& b)
+	{
+		if (&a == &b) return true;
+		return (a.is_dynamic_ == b.is_dynamic_) && (a.ptr_ == b.ptr_);
+	}
+
+	template<typename T>
+	bool operator!=(const LightProxy<T>& a, const LightProxy<T>& b)
+	{
+		if (&a == &b) return false;
+		return (a.is_dynamic_ != b.is_dynamic_) || (a.ptr_ != b.ptr_);
+	}
+	/// @endcond
+
+	/**
+	 * A kind of proxy class that encapsulates access to a fixed @p T instance.
+	 * Each instance uses 2 bytes (pointer to the instance proxied).
+	 * This class has the same API as LightProxy so it can be used in lieu of
+	 * LightProxy.
+	 * 
+	 * @tparam T the type of the object proxied
+	 * 
+	 * @sa LightProxy
+	 */
+	template<typename T> class DirectProxy
+	{
+	public:
+		/**
+		 * Create a `DirectProxy<T>` to a static reference.
+		 * @param dest the reference to a @p T instance to proxify.
+		 */
+		DirectProxy(const T& dest) : ptr_{reinterpret_cast<uintptr_t>(&dest)}  {}
+
+		/// @cond notdocumented
+		constexpr DirectProxy() = default;
+		template<typename U> DirectProxy(const DirectProxy<U>& that) : ptr_{that.ptr_}
+		{
+			// Statically check (at compile-time) that U is a subclass of T
+			UNUSED types_traits::derives_from<U, T> check;
+		}
+		template<typename U> DirectProxy& operator=(const DirectProxy<U>& that)
+		{
+			// Statically check (at compile-time) that U is a subclass of T
+			UNUSED types_traits::derives_from<U, T> check;
+			if (this == &that) return *this;
+			ptr_ = that.ptr_;
+			return *this;
+		}
+		/// @endcond
+
+		/**
+		 * Return a pointer to the proxified @p T instance.
+		 * @param manager unused, here to comply to LightProxy API, can be left to 
+		 * default `nullptr`.
+		 */
+		T* operator()(UNUSED const AbstractLifeCycleManager* manager = nullptr) const
+		{
+			return reinterpret_cast<T*>(ptr_);
+		}
+
+		/**
+		 * Tell if this DirectProxy is dynamic or static.
+		 * Actually a DirectProxy is *always* static.
+		 * This API exists to comply to LightProxy API.
+		 */
+		bool is_dynamic() const
+		{
+			return false;
+		}
+
+		/**
+		 * The identifier of the proxified `LifeCycle<U>` or `0` if a static instance
+		 * was proxified.
+		 * This API actually always returns `0` and exists to comply to LightProxy API.
+		 */
+		uint8_t id() const
+		{
+			return 0;
+		}
+
+		/**
+		 * A pointer to the static instance proxified.
+		 */
+		T* destination() const
+		{
+			return reinterpret_cast<T*>(ptr_);
+		}
+
+	private:
+		uintptr_t ptr_ = 0;
+
+		template<typename U> friend class DirectProxy;
+		friend bool operator==<T>(const DirectProxy<T>&, const DirectProxy<T>&);
+		friend bool operator!=<T>(const DirectProxy<T>&, const DirectProxy<T>&);
+	};
+
+	/**
+	 * Utility template function to create a DirectProxy<T> from @p dest without
+	 * the need to speicify @p T.
+	 * @tparam T the type of proxied instance
+	 * @param dest the instance to proxify
+	 * @return a DirectProxy to @p dest
+	 * @sa DirectProxy
+	 */
+	template<typename T> DirectProxy<T> make_direct_proxy(const T& dest)
+	{
+		return DirectProxy<T>{dest};
+	}
+
+	/// @cond notdocumented
+	template<typename T>
+	bool operator==(const DirectProxy<T>& a, const DirectProxy<T>& b)
+	{
+		if (&a == &b) return true;
+		return (a.ptr_ == b.ptr_);
+	}
+
+	template<typename T>
+	bool operator!=(const DirectProxy<T>& a, const DirectProxy<T>& b)
+	{
+		if (&a == &b) return false;
+		return (a.ptr_ != b.ptr_);
+	}
+	/// @endcond
 }
 
 #endif /* LIFECYCLE_HH */

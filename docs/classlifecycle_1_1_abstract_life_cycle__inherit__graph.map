@@ -1,0 +1,4 @@
+<map id="lifecycle::AbstractLifeCycle" name="lifecycle::AbstractLifeCycle">
+<area shape="rect" id="node1" title="The abstract base class of all LifeCycle&lt;T&gt;." alt="" coords="5,5,204,32"/>
+<area shape="rect" id="node2" href="$classlifecycle_1_1_life_cycle.html" title="A mixin class allowing lifecycle management of any object of any type T." alt="" coords="13,80,196,107"/>
+</map>

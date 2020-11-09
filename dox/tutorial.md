@@ -507,8 +507,9 @@ The few examples in this section will introduce you to a few functions that may 
 1. `utils::swap_bytes`: this function is useful whenever you use a sensor device that provides you with integer values, coded on 2 bytes, with high byte first and low byte second; since AVR MCU are "little-endian" processors, they expect words in the opposite order: low byte first, high byte second, hence in order to interpret values provided by that device, you need to first swap their bytes. Bytes swap is performed "in-place", i.e. the original value is replace with the converted value. The following example is an excerpt of `hmc5883l.h` provided by FastArduino, where magnetic fields in 3 axes have to be converted from big endian (as provided by the HMC5883L) to little endian (as expected by the AVR MCU):
 @snippet tuto_snippets.cpp utils_swap_bytes
 
-2. `utils::bcd_to_binary`: this function is useful when you use a sensor device that provides values coded as *BCD* (binary-coded decimal), i.e. where each half-byte (*nibble*) contains the value of one digit (i.e. `0` to `9`), thus holding a range of values from `0` to `99`. Many RTC devices use BCD representation for time. In order to performa calculation on BCD values, you need to first convert them to binary. The opposite function is also provided as `utils::binary_to_bcd`. The following example is an excerpt of `ds1307.h` provided by FastArduino, where each datetime field (seconds, minutes, hours...) have to be converted from BCD to binary:
+2. `utils::bcd_to_binary`: this function is useful when you use a sensor device that provides values coded as *BCD* (binary-coded decimal), i.e. where each half-byte (*nibble*) contains the value of one digit (i.e. `0` to `9`), thus holding a range of values from `0` to `99`. Many RTC devices use BCD representation for time. In order to perform a calculation on BCD values, you need to first convert them to binary. The opposite function is also provided as `utils::binary_to_bcd`. The following example is an excerpt of `ds1307.h` provided by FastArduino, where each datetime field (seconds, minutes, hours...) have to be converted from BCD to binary:
 @snippet tuto_snippets.cpp utils_bcd_to_binary
+
 
 ### Conversion utilities examples
 
@@ -599,34 +600,35 @@ All FastArduino API respects some guidelines for naming ISR registration macros.
 - `REGISTER_XXX_ISR_FUNCTION()` for function callback
 
 Here is a table showing all FastArduino macros to register ISR (*Name* is to be replaced in macro name `REGISTER_NAME_ISR`, `REGISTER_NAME_ISR_EMPTY`, `REGISTER_NAME_ISR_CALLBACK` or `REGISTER_NAME_ISR_FUNCTION`):
-| Header               | Name                      | Flavours | Comments                                                           |
-|----------------------|---------------------------|----------|--------------------------------------------------------------------|
-| `analog_comparator.h`| `ANALOG_COMPARE`          | 2,3,4    | Called upon Analog Comparator interrupt.                           |
-| `eeprom.h`           | `EEPROM`                  | 1,3,4    | Called when asynchronous EEPROM write is finished.                 |
-| `int.h`              | `INT`                     | 2,3,4    | Called when an INT pin changes level.                              |
-| `pci.h`              | `PCI`                     | 2,3,4    | Called when a PCINT pin changes level.                             |
-| `pulse_timer.h`      | `PULSE_TIMER8_A`          | 1        | Called when a PulseTimer8 overflows or equals OCRA.                |
-| `pulse_timer.h`      | `PULSE_TIMER8_B`          | 1        | Called when a PulseTimer8 overflows or equals OCRB.                |
-| `pulse_timer.h`      | `PULSE_TIMER8_AB`         | 1        | Called when a PulseTimer8 overflows or equals OCRA or OCRB.        |
-| `realtime_timer.h`   | `RTT`                     | 1,3,4    | Called when RTT timer has one more millisecond elapsed.            |
-| `realtime_timer.h`   | `RTT_EVENT`               | 1        | Same as above, and trigger RTTEventCallback.                       |
-| `soft_uart.h`        | `UART_PCI`                | 1        | Called when a start bit is received on a PCINT pin linked to UATX. |
-| `soft_uart.h`        | `UART_INT`                | 1        | Called when a start bit is received on an INT pin linked to UATX.  |
-| `timer.h`            | `COMPARE`                 | 2,3,4    | Called when a Timer counter reaches OCRA.                          |
-| `timer.h`            | `OVERFLOW`                | 2,3,4    | Called when a Timer counter overflows.                             |
-| `timer.h`            | `CAPTURE`                 | 2,3,4    | Called when a Timer counter gets captured (when ICP level changes).|
-| `uart.h`             | `UATX`                    | 1        | Called when one character is finished transmitted on UATX.         |
-| `uart.h`             | `UARX`                    | 1        | Called when one character is finished received on UARX.            |
-| `uart.h`             | `UART`                    | 1        | Called when one character is finished transmitted/received on UART.|
-| `watchdog.h`         | `WATCHDOG_CLOCK`          | 1        | Called when Watchdog timeout occurs, and clock must be updated.    |
-| `watchdog.h`         | `WATCHDOG_RTT`            | 1        | Called when Watchdog timeout occurs, and RTT clock must be updated.|
-| `watchdog.h`         | `WATCHDOG`                | 2,3,4    | Called when WatchdogSignal timeout occurs.                         |
-| `devices/sonar.h`    | `HCSR04_INT`              | 1,3,4    | Called when HCSR04 echo INT pin changes level.                     |
-| `devices/sonar.h`    | `HCSR04_PCI`              | 1,3,4    | Called when HCSR04 echo PCINT pin changes level.                   |
-| `devices/sonar.h`    | `HCSR04_RTT_TIMEOUT`      | 1,3,4    | Called when HCSR04 RTT times out (without any echo).               |
-| `devices/sonar.h`    | `DISTINCT_HCSR04_PCI`     | 1        | Called when HCSR04 any echo PCINT pin changes level.               |
-| `devices/sonar.h`    | `MULTI_HCSR04_PCI`        | 3,4      | Called when MultiHCSR04 any echo PCINT pin changes level.          |
-| `devices/sonar.h`    | `MULTI_HCSR04_RTT_TIMEOUT`| 1,3,4    | Called when MultiHCSR04 RTT times out (without any echo).          |
+| Header                | Name                      | Flavours | Comments                                                           |
+|-----------------------|---------------------------|----------|--------------------------------------------------------------------|
+| `analog_comparator.h` | `ANALOG_COMPARE`          | 2,3,4    | Called upon Analog Comparator interrupt.                           |
+| `eeprom.h`            | `EEPROM`                  | 1,3,4    | Called when asynchronous EEPROM write is finished.                 |
+| `int.h`               | `INT`                     | 2,3,4    | Called when an INT pin changes level.                              |
+| `pci.h`               | `PCI`                     | 2,3,4    | Called when a PCINT pin changes level.                             |
+| `pulse_timer.h`       | `PULSE_TIMER8_A`          | 1        | Called when a PulseTimer8 overflows or equals OCRA.                |
+| `pulse_timer.h`       | `PULSE_TIMER8_B`          | 1        | Called when a PulseTimer8 overflows or equals OCRB.                |
+| `pulse_timer.h`       | `PULSE_TIMER8_AB`         | 1        | Called when a PulseTimer8 overflows or equals OCRA or OCRB.        |
+| `realtime_timer.h`    | `RTT`                     | 1,3,4    | Called when RTT timer has one more millisecond elapsed.            |
+| `realtime_timer.h`    | `RTT_EVENT`               | 1        | Same as above, and trigger RTTEventCallback.                       |
+| `soft_uart.h`         | `UART_PCI`                | 1        | Called when a start bit is received on a PCINT pin linked to UATX. |
+| `soft_uart.h`         | `UART_INT`                | 1        | Called when a start bit is received on an INT pin linked to UATX.  |
+| `timer.h`             | `COMPARE`                 | 2,3,4    | Called when a Timer counter reaches OCRA.                          |
+| `timer.h`             | `OVERFLOW`                | 2,3,4    | Called when a Timer counter overflows.                             |
+| `timer.h`             | `CAPTURE`                 | 2,3,4    | Called when a Timer counter gets captured (when ICP level changes).|
+| `uart.h`              | `UATX`                    | 1        | Called when one character is finished transmitted on UATX.         |
+| `uart.h`              | `UARX`                    | 1        | Called when one character is finished received on UARX.            |
+| `uart.h`              | `UART`                    | 1        | Called when one character is finished transmitted/received on UART.|
+| `watchdog.h`          | `WATCHDOG_CLOCK`          | 1        | Called when Watchdog timeout occurs, and clock must be updated.    |
+| `watchdog.h`          | `WATCHDOG_RTT`            | 1        | Called when Watchdog timeout occurs, and RTT clock must be updated.|
+| `watchdog.h`          | `WATCHDOG`                | 2,3,4    | Called when WatchdogSignal timeout occurs.                         |
+| `i2c_handler_atmega.h`| `I2C`                     | 1,3,4    | Called when I2C status changes (ATmega only).                      |
+| `devices/sonar.h`     | `HCSR04_INT`              | 1,3,4    | Called when HCSR04 echo INT pin changes level.                     |
+| `devices/sonar.h`     | `HCSR04_PCI`              | 1,3,4    | Called when HCSR04 echo PCINT pin changes level.                   |
+| `devices/sonar.h`     | `HCSR04_RTT_TIMEOUT`      | 1,3,4    | Called when HCSR04 RTT times out (without any echo).               |
+| `devices/sonar.h`     | `DISTINCT_HCSR04_PCI`     | 1        | Called when HCSR04 any echo PCINT pin changes level.               |
+| `devices/sonar.h`     | `MULTI_HCSR04_PCI`        | 3,4      | Called when MultiHCSR04 any echo PCINT pin changes level.          |
+| `devices/sonar.h`     | `MULTI_HCSR04_RTT_TIMEOUT`| 1,3,4    | Called when MultiHCSR04 RTT times out (without any echo).          |
 
 For further details on ISR registration in FastArduino, you can check [`interrutps.h` API](interrupts_8h.html) for the general approach, and each individual API documentation for specific interrupts.
 
@@ -1154,17 +1156,34 @@ FastArduino also brings specific support to several I2C devices:
 - DS1307 (real-time clock)
 - MPU6050 (accelerometer and gyroscope)
 - HMC5883L (compass)
+- MCP23008 (8-Bit I/O Expander)
 - MCP23017 (16-Bit I/O Expander)
 
-FastArduino core I2C API is defined in several headers and made of a few types:
+FastArduino core I2C API is defined in several headers (namespace `i2c`) and made of a few types:
 - `i2c.h` contains a few constants and enumerations used everywhere else in the I2C API
-- `i2c_manager.h` defines the `i2c::I2CManager` template class which is central to the API
+- `i2c_handler.h` defines several template classes defining different kinds of "I2C Manager"
+which are central to the API
 - `i2c_device.h` mainly defines `i2c::I2CDevice` template class, which is the abstract base
 class of all concrete I2C devices
 
+Other more specific headers exist but shall not be directly included in programs.
+
+In FastArduino, I2C communication is centralized by an I2C Manager; there are several flavors
+of I2C Manager defined in FastArduino, with distinct characteristics such as:
+- synchronous (all MCU) or asynchronous (ATmega only)
+- I2C mode supported (fast 400kHz or standard 100kHz)
+- policy to follow in case of failure during an I2C transaction
+- ...
+
+In this tutorial, we will use the simplest I2C Manager provided by FastArduino: `i2c::I2CSyncManager`,
+which handles only synchronous (blocking) I2C operations.
+
+There are also asynchronous I2C Managers but they will not be explained here. If you want
+to learn more about there, please take a look at the API and examples using it.
+
 In order to illustrate concretely I2C API usage in this tutorial, we will focus on a concrete
 example with the DS1307 RTC chip. If you want to develop an API for your own I2C device then
-please refer to `i2c::I2CDevice` API documentation.
+please refer to `i2c::I2CDevice` API documentation and the [dedicated tutorial](i2cdevices.html).
 
 The following example reads the current clock time from a DS1307 chip:
 
@@ -1174,17 +1193,19 @@ This example has 3 important parts.
 
 The first part is the I2C and the RTC device initialization:
 @dontinclude fastarduino/i2c_1_rtc.cpp
-@skip I2CManager
+@skip MANAGER
 @until DS1307
-`i2c::I2CManager` is a template class with a parameter of type `i2c::I2CMode`, which can any of:
+`i2c::I2CSyncManager` is a template class with a parameter of type `i2c::I2CMode`, which can any of:
 - `i2c::I2CMode::STANDARD`: slow I2C mode (100 kHz), this the default
 - `i2c::I2CMode::FAST`: fast I2C mode (400 kHz)
 
 The mode selection depends on all devices you wire on the I2C bus, if one is using standard mode, 
 then all the bus must be set to standard mode. Since DS1307 chip does not support fast mode,
-its device forces standard mode, and that mode must be used for the `I2CManager`.
+its device forces standard mode, and that mode must be used for the `I2CSyncManager`.
 
-It is important to ensure `begin()` has been called on `i2c::I2CManager` before any use of 
+For convenience reasons, we define the `MANAGER` type alias once and then reuse it where needed.
+
+It is important to ensure `begin()` has been called on `i2c::I2CSyncManager` before any use of 
 the I2C bus by devices.
 
 Next code piece is reading current clock date and time from the RTC chip:

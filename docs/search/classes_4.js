@@ -1,10 +1,9 @@
 var searchData=
 [
-  ['fastmaskedport',['FastMaskedPort',['../classgpio_1_1_fast_masked_port.html',1,'gpio']]],
-  ['fastmaskedport_3c_20echo_5fport_2c_20echo_5fmask_20_3e',['FastMaskedPort&lt; ECHO_PORT, ECHO_MASK &gt;',['../classgpio_1_1_fast_masked_port.html',1,'gpio']]],
-  ['fastpin',['FastPin',['../classgpio_1_1_fast_pin.html',1,'gpio']]],
-  ['fastpintype',['FastPinType',['../classgpio_1_1_fast_pin_type.html',1,'gpio']]],
-  ['fastport',['FastPort',['../classgpio_1_1_fast_port.html',1,'gpio']]],
-  ['fifo_5fstatus_5ft',['fifo_status_t',['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1fifo__status__t.html',1,'devices::rf::NRF24L01']]],
-  ['fifoenable',['FIFOEnable',['../structdevices_1_1magneto_1_1_f_i_f_o_enable.html',1,'devices::magneto']]]
+  ['eeprom_1159',['EEPROM',['../classeeprom_1_1_e_e_p_r_o_m.html',1,'eeprom']]],
+  ['enableoutputfuture_1160',['EnableOutputFuture',['../classdevices_1_1rtc_1_1_d_s1307_1_1_enable_output_future.html',1,'devices::rtc::DS1307']]],
+  ['endfuture_1161',['EndFuture',['../classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_end_future.html',1,'devices::magneto::HMC5883L&lt; MANAGER &gt;::EndFuture'],['../classdevices_1_1magneto_1_1_m_p_u6050_1_1_end_future.html',1,'devices::magneto::MPU6050&lt; MANAGER &gt;::EndFuture']]],
+  ['event_1162',['Event',['../classevents_1_1_event.html',1,'events']]],
+  ['eventhandler_1163',['EventHandler',['../classevents_1_1_event_handler.html',1,'events']]],
+  ['eventhandler_3c_20event_5f_20_3e_1164',['EventHandler&lt; EVENT_ &gt;',['../classevents_1_1_event_handler.html',1,'events']]]
 ];

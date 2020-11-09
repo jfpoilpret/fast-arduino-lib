@@ -40,6 +40,7 @@ namespace devices::magneto
 	 */
 	struct Sensor3D
 	{
+		Sensor3D() = default;
 		/** Sensor value on X axis. */
 		int16_t x;
 		/** Sensor value on Y axis. */

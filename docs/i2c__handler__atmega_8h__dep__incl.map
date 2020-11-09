@@ -1,0 +1,10 @@
+<map id="fastarduino/i2c_handler_atmega.h" name="fastarduino/i2c_handler_atmega.h">
+<area shape="rect" id="node1" title="ATmega I2C Manager API." alt="" coords="103,5,277,47"/>
+<area shape="rect" id="node2" href="$i2c__handler_8h.html" title="Common I2C Manager API." alt="" coords="97,95,283,121"/>
+<area shape="rect" id="node3" href="$ds1307_8h.html" title="API to handle Real&#45;Time Clock DS1307 I2C chip." alt="" coords="5,244,156,285"/>
+<area shape="rect" id="node4" href="$i2c__device_8h.html" title="I2C Device API." alt="" coords="251,169,433,196"/>
+<area shape="rect" id="node5" href="$hmc5883l_8h.html" title="API to handle HMC5883L 3&#45;axis digital compass I2C chip." alt="" coords="180,244,331,285"/>
+<area shape="rect" id="node6" href="$mcp23008_8h.html" title="API to handle the MCP23008 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="355,244,505,285"/>
+<area shape="rect" id="node7" href="$mcp23017_8h.html" title="API to handle the MCP23017 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="529,244,680,285"/>
+<area shape="rect" id="node8" href="$mpu6050_8h.html" title="API to handle MPU6050 3&#45;axis gyroscope/accelerometer I2C chip." alt="" coords="704,244,855,285"/>
+</map>

@@ -1,11 +1,11 @@
 <map id="serial::UARTErrors" name="serial::UARTErrors">
-<area shape="rect" id="node1" title="Holder of latest UART errors." alt="" coords="5,257,144,283"/>
-<area shape="rect" id="node2" href="$classserial_1_1hard_1_1_u_a_r_t.html" title="Hardware serial receiver/transceiver API." alt="" coords="219,5,357,47"/>
-<area shape="rect" id="node3" href="$classserial_1_1hard_1_1_u_a_r_x.html" title="Hardware serial receiver API." alt="" coords="218,71,358,112"/>
-<area shape="rect" id="node4" href="$classserial_1_1hard_1_1_u_a_t_x.html" title="Hardware serial transmitter API." alt="" coords="219,136,357,177"/>
-<area shape="rect" id="node5" href="$classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_external_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html" title=" " alt="" coords="192,202,384,258"/>
-<area shape="rect" id="node6" href="$classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html" title=" " alt="" coords="207,282,369,338"/>
-<area shape="rect" id="node7" href="$classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_external_interrupt_pin_00_01_r_x___01_4.html" title=" " alt="" coords="192,362,384,418"/>
-<area shape="rect" id="node8" href="$classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html" title=" " alt="" coords="207,442,369,498"/>
-<area shape="rect" id="node9" href="$classserial_1_1soft_1_1_u_a_t_x.html" title="Software&#45;emulated serial transmitter API." alt="" coords="221,523,355,564"/>
+<area shape="rect" id="node1" title="Holder of latest UART errors." alt="" coords="5,257,145,283"/>
+<area shape="rect" id="node2" href="$classserial_1_1hard_1_1_u_a_r_t.html" title="Hardware serial receiver/transceiver API." alt="" coords="220,5,359,47"/>
+<area shape="rect" id="node3" href="$classserial_1_1hard_1_1_u_a_r_x.html" title="Hardware serial receiver API." alt="" coords="219,71,359,112"/>
+<area shape="rect" id="node4" href="$classserial_1_1hard_1_1_u_a_t_x.html" title="Hardware serial transmitter API." alt="" coords="220,136,359,177"/>
+<area shape="rect" id="node5" href="$classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_external_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html" title=" " alt="" coords="193,202,385,258"/>
+<area shape="rect" id="node6" href="$classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html" title=" " alt="" coords="208,282,371,338"/>
+<area shape="rect" id="node7" href="$classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_external_interrupt_pin_00_01_r_x___01_4.html" title=" " alt="" coords="193,362,385,418"/>
+<area shape="rect" id="node8" href="$classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html" title=" " alt="" coords="208,442,371,498"/>
+<area shape="rect" id="node9" href="$classserial_1_1soft_1_1_u_a_t_x.html" title="Software&#45;emulated serial transmitter API." alt="" coords="222,523,357,564"/>
 </map>

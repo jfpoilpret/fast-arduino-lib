@@ -1,0 +1,9 @@
+<map id="fastarduino/lifecycle.h" name="fastarduino/lifecycle.h">
+<area shape="rect" id="node1" title="Utility API to handle lifecycle of objects so that:" alt="" coords="52,5,219,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,80,76,107"/>
+<area shape="rect" id="node3" href="$move_8h_source.html" title=" " alt="" coords="100,80,171,107"/>
+<area shape="rect" id="node4" href="$types__traits_8h.html" title="Useful traits for common types." alt="" coords="116,155,227,181"/>
+<area shape="rect" id="node5" title=" " alt="" coords="37,229,111,256"/>
+<area shape="rect" id="node6" title=" " alt="" coords="136,229,207,256"/>
+<area shape="rect" id="node7" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="231,229,314,256"/>
+</map>

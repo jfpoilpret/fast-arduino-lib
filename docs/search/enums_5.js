@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['gain',['Gain',['../namespacedevices_1_1magneto.html#a9e3190fff3a9a97602b890647846068d',1,'devices::magneto']]],
-  ['gyrorange',['GyroRange',['../namespacedevices_1_1magneto.html#af1ab54980b0620a7f3c95ff2318604f4',1,'devices::magneto']]]
+  ['futurestatus_2079',['FutureStatus',['../namespacefuture.html#a9f72173fcd5be9bfef028415665efbe4',1,'future']]]
 ];

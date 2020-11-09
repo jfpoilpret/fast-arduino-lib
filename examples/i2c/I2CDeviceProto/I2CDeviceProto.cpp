@@ -23,8 +23,8 @@
  * Wiring:
  * NB: you should add pullup resistors (10K-22K typically) on both SDA and SCL lines.
  * - on Arduino UNO:
- *   - A4 (PC4, SDA): connected to DS1307 SDA pin
- *   - A5 (PC5, SCL): connected to DS1307 SCL pin
+ *   - A4 (PC4, SDA): connected to I2C SDA pin
+ *   - A5 (PC5, SCL): connected to I2C SCL pin
  *   - direct USB access (traces output)
  */
 
@@ -32,6 +32,22 @@
 #include <fastarduino/i2c_device.h>
 #include <fastarduino/utilities.h>
 #include <fastarduino/uart.h>
+#include <fastarduino/i2c_debug.h>
+
+// I2C Device specific constants go here
+//======================================
+static constexpr const i2c::I2CMode MODE = i2c::I2CMode::FAST;
+static constexpr const uint8_t DEVICE_ADDRESS = 0x68 << 1;
+
+static constexpr const uint8_t DEBUG_SIZE = 32;
+using DEBUGGER = i2c::debug::I2CDebugStatusRecorder<DEBUG_SIZE, DEBUG_SIZE>;
+using MANAGER = i2c::I2CSyncStatusDebugManager<MODE, DEBUGGER&, DEBUGGER&>;
+#define DEBUG(OUT) debugger.trace(OUT)
+
+// The following type aliases will be useful for declaring proper Futures and calling I2CDevice API
+using PARENT = i2c::I2CDevice<MANAGER>;
+template<typename T> using PROXY = typename PARENT::template PROXY<T>;
+template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
@@ -42,28 +58,17 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 static serial::hard::UATX<board::USART::USART0> uart{output_buffer};
 static streams::ostream out = uart.out();
 
-// I2C Device specific stuff goes here
-//=====================================
-static constexpr const i2c::I2CMode MODE = i2c::I2CMode::FAST;
-static constexpr const uint8_t DEVICE_ADDRESS = 0x68 << 1;
-
 // Subclass I2CDevice to make protected methods available
-class PublicDevice: public i2c::I2CDevice<MODE>
+class PublicDevice: public PARENT
 {
 public:
-	PublicDevice(MANAGER& manager): I2CDevice(manager) {}
+	PublicDevice(MANAGER& manager): PARENT{manager, DEVICE_ADDRESS, i2c::Mode<MODE>{}} {}
 	friend int main();
 };
 
 using streams::endl;
 using streams::dec;
 using streams::hex;
-
-void trace_i2c_status(uint8_t expected_status, uint8_t actual_status)
-{
-	if (expected_status != actual_status)
-		out << F("status expected = ") << expected_status << F(", actual = ") << actual_status << endl;
-}
 
 int main()
 {
@@ -75,18 +80,26 @@ int main()
 	
 	// Start TWI interface
 	//====================
-	PublicDevice::MANAGER manager{trace_i2c_status};
+	DEBUGGER debugger;
+	MANAGER manager{debugger, debugger};
 	manager.begin();
 	out << F("I2C interface started") << endl;
 	
 	PublicDevice device{manager};
 	
 	// Init I2C device if needed
+
+	// Output all debug traces
+	DEBUG(out);
 	
 	// Loop to show measures
 	while (true)
 	{
 		// Read measures and display them to UART
+
+		// Output all debug traces
+		DEBUG(out);
+
 		time::delay_ms(1000);
 	}
 	

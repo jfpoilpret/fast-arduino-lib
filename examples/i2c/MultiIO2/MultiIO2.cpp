@@ -46,9 +46,19 @@
 #include <fastarduino/i2c_device.h>
 #include <fastarduino/devices/mcp23017.h>
 
-constexpr const i2c::I2CMode I2C_MODE = i2c::I2CMode::FAST;
+#define FORCE_SYNC
 
-using MCP = devices::mcp230xx::MCP23017<I2C_MODE>;
+#if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
+using MANAGER = i2c::I2CAsyncManager<
+	i2c::I2CMode::FAST, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS>;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
+static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
+REGISTER_I2C_ISR(MANAGER)
+#else
+using MANAGER = i2c::I2CSyncManager<i2c::I2CMode::FAST>;
+#endif
+
+using MCP = devices::mcp230xx::MCP23017<MANAGER>;
 using MCP_PORT = devices::mcp230xx::MCP23017Port;
 
 static inline uint8_t shift_pattern(uint8_t pattern, uint8_t shift, bool direction)
@@ -97,7 +107,11 @@ int main()
 	
 	// Start TWI interface
 	//====================
-	i2c::I2CManager<I2C_MODE> manager;
+#if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
+	MANAGER manager{i2c_buffer};
+#else
+	MANAGER manager;
+#endif
 	manager.begin();
 
 	// Initialize chip

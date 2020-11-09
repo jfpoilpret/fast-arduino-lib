@@ -24,7 +24,6 @@
 #include "boards/board.h"
 #include "gpio.h"
 
-//TODO Make a SPISlave class with a data handler/buffer
 /**
  * Define API to define and manage SPI devices.
  * SPI is available to all MCU supported by FastArduino, even in ATtiny MCU, for which

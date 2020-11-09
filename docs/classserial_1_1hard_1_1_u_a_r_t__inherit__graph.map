@@ -1,6 +1,6 @@
 <map id="serial::hard::UART&lt; USART_ &gt;" name="serial::hard::UART&lt; USART_ &gt;">
-<area shape="rect" id="node1" title="Hardware serial receiver/transceiver API." alt="" coords="129,80,267,121"/>
+<area shape="rect" id="node1" title="Hardware serial receiver/transceiver API." alt="" coords="130,80,269,121"/>
 <area shape="rect" id="node2" title=" " alt="" coords="5,5,119,32"/>
-<area shape="rect" id="node3" title=" " alt="" coords="143,5,253,32"/>
-<area shape="rect" id="node4" href="$classserial_1_1_u_a_r_t_errors.html" title="Holder of latest UART errors." alt="" coords="278,5,417,32"/>
+<area shape="rect" id="node3" title=" " alt="" coords="143,5,255,32"/>
+<area shape="rect" id="node4" href="$classserial_1_1_u_a_r_t_errors.html" title="Holder of latest UART errors." alt="" coords="280,5,420,32"/>
 </map>

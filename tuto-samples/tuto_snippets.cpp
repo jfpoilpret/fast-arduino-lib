@@ -49,40 +49,38 @@ uint16_t echo_us = uint16_t(end.millis() * 1000UL + end.micros());
 
 using devices::magneto::MagneticFields;
 //! [utils_swap_bytes]
-    bool magnetic_fields(MagneticFields& fields)
-    {
-        if (	this->write(DEVICE_ADDRESS, OUTPUT_REG_1, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
-            &&	this->read(DEVICE_ADDRESS, fields, i2c::BusConditions::REPEAT_START_STOP) == i2c::Status::OK)
-        {
-            utils::swap_bytes(fields.x);
-            utils::swap_bytes(fields.y);
-            utils::swap_bytes(fields.z);
-            return true;
-        }
-        else
-            return false;
-    }
+	class MagneticFieldsFuture : public ReadRegisterFuture<Sensor3D>
+	{
+	public:
+		bool get(Sensor3D& fields)
+		{
+			if (!PARENT::get(fields)) return false;
+			utils::swap_bytes(fields.x);
+			utils::swap_bytes(fields.y);
+			utils::swap_bytes(fields.z);
+			return true;
+		}
+	};
 //! [utils_swap_bytes]
 
 
 using devices::rtc::tm;
 //! [utils_bcd_to_binary]
-    bool getDateTime(tm& datetime)
-    {
-        // send register address to read from (0)
-        // read datetime at address 0
-        if (	write(DEVICE_ADDRESS, TIME_ADDRESS, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
-            &&	read(DEVICE_ADDRESS, datetime, i2c::BusConditions::REPEAT_START_STOP) == i2c::Status::OK)
-        {
-            // convert DS1307 output (BCD) to integer type
-            datetime.tm_sec = utils::bcd_to_binary(datetime.tm_sec);
-            datetime.tm_min = utils::bcd_to_binary(datetime.tm_min);
-            datetime.tm_hour = utils::bcd_to_binary(datetime.tm_hour);
-            datetime.tm_mday = utils::bcd_to_binary(datetime.tm_mday);
-            datetime.tm_mon = utils::bcd_to_binary(datetime.tm_mon);
-            datetime.tm_year = utils::bcd_to_binary(datetime.tm_year);
-        }
-    }
+	struct set_tm
+	{
+		set_tm(const tm& datetime)
+		{
+			tm_.tm_sec = utils::binary_to_bcd(datetime.tm_sec);
+			tm_.tm_min = utils::binary_to_bcd(datetime.tm_min);
+			tm_.tm_hour = utils::binary_to_bcd(datetime.tm_hour);
+			tm_.tm_mday = utils::binary_to_bcd(datetime.tm_mday);
+			tm_.tm_mon = utils::binary_to_bcd(datetime.tm_mon);
+			tm_.tm_year = utils::binary_to_bcd(datetime.tm_year);
+		}
+
+		uint8_t address_ = TIME_ADDRESS;
+		tm tm_;
+	};
 //! [utils_bcd_to_binary]
 
 using utils::UnitPrefix;

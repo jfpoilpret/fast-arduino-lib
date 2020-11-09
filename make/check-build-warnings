@@ -1,0 +1,44 @@
+#!/bin/bash
+#
+# This script helps checking all builds of a release even in case of warnings:
+# 0. Clean all code for all targets
+# 1. Build all examples for all targets
+# 2. Gather make output and prepare new code size sheet for all targets
+
+CURDIR=`pwd`
+SCRIPT=$(readlink -f "$0")
+MAKEDIR=$(dirname "$SCRIPT")
+BASEDIR=$MAKEDIR/..
+DOCDIR=$BASEDIR/basedoc
+
+echo "Clean up all generated code"
+cd $BASEDIR
+make clean-all >/dev/null 2>&1
+make clean-examples-all >/dev/null 2>&1
+
+echo "Build all examples for all targets"
+export TARGETS="UNO LEONARDO MEGA ATtiny84 ATtiny85"
+for TARGET in $TARGETS
+do
+	echo "Target: $TARGET"
+	make CONF=$TARGET examples 2>errors | $MAKEDIR/stats.py >newsizes-$TARGET
+	grep "Error" errors
+	# check if error found, then abort
+	if [ $? -ne 1 ]; then
+		echo "Error occurred, aborting."
+		exit 1
+	fi
+	grep "warning" errors
+	# check if warning found, then abort
+	if [ $? -ne 1 ]; then
+		echo "Warning occurred, aborting."
+		exit 1
+	fi
+	rm -f errors
+done
+
+echo "Remove intermediate result files"
+for TARGET in $TARGETS
+do
+	rm -f newsizes-$TARGET
+done

@@ -602,6 +602,11 @@ namespace future
 		/** Type of the input value of this Future. */
 		using IN = IN_;
 
+		/** Size of the output value of this Future. */
+		static constexpr uint8_t OUT_SIZE = sizeof(OUT);
+		/** Size of the input value of this Future. */
+		static constexpr uint8_t IN_SIZE = sizeof(IN);
+
 		/** 
 		 * Construct a new Future.
 		 * The created Future is in `FutureStatus::NOT_READY` status.
@@ -614,8 +619,6 @@ namespace future
 		 * @sa AbstractFuture
 		 * @sa status()
 		 * @sa FutureStatus
-		 * @sa Future(Future&&)
-		 * @sa operator=(Future&&)
 		 */
 		explicit Future(const IN& input = IN{})
 			: AbstractFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}, input_{input} {}
@@ -732,6 +735,9 @@ namespace future
 		using OUT = OUT_;
 		using IN = void;
 
+		static constexpr uint8_t OUT_SIZE = sizeof(OUT);
+		static constexpr uint8_t IN_SIZE = 0;
+
 		Future() : AbstractFuture{output_buffer_, sizeof(OUT), nullptr, 0} {}
 		~Future() = default;
 
@@ -785,6 +791,9 @@ namespace future
 	public:
 		using OUT = void;
 		using IN = IN_;
+
+		static constexpr uint8_t OUT_SIZE = 0;
+		static constexpr uint8_t IN_SIZE = sizeof(IN);
 
 		explicit Future(const IN& input = IN{})
 			: AbstractFuture{nullptr, 0, input_buffer_, sizeof(IN)}, input_{input} {}
@@ -849,6 +858,9 @@ namespace future
 		using OUT = void;
 		using IN = void;
 
+		static constexpr uint8_t OUT_SIZE = 0;
+		static constexpr uint8_t IN_SIZE = 0;
+
 		Future() : AbstractFuture{nullptr, 0,nullptr, 0} {}
 		~Future() = default;
 
@@ -870,6 +882,291 @@ namespace future
 		bool get()
 		{
 			return (await() == FutureStatus::READY);
+		}
+	};
+	/// @endcond
+
+	/**
+	 * Base class for all `FakeFuture`s.
+	 * A FakeFuture is an implementation for a specific Future that shall be used
+	 * and completed within a single function.
+	 * It is used only as an optimization surrogate for I2C devices working in
+	 * synchronous mode, and should generally not be needed in applications.
+	 * 
+	 * @sa AbstractFuture
+	 * @sa FakeFuture
+	 */
+	class AbstractFakeFuture
+	{
+	public:
+		/// @cond notdocumented
+		FutureStatus status() const
+		{
+			return (error_ == 0 ? FutureStatus::READY : FutureStatus::ERROR);
+		}
+
+		FutureStatus await() const
+		{
+			return status();
+		}
+
+		int error()
+		{
+			return error_;
+		}
+
+		// Methods called by a Future consumer
+		//=====================================
+
+		uint8_t get_storage_value_size_() const
+		{
+			return input_size_;
+		}
+
+		bool get_storage_value_(uint8_t& chunk)
+		{
+			// Check all bytes have not been transferred yet
+			chunk = *input_current_++;
+			--input_size_;
+			return true;
+		}
+
+		bool get_storage_value_(uint8_t* chunk, uint8_t size)
+		{
+			memcpy(chunk, input_current_, size);
+			input_current_ += size;
+			input_size_ -= size;
+			return true;
+		}
+
+		// Methods called by a Future supplier
+		//=====================================
+
+		uint8_t get_future_value_size_() const
+		{
+			return output_size_;
+		}
+
+		bool set_future_finish_()
+		{
+			return true;
+		}
+
+		bool set_future_value_(uint8_t chunk)
+		{
+			// Update Future value chunk
+			*output_current_++ = chunk;
+			return true;
+		}
+
+		bool set_future_value_(const uint8_t* chunk, uint8_t size)
+		{
+			while (size--)
+			{
+				set_future_value_(*chunk++);
+			}
+			return true;
+		}
+
+		template<typename T> bool set_future_value_(const T& value)
+		{
+			return set_future_value_(reinterpret_cast<const uint8_t*>(&value), sizeof(T));
+		}
+
+		bool set_future_error_(int error)
+		{
+			error_ = error;
+			return true;
+		}
+		/// @endcond
+
+	protected:
+		/// @cond notdocumented
+		// "default" constructor
+		AbstractFakeFuture(uint8_t* output_data, uint8_t output_size, uint8_t* input_data, uint8_t input_size)
+			:	output_current_{output_data}, output_size_{output_size},
+				input_current_{input_data}, input_size_{input_size} {}
+
+		// these constructors are forbidden (subclass ctors shall call above move/copy ctor instead)
+		AbstractFakeFuture(const AbstractFakeFuture&) = delete;
+		AbstractFakeFuture& operator=(const AbstractFakeFuture&) = delete;
+		AbstractFakeFuture(AbstractFakeFuture&&) = delete;
+		AbstractFakeFuture& operator=(AbstractFakeFuture&&) = delete;
+
+		~AbstractFakeFuture() = default;
+
+		// This method is called by subclass to check if input is replaceable,
+		// i.e. it has not been read yet
+		bool can_replace_input_() const
+		{
+			return true;
+		}
+		/// @endcond
+
+	private:
+		int error_ = 0;
+
+		uint8_t* output_current_ = nullptr;
+		uint8_t output_size_ = 0;
+		
+		uint8_t* input_current_ = nullptr;
+		uint8_t input_size_ = 0;
+	};
+
+	/**
+	 * Actual FakeFuture, it has the exact same API as Future and can be used in 
+	 * lieu of Future.
+	 * 
+	 * It is used only as an optimization surrogate for I2C devices working in
+	 * synchronous mode, and should generally not be needed in applications.
+	 */
+	template<typename OUT_ = void, typename IN_ = void>
+	class FakeFuture : public AbstractFakeFuture
+	{
+		static_assert(sizeof(OUT_) <= UINT8_MAX, "OUT type must be strictly smaller than 256 bytes");
+		static_assert(sizeof(IN_) <= UINT8_MAX, "IN type must be strictly smaller than 256 bytes");
+
+	public:
+		/// @cond notdocumented
+		using OUT = OUT_;
+		using IN = IN_;
+
+		static constexpr uint8_t OUT_SIZE = sizeof(OUT);
+		static constexpr uint8_t IN_SIZE = sizeof(IN);
+
+		explicit FakeFuture(const IN& input = IN{})
+			: AbstractFakeFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}, input_{input} {}
+
+		~FakeFuture() = default;
+
+		bool reset_input_(const IN& input)
+		{
+			input_ = input;
+			return true;
+		}
+
+		bool get(OUT& result)
+		{
+			result = output_;
+			return true;
+		}
+
+	protected:
+		const IN& get_input() const
+		{
+			return input_;
+		}
+		/// @endcond
+
+	private:
+		union
+		{
+			OUT output_;
+			uint8_t output_buffer_[sizeof(OUT)];
+		};
+		union
+		{
+			IN input_;
+			uint8_t input_buffer_[sizeof(IN)];
+		};
+	};
+
+	/// @cond notdocumented	
+	template<typename OUT_>
+	class FakeFuture<OUT_, void> : public AbstractFakeFuture
+	{
+		static_assert(sizeof(OUT_) <= UINT8_MAX, "OUT type must be strictly smaller than 256 bytes");
+
+	public:
+		using OUT = OUT_;
+		using IN = void;
+
+		static constexpr uint8_t OUT_SIZE = sizeof(OUT);
+		static constexpr uint8_t IN_SIZE = 0;
+
+		FakeFuture()
+			: AbstractFakeFuture{output_buffer_, sizeof(OUT), nullptr, 0} {}
+
+		~FakeFuture() = default;
+
+		bool get(OUT& result)
+		{
+			result = output_;
+			return true;
+		}
+
+	private:
+		union
+		{
+			OUT output_;
+			uint8_t output_buffer_[sizeof(OUT)];
+		};
+	};
+	/// @endcond
+
+	/// @cond notdocumented	
+	template<typename IN_>
+	class FakeFuture<void, IN_> : public AbstractFakeFuture
+	{
+		static_assert(sizeof(IN_) <= UINT8_MAX, "IN type must be strictly smaller than 256 bytes");
+
+	public:
+		using OUT = void;
+		using IN = IN_;
+
+		static constexpr uint8_t OUT_SIZE = 0;
+		static constexpr uint8_t IN_SIZE = sizeof(IN);
+
+		explicit FakeFuture(const IN& input = IN{})
+			: AbstractFakeFuture{nullptr, 0, input_buffer_, sizeof(IN)}, input_{input} {}
+
+		~FakeFuture() = default;
+
+		bool reset_input_(const IN& input)
+		{
+			input_ = input;
+			return true;
+		}
+
+		bool get()
+		{
+			return true;
+		}
+
+	protected:
+		const IN& get_input() const
+		{
+			return input_;
+		}
+
+	private:
+		union
+		{
+			IN input_;
+			uint8_t input_buffer_[sizeof(IN)];
+		};
+	};
+	/// @endcond
+
+	/// @cond notdocumented	
+	template<>
+	class FakeFuture<void, void> : public AbstractFakeFuture
+	{
+	public:
+		using OUT = void;
+		using IN = void;
+
+		static constexpr uint8_t OUT_SIZE = 0;
+		static constexpr uint8_t IN_SIZE = 0;
+
+		FakeFuture()
+			: AbstractFakeFuture{nullptr, 0, nullptr, 0} {}
+
+		~FakeFuture() = default;
+
+		bool get()
+		{
+			return true;
 		}
 	};
 	/// @endcond

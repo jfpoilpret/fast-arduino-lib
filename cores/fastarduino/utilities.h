@@ -342,9 +342,9 @@ namespace utils
 	 */
 	inline uint8_t bcd_to_binary(uint8_t bcd)
 	{
-		uint8_t tens = bcd >> 4;
+		const uint8_t tens = bcd / 16;
 		// We avoid tens * 10 to avoid adding library for multiplication
-		return (tens * 8) + (tens * 2) + (bcd & 0x0F);
+		return (tens << 3) + (tens << 1) + (bcd & 0x0F);
 	}
 
 	/**
@@ -405,7 +405,7 @@ namespace utils
 	/**
 	 * Cast a one byte long bit-fields struct into a byte.
 	 * Useful when dealing with devices registers (bytes) where each bit has a
-	 * specific maening which you want to clarify through a bitfield struct.
+	 * specific meaning which you want to clarify through a bitfield struct.
 	 * @param input the bit field struct value to convert
 	 * @return @p input casted as a byte
 	 */

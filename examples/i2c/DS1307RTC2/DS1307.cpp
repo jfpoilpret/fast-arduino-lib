@@ -18,6 +18,8 @@
  * 
  * Wiring:
  * NB: you should add pullup resistors (10K-22K typically) on both SDA and SCL lines.
+ * WARNING: wiring is very sensitive for I2C connections! When using breadboard, ensure
+ * wires connections are tight and stable.
  * - on ATmega328P based boards (including Arduino UNO):
  *   - A4 (PC4, SDA): connected to DS1307 SDA pin
  *   - A5 (PC5, SCL): connected to DS1307 SCL pin
@@ -41,44 +43,57 @@
  */
 
 #include <fastarduino/time.h>
-#include <fastarduino/i2c_manager.h>
+#include <fastarduino/i2c_handler.h>
 #include <fastarduino/devices/ds1307.h>
 #include <fastarduino/iomanip.h>
+#include <fastarduino/i2c_debug.h>
+#include <fastarduino/i2c_status.h>
 
 #if defined(ARDUINO_UNO) || defined(ARDUINO_NANO) || defined(BREADBOARD_ATMEGA328P)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART0;
+static constexpr const uint8_t DEBUG_SIZE = 128;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
 #elif defined(ARDUINO_MEGA)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART0;
+static constexpr const uint8_t DEBUG_SIZE = 128;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
 #elif defined(ARDUINO_LEONARDO)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART1;
+static constexpr const uint8_t DEBUG_SIZE = 128;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(1)
 #elif defined(BREADBOARD_ATTINYX4)
 #define HARDWARE_UART 0
 #include <fastarduino/soft_uart.h>
+static constexpr const uint8_t DEBUG_SIZE = 32;
 static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
-static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 32;
 #elif defined(BREADBOARD_ATTINYX5)
 #define HARDWARE_UART 0
 #include <fastarduino/soft_uart.h>
+static constexpr const uint8_t DEBUG_SIZE = 32;
 static constexpr const board::DigitalPin TX = board::DigitalPin::D3_PB3;
-static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 32;
 #else
 #error "Current target is not yet supported!"
 #endif
+
+#define DEBUG_I2C
+#define FORCE_SYNC
 
 // UART buffer for traces
 static char output_buffer[OUTPUT_BUFFER_SIZE];
@@ -89,18 +104,35 @@ using devices::rtc::tm;
 using devices::rtc::SquareWaveFrequency;
 using namespace streams;
 
-// Have to somehow declare this ugly global pointer so that trace_status()
-// knwos where to display its content.
-static ostream* pout = 0;
-void trace_status(uint8_t expected_status UNUSED, uint8_t actual_status UNUSED)
-{
-	(*pout) << hex << F("status expected = ") << expected_status << F(", actual = ") << actual_status << endl;
-}
+#ifdef DEBUG_I2C
+using DEBUGGER = i2c::debug::I2CDebugStatusRecorder<DEBUG_SIZE, DEBUG_SIZE>;
+#	if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
+using MANAGER = i2c::I2CAsyncStatusDebugManager<
+	i2c::I2CMode::STANDARD, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, DEBUGGER&, DEBUGGER&>;
+static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
+#	else
+using MANAGER = i2c::I2CSyncStatusDebugManager<i2c::I2CMode::STANDARD, DEBUGGER&, DEBUGGER&>;
+#	endif
+#define DEBUG(OUT) debugger.trace(OUT)
+#define SHOW_STATUS(OUT)
 
-void display_status(ostream& out, char index, uint8_t status)
-{
-	out << hex << F("status #") << index << ' ' << status << endl;
-}
+#else
+
+using STATUS = i2c::status::I2CLatestStatusHolder;
+#	if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
+using MANAGER = i2c::I2CAsyncStatusManager<
+	i2c::I2CMode::STANDARD, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, STATUS&>;
+static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
+#	else
+using MANAGER = i2c::I2CSyncStatusManager<i2c::I2CMode::STANDARD, STATUS&>;
+#	endif
+#define DEBUG(OUT)
+#define SHOW_STATUS(OUT) OUT << streams::hex << status_holder.latest_status() << streams::endl
+#endif
+
+#if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
+REGISTER_I2C_ISR(MANAGER)
+#endif
 
 void display_ram(ostream& out, const uint8_t* data, uint8_t size)
 {
@@ -138,25 +170,44 @@ int main()
 #endif
 	uart.begin(115200);
 	ostream out = uart.out();
-	pout = &out;
 	out << F("Start") << endl;
-	
+
 	// Start TWI interface
 	//====================
-	i2c::I2CManager<> manager{trace_status};
+#ifdef DEBUG_I2C
+	DEBUGGER debugger;
+#else
+	STATUS status_holder;
+#endif
+
+#if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
+#	ifdef DEBUG_I2C
+	MANAGER manager{i2c_buffer, debugger, debugger};
+#	else
+	MANAGER manager{i2c_buffer, status_holder};
+#	endif
+#else
+#	ifdef DEBUG_I2C
+	MANAGER manager{debugger, debugger};
+#	else
+	MANAGER manager{status_holder};
+#	endif
+#endif
+
 	manager.begin();
 	out << F("I2C interface started") << endl;
-	display_status(out, '1', manager.status());
+	SHOW_STATUS(out);
 	time::delay_ms(1000);
 	
-	DS1307 rtc{manager};
+	DS1307<MANAGER> rtc{manager};
 	
 	// read RAM content and print out
-	uint8_t data[DS1307::ram_size()];
-	memset(data, 0,sizeof data);
-	rtc.get_ram(0, data, sizeof data);
-	display_status(out, '2', manager.status());
+	uint8_t data[DS1307<MANAGER>::ram_size()];
+	memset(data, 0, sizeof data);
+	rtc.get_ram(0, data);
+	SHOW_STATUS(out);
 	display_ram(out, data, sizeof data);
+	DEBUG(out);
 	
 	tm time1;
 	time1.tm_hour = 8;
@@ -170,34 +221,38 @@ int main()
 	// Initialize clock date
 	//=======================
 	rtc.set_datetime(time1);
-	display_status(out, '3', manager.status());
+	SHOW_STATUS(out);
+	DEBUG(out);
 
 	time::delay_ms(2000);
 	
 	// Read clock
 	//============
 	tm time2;
-	memset(&time2, 0,sizeof time2);
 	rtc.get_datetime(time2);
-	display_status(out, '4', manager.status());
 	display_time(out, time2);
+	SHOW_STATUS(out);
+	DEBUG(out);
 	
 	// Enable output clock
 	//====================
 	rtc.enable_output(SquareWaveFrequency::FREQ_1HZ);
-	display_status(out, '5', manager.status());
+	SHOW_STATUS(out);
+	DEBUG(out);
 	
-	// Provide 10 seconds delay to allow checking square ave output with an oscilloscope
+	// Provide 10 seconds delay to allow checking square wave output with an oscilloscope
 	time::delay_ms(10000);
 	
 	rtc.disable_output(false);
-	display_status(out, '6', manager.status());
+	SHOW_STATUS(out);
+	DEBUG(out);
 
 	// write RAM content
 	for (uint8_t i = 0; i < sizeof(data); ++i)
 		data[i] = i;
-	rtc.set_ram(0, data, sizeof data);
-	display_status(out, '7', manager.status());
+	rtc.set_ram(0, data);
+	SHOW_STATUS(out);
+	DEBUG(out);
 	
 	// Stop TWI interface
 	//===================

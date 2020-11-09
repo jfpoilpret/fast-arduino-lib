@@ -20,13 +20,18 @@ to successfully implement such a driver.
 FastArduino I2C driver API
 --------------------------
 
-The generic support for I2C device driver in FastArduino looks quite simple, it is entirely embedded in 1 class, 
+The generic support for I2C device driver in FastArduino looks quite simple, it is entirely embedded in one class, 
 `i2c::I2CDevice`; this is a template class which all actual I2C device drivers shall derive from.
 
-This template class has only one `MODE` parameter, of type `i2c::I2CMode`, which defines the I2C bus speed, among
-two supported speeds: Normal (100KHz) or Fast (400KHz).
+This template class has only one `MANAGER` parameter, which must be kept as is in all subclasses; this represents 
+the type of I2C Manager used to handle the I2C bus and operations.
 
-The `i2c::I2CDevice` class mainly contains `protected` methods to read and write content to a device on the I2C bus.
+The `i2c::I2CDevice` class mainly contains `protected` types aliases and methods to create and launch read and write
+commands to a device on the I2C bus.
+
+Any FastArduino I2C device must be able to work in both asynchronous and synchronous modes The `i2c::I2CDevice` API is
+made for asynchronous operations; synchronous flavours of a specific device API are based on asynchronous
+implementations of that API (just awaiting for the operation to finish).
 
 As you can see in the following diagrams, the drivers for I2C devices currently supported by FastArduino directly
 derive from `i2c::I2CDevice`:
@@ -35,46 +40,93 @@ derive from `i2c::I2CDevice`:
 @image html classdevices_1_1rtc_1_1_d_s1307__inherit__graph.png
 @image latex classdevices_1_1rtc_1_1_d_s1307__inherit__graph.pdf
 
-2. MCP23017 16-Bit I/O Expander chip
-@image html classdevices_1_1mcp23017_1_1_m_c_p23017__inherit__graph.png
-@image latex classdevices_1_1mcp23017_1_1_m_c_p23017__inherit__graph.pdf
+2. MCP23008 8-Bit I/O Expander chip
+@image html classdevices_1_1mcp230xx_1_1_m_c_p23008__inherit__graph.png
+@image latex classdevices_1_1mcp230xx_1_1_m_c_p23008__inherit__graph.pdf
 
-3. MPU6050 3D Accelerometer-Gyroscope chip
+3. MCP23017 16-Bit I/O Expander chip
+@image html classdevices_1_1mcp230xx_1_1_m_c_p23017__inherit__graph.png
+@image latex classdevices_1_1mcp230xx_1_1_m_c_p23017__inherit__graph.pdf
+
+4. MPU6050 3D Accelerometer-Gyroscope chip
 @image html classdevices_1_1magneto_1_1_m_p_u6050__inherit__graph.png
 @image latex classdevices_1_1magneto_1_1_m_p_u6050__inherit__graph.pdf
 
-4. HMC5883L 3D Compass chip
+5. HMC5883L 3D Compass chip
 @image html classdevices_1_1magneto_1_1_h_m_c5883_l__inherit__graph.png
 @image latex classdevices_1_1magneto_1_1_h_m_c5883_l__inherit__graph.pdf
 
-Do note that, for the RTC DS1307 device above, `MODE` template parameter has been forced to `i2c::I2CMode::STANDARD`
-because that device does not support Fast I2C mode. Driver classes for other devices are still template with
-`i2c::I2CMode` template parameter as they can be used in any mode.
-
-Creating a new driver for an I2C device is as simple as:
-1. Creating a `i2c::I2CDevice` subclass; let's call it `MyI2CDevice` in the rest of this page.
-2. Add a constructor with one argument: `MyI2CDevice::MyI2CDevice(MANAGER& manager)` where `MANAGER` is directly 
-defined as `i2c::I2CManager<MODE>` in superclass `i2c::I2CDevice`.
-3. Add proper `public` API on this `MyI2CDevice` class, based on actual device features we want to use.
-4. Implement this API through the basic `protected` API methods inherited from `i2c::I2CDevice`
+Creating a new driver for an I2C device must follow these steps:
+1. Create a `i2c::I2CDevice` template subclass; let's call it `MyI2CDevice` in the rest of this page.
+2. Redefine (as `private`) the following type aliases inherited from `i2c::I2CDevice`: `PARENT`, `PROXY`, `FUTURE` 
+3. Add a `public` constructor with one argument: `MyI2CDevice::MyI2CDevice(MANAGER& manager)` where `MANAGER` is a class 
+template argument of both `MyI2CDevice` and `i2c::I2CDevice`; this constructor must call the inherited constructor
+and pass it 3 arguments: `manager`, the default I2C address for your device, and finally, one of `i2c::I2C_STANDARD` 
+or `i2c::I2C_FAST` constants, to indicate the best mode (highest I2C frequency) that you device can support.
+4. List the API you need to provide to the end user of your device (based on the device datasheet)
+5. For each `public` API you need to provide, define a specific *Future* to hold
+values written to the device, as well as values later read from the device. Each defined Future shall derive from 
+`FUTURE` (type alias defined above). This future will allow asynchronous execution of the API.
+FastArduino guidelines for I2C devices suggest to name the future class according to the API name itself e.g. 
+`SetDatetimeFuture` for the `set_datetime()` API.
+6. For each `public` API, define a method that takes a `PROXY` to the future defined above and return an `int`. 
+The implementation of this method is based on mainly 3 inherited `protected` methods: `i2c::I2CDevice.read()`,
+`i2c::I2CDevice.write()` and `i2c::I2CDevice.launch_commands()`
+7. For each `public` API, also define a similar method (same name) with a synchronous flavour. That method will
+directly take "natural" arguments (no futures) as input or output (reference), and return a `bool` to indicate
+if API was performed without any error.
 
 ### I2CDevice API ###
-Subclassing `i2c::I2CDevice` gives `MyI2CDevice` access to all low-level `protected` methods:
-- `i2c::I2CDevice.read(uint8_t, uint8_t*, uint8_t, BusConditions)`: read an array of bytes from the I2C device
-- `i2c::I2CDevice.read(uint8_t, T&, BusConditions)`: read bytes as a struct `T` from the I2C device
-- `i2c::I2CDevice.write(uint8_t, uint8_t, BusConditions)`: write one byte to the I2C device
-- `i2c::I2CDevice.write(uint8_t, const uint8_t*, uint8_t, BusConditions)`: write an array of bytes to the I2C device
-- `i2c::I2CDevice.write(uint8_t, const T&, BusConditions)`: write bytes of a struct `T` to the I2C device
 
-All methods above start with `uint8_t address` as their first argument. This is the unique device address 
-on the I2C bus, made of 7 bits. Typically an I2C device falls in one of the following categories:
+Before describing FastArduino I2C Device API, it is important to mention that this API is heavily based
+on FastArduino [`future`](namespacefuture.html) API, which concepts shall be first understood before starting to build
+your own support for an I2C device.
+
+Subclassing `i2c::I2CDevice` gives `MyI2CDevice` access to all low-level `protected` aliases:
+- `PARENT`: this is simply defined as `i2c::I2CDevice<MANAGER>` and is useful for accessing next aliases
+- `i2c::I2CDevice::PROXY`: this is the type of lifecycle proxy used by `MANAGER`; it must be used for all asynchronous 
+API of `MyI2CDevice` to embed actual Future types
+- `i2c::I2CDevice::FUTURE`: this is the type of Future used by `MANAGER`; it must be used for defining your own
+Future types for all asynchronous API of `MyI2CDevice`
+
+Note that to be accessible from `MyI2CDevice` class, these types must be redefined as follows:
+@code{.cpp}
+	private:
+		using PARENT = i2c::I2CDevice<MANAGER>;
+		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
+		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
+@endcode
+
+`i2c::I2CDevice` constructor takes 4 arguments:
+1. `MANAGER& manager`: this should be passed as is from `MyI2CDevice` constructor
+2. `uint8_t device`: this is the default I2C address of this device (this 7-bits address must be already left-shifted
+one bit to leave the LSB available for I2C direction read or write)
+3. `Mode<MODE> mode` (`MODE` is a template argument of the constructor, `i2c::I2CMode MODE`): this should be passed one of
+2 constants `i2c::I2C_FAST` or `i2c::I2C_STANDARD`) to indicate the best I2C mode (highest frequency) supported by 
+`MyI2CDevice`: this will impact what `MANAGER` type can be used when instantiating `MyI2CDevice` template
+4. `bool auto_stop`: this defines whether all chains of commands of `MyI2CDevice` shall automatically be ended with
+a STOP condition on the I2C bus or not. In most cases, the default (`false`) should work, but some devices 
+(e.g. DS1307) do not work properly in 2 chains of commands are not separated by a STOP condition.
+
+Note that `device` address must be provided at construction time but can optionally be changed later.
+Regarding its I2C address, typically an I2C device falls in one of the following categories:
 1. it has a fixed I2C address that cannot be changed (e.g. DS1307 RTC chip)
 2. it has an I2C address that can be changed by hardware (e.g. jumpers) among a limited range of possible addresses
 (e.g. MCP23017 I/O expander chip, MPU 6050 acceleromete/gyroscope chip)
 3. it has a fixed I2C address that can be changed by software (e.g. VL53L0X "micro lidar" chip); 
 this is generally harder to support.
 
-For devices in category 1, you would typically define the address as a constant in `MyI2CDevice`.
+For devices in category 1, you would typically define the address as a constant in `MyI2CDevice` and pass it 
+directly to `i2c::I2CDevice` constructor.
+
+Here is a snippet from DS1307 device:
+@code{.cpp}
+	public:
+		explicit DS1307(MANAGER& manager) : PARENT{manager, DEVICE_ADDRESS, i2c::I2C_STANDARD} {}
+
+	private:
+		static constexpr const uint8_t DEVICE_ADDRESS = 0x68 << 1;
+@endcode
 
 For devices in category 2, you would rather define an `enum class` limiting the possible addresses configurable by
 hardware, or pass the address (as `uint8_t`) to the driver class constructor.
@@ -82,69 +134,114 @@ hardware, or pass the address (as `uint8_t`) to the driver class constructor.
 For devices in category 3, you would first define the fixed address as a constant, then define an API to change it
 (as a data member of `MyI2CDevice`).
 
-All methods above always end with a `i2c::BusConditions conditions` argument. This argument is super important as it 
-defines how each method shall handle the I2C bus (this bus is shared between all devices and thus access to it must
-follow certain rules).
+Subclassing `i2c::I2CDevice` gives `MyI2CDevice` access to all low-level `protected` methods:
+- `i2c::I2CDevice.read(uint8_t read_count, bool finish_future, bool stop)`: create a command to read bytes from the 
+I2C device; read bytes will be added to the related Future (passed to `launch_commands()`)
+- `i2c::I2CDevice.write(uint8_t write_count, bool finish_future, bool stop)`:create a command to write bytes to the
+I2C device; written bytes are taken from the related Future (passed to `launch_commands()`)
+- `i2c::I2CDevice.launch_commands(PROXY<> proxy, initializer_list<> commands)`: prepare passed read/write 
+`commands` and send them to `MANAGER` for later asynchronous execution (commands are queued); the `Future` referenced
+by `proxy` is used to provide data to write to, and store data to read from, the I2C device.
+- `i2c::I2CDevice.set_device(uint8_t device)`: change the I2C address of this device. This is useful for devices
+that allow changing their I2C address by software.
+- `i2c::I2CDevice.resolve(PROXY<T> proxy)`: this method must be used when you need to resolve a `PROXY` passed to
+one of your API, in order to access some parts of its proxied Future. This method is seldom used.
+- `i2c::I2CDevice.make_proxy(const T& target)`: this method must be used in your synchronous API, in order to
+"proxify" a local Future before calling the related asynchronous API.
 
-In particular, before any access to the I2C bus, a host device (the MCU) must first send a 
-"START condition" onto it, and only after that can it initialize a communication to a given device, known by 
-its I2C address.
+Note that `read()` and `write()` methods do not actually perform any I2C operation! They only prepare an I2C read 
+or write command (`i2c::I2CLightCommand` type embedding necessary information) based on their arguments:
+- `read_count`/`write_count` specify the number of bytes to read or write. When `0` (the default), this means that
+all bytes (as defined in the specific Future) will be read or written.
+- `finish_future`: specify that, after this command execution, the Future assigned to the current transaction 
+will be marked as finished
+- `stop`: specify that, after this command execution, an I2C STOP condition will be generated on the I2C bus;
+this will automatically trigger a "START" condition on the next command (whether it is part of the current chain 
+of commands or not)
 
-All bytes sent or received must be acknowledged (though special signals on SDA and SCL wires) by the recipient.
+The `launch_commands()` method does the actual work:
+- with a synchronous I2C Manager, it blocks until all commands get executed or an error occurs; the assigned Future
+is directly `READY` (or in `ERROR`) when the method returns
+- with an asynchronous I2C Manager, it enqueues all commands for asynchronous execution and returns immediately; the
+assigned Future will be later updated (it status will become either `READY` or `ERROR`) once all commands are complete.
 
-Once a transmission between a host and a device is finished, the bus must be released (for later transmissions) through
-a "STOP condition".
 
-The `i2c::BusConditions` argument for each read/write method indicates whether te method should first acquire the I2C
-bus before writing or reading, if it should release the I2C bus after writing or reading. This allows your API
-implementation to perform a sequence of calls to the I2C device, where the first call will acquire the bus and the last 
-call will release it, and calls in between will not need to acquire or release the bus.
+### I2C Bus handling ###
 
-Note that many I2C devices communication is based on writing and reading "registers", each device having its own
+Handling of the I2C bus by the I2C Manager and the `I2CDevice` follows standard I2C protocol, with some level of 
+"intelligence".
+
+In usual conditions: `launch_commands()` can execute long chains of commands on one device:
+1. The first command in the chain will generate a "START" condition on the I2C bus as required by the I2C protocol
+2. By default, all following commands will be preceded by a "REPEAT START" condition on the I2C bus
+3. By default, the last command in the chain will **not** end with a "STOP" condition on the bus; FastArduino 
+I2C Manager will keep the I2C bus for itself, unless required otherwise by I2C devices implementation.
+
+This default behaviour allows your I2C device API implementation to perform a sequence of calls to the I2C device, 
+where the first call will acquire the bus, and all following calls in between will not need to acquire the bus.
+
+You can change the default for each command or for a whole device:
+- at command level, by setting `stop` argument to `true`, which will produce a "STOP" condition at the end 
+of that command and a "START" condition on the next command in the chain.
+- at device level, by setting `auto_stop` constructor argument to `true`; then all chains of commands for the device
+will always end with a STOP condition.
+
+**IMPORTANT:** Actually, asynchronous flavours of I2C Managers will release the I2C bus at the end of an 
+I2C transaction, in case there is no more pending command (from another I2C transaction) in the commands queue.
+
+### API Typical Example ###
+
+For many I2C devices, communication is based on writing and reading "registers", each device having its own
 list of specific registers. Hence most I2C device drivers API will consist in reading or writing one register.
-In FastArduino, drivers like `devices::magneto::HMC5883L` first define `private` methods to read and write registers,
-which other API methods can simply use (by passing the right register number and proper value):
+
+In FastArduino, drivers like `devices::mcp230xx::MCP23008` first define `private` generic Future classes, later used
+by specific API to read registers:
 
 @code{.cpp}
-    using BUSCOND = i2c::BusConditions;
-
-    bool write_register(uint8_t address, uint8_t value)
+    class ReadRegisterFuture : public FUTURE<uint8_t, uint8_t>
     {
-        using i2c::Status::OK;
-        return (this->write(DEVICE_ADDRESS, address, BUSCOND::START_NO_STOP) == OK
-                && this->write(DEVICE_ADDRESS, value, BUSCOND::NO_START_STOP) == OK);
-    }
+        using PARENT = FUTURE<uint8_t, uint8_t>;
+    protected:
+        ReadRegisterFuture(uint8_t address) : PARENT{address} {}
+        ReadRegisterFuture(ReadRegisterFuture&&) = default;
+        ReadRegisterFuture& operator=(ReadRegisterFuture&&) = default;
+    };
+@endcode
 
-    bool read_register(uint8_t address, uint8_t& value)
+In this snippet, a base Future, `ReadRegisterFuture`, is defined. It will serve as a base class for all specific
+Futures needed by all API reading registers, like in the following excerpt from MCP23008 device:
+@code{.cpp}
+    // Address of GPIO register (to read digital input pins from MCP23008)
+	static constexpr const uint8_t GPIO = 0x09;
+
+    class GetValuesFuture : public ReadRegisterFuture
     {
-        using i2c::Status::OK;
-        return (this->write(DEVICE_ADDRESS, address, BUSCOND::START_NO_STOP) == OK
-                && this->read(DEVICE_ADDRESS, value, BUSCOND::REPEAT_START_STOP) == OK);
+    public:
+        GetValuesFuture() : ReadRegisterFuture{GPIO} {}
+        GetValuesFuture(GetValuesFuture&&) = default;
+        GetValuesFuture& operator=(GetValuesFuture&&) = default;
+    };
+
+    int values(PROXY<GetValuesFuture> future)
+    {
+        return this->launch_commands(future, {this->write(), this->read()});
     }
 @endcode
 
-Note usage of `using BUSCOND = i2c::BusConditions;` and `using i2c::Status::OK;` to ease code writing and reading.
+In the above code, the only added value of `GetValuesFuture` class is to embed the `GPIO` register address; this allows
+callers of the `values()` API to directly instantiate this Future without further input.
 
-In this snippet, `write_register()` is straightforward:
-1. It starts (`START_NO_STOP`) I2C communication with device `DEVICE_ADDRESS` and sends register number `address` to 
-the I2C device
-2. It then sends `value` byte to the same device (as part of the same transmission) which will be written to the device 
-register, then it stops (`NO_START_STOP`) I2C communication
+The implementation of `values()` is a one-liner that requires a few explanations:
+- `launch_commands()` has only 2 arguments: `future` that is directly passed from the API argument, and a list of 
+commands (embedded within braces)
+- in this example, there are only 2 commands; the first, returned by `write()`, writes all input content of `future`, 
+i.e. the `GPIO` register address (single) byte); the second command, created by `read()`, reads enough bytes (only 
+one here) from the decice to fill the output of `future`.
+- both commands are created with default calls to `read()` and `write()` i.e. `0` for bytes count (special meaning:
+use full content size of `future`), `false` for `finish_future` and `stop`, leading to generation of "START" condition at the
+beginning, and no STOP forced at the end.
 
-`read_register()` is a bit more special:
-1. It starts (`START_NO_STOP`) I2C communication with device `DEVICE_ADDRESS` and sends register number `address` to 
-the I2C device (same as before)
-2. It then restarts (`REPEAT_START_STOP`) a new I2C transmission to ask the device for the value in that register, then
-it finally stops (`REPEAT_START_STOP`) I2C communication
-
-Here, in step 2, we cannot use the same transmission to read after write, as one transmission defines the data
-direction; however, we can take advantage of the current write transmission (I2C bus already accquired) to restart a
-new transmission but for reading. Please do note that some I2C devices do support this way for write-then-read, but not 
-all of them; refer to the target device datahseet for further details.
-
-Note that both `i2c::I2CDevice.read()` and `i2c::I2CDevice.write()` sets of methods exist in a `template` flavour that
-allows using `struct` types references directly, instead of using arrays of bytes, which can simplify code 
-implementation.
+A similar approach is used for writing a value to a device register and will not be detailed here.
 
 
 Debugging support for a new device (low-level)
@@ -161,6 +258,8 @@ One easy way to develop such a debugging sample is to create a program with just
 - a `PublicDevice` class that derives from `i2c::I2CDevice` but declares `main()` as a `friend`, which allows direct 
 calls, from `main()`, to `protected` API of `i2c::I2CDevice`, for easy testing
 - directly call SPI API on a `PublicDevice` instance, from `main()` and trace results to a console, through UART
+- use, as I2C Manager, `I2CSyncDebugManager` or `I2CSyncDebugStatusManager`, which allow tracing (live or later) all
+steps of I2C transactions
 
 FastArduino includes such a debugging sample in `examples/i2c/I2CDeviceProto` example, copied hereafter:
 
@@ -173,11 +272,8 @@ This example is just an empty skeleton for your own tests. It is made of several
 @line include
 @line include
 @line include
+@line include
 Those lines include a few headers necessary (or just useful) to debug an I2C device.
-
-@skip REGISTER
-@until uart.out()
-Then an output stream is created for tracing through UART, and the necessary UART ISR is registered.
 
 @skip MODE
 @until DEVICE_ADDRESS
@@ -185,16 +281,19 @@ Any specificity of the tested I2C device is defined as a constant in the next co
 Note the definition of `DEVICE_ADDRESS` constant: this 7-bit I2C device address is shifted one bit left as an 8th bit
 will be added (I2C communication protocol) to define data direction for each transmission.
 
+@skip DEBUG_SIZE
+@until FUTURE
+This section defines various types aliases, for I2C Manager, I2C debugger, and types used as part of device API definition. In addition, a `DEBUG` macro to debug all I2C steps after API execution is defined.
+
+@skip REGISTER
+@until uart.out()
+Then an output stream is created for tracing through UART, and the necessary UART ISR is registered.
+
 @skip PublicDevice
 @until };
 This is where we define a utility class to debug our I2C interface to the tested device. `PublicDevice` class does 
 **nothing** but making all protected methods callable from `main()`, so that we can directly perform our code tests in
 `main()`, without thinking much about proper API design now.
-
-@skip trace_i2c_status
-@until }
-This utility method is automatically called back by FastArduino I2C library for every low-level I2C command; it is
-useful to debug communication issues with the target I2C device during tests.
 
 @skip main()
 @until out.width
@@ -207,8 +306,9 @@ Here we simply initialize I2C function on the UNO.
 @skipline PublicDevice
 We then declare the `device` variable that we will use for testing our I2C device.
 
-Finally we start an infinite loop where we can call read/write methods on `device` in order to test the way to handle 
-the target device.
+Finally the rest of the code is placeholder for any initialization API,
+followed by an infinite loop where you can call lauinch_commands/read/write methods on `device` in order to test
+the way to handle the target device.
 
 
 Defining the driver API based on device features
@@ -234,20 +334,33 @@ Implementing the driver API
 
 This step consists in implementing the API defined in the step before.
 
-Typically every API method will be made of:
-- `write()` calls to the device
-- `read()` calls to the device
-- various conversions or calculation before calling `write()` or after calling `read()`
+Typically every API will be made of:
+- a specific Future class taht encapsulates input arguments (in its constructor) and holds place for output;
+this Future shall embed any necessary conversion of input arguments if needed, as well as conversion of output,
+through override of `get()` method
+- one asynchronous method taking as only argument `PROXY` to the Future defined above, calling `launch_commands()`
+withe `write()` and `read()` calls to prepare I2C commands, as described above in the description of 
+`i2c::I2CDevice` API
+- one synchronous method taking same arguments as Future constructor defined above, plus a reference argument
+for any output; this method instantiates the above Future, calls the asynchronous method defined before, and 
+awaits the Future to be ready and get its output
 
-Here is a concrete example from `devices::rtc::DS1307`, another I2C device driver in FastArduino:
+Here is a concrete example from `devices::rtc::DS1307`, another I2C device driver in FastArduino.
+
+The first snippet below defines a specific Future for getting current datetime from the device:
 @code{.cpp}
-    bool get_datetime(tm& datetime)
+	static constexpr const uint8_t TIME_ADDRESS = 0x00;
+
+    class GetDatetimeFuture : public FUTURE<tm, uint8_t>
     {
-        // send register address to read from (0)
-        // read datetime at address 0
-        if (write(DEVICE_ADDRESS, TIME_ADDRESS, i2c::BusConditions::START_NO_STOP) == i2c::Status::OK
-            && read(DEVICE_ADDRESS, datetime, i2c::BusConditions::REPEAT_START_STOP) == i2c::Status::OK)
+    public:
+        GetDatetimeFuture() : FUTURE<tm, uint8_t>{TIME_ADDRESS} {}
+        GetDatetimeFuture(GetDatetimeFuture&&) = default;
+        GetDatetimeFuture& operator=(GetDatetimeFuture&&) = default;
+
+        bool get(tm& datetime)
         {
+            if (!FUTURE<tm, uint8_t>::get(datetime)) return false;
             // convert DS1307 output (BCD) to integer type
             datetime.tm_sec = utils::bcd_to_binary(datetime.tm_sec);
             datetime.tm_min = utils::bcd_to_binary(datetime.tm_min);
@@ -257,12 +370,43 @@ Here is a concrete example from `devices::rtc::DS1307`, another I2C device drive
             datetime.tm_year = utils::bcd_to_binary(datetime.tm_year);
             return true;
         }
-        return false;
+    };
+@endcode
+In this code, `tm` is a strcuture to hold all parts of a datetime.
+
+The constructor takes no argument: it just passes `TIME_ADDRESS` constant to the superclass.
+
+Note the overridden `get()` method, necessary to convert raw datetime data read from the device,
+to properly formatted data, usable by the caller program.
+
+The second snippet shows the asynchronous API method:
+@code{.cpp}
+    int get_datetime(PROXY<GetDatetimeFuture> future)
+    {
+        return this->launch_commands(future, {this->write(), this->read()});
     }
 @endcode
+In this code, one read and one write commands are generated and sent to the I2C Manager for execution (immediate 
+or deferred, depending on the I2C Manager associated to the device); the write command writes all bytes from 
+`GetDatetimeFuture`, i.e. one byte; the read command reads as many bytes as expected by `GetDatetimeFuture`, i.e. 
+one byte. Although not directly visible in this snippet, at the end of the I2C transaction (end of read command), 
+a "STOP" condition is generated, releasing the I2C bus. This seems required by DS1307 device (from experiment) to 
+release the bus between two consecutive transactions. This is why `DS1307` device constructor sets `auto_stop`
+to `true`.
 
-Note that, besides one I2C transmission with one `write()` followed by one `read()`, most code here consists in
-converting each received piece of data to proper format (BCD to binary).
+The last snippet demonstrates implementation of the synchronous API method:
+@code{.cpp}
+    bool get_datetime(tm& datetime)
+    {
+        GetDatetimeFuture future;
+        if (get_datetime(PARENT::make_proxy(future)) != 0) return false;
+        return future.get(datetime);
+    }
+@endcode
+The implementation is totally based on the asynchronous method: it instantiates a `GetDatetimeFuture` future,
+passes it as a `PROXY`, through `PARENT::make_proxy(future)` to the asynchronous method.
+If the asynchronous method fails (return `!= 0`), then we return `false` immediately; otherwise, we await on 
+`future`, through the call of `future.get(datetime)` which is blocked until `future` is `READY` or in `ERROR`.
 
 
 The last mile: add driver to FastArduino project!

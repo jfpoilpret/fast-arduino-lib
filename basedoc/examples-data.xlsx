@@ -18,13 +18,13 @@ UartApp2	SW UARX/UATX with PCI	1130	130	1216	130	1266	130	1052	130	1048	130
 UartApp3	SW UART with PCI	1128	130	1198	130	1264	130	1050	130	1046	130
 UartApp4	SW UART with INT	1120	130	1200	130	1252	130	1054	130		
 UartApp5	HW UATX with flash string output	796	94			936	94				
-UartApp6	HW UART with iostream conversion checks	12890	162			13200	162				
+UartApp6	HW UART with iostream conversion checks	13298	162			13614	162				
 UartApp7	SW UATX timing debug example	804	64								
 UartApp8	SW UARX timing debug example	752	94								
-UartApp9	HW UART test of begin/end	3708	148			3910	148				
-UartApp10	HW UART test of begin/end	3662	146			3864	146				
-UartApp11	SW UART test of begin/end	4008	178								
-UartApp12	SW UART test of begin/end	3626	146								
+UartApp9	HW UART test of begin/end	3764	148			3986	148				
+UartApp10	HW UART test of begin/end	3718	146			3940	146				
+UartApp11	SW UART test of begin/end	4064	178								
+UartApp12	SW UART test of begin/end	3682	146								
 Flash1	Display (UATX) strings and structures from Flash	2144	74	2228	74	2288	74	2064	72		
 InputCapture1	Measure button switch duration through timer ICP (UATX)	2464	76	2548	76	2646	76	2406	42		
 RTTApp1b	Check all timers with RTT to blink a LED based on delay	794	6	888	6	1540	12	520	4	524	4
@@ -57,27 +57,31 @@ Eeprom1	Blocking EEPROM read/writes (UATX)	2430	104	2514	104	2574	104	2348	102	2
 Eeprom2	Asynchronous EEPROM writes (UATX)	3378	382	3446	382	3524	382	3252	380		
 Eeprom3	Asynchronous EEPROM writes with callback (UATX)	3602	418	3670	418	3748	418	3478	416		
 Eeprom4	Check EEMEM variables to read/write EEPROM (UATX)	3234	162	3318	162	3388	162	3154	160		
-IOStreams1	Check ostream (SW UATX)							3056	64		
-IOStreams2	Check real Vs. null ostream	5814	94	5898	94	6022	94	5754	94	5750	94
-IOStreams3	Check ostream error handling (UART)	3646	184								
+IOStreams1	Check ostream (SW UATX)							3264	64		
+IOStreams2	Check real Vs. null ostream	6020	94	6104	94	6194	94	5962	94	5958	94
+IOStreams3	Check ostream error handling (UART)	3792	184								
+LifecycleCheck	Unit Tests of lifecycle/proxy API	8042	140								
+FutureCheck	Unit Tests of future API	11160	146								
 QueueCheck	Unit Tests of queue container	4434	592								
 LinkedListCheck	Unit Tests of linked list container	6000	463								
 UtilsCheck	Unit Tests of conversion utilities	3272	230								
-AccelGyro1	Display (UATX) measures (gyro, accel) from MPU6050 (i2c)	3340	95	3424	95	3498	95	3490	100		
-AccelGyro2	Display (UATX) continuous measures (gyro, accel) from MPU6050 FIFO (i2c)	3472	95	3556	95	3630	95	3672	100		
-DS1307RTC1	Change RTC and display (UATX) date/time (i2c)	2366	168	2450	168	2506	168	2400	166	2396	166
-DS1307RTC2	Change RTC, display (UATX) date/time, use RAM and clock generation (i2c)	3118	76	3202	76	3262	76	3218	74	3214	74
-Magneto1	Display (UATX) measures (compass) from HMC5883L (i2c)	6910	95	6994	95	7136	95	7110	100		
-Magneto2	Display (UATX) measures (compass) from HMC5883L (i2c, with DRDY interrupt)	2776	97	2860	97	2942	97	2936	102		
+AccelGyro0	Check of MPU6050 FIFO push/pop (i2c)	3534	111	3618	111	3692	111	3490	84		
+AccelGyro1	Display (UATX) measures (gyro, accel) from MPU6050 (i2c)	3810	103	3894	103	3968	103	3834	76		
+AccelGyro2	Display (UATX) continuous measures (gyro, accel) from MPU6050 FIFO (i2c)	4010	113	4094	113	4168	113	4098	118		
+DS1307RTC1	Change RTC and display (UATX) date/time (i2c)	4402	298	4486	298	4562	298	3688	134	3684	134
+DS1307RTC2	Change RTC, display (UATX) date/time, use RAM and clock generation (i2c)	4836	102	4920	102	4980	102	4714	68	4710	68
+DS1307RTC3	Change RTC and display (UATX) date/time (i2c, asynchronous)	4998	272	5082	272	5158	272				
+DS1307RTC4	Change RTC and display (UATX) date/time (i2c, asynchronous, with callback)	5038	274	5122	274	5198	274				
+Magneto1	Display (UATX) measures (compass) from HMC5883L (i2c)	7914	84	7998	84	8078	84	3768	82		
+Magneto2	Display (UATX) measures (compass) from HMC5883L (i2c, with DRDY interrupt)	3284	107	3368	107	3450	107	3326	112		
 MultiADC00	Check MCP3x0x constexpr (compile only, does nothing)	132	0	200	0	260	0	62	0	58	0
 MultiADC01	MCP3008 pots reading and trace (UATX) (spi)	1974	74	2058	74	2152	74	1896	72	1892	72
 MultiADC02	MCP3X0X chips support compilation check (spi)	4294	74	4378	74	4518	74	4212	72	4208	72
-MultiIO0	Direct MCP23017 command and trace (UATX) for testing chip (i2c)	2296	180			2436	180				
-MultiIO1	LED chaser with config buttons and LEDs on MCP23017 2 ports (i2c)	974	8	1058	8	1106	8	1036	8	1032	8
-MultiIO2	LED chaser with config buttons and LEDs on MCP23017 1 port (i2c)	1106	8	1190	8	1238	8	1186	8	1182	8
-MultiIO3	LED chaser with config buttons (callback function) and LEDs on MCP23017 2 ports (i2c)	990	12								
-MultiIO4	LED chaser with config buttons (callback method) and LEDs on MCP23017 2 ports (i2c)	986	10								
-MultiIO5	LED chaser with config buttons (callback method) and LEDs on MCP23008 (i2c)	964	10								
+MultiIO1	LED chaser with config buttons and LEDs on MCP23017 2 ports (i2c)	1504	12	1588	12	1636	12	1460	12	1456	12
+MultiIO2	LED chaser with config buttons and LEDs on MCP23017 1 port (i2c)	1452	12	1536	12	1584	12	1408	12	1404	12
+MultiIO3	LED chaser with config buttons (callback function) and LEDs on MCP23017 2 ports (i2c)	1530	16								
+MultiIO4	LED chaser with config buttons (callback method) and LEDs on MCP23017 2 ports (i2c)	1538	14								
+MultiIO5	LED chaser with config buttons (callback method) and LEDs on MCP23008 (i2c)	1506	14					1462	14		
 Servo1	Servo controlled by a pot through 8bits pulse timer	642	2	726	2	778	2	594	2		
 Servo2	Servo controlled by a pot through 16bits pulse timer	562	0	646	0	690	0	488	0		
 RF24App1	NRF24L01P ping-pong (UATX except ATtiny), no IRQ (spi)	4140	224	4236	224	4432	224	1746	8	1292	6
@@ -101,4 +105,5 @@ tones4	Tone player from SRAM, stoppable from external interrupt (QTonePlay)	1116
 tones5	Tone player from SRAM, playing asynchronously from ISR (QTonePlay)	1428	288								
 tones6	Tone player from Flash, playing 2 channels asynchronously from RTT events (QTonePlay)	2218	42								
 tones7	Tone player from Flash, playing asynchronously from RTT events (QTonePlay)	1528	42								
+PCIFuture	Example of Future concept usage with PCI ISR	1946	76	2030	76	2046	76	1860	74	1858	74
 Conway	Game of Life (8x8 LED) 1KB Hackaday	2972	267	1168	0			994	0		

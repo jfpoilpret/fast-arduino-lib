@@ -41,7 +41,7 @@
 
 /**
  * Register the necessary ISR (Interrupt Service Routine) for eeprom::QueuedWriter 
- * to work properly, along with a callback method taht will be called everytime
+ * to work properly, along with a callback method that will be called everytime
  * all pending queued write operations are complete.
  * 
  * @param HANDLER the class holding the callback method

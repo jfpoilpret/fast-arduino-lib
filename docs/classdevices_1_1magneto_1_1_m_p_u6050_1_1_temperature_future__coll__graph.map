@@ -1,0 +1,4 @@
+<map id="devices::magneto::MPU6050&lt; MANAGER &gt;::TemperatureFuture" name="devices::magneto::MPU6050&lt; MANAGER &gt;::TemperatureFuture">
+<area shape="rect" id="node1" title="Create a future to be used by asynchronous method temperature(TemperatureFuture&amp;)." alt="" coords="5,80,256,121"/>
+<area shape="rect" id="node2" title=" " alt="" coords="29,5,232,32"/>
+</map>

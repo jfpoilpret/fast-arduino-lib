@@ -39,13 +39,26 @@
 #include <fastarduino/i2c_device.h>
 #include <fastarduino/devices/mcp23017.h>
 
+#define FORCE_SYNC
+
+#if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
+using MANAGER = i2c::I2CAsyncManager<
+	i2c::I2CMode::FAST, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS>;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
+static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
+REGISTER_I2C_ISR(MANAGER)
+#else
+using MANAGER = i2c::I2CSyncManager<i2c::I2CMode::FAST>;
+#endif
+
 #define INT_NUM 0
 static constexpr const board::ExternalInterruptPin INT_PIN = board::ExternalInterruptPin::D2_PD2_EXT0;
 
 class LedChaser
 {
 public:
-	LedChaser() : manager_{}, mcp_{manager_, 0x00}, signal_{interrupt::InterruptTrigger::RISING_EDGE}
+	LedChaser()
+		:	mcp_{manager_, 0x00}, signal_{interrupt::InterruptTrigger::RISING_EDGE}
 	{
 		interrupt::register_handler(*this);
 		manager_.begin();
@@ -115,11 +128,14 @@ private:
 		pattern_ = calculate_pattern(switches);
 	}
 
-	static constexpr const i2c::I2CMode I2C_MODE = i2c::I2CMode::FAST;
-	using MCP = devices::mcp230xx::MCP23017<I2C_MODE>;
+	using MCP = devices::mcp230xx::MCP23017<MANAGER>;
 	using MCP_PORT = devices::mcp230xx::MCP23017Port;
 
-	i2c::I2CManager<I2C_MODE> manager_;
+#if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
+	MANAGER manager_{i2c_buffer};
+#else
+	MANAGER manager_;
+#endif
 	MCP mcp_;
 	interrupt::INTSignal<INT_PIN> signal_;
 
@@ -136,6 +152,7 @@ int main()
 {
 	board::init();
 	sei();
+
 	LedChaser chaser;
 	chaser.loop();
 }

@@ -1,0 +1,4 @@
+<map id="devices::mcp230xx::MCP23008&lt; MANAGER &gt;::ConfigureGPIOFuture" name="devices::mcp230xx::MCP23008&lt; MANAGER &gt;::ConfigureGPIOFuture">
+<area shape="rect" id="node1" title="Create a future to be used by asynchronous method configure_gpio(ConfigureGPIOFuture&amp;)." alt="" coords="34,80,222,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,251,32"/>
+</map>

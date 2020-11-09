@@ -1,7 +1,5 @@
 var searchData=
 [
-  ['i2cmode',['I2CMode',['../namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36',1,'i2c']]],
-  ['interruptpin',['InterruptPin',['../namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da',1,'board']]],
-  ['interruptpolarity',['InterruptPolarity',['../namespacedevices_1_1mcp230xx.html#ab64cc45f646dfa61b0884cf61c7a8644',1,'devices::mcp230xx']]],
-  ['interrupttrigger',['InterruptTrigger',['../namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1b',1,'interrupt']]]
+  ['gain_2080',['Gain',['../namespacedevices_1_1magneto.html#a9e3190fff3a9a97602b890647846068d',1,'devices::magneto']]],
+  ['gyrorange_2081',['GyroRange',['../namespacedevices_1_1magneto.html#af1ab54980b0620a7f3c95ff2318604f4',1,'devices::magneto']]]
 ];

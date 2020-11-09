@@ -1,6 +1,5 @@
 var tone__player_8h =
 [
-    [ "AbstractTonePlayer", "classdevices_1_1audio_1_1_abstract_tone_player.html", "classdevices_1_1audio_1_1_abstract_tone_player" ],
     [ "TonePlay", "classdevices_1_1audio_1_1_tone_play.html", "classdevices_1_1audio_1_1_tone_play" ],
     [ "QTonePlay", "classdevices_1_1audio_1_1_q_tone_play.html", "classdevices_1_1audio_1_1_q_tone_play" ],
     [ "AbstractTonePlayer", "classdevices_1_1audio_1_1_abstract_tone_player.html", "classdevices_1_1audio_1_1_abstract_tone_player" ],

@@ -171,7 +171,6 @@ using namespace streams;
 // 	}
 // }
 
-//TODO add call hook
 int main() __attribute__((OS_main));
 int main()
 {

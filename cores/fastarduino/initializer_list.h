@@ -81,7 +81,7 @@ namespace std
 			return array_;
 		}
 
-		/** One pas the last element of this initializer_list. */
+		/** One past the last element of this initializer_list. */
 		constexpr const T* end() const
 		{
 			return begin() + size();

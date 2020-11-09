@@ -29,6 +29,10 @@
  *   - A4 (PC4, SDA): connected to MCP23008 SDA pin
  *   - A5 (PC5, SCL): connected to MCP23008 SCL pin
  *   - D2 (PD2): connected to MCP23008 INT pin
+ * - on ATtinyX4 based boards:
+ *   - D6 (PA6, SDA): connected to MPU6050 SDA pin
+ *   - D4 (PA4, SCL): connected to MPU6050 SDA pin
+ *   - D10 (PB2): connected to MCP23008 INT pin
  */
 
 #include <fastarduino/int.h>
@@ -36,13 +40,33 @@
 #include <fastarduino/i2c_device.h>
 #include <fastarduino/devices/mcp23008.h>
 
+#if defined(ARDUINO_UNO) || defined(ARDUINO_NANO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_MEGA)
 #define INT_NUM 0
 static constexpr const board::ExternalInterruptPin INT_PIN = board::ExternalInterruptPin::D2_PD2_EXT0;
+#elif defined(BREADBOARD_ATTINYX4)
+#define INT_NUM 0
+static constexpr const board::ExternalInterruptPin INT_PIN = board::ExternalInterruptPin::D10_PB2_EXT0;
+#else
+#error "Current target is not yet supported!"
+#endif
+
+#define FORCE_SYNC
+
+#if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
+using MANAGER = i2c::I2CAsyncManager<
+	i2c::I2CMode::FAST, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS>;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
+static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
+REGISTER_I2C_ISR(MANAGER)
+#else
+using MANAGER = i2c::I2CSyncManager<i2c::I2CMode::FAST>;
+#endif
 
 class LedChaser
 {
 public:
-	LedChaser() : manager_{}, mcp_{manager_, 0x00}, signal_{interrupt::InterruptTrigger::RISING_EDGE}
+	LedChaser()
+		: mcp_{manager_, 0x00}, signal_{interrupt::InterruptTrigger::RISING_EDGE}
 	{
 		interrupt::register_handler(*this);
 		manager_.begin();
@@ -107,10 +131,13 @@ private:
 		pattern_ = calculate_pattern(switches);
 	}
 
-	static constexpr const i2c::I2CMode I2C_MODE = i2c::I2CMode::FAST;
-	using MCP = devices::mcp230xx::MCP23008<I2C_MODE>;
+	using MCP = devices::mcp230xx::MCP23008<MANAGER>;
 
-	i2c::I2CManager<I2C_MODE> manager_;
+#if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
+	MANAGER manager_{i2c_buffer};
+#else
+	MANAGER manager_;
+#endif
 	MCP mcp_;
 	interrupt::INTSignal<INT_PIN> signal_;
 
@@ -127,6 +154,7 @@ int main()
 {
 	board::init();
 	sei();
+
 	LedChaser chaser;
 	chaser.loop();
 }

@@ -44,12 +44,15 @@
 
 #include <fastarduino/time.h>
 #include <fastarduino/i2c_device.h>
+#include <fastarduino/i2c_debug.h>
+#include <fastarduino/i2c_status.h>
 
 #if defined(ARDUINO_UNO) || defined(ARDUINO_NANO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_MEGA)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
 #elif defined(ARDUINO_LEONARDO)
@@ -57,6 +60,7 @@ REGISTER_UATX_ISR(0)
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART1;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(1)
 #elif defined(BREADBOARD_ATTINYX4)
@@ -73,31 +77,71 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 #error "Current target is not yet supported!"
 #endif
 
+// #define DEBUG_I2C
+
 // UART buffer for traces
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
+#ifdef DEBUG_I2C
+static constexpr const uint8_t DEBUG_SIZE = 32;
+using DEBUGGER = i2c::debug::I2CDebugStatusRecorder<DEBUG_SIZE, DEBUG_SIZE>;
+#	if I2C_TRUE_ASYNC
+using MANAGER = i2c::I2CAsyncStatusDebugManager<
+	i2c::I2CMode::STANDARD, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, DEBUGGER&, DEBUGGER&>;
+static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
+#	else
+using MANAGER = i2c::I2CSyncStatusDebugManager<i2c::I2CMode::STANDARD, DEBUGGER&, DEBUGGER&>;
+#	endif
+#define DEBUG(OUT) debugger.trace(OUT)
+#define SHOW_STATUS(OUT)
+
+#else
+
+using STATUS = i2c::status::I2CLatestStatusHolder;
+#	if I2C_TRUE_ASYNC
+using MANAGER = i2c::I2CAsyncStatusManager<
+	i2c::I2CMode::STANDARD, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, STATUS&>;
+static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
+#	else
+using MANAGER = i2c::I2CSyncStatusManager<i2c::I2CMode::STANDARD, STATUS&>;
+#	endif
+#define DEBUG(OUT)
+#define SHOW_STATUS(OUT) OUT << streams::hex << status_holder.latest_status() << streams::endl
+#endif
+
+#if I2C_TRUE_ASYNC
+REGISTER_I2C_ISR(MANAGER)
+#endif
+
+// DS1307 specific
+static constexpr uint8_t DEVICE_ADDRESS = 0x68 << 1;
+
+using PARENT = i2c::I2CDevice<MANAGER>;
+template<typename T> using PROXY = typename PARENT::template PROXY<T>;
+template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
+
 // Subclass I2CDevice to make protected methods available
-class PublicDevice: public i2c::I2CDevice<i2c::I2CMode::STANDARD>
+class PublicDevice: public PARENT
 {
 public:
-	PublicDevice(MANAGER& manager): i2c::I2CDevice<i2c::I2CMode::STANDARD>{manager} {}
+	PublicDevice(MANAGER& manager): PARENT{manager, DEVICE_ADDRESS, i2c::I2C_STANDARD, true} {}
 	friend int main();
 };
 
-// DS1307 specific
-const uint8_t DEVICE_ADDRESS = 0x68 << 1;
 union BCD
 {
+	BCD() = default;
 	struct
 	{
 		uint8_t units	:4;
 		uint8_t tens	:4;
 	};
-	uint8_t two_digits;
+	uint8_t two_digits = 0;
 };
 
 struct RealTime 
 {
+	RealTime() = default;
 	BCD seconds;
 	BCD minutes;
 	BCD hours;
@@ -110,6 +154,8 @@ struct RealTime
 const uint32_t I2C_FREQUENCY = 100000;
 
 using namespace streams;
+
+static constexpr uint8_t MAX_FUTURES = 8;
 
 int main() __attribute__((OS_main));
 int main()
@@ -130,10 +176,29 @@ int main()
 	
 	// Start TWI interface
 	//====================
-	i2c::I2CManager<i2c::I2CMode::STANDARD> manager;
+	// Initialize I2C async handler
+#ifdef DEBUG_I2C
+	DEBUGGER debugger;
+#else
+	STATUS status_holder;
+#endif
+
+#if I2C_TRUE_ASYNC
+#	ifdef DEBUG_I2C
+	MANAGER manager{i2c_buffer, debugger, debugger};
+#	else
+	MANAGER manager{i2c_buffer, status_holder};
+#	endif
+#else
+#	ifdef DEBUG_I2C
+	MANAGER manager{debugger, debugger};
+#	else
+	MANAGER manager{status_holder};
+#	endif
+#endif
+
 	manager.begin();
 	out << "I2C interface started" << endl;
-	out << "status #1 " << manager.status() << endl;
 	time::delay_ms(1000);
 	
 	PublicDevice rtc{manager};
@@ -149,20 +214,38 @@ int main()
 	
 	// Initialize clock date
 	//=======================
-	rtc.write(DEVICE_ADDRESS, uint8_t(0), i2c::BusConditions::START_NO_STOP);
-	rtc.write(DEVICE_ADDRESS, init_time, i2c::BusConditions::NO_START_STOP);
-	out << "status #2 " << manager.status() << endl;
+	FUTURE<void, uint8_t> f1{0};
+	int error1 = rtc.launch_commands(f1, {rtc.write(0, true)});
+	DEBUG(out);
+	SHOW_STATUS(out);
+	FUTURE<void, RealTime> f2{init_time};
+	int error2 = rtc.launch_commands(f2, {rtc.write(0, true)});
+	DEBUG(out);
+	SHOW_STATUS(out);
+	out << "error1 " << error1 << endl;
+	out << "error2 " << error2 << endl;
+	out << f1.await() << endl;
+	out << f2.await() << endl;
 
 	time::delay_ms(2000);
 	
 	// Read clock
 	//============
 	RealTime time;
-	rtc.write(DEVICE_ADDRESS, uint8_t(0), i2c::BusConditions::START_NO_STOP);
-	out << "status #3 " << manager.status() << endl;
-	rtc.read(DEVICE_ADDRESS, time, i2c::BusConditions::REPEAT_START_STOP);
-	out << "status #4 " << manager.status() << endl;
-	
+	FUTURE<void, uint8_t> f3{0};
+	error1 = rtc.launch_commands(f3, {rtc.write()});
+	DEBUG(out);
+	SHOW_STATUS(out);
+	FUTURE<RealTime, void> f4{};
+	error2 = rtc.launch_commands(f4, {rtc.read()});
+	DEBUG(out);
+	SHOW_STATUS(out);
+	out << "error1 " << error1 << endl;
+	out << "error2 " << error2 << endl;
+	out << f3.await() << endl;
+	out << f4.await() << endl;
+
+	f4.get(time);
 	out	<< "RTC: " 
 		<< time.day.tens << time.day.units << '.'
 		<< time.month.tens << time.month.units << '.'
@@ -175,6 +258,5 @@ int main()
 	// Stop TWI interface
 	//===================
 	manager.end();
-	out << "status #5 " << manager.status() << endl;
 	out << "End" << endl;
 }
