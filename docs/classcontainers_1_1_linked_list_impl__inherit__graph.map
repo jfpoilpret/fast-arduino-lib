@@ -1,7 +1,0 @@
-<map id="containers::LinkedListImpl" name="containers::LinkedListImpl">
-<area shape="rect" id="node2" href="$classcontainers_1_1_linked_list.html" title="containers::LinkedList\l\&lt; T_ \&gt;" alt="" coords="251,5,400,47"/>
-<area shape="rect" id="node3" href="$classcontainers_1_1_linked_list.html" title="containers::LinkedList\l\&lt; EventHandler\&lt; EVENT \&gt; \&gt;" alt="" coords="228,71,423,112"/>
-<area shape="rect" id="node5" href="$classcontainers_1_1_linked_list.html" title="containers::LinkedList\l\&lt; Job \&gt;" alt="" coords="251,136,400,177"/>
-<area shape="rect" id="node4" href="$classevents_1_1_dispatcher.html" title="Utility to dispatch an event to a list of EventHandlers that are registered for its type..." alt="" coords="480,71,612,112"/>
-<area shape="rect" id="node6" href="$classevents_1_1_scheduler.html" title="events::Scheduler\&lt;\l CLOCK_, EVENT_ \&gt;" alt="" coords="471,136,621,177"/>
-</map>

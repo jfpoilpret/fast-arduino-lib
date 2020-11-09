@@ -1,13 +1,13 @@
 var searchData=
 [
   ['audio_146',['audio',['../namespacedevices_1_1audio.html',1,'devices']]],
-  ['data_147',['data',['../classcontainers_1_1array.html#a3c0079f0dbe93b6963972bed1e751d84',1,'containers::array::data() const'],['../classcontainers_1_1array.html#aebe7295b2438a6ec61c0d37ae6d596e0',1,'containers::array::data()'],['../classdevices_1_1_s_i_p_o.html#a65ba8db33cb58fb001e5f3fe6f1bf2e8',1,'devices::SIPO::DATA()']]],
+  ['data_147',['DATA',['../classdevices_1_1_s_i_p_o.html#a65ba8db33cb58fb001e5f3fe6f1bf2e8',1,'devices::SIPO::DATA()'],['../classcontainers_1_1array.html#a3c0079f0dbe93b6963972bed1e751d84',1,'containers::array::data() const'],['../classcontainers_1_1array.html#aebe7295b2438a6ec61c0d37ae6d596e0',1,'containers::array::data()']]],
   ['data_5foverrun_148',['data_overrun',['../classserial_1_1_u_a_r_t_errors.html#a7bcc441d2fa2cb73940e09bd635a3afa',1,'serial::UARTErrors']]],
   ['data_5fready_149',['data_ready',['../classdevices_1_1magneto_1_1_i_n_t_status.html#abc74f1d18e06c7ae7a4f47c53171d67e',1,'devices::magneto::INTStatus']]],
-  ['data_5freceived_5fack_150',['DATA_RECEIVED_ACK',['../namespacei2c_1_1_status.html#ae5c8a3507130476780bb0ed34d951463',1,'i2c::Status']]],
-  ['data_5freceived_5fnack_151',['DATA_RECEIVED_NACK',['../namespacei2c_1_1_status.html#a7298426da5cd640f388d392458134bc3',1,'i2c::Status']]],
-  ['data_5ftransmitted_5fack_152',['DATA_TRANSMITTED_ACK',['../namespacei2c_1_1_status.html#adae656ee2e61da80eee6100641af96b7',1,'i2c::Status']]],
-  ['data_5ftransmitted_5fnack_153',['DATA_TRANSMITTED_NACK',['../namespacei2c_1_1_status.html#a55da5eaec34ba509c5faac0b6bee8739',1,'i2c::Status']]],
+  ['data_5freceived_5fack_150',['DATA_RECEIVED_ACK',['../namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394a912b7b2e9352cadf9ed4bac50d985ac5',1,'i2c']]],
+  ['data_5freceived_5fnack_151',['DATA_RECEIVED_NACK',['../namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394aa852f412f97bf4c4dc2d58a53c18db06',1,'i2c']]],
+  ['data_5ftransmitted_5fack_152',['DATA_TRANSMITTED_ACK',['../namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394a3bc1886a3f635d69d7a3f86c0251e9cd',1,'i2c']]],
+  ['data_5ftransmitted_5fnack_153',['DATA_TRANSMITTED_NACK',['../namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394a78d1df25360b4e5d4b6e98b85ad1054a',1,'i2c']]],
   ['dataorder_154',['DataOrder',['../namespacespi.html#a671a4e4a182c39c4e72e9ff821d8bec7',1,'spi']]],
   ['dataoutput_155',['DataOutput',['../namespacedevices_1_1magneto.html#af2ffe07596a9831289b3eb76e83ec2aa',1,'devices::magneto']]],
   ['debug_156',['DEBUG',['../namespacei2c_1_1debug.html#aa73d62f49bbf5a9cd8ced80e467cefcc',1,'i2c::debug']]],

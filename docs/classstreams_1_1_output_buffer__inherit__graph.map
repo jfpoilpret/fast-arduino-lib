@@ -1,8 +1,0 @@
-<map id="streams::OutputBuffer" name="streams::OutputBuffer">
-<area shape="rect" id="node3" href="$classserial_1_1hard_1_1_u_a_t_x.html" title="Hardware serial transmitter API. " alt="" coords="5,169,136,211"/>
-<area shape="rect" id="node5" href="$classserial_1_1soft_1_1_abstract_u_a_t_x.html" title="serial::soft::AbstractUATX" alt="" coords="160,177,336,203"/>
-<area shape="rect" id="node2" href="$classcontainers_1_1_queue.html" title="containers::Queue\&lt;\l char, char \&gt;" alt="" coords="91,5,227,47"/>
-<area shape="rect" id="node4" href="$classserial_1_1hard_1_1_u_a_r_t.html" title="Hardware serial receiver/transceiver API. " alt="" coords="5,259,136,300"/>
-<area shape="rect" id="node6" href="$classserial_1_1soft_1_1_u_a_t_x.html" title="serial::soft::UATX\l\&lt; TX_ \&gt;" alt="" coords="185,259,311,300"/>
-<area shape="rect" id="node7" href="$classserial_1_1soft_1_1_u_a_r_t.html" title="serial::soft::UART\l\&lt; TX_ \&gt;" alt="" coords="184,348,312,389"/>
-</map>

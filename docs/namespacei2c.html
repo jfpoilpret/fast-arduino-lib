@@ -104,9 +104,6 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespacei2c_1_1status"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c_1_1status.html">status</a></td></tr>
 <tr class="memdesc:namespacei2c_1_1status"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines API to ease I2C manager status tracing and debugging. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespacei2c_1_1_status"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c_1_1_status.html">Status</a></td></tr>
-<tr class="memdesc:namespacei2c_1_1_status"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transmission status codes. <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
@@ -185,12 +182,40 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a28595eabdfa2ce6a84220d6eb59233e0"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c.html#a28595eabdfa2ce6a84220d6eb59233e0">I2C_DEBUG_HOOK</a> = void(*)(<a class="el" href="namespacei2c.html#a2572e0fde7ef325c8f5c1c974c2de720">DebugStatus</a> status, uint8_t data)</td></tr>
 <tr class="memdesc:a28595eabdfa2ce6a84220d6eb59233e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The default debugging hook type.  <a href="namespacei2c.html#a28595eabdfa2ce6a84220d6eb59233e0">More...</a><br /></td></tr>
 <tr class="separator:a28595eabdfa2ce6a84220d6eb59233e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a318628c0b47ff33e4c2f63039ffa414a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c.html#a318628c0b47ff33e4c2f63039ffa414a">I2C_STATUS_HOOK</a> = void(*)(uint8_t expected, uint8_t actual)</td></tr>
-<tr class="memdesc:a318628c0b47ff33e4c2f63039ffa414a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The default status observer hook type.  <a href="namespacei2c.html#a318628c0b47ff33e4c2f63039ffa414a">More...</a><br /></td></tr>
-<tr class="separator:a318628c0b47ff33e4c2f63039ffa414a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d00ac941e250c51b3cde59069e2fbec"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c.html#a0d00ac941e250c51b3cde59069e2fbec">I2C_STATUS_HOOK</a> = void(*)(<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394">Status</a> expected, <a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394">Status</a> actual)</td></tr>
+<tr class="memdesc:a0d00ac941e250c51b3cde59069e2fbec"><td class="mdescLeft">&#160;</td><td class="mdescRight">The default status observer hook type.  <a href="namespacei2c.html#a0d00ac941e250c51b3cde59069e2fbec">More...</a><br /></td></tr>
+<tr class="separator:a0d00ac941e250c51b3cde59069e2fbec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
+<tr class="memitem:adb5bfde92afd6cbc048d1ee7472bf394"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394">Status</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394ae0aa021e21dddbd6d8cecec71e9cf564">Status::OK</a> = 0x00, 
+<br />
+&#160;&#160;<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394a0f0db442fad97bbaa5d55ef59d4a01d4">Status::START_TRANSMITTED</a> = 0x08, 
+<br />
+&#160;&#160;<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394a2bf969769e65b7f1da7824cd59384d38">Status::REPEAT_START_TRANSMITTED</a> = 0x10, 
+<br />
+&#160;&#160;<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394a4732cb8574071463f6bba0b25d081cd2">Status::SLA_W_TRANSMITTED_ACK</a> = 0x18, 
+<br />
+&#160;&#160;<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394a9f0c8e7e539ae0087ac1bcb9c3fa721d">Status::SLA_W_TRANSMITTED_NACK</a> = 0x20, 
+<br />
+&#160;&#160;<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394a3bc1886a3f635d69d7a3f86c0251e9cd">Status::DATA_TRANSMITTED_ACK</a> = 0x28, 
+<br />
+&#160;&#160;<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394a78d1df25360b4e5d4b6e98b85ad1054a">Status::DATA_TRANSMITTED_NACK</a> = 0x30, 
+<br />
+&#160;&#160;<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394a1b265dff01af1e30093a5c05a841197c">Status::ARBITRATION_LOST</a> = 0x38, 
+<br />
+&#160;&#160;<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394aba848a7dd2b8595e79d1642ab7f143c1">Status::SLA_R_TRANSMITTED_ACK</a> = 0x40, 
+<br />
+&#160;&#160;<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394ab073180fed195e16de9e345d1bbbbedc">Status::SLA_R_TRANSMITTED_NACK</a> = 0x48, 
+<br />
+&#160;&#160;<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394a912b7b2e9352cadf9ed4bac50d985ac5">Status::DATA_RECEIVED_ACK</a> = 0x50, 
+<br />
+&#160;&#160;<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394aa852f412f97bf4c4dc2d58a53c18db06">Status::DATA_RECEIVED_NACK</a> = 0x58
+<br />
+ }</td></tr>
+<tr class="memdesc:adb5bfde92afd6cbc048d1ee7472bf394"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transmission status codes.  <a href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394">More...</a><br /></td></tr>
+<tr class="separator:adb5bfde92afd6cbc048d1ee7472bf394"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2780f0139dbc26f4d83a426dad67e36"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36">I2CMode</a> : uint8_t { <br />
 &#160;&#160;<a class="el" href="namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36a94e94133f4bdc1794c6b647b8ea134d0">I2CMode::STANDARD</a>, 
 <br />
@@ -199,16 +224,6 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:ac2780f0139dbc26f4d83a426dad67e36"><td class="mdescLeft">&#160;</td><td class="mdescRight">I2C available transmission modes.  <a href="namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36">More...</a><br /></td></tr>
 <tr class="separator:ac2780f0139dbc26f4d83a426dad67e36"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a27817c81d0a29a84a77cf2dc99ac187b"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c.html#a27817c81d0a29a84a77cf2dc99ac187b">I2CFinish</a> : uint8_t { <br />
-&#160;&#160;<a class="el" href="namespacei2c.html#a27817c81d0a29a84a77cf2dc99ac187bab50339a10e1de285ac99d4c3990b8693">I2CFinish::NONE</a> = 0, 
-<br />
-&#160;&#160;<a class="el" href="namespacei2c.html#a27817c81d0a29a84a77cf2dc99ac187ba4828c4ddf6aafe8d2ed5dbc6747b4fc1">I2CFinish::FORCE_STOP</a> = 0x01, 
-<br />
-&#160;&#160;<a class="el" href="namespacei2c.html#a27817c81d0a29a84a77cf2dc99ac187ba61f14b4d18003f429884bb61d2b10b08">I2CFinish::FUTURE_FINISH</a> = 0x02
-<br />
- }</td></tr>
-<tr class="memdesc:a27817c81d0a29a84a77cf2dc99ac187b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Action(s) to perform at the end of an I2C read or write command.  <a href="namespacei2c.html#a27817c81d0a29a84a77cf2dc99ac187b">More...</a><br /></td></tr>
-<tr class="separator:a27817c81d0a29a84a77cf2dc99ac187b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b806d8952ab67c30889f49248e7fa09"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c.html#a2b806d8952ab67c30889f49248e7fa09">I2CErrorPolicy</a> : uint8_t { <br />
 &#160;&#160;<a class="el" href="namespacei2c.html#a2b806d8952ab67c30889f49248e7fa09acd6102c4e0e339658526415ee06ad67d">I2CErrorPolicy::DO_NOTHING</a>, 
 <br />
@@ -315,13 +330,13 @@ static constexpr Mode&#160;</td><td class="memItemRight" valign="bottom"><a clas
 <li><a class="el" href="classi2c_1_1_i2_c_sync_l_c_status_debug_manager.html" title="Synchronous I2C Manager for ATmega architecture with status notification and debug facilities and sup...">I2CSyncLCStatusDebugManager</a>: synchronous I2C Manager with lifecycle support and both an I2C status callback hook and a debug callback hook</li>
 </ul>
 <p>All these classes are template classes with various arguments (the actual list of arguments depends on each specific class):</p><ul>
-<li>MODE: I2CMode (bus frequency) supported (fast 400kHz or standard 100kHz)</li>
-<li>POLICY: I2CErrorPolicy (behavior in case of an error during a transaction) for asynchronous I2C Managers only</li>
+<li>MODE: <a class="el" href="namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36" title="I2C available transmission modes.">i2c::I2CMode</a> (bus frequency) supported (fast 400kHz or standard 100kHz)</li>
+<li>POLICY: <a class="el" href="namespacei2c.html#a2b806d8952ab67c30889f49248e7fa09" title="I2C Manager policy to use in case of an error during I2C transaction.">i2c::I2CErrorPolicy</a> (behavior in case of an error during a transaction) for asynchronous I2C Managers only</li>
 <li>DEBUG_HOOK: the type of callback hook for debug, can be a simple function pointer (type <a class="el" href="namespacei2c.html#a28595eabdfa2ce6a84220d6eb59233e0" title="The default debugging hook type.">i2c::I2C_DEBUG_HOOK</a>) or a more complex functor class</li>
-<li>STATUS_HOOK: the type of callback hook for I2C status, can be a simple function pointer (type <a class="el" href="namespacei2c.html#a318628c0b47ff33e4c2f63039ffa414a" title="The default status observer hook type.">i2c::I2C_STATUS_HOOK</a>) or a more complex functor class</li>
+<li>STATUS_HOOK: the type of callback hook for I2C status, can be a simple function pointer (type <a class="el" href="namespacei2c.html#a0d00ac941e250c51b3cde59069e2fbec" title="The default status observer hook type.">i2c::I2C_STATUS_HOOK</a>) or a more complex functor class</li>
 </ul>
 <p>All these different flavors of I2C Manager share the same API (except for their constructor that may need different arguments).</p>
-<p>Lifecycle support enables programs to move futures around without losing track of the right, thanks to the use of <a class="el" href="classlifecycle_1_1_light_proxy.html" title="A light proxy class that encapsulates access to a fixed T instance, or to a dynamic LifeCycle&lt;T&gt; inst...">lifecycle::LightProxy</a>. Although not often needed, it can prove useful in some situations.</p>
+<p>Lifecycle support enables programs to move futures around without losing track of the right location, thanks to the use of <a class="el" href="classlifecycle_1_1_light_proxy.html" title="A light proxy class that encapsulates access to a fixed T instance, or to a dynamic LifeCycle&lt;T&gt; inst...">lifecycle::LightProxy</a>. Although not often needed, it can prove useful in some situations.</p>
 <p>All I2C Manager asynchronous flavors operate based on a queue of I2C commands. It is up to the end program to create the properly sized buffer for that command queue, before instantiating the relevant asynchronous I2C Manager; the buffer must be passed to the asynchronous I2C Manager constructor. Asynchronous I2C Manager classes will work fine only if the proper ISR function is registered, through one of the 3 provided registration macros. Some of these registration macros also allow registration of a callback hook that will be called for every single I2C step (as defined in ATmega datasheet).</p>
 <p>The following snippet shows the minimal code to operate the I2C RTC device DS1307 in synchronous mode: </p><div class="fragment"><div class="line"><span class="comment">// Define type alias for I2C Manager; here we use the simplest possible synchronous manager</span></div>
 <div class="line"><span class="keyword">using</span> MANAGER = <a class="code" href="classi2c_1_1_i2_c_sync_manager.html">i2c::I2CSyncManager&lt;i2c::I2CMode::STANDARD&gt;</a>;</div>
@@ -394,14 +409,14 @@ static constexpr Mode&#160;</td><td class="memItemRight" valign="bottom"><a clas
 
 </div>
 </div>
-<a id="a318628c0b47ff33e4c2f63039ffa414a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a318628c0b47ff33e4c2f63039ffa414a">&#9670;&nbsp;</a></span>I2C_STATUS_HOOK</h2>
+<a id="a0d00ac941e250c51b3cde59069e2fbec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d00ac941e250c51b3cde59069e2fbec">&#9670;&nbsp;</a></span>I2C_STATUS_HOOK</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="namespacei2c.html#a318628c0b47ff33e4c2f63039ffa414a">i2c::I2C_STATUS_HOOK</a> = typedef void (*)(uint8_t expected, uint8_t actual)</td>
+          <td class="memname">using <a class="el" href="namespacei2c.html#a0d00ac941e250c51b3cde59069e2fbec">i2c::I2C_STATUS_HOOK</a> = typedef void (*)(<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394">Status</a> expected, <a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394">Status</a> actual)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -421,6 +436,67 @@ static constexpr Mode&#160;</td><td class="memItemRight" valign="bottom"><a clas
 </div>
 </div>
 <h2 class="groupheader">Enumeration Type Documentation</h2>
+<a id="adb5bfde92afd6cbc048d1ee7472bf394"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb5bfde92afd6cbc048d1ee7472bf394">&#9670;&nbsp;</a></span>Status</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394">i2c::Status</a> : uint8_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Transmission status codes. </p>
+<p>Transmission status is returned by all <code><a class="el" href="classi2c_1_1_i2_c_device.html" title="Base class for all I2C devices.">i2c::I2CDevice</a></code> read and write methods. This status is also transmitted to an optional hook function for debug purposes.</p>
+<p>All codes are defined and directly mapped from ATmega328 datasheet (section 22. "2-wire Serial interface", tables 22-2 and 22-3).</p>
+<p>You will probably never need to use these codes in your program.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1_i2_c_sync_status_manager.html" title="Synchronous I2C Manager for ATmega architecture wit status notification facility.">I2CSyncStatusManager</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_async_status_manager.html" title="Asynchronous I2C Manager for ATmega architecture with status notification facility.">I2CAsyncStatusManager</a> </dd>
+<dd>
+<a class="el" href="namespacei2c_1_1status.html" title="Defines API to ease I2C manager status tracing and debugging.">i2c::status</a> </dd></dl>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="adb5bfde92afd6cbc048d1ee7472bf394ae0aa021e21dddbd6d8cecec71e9cf564"></a>OK&#160;</td><td class="fielddoc"><p>Code indicating the last called method executed as expected without any issue. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="adb5bfde92afd6cbc048d1ee7472bf394a0f0db442fad97bbaa5d55ef59d4a01d4"></a>START_TRANSMITTED&#160;</td><td class="fielddoc"><p>[Transmitter/Receiver modes] A START condition has been transmitted. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="adb5bfde92afd6cbc048d1ee7472bf394a2bf969769e65b7f1da7824cd59384d38"></a>REPEAT_START_TRANSMITTED&#160;</td><td class="fielddoc"><p>[Transmitter/Receiver modes] A repeated START condition has been transmitted. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="adb5bfde92afd6cbc048d1ee7472bf394a4732cb8574071463f6bba0b25d081cd2"></a>SLA_W_TRANSMITTED_ACK&#160;</td><td class="fielddoc"><p>[Transmitter mode] SLA+W has been transmitted; ACK has been received. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="adb5bfde92afd6cbc048d1ee7472bf394a9f0c8e7e539ae0087ac1bcb9c3fa721d"></a>SLA_W_TRANSMITTED_NACK&#160;</td><td class="fielddoc"><p>[Transmitter mode] SLA+W has been transmitted; NOT ACK has been received. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="adb5bfde92afd6cbc048d1ee7472bf394a3bc1886a3f635d69d7a3f86c0251e9cd"></a>DATA_TRANSMITTED_ACK&#160;</td><td class="fielddoc"><p>[Transmitter mode] Data byte has been transmitted; ACK has been received. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="adb5bfde92afd6cbc048d1ee7472bf394a78d1df25360b4e5d4b6e98b85ad1054a"></a>DATA_TRANSMITTED_NACK&#160;</td><td class="fielddoc"><p>[Transmitter mode] Data byte has been transmitted; NOT ACK has been received. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="adb5bfde92afd6cbc048d1ee7472bf394a1b265dff01af1e30093a5c05a841197c"></a>ARBITRATION_LOST&#160;</td><td class="fielddoc"><p>[Transmitter mode] Abitration lost in SLA+W or data bytes. </p>
+<p>[Receiver mode] Abitration lost in SLA+R or NOT ACK bit. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="adb5bfde92afd6cbc048d1ee7472bf394aba848a7dd2b8595e79d1642ab7f143c1"></a>SLA_R_TRANSMITTED_ACK&#160;</td><td class="fielddoc"><p>[Receiver mode] SLA+R has been transmitted; ACK has been received. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="adb5bfde92afd6cbc048d1ee7472bf394ab073180fed195e16de9e345d1bbbbedc"></a>SLA_R_TRANSMITTED_NACK&#160;</td><td class="fielddoc"><p>[Receiver mode] SLA+R has been transmitted; NOT ACK has been received. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="adb5bfde92afd6cbc048d1ee7472bf394a912b7b2e9352cadf9ed4bac50d985ac5"></a>DATA_RECEIVED_ACK&#160;</td><td class="fielddoc"><p>[Receiver mode] Data byte has been transmitted; ACK has been returned. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="adb5bfde92afd6cbc048d1ee7472bf394aa852f412f97bf4c4dc2d58a53c18db06"></a>DATA_RECEIVED_NACK&#160;</td><td class="fielddoc"><p>[Receiver mode] Data byte has been transmitted; NOT ACK has been returned. </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="i2c_8h_source.html#l00065">65</a> of file <a class="el" href="i2c_8h_source.html">i2c.h</a>.</p>
+
+</div>
+</div>
 <a id="ac2780f0139dbc26f4d83a426dad67e36"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac2780f0139dbc26f4d83a426dad67e36">&#9670;&nbsp;</a></span>I2CMode</h2>
 
@@ -453,47 +529,7 @@ static constexpr Mode&#160;</td><td class="memItemRight" valign="bottom"><a clas
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="i2c_8h_source.html#l00105">105</a> of file <a class="el" href="i2c_8h_source.html">i2c.h</a>.</p>
-
-</div>
-</div>
-<a id="a27817c81d0a29a84a77cf2dc99ac187b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a27817c81d0a29a84a77cf2dc99ac187b">&#9670;&nbsp;</a></span>I2CFinish</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="namespacei2c.html#a27817c81d0a29a84a77cf2dc99ac187b">i2c::I2CFinish</a> : uint8_t</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Action(s) to perform at the end of an I2C read or write command. </p>
-<p>Values can be or'ed together to combine several actions.</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1_i2_c_device.html#a788c6ee190552796b171c7c1d45548ec" title="Build a read I2CLightCommand that can be later pushed to the I2C Manager for proper handling.">I2CDevice::read()</a> </dd>
-<dd>
-<a class="el" href="classi2c_1_1_i2_c_device.html#ada1d513b26e28281b64ca8cc97c39f8d" title="Build a write I2CLightCommand that can be later pushed to the I2C Manager for proper handling.">I2CDevice::write()</a> </dd></dl>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a27817c81d0a29a84a77cf2dc99ac187bab50339a10e1de285ac99d4c3990b8693"></a>NONE&#160;</td><td class="fielddoc"><p>Perform no specific action ate the end of a read or write I2C command. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a27817c81d0a29a84a77cf2dc99ac187ba4828c4ddf6aafe8d2ed5dbc6747b4fc1"></a>FORCE_STOP&#160;</td><td class="fielddoc"><p>Force an I2C STOP condition at the end of a read or write command, instead of the default REPEAT START condition. </p>
-<p>This may be useful for some devices that do not support REEAT START well. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a27817c81d0a29a84a77cf2dc99ac187ba61f14b4d18003f429884bb61d2b10b08"></a>FUTURE_FINISH&#160;</td><td class="fielddoc"><p>Force finishing the Future associated with the current read or write I2C command. </p>
-<p>This is useful for I2C transaction with only write commands, hence associated to a Future with no output. </p><dl class="section warning"><dt>Warning</dt><dd>In general, you would never use this value in your own implementation for a device, because FastArduino I2C support already ensures this is done at the end of a complete I2C transaction (with mutiple read and write commands). This could be useful in the exceptional case where your I2C transaction is made of many commands, but you would like to finish the associated Future <b>before</b> the last command is executed, which should be an extraordinarily rare situation. </dd></dl>
-</td></tr>
-</table>
-
-<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00054">54</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c_8h_source.html#l00107">107</a> of file <a class="el" href="i2c_8h_source.html">i2c.h</a>.</p>
 
 </div>
 </div>
@@ -530,7 +566,7 @@ static constexpr Mode&#160;</td><td class="memItemRight" valign="bottom"><a clas
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="i2c__handler__atmega_8h_source.html#l00110">110</a> of file <a class="el" href="i2c__handler__atmega_8h_source.html">i2c_handler_atmega.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__handler__atmega_8h_source.html#l00115">115</a> of file <a class="el" href="i2c__handler__atmega_8h_source.html">i2c_handler_atmega.h</a>.</p>
 
 </div>
 </div>
@@ -566,7 +602,7 @@ static constexpr Mode&#160;</td><td class="memItemRight" valign="bottom"><a clas
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="i2c__handler__atmega_8h_source.html#l00137">137</a> of file <a class="el" href="i2c__handler__atmega_8h_source.html">i2c_handler_atmega.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__handler__atmega_8h_source.html#l00142">142</a> of file <a class="el" href="i2c__handler__atmega_8h_source.html">i2c_handler_atmega.h</a>.</p>
 
 </div>
 </div>
@@ -630,10 +666,10 @@ static constexpr Mode&#160;</td><td class="memItemRight" valign="bottom"><a clas
 <div class="ttc" id="anamespacefuture_html"><div class="ttname"><a href="namespacefuture.html">future</a></div><div class="ttdoc">Contains the API around Future implementation.</div><div class="ttdef"><b>Definition:</b> <a href="future_8cpp_source.html#l00017">future.cpp:18</a></div></div>
 <div class="ttc" id="astructdevices_1_1rtc_1_1tm_html"><div class="ttname"><a href="structdevices_1_1rtc_1_1tm.html">devices::rtc::tm</a></div><div class="ttdoc">The datetime structure used by the RTC API.</div><div class="ttdef"><b>Definition:</b> <a href="ds1307_8h_source.html#l00077">ds1307.h:78</a></div></div>
 <div class="ttc" id="aclassdevices_1_1rtc_1_1_d_s1307_html"><div class="ttname"><a href="classdevices_1_1rtc_1_1_d_s1307.html">devices::rtc::DS1307</a></div><div class="ttdoc">I2C device driver for the DS1307 RTC chip.</div><div class="ttdef"><b>Definition:</b> <a href="ds1307_8h_source.html#l00107">ds1307.h:108</a></div></div>
-<div class="ttc" id="aclassi2c_1_1_i2_c_sync_manager_html"><div class="ttname"><a href="classi2c_1_1_i2_c_sync_manager.html">i2c::I2CSyncManager</a></div><div class="ttdoc">Synchronous I2C Manager for ATmega architecture.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__atmega_8h_source.html#l01167">i2c_handler_atmega.h:1169</a></div></div>
+<div class="ttc" id="aclassi2c_1_1_i2_c_sync_manager_html"><div class="ttname"><a href="classi2c_1_1_i2_c_sync_manager.html">i2c::I2CSyncManager</a></div><div class="ttdoc">Synchronous I2C Manager for ATmega architecture.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__atmega_8h_source.html#l01172">i2c_handler_atmega.h:1174</a></div></div>
 <div class="ttc" id="aclassi2c_1_1_abstract_i2_c_sync_manager_html_a89d6aa837d6c10f2de51725dd76abd2e"><div class="ttname"><a href="classi2c_1_1_abstract_i2_c_sync_manager.html#a89d6aa837d6c10f2de51725dd76abd2e">i2c::AbstractI2CSyncManager&lt; ATmegaI2CSyncHandler&lt; MODE_, HAS_STATUS_, I2C_STATUS_HOOK &gt;, MODE_, HAS_LC_, I2C_STATUS_HOOK, HAS_DEBUG_, I2C_DEBUG_HOOK &gt;::end</a></div><div class="ttdeci">void end()</div><div class="ttdoc">Disable MCU I2C transmission.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__common_8h_source.html#l00438">i2c_handler_common.h:438</a></div></div>
-<div class="ttc" id="aclassi2c_1_1_i2_c_async_manager_html"><div class="ttname"><a href="classi2c_1_1_i2_c_async_manager.html">i2c::I2CAsyncManager</a></div><div class="ttdoc">Asynchronous I2C Manager for ATmega architecture.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__atmega_8h_source.html#l00804">i2c_handler_atmega.h:806</a></div></div>
-<div class="ttc" id="ai2c__handler__atmega_8h_html_a66b761ad07c3eb470ddf58fd6b58594e"><div class="ttname"><a href="i2c__handler__atmega_8h.html#a66b761ad07c3eb470ddf58fd6b58594e">REGISTER_I2C_ISR</a></div><div class="ttdeci">#define REGISTER_I2C_ISR(MANAGER)</div><div class="ttdoc">Register the necessary ISR (Interrupt Service Routine) for an asynchronous I2C Manager to work proper...</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__atmega_8h_source.html#l00048">i2c_handler_atmega.h:48</a></div></div>
+<div class="ttc" id="aclassi2c_1_1_i2_c_async_manager_html"><div class="ttname"><a href="classi2c_1_1_i2_c_async_manager.html">i2c::I2CAsyncManager</a></div><div class="ttdoc">Asynchronous I2C Manager for ATmega architecture.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__atmega_8h_source.html#l00809">i2c_handler_atmega.h:811</a></div></div>
+<div class="ttc" id="ai2c__handler__atmega_8h_html_a66b761ad07c3eb470ddf58fd6b58594e"><div class="ttname"><a href="i2c__handler__atmega_8h.html#a66b761ad07c3eb470ddf58fd6b58594e">REGISTER_I2C_ISR</a></div><div class="ttdeci">#define REGISTER_I2C_ISR(MANAGER)</div><div class="ttdoc">Register the necessary ISR (Interrupt Service Routine) for an asynchronous I2C Manager to work proper...</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__atmega_8h_source.html#l00053">i2c_handler_atmega.h:53</a></div></div>
 <div class="ttc" id="aclassi2c_1_1_abstract_i2_c_sync_manager_html_a66b6a7902f2d3e2354f344c154f4a841"><div class="ttname"><a href="classi2c_1_1_abstract_i2_c_sync_manager.html#a66b6a7902f2d3e2354f344c154f4a841">i2c::AbstractI2CSyncManager&lt; ATmegaI2CSyncHandler&lt; MODE_, HAS_STATUS_, I2C_STATUS_HOOK &gt;, MODE_, HAS_LC_, I2C_STATUS_HOOK, HAS_DEBUG_, I2C_DEBUG_HOOK &gt;::begin</a></div><div class="ttdeci">void begin()</div><div class="ttdoc">Prepare and enable the MCU for I2C transmission.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__common_8h_source.html#l00427">i2c_handler_common.h:427</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

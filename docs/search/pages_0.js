@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['adding_20support_20for_20an_20i2c_20device_2359',['Adding support for an I2C device',['../i2cdevices.html',1,'']]],
-  ['adding_20support_20for_20an_20spi_20device_2360',['Adding support for an SPI device',['../spidevices.html',1,'']]]
+  ['adding_20support_20for_20an_20i2c_20device_2351',['Adding support for an I2C device',['../i2cdevices.html',1,'']]],
+  ['adding_20support_20for_20an_20spi_20device_2352',['Adding support for an SPI device',['../spidevices.html',1,'']]]
 ];

@@ -97,15 +97,15 @@ $(document).ready(function(){initNavTree('classi2c_1_1status_1_1_i2_c_status_rec
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a4ced5300035e2258830d609c5102fa05"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1status_1_1_i2_c_status_recorder.html#a4ced5300035e2258830d609c5102fa05">I2CStatusRecorder</a> (<a class="el" href="namespacei2c_1_1status.html#a8e07f8d34f9f155ed73d199716ec173f">STATUS</a> <a class="el" href="classi2c_1_1status_1_1_i2_c_status_recorder.html#a79bc2100cff8a6b462b09bd2870e45b0">trace</a>=<a class="el" href="namespacei2c_1_1status.html#a8e07f8d34f9f155ed73d199716ec173fa3b0ecf56176942a81ec8148a69ad6b5b">STATUS::TRACE_ALL</a>)</td></tr>
+<tr class="memitem:a4ced5300035e2258830d609c5102fa05"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1status_1_1_i2_c_status_recorder.html#a4ced5300035e2258830d609c5102fa05">I2CStatusRecorder</a> (<a class="el" href="namespacei2c_1_1status.html#a8e07f8d34f9f155ed73d199716ec173f">STATUS</a> <a class="el" href="classi2c_1_1status_1_1_i2_c_status_recorder.html#a4044094a5c160085c647fb43b07c51f2">trace</a>=<a class="el" href="namespacei2c_1_1status.html#a8e07f8d34f9f155ed73d199716ec173fa3b0ecf56176942a81ec8148a69ad6b5b">STATUS::TRACE_ALL</a>)</td></tr>
 <tr class="memdesc:a4ced5300035e2258830d609c5102fa05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an <a class="el" href="classi2c_1_1status_1_1_i2_c_status_recorder.html" title="Class recording I2C status notifications for later output.">I2CStatusRecorder</a> that can record I2C status notifications determined by <code>trace</code>.  <a href="classi2c_1_1status_1_1_i2_c_status_recorder.html#a4ced5300035e2258830d609c5102fa05">More...</a><br /></td></tr>
 <tr class="separator:a4ced5300035e2258830d609c5102fa05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a75d83bcc9343dae400812fa84a9d2e72"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1status_1_1_i2_c_status_recorder.html#a75d83bcc9343dae400812fa84a9d2e72">reset</a> ()</td></tr>
 <tr class="memdesc:a75d83bcc9343dae400812fa84a9d2e72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear all recorded notifications.  <a href="classi2c_1_1status_1_1_i2_c_status_recorder.html#a75d83bcc9343dae400812fa84a9d2e72">More...</a><br /></td></tr>
 <tr class="separator:a75d83bcc9343dae400812fa84a9d2e72"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a79bc2100cff8a6b462b09bd2870e45b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1status_1_1_i2_c_status_recorder.html#a79bc2100cff8a6b462b09bd2870e45b0">trace</a> (<a class="el" href="classstreams_1_1ostream.html">streams::ostream</a> &amp;out)</td></tr>
-<tr class="memdesc:a79bc2100cff8a6b462b09bd2870e45b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output all recorded I2C status notifications to <code>out</code> then clear all records.  <a href="classi2c_1_1status_1_1_i2_c_status_recorder.html#a79bc2100cff8a6b462b09bd2870e45b0">More...</a><br /></td></tr>
-<tr class="separator:a79bc2100cff8a6b462b09bd2870e45b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4044094a5c160085c647fb43b07c51f2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1status_1_1_i2_c_status_recorder.html#a4044094a5c160085c647fb43b07c51f2">trace</a> (<a class="el" href="classstreams_1_1ostream.html">streams::ostream</a> &amp;out, bool hex_status=true)</td></tr>
+<tr class="memdesc:a4044094a5c160085c647fb43b07c51f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output all recorded I2C status notifications to <code>out</code> then clear all records.  <a href="classi2c_1_1status_1_1_i2_c_status_recorder.html#a4044094a5c160085c647fb43b07c51f2">More...</a><br /></td></tr>
+<tr class="separator:a4044094a5c160085c647fb43b07c51f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;uint8_t SIZE&gt;<br />
@@ -148,14 +148,14 @@ template&lt;uint8_t SIZE&gt; </div>
 </div><div class="memdoc">
 
 <p>Create an <a class="el" href="classi2c_1_1status_1_1_i2_c_status_recorder.html" title="Class recording I2C status notifications for later output.">I2CStatusRecorder</a> that can record I2C status notifications determined by <code>trace</code>. </p>
-<p>list. The number of recorded notifications is limited by <code>SIZE</code>. Once <code>SIZE</code> notifications have been recorded by this <a class="el" href="classi2c_1_1status_1_1_i2_c_status_recorder.html" title="Class recording I2C status notifications for later output.">I2CStatusRecorder</a>, any additional notification will be trashed. To be effective, this must be attached to an I2C Manager (at construction time). Recorded notifications can be output to a <code><a class="el" href="classstreams_1_1ostream.html" title="Output stream wrapper to provide formatted output API, a la C++.">streams::ostream</a></code> with <code><a class="el" href="classi2c_1_1status_1_1_i2_c_status_recorder.html#a79bc2100cff8a6b462b09bd2870e45b0" title="Output all recorded I2C status notifications to out then clear all records.">trace()</a></code>.</p>
+<p>list. The number of recorded notifications is limited by <code>SIZE</code>. Once <code>SIZE</code> notifications have been recorded by this <a class="el" href="classi2c_1_1status_1_1_i2_c_status_recorder.html" title="Class recording I2C status notifications for later output.">I2CStatusRecorder</a>, any additional notification will be trashed. To be effective, this must be attached to an I2C Manager (at construction time). Recorded notifications can be output to a <code><a class="el" href="classstreams_1_1ostream.html" title="Output stream wrapper to provide formatted output API, a la C++.">streams::ostream</a></code> with <code><a class="el" href="classi2c_1_1status_1_1_i2_c_status_recorder.html#a4044094a5c160085c647fb43b07c51f2" title="Output all recorded I2C status notifications to out then clear all records.">trace()</a></code>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">trace.</td><td>the list of notifications to be recorded</td></tr>
+    <tr><td class="paramname">trace</td><td>the list of notifications to be recorded</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1status_1_1_i2_c_status_recorder.html#a79bc2100cff8a6b462b09bd2870e45b0" title="Output all recorded I2C status notifications to out then clear all records.">trace()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1status_1_1_i2_c_status_recorder.html#a4044094a5c160085c647fb43b07c51f2" title="Output all recorded I2C status notifications to out then clear all records.">trace()</a> </dd>
 <dd>
 <a class="el" href="classi2c_1_1status_1_1_i2_c_status_recorder.html#a75d83bcc9343dae400812fa84a9d2e72" title="Clear all recorded notifications.">reset()</a> </dd></dl>
 
@@ -190,14 +190,14 @@ template&lt;uint8_t SIZE&gt; </div>
 </div><div class="memdoc">
 
 <p>Clear all recorded notifications. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1status_1_1_i2_c_status_recorder.html#a79bc2100cff8a6b462b09bd2870e45b0" title="Output all recorded I2C status notifications to out then clear all records.">trace()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1status_1_1_i2_c_status_recorder.html#a4044094a5c160085c647fb43b07c51f2" title="Output all recorded I2C status notifications to out then clear all records.">trace()</a> </dd></dl>
 
 <p class="definition">Definition at line <a class="el" href="i2c__status_8h_source.html#l00083">83</a> of file <a class="el" href="i2c__status_8h_source.html">i2c_status.h</a>.</p>
 
 </div>
 </div>
-<a id="a79bc2100cff8a6b462b09bd2870e45b0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a79bc2100cff8a6b462b09bd2870e45b0">&#9670;&nbsp;</a></span>trace()</h2>
+<a id="a4044094a5c160085c647fb43b07c51f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4044094a5c160085c647fb43b07c51f2">&#9670;&nbsp;</a></span>trace()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -211,8 +211,18 @@ template&lt;uint8_t SIZE&gt; </div>
           <td class="memname">void <a class="el" href="classi2c_1_1status_1_1_i2_c_status_recorder.html">i2c::status::I2CStatusRecorder</a>&lt; SIZE &gt;::trace </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classstreams_1_1ostream.html">streams::ostream</a> &amp;&#160;</td>
-          <td class="paramname"><em>out</em></td><td>)</td>
+          <td class="paramname"><em>out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>hex_status</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -226,12 +236,13 @@ template&lt;uint8_t SIZE&gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">out</td><td>the <code><a class="el" href="classstreams_1_1ostream.html" title="Output stream wrapper to provide formatted output API, a la C++.">streams::ostream</a></code> to output traces to </td></tr>
+    <tr><td class="paramname">hex_status</td><td>if <code>true</code> (the default), status values will be displayed in hexadecimal, otherwise status name will be displayed </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1status_1_1_i2_c_status_recorder.html#a75d83bcc9343dae400812fa84a9d2e72" title="Clear all recorded notifications.">reset()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__status_8h_source.html#l00093">93</a> of file <a class="el" href="i2c__status_8h_source.html">i2c_status.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__status_8h_source.html#l00095">95</a> of file <a class="el" href="i2c__status_8h_source.html">i2c_status.h</a>.</p>
 
 </div>
 </div>

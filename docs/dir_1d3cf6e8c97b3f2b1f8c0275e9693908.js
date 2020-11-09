@@ -22,6 +22,7 @@ var dir_1d3cf6e8c97b3f2b1f8c0275e9693908 =
     [ "future.cpp", "future_8cpp_source.html", null ],
     [ "future.h", "future_8h.html", "future_8h" ],
     [ "gpio.h", "gpio_8h.html", "gpio_8h" ],
+    [ "i2c.cpp", "i2c_8cpp_source.html", null ],
     [ "i2c.h", "i2c_8h.html", "i2c_8h" ],
     [ "i2c_debug.cpp", "i2c__debug_8cpp_source.html", null ],
     [ "i2c_debug.h", "i2c__debug_8h.html", "i2c__debug_8h" ],

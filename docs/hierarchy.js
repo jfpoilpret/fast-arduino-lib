@@ -1,10 +1,7 @@
 var hierarchy =
 [
     [ "future::AbstractFakeFuture", "classfuture_1_1_abstract_fake_future.html", [
-      [ "future::FakeFuture< OUT_, IN_ >", "classfuture_1_1_fake_future.html", null ],
-      [ "future::FakeFuture< OUT_, void >", "classfuture_1_1_fake_future_3_01_o_u_t___00_01void_01_4.html", null ],
-      [ "future::FakeFuture< void, IN_ >", "classfuture_1_1_fake_future_3_01void_00_01_i_n___01_4.html", null ],
-      [ "future::FakeFuture< void, void >", "classfuture_1_1_fake_future_3_01void_00_01void_01_4.html", null ]
+      [ "future::FakeFuture< OUT_, IN_ >", "classfuture_1_1_fake_future.html", null ]
     ] ],
     [ "future::AbstractFuture", "classfuture_1_1_abstract_future.html", [
       [ "future::Future< OUT_, IN_ >", "classfuture_1_1_future.html", null ]
@@ -151,6 +148,7 @@ var hierarchy =
       [ "devices::magneto::MPU6050< MANAGER >::FifoBeginFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_fifo_begin_future.html", null ],
       [ "devices::magneto::MPU6050< MANAGER >::FifoCountFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_fifo_count_future.html", null ],
       [ "devices::magneto::MPU6050< MANAGER >::FifoPopFuture< T >", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_fifo_pop_future.html", null ],
+      [ "devices::magneto::MPU6050< MANAGER >::FifoPushFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_fifo_push_future.html", null ],
       [ "devices::magneto::MPU6050< MANAGER >::InterruptStatusFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_interrupt_status_future.html", null ],
       [ "devices::magneto::MPU6050< MANAGER >::ResetFifoFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_reset_fifo_future.html", null ],
       [ "devices::magneto::MPU6050< MANAGER >::TemperatureFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_temperature_future.html", null ],
@@ -260,8 +258,8 @@ var hierarchy =
     [ "time::RTTTime", "classtime_1_1_r_t_t_time.html", null ],
     [ "devices::magneto::Sensor3D", "structdevices_1_1magneto_1_1_sensor3_d.html", null ],
     [ "devices::servo::Servo< TIMER_, PWMPIN_ >", "classdevices_1_1servo_1_1_servo.html", null ],
-    [ "devices::mcp230xx::MCP23017< MANAGER >::SetValuesFuture< P_ >", "classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_set_values_future.html", null ],
     [ "devices::mcp230xx::MCP23008< MANAGER >::SetValuesFuture", "classdevices_1_1mcp230xx_1_1_m_c_p23008_1_1_set_values_future.html", null ],
+    [ "devices::mcp230xx::MCP23017< MANAGER >::SetValuesFuture< P_ >", "classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_set_values_future.html", null ],
     [ "devices::SIPO< CLOCK_, LATCH_, DATA_ >", "classdevices_1_1_s_i_p_o.html", null ],
     [ "devices::sonar::SonarEvent< NTIMER_ >", "structdevices_1_1sonar_1_1_sonar_event.html", null ],
     [ "timer::SquareWave< NTIMER_, OUTPUT_ >", "classtimer_1_1_square_wave.html", null ],

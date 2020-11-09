@@ -84,8 +84,7 @@ $(document).ready(function(){initNavTree('i2c_8h.html',''); initResizable(); });
 <div class="header">
   <div class="summary">
 <a href="#namespaces">Namespaces</a> &#124;
-<a href="#enum-members">Enumerations</a> &#124;
-<a href="#var-members">Variables</a>  </div>
+<a href="#enum-members">Enumerations</a>  </div>
   <div class="headertitle">
 <div class="title">i2c.h File Reference</div>  </div>
 </div><!--header-->
@@ -94,26 +93,48 @@ $(document).ready(function(){initNavTree('i2c_8h.html',''); initResizable(); });
 <p>I2C API common definitions.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;stdint.h&gt;</code><br />
+<code>#include &quot;<a class="el" href="streams_8h_source.html">streams.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for i2c.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="i2c_8h__incl.png" border="0" usemap="#afastarduino_2i2c_8h" alt=""/></div>
-<map name="fastarduino_2i2c_8h" id="fastarduino_2i2c_8h">
-<area shape="rect" title="I2C API common definitions." alt="" coords="5,5,136,32"/>
-<area shape="rect" title=" " alt="" coords="35,80,106,107"/>
+<map name="fastarduino_2i2c_8h" id="afastarduino_2i2c_8h">
+<area shape="rect" title="I2C API common definitions." alt="" coords="60,5,191,32"/>
+<area shape="rect" title=" " alt="" coords="313,603,383,629"/>
+<area shape="rect" href="streams_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="219,80,306,107"/>
+<area shape="rect" title=" " alt="" coords="471,155,542,181"/>
+<area shape="rect" href="queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="336,304,411,331"/>
+<area shape="rect" href="time_8h.html" title="Simple time utilities." alt="" coords="304,379,368,405"/>
+<area shape="rect" href="flash_8h.html" title="Flash memory utilities." alt="" coords="199,304,265,331"/>
+<area shape="rect" href="ios_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="393,155,447,181"/>
+<area shape="rect" href="streambuf_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="633,229,733,256"/>
+<area shape="rect" href="utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="373,453,456,480"/>
+<area shape="rect" href="defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="481,528,564,555"/>
+<area shape="rect" href="board_8h_source.html" title=" " alt="" coords="338,528,457,555"/>
+<area shape="rect" title=" " alt="" coords="588,528,692,555"/>
+<area shape="rect" href="io_8h_source.html" title=" " alt="" coords="43,453,138,480"/>
+<area shape="rect" title=" " alt="" coords="163,453,299,480"/>
+<area shape="rect" title=" " alt="" coords="55,528,126,555"/>
+<area shape="rect" title=" " alt="" coords="153,379,279,405"/>
+<area shape="rect" title=" " alt="" coords="446,229,514,256"/>
+<area shape="rect" title=" " alt="" coords="767,379,841,405"/>
+<area shape="rect" title=" " alt="" coords="538,229,609,256"/>
+<area shape="rect" title=" " alt="" coords="351,229,422,256"/>
+<area shape="rect" href="virtual_8h.html" title="Small utilities to emulate virtual methods without extra vtabl." alt="" coords="690,304,766,331"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
 This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="i2c_8h__dep__incl.png" border="0" usemap="#afastarduino_2i2c_8hdep" alt=""/></div>
-<map name="fastarduino_2i2c_8hdep" id="fastarduino_2i2c_8hdep">
-<area shape="rect" title="I2C API common definitions." alt="" coords="277,5,407,32"/>
+<map name="fastarduino_2i2c_8hdep" id="afastarduino_2i2c_8hdep">
+<area shape="rect" title="I2C API common definitions." alt="" coords="302,5,433,32"/>
 <area shape="rect" href="ds1307_8h.html" title="API to handle Real&#45;Time Clock DS1307 I2C chip." alt="" coords="5,408,156,449"/>
+<area shape="rect" href="i2c_8cpp_source.html" title=" " alt="" coords="630,87,777,114"/>
 <area shape="rect" href="i2c__device_8h.html" title="I2C Device API." alt="" coords="251,333,433,360"/>
 <area shape="rect" href="i2c__handler__atmega_8h.html" title="ATmega I2C Manager API." alt="" coords="129,169,304,211"/>
 <area shape="rect" href="i2c__handler__attiny_8h.html" title="ATtiny I2C Manager API." alt="" coords="380,169,555,211"/>
-<area shape="rect" href="i2c__handler__common_8h.html" title="Common I2C Manager API." alt="" coords="524,80,699,121"/>
+<area shape="rect" href="i2c__handler__common_8h.html" title="Common I2C Manager API." alt="" coords="431,80,605,121"/>
 <area shape="rect" href="hmc5883l_8h.html" title="API to handle HMC5883L 3&#45;axis digital compass I2C chip." alt="" coords="180,408,331,449"/>
 <area shape="rect" href="mcp23008_8h.html" title="API to handle the MCP23008 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="355,408,505,449"/>
 <area shape="rect" href="mcp23017_8h.html" title="API to handle the MCP23017 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="529,408,680,449"/>
@@ -133,12 +154,37 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespacei2c"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c.html">i2c</a></td></tr>
 <tr class="memdesc:namespacei2c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Define API to define and manage I2C devices. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:namespacei2c_1_1_status"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c_1_1_status.html">i2c::Status</a></td></tr>
-<tr class="memdesc:namespacei2c_1_1_status"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transmission status codes. <br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
+<tr class="memitem:adb5bfde92afd6cbc048d1ee7472bf394"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394">i2c::Status</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394ae0aa021e21dddbd6d8cecec71e9cf564">i2c::Status::OK</a> = 0x00, 
+<br />
+&#160;&#160;<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394a0f0db442fad97bbaa5d55ef59d4a01d4">i2c::Status::START_TRANSMITTED</a> = 0x08, 
+<br />
+&#160;&#160;<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394a2bf969769e65b7f1da7824cd59384d38">i2c::Status::REPEAT_START_TRANSMITTED</a> = 0x10, 
+<br />
+&#160;&#160;<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394a4732cb8574071463f6bba0b25d081cd2">i2c::Status::SLA_W_TRANSMITTED_ACK</a> = 0x18, 
+<br />
+&#160;&#160;<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394a9f0c8e7e539ae0087ac1bcb9c3fa721d">i2c::Status::SLA_W_TRANSMITTED_NACK</a> = 0x20, 
+<br />
+&#160;&#160;<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394a3bc1886a3f635d69d7a3f86c0251e9cd">i2c::Status::DATA_TRANSMITTED_ACK</a> = 0x28, 
+<br />
+&#160;&#160;<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394a78d1df25360b4e5d4b6e98b85ad1054a">i2c::Status::DATA_TRANSMITTED_NACK</a> = 0x30, 
+<br />
+&#160;&#160;<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394a1b265dff01af1e30093a5c05a841197c">i2c::Status::ARBITRATION_LOST</a> = 0x38, 
+<br />
+&#160;&#160;<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394aba848a7dd2b8595e79d1642ab7f143c1">i2c::Status::SLA_R_TRANSMITTED_ACK</a> = 0x40, 
+<br />
+&#160;&#160;<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394ab073180fed195e16de9e345d1bbbbedc">i2c::Status::SLA_R_TRANSMITTED_NACK</a> = 0x48, 
+<br />
+&#160;&#160;<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394a912b7b2e9352cadf9ed4bac50d985ac5">i2c::Status::DATA_RECEIVED_ACK</a> = 0x50, 
+<br />
+&#160;&#160;<a class="el" href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394aa852f412f97bf4c4dc2d58a53c18db06">i2c::Status::DATA_RECEIVED_NACK</a> = 0x58
+<br />
+ }</td></tr>
+<tr class="memdesc:adb5bfde92afd6cbc048d1ee7472bf394"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transmission status codes.  <a href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394">More...</a><br /></td></tr>
+<tr class="separator:adb5bfde92afd6cbc048d1ee7472bf394"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2780f0139dbc26f4d83a426dad67e36"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36">i2c::I2CMode</a> : uint8_t { <br />
 &#160;&#160;<a class="el" href="namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36a94e94133f4bdc1794c6b647b8ea134d0">i2c::I2CMode::STANDARD</a>, 
 <br />
@@ -147,60 +193,6 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:ac2780f0139dbc26f4d83a426dad67e36"><td class="mdescLeft">&#160;</td><td class="mdescRight">I2C available transmission modes.  <a href="namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36">More...</a><br /></td></tr>
 <tr class="separator:ac2780f0139dbc26f4d83a426dad67e36"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
-Variables</h2></td></tr>
-<tr class="memitem:a64da02c9095e825b16389e29f86d4192"><td class="memItemLeft" align="right" valign="top"><a id="a64da02c9095e825b16389e29f86d4192"></a>
-constexpr const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c_1_1_status.html#a64da02c9095e825b16389e29f86d4192">i2c::Status::OK</a> = 0x00</td></tr>
-<tr class="memdesc:a64da02c9095e825b16389e29f86d4192"><td class="mdescLeft">&#160;</td><td class="mdescRight">Code indicating the last called method executed as expected without any issue. <br /></td></tr>
-<tr class="separator:a64da02c9095e825b16389e29f86d4192"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3332435f3cfafe3c696fdc5ec63d38f9"><td class="memItemLeft" align="right" valign="top"><a id="a3332435f3cfafe3c696fdc5ec63d38f9"></a>
-constexpr const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c_1_1_status.html#a3332435f3cfafe3c696fdc5ec63d38f9">i2c::Status::START_TRANSMITTED</a> = 0x08</td></tr>
-<tr class="memdesc:a3332435f3cfafe3c696fdc5ec63d38f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">[Transmitter/Receiver modes] A START condition has been transmitted. <br /></td></tr>
-<tr class="separator:a3332435f3cfafe3c696fdc5ec63d38f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad9c7648c21844441d018d254739461fc"><td class="memItemLeft" align="right" valign="top"><a id="ad9c7648c21844441d018d254739461fc"></a>
-constexpr const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c_1_1_status.html#ad9c7648c21844441d018d254739461fc">i2c::Status::REPEAT_START_TRANSMITTED</a> = 0x10</td></tr>
-<tr class="memdesc:ad9c7648c21844441d018d254739461fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">[Transmitter/Receiver modes] A repeated START condition has been transmitted. <br /></td></tr>
-<tr class="separator:ad9c7648c21844441d018d254739461fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7866c436d5794cdb6931392f35658f99"><td class="memItemLeft" align="right" valign="top"><a id="a7866c436d5794cdb6931392f35658f99"></a>
-constexpr const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c_1_1_status.html#a7866c436d5794cdb6931392f35658f99">i2c::Status::SLA_W_TRANSMITTED_ACK</a> = 0x18</td></tr>
-<tr class="memdesc:a7866c436d5794cdb6931392f35658f99"><td class="mdescLeft">&#160;</td><td class="mdescRight">[Transmitter mode] SLA+W has been transmitted; ACK has been received. <br /></td></tr>
-<tr class="separator:a7866c436d5794cdb6931392f35658f99"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a41e8f178c653f0fcf4060a26dab6f7bf"><td class="memItemLeft" align="right" valign="top"><a id="a41e8f178c653f0fcf4060a26dab6f7bf"></a>
-constexpr const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c_1_1_status.html#a41e8f178c653f0fcf4060a26dab6f7bf">i2c::Status::SLA_W_TRANSMITTED_NACK</a> = 0x20</td></tr>
-<tr class="memdesc:a41e8f178c653f0fcf4060a26dab6f7bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">[Transmitter mode] SLA+W has been transmitted; NOT ACK has been received. <br /></td></tr>
-<tr class="separator:a41e8f178c653f0fcf4060a26dab6f7bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adae656ee2e61da80eee6100641af96b7"><td class="memItemLeft" align="right" valign="top"><a id="adae656ee2e61da80eee6100641af96b7"></a>
-constexpr const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c_1_1_status.html#adae656ee2e61da80eee6100641af96b7">i2c::Status::DATA_TRANSMITTED_ACK</a> = 0x28</td></tr>
-<tr class="memdesc:adae656ee2e61da80eee6100641af96b7"><td class="mdescLeft">&#160;</td><td class="mdescRight">[Transmitter mode] Data byte has been transmitted; ACK has been received. <br /></td></tr>
-<tr class="separator:adae656ee2e61da80eee6100641af96b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a55da5eaec34ba509c5faac0b6bee8739"><td class="memItemLeft" align="right" valign="top"><a id="a55da5eaec34ba509c5faac0b6bee8739"></a>
-constexpr const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c_1_1_status.html#a55da5eaec34ba509c5faac0b6bee8739">i2c::Status::DATA_TRANSMITTED_NACK</a> = 0x30</td></tr>
-<tr class="memdesc:a55da5eaec34ba509c5faac0b6bee8739"><td class="mdescLeft">&#160;</td><td class="mdescRight">[Transmitter mode] Data byte has been transmitted; NOT ACK has been received. <br /></td></tr>
-<tr class="separator:a55da5eaec34ba509c5faac0b6bee8739"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0d30866c532bc8107b3b54cc9de1e42"><td class="memItemLeft" align="right" valign="top">constexpr const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c_1_1_status.html#ae0d30866c532bc8107b3b54cc9de1e42">i2c::Status::ARBITRATION_LOST</a> = 0x38</td></tr>
-<tr class="memdesc:ae0d30866c532bc8107b3b54cc9de1e42"><td class="mdescLeft">&#160;</td><td class="mdescRight">[Transmitter mode] Abitration lost in SLA+W or data bytes.  <a href="namespacei2c_1_1_status.html#ae0d30866c532bc8107b3b54cc9de1e42">More...</a><br /></td></tr>
-<tr class="separator:ae0d30866c532bc8107b3b54cc9de1e42"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a269787b0dd39990c7177b8768fc763e8"><td class="memItemLeft" align="right" valign="top"><a id="a269787b0dd39990c7177b8768fc763e8"></a>
-constexpr const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c_1_1_status.html#a269787b0dd39990c7177b8768fc763e8">i2c::Status::SLA_R_TRANSMITTED_ACK</a> = 0x40</td></tr>
-<tr class="memdesc:a269787b0dd39990c7177b8768fc763e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">[Receiver mode] SLA+R has been transmitted; ACK has been received. <br /></td></tr>
-<tr class="separator:a269787b0dd39990c7177b8768fc763e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7beb58eba45fb7b5fda82981ce5793f"><td class="memItemLeft" align="right" valign="top"><a id="ac7beb58eba45fb7b5fda82981ce5793f"></a>
-constexpr const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c_1_1_status.html#ac7beb58eba45fb7b5fda82981ce5793f">i2c::Status::SLA_R_TRANSMITTED_NACK</a> = 0x48</td></tr>
-<tr class="memdesc:ac7beb58eba45fb7b5fda82981ce5793f"><td class="mdescLeft">&#160;</td><td class="mdescRight">[Receiver mode] SLA+R has been transmitted; NOT ACK has been received. <br /></td></tr>
-<tr class="separator:ac7beb58eba45fb7b5fda82981ce5793f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5c8a3507130476780bb0ed34d951463"><td class="memItemLeft" align="right" valign="top"><a id="ae5c8a3507130476780bb0ed34d951463"></a>
-constexpr const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c_1_1_status.html#ae5c8a3507130476780bb0ed34d951463">i2c::Status::DATA_RECEIVED_ACK</a> = 0x50</td></tr>
-<tr class="memdesc:ae5c8a3507130476780bb0ed34d951463"><td class="mdescLeft">&#160;</td><td class="mdescRight">[Receiver mode] Data byte has been transmitted; ACK has been returned. <br /></td></tr>
-<tr class="separator:ae5c8a3507130476780bb0ed34d951463"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7298426da5cd640f388d392458134bc3"><td class="memItemLeft" align="right" valign="top"><a id="a7298426da5cd640f388d392458134bc3"></a>
-constexpr const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c_1_1_status.html#a7298426da5cd640f388d392458134bc3">i2c::Status::DATA_RECEIVED_NACK</a> = 0x58</td></tr>
-<tr class="memdesc:a7298426da5cd640f388d392458134bc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">[Receiver mode] Data byte has been transmitted; NOT ACK has been returned. <br /></td></tr>
-<tr class="separator:a7298426da5cd640f388d392458134bc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92b9a1ec20445ffa7b15a2a7d9297047"><td class="memItemLeft" align="right" valign="top"><a id="a92b9a1ec20445ffa7b15a2a7d9297047"></a>
-constexpr const uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacei2c_1_1_status.html#a92b9a1ec20445ffa7b15a2a7d9297047">i2c::Status::FUTURE_ERROR</a> = 0x80</td></tr>
-<tr class="memdesc:a92b9a1ec20445ffa7b15a2a7d9297047"><td class="mdescLeft">&#160;</td><td class="mdescRight">[Any mode] Problem occurring with Future handling during I2C transmission. <br /></td></tr>
-<tr class="separator:a92b9a1ec20445ffa7b15a2a7d9297047"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>I2C API common definitions. </p>

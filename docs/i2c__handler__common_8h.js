@@ -4,7 +4,7 @@ var i2c__handler__common_8h =
     [ "I2CCommand", "classi2c_1_1_i2_c_command.html", null ],
     [ "AbstractI2CSyncManager", "classi2c_1_1_abstract_i2_c_sync_manager.html", "classi2c_1_1_abstract_i2_c_sync_manager" ],
     [ "I2C_DEBUG_HOOK", "i2c__handler__common_8h.html#a28595eabdfa2ce6a84220d6eb59233e0", null ],
-    [ "I2C_STATUS_HOOK", "i2c__handler__common_8h.html#a318628c0b47ff33e4c2f63039ffa414a", null ],
+    [ "I2C_STATUS_HOOK", "i2c__handler__common_8h.html#a0d00ac941e250c51b3cde59069e2fbec", null ],
     [ "DebugStatus", "i2c__handler__common_8h.html#a2572e0fde7ef325c8f5c1c974c2de720", [
       [ "START", "i2c__handler__common_8h.html#a2572e0fde7ef325c8f5c1c974c2de720ab078ffd28db767c502ac367053f6e0ac", null ],
       [ "REPEAT_START", "i2c__handler__common_8h.html#a2572e0fde7ef325c8f5c1c974c2de720a76b1318f71bfa0c154b487992316b17f", null ],

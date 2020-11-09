@@ -59,7 +59,7 @@ var searchData=
   ['analogreference_56',['AnalogReference',['../namespaceboard.html#afce4d1fd9c536a1cb4275682b46bc1f9',1,'board']]],
   ['any_5fchange_57',['ANY_CHANGE',['../namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1ba1d6fe09476721a54c07d90573d84a1f2',1,'interrupt']]],
   ['apin_58',['APIN',['../classanalog_1_1_analog_input.html#a504bffcb042051f57014d694f648c70d',1,'analog::AnalogInput']]],
-  ['arbitration_5flost_59',['ARBITRATION_LOST',['../namespacei2c_1_1_status.html#ae0d30866c532bc8107b3b54cc9de1e42',1,'i2c::Status']]],
+  ['arbitration_5flost_59',['ARBITRATION_LOST',['../namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394a1b265dff01af1e30093a5c05a841197c',1,'i2c']]],
   ['arc_5fcnt_60',['arc_cnt',['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1observe__tx__t.html#abdf2eabf22bfd408ba008dcd4251692a',1,'devices::rf::NRF24L01::observe_tx_t']]],
   ['are_5finterrupts_5fenabled_61',['are_interrupts_enabled',['../classtimer_1_1_timer.html#a54448770d116b18757554946ff89578f',1,'timer::Timer']]],
   ['aref_62',['AREF',['../classanalog_1_1_analog_input.html#ab008fa68408ab53906cfb790446cd4ac',1,'analog::AnalogInput']]],

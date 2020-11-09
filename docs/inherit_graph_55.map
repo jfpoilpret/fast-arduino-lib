@@ -1,7 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classfuture_1_1_abstract_fake_future.html" title="Base class for all FakeFutures." alt="" coords="5,111,200,138"/>
+<area shape="rect" id="node1" href="$classfuture_1_1_abstract_fake_future.html" title="Base class for all FakeFutures." alt="" coords="5,13,200,39"/>
 <area shape="rect" id="node2" href="$classfuture_1_1_fake_future.html" title="Actual FakeFuture, it has the exact same API as Future and can be used in lieu of Future." alt="" coords="248,5,388,47"/>
-<area shape="rect" id="node3" href="$classfuture_1_1_fake_future_3_01_o_u_t___00_01void_01_4.html" title=" " alt="" coords="248,71,388,112"/>
-<area shape="rect" id="node4" href="$classfuture_1_1_fake_future_3_01void_00_01_i_n___01_4.html" title=" " alt="" coords="248,136,388,177"/>
-<area shape="rect" id="node5" href="$classfuture_1_1_fake_future_3_01void_00_01void_01_4.html" title=" " alt="" coords="248,201,388,243"/>
 </map>

@@ -1,9 +1,9 @@
 var classdevices_1_1magneto_1_1_h_m_c5883_l =
 [
-    [ "BeginFuture", "classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_begin_future.html", "classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_begin_future" ],
-    [ "EndFuture", "classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_end_future.html", "classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_end_future" ],
-    [ "MagneticFieldsFuture", "classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_magnetic_fields_future.html", "classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_magnetic_fields_future" ],
-    [ "StatusFuture", "classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_status_future.html", "classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_status_future" ],
+    [ "BeginFuture", "classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_begin_future.html", null ],
+    [ "EndFuture", "classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_end_future.html", null ],
+    [ "MagneticFieldsFuture", "classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_magnetic_fields_future.html", null ],
+    [ "StatusFuture", "classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_status_future.html", null ],
     [ "HMC5883L", "classdevices_1_1magneto_1_1_h_m_c5883_l.html#af906ae6a559cf9a656c02b6cc7853105", null ],
     [ "begin", "classdevices_1_1magneto_1_1_h_m_c5883_l.html#ae0ce7a3c37c9fc922853d65336ab13c0", null ],
     [ "end", "classdevices_1_1magneto_1_1_h_m_c5883_l.html#a4389d62530fecd8b428c2c24af7921fb", null ],
