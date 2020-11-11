@@ -42,6 +42,7 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 #error "Current target is not yet supported!"
 #endif
 
+using namespace tests;
 using namespace streams;
 using containers::array;
 
@@ -57,13 +58,13 @@ void assert_array(ostream& out, const flash::FlashStorage* message,
 	const T (&expected)[SIZE], const array<T, SIZE>& actual)
 {
 	out << message << endl;
-	assert(out, F("size"), SIZE, actual.size());
+	assert_equals(out, F("size"), SIZE, actual.size());
 	const uint8_t size = (SIZE <= actual.size() ? SIZE : actual.size());
 	uint8_t i = 0;
 	for (T t : actual)
 	{
 		out << t << endl;
-		assert(out, "", expected[i], t);
+		assert_equals(out, "", expected[i], t);
 		if (++i == size) break;
 	}
 }
@@ -111,11 +112,11 @@ int main()
 		actual.set(1, data);
 
 		out << F("array.set()") << endl;
-		assert(out, F("set() [0]"), 0xFF, actual.data()[0]);
+		assert_equals(out, F("set() [0]"), 0xFF, actual.data()[0]);
 		for (uint8_t i = 0; i < 56; ++i)
 		{
 			out << i << endl;
-			assert(out, F("set() [i]"), data[i], actual.data()[i+1]);
+			assert_equals(out, F("set() [i]"), data[i], actual.data()[i+1]);
 		}
 	}
 

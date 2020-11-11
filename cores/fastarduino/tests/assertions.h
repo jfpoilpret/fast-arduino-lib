@@ -20,35 +20,37 @@
 #include "../iomanip.h"
 #include "../streams.h"
 
-void assert(streams::ostream& out, const char* message, bool condition)
+#define ASSERT(OUT, CONDITION) tests::assert_true(OUT, F("" #CONDITION ""), CONDITION)
+
+namespace tests
 {
-	if (!condition)
-		out << F("ASSERTION FAILED: ") << message << streams::endl;
+	void assert_true(streams::ostream& out, const char* message, bool condition)
+	{
+		if (!condition)
+			out << F("ASSERTION FAILED: ") << message << streams::endl;
+	}
+
+	void assert_true(streams::ostream& out, const flash::FlashStorage* message, bool condition)
+	{
+		if (!condition)
+			out << F("ASSERTION FAILED: ") << message << streams::endl;
+	}
+
+	template<typename T1, typename T2>
+	void assert_equals(streams::ostream& out, const char* var, T1 expected, T2 actual)
+	{
+		if (expected != actual)
+			out << F("ASSERTION FAILED on ") << var 
+				<< F(": expected = ") << expected << F(", actual=") << actual << streams::endl;
+	}
+
+	template<typename T1, typename T2>
+	void assert_equals(streams::ostream& out, const flash::FlashStorage* var, T1 expected, T2 actual)
+	{
+		if (expected != actual)
+			out << F("ASSERTION FAILED on ") << var 
+				<< F(": expected = ") << expected << F(", actual=") << actual << streams::endl;
+	}
 }
-
-void assert(streams::ostream& out, const flash::FlashStorage* message, bool condition)
-{
-	if (!condition)
-		out << F("ASSERTION FAILED: ") << message << streams::endl;
-}
-
-#define ASSERT(OUT, CONDITION) assert(OUT, F("" #CONDITION ""), CONDITION)
-
-template<typename T1, typename T2>
-void assert(streams::ostream& out, const char* var, T1 expected, T2 actual)
-{
-	if (expected != actual)
-		out << F("ASSERTION FAILED on ") << var 
-			<< F(": expected = ") << expected << F(", actual=") << actual << streams::endl;
-}
-
-template<typename T1, typename T2>
-void assert(streams::ostream& out, const flash::FlashStorage* var, T1 expected, T2 actual)
-{
-	if (expected != actual)
-		out << F("ASSERTION FAILED on ") << var 
-			<< F(": expected = ") << expected << F(", actual=") << actual << streams::endl;
-}
-
 #endif /* TESTS_ASSERTIONS_H */
 /// @endcond

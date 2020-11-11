@@ -44,6 +44,7 @@ static constexpr const uint8_t MAX_LC_SLOTS = 16;
 
 using namespace streams;
 using namespace lifecycle;
+using namespace tests;
 
 // Define types that output traces on each ctor/dtor/operator=
 class Value
@@ -128,19 +129,19 @@ template<typename T> static void check(ostream& out, AbstractLifeCycleManager& m
 	{
 		out << F("0. Instance creation") << endl;
 		LifeCycle<T> instance{init};
-		assert(out, F("available_slots()"), MAX_LC_SLOTS, manager.available_());
-		assert(out, F("id() after construction"), 0, instance.id());
+		assert_equals(out, F("available_slots()"), MAX_LC_SLOTS, manager.available_());
+		assert_equals(out, F("id() after construction"), 0, instance.id());
 
 		out << F("1. Registration") << endl;
 		uint8_t id = manager.register_(instance);
-		assert(out, F("id returned by register_()"), id);
-		assert(out, F("id() after registration"), id, instance.id());
-		assert(out, F("available_slots()"), MAX_LC_SLOTS - 1, manager.available_());
+		assert_true(out, F("id returned by register_()"), id);
+		assert_equals(out, F("id() after registration"), id, instance.id());
+		assert_equals(out, F("available_slots()"), MAX_LC_SLOTS - 1, manager.available_());
 
 		out << F("2. Find") << endl;
 		LifeCycle<T>* found = manager.find_<T>(id);
-		assert(out, F("manager.find_(id)"), found != nullptr);
-		assert(out, F("manager.find_(id)"), &instance, found);
+		assert_true(out, F("manager.find_(id)"), found != nullptr);
+		assert_equals(out, F("manager.find_(id)"), &instance, found);
 		out << F("val=") << dec << found->val() << endl;
 
 		// Check copy never compiles
@@ -148,14 +149,14 @@ template<typename T> static void check(ostream& out, AbstractLifeCycleManager& m
 
 		out << F("3. Move constructor") << endl;
 		LifeCycle<T> move = std::move(instance);
-		assert(out, F("original id() after registration"), 0, instance.id());
-		assert(out, F("moved id() after registration"), id, move.id());
-		assert(out, F("available_slots()"), MAX_LC_SLOTS - 1, manager.available_());
+		assert_equals(out, F("original id() after registration"), 0, instance.id());
+		assert_equals(out, F("moved id() after registration"), id, move.id());
+		assert_equals(out, F("available_slots()"), MAX_LC_SLOTS - 1, manager.available_());
 
 		out << F("4. Find after move") << endl;
 		found = manager.find_<T>(id);
-		assert(out, F("manager.find_(id)"), found != nullptr);
-		assert(out, F("manager.find_(id)"), &move, found);
+		assert_true(out, F("manager.find_(id)"), found != nullptr);
+		assert_equals(out, F("manager.find_(id)"), &move, found);
 		out << F("val=") << dec << found->val() << endl;
 
 		// Check copy never compiles
@@ -165,14 +166,14 @@ template<typename T> static void check(ostream& out, AbstractLifeCycleManager& m
 		out << F("5. Move assignment") << endl;
 		LifeCycle<T> move2;
 		move2 = std::move(move);
-		assert(out, F("original id() after registration"), 0, move.id());
-		assert(out, F("moved id() after registration"), id, move2.id());
-		assert(out, F("available_slots()"), MAX_LC_SLOTS - 1, manager.available_());
+		assert_equals(out, F("original id() after registration"), 0, move.id());
+		assert_equals(out, F("moved id() after registration"), id, move2.id());
+		assert_equals(out, F("available_slots()"), MAX_LC_SLOTS - 1, manager.available_());
 	}
 
 	// Check destruction
 	out << F("6. Destruction") << endl;
-	assert(out, F("available_slots()"), MAX_LC_SLOTS, manager.available_());
+	assert_equals(out, F("available_slots()"), MAX_LC_SLOTS, manager.available_());
 }
 
 void check_light_proxies(ostream& out, AbstractLifeCycleManager& manager)
@@ -182,18 +183,18 @@ void check_light_proxies(ostream& out, AbstractLifeCycleManager& manager)
 	Value v1{10};
 	SubValue v2{20, 30};
 
-	assert(out, F("sizeof LightProxy<Value>"), 2u, sizeof(LightProxy<Value>));
+	assert_equals(out, F("sizeof LightProxy<Value>"), 2u, sizeof(LightProxy<Value>));
 	LightProxy<Value> p1{v1};
 	LightProxy<Value> p2{v2};
 	out << F("p1()->val() ") << hex << p1() << ' ' << dec << p1()->val() << endl;
 	out << F("p2()->val() ") << hex << p2() << ' ' << dec << p2()->val() << endl;
 
 	LifeCycle<Value> lc1{v1};
-	assert(out, F("manager.register_(lc1)"), 1, manager.register_(lc1));
-	assert(out, F("lc1.id()"), 1, lc1.id());
+	assert_equals(out, F("manager.register_(lc1)"), 1, manager.register_(lc1));
+	assert_equals(out, F("lc1.id()"), 1, lc1.id());
 	LifeCycle<SubValue> lc2{v2};
-	assert(out, F("manager.register_(lc2)"), 2, manager.register_(lc2));
-	assert(out, F("lc2.id()"), 2, lc2.id());
+	assert_equals(out, F("manager.register_(lc2)"), 2, manager.register_(lc2));
+	assert_equals(out, F("lc2.id()"), 2, lc2.id());
 
 	LightProxy<Value> p3{lc1};
 	out << F("p3.id=") << dec << p3.id()
@@ -229,18 +230,18 @@ void check_proxies(ostream& out, AbstractLifeCycleManager& manager)
 	Value v1{10};
 	SubValue v2{20, 30};
 
-	assert(out, F("sizeof Proxy<Value>"), 3u, sizeof(Proxy<Value>));
+	assert_equals(out, F("sizeof Proxy<Value>"), 3u, sizeof(Proxy<Value>));
 	Proxy<Value> p1{v1};
 	Proxy<Value> p2{v2};
 	out << F("p1->val() ") << hex << &(*p1) << ' ' << dec << p1->val() << endl;
 	out << F("p2->val() ") << hex << &(*p2) << ' ' << dec << p2->val() << endl;
 
 	LifeCycle<Value> lc1{v1};
-	assert(out, F("manager.register_(lc1)"), 1, manager.register_(lc1));
-	assert(out, F("lc1.id()"), 1, lc1.id());
+	assert_equals(out, F("manager.register_(lc1)"), 1, manager.register_(lc1));
+	assert_equals(out, F("lc1.id()"), 1, lc1.id());
 	LifeCycle<SubValue> lc2{v2};
-	assert(out, F("manager.register_(lc2)"), 2, manager.register_(lc2));
-	assert(out, F("lc2.id()"), 2, lc2.id());
+	assert_equals(out, F("manager.register_(lc2)"), 2, manager.register_(lc2));
+	assert_equals(out, F("lc2.id()"), 2, lc2.id());
 
 	Proxy<Value> p3{lc1};
 	out << F("p3.id=") << dec << p3.id()
@@ -265,50 +266,50 @@ void check_proxy_constructors(ostream& out, UNUSED AbstractLifeCycleManager& man
 	{
 		Proxy<Value> p1;
 		out << F("Proxy default constructor") << endl;
-		assert(out, F("p1.is_dynamic()"), false, p1.is_dynamic());
-		assert(out, F("p1.manager()"), (AbstractLifeCycleManager*) nullptr, p1.manager());
-		assert(out, F("p1.destination()"), (Value*) nullptr, p1.destination());
+		assert_equals(out, F("p1.is_dynamic()"), false, p1.is_dynamic());
+		assert_equals(out, F("p1.manager()"), (AbstractLifeCycleManager*) nullptr, p1.manager());
+		assert_equals(out, F("p1.destination()"), (Value*) nullptr, p1.destination());
 
 		p1 = Proxy<Value>{v1};
 		out << F("Proxy assignment operator") << endl;
-		assert(out, F("p1.is_dynamic()"), false, p1.is_dynamic());
-		assert(out, F("p1.manager()"), (AbstractLifeCycleManager*) nullptr, p1.manager());
-		assert(out, F("p1.destination()"), &v1, p1.destination());
-		assert(out, F("p1->val()"), 50, p1->val());
+		assert_equals(out, F("p1.is_dynamic()"), false, p1.is_dynamic());
+		assert_equals(out, F("p1.manager()"), (AbstractLifeCycleManager*) nullptr, p1.manager());
+		assert_equals(out, F("p1.destination()"), &v1, p1.destination());
+		assert_equals(out, F("p1->val()"), 50, p1->val());
 
 		Proxy<Value> p2{p1};
 		out << F("Proxy copy constructor") << endl;
-		assert(out, F("p2.is_dynamic()"), false, p2.is_dynamic());
-		assert(out, F("p2.manager()"), (AbstractLifeCycleManager*) nullptr, p2.manager());
-		assert(out, F("p2.destination()"), &v1, p2.destination());
-		assert(out, F("p2->val()"), 50, p2->val());
+		assert_equals(out, F("p2.is_dynamic()"), false, p2.is_dynamic());
+		assert_equals(out, F("p2.manager()"), (AbstractLifeCycleManager*) nullptr, p2.manager());
+		assert_equals(out, F("p2.destination()"), &v1, p2.destination());
+		assert_equals(out, F("p2->val()"), 50, p2->val());
 	}
 
 	out << F("Check LightProxy constructors") << endl;
 	{
 		LightProxy<Value> p1;
 		out << F("LightProxy default constructor") << endl;
-		assert(out, F("p1.is_dynamic()"), false, p1.is_dynamic());
-		assert(out, F("p1.destination()"), (Value*) nullptr, p1.destination());
+		assert_equals(out, F("p1.is_dynamic()"), false, p1.is_dynamic());
+		assert_equals(out, F("p1.destination()"), (Value*) nullptr, p1.destination());
 
 		p1 = LightProxy<Value>{v1};
 		out << F("LightProxy assignment operator") << endl;
-		assert(out, F("p1.is_dynamic()"), false, p1.is_dynamic());
-		assert(out, F("p1.destination()"), &v1, p1.destination());
-		assert(out, F("p1()->val()"), 50, p1()->val());
+		assert_equals(out, F("p1.is_dynamic()"), false, p1.is_dynamic());
+		assert_equals(out, F("p1.destination()"), &v1, p1.destination());
+		assert_equals(out, F("p1()->val()"), 50, p1()->val());
 
 		LightProxy<Value> p2{p1};
 		out << F("LightProxy copy constructor") << endl;
-		assert(out, F("p2.is_dynamic()"), false, p2.is_dynamic());
-		assert(out, F("p2.destination()"), &v1, p2.destination());
-		assert(out, F("p2()->val()"), 50, p2()->val());
+		assert_equals(out, F("p2.is_dynamic()"), false, p2.is_dynamic());
+		assert_equals(out, F("p2.destination()"), &v1, p2.destination());
+		assert_equals(out, F("p2()->val()"), 50, p2()->val());
 
 		out << F("LightProxy conversion constructor from Proxy") << endl;
 		Proxy<Value> p4{v1};
 		LightProxy<Value> p5{p4};
-		assert(out, F("p5.is_dynamic()"), false, p5.is_dynamic());
-		assert(out, F("p5.destination()"), &v1, p5.destination());
-		assert(out, F("p5()->val()"), 50, p5()->val());
+		assert_equals(out, F("p5.is_dynamic()"), false, p5.is_dynamic());
+		assert_equals(out, F("p5.destination()"), &v1, p5.destination());
+		assert_equals(out, F("p5()->val()"), 50, p5()->val());
 	}
 }
 
@@ -343,7 +344,7 @@ int main()
 	out << F("Instantiate LifeCycleManager") << endl;
 	LifeCycleManager<MAX_LC_SLOTS> manager;
 	// Check available slots
-	assert(out, F("available_slots()"), MAX_LC_SLOTS, manager.available_());
+	assert_equals(out, F("available_slots()"), MAX_LC_SLOTS, manager.available_());
 
 	// Check LC
 	check<Value>(out, manager, VAL0);

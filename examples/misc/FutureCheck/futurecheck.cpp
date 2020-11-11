@@ -36,6 +36,7 @@ REGISTER_UATX_ISR(0)
 
 using namespace future;
 using namespace streams;
+using namespace tests;
 
 // Buffers for UART
 //==================
@@ -78,15 +79,15 @@ public:
 
 // Utilities for assertions and traces
 //=====================================
-#define ASSERT_STATUS(OUT, STATUS, FUTURE) assert(OUT, F("" #FUTURE ".status()"), FutureStatus:: STATUS, FUTURE.status())
-#define ASSERT_ERROR(OUT, ERROR, FUTURE) assert(OUT, F("" #FUTURE ".error()"), ERROR, FUTURE.error())
+#define ASSERT_STATUS(OUT, STATUS, FUTURE) assert_equals(OUT, F("" #FUTURE ".status()"), FutureStatus:: STATUS, FUTURE.status())
+#define ASSERT_ERROR(OUT, ERROR, FUTURE) assert_equals(OUT, F("" #FUTURE ".error()"), ERROR, FUTURE.error())
 template<typename T1, typename T2> 
 void assert_value(ostream& out, const flash::FlashStorage* name1, const flash::FlashStorage* name2, 
 	Future<T1>& future, const T2& expected)
 {
 	T1 actual{};
-	assert(out, name1, future.get(actual));
-	assert(out, name2, expected, actual);
+	assert_true(out, name1, future.get(actual));
+	assert_equals(out, name2, expected, actual);
 }
 #define ASSERT_VALUE(OUT, VALUE, FUTURE) assert_value(OUT, F("" #FUTURE ".get()"), F("" #FUTURE ".get() value"), FUTURE, VALUE)
 
@@ -280,7 +281,7 @@ int main()
 	out << F("#9.4 get()") << endl;
 	uint16_t actual = 0;
 	ASSERT(out, my_future.get(actual));
-	assert(out, F("myfuture.get() value"), 1230u, actual);
+	assert_equals(out, F("myfuture.get() value"), 1230u, actual);
 	ASSERT_STATUS(out, READY, my_future);
 	out << endl;
 
@@ -292,7 +293,7 @@ int main()
 	out << F("#10.3 get storage value") << endl;
 	uint16_t input = 0;
 	ASSERT(out, future26.get_storage_value_((uint8_t*) &input, sizeof(input)));
-	assert(out, F("get_storage_value((future26.id())"), 12345u, input);
+	assert_equals(out, F("get_storage_value((future26.id())"), 12345u, input);
 	ASSERT_STATUS(out, NOT_READY, future26);
 	out << F("#10.4 set_future_value()") << endl;
 	ASSERT(out, future26.set_future_value_(123));
@@ -300,7 +301,7 @@ int main()
 	out << F("#10.5 get()") << endl;
 	actual = 0;
 	ASSERT(out, future26.get(actual));
-	assert(out, F("future26.get() value"), 123u, actual);
+	assert_equals(out, F("future26.get() value"), 123u, actual);
 	ASSERT_STATUS(out, READY, future26);
 	out << endl;
 

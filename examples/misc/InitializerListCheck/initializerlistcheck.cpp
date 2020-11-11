@@ -45,6 +45,7 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 #endif
 
 using namespace streams;
+using namespace tests;
 
 // Buffers for UART
 //==================
@@ -57,13 +58,13 @@ template<typename T, uint8_t SIZE>
 void assert(ostream& out, const flash::FlashStorage* message, const T (&expected)[SIZE], std::initializer_list<T> actual)
 {
 	out << message << endl;
-	assert(out, F("size"), SIZE, actual.size());
+	assert_equals(out, F("size"), SIZE, actual.size());
 	const uint8_t size = (SIZE <= actual.size() ? SIZE : actual.size());
 	uint8_t i = 0;
 	for (T t : actual)
 	{
 		out << t << endl;
-		assert(out, "", expected[i], t);
+		assert_equals(out, "", expected[i], t);
 		if (++i == size) break;
 	}
 }

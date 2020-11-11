@@ -38,6 +38,7 @@ REGISTER_UATX_ISR(0)
 using namespace future;
 using namespace lifecycle;
 using namespace streams;
+using namespace tests;
 
 // Buffers for UART
 //==================
@@ -49,17 +50,17 @@ using LCFuture = LifeCycle<Future<OUT, IN>>;
 
 // Utilities for assertions and traces
 //=====================================
-#define ASSERT_PROXY_STATUS(OUT, STATUS, FUTURE) assert(OUT, F("" #FUTURE "->status()"), FutureStatus:: STATUS, FUTURE->status())
-#define ASSERT_PROXY_ERROR(OUT, ERROR, FUTURE) assert(OUT, F("" #FUTURE "->error()"), ERROR, FUTURE->error())
-#define ASSERT_STATUS(OUT, STATUS, FUTURE) assert(OUT, F("" #FUTURE ".status()"), FutureStatus:: STATUS, FUTURE.status())
-#define ASSERT_ERROR(OUT, ERROR, FUTURE) assert(OUT, F("" #FUTURE ".error()"), ERROR, FUTURE.error())
+#define ASSERT_PROXY_STATUS(OUT, STATUS, FUTURE) assert_equals(OUT, F("" #FUTURE "->status()"), FutureStatus:: STATUS, FUTURE->status())
+#define ASSERT_PROXY_ERROR(OUT, ERROR, FUTURE) assert_equals(OUT, F("" #FUTURE "->error()"), ERROR, FUTURE->error())
+#define ASSERT_STATUS(OUT, STATUS, FUTURE) assert_equals(OUT, F("" #FUTURE ".status()"), FutureStatus:: STATUS, FUTURE.status())
+#define ASSERT_ERROR(OUT, ERROR, FUTURE) assert_equals(OUT, F("" #FUTURE ".error()"), ERROR, FUTURE.error())
 template<typename T1, typename T2> 
 void assert_value(ostream& out, const flash::FlashStorage* name1, const flash::FlashStorage* name2, 
 	Future<T1>& future, const T2& expected)
 {
 	T1 actual{};
-	assert(out, name1, future.get(actual));
-	assert(out, name2, expected, actual);
+	assert_true(out, name1, future.get(actual));
+	assert_equals(out, name2, expected, actual);
 }
 #define ASSERT_VALUE(OUT, VALUE, FUTURE) assert_value(OUT, F("" #FUTURE ".get()"), F("" #FUTURE ".get() value"), FUTURE, VALUE)
 #define ASSERT_PROXY_VALUE(OUT, VALUE, FUTURE) assert_value(OUT, F("" #FUTURE "->get()"), F("" #FUTURE "->get() value"), *FUTURE, VALUE)
@@ -81,7 +82,7 @@ int main()
 
 	out << F("Before FutureManager instantiation") << endl;
 	LifeCycleManager<MAX_FUTURES> manager;
-	assert(out, F("available slots"), MAX_FUTURES, manager.available_());
+	assert_equals(out, F("available slots"), MAX_FUTURES, manager.available_());
 
 	// Check operations with move-constructor
 	{
