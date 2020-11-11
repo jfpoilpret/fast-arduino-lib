@@ -1,0 +1,46 @@
+#!/bin/bash
+#
+# This script helps preparing a release:
+# 0. Clean all code for all targets
+# 1. Build all examples for all targets
+# 2. Gather make output and prepare new code size sheet for all targets
+# 3. Compare old and new sizes and alert in case of changed
+
+CURDIR=`pwd`
+SCRIPT=$(readlink -f "$0")
+MAKEDIR=$(dirname "$SCRIPT")
+BASEDIR=$MAKEDIR/..
+DOCDIR=$BASEDIR/basedoc
+
+echo "Clean up all generated code"
+cd $BASEDIR
+make clean-all >/dev/null 2>&1
+make clean-examples-all >/dev/null 2>&1
+
+echo "Build all examples for all targets"
+export TARGETS="UNO ATtiny84"
+for TARGET in $TARGETS
+do
+	echo "Target: $TARGET"
+	make CONF=$TARGET examples 2>errors | $MAKEDIR/stats.py >newsizes-$TARGET
+	grep "Error" errors
+	# check if error found, then abort
+	if [ $? -ne 1 ]; then
+		echo "Error occurred, aborting."
+		exit 1
+	fi
+	rm -f errors
+done
+
+echo "Generate size data sheets"
+$MAKEDIR/gen-size-sheet.py $DOCDIR/new-examples-data.xlsx $TARGETS
+
+echo "Remove intermediate result files"
+for TARGET in $TARGETS
+do
+	rm -f newsizes-$TARGET
+done
+
+echo "Compare new sizes with previous release sizes"
+$MAKEDIR/compare-size-sheets.py $DOCDIR/examples-data.xlsx $DOCDIR/new-examples-data.xlsx >$DOCDIR/sizes-diff.xlsx
+cd $CURDIR
