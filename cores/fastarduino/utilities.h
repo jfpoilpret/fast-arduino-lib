@@ -389,16 +389,16 @@ namespace utils
 	template<typename T> union ToUint8
 	{
 		static_assert(sizeof(T) == 1, "T must be a one-byte size type");
-		explicit ToUint8(T value) : value(value) {}
-		T value;
-		uint8_t as_uint8;
+		explicit ToUint8(T value) : value_(value) {}
+		T value_;
+		uint8_t as_uint8_;
 	};
 
 	template<typename T> union ToArray
 	{
-		explicit ToArray(const T& value): value{value} {}
-		T value;
-		uint8_t as_array[sizeof(T)];
+		explicit ToArray(const T& value): value_{value} {}
+		T value_;
+		uint8_t as_array_[sizeof(T)];
 	};
 	/// @endcond
 
@@ -411,7 +411,7 @@ namespace utils
 	 */
 	template<typename T> constexpr uint8_t as_uint8_t(T input)
 	{
-		return ToUint8<T>(input).as_uint8;
+		return ToUint8<T>(input).as_uint8_;
 	}
 
 	/**
@@ -423,7 +423,7 @@ namespace utils
 	template<typename T, typename U = uint8_t[sizeof(T)]>
 	constexpr void as_array(const T& input, U output)
 	{
-		memcpy(output, ToArray<T>(input).as_array, sizeof(T));
+		memcpy(output, ToArray<T>(input).as_array_, sizeof(T));
 	} 
 
 	/**

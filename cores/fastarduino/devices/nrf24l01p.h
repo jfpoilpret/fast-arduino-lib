@@ -432,7 +432,7 @@ namespace devices::rf
 		union fifo_status_t
 		{
 			uint8_t as_byte; //!< Byte representation of fifo status.
-
+			//TODO why not bool for bools
 			struct
 			{
 				uint8_t rx_empty : 1; //!< RX FIFO empty flag.
@@ -479,6 +479,7 @@ namespace devices::rf
 		union status_t
 		{
 			uint8_t as_byte; //!< Byte representation of status.
+			//TODO why not bool for bools
 			struct
 			{
 				uint8_t tx_full : 1; //!< TX FIFO full.

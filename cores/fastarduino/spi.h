@@ -369,8 +369,8 @@ namespace spi
 		static constexpr const REG8 SPSR_{SPSR};
 		// Configuration values to reset at beginning of each transfer
 		static const constexpr uint8_t SPCR_START_ =
-			bits::BV8(SPE, MSTR) | (uint8_t(RATE) & 0x03) | uint8_t(ORDER) | uint8_t(MODE);
-		static const constexpr uint8_t SPSR_START_ = (uint8_t(RATE) & 0x10) ? bits::BV8(SPI2X) : 0;
+			bits::BV8(SPE, MSTR) | (uint8_t(RATE) & 0x03U) | uint8_t(ORDER) | uint8_t(MODE);
+		static const constexpr uint8_t SPSR_START_ = (uint8_t(RATE) & 0x10U) ? bits::BV8(SPI2X) : 0;
 #else
 		static constexpr const REG8 USIDR_{USIDR};
 		static constexpr const REG8 USISR_{USISR};

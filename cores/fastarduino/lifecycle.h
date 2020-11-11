@@ -178,7 +178,7 @@ namespace lifecycle
 		bool unregister_(uint8_t id)
 		{
 			AbstractLifeCycle** slot = find_slot_(id);
-			if (slot == nullptr || *slot == nullptr)
+			if ((slot == nullptr) || (*slot == nullptr))
 				return false;
 			AbstractLifeCycle& source = **slot;
 			source.id_ = 0;
@@ -225,7 +225,7 @@ namespace lifecycle
 		{
 			// Check this instance is managed
 			AbstractLifeCycle** slot = find_slot_(id);
-			if (slot == nullptr || *slot == nullptr) return false;
+			if ((slot == nullptr) || (*slot == nullptr)) return false;
 			// Perform move
 			AbstractLifeCycle& source = **slot;
 			dest.id_ = source.id_;
@@ -314,7 +314,7 @@ namespace lifecycle
 
 		AbstractLifeCycle** find_slot_(uint8_t id) const
 		{
-			if (id == 0 || id > size_)
+			if ((id == 0) || (id > size_))
 				return nullptr;
 			else
 				return &slots_[id - 1];
@@ -376,7 +376,7 @@ namespace lifecycle
 		 * 
 		 * @param value the original value of this @p T instance
 		 */
-		LifeCycle(const T& value) : AbstractLifeCycle{}, T{value} {}
+		explicit LifeCycle(const T& value) : AbstractLifeCycle{}, T{value} {}
 
 		/**
 		 * Create a new `LifeCycle<T>` mixin for object @p value of type @p T.
@@ -388,7 +388,7 @@ namespace lifecycle
 		 * 
 		 * @param value the original value of this @p T instance
 		 */
-		LifeCycle(T&& value) : AbstractLifeCycle{}, T{std::move(value)} {}
+		explicit LifeCycle(T&& value) : AbstractLifeCycle{}, T{std::move(value)} {}
 
 		/**
 		 * Crate a new `LifeCycle<T>` mixin object of type @p T, by moving an
@@ -463,7 +463,7 @@ namespace lifecycle
 		 * @param dest the reference to a @p T instance to proxify.
 		 */
 		Proxy(const T& dest)
-			:	id_{0}, ptr_{reinterpret_cast<uintptr_t>(&dest)}, is_dynamic_{false} {}
+			:	ptr_{reinterpret_cast<uintptr_t>(&dest)}, is_dynamic_{false} {}
 
 		/**
 		 * Create a `Proxy<T>` to a `LifeCycle<U>` instance (dynamic reference).
@@ -572,7 +572,7 @@ namespace lifecycle
 
 		struct
 		{
-			uint8_t id_;
+			uint8_t id_ = 0;
 			uintptr_t ptr_ : 15;
 			bool is_dynamic_ : 1;
 		};
@@ -671,7 +671,7 @@ namespace lifecycle
 		 * 
 		 * @sa Proxy
 		 */
-		LightProxy(const Proxy<T>& proxy)
+		explicit LightProxy(const Proxy<T>& proxy)
 		{
 			if (proxy.is_dynamic())
 			{
@@ -696,7 +696,7 @@ namespace lifecycle
 		{
 			// Statically check (at compile-time) that U is a subclass of T
 			UNUSED types_traits::derives_from<U, T> check;
-			if (this == (LightProxy<T>*) &that) return *this;
+			if (this == (const LightProxy<T>*) &that) return *this;
 			content_ = that.content_;
 			return *this;
 		}

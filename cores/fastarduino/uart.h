@@ -93,9 +93,9 @@ namespace serial::hard
 		
 		struct SpeedSetup
 		{
-			constexpr SpeedSetup(uint16_t ubrr_value, bool u2x) : ubrr_value{ubrr_value}, u2x{u2x} {}
-			const uint16_t ubrr_value;
-			const bool u2x;
+			constexpr SpeedSetup(uint16_t ubrr_value, bool u2x) : ubrr_value_{ubrr_value}, u2x_{u2x} {}
+			const uint16_t ubrr_value_;
+			const bool u2x_;
 		};
 
 		static constexpr SpeedSetup compute_speed(uint32_t rate)
@@ -114,12 +114,12 @@ namespace serial::hard
 			using TRAIT = board_traits::USART_trait<USART>;
 			constexpr uint8_t UCSRB_TX = TRAIT::TX_ENABLE_MASK | TRAIT::UDRIE_MASK;
 			constexpr uint8_t UCSRB_RX = TRAIT::RX_ENABLE_MASK | TRAIT::RXCIE_MASK;
-			const uint8_t UCSRB_MASK = ((out != nullptr) ? UCSRB_TX : 0) | ((in != nullptr) ? UCSRB_RX : 0);
+			const uint8_t UCSRB_MASK = ((out != nullptr) ? UCSRB_TX : 0U) | ((in != nullptr) ? UCSRB_RX : 0U);
 			SpeedSetup setup = compute_speed(rate);
-			const uint8_t UCSRA_MASK = (setup.u2x ? TRAIT::U2X_MASK : 0);
+			const uint8_t UCSRA_MASK = (setup.u2x_ ? TRAIT::U2X_MASK : 0);
 			synchronized
 			{
-				TRAIT::UBRR = setup.ubrr_value;
+				TRAIT::UBRR = setup.ubrr_value_;
 				TRAIT::UCSRA = UCSRA_MASK;
 				TRAIT::UCSRB |= UCSRB_MASK;
 				TRAIT::UCSRC = TRAIT::UCSRC_value(parity, stop_bits);
@@ -141,7 +141,7 @@ namespace serial::hard
 			}
 			constexpr uint8_t UCSRB_TX = TRAIT::TX_ENABLE_MASK | TRAIT::UDRIE_MASK;
 			constexpr uint8_t UCSRB_RX = TRAIT::RX_ENABLE_MASK | TRAIT::RXCIE_MASK;
-			const uint8_t UCSRB_MASK = ((out != nullptr) ? UCSRB_TX : 0) | ((in != nullptr) ? UCSRB_RX : 0);
+			const uint8_t UCSRB_MASK = ((out != nullptr) ? UCSRB_TX : 0U) | ((in != nullptr) ? UCSRB_RX : 0U);
 			synchronized TRAIT::UCSRB &= ~UCSRB_MASK;
 			if ((in != nullptr) && (buffer_handling == BufferHandling::CLEAR))
 				in->queue().clear();
@@ -152,11 +152,11 @@ namespace serial::hard
 
 		static constexpr uint16_t UBRR_double(uint32_t rate)
 		{
-			return (F_CPU / 4 / rate - 1) / 2;
+			return ((F_CPU / 4 / rate) - 1) / 2;
 		}
 		static constexpr uint16_t UBRR_single(uint32_t rate)
 		{
-			return (F_CPU / 8 / rate - 1) / 2;
+			return ((F_CPU / 8 / rate) - 1) / 2;
 		}
 	};
 
@@ -177,7 +177,7 @@ namespace serial::hard
 
 		template<uint8_t SIZE_TX> 
 		AbstractUATX(char (&output)[SIZE_TX], CALLBACK callback, void* arg)
-		: obuf_{output, callback, arg}, transmitting_{false} {}
+		: obuf_{output, callback, arg} {}
 
 		streams::ostreambuf& out_()
 		{
@@ -225,7 +225,7 @@ namespace serial::hard
 
 	private:
 		streams::ostreambuf obuf_;
-		bool transmitting_;
+		bool transmitting_ = false;
 	};
 	/// @endcond
 
@@ -256,7 +256,7 @@ namespace serial::hard
 		 * blocking.
 		 * @sa REGISTER_UATX_ISR()
 		 */
-		template<uint8_t SIZE_TX> UATX(char (&output)[SIZE_TX])
+		template<uint8_t SIZE_TX> explicit UATX(char (&output)[SIZE_TX])
 		: AbstractUATX{output, THIS::on_put, this}
 		{
 			interrupt::register_handler(*this);
@@ -320,7 +320,7 @@ namespace serial::hard
 		}
 
 	protected:
-		template<uint8_t SIZE_RX> AbstractUARX(char (&input)[SIZE_RX]) : ibuf_{input} {}
+		template<uint8_t SIZE_RX> explicit AbstractUARX(char (&input)[SIZE_RX]) : ibuf_{input} {}
 
 		streams::istreambuf& in_()
 		{
@@ -331,11 +331,11 @@ namespace serial::hard
 		void data_receive_complete(Errors& errors)
 		{
 			using TRAIT = board_traits::USART_trait<USART>;
-			char status = TRAIT::UCSRA;
+			uint8_t status = TRAIT::UCSRA;
 			errors.data_overrun = status & TRAIT::DOR_MASK;
 			errors.frame_error = status & TRAIT::FE_MASK;
 			errors.parity_error = status & TRAIT::UPE_MASK;
-			char value = TRAIT::UDR;
+			uint8_t value = TRAIT::UDR;
 			errors.queue_overflow = !ibuf_.queue().push_(value);
 		}
 
@@ -371,7 +371,7 @@ namespace serial::hard
 		 * `in()`.
 		 * @sa REGISTER_UARX_ISR()
 		 */
-		template<uint8_t SIZE_RX> UARX(char (&input)[SIZE_RX]) : AbstractUARX{input}
+		template<uint8_t SIZE_RX> explicit UARX(char (&input)[SIZE_RX]) : AbstractUARX{input}
 		{
 			interrupt::register_handler(*this);
 		}

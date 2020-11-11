@@ -74,7 +74,7 @@ namespace i2c::status
 		 * @sa trace()
 		 * @sa reset()
 		 */
-		I2CStatusRecorder(STATUS trace = STATUS::TRACE_ALL) : trace_{trace} {}
+		explicit I2CStatusRecorder(STATUS trace = STATUS::TRACE_ALL) : trace_{trace} {}
 
 		/**
 		 * Clear all recorded notifications.
@@ -110,7 +110,7 @@ namespace i2c::status
 		void operator()(Status expected, Status actual)
 		{
 			if (index_ >= SIZE) return;
-			if ((expected != actual) || trace_ == STATUS::TRACE_ALL)
+			if ((expected != actual) || (trace_ == STATUS::TRACE_ALL))
 			{
 				expected_[index_] = expected;
 				actual_[index_++] = actual;
@@ -150,7 +150,7 @@ namespace i2c::status
 		/// @cond notdocumented
 		void operator()(Status expected, Status actual)
 		{
-			if ((expected != actual) || trace_ == STATUS::TRACE_ALL)
+			if ((expected != actual) || (trace_ == STATUS::TRACE_ALL))
 			{
 				if (hex_status_)
 					out_ << streams::hex << uint8_t(expected) << ' ' 

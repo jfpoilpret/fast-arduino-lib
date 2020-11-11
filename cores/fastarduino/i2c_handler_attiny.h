@@ -58,7 +58,7 @@ namespace i2c
 		using STATUS = I2CStatusSupport<HAS_STATUS_, STATUS_HOOK_>;
 
 	public:
-		ATtinyI2CSyncHandler(STATUS_HOOK_ status_hook = nullptr) : status_hook_{status_hook}
+		explicit ATtinyI2CSyncHandler(STATUS_HOOK_ status_hook = nullptr) : status_hook_{status_hook}
 		{
 			// set SDA/SCL default directions
 			I2C_TRAIT::PORT |= I2C_TRAIT::SCL_SDA_MASK;
@@ -331,7 +331,7 @@ namespace i2c
 	{
 		using PARENT = AbstractI2CSyncATtinyManager<MODE_, false, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK>;
 	public:
-		I2CSyncStatusManager(STATUS_HOOK_ status_hook) : PARENT{nullptr, status_hook} {}
+		explicit I2CSyncStatusManager(STATUS_HOOK_ status_hook) : PARENT{nullptr, status_hook} {}
 	};
 
 	/**

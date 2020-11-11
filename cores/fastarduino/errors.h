@@ -38,28 +38,25 @@ namespace errors
 {
 	/** Input/output error. */
 	constexpr const int EIO = -5;
+
 	/** 
 	 * Try again. 
 	 * This may happen when limited resources are exhausted but could be released.
 	 */
 	constexpr const int EAGAIN = -11;
-	// /** Out of memory. */
-	// constexpr const int ENOMEM = -12;
+
 	/** Invalid argument or invalid Future. */
 	constexpr const int EINVAL = -22;
-	// /** No message of desired type. */
-	// constexpr const int ENOMSG = -42;
-	// /** Identifier removed. */
-	// constexpr const int EIDRM = -43;
+
 	/** Timer expired. */
 	constexpr const int ETIME = -62;
+
 	/**
 	 * Protocol error.
 	 * This may happen on I2C transactions.
 	 */
 	constexpr const int EPROTO = -71;
-	// /** Value too large for defined data type. */
-	// constexpr const int EOVERFLOW = -75;
+
 	/**
 	 * Illegal byte sequence.
 	 * This may happen in I2C transactions when an associated Future cannot 
@@ -69,8 +66,6 @@ namespace errors
 
 	/** Message too long.  */
 	constexpr const int EMSGSIZE = -90;
-	// /** No buffer space available.  */
-	// constexpr const int ENOBUFS = -105;
 }
 
 #endif /* ERRORS_HH */

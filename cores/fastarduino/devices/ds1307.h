@@ -76,13 +76,20 @@ namespace devices::rtc
 	 */
 	struct tm
 	{
-		uint8_t tm_sec = 0;           /**< seconds after the minute - [ 0 to 59 ] */
-		uint8_t tm_min = 0;           /**< minutes after the hour - [ 0 to 59 ] */
-		uint8_t tm_hour = 0;          /**< hours since midnight - [ 0 to 23 ] */
-		WeekDay tm_wday = WeekDay(0); /**< days since Sunday - [ 1 to 7 ] */
-		uint8_t tm_mday = 0;          /**< day of the month - [ 1 to 31 ] */
-		uint8_t tm_mon = 0;           /**< months since January - [ 1 to 12 ] */
-		uint8_t tm_year = 0;          /**< years since 2000 */
+		/** seconds after the minute - [ 0 to 59 ] */
+		uint8_t tm_sec = 0;
+		/** minutes after the hour - [ 0 to 59 ] */
+		uint8_t tm_min = 0;
+		/** hours since midnight - [ 0 to 23 ] */
+		uint8_t tm_hour = 0;
+		/** days since Sunday - [ 1 to 7 ] */
+		WeekDay tm_wday = WeekDay(0);
+		/** day of the month - [ 1 to 31 ] */
+		uint8_t tm_mday = 0;
+		/** months since January - [ 1 to 12 ] */
+		uint8_t tm_mon = 0;
+		/** years since 2000 */
+		uint8_t tm_year = 0;
 	};
 
 	/**
@@ -111,9 +118,9 @@ namespace devices::rtc
 		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
 		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
-		struct set_tm
+		struct SetTMHolder
 		{
-			set_tm(const tm& datetime)
+			explicit SetTMHolder(const tm& datetime)
 			{
 				tm_.tm_sec = utils::binary_to_bcd(datetime.tm_sec);
 				tm_.tm_min = utils::binary_to_bcd(datetime.tm_min);
@@ -157,13 +164,13 @@ namespace devices::rtc
 		 * 
 		 * @sa set_datetime(SetDatetimeFuture&)
 		 */
-		class SetDatetimeFuture : public FUTURE<void, set_tm>
+		class SetDatetimeFuture : public FUTURE<void, SetTMHolder>
 		{
-			using PARENT = FUTURE<void, set_tm>;
+			using PARENT = FUTURE<void, SetTMHolder>;
 
 		public:
 			/// @cond notdocumented
-			explicit SetDatetimeFuture(const tm& datetime) : PARENT{set_tm{datetime}} {}
+			explicit SetDatetimeFuture(const tm& datetime) : PARENT{SetTMHolder{datetime}} {}
 			SetDatetimeFuture(SetDatetimeFuture&&) = default;
 			SetDatetimeFuture& operator=(SetDatetimeFuture&&) = default;
 			/// @endcond
@@ -283,7 +290,7 @@ namespace devices::rtc
 
 			bool is_input_valid() const
 			{
-				return (this->get_input()[0] + SIZE_ <= RAM_END);
+				return ((this->get_input()[0] + SIZE_) <= RAM_END);
 			}
 			/// @endcond
 		};
@@ -392,7 +399,7 @@ namespace devices::rtc
 
 			bool is_input_valid() const
 			{
-				return (this->get_input() + SIZE_ <= RAM_END);
+				return ((this->get_input() + SIZE_) <= RAM_END);
 			}
 			/// @endcond
 		};
@@ -864,6 +871,7 @@ namespace devices::rtc
 			explicit ControlRegister(uint8_t data = 0) : data{data} {}
 
 			uint8_t data;
+			//TODO why not bool for bools?
 			struct
 			{
 				uint8_t rs : 2;

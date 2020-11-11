@@ -49,7 +49,7 @@ namespace devices::mcp230xx
 
 		static constexpr uint8_t compute_address(uint8_t address)
 		{
-			return uint8_t((uint8_t(BASE_ADDRESS) | uint8_t(address & 0x07)) << 1);
+			return uint8_t((uint8_t(BASE_ADDRESS) | uint8_t(address & 0x07U)) << 1);
 		}
 
 	public:
@@ -227,7 +227,7 @@ namespace devices::mcp230xx
 		{
 		public:
 			/// @cond notdocumented
-			SetValuesFuture(uint8_t value) : WriteRegisterFuture{GPIO, value} {}
+			explicit SetValuesFuture(uint8_t value) : WriteRegisterFuture{GPIO, value} {}
 			SetValuesFuture(SetValuesFuture&&) = default;
 			SetValuesFuture& operator=(SetValuesFuture&&) = default;
 			/// @endcond
@@ -570,24 +570,24 @@ namespace devices::mcp230xx
 			Write3Registers(uint8_t address1, uint8_t value1, 
 							uint8_t address2, uint8_t value2, 
 							uint8_t address3, uint8_t value3)
-				:	address1{address1}, value1{value1},
-					address2{address2}, value2{value2},
-					address3{address3}, value3{value3} {}
+				:	address1_{address1}, value1_{value1},
+					address2_{address2}, value2_{value2},
+					address3_{address3}, value3_{value3} {}
 
-			uint8_t address1;
-			uint8_t value1;
-			uint8_t address2;
-			uint8_t value2;
-			uint8_t address3;
-			uint8_t value3;
+			uint8_t address1_;
+			uint8_t value1_;
+			uint8_t address2_;
+			uint8_t value2_;
+			uint8_t address3_;
+			uint8_t value3_;
 		};
 
 		struct WriteRegister
 		{
-			WriteRegister(uint8_t address, uint8_t value) : address{address}, value{value} {}
+			WriteRegister(uint8_t address, uint8_t value) : address_{address}, value_{value} {}
 
-			uint8_t address;
-			uint8_t value;
+			uint8_t address_;
+			uint8_t value_;
 		};
 
 		class WriteRegisterFuture : public FUTURE<void, WriteRegister>
@@ -603,7 +603,7 @@ namespace devices::mcp230xx
 		{
 			using PARENT = FUTURE<uint8_t, uint8_t>;
 		protected:
-			ReadRegisterFuture(uint8_t address) : PARENT{address} {}
+			explicit ReadRegisterFuture(uint8_t address) : PARENT{address} {}
 			ReadRegisterFuture(ReadRegisterFuture&&) = default;
 			ReadRegisterFuture& operator=(ReadRegisterFuture&&) = default;
 		};

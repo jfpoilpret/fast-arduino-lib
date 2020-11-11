@@ -419,7 +419,7 @@ namespace eeprom
 		/// @cond notdocumented
 		static bool constexpr check(uint16_t address, uint16_t size)
 		{
-			return size && (address <= E2END) && (size <= (E2END + 1)) && ((address + size) <= (E2END + 1));
+			return (size != 0) && (address <= E2END) && (size <= (E2END + 1)) && ((address + size) <= (E2END + 1));
 		}
 
 		static void blocked_read(uint16_t address, uint8_t& value)

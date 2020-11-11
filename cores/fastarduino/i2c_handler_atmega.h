@@ -155,13 +155,16 @@ namespace i2c
 	// Generic support for LifeCycle resolution
 	template<I2CErrorPolicy POLICY = I2CErrorPolicy::DO_NOTHING> struct I2CErrorPolicySupport
 	{
-		I2CErrorPolicySupport() {}
+		I2CErrorPolicySupport() = default;
 		template<typename T>
-		void handle_error(UNUSED const I2CCommand<T>& current, UNUSED containers::Queue<I2CCommand<T>>& commands) {}
+		void handle_error(UNUSED const I2CCommand<T>& current, UNUSED containers::Queue<I2CCommand<T>>& commands)
+		{
+			// Intentionally empty: do nothing in this policy
+		}
 	};
 	template<> struct I2CErrorPolicySupport<I2CErrorPolicy::CLEAR_ALL_COMMANDS>
 	{
-		I2CErrorPolicySupport() {}
+		I2CErrorPolicySupport() = default;
 		template<typename T>
 		void handle_error(UNUSED const I2CCommand<T>& current, containers::Queue<I2CCommand<T>>& commands)
 		{
@@ -170,7 +173,7 @@ namespace i2c
 	};
 	template<> struct I2CErrorPolicySupport<I2CErrorPolicy::CLEAR_TRANSACTION_COMMANDS>
 	{
-		I2CErrorPolicySupport() {}
+		I2CErrorPolicySupport() = default;
 		template<typename T>
 		void handle_error(const I2CCommand<T>& current, containers::Queue<I2CCommand<T>>& commands)
 		{
@@ -201,7 +204,7 @@ namespace i2c
 		using STATUS = I2CStatusSupport<HAS_STATUS_, STATUS_HOOK_>;
 
 	public:
-		ATmegaI2CSyncHandler(STATUS_HOOK_ status_hook = nullptr) : status_hook_{status_hook} {}
+		explicit ATmegaI2CSyncHandler(STATUS_HOOK_ status_hook = nullptr) : status_hook_{status_hook} {}
 
 		void begin_()
 		{
@@ -476,7 +479,7 @@ namespace i2c
 			lifecycle::AbstractLifeCycleManager* lifecycle_manager = nullptr,
 			STATUS_HOOK_ status_hook = nullptr,
 			DEBUG_HOOK_ debug_hook = nullptr)
-			:	commands_{buffer}, policy_{}, lc_{lifecycle_manager}, 
+			:	commands_{buffer}, lc_{lifecycle_manager}, 
 				status_hook_{status_hook}, debug_hook_{debug_hook} {}
 		/// @endcond
 
@@ -693,7 +696,7 @@ namespace i2c
 				return I2CCallback::ERROR;
 			
 			// Handle TWI interrupt when data received
-			if (current_ == State::RECV || current_ == State::RECV_LAST)
+			if ((current_ == State::RECV) || (current_ == State::RECV_LAST))
 			{
 				const uint8_t data = TWDR_;
 				bool ok = future.set_future_value_(data);
@@ -782,7 +785,7 @@ namespace i2c
 		// Queue of commands to execute
 		containers::Queue<I2CCOMMAND> commands_;
 
-		POLICY policy_;
+		POLICY policy_{};
 		LC lc_;
 		STATUS status_hook_;
 		DEBUG debug_hook_;
@@ -1195,7 +1198,7 @@ namespace i2c
 	{
 		using PARENT = AbstractI2CSyncATmegaManager<MODE_, false, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK>;
 	public:
-		I2CSyncStatusManager(STATUS_HOOK_ status_hook) : PARENT{nullptr, status_hook} {}
+		explicit I2CSyncStatusManager(STATUS_HOOK_ status_hook) : PARENT{nullptr, status_hook} {}
 	};
 
 	/**
@@ -1413,7 +1416,7 @@ namespace i2c
 		template<typename MANAGER, void (*CALLBACK_)(I2CCallback, typename MANAGER::FUTURE_PROXY)>
 		static void i2c_change_function()
 		{
-			using namespace interrupt;
+			using interrupt::HandlerHolder;
 			static_assert(I2CManager_trait<MANAGER>::IS_I2CMANAGER, "MANAGER must be an I2C Manager");
 			static_assert(I2CManager_trait<MANAGER>::IS_ASYNC, "MANAGER must be an asynchronous I2C Manager");
 			I2CCallback callback =  HandlerHolder<MANAGER>::handler()->i2c_change();
@@ -1428,7 +1431,8 @@ namespace i2c
 			void (HANDLER_::*CALLBACK_)(I2CCallback, typename MANAGER::FUTURE_PROXY)>
 		static void i2c_change_method()
 		{
-			using namespace interrupt;
+			using interrupt::HandlerHolder;
+			using interrupt::CallbackHandler;
 			static_assert(I2CManager_trait<MANAGER>::IS_I2CMANAGER, "MANAGER must be an I2C Manager");
 			static_assert(I2CManager_trait<MANAGER>::IS_ASYNC, "MANAGER must be an asynchronous I2C Manager");
 			I2CCallback callback =  HandlerHolder<MANAGER>::handler()->i2c_change();

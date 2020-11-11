@@ -116,10 +116,10 @@ namespace i2c
 		 */
 		template<I2CMode MODE>
 		I2CDevice(MANAGER& manager, uint8_t device, UNUSED Mode<MODE> mode, bool auto_stop) 
-		: device_{device}, handler_{manager}, auto_stop_{auto_stop}
+		: device_{device}, handler_{manager}, auto_stop_flags_{I2CCommandType::flags(auto_stop, true, true)}
 		{
 			// Ensure that MANAGER I2C mode is compliant with the best mode for this device
-			static_assert(MODE == I2CMode::FAST || MODE == MANAGER_TRAIT::MODE,
+			static_assert((MODE == I2CMode::FAST) || (MODE == MANAGER_TRAIT::MODE),
 				"MANAGER_ I2CMode must be compliant with this device best mode");
 		}
 
@@ -237,6 +237,7 @@ namespace i2c
 		{
 			uint8_t num_commands = commands.size();
 			if (num_commands == 0) return errors::EINVAL;
+			//FIXME this makes the whole block synchronized even for ATmega synchronous manager!
 			OUTER_SYNCHRONIZED
 			{
 				uint8_t max_read;
@@ -251,23 +252,8 @@ namespace i2c
 				}
 
 				// That check is normally usefull only in debug mode
-				if (MANAGER_TRAIT::IS_DEBUG)
-				{
-					// Limit total number of bytes read or written in a transaction to 255
-					uint8_t total_read = 0;
-					uint8_t total_write = 0;
-					for (const I2CLightCommand& command : commands)
-					{
-						// Count number of bytes read and written
-						if (command.type().is_write())
-							total_write += (command.byte_count() ? command.byte_count() : max_write);
-						else
-							total_read += (command.byte_count() ? command.byte_count() : max_read);
-					}
-					// check sum of read commands byte_count matches future output size
-					// check sum of write commands byte_count matches future input size
-					if ((total_write != max_write) || (total_read != max_read)) return errors::EINVAL;
-				}
+				if (MANAGER_TRAIT::IS_DEBUG && (!check_commands(max_write, max_read, commands)))
+						return errors::EINVAL;
 
 				// Now push each command to the I2C Manager
 				int error = 0;
@@ -276,8 +262,9 @@ namespace i2c
 					// update command.byte_count if 0
 					command.update_byte_count(max_read, max_write);
 					// force future finish for last command in transaction
-					if (--num_commands == 0)
-						command.type().add_flags(I2CCommandType::flags(auto_stop_, true, true));
+					--num_commands;
+					if (num_commands == 0)
+						command.type().add_flags(auto_stop_flags_);
 					// Note: on ATtiny, this method blocks until I2C command is finished!
 					if (!handler_.push_command_(command, device_, proxy))
 					{
@@ -315,9 +302,28 @@ namespace i2c
 		}
 
 	private:
+		static bool check_commands(
+			uint8_t max_write, uint8_t max_read, const std::initializer_list<I2CLightCommand>& commands)
+		{
+			// Limit total number of bytes read or written in a transaction to 255
+			uint8_t total_read = 0;
+			uint8_t total_write = 0;
+			for (const I2CLightCommand& command : commands)
+			{
+				// Count number of bytes read and written
+				if (command.type().is_write())
+					total_write += (command.byte_count() ? command.byte_count() : max_write);
+				else
+					total_read += (command.byte_count() ? command.byte_count() : max_read);
+			}
+			// check sum of read commands byte_count matches future output size
+			// check sum of write commands byte_count matches future input size
+			return (total_write == max_write) && (total_read == max_read);
+		}
+
 		uint8_t device_ = 0;
 		MANAGER& handler_;
-		bool auto_stop_;
+		const uint8_t auto_stop_flags_;
 	};
 }
 
