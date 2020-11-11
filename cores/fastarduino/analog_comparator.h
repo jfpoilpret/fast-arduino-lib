@@ -233,15 +233,15 @@ namespace analog
 		{
 			using ATRAIT = board_traits::AnalogPin_trait<INPUT1>;
 			static_assert(ATRAIT::IS_ANALOG_PIN || (INPUT1 == board::AnalogPin::NONE), "INPUT must not be TEMP!");
-			static_assert(INPUT1 != board::AnalogPin::NONE || GLOBAL_TRAIT::HAS_AIN1, "Target has no AIN1 pin!");
+			static_assert((INPUT1 != board::AnalogPin::NONE) || GLOBAL_TRAIT::HAS_AIN1, "Target has no AIN1 pin!");
 			static_assert(GLOBAL_TRAIT::HAS_AIN0 || INPUT0_BANDGAP, "Target has no AIN0 hence INPUT0_BANDGAP must be true");
 
 			GLOBAL_TRAIT::ADCSRB_ = ((INPUT1 == board::AnalogPin::NONE) ? 0 : bits::BV8(ACME));
 			GLOBAL_TRAIT::ADCSRA_ = ATRAIT::MUX_MASK2;
 			GLOBAL_TRAIT::ADMUX_ = ATRAIT::MUX_MASK1;
-			ACSR_ = (INPUT0_BANDGAP ? bits::BV8(ACBG) : 0) |
+			ACSR_ = (INPUT0_BANDGAP ? bits::BV8(ACBG) : 0U) |
 					uint8_t(mode) |
-					(trigger_icp ? GLOBAL_TRAIT::ICP_TRIGGER : 0);
+					(trigger_icp ? GLOBAL_TRAIT::ICP_TRIGGER : 0U);
 		}
 
 		/**
