@@ -252,11 +252,8 @@ namespace i2c
 				}
 
 				// That check is normally usefull only in debug mode
-				if (MANAGER_TRAIT::IS_DEBUG)
-				{
-					if (!check_commands(max_write, max_read, commands))
+				if (MANAGER_TRAIT::IS_DEBUG && (!check_commands(max_write, max_read, commands)))
 						return errors::EINVAL;
-				}
 
 				// Now push each command to the I2C Manager
 				int error = 0;
