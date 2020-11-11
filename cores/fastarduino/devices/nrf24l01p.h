@@ -432,15 +432,14 @@ namespace devices::rf
 		union fifo_status_t
 		{
 			uint8_t as_byte; //!< Byte representation of fifo status.
-			//TODO why not bool for bools
 			struct
 			{
-				uint8_t rx_empty : 1; //!< RX FIFO empty flag.
-				uint8_t rx_full : 1;  //!< RX FIFO full flag.
+				bool rx_empty : 1; //!< RX FIFO empty flag.
+				bool rx_full : 1;  //!< RX FIFO full flag.
 				uint8_t reserved1 : 2;
-				uint8_t tx_empty : 1; //!< TX FIFO empty flag.
-				uint8_t tx_full : 1;  //!< TX FIFO full flag.
-				uint8_t tx_reuse : 1; //!< Reuse last transmitted data packat.
+				bool tx_empty : 1; //!< TX FIFO empty flag.
+				bool tx_full : 1;  //!< TX FIFO full flag.
+				bool tx_reuse : 1; //!< Reuse last transmitted data packat.
 				uint8_t reserved2 : 1;
 			};
 
@@ -479,14 +478,13 @@ namespace devices::rf
 		union status_t
 		{
 			uint8_t as_byte; //!< Byte representation of status.
-			//TODO why not bool for bools
 			struct
 			{
-				uint8_t tx_full : 1; //!< TX FIFO full.
+				bool tx_full : 1; //!< TX FIFO full.
 				uint8_t rx_p_no : 3; //!< Data pipe number for available payload.
-				uint8_t max_rt : 1;  //!< Max number of TX retransmit interrupt.
-				uint8_t tx_ds : 1;   //!< Data send TX FIFO interrupt.
-				uint8_t rx_dr : 1;   //!< Data ready RX FIFO interrupt.
+				bool max_rt : 1;  //!< Max number of TX retransmit interrupt.
+				bool tx_ds : 1;   //!< Data send TX FIFO interrupt.
+				bool rx_dr : 1;   //!< Data ready RX FIFO interrupt.
 				uint8_t reserved : 1;
 			};
 

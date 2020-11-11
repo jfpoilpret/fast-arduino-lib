@@ -541,7 +541,7 @@ namespace devices::rtc
 			explicit EnableOutputFuture(SquareWaveFrequency frequency)
 			{
 				ControlRegister control;
-				control.sqwe = 1;
+				control.sqwe = true;
 				control.rs = uint8_t(frequency);
 				typename PARENT::IN input;
 				input[0] = CONTROL_ADDRESS;
@@ -871,14 +871,13 @@ namespace devices::rtc
 			explicit ControlRegister(uint8_t data = 0) : data{data} {}
 
 			uint8_t data;
-			//TODO why not bool for bools?
 			struct
 			{
 				uint8_t rs : 2;
 				uint8_t res1 : 2;
-				uint8_t sqwe : 1;
+				bool sqwe : 1;
 				uint8_t res2 : 2;
-				uint8_t out : 1;
+				bool out : 1;
 			};
 		};
 	};
