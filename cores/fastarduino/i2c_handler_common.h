@@ -134,7 +134,7 @@ namespace i2c
 
 		static constexpr uint8_t flags(bool stop, bool finish, bool end)
 		{
-			return (stop ? STOP : 0) | (finish ? FINISH : 0) | (end ? END : 0);
+			return (stop ? STOP : 0U) | (finish ? FINISH : 0U) | (end ? END : 0U);
 		}
 
 	private:
@@ -147,7 +147,7 @@ namespace i2c
 
 		static constexpr uint8_t value(bool write, bool stop, bool finish, bool end)
 		{
-			return NOT_NONE | (write ? WRITE : 0) | (stop ? STOP : 0) | (finish ? FINISH : 0) | (end ? END : 0);
+			return NOT_NONE | (write ? WRITE : 0U) | (stop ? STOP : 0U) | (finish ? FINISH : 0U) | (end ? END : 0U);
 		}
 
 		uint8_t value_ = NONE;
@@ -198,7 +198,7 @@ namespace i2c
 		}
 		void update_byte_count(uint8_t read_count, uint8_t write_count)
 		{
-			if (!byte_count_)
+			if (byte_count_ == 0)
 				byte_count_ = (type_.is_write() ? write_count : read_count);
 		}
 		/// @endcond

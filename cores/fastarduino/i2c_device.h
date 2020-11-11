@@ -116,7 +116,7 @@ namespace i2c
 		 */
 		template<I2CMode MODE>
 		I2CDevice(MANAGER& manager, uint8_t device, UNUSED Mode<MODE> mode, bool auto_stop) 
-		: device_{device}, handler_{manager}, auto_stop_{auto_stop}
+		: device_{device}, handler_{manager}, auto_stop_flags_{I2CCommandType::flags(auto_stop, true, true)}
 		{
 			// Ensure that MANAGER I2C mode is compliant with the best mode for this device
 			static_assert((MODE == I2CMode::FAST) || (MODE == MANAGER_TRAIT::MODE),
@@ -267,7 +267,7 @@ namespace i2c
 					// force future finish for last command in transaction
 					--num_commands;
 					if (num_commands == 0)
-						command.type().add_flags(I2CCommandType::flags(auto_stop_, true, true));
+						command.type().add_flags(auto_stop_flags_);
 					// Note: on ATtiny, this method blocks until I2C command is finished!
 					if (!handler_.push_command_(command, device_, proxy))
 					{
@@ -326,7 +326,7 @@ namespace i2c
 
 		uint8_t device_ = 0;
 		MANAGER& handler_;
-		bool auto_stop_;
+		const uint8_t auto_stop_flags_;
 	};
 }
 
