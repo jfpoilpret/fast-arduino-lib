@@ -387,7 +387,7 @@ namespace time
 		static const CLOCK* clock_;
 	};
 
-	template<typename CLOCK> const CLOCK* ClockDelegate<CLOCK>::clock_ = 0;
+	template<typename CLOCK> const CLOCK* ClockDelegate<CLOCK>::clock_ = nullptr;
 	/// @endcond
 
 	/**

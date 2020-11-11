@@ -314,7 +314,7 @@ namespace devices
 		void send(uint8_t code);
 		void send(uint8_t code, uint32_t address)
 		{
-			send(code, address, 0, 0);
+			send(code, address, nullptr, 0);
 		}
 		void send(uint8_t code, uint32_t address, uint8_t* data, uint16_t size);
 

@@ -543,7 +543,7 @@ namespace devices::magneto
 		{
 			using PARENT = FUTURE<T, uint8_t>;
 		protected:
-			ReadRegisterFuture(uint8_t address) : PARENT{{address}} {}
+			explicit ReadRegisterFuture(uint8_t address) : PARENT{{address}} {}
 			ReadRegisterFuture(ReadRegisterFuture<T>&&) = default;
 			ReadRegisterFuture<T>& operator=(ReadRegisterFuture<T>&&) = default;
 		};

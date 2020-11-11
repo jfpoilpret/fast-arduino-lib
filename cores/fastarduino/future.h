@@ -270,7 +270,7 @@ namespace future
 		bool get_storage_value_(uint8_t& chunk)
 		{
 			// Check all bytes have not been transferred yet
-			if (!input_size_)
+			if (input_size_ == 0)
 				return false;
 			chunk = *input_current_++;
 			--input_size_;
@@ -399,7 +399,8 @@ namespace future
 			// Update Future value chunk
 			*output_current_++ = chunk;
 			// Is that the last chunk?
-			if (--output_size_ == 0)
+			--output_size_;
+			if (output_size_ == 0)
 				status_ = FutureStatus::READY;
 			return true;
 		}
@@ -497,7 +498,7 @@ namespace future
 		bool set_future_error_(int error)
 		{
 			// Check this future is waiting for data
-			if (error == 0 || status_ != FutureStatus::NOT_READY)
+			if ((error == 0) || (status_ != FutureStatus::NOT_READY))
 				return false;
 			error_ = error;
 			status_ = FutureStatus::ERROR;

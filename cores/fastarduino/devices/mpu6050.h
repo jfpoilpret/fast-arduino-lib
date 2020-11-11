@@ -425,13 +425,20 @@ namespace devices::magneto
 		 */
 		int begin(PROXY<FifoBeginFuture> future)
 		{
-			return this->launch_commands(future, {	this->write(4), 		// CONFIG, GYRO_CONFIG, ACCEL_CONFIG
-													this->write(2),			// PWR_MGMT_1
-													this->write(2), 		// SMPRT_DIV
-													this->write(2), 		// FIFO_EN
-													this->write(3),			// INT_PIN_CFG
-													this->write(2), 		// USER_CONTROL
-												});
+			return this->launch_commands(future, {	
+				// CONFIG, GYRO_CONFIG, ACCEL_CONFIG
+				this->write(4),
+				// PWR_MGMT_1
+				this->write(2),
+				// SMPRT_DIV
+				this->write(2),
+				// FIFO_EN
+				this->write(2),
+				// INT_PIN_CFG
+				this->write(3),
+				// USER_CONTROL
+				this->write(2),
+			});
 		}
 
 		/**
@@ -919,7 +926,7 @@ namespace devices::magneto
 			using PARENT = FUTURE<void, containers::array<uint8_t, 2>>;
 		public:
 			/// @cond notdocumented
-			FifoPushFuture(uint8_t data) : PARENT{{FIFO_R_W, data}} {}
+			explicit FifoPushFuture(uint8_t data) : PARENT{{FIFO_R_W, data}} {}
 			FifoPushFuture(FifoPushFuture&&) = default;
 			FifoPushFuture& operator=(FifoPushFuture&&) = default;
 			/// @endcond
@@ -1240,7 +1247,7 @@ namespace devices::magneto
 		{
 			using PARENT = FUTURE<Sensor3D, uint8_t>;
 		protected:
-			Sensor3DFuture(uint8_t address) : PARENT{address} {}
+			explicit Sensor3DFuture(uint8_t address) : PARENT{address} {}
 			Sensor3DFuture(Sensor3DFuture&&) = default;
 			Sensor3DFuture& operator=(Sensor3DFuture&&) = default;
 		public:
@@ -1304,7 +1311,7 @@ namespace devices::magneto
 		{
 			using PARENT = FUTURE<void, containers::array<uint8_t, 2>>;
 		protected:
-			PowerManagementFuture(PowerManagement power) : PARENT{{PWR_MGMT_1, uint8_t(power)}} {}
+			explicit PowerManagementFuture(PowerManagement power) : PARENT{{PWR_MGMT_1, uint8_t(power)}} {}
 			PowerManagementFuture(PowerManagementFuture&&) = default;
 			PowerManagementFuture& operator=(PowerManagementFuture&&) = default;
 		};

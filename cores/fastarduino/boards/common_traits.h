@@ -60,7 +60,7 @@ namespace board_traits
 		}
 		void loop_until_bit_set(uint8_t bit) const INLINE
 		{
-			while (!(*((volatile T*) addr_) & bits::BV8(bit)))
+			while ((*((volatile T*) addr_) & bits::BV8(bit)) == 0)
 				;
 		}
 		void loop_until_bit_clear(uint8_t bit) const INLINE

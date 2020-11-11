@@ -1400,7 +1400,7 @@ namespace devices::sonar
 			static_assert((PTRAIT::DPIN_MASK & ECHO_MASK_) == ECHO_MASK_, "ECHO_MASK must contain available PORT pins");
 			using SONAR = MultiHCSR04<TIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_>;
 			SonarEvent<TIMER_> event = interrupt::HandlerHolder<SONAR>::handler()->on_pin_change();
-			if (event.ready() || event.started())
+			if ((event.ready() != 0) || (event.started() != 0))
 				interrupt::CallbackHandler<void (HANDLER_::*)(const SonarEvent<TIMER_>&), CALLBACK_>::call(event);
 		}
 

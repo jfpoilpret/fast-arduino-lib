@@ -106,7 +106,7 @@ namespace i2c::debug
 		 * @sa trace()
 		 * @sa reset()
 		 */
-		I2CDebugRecorder(DEBUG debug = DEBUG::DEBUG_ALL) : debug_{debug} {}
+		explicit I2CDebugRecorder(DEBUG debug = DEBUG::DEBUG_ALL) : debug_{debug} {}
 
 		/**
 		 * Clear all recorded notifications.

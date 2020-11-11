@@ -101,7 +101,7 @@ namespace devices::mcp230xx
 
 		static constexpr uint8_t compute_address(uint8_t address)
 		{
-			return uint8_t((uint8_t(BASE_ADDRESS) | uint8_t(address & 0x07)) << 1);
+			return uint8_t((uint8_t(BASE_ADDRESS) | uint8_t(address & 0x07U)) << 1);
 		}
 
 	public:
@@ -310,7 +310,7 @@ namespace devices::mcp230xx
 		{
 		public:
 			/// @cond notdocumented
-			SetValuesFuture(T<P_> value) : WriteRegisterFuture<P_>{GPIO_A, value} {}
+			explicit SetValuesFuture(T<P_> value) : WriteRegisterFuture<P_>{GPIO_A, value} {}
 			SetValuesFuture(SetValuesFuture<P_>&&) = default;
 			SetValuesFuture<P_>& operator=(SetValuesFuture<P_>&&) = default;
 			/// @endcond
@@ -720,16 +720,16 @@ namespace devices::mcp230xx
 			static constexpr uint8_t SHIFT = TRAIT<P>::REG_SHIFT;
 
 			Write3Registers(uint8_t address1, TT value1, uint8_t address2, TT value2, uint8_t address3, TT value3)
-				:	address1{uint8_t(address1 + SHIFT)}, value1{value1},
-					address2{uint8_t(address2 + SHIFT)}, value2{value2},
-					address3{uint8_t(address3 + SHIFT)}, value3{value3} {}
+				:	address1_{uint8_t(address1 + SHIFT)}, value1_{value1},
+					address2_{uint8_t(address2 + SHIFT)}, value2_{value2},
+					address3_{uint8_t(address3 + SHIFT)}, value3_{value3} {}
 
-			uint8_t address1;
-			TT value1;
-			uint8_t address2;
-			TT value2;
-			uint8_t address3;
-			TT value3;
+			uint8_t address1_;
+			TT value1_;
+			uint8_t address2_;
+			TT value2_;
+			uint8_t address3_;
+			TT value3_;
 		};
 
 		template<MCP23017Port P> struct WriteRegister
@@ -737,10 +737,10 @@ namespace devices::mcp230xx
 			using TT = T<P>;
 			static constexpr uint8_t SHIFT = TRAIT<P>::REG_SHIFT;
 
-			WriteRegister(uint8_t address, TT value) : address{uint8_t(address + SHIFT)}, value{value} {}
+			WriteRegister(uint8_t address, TT value) : address_{uint8_t(address + SHIFT)}, value_{value} {}
 
-			uint8_t address;
-			TT value;
+			uint8_t address_;
+			TT value_;
 		};
 
 		template<MCP23017Port P>
@@ -759,7 +759,7 @@ namespace devices::mcp230xx
 			static constexpr uint8_t SHIFT = TRAIT<P>::REG_SHIFT;
 			using PARENT = FUTURE<T<P>, uint8_t>;
 		protected:
-			ReadRegisterFuture(uint8_t address) : PARENT{uint8_t(address + SHIFT)} {}
+			explicit ReadRegisterFuture(uint8_t address) : PARENT{uint8_t(address + SHIFT)} {}
 			ReadRegisterFuture(ReadRegisterFuture<P>&&) = default;
 			ReadRegisterFuture<P>& operator=(ReadRegisterFuture<P>&&) = default;
 		};
