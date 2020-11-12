@@ -541,11 +541,11 @@ namespace devices::rtc
 			explicit EnableOutputFuture(SquareWaveFrequency frequency)
 			{
 				ControlRegister control;
-				control.sqwe = true;
-				control.rs = uint8_t(frequency);
+				control.sqwe_ = true;
+				control.rs_ = uint8_t(frequency);
 				typename PARENT::IN input;
 				input[0] = CONTROL_ADDRESS;
-				input[1] = control.data;
+				input[1] = control.data_;
 				this->reset_input_(input);
 			}
 			EnableOutputFuture(EnableOutputFuture&&) = default;
@@ -593,10 +593,10 @@ namespace devices::rtc
 			explicit DisableOutputFuture(bool output_value)
 			{
 				ControlRegister control;
-				control.out = output_value;
+				control.out_ = output_value;
 				typename PARENT::IN input;
 				input[0] = CONTROL_ADDRESS;
-				input[1] = control.data;
+				input[1] = control.data_;
 				this->reset_input_(input);
 			}
 			DisableOutputFuture(DisableOutputFuture&&) = default;
@@ -868,16 +868,16 @@ namespace devices::rtc
 
 		union ControlRegister
 		{
-			explicit ControlRegister(uint8_t data = 0) : data{data} {}
+			explicit ControlRegister(uint8_t data = 0) : data_{data} {}
 
-			uint8_t data;
+			uint8_t data_;
 			struct
 			{
-				uint8_t rs : 2;
-				uint8_t res1 : 2;
-				bool sqwe : 1;
-				uint8_t res2 : 2;
-				bool out : 1;
+				uint8_t rs_ : 2;
+				uint8_t res1_ : 2;
+				bool sqwe_ : 1;
+				uint8_t res2_ : 2;
+				bool out_ : 1;
 			};
 		};
 	};
