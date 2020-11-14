@@ -40,11 +40,10 @@ namespace i2c
 	/** Constant determining that best supported I2C mode for an I2CDevice is FAST (400kHz). */
 	static constexpr Mode I2C_FAST = Mode<I2CMode::FAST>{};
 	
-	// Utility class to start/end synchronization or do nothing at all
-	//TODO find where to put it (should be private if possible)
+	// Internal (private) utility class to start/end synchronization or do nothing at all
+	/// @cond notdocumented
 	template<bool DISABLE = true> class DisableInterrupts
 	{
-	public:
 		DisableInterrupts() : sreg_{SREG}
 		{
 			cli();
@@ -54,14 +53,17 @@ namespace i2c
 			SREG = sreg_;
 		}
 
-	private:
 		const uint8_t sreg_;
+
+		template<typename> friend class I2CDevice;
 	};
 	template<> class DisableInterrupts<false>
 	{
-	public:
 		DisableInterrupts() = default;
+
+		template<typename> friend class I2CDevice;
 	};
+	/// @endcond
 
 	/**
 	 * Base class for all I2C devices.
