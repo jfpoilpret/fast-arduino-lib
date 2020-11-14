@@ -44,7 +44,7 @@ namespace i2c
 	/// @cond notdocumented
 	template<bool DISABLE = true> class DisableInterrupts
 	{
-		DisableInterrupts() : sreg_{SREG}
+		DisableInterrupts()
 		{
 			cli();
 		}
@@ -53,7 +53,7 @@ namespace i2c
 			SREG = sreg_;
 		}
 
-		const uint8_t sreg_;
+		const uint8_t sreg_ = SREG;
 
 		template<typename> friend class I2CDevice;
 	};
