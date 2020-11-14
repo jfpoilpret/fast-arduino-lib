@@ -754,7 +754,7 @@ $(document).ready(function(){initNavTree('sonar_8h_source.html',''); initResizab
 <div class="line"><a name="l01400"></a><span class="lineno"> 1400</span>&#160;            static_assert((PTRAIT::DPIN_MASK &amp; ECHO_MASK_) == ECHO_MASK_, <span class="stringliteral">&quot;ECHO_MASK must contain available PORT pins&quot;</span>);</div>
 <div class="line"><a name="l01401"></a><span class="lineno"> 1401</span>&#160;            <span class="keyword">using</span> SONAR = MultiHCSR04&lt;TIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_&gt;;</div>
 <div class="line"><a name="l01402"></a><span class="lineno"> 1402</span>&#160;            SonarEvent&lt;TIMER_&gt; event = interrupt::HandlerHolder&lt;SONAR&gt;::handler()-&gt;on_pin_change();</div>
-<div class="line"><a name="l01403"></a><span class="lineno"> 1403</span>&#160;            <span class="keywordflow">if</span> (event.ready() || event.started())</div>
+<div class="line"><a name="l01403"></a><span class="lineno"> 1403</span>&#160;            <span class="keywordflow">if</span> ((event.ready() != 0) || (event.started() != 0))</div>
 <div class="line"><a name="l01404"></a><span class="lineno"> 1404</span>&#160;                interrupt::CallbackHandler&lt;void (HANDLER_::*)(<span class="keyword">const</span> SonarEvent&lt;TIMER_&gt;&amp;), CALLBACK_&gt;::call(event);</div>
 <div class="line"><a name="l01405"></a><span class="lineno"> 1405</span>&#160;        }</div>
 <div class="line"><a name="l01406"></a><span class="lineno"> 1406</span>&#160; </div>

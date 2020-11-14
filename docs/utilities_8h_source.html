@@ -248,27 +248,27 @@ $(document).ready(function(){initNavTree('utilities_8h_source.html',''); initRes
 <div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="keyword">union </span>ToUint8</div>
 <div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;    {</div>
 <div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;        static_assert(<span class="keyword">sizeof</span>(T) == 1, <span class="stringliteral">&quot;T must be a one-byte size type&quot;</span>);</div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;        <span class="keyword">explicit</span> ToUint8(T value) : value(value) {}</div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;        T value;</div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;        uint8_t as_uint8;</div>
+<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;        <span class="keyword">explicit</span> ToUint8(T value) : value_(value) {}</div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;        T value_;</div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;        uint8_t as_uint8_;</div>
 <div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;    };</div>
 <div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160; </div>
 <div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="keyword">union </span>ToArray</div>
 <div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;    {</div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;        <span class="keyword">explicit</span> ToArray(<span class="keyword">const</span> T&amp; value): value{value} {}</div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;        T value;</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;        uint8_t <a class="code" href="namespaceutils.html#a56da5697e356f76ec2e4061279ca0254">as_array</a>[<span class="keyword">sizeof</span>(T)];</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;        <span class="keyword">explicit</span> ToArray(<span class="keyword">const</span> T&amp; value): value_{value} {}</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;        T value_;</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;        uint8_t as_array_[<span class="keyword">sizeof</span>(T)];</div>
 <div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;    };</div>
 <div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160; </div>
 <div class="line"><a name="l00412"></a><span class="lineno"><a class="line" href="namespaceutils.html#a8122a1acb9aff2f2cd1d4ae7e1e99ac9">  412</a></span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; constexpr uint8_t <a class="code" href="namespaceutils.html#a8122a1acb9aff2f2cd1d4ae7e1e99ac9">as_uint8_t</a>(T input)</div>
 <div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;    {</div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;        <span class="keywordflow">return</span> ToUint8&lt;T&gt;(input).as_uint8;</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;        <span class="keywordflow">return</span> ToUint8&lt;T&gt;(input).as_uint8_;</div>
 <div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;    }</div>
 <div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160; </div>
 <div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> U = u<span class="keywordtype">int</span>8_t[sizeof(T)]&gt;</div>
 <div class="line"><a name="l00424"></a><span class="lineno"><a class="line" href="namespaceutils.html#a56da5697e356f76ec2e4061279ca0254">  424</a></span>&#160;    constexpr <span class="keywordtype">void</span> <a class="code" href="namespaceutils.html#a56da5697e356f76ec2e4061279ca0254">as_array</a>(<span class="keyword">const</span> T&amp; input, U output)</div>
 <div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;    {</div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;        memcpy(output, ToArray&lt;T&gt;(input).<a class="code" href="namespaceutils.html#a56da5697e356f76ec2e4061279ca0254">as_array</a>, <span class="keyword">sizeof</span>(T));</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;        memcpy(output, ToArray&lt;T&gt;(input).as_array_, <span class="keyword">sizeof</span>(T));</div>
 <div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;    } </div>
 <div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160; </div>
 <div class="line"><a name="l00437"></a><span class="lineno"><a class="line" href="namespaceutils.html#a6ed4721feb889faa1f72fc2629d71271">  437</a></span>&#160;    constexpr uint8_t <a class="code" href="namespaceutils.html#a6ed4721feb889faa1f72fc2629d71271">calculate_delay1_count</a>(<span class="keywordtype">float</span> time_us)</div>

@@ -1,4 +1,4 @@
 <map id="devices::rtc::DS1307&lt; MANAGER &gt;::SetDatetimeFuture" name="devices::rtc::DS1307&lt; MANAGER &gt;::SetDatetimeFuture">
 <area shape="rect" id="node1" title="Create a future to be used by asynchronous method set_datetime(SetDatetimeFuture&amp;)." alt="" coords="5,80,256,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="37,5,224,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="18,5,243,32"/>
 </map>

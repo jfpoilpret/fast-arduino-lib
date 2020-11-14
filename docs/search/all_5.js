@@ -44,7 +44,7 @@ var searchData=
   ['free_5f_321',['free_',['../classcontainers_1_1_queue.html#ab561b57e48848788f3ed6c429df9920f',1,'containers::Queue']]],
   ['full_322',['full',['../classcontainers_1_1_queue.html#a9325c329a5241b3b53655bf7cfced0fc',1,'containers::Queue']]],
   ['full_5f_323',['full_',['../classcontainers_1_1_queue.html#ae11324e5034406bd864a2b9bb1d3470b',1,'containers::Queue']]],
-  ['future_324',['Future',['../classfuture_1_1_future.html',1,'future::Future&lt; OUT_, IN_ &gt;'],['../namespacefuture.html',1,'future'],['../classfuture_1_1_future.html#a9fdeb99f37aefaca52740fdd65dd95e0',1,'future::Future::Future()'],['../classi2c_1_1_i2_c_device.html#ad029f30f422ebd435b20e1d2138ff908',1,'i2c::I2CDevice::FUTURE()']]],
+  ['future_324',['Future',['../classfuture_1_1_future.html',1,'future::Future&lt; OUT_, IN_ &gt;'],['../namespacefuture.html',1,'future'],['../classi2c_1_1_i2_c_device.html#ad029f30f422ebd435b20e1d2138ff908',1,'i2c::I2CDevice::FUTURE()'],['../classfuture_1_1_future.html#a9fdeb99f37aefaca52740fdd65dd95e0',1,'future::Future::Future()']]],
   ['future_2eh_325',['future.h',['../future_8h.html',1,'']]],
   ['future_5fproxy_326',['FUTURE_PROXY',['../classi2c_1_1_abstract_i2_c_async_manager.html#aff4ed912cfd5a358b03eb79ea1b8eabf',1,'i2c::AbstractI2CAsyncManager']]],
   ['futurestatus_327',['FutureStatus',['../namespacefuture.html#a9f72173fcd5be9bfef028415665efbe4',1,'future']]],

@@ -166,15 +166,15 @@ $(document).ready(function(){initNavTree('analog__comparator_8h_source.html','')
 <div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        {</div>
 <div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;            <span class="keyword">using</span> ATRAIT = board_traits::AnalogPin_trait&lt;INPUT1&gt;;</div>
 <div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;            static_assert(ATRAIT::IS_ANALOG_PIN || (INPUT1 == board::AnalogPin::NONE), <span class="stringliteral">&quot;INPUT must not be TEMP!&quot;</span>);</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;            static_assert(INPUT1 != board::AnalogPin::NONE || GLOBAL_TRAIT::HAS_AIN1, <span class="stringliteral">&quot;Target has no AIN1 pin!&quot;</span>);</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;            static_assert((INPUT1 != board::AnalogPin::NONE) || GLOBAL_TRAIT::HAS_AIN1, <span class="stringliteral">&quot;Target has no AIN1 pin!&quot;</span>);</div>
 <div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;            static_assert(GLOBAL_TRAIT::HAS_AIN0 || INPUT0_BANDGAP, <span class="stringliteral">&quot;Target has no AIN0 hence INPUT0_BANDGAP must be true&quot;</span>);</div>
 <div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160; </div>
 <div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;            GLOBAL_TRAIT::ADCSRB_ = ((INPUT1 == board::AnalogPin::NONE) ? 0 : <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(ACME));</div>
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;            GLOBAL_TRAIT::ADCSRA_ = ATRAIT::MUX_MASK2;</div>
 <div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;            GLOBAL_TRAIT::ADMUX_ = ATRAIT::MUX_MASK1;</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;            ACSR_ = (INPUT0_BANDGAP ? <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(ACBG) : 0) |</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;            ACSR_ = (INPUT0_BANDGAP ? <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(ACBG) : 0U) |</div>
 <div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;                    uint8_t(mode) |</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;                    (trigger_icp ? GLOBAL_TRAIT::ICP_TRIGGER : 0);</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;                    (trigger_icp ? GLOBAL_TRAIT::ICP_TRIGGER : 0U);</div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        }</div>
 <div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160; </div>
 <div class="line"><a name="l00259"></a><span class="lineno"><a class="line" href="classanalog_1_1_analog_comparator.html#ae9a0059d72f1589a1e387aa194dfe948">  259</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classanalog_1_1_analog_comparator.html#ae9a0059d72f1589a1e387aa194dfe948">end_</a>()</div>

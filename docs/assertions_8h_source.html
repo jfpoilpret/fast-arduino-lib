@@ -107,38 +107,40 @@ $(document).ready(function(){initNavTree('assertions_8h_source.html',''); initRe
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &quot;../iomanip.h&quot;</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &quot;../streams.h&quot;</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keywordtype">void</span> assert(<a class="code" href="classstreams_1_1ostream.html">streams::ostream</a>&amp; out, <span class="keyword">const</span> <span class="keywordtype">char</span>* message, <span class="keywordtype">bool</span> condition)</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;{</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keywordflow">if</span> (!condition)</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;        out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;ASSERTION FAILED: &quot;</span>) &lt;&lt; message &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">streams::endl</a>;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;}</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keywordtype">void</span> assert(<a class="code" href="classstreams_1_1ostream.html">streams::ostream</a>&amp; out, <span class="keyword">const</span> flash::FlashStorage* message, <span class="keywordtype">bool</span> condition)</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;{</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="keywordflow">if</span> (!condition)</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;ASSERTION FAILED: &quot;</span>) &lt;&lt; message &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">streams::endl</a>;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;}</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#define ASSERT(OUT, CONDITION) assert(OUT, F(&quot;&quot; #CONDITION &quot;&quot;), CONDITION)</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T1, <span class="keyword">typename</span> T2&gt;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keywordtype">void</span> assert(<a class="code" href="classstreams_1_1ostream.html">streams::ostream</a>&amp; out, <span class="keyword">const</span> <span class="keywordtype">char</span>* var, T1 expected, T2 actual)</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;{</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordflow">if</span> (expected != actual)</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;ASSERTION FAILED on &quot;</span>) &lt;&lt; var </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;: expected = &quot;</span>) &lt;&lt; expected &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;, actual=&quot;</span>) &lt;&lt; actual &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">streams::endl</a>;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;}</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">typename</span> T1, <span class="keyword">typename</span> T2&gt;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keywordtype">void</span> assert(<a class="code" href="classstreams_1_1ostream.html">streams::ostream</a>&amp; out, <span class="keyword">const</span> flash::FlashStorage* var, T1 expected, T2 actual)</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;{</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keywordflow">if</span> (expected != actual)</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;ASSERTION FAILED on &quot;</span>) &lt;&lt; var </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;            &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;: expected = &quot;</span>) &lt;&lt; expected &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;, actual=&quot;</span>) &lt;&lt; actual &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">streams::endl</a>;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;}</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* TESTS_ASSERTIONS_H */</span><span class="preprocessor"></span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#define ASSERT(OUT, CONDITION) tests::assert_true(OUT, F(&quot;&quot; #CONDITION &quot;&quot;), CONDITION)</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">namespace </span>tests</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;{</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keywordtype">void</span> assert_true(<a class="code" href="classstreams_1_1ostream.html">streams::ostream</a>&amp; out, <span class="keyword">const</span> <span class="keywordtype">char</span>* message, <span class="keywordtype">bool</span> condition)</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    {</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;        <span class="keywordflow">if</span> (!condition)</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;            out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;ASSERTION FAILED: &quot;</span>) &lt;&lt; message &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">streams::endl</a>;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    }</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keywordtype">void</span> assert_true(<a class="code" href="classstreams_1_1ostream.html">streams::ostream</a>&amp; out, <span class="keyword">const</span> flash::FlashStorage* message, <span class="keywordtype">bool</span> condition)</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    {</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <span class="keywordflow">if</span> (!condition)</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;            out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;ASSERTION FAILED: &quot;</span>) &lt;&lt; message &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">streams::endl</a>;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    }</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T1, <span class="keyword">typename</span> T2&gt;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordtype">void</span> assert_equals(<a class="code" href="classstreams_1_1ostream.html">streams::ostream</a>&amp; out, <span class="keyword">const</span> <span class="keywordtype">char</span>* var, T1 expected, T2 actual)</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    {</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keywordflow">if</span> (expected != actual)</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;ASSERTION FAILED on &quot;</span>) &lt;&lt; var </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;                &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;: expected = &quot;</span>) &lt;&lt; expected &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;, actual=&quot;</span>) &lt;&lt; actual &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">streams::endl</a>;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    }</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T1, <span class="keyword">typename</span> T2&gt;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keywordtype">void</span> assert_equals(<a class="code" href="classstreams_1_1ostream.html">streams::ostream</a>&amp; out, <span class="keyword">const</span> flash::FlashStorage* var, T1 expected, T2 actual)</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    {</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keywordflow">if</span> (expected != actual)</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;            out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;ASSERTION FAILED on &quot;</span>) &lt;&lt; var </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;: expected = &quot;</span>) &lt;&lt; expected &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;, actual=&quot;</span>) &lt;&lt; actual &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">streams::endl</a>;</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    }</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;}</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* TESTS_ASSERTIONS_H */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="aclassstreams_1_1ostream_html"><div class="ttname"><a href="classstreams_1_1ostream.html">streams::ostream</a></div><div class="ttdoc">Output stream wrapper to provide formatted output API, a la C++.</div><div class="ttdef"><b>Definition:</b> <a href="streams_8h_source.html#l00060">streams.h:61</a></div></div>
