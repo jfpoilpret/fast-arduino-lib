@@ -188,7 +188,7 @@ int main()
 		// read 16 bytes from FIFO
 		FIFO_TYPE content{};
 		ok = mpu.fifo_pop(content);
-		out << F("fifo_push() ") << ok << endl;
+		out << F("fifo_pop() ") << ok << endl;
 		DEBUG(out);
 		for(uint8_t value: content)
 			out << dec << value << ' ';
