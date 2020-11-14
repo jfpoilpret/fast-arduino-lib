@@ -28,20 +28,6 @@
 #include "lifecycle.h"
 #include "i2c_handler.h"
 
-/// @cond notdocumented
-#if defined(TWCR)
-// Truly asynchronous mode (ATmega only)
-// The whole code block in launch_commands() must be synchronized
-#define OUTER_SYNCHRONIZED synchronized
-#define INNER_SYNCHRONIZED
-#else
-// Fake asynchronous mode (ATtiny)
-// Only a few method calls in launch_commands() shall be synchronized
-#define INNER_SYNCHRONIZED synchronized
-#define OUTER_SYNCHRONIZED
-#endif
-/// @endcond
-
 namespace i2c
 {
 	// Trick to support MODE as I2CDevice constructor template argument (deducible)
@@ -54,6 +40,29 @@ namespace i2c
 	/** Constant determining that best supported I2C mode for an I2CDevice is FAST (400kHz). */
 	static constexpr Mode I2C_FAST = Mode<I2CMode::FAST>{};
 	
+	// Utility class to start/end synchronization or do nothing at all
+	//TODO find where to put it (should be private if possible)
+	template<bool DISABLE = true> class DisableInterrupts
+	{
+	public:
+		DisableInterrupts() : sreg_{SREG}
+		{
+			cli();
+		}
+		~DisableInterrupts()
+		{
+			SREG = sreg_;
+		}
+
+	private:
+		const uint8_t sreg_;
+	};
+	template<> class DisableInterrupts<false>
+	{
+	public:
+		DisableInterrupts() = default;
+	};
+
 	/**
 	 * Base class for all I2C devices.
 	 * 
@@ -237,13 +246,16 @@ namespace i2c
 		{
 			uint8_t num_commands = commands.size();
 			if (num_commands == 0) return errors::EINVAL;
-			//FIXME this makes the whole block synchronized even for ATmega synchronous manager!
-			OUTER_SYNCHRONIZED
 			{
+				// Truly asynchronous mode (ATmega only)
+				// The whole code block in launch_commands() must be synchronized
+				UNUSED auto outer_sync = DisableInterrupts<MANAGER_TRAIT::IS_ASYNC>{};
 				uint8_t max_read;
 				uint8_t max_write;
-				INNER_SYNCHRONIZED
 				{
+					// Synchronous mode
+					// Only the next few method calls shall be synchronized
+					UNUSED auto inner_sync = DisableInterrupts<!MANAGER_TRAIT::IS_ASYNC>{};
 					// pre-conditions (must be synchronized)
 					if (!handler_.ensure_num_commands_(num_commands)) return errors::EAGAIN;
 					ABSTRACT_FUTURE& future = resolve(proxy);
@@ -326,9 +338,6 @@ namespace i2c
 		const uint8_t auto_stop_flags_;
 	};
 }
-
-#undef INNER_SYNCHRONIZED
-#undef OUTER_SYNCHRONIZED
 
 #endif /* I2C_DEVICE_HH */
 /// @endcond
