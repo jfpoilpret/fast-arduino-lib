@@ -124,7 +124,7 @@ namespace board
 	
 	/**
 	 * Defines all available analog input pins of ATtinyX5, with 
-	 * reference to Arduino UNO pins.
+	 * reference to ATtinyX5 pins.
 	 * Note that this includes also other sources than pin, e.g. the internal
 	 * bandgap reference or the temperature sensor.
 	 */
