@@ -32,6 +32,10 @@
 #include "utilities.h"
 #include "i2c_handler_common.h"
 
+// Prevent direct inclusion (must be done through i2c_handler.h)
+#ifndef I2C_HANDLER_HH
+#error "i2c_handler_atmega.h shall not be directly included! Include 'i2c_handler.h' instead."
+#endif
 // Prevent inclusion for ATtiny architecture
 #ifndef TWCR
 #error "i2c_handler_atmega.h cannot be included in an ATtiny program!"
@@ -1367,39 +1371,6 @@ namespace i2c
 	template<I2CMode MODE_, I2CErrorPolicy POLICY_, typename STATUS_HOOK_, typename DEBUG_HOOK_>
 	struct I2CManager_trait<I2CAsyncLCStatusDebugManager<MODE_, POLICY_, STATUS_HOOK_, DEBUG_HOOK_>>
 		:	I2CManager_trait_impl<true, true, true, true, MODE_> {};
-	
-	// Then sync managers
-	template<I2CMode MODE_>
-	struct I2CManager_trait<I2CSyncManager<MODE_>>
-		:	I2CManager_trait_impl<false, false, false, false, MODE_> {};
-
-	template<I2CMode MODE_>
-	struct I2CManager_trait<I2CSyncLCManager<MODE_>>
-		:	I2CManager_trait_impl<false, true, false, false, MODE_> {};
-
-	template<I2CMode MODE_, typename STATUS_HOOK_>
-	struct I2CManager_trait<I2CSyncStatusManager<MODE_, STATUS_HOOK_>>
-		:	I2CManager_trait_impl<false, false, true, false, MODE_> {};
-
-	template<I2CMode MODE_, typename DEBUG_HOOK_>
-	struct I2CManager_trait<I2CSyncDebugManager<MODE_, DEBUG_HOOK_>>
-		:	I2CManager_trait_impl<false, false, false, true, MODE_> {};
-
-	template<I2CMode MODE_, typename STATUS_HOOK_, typename DEBUG_HOOK_>
-	struct I2CManager_trait<I2CSyncStatusDebugManager<MODE_, STATUS_HOOK_, DEBUG_HOOK_>>
-		:	I2CManager_trait_impl<false, false, true, true, MODE_> {};
-
-	template<I2CMode MODE_, typename STATUS_HOOK_>
-	struct I2CManager_trait<I2CSyncLCStatusManager<MODE_, STATUS_HOOK_>>
-		:	I2CManager_trait_impl<false, true, true, false, MODE_> {};
-
-	template<I2CMode MODE_, typename DEBUG_HOOK_>
-	struct I2CManager_trait<I2CSyncLCDebugManager<MODE_, DEBUG_HOOK_>>
-		:	I2CManager_trait_impl<false, true, false, true, MODE_> {};
-
-	template<I2CMode MODE_, typename STATUS_HOOK_, typename DEBUG_HOOK_>
-	struct I2CManager_trait<I2CSyncLCStatusDebugManager<MODE_, STATUS_HOOK_, DEBUG_HOOK_>>
-		:	I2CManager_trait_impl<false, true, true, true, MODE_> {};
 	/// @endcond
 
 	/// @cond notdocumented
