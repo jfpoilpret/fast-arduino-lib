@@ -79,10 +79,10 @@ public:
 	
 	void on_timer()
 	{
-		if (_blink_timer.is_suspended())
-			_blink_timer.resume_();
+		if (_blink_timer.is_interrupt_suspended())
+			_blink_timer.resume_interrupts_();
 		else
-			_blink_timer.suspend_();
+			_blink_timer.suspend_interrupts_();
 	}
 	
 private:

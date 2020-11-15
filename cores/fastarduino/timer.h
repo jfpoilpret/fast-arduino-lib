@@ -1035,13 +1035,13 @@ namespace timer
 		 * Note that this method is synchronized, i.e. it disables interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
-		 * `suspend_()` instead.
-		 * @sa resume()
-		 * @sa suspend_()
+		 * `suspend_interrupts_()` instead.
+		 * @sa resume_interrupts()
+		 * @sa suspend_interrupts_()
 		 */
-		void suspend()
+		void suspend_interrupts()
 		{
-			synchronized suspend_();
+			synchronized suspend_interrupts_();
 		}
 
 		/**
@@ -1050,11 +1050,11 @@ namespace timer
 		 * Note that this method is not synchronized, hence you should ensure it
 		 * is called only while interrupts are not enabled.
 		 * If you need synchronization, then you should better use
-		 * `suspend()` instead.
-		 * @sa resume_()
-		 * @sa suspend()
+		 * `suspend_interrupts()` instead.
+		 * @sa resume_interrupts_()
+		 * @sa suspend_interrupts()
 		 */
-		void suspend_()
+		void suspend_interrupts_()
 		{
 			// Clear timer interrupt mode
 			utils::set_mask((volatile uint8_t&) TRAIT::TIMSK_, TRAIT::TIMSK_MASK, uint8_t(0));
@@ -1066,13 +1066,13 @@ namespace timer
 		 * Note that this method is synchronized, i.e. it disables interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
-		 * `resume_()` instead.
-		 * @sa suspend()
-		 * @sa resume_()
+		 * `resume_interrupts_()` instead.
+		 * @sa suspend_interrupts()
+		 * @sa resume_interrupts_()
 		 */
-		void resume()
+		void resume_interrupts()
 		{
-			synchronized resume_();
+			synchronized resume_interrupts_();
 		}
 
 		/**
@@ -1081,11 +1081,11 @@ namespace timer
 		 * Note that this method is not synchronized, hence you should ensure it
 		 * is called only while interrupts are not enabled.
 		 * If you need synchronization, then you should better use
-		 * `resume()` instead.
-		 * @sa suspend_()
-		 * @sa resume()
+		 * `resume_interrupts()` instead.
+		 * @sa suspend_interrupts_()
+		 * @sa resume_interrupts()
 		 */
-		void resume_()
+		void resume_interrupts_()
 		{
 			// Reset timer counter
 			TRAIT::TCNT = 0;
@@ -1099,7 +1099,7 @@ namespace timer
 		 * @retval true the timer is currently suspended
 		 * @retval false the timer is currently active
 		 */
-		bool is_suspended()
+		bool is_interrupt_suspended()
 		{
 			return (TRAIT::TIMSK_ & TRAIT::TIMSK_MASK) == 0;
 		}
