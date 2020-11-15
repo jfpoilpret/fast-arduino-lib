@@ -980,12 +980,12 @@ namespace timer
 		 * `reset_()` instead.
 		 * @sa reset_()
 		 */
-		void reset()
+		void reset(TYPE ticks = 0)
 		{
 			if (sizeof(TYPE) > 1)
-				synchronized reset_();
+				synchronized reset_(ticks);
 			else
-				reset_();
+				reset_(ticks);
 		}
 
 		/**
@@ -996,9 +996,9 @@ namespace timer
 		 * `reset()` instead.
 		 * @sa reset()
 		 */
-		void reset_()
+		void reset_(TYPE ticks = 0)
 		{
-			TRAIT::TCNT = 0;
+			TRAIT::TCNT = ticks;
 		}
 
 		/**
@@ -1032,7 +1032,7 @@ namespace timer
 		/**
 		 * Temporarily suspend this timer: the timer does not generate any
 		 * interrupt any longer.
-		 * Note that this method is synchronized, i.e. it disables interrupts
+		 * Note that this method is synchronized, i.e. it disables AVR interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
 		 * `suspend_interrupts_()` instead.
@@ -1048,7 +1048,7 @@ namespace timer
 		 * Temporarily suspend this timer: the timer does not generate any
 		 * interrupt any longer.
 		 * Note that this method is not synchronized, hence you should ensure it
-		 * is called only while interrupts are not enabled.
+		 * is called only while AVR interrupts are not enabled.
 		 * If you need synchronization, then you should better use
 		 * `suspend_interrupts()` instead.
 		 * @sa resume_interrupts_()
@@ -1063,7 +1063,7 @@ namespace timer
 		/**
 		 * Resume this timer if it was previously suspended: the timer's counter
 		 * is reset and the timer starts generating interrupts again.
-		 * Note that this method is synchronized, i.e. it disables interrupts
+		 * Note that this method is synchronized, i.e. it disables AVR interrupts
 		 * during its call and restores interrupts on return.
 		 * If you do not need synchronization, then you should better use
 		 * `resume_interrupts_()` instead.
@@ -1079,7 +1079,7 @@ namespace timer
 		 * Resume this timer if it was previously suspended: the timer's counter
 		 * is reset and the timer starts generating interrupts again.
 		 * Note that this method is not synchronized, hence you should ensure it
-		 * is called only while interrupts are not enabled.
+		 * is called only while AVR interrupts are not enabled.
 		 * If you need synchronization, then you should better use
 		 * `resume_interrupts()` instead.
 		 * @sa suspend_interrupts_()
@@ -1094,14 +1094,37 @@ namespace timer
 		}
 
 		/**
-		 * Check if this timer is currently suspended, i.e. it does not generate
-		 * any interrupts.
+		 * Check if this timer interrupts are currently suspended, i.e. it does 
+		 * not generate any interrupts.
 		 * @retval true the timer is currently suspended
 		 * @retval false the timer is currently active
 		 */
 		bool is_interrupt_suspended()
 		{
 			return (TRAIT::TIMSK_ & TRAIT::TIMSK_MASK) == 0;
+		}
+
+		//TODO DOC
+		void suspend_timer()
+		{
+			synchronized suspend_timer_();
+		}
+		//TODO DOC
+		void suspend_timer_()
+		{
+			// Check if timer is currently running, and force clock select to 0 (timer stopped)
+			if (TRAIT::TCCRB) TRAIT::TCCRB = tccrb_ & ~TRAIT::CS_MASK_TCCRB;
+		}
+		//TODO DOC
+		void resume_timer()
+		{
+			synchronized resume_timer();
+		}
+		//TODO DOC
+		void resume_timer_()
+		{
+			// Check if timer is currently running
+			if (TRAIT::TCCRB) TRAIT::TCCRB = tccrb_;
 		}
 
 		/**
