@@ -22,6 +22,9 @@
 #ifndef I2C_HANDLER_HH
 #define I2C_HANDLER_HH
 
+// Thsi ehader is included only to get all registers (TWCR in particular) defined for the current target
+#include <fastarduino/boards/board.h>
+
 #ifdef TWCR
 #include "i2c_handler_atmega.h"
 #else
