@@ -62,7 +62,7 @@ static streams::ostream out = uart.out();
 class PublicDevice: public PARENT
 {
 public:
-	PublicDevice(MANAGER& manager): PARENT{manager, DEVICE_ADDRESS, i2c::Mode<MODE>{}} {}
+	PublicDevice(MANAGER& manager): PARENT{manager, DEVICE_ADDRESS, i2c::Mode<MODE>{}, true} {}
 	friend int main();
 };
 

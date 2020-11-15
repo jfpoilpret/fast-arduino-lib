@@ -327,12 +327,14 @@ namespace i2c::debug
 		/**
 		 * Output all recorded I2C notifications to @p out then clear all records.
 		 * @param out the `streams::ostream` to output traces to
+		 * @param hex_status if `true` (the default), status values will be displayed in 
+		 * hexadecimal, otherwise status name will be displayed 
 		 * @sa reset()
 		 */
-		void trace(streams::ostream& out)
+		void trace(streams::ostream& out, bool hex_status = true)
 		{
 			I2CDebugRecorder<SIZE_DEBUG>::trace(out);
-			i2c::status::I2CStatusRecorder<SIZE_STATUS>::trace(out);
+			i2c::status::I2CStatusRecorder<SIZE_STATUS>::trace(out, hex_status);
 		}
 	};
 
@@ -353,13 +355,17 @@ namespace i2c::debug
 		 * @param out the `streams::ostream` to output traces to
 		 * @param trace the list of debug notifications to be recorded
 		 * @param debug the list of status notifications to be recorded
+		 * @param hex_status if `true` (the default), status values will be displayed in 
+		 * hexadecimal, otherwise status name will be displayed 
 		 * 
 		 * @sa trace()
 		 * @sa reset()
 		 */
 		I2CDebugStatusLiveLogger(streams::ostream& out,
-			i2c::status::STATUS trace = i2c::status::STATUS::TRACE_ALL, DEBUG debug = DEBUG::DEBUG_ALL)
-		: i2c::status::I2CStatusLiveLogger{out, trace}, I2CDebugLiveLogger{out, debug} {}
+			i2c::status::STATUS trace = i2c::status::STATUS::TRACE_ALL, 
+			DEBUG debug = DEBUG::DEBUG_ALL,
+			bool hex_status = true)
+		: i2c::status::I2CStatusLiveLogger{out, trace, hex_status}, I2CDebugLiveLogger{out, debug} {}
 	};
 }
 
