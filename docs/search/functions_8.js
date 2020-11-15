@@ -10,7 +10,7 @@ var searchData=
   ['i2casyncstatusmanager_1587',['I2CAsyncStatusManager',['../classi2c_1_1_i2_c_async_status_manager.html#a45e72d489cee98f0549b6db976537550',1,'i2c::I2CAsyncStatusManager']]],
   ['i2cdebuglivelogger_1588',['I2CDebugLiveLogger',['../classi2c_1_1debug_1_1_i2_c_debug_live_logger.html#aabc7827816f365910f598b35d02f2156',1,'i2c::debug::I2CDebugLiveLogger']]],
   ['i2cdebugrecorder_1589',['I2CDebugRecorder',['../classi2c_1_1debug_1_1_i2_c_debug_recorder.html#ac23789b6207d7dd74db0e64ca631c2af',1,'i2c::debug::I2CDebugRecorder']]],
-  ['i2cdebugstatuslivelogger_1590',['I2CDebugStatusLiveLogger',['../classi2c_1_1debug_1_1_i2_c_debug_status_live_logger.html#a7d05e4d5323c493503b338035db10541',1,'i2c::debug::I2CDebugStatusLiveLogger']]],
+  ['i2cdebugstatuslivelogger_1590',['I2CDebugStatusLiveLogger',['../classi2c_1_1debug_1_1_i2_c_debug_status_live_logger.html#a489d8ece13aa9ec18525f7299ace80d9',1,'i2c::debug::I2CDebugStatusLiveLogger']]],
   ['i2cdebugstatusrecorder_1591',['I2CDebugStatusRecorder',['../classi2c_1_1debug_1_1_i2_c_debug_status_recorder.html#ad1c8520bf2c73f83514c2842d383b06d',1,'i2c::debug::I2CDebugStatusRecorder']]],
   ['i2cdevice_1592',['I2CDevice',['../classi2c_1_1_i2_c_device.html#ac9dbb29fefbc1a66a6df687d9874fec4',1,'i2c::I2CDevice']]],
   ['i2clateststatusholder_1593',['I2CLatestStatusHolder',['../classi2c_1_1status_1_1_i2_c_latest_status_holder.html#a831167d862fd8b69f64f06a2d6571c32',1,'i2c::status::I2CLatestStatusHolder']]],

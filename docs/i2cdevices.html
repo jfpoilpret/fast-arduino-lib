@@ -298,7 +298,7 @@ $(document).ready(function(){initNavTree('i2cdevices.html',''); initResizable();
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keyword">class </span>PublicDevice: <span class="keyword">public</span> PARENT</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;{</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    PublicDevice(MANAGER&amp; manager): PARENT{manager, DEVICE_ADDRESS, i2c::Mode&lt;MODE&gt;{}} {}</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    PublicDevice(MANAGER&amp; manager): PARENT{manager, DEVICE_ADDRESS, i2c::Mode&lt;MODE&gt;{}, <span class="keyword">true</span>} {}</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">friend</span> <span class="keywordtype">int</span> main();</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;};</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
@@ -375,7 +375,7 @@ $(document).ready(function(){initNavTree('i2cdevices.html',''); initResizable();
 <div class="fragment"><div class="line"><span class="keyword">class </span>PublicDevice: <span class="keyword">public</span> PARENT</div>
 <div class="line">{</div>
 <div class="line"><span class="keyword">public</span>:</div>
-<div class="line">    PublicDevice(MANAGER&amp; manager): PARENT{manager, DEVICE_ADDRESS, i2c::Mode&lt;MODE&gt;{}} {}</div>
+<div class="line">    PublicDevice(MANAGER&amp; manager): PARENT{manager, DEVICE_ADDRESS, i2c::Mode&lt;MODE&gt;{}, <span class="keyword">true</span>} {}</div>
 <div class="line">    <span class="keyword">friend</span> <span class="keywordtype">int</span> main();</div>
 <div class="line">};</div>
 </div><!-- fragment --><p> This is where we define a utility class to debug our I2C interface to the tested device. <code>PublicDevice</code> class does <b>nothing</b> but making all protected methods callable from <code>main()</code>, so that we can directly perform our code tests in <code>main()</code>, without thinking much about proper API design now.</p>
