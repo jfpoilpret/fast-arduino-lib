@@ -25,28 +25,67 @@
  */
 
 #include <fastarduino/array.h>
+#include <fastarduino/i2c_handler.h>
 #include <fastarduino/i2c_device.h>
-#include <fastarduino/uart.h>
 #include <fastarduino/i2c_debug.h>
+#include <fastarduino/i2c_status.h>
 
-// I2C Device specific constants go here
-//======================================
-static constexpr const i2c::I2CMode MODE = i2c::I2CMode::FAST;
-static constexpr const uint8_t DEVICE_ADDRESS = 0x77 << 1;
-
+//TODO adapt to allow checks also on async manager!
+//TODO allow disabling debug (may impact results?)
+//TODO adapt to also support ATtinyX4 (useful for testing I2C API in this context)
+#if defined(ARDUINO_UNO)
+#define HARDWARE_UART 1
+#include <fastarduino/uart.h>
+static constexpr const board::USART UART = board::USART::USART0;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
 static constexpr const uint8_t DEBUG_SIZE = 32;
-using DEBUGGER = i2c::debug::I2CDebugStatusRecorder<DEBUG_SIZE, DEBUG_SIZE>;
-using MANAGER = i2c::I2CSyncStatusDebugManager<MODE, DEBUGGER&, DEBUGGER&>;
-#define DEBUG(OUT) debugger.trace(OUT, false)
-
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
-
-// UART for traces
+#elif defined(BREADBOARD_ATTINYX4)
+#define HARDWARE_UART 0
+#include <fastarduino/soft_uart.h>
+static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr const uint8_t DEBUG_SIZE = 32;
+#else
+#error "Current target is not yet supported!"
+#endif
+
+// #define DEBUG_I2C
+// #define FORCE_SYNC
+
+#ifdef DEBUG_I2C
+using DEBUGGER = i2c::debug::I2CDebugStatusRecorder<DEBUG_SIZE, DEBUG_SIZE>;
+#	if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
+using MANAGER = i2c::I2CAsyncStatusDebugManager<
+	i2c::I2CMode::FAST, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, DEBUGGER&, DEBUGGER&>;
+static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
+#	else
+using MANAGER = i2c::I2CSyncStatusDebugManager<i2c::I2CMode::FAST, DEBUGGER&, DEBUGGER&>;
+#	endif
+#define DEBUG(OUT) debugger.trace(OUT, false)
+#else
+using DEBUGGER = i2c::status::I2CLatestStatusHolder;
+#	if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
+using MANAGER = i2c::I2CAsyncStatusManager<
+	i2c::I2CMode::FAST, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, DEBUGGER&>;
+static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
+#	else
+using MANAGER = i2c::I2CSyncStatusManager<i2c::I2CMode::FAST, DEBUGGER&>;
+#	endif
+#define DEBUG(OUT) OUT << streams::hex << debugger.latest_status() << streams::endl
+#endif
+
+#if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
+REGISTER_I2C_ISR(MANAGER)
+#endif
+
+// UART buffer for traces
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 // Subclass I2CDevice to make protected methods available
+static constexpr const uint8_t DEVICE_ADDRESS = 0x77 << 1;
 class FakeDevice: public i2c::I2CDevice<MANAGER>
 {
 	// The following type aliases will be useful for declaring proper Futures and calling I2CDevice API
@@ -55,7 +94,7 @@ class FakeDevice: public i2c::I2CDevice<MANAGER>
 	template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
 public:
-	FakeDevice(MANAGER& manager): PARENT{manager, DEVICE_ADDRESS, i2c::Mode<MODE>{}, true} {}
+	FakeDevice(MANAGER& manager): PARENT{manager, DEVICE_ADDRESS, i2c::I2C_FAST, true} {}
 
 	class WriteRegister : public FUTURE<void, containers::array<uint8_t, 2>>
 	{
@@ -107,7 +146,11 @@ int main()
 	board::init();
 	sei();
 	
-	serial::hard::UATX<board::USART::USART0> uart{output_buffer};
+#if HARDWARE_UART
+	serial::hard::UATX<UART> uart{output_buffer};
+#else
+	serial::soft::UATX<TX> uart{output_buffer};
+#endif
 	streams::ostream out = uart.out();
 	uart.begin(115200);
 	out.width(2);
@@ -116,7 +159,19 @@ int main()
 	// Start TWI interface
 	//====================
 	DEBUGGER debugger{};
+#if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
+#	ifdef DEBUG_I2C
+	MANAGER manager{i2c_buffer, debugger, debugger};
+#	else
+	MANAGER manager{i2c_buffer, debugger};
+#	endif
+#else
+#	ifdef DEBUG_I2C
 	MANAGER manager{debugger, debugger};
+#	else
+	MANAGER manager{debugger};
+#	endif
+#endif
 	manager.begin();
 	out << F("I2C interface started") << endl;
 	
