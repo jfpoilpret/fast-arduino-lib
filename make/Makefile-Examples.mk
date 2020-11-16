@@ -33,7 +33,7 @@ COMMON_EXAMPLES=	i2c/AccelGyro0 i2c/AccelGyro1 i2c/AccelGyro2							\
 					rtt/InputCapture1														\
 					rtt/RTTApp1b rtt/RTTApp2 rtt/RTTApp3 rtt/RTTApp4						\
 					motors/Servo1 motors/Servo2												\
-					rtt/TimerApp3 rtt/TimerApp4												\
+					rtt/TimerApp3 rtt/TimerApp4	rtt/TimerSuspendCheck						\
 					spi/MultiADC00 spi/MultiADC01 spi/MultiADC02							\
 					spi/RF24App1 spi/RF24App2 spi/WinBond									\
 					uart/UartApp2 uart/UartApp3 uart/UartApp4								\
