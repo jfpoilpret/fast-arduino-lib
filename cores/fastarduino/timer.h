@@ -1118,13 +1118,13 @@ namespace timer
 		//TODO DOC
 		void resume_timer()
 		{
-			synchronized resume_timer();
+			synchronized resume_timer_();
 		}
 		//TODO DOC
 		void resume_timer_()
 		{
 			// Check if timer is currently running
-			if (TRAIT::TCCRB) TRAIT::TCCRB = tccrb_;
+			TRAIT::TCCRB = tccrb_;
 		}
 
 		/**
