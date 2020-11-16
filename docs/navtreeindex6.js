@@ -1,5 +1,9 @@
 var NAVTREEINDEX6 =
 {
+"int_8h.html#a27eee51cf0393a75a91aac0425e65d1bad5ef89cca31152290b30f50cd1d8c536":[7,0,0,29,5,0],
+"int_8h.html#a27eee51cf0393a75a91aac0425e65d1bad85243a747ac5537ef0b7adde99c3e98":[7,0,0,29,5,3],
+"int_8h.html#a3e2a8c98468d29717612f7c694a17d59":[7,0,0,29,1],
+"int_8h.html#a797c88ca60edb14f5189217ad50a65cb":[7,0,0,29,3],
 "int_8h.html#a8a587b48884f6b62938abfbcf1484130":[7,0,0,29,6],
 "int_8h.html#ac8d31ae95551a7ba072fd11cd7339f68":[7,0,0,29,4],
 "int_8h.html#ae9a69c986cdabeb7bc749701a74b71fa":[7,0,0,29,2],
@@ -240,14 +244,10 @@ var NAVTREEINDEX6 =
 "namespaceanalog.html":[6,0,0],
 "namespacebits.html":[5,0,1],
 "namespaceboard.html":[5,0,2],
-"namespacecontainers.html":[5,0,3],
 "namespacecontainers.html":[6,0,1],
+"namespacecontainers.html":[5,0,3],
 "namespacedevices.html":[5,0,4],
 "namespacedevices.html":[6,0,2],
-"namespacedevices_1_1audio.html":[5,0,4,0],
 "namespacedevices_1_1audio.html":[6,0,2,0],
-"namespacedevices_1_1audio_1_1_special_tone.html":[5,0,4,0,0],
-"namespacedevices_1_1magneto.html":[5,0,4,1],
-"namespacedevices_1_1magneto.html":[6,0,2,1],
-"namespacedevices_1_1mcp230xx.html":[5,0,4,2]
+"namespacedevices_1_1audio.html":[5,0,4,0]
 };
