@@ -974,10 +974,12 @@ namespace timer
 		}
 
 		/**
-		 * Reset current counter to 0.
+		 * Reset current counter to @p ticks .
 		 * This method is synchronized if needed (i.e. if this timer is 16 bits).
 		 * If you do not need synchronization, then you should better use
 		 * `reset_()` instead.
+		 * @param ticks number of ticks to reset counter to
+		 * 
 		 * @sa reset_()
 		 */
 		void reset(TYPE ticks = 0)
@@ -989,11 +991,13 @@ namespace timer
 		}
 
 		/**
-		 * Reset current counter to 0.
+		 * Reset current counter to @p ticks .
 		 * Note that this method is not synchronized, hence you should ensure it
 		 * is called only while interrupts are not enabled.
 		 * If you need synchronization, then you should better use
 		 * `reset()` instead.
+		 * @param ticks number of ticks to reset counter to
+		 * 
 		 * @sa reset()
 		 */
 		void reset_(TYPE ticks = 0)
