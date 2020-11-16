@@ -1104,23 +1104,62 @@ namespace timer
 			return (TRAIT::TIMSK_ & TRAIT::TIMSK_MASK) == 0;
 		}
 
-		//TODO DOC
+		/**
+		 * Suspend this timer, ie stop this timer counting (`ticks()` will not change then).
+		 * Note that this method is synchronized, i.e. it disables AVR interrupts
+		 * during its call and restores interrupts on return.
+		 * If you do not need synchronization, then you should better use
+		 * `suspend_timer_()` instead.
+		 * 
+		 * @sa resume_timer()
+		 * @sa suspend_timer_()
+		 */
 		void suspend_timer()
 		{
 			synchronized suspend_timer_();
 		}
-		//TODO DOC
+
+		/**
+		 * Suspend this timer, ie stop this timer counting (`ticks()` will not change then).
+		 * Note that this method is not synchronized, hence you should ensure it
+		 * is called only while AVR interrupts are not enabled.
+		 * If you need synchronization, then you should better use
+		 * `suspend_timer()` instead.
+		 * 
+		 * @sa resume_timer_()
+		 * @sa suspend_timer()
+		 */
 		void suspend_timer_()
 		{
 			// Check if timer is currently running, and force clock select to 0 (timer stopped)
 			if (TRAIT::TCCRB) TRAIT::TCCRB = tccrb_ & ~TRAIT::CS_MASK_TCCRB;
 		}
-		//TODO DOC
+
+		/**
+		 * Resume this timer, ie restart counting (`ticks()` will start changing again).
+		 * Note that this method is synchronized, i.e. it disables AVR interrupts
+		 * during its call and restores interrupts on return.
+		 * If you do not need synchronization, then you should better use
+		 * `resume_timer_()` instead.
+		 * 
+		 * @sa suspend_timer()
+		 * @sa resume_timer_()
+		 */
 		void resume_timer()
 		{
 			synchronized resume_timer_();
 		}
-		//TODO DOC
+
+		/**
+		 * Resume this timer, ie restart counting (`ticks()` will start changing again).
+		 * Note that this method is not synchronized, hence you should ensure it
+		 * is called only while AVR interrupts are not enabled.
+		 * If you need synchronization, then you should better use
+		 * `resume_timer()` instead.
+		 * 
+		 * @sa suspend_timer_()
+		 * @sa resume_timer()
+		 */
 		void resume_timer_()
 		{
 			// Check if timer is currently running
