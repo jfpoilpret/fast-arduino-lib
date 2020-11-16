@@ -30,6 +30,7 @@
 #include <fastarduino/flash.h>
 #include <fastarduino/gpio.h>
 #include <fastarduino/timer.h>
+#include <fastarduino/tests/assertions.h>
 
 #if defined(ARDUINO_UNO) || defined(BREADBOARD_ATMEGA328P) || defined(ARDUINO_NANO)
 #define HAS_UART 1
@@ -78,10 +79,10 @@ using TYPE = TIMER::TYPE;
 static constexpr const uint32_t PRECISION = 100UL;
 using CALC = timer::Calculator<NTIMER>;
 static constexpr const TIMER::PRESCALER PRESCALER = CALC::tick_prescaler(PRECISION);
-//FIXME will not work with both ATmega and ATtiny
-static_assert(PRESCALER == TIMER::PRESCALER::DIV_1024, "PRESCALER should be DIV_1024");
 static constexpr TYPE TICKS_PER_MS = CALC::us_to_ticks(PRESCALER, 1000UL);
+static_assert(TICKS_PER_MS >= 10, "TICKS_PER_MS >= 10");
 
+using namespace tests;
 using streams::dec;
 using streams::endl;
 
@@ -112,7 +113,7 @@ int main()
 	time::delay_us(1000U);
 	TYPE end = timer.ticks();
 	out << F("Ticks in 1ms = ") << dec << (end - start) << endl;
-	//TODO add assertions
+	assert_true(out, F("Normal timer: (end - start) >= TICKS_PER_MS"), (end - start) >= TICKS_PER_MS);
 
 	// Specific situation: suspend timer, check ticks stop, resume timer
 	out << F("Check suspended timer...") << endl;
@@ -122,9 +123,9 @@ int main()
 	time::delay_us(1000U);
 	end = timer.ticks();
 	out << F("Ticks in 1ms (expected 0) = ") << dec << (end - start) << endl;
-	//TODO add assertions
+	assert_equals(out, F("Suspended timer: (end - start)"), (end - start), 0U);
 
-	//TODO Check resume works
+	// Check resume works
 	out << F("Check resume timer...") << endl;
 	timer.reset();
 	timer.resume_timer();
@@ -132,5 +133,5 @@ int main()
 	time::delay_us(1000U);
 	end = timer.ticks();
 	out << F("Ticks in 1ms = ") << dec << (end - start) << endl;
-	//TODO add assertions
+	assert_true(out, F("Resumed timer: (end - start) >= TICKS_PER_MS"), (end - start) >= TICKS_PER_MS);
 }
