@@ -1136,7 +1136,7 @@ namespace timer
 		void suspend_timer_()
 		{
 			// Check if timer is currently running, and force clock select to 0 (timer stopped)
-			if (TRAIT::TCCRB) TRAIT::TCCRB = tccrb_ & ~TRAIT::CS_MASK_TCCRB;
+			if (TRAIT::TCCRB) TRAIT::TCCRB = tccrb_ & uint8_t(~TRAIT::CS_MASK_TCCRB);
 		}
 
 		/**
