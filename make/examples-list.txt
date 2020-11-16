@@ -31,6 +31,7 @@ RTTApp3	Display (UART) RTT microseconds
 RTTApp4	LED blinker based on RTTEventCallback (ISR)
 TimerApp3	LED blinker based on CTC Timer (ISR)
 TimerApp4	LED blinker with dimmer based on 2 CTC Timers (2 ISR)
+TimerSuspendCheck	Unit tests of suspend/resume timer API
 TimerTinyX5	LEDs blinker with ATtinyX5 timer mode specificities
 AnalogPin1	Display (UATX) analog value/voltage
 AnalogPin2	Display analog input on 8 LEDs

@@ -30,9 +30,6 @@
 #include <fastarduino/i2c_debug.h>
 #include <fastarduino/i2c_status.h>
 
-//TODO adapt to allow checks also on async manager!
-//TODO allow disabling debug (may impact results?)
-//TODO adapt to also support ATtinyX4 (useful for testing I2C API in this context)
 #if defined(ARDUINO_UNO)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>

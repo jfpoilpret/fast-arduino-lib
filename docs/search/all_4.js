@@ -37,7 +37,7 @@ var searchData=
   ['end_5ftransfer_255',['end_transfer',['../classspi_1_1_s_p_i_device.html#a7966a43f4b18fa308a637e28a5633722',1,'spi::SPIDevice']]],
   ['endfuture_256',['EndFuture',['../classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_end_future.html',1,'devices::magneto::HMC5883L&lt; MANAGER &gt;::EndFuture'],['../classdevices_1_1magneto_1_1_m_p_u6050_1_1_end_future.html',1,'devices::magneto::MPU6050&lt; MANAGER &gt;::EndFuture']]],
   ['endl_257',['endl',['../namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22',1,'streams']]],
-  ['eof_258',['EOF',['../classstreams_1_1istreambuf.html#a99e49d98dc017ef8d9a34619f0c9bc38',1,'streams::istreambuf::EOF()'],['../classstreams_1_1ios__base.html#ad85b4ac8316bdfb945c33589e25c1db0',1,'streams::ios_base::eof()']]],
+  ['eof_258',['eof',['../classstreams_1_1ios__base.html#ad85b4ac8316bdfb945c33589e25c1db0',1,'streams::ios_base::eof()'],['../classstreams_1_1istreambuf.html#a99e49d98dc017ef8d9a34619f0c9bc38',1,'streams::istreambuf::EOF()']]],
   ['eofbit_259',['eofbit',['../classstreams_1_1ios__base.html#a1bf5d3cf53901af8bd2a3739b8290a70',1,'streams::ios_base']]],
   ['eproto_260',['EPROTO',['../namespaceerrors.html#aa18e3e1d10cd2aed65dc2559a901beff',1,'errors']]],
   ['erase_261',['erase',['../classeeprom_1_1_e_e_p_r_o_m.html#ace5a82d71896ab870d162c32a7627d5c',1,'eeprom::EEPROM::erase()'],['../classeeprom_1_1_queued_writer.html#ad2933f1803b50189ced1361ee0292ac8',1,'eeprom::QueuedWriter::erase()']]],
