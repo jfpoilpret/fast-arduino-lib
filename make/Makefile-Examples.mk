@@ -51,7 +51,10 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						analog/AnalogComparator5				\
 						analog/AnalogComparator6				\
 						misc/IOStreams3							\
+						misc/ArrayCheck							\
+						misc/InitializerListCheck				\
 						misc/FutureCheck						\
+						misc/FutureCheck2						\
 						misc/LifecycleCheck						\
 						misc/QueueCheck							\
 						misc/LinkedListCheck					\
@@ -61,6 +64,8 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						i2c/DS1307RTC3 i2c/DS1307RTC4			\
 						i2c/MultiIO3							\
 						i2c/MultiIO4 i2c/MultiIO5				\
+						i2c/MultiIO6 i2c/MultiIO7				\
+						i2c/I2CFakeDevice						\
 						tones/tones0							\
 						tones/tones1 tones/tones2 tones/tones3	\
 						tones/tones4 tones/tones5 tones/tones6	\
@@ -137,7 +142,10 @@ EXAMPLES_BREADBOARD_ATMEGA328P=	int/ExternalInterrupt3					\
 
 EXAMPLES_BREADBOARD_ATTINYX4=	complete/Conway					\
 								i2c/MultiIO5					\
+								i2c/I2CFakeDevice				\
 								misc/IOStreams1					\
+								misc/ArrayCheck					\
+								misc/InitializerListCheck		\
 								misc/LifeCycleCheck				\
 								analog/AnalogComparator1		\
 								analog/AnalogComparator2		\
