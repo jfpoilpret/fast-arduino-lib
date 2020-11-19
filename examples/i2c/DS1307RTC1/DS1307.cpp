@@ -214,6 +214,7 @@ int main()
 	
 	// Initialize clock date
 	//=======================
+	//FIXME this is incorrect, to split one write transaction into 2 write transactions!
 	FUTURE<void, uint8_t> f1{0};
 	int error1 = rtc.launch_commands(f1, {rtc.write(0, true)});
 	DEBUG(out);
