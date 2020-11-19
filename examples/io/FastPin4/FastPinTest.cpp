@@ -19,7 +19,7 @@
  * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):
  *   - D0-D7 (port D) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
- *   - D14-D17 (A0-A3, port C) branch 4 switches connected to ground
+ *   - D8-D11 (port B) branch 4 switches connected to ground
  * - on Arduino LEONARDO:
  *	- D3-D2-D0-D1-D4-TXLED-D12-D6 (port D) branch 8 LED (except for TXLED) in series with 330 Ohm resistors
  *	- A0-A3 (port F) branch 4 switches connected to ground
