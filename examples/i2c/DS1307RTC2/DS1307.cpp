@@ -92,7 +92,7 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 32;
 #error "Current target is not yet supported!"
 #endif
 
-#define DEBUG_I2C
+// #define DEBUG_I2C
 #define FORCE_SYNC
 
 // UART buffer for traces
