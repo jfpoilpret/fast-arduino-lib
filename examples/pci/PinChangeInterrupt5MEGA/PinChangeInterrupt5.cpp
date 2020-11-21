@@ -26,7 +26,7 @@
  *   - D0 (PCINT1, PE0) branch a push button connected to ground
  *   - D14 (PCINT1, PJ1) branch a push button connected to ground
  *   - D15 (PCINT1, PJ0) branch a push button connected to ground
- *   - D8-D10: LEDs in series with 330 Ohm resistor to GND
+ *   - D10-D12: LEDs in series with 330 Ohm resistor to GND
  */
 
 #include <fastarduino/gpio.h>
