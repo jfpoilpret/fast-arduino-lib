@@ -33,6 +33,7 @@ RTTApp3	Display (UART) RTT microseconds	2012	92	2096	92	2160	92	2014	90	2018	90
 RTTApp4	LED blinker based on RTTEventCallback (ISR)	1140	54	1224	54	1294	54	1066	54	1068	54
 TimerApp3	LED blinker based on CTC Timer (ISR)	234	2	318	2	374	2	148	2	138	2
 TimerApp4	LED blinker with dimmer based on 2 CTC Timers (2 ISR)	390	4	474	4	532	4	290	4	296	4
+TimerSuspendCheck	Unit tests of suspend/resume timer API	2324	74	2408	74	2468	74	2212	40		
 TimerTinyX5	LEDs blinker with ATtinyX5 timer mode specificities									350	0
 AnalogPin1	Display (UATX) analog value/voltage	1956	92	2040	92	2096	92	1836	90	1836	90
 AnalogPin2	Display analog input on 8 LEDs	198	0	282	0	326	0	122	0		
@@ -60,31 +61,37 @@ Eeprom4	Check EEMEM variables to read/write EEPROM (UATX)	3234	162	3318	162	3388
 IOStreams1	Check ostream (SW UATX)							3264	64		
 IOStreams2	Check real Vs. null ostream	6020	94	6104	94	6194	94	5962	94	5958	94
 IOStreams3	Check ostream error handling (UART)	3792	184								
+ArrayCheck	Unit Tests for array container	2788	170					2708	104		
+InitializerListCheck	Unit Tests for initializer_list	2748	170					2722	104		
 LifecycleCheck	Unit Tests of lifecycle/proxy API	8042	140								
 FutureCheck	Unit Tests of future API	11160	146								
+FutureCheck2	Unit Tests of future API used with Lifecycle API	8992	146								
 QueueCheck	Unit Tests of queue container	4434	592								
 LinkedListCheck	Unit Tests of linked list container	6000	463								
 UtilsCheck	Unit Tests of conversion utilities	3272	230								
-AccelGyro0	Check of MPU6050 FIFO push/pop (i2c)	3528	111	3612	111	3686	111	3484	84		
-AccelGyro1	Display (UATX) measures (gyro, accel) from MPU6050 (i2c)	3802	103	3886	103	3960	103	3826	76		
-AccelGyro2	Display (UATX) continuous measures (gyro, accel) from MPU6050 FIFO (i2c)	4004	113	4088	113	4162	113	4092	118		
+I2CFakeDevice	Example to check a fake I2C device does not get wrongly detected	3834	240					3224	76		
+AccelGyro0	Check of MPU6050 FIFO push/pop (i2c)	3486	111	3570	111	3644	111	3484	84		
+AccelGyro1	Display (UATX) measures (gyro, accel) from MPU6050 (i2c)	3804	103	3888	103	3962	103	3826	76		
+AccelGyro2	Display (UATX) continuous measures (gyro, accel) from MPU6050 FIFO (i2c)	3962	113	4046	113	4120	113	4092	118		
 DS1307RTC1	Change RTC and display (UATX) date/time (i2c)	4396	298	4480	298	4556	298	3688	134	3684	134
-DS1307RTC2	Change RTC, display (UATX) date/time, use RAM and clock generation (i2c)	4816	102	4900	102	4960	102	4706	68	4702	68
+DS1307RTC2	Change RTC, display (UATX) date/time, use RAM and clock generation (i2c)	4698	102	4782	102	4842	102	4706	68	4702	68
 DS1307RTC3	Change RTC and display (UATX) date/time (i2c, asynchronous)	4994	272	5078	272	5154	272				
 DS1307RTC4	Change RTC and display (UATX) date/time (i2c, asynchronous, with callback)	5034	274	5118	274	5194	274				
-Magneto1	Display (UATX) measures (compass) from HMC5883L (i2c)	7908	84	7992	84	8072	84	3762	82		
-Magneto2	Display (UATX) measures (compass) from HMC5883L (i2c, with DRDY interrupt)	3278	107	3362	107	3444	107	3320	112		
+Magneto1	Display (UATX) measures (compass) from HMC5883L (i2c)	7866	84	7950	84	8030	84	3762	82		
+Magneto2	Display (UATX) measures (compass) from HMC5883L (i2c, with DRDY interrupt)	3236	107	3320	107	3402	107	3320	112		
 MultiADC00	Check MCP3x0x constexpr (compile only, does nothing)	132	0	200	0	260	0	62	0	58	0
 MultiADC01	MCP3008 pots reading and trace (UATX) (spi)	1974	74	2058	74	2152	74	1896	72	1892	72
 MultiADC02	MCP3X0X chips support compilation check (spi)	4294	74	4378	74	4518	74	4212	72	4208	72
-MultiIO1	LED chaser with config buttons and LEDs on MCP23017 2 ports (i2c)	1496	12	1580	12	1628	12	1452	12	1448	12
-MultiIO2	LED chaser with config buttons and LEDs on MCP23017 1 port (i2c)	1444	12	1528	12	1576	12	1400	12	1396	12
-MultiIO3	LED chaser with config buttons (callback function) and LEDs on MCP23017 2 ports (i2c)	1522	16								
-MultiIO4	LED chaser with config buttons (callback method) and LEDs on MCP23017 2 ports (i2c)	1530	14								
-MultiIO5	LED chaser with config buttons (callback method) and LEDs on MCP23008 (i2c)	1498	14					1454	14		
+MultiIO1	LED chaser with config buttons and LEDs on MCP23017 2 ports (i2c)	1454	12	1538	12	1586	12	1452	12	1448	12
+MultiIO2	LED chaser with config buttons and LEDs on MCP23017 1 port (i2c)	1402	12	1486	12	1534	12	1400	12	1396	12
+MultiIO3	LED chaser with config buttons (callback function) and LEDs on MCP23017 2 ports (i2c)	1480	16								
+MultiIO4	LED chaser with config buttons (callback method) and LEDs on MCP23017 2 ports (i2c)	1488	14								
+MultiIO5	LED chaser with config buttons (callback method) and LEDs on MCP23008 (i2c)	1456	14					1454	14		
+MultiIO6	Multiple LED -switch mapper on MCP23008 (i2c)	4708	104								
+MultiIO7	Simple LED chaser on MCP23008 (i2c)	1040	0								
 Servo1	Servo controlled by a pot through 8bits pulse timer	642	2	726	2	778	2	594	2		
 Servo2	Servo controlled by a pot through 16bits pulse timer	562	0	646	0	690	0	488	0		
-RF24App1	NRF24L01P ping-pong (UATX except ATtiny), no IRQ (spi)	4140	224	4236	224	4432	224	1746	8	1292	6
+RF24App1	NRF24L01P ping-pong (UATX except ATtiny), no IRQ (spi)	4140	224	4236	224	4432	224	1746	8	1298	6
 RF24App2	NRF24L01P ping-pong (UATX except ATtiny), IRQ (spi)	4166	224	4262	224	4458	224	1772	8		
 WinBond	Trace (UATX) WinBond flash chip read/writes (spi)	3406	330	3490	330	3618	330	3320	200	3316	200
 Sonar1	Display (UATX) sonar range meaures in blocking mode	2472	76	2556	76	2624	76	2436	74		
