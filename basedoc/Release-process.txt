@@ -12,6 +12,39 @@ Release procedure
 9. Official release in github
 10. Close milestone in github
 
+FastArduino 1.6 release
+
+I am happy to announce the 7th major release of FastArduino platform.
+
+Since release 1.5 (January 2020), the main changes are listed [there](https://github.com/jfpoilpret/fast-arduino-lib/milestone/8?closed=1).
+
+This release brings the following improvements:
+- New API for "future" concept
+- New API for "lifecycle" concept and dynamic proxies
+- Global rework of the I2C support in order to allow asynchronous handling (on ATmega architecture only)
+- Small improvements to Timer API
+- Slight improvements to API of GPIO, PCI and PWM
+- New "test" namespace with a few helper function used by some FastArduino test examples
+
+Note that I2C API changes are unfortunately not fully compatible with existing programs:
+1. If your program uses FastArduino provided I2C devices, then small adaptations will be needed. All examples have been adapted to show these changes.
+2. If you have defined your own I2C device support, then you are out of luck: you will have to rewrite most of it, as I2C device API is now based on the new "future" concept.
+
+Other API changes shall have no impact on existing programs.
+
+Known bugs and requests for enhancements: https://github.com/jfpoilpret/fast-arduino-lib/issues
+
+The platform is well documented:
+
+- a [tutorial](http://jfpoilpret.github.io/fast-arduino-lib/tutorial.html) allows developers to discover and learn the platform step by step
+- FastArduino core API is documented through doxygen and documentation is published [here](http://jfpoilpret.github.io/fast-arduino-lib/)
+- FastArduino comes with many examples covering all supported features and devices
+
+I hope you'll enjoy playing with FastArduino platform; please submit enhancements you would like 
+to see in future versions or report issues you may discover.
+
+  
+
 FastArduino 1.5 release
 
 I am happy to announce the 6th major release of FastArduino platform.

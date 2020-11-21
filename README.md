@@ -1,9 +1,9 @@
 Latest News
 ===========
 
-FastArduino v1.5 has been released on 18th January 2020.
-The implemented enhancements are listed [here](https://github.com/jfpoilpret/fast-arduino-lib/milestone/7?closed=1).
-Please note that this version breaks compatibility on some API, as described in further detail in the [release notes](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.5).
+FastArduino v1.6 has been released on 22nd November 2020.
+The implemented enhancements are listed [here](https://github.com/jfpoilpret/fast-arduino-lib/milestone/8?closed=1).
+Please note that this version breaks compatibility on I2C API, as described in further detail in the [release notes](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.6).
 
 FastArduino
 ===========
@@ -51,8 +51,8 @@ In the current version, the project covers almost all features; a few missing, l
 What the library already has:
 
 - General utilities (queues, linked lists, busy loop delays)
-- LifeCycle management support to keep track of moving or destroyed objects (preview on Git master, to be released in **v1.6**)
-- "Future" support for asynchronous computation (preview on Git master, to be released in **v1.6**)
+- LifeCycle management support to keep track of moving or destroyed objects
+- "Future" support for asynchronous computation
 - Fast IO support: template-based, optimized for speed and size
 - Analog Digital Conversion support (in Single Conversion mode)
 - Analog Comparator support
@@ -70,7 +70,7 @@ What the library already has:
 - Pin Change Interrupt (PCI) handling
 - External Pin Interrupt handling
 - SPI master support
-- I2C master support (synchronous mode and asynchronous mode (preview on Git master, to be released in **v1.6**) for ATmega MCU)
+- I2C master support with both synchronous and asynchronous modes supported (asynchronous only for ATmega MCU)
 - Hardware UART support (for MCU that support it, ie not for ATtiny)
 - Software UART support (for all MCU)
 - "C++ like" Input/Output streams (used by UART implementations)
@@ -139,14 +139,14 @@ The roadmap of next activities and new supported features is the following:
 - [Milestone v1.3](https://github.com/jfpoilpret/fast-arduino-lib/milestone/5?closed=1) (released on 1.09.2019)
 - [Milestone v1.4](https://github.com/jfpoilpret/fast-arduino-lib/milestone/6?closed=1) (released on 22.09.2019)
 - [Milestone v1.5](https://github.com/jfpoilpret/fast-arduino-lib/milestone/7?closed=1) (released on 18.01.2020)
-- [Milestone v1.6](https://github.com/jfpoilpret/fast-arduino-lib/milestone/8) (30.11.2020)
+- [Milestone v1.6](https://github.com/jfpoilpret/fast-arduino-lib/milestone/8?closed=1) (released on 22.11.2020)
 - [Milestone v1.7](https://github.com/jfpoilpret/fast-arduino-lib/milestone/9) (31.12.2020)
 - [Milestone v2.0](https://github.com/jfpoilpret/fast-arduino-lib/milestone/3) (undefined date)
 - [Later](https://github.com/jfpoilpret/fast-arduino-lib/issues?q=is%3Aopen+is%3Aissue+no%3Amilestone)
 
 Documentation - no milestones
 -----------------------------
-- Document how to add support for other boards in Tutorial (late 2020)
+- Document how to add support for other boards in Tutorial (1st half 2021)
 
 Milestones dates are "best effort" and may change based on contributors' availability.
 
