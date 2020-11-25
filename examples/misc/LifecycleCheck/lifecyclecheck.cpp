@@ -34,6 +34,7 @@ static constexpr const uint8_t MAX_LC_SLOTS = 32;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
 #elif defined (BREADBOARD_ATTINYX4)
+#define RESTRICT_CODE
 #include <fastarduino/soft_uart.h>
 static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
@@ -349,7 +350,9 @@ int main()
 	// Check LC
 	check<Value>(out, manager, VAL0);
 	// Check full proxies
+#ifndef RESTRICT_CODE
 	check_proxies(out, manager);
+#endif
 	// Check light proxies
 	check_light_proxies(out, manager);
 	// Check other constructors
