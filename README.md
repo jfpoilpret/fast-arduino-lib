@@ -44,7 +44,7 @@ One easy way to start a new project using FastArduino is to checkout [this proje
 Status
 ======
 
-Latest FastArduino release [**v1.5**](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.5) has been published on 18.01.2020.
+Latest FastArduino release [**v1.6**](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.6) has been published on 22.11.2020.
 
 In the current version, the project covers almost all features; a few missing, less important, features will be released in future versions (see roadmap below); the API of current features is deemed stable and should not change in the future.
 
