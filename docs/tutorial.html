@@ -190,7 +190,7 @@ $(document).ready(function(){initNavTree('tutorial.html',''); initResizable(); }
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;}</div>
 </div><!-- fragment --><p>The problem here is that Arduino API accept a simple number when they need a pin, hence it is perfectly possible to pass them the number of a pin that does not exist, as in the faulty code above: this code will compile and upload properly to an Arduino UNO, however it will not work, because pin 53 does not exist!</p>
 <p>This problem cannot occur with FastArduino as the available pins are stored in a strong enum and it becomes impossible to select a pin that does not exist for the board we target!</p>
-<p>Now, what is really interesting in comparing both working code examples is the size of the built program (measured with UNO as a target, FastArduino project built with AVR GCC 9.2.0, Arduino API project built with Arduino CLI 0.7.0):</p>
+<p>Now, what is really interesting in comparing both working code examples is the size of the built program (measured with UNO as a target, FastArduino project built with AVR GCC 10.2.0, Arduino API project built with Arduino CLI 0.7.0):</p>
 <p><table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone">Arduino API </th><th class="markdownTableHeadNone">FastArduino  </th></tr>
@@ -311,7 +311,7 @@ $(document).ready(function(){initNavTree('tutorial.html',''); initResizable(); }
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone">Arduino API </th><th class="markdownTableHeadNone">FastArduino  </th></tr>
 <tr class="markdownTableBody" class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">code size </td><td class="markdownTableBodyNone">1480 bytes </td><td class="markdownTableBodyNone">644 bytes  </td></tr>
+<td class="markdownTableBodyNone">code size </td><td class="markdownTableBodyNone">1480 bytes </td><td class="markdownTableBodyNone">638 bytes  </td></tr>
 <tr class="markdownTableBody" class="markdownTableRowEven">
 <td class="markdownTableBodyNone">data size </td><td class="markdownTableBodyNone">202 bytes </td><td class="markdownTableBodyNone">82 bytes  </td></tr>
 </table>
@@ -336,7 +336,7 @@ $(document).ready(function(){initNavTree('tutorial.html',''); initResizable(); }
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone">without F() </th><th class="markdownTableHeadNone">with F()  </th></tr>
 <tr class="markdownTableBody" class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">code size </td><td class="markdownTableBodyNone">644 bytes </td><td class="markdownTableBodyNone">630 bytes  </td></tr>
+<td class="markdownTableBodyNone">code size </td><td class="markdownTableBodyNone">638 bytes </td><td class="markdownTableBodyNone">624 bytes  </td></tr>
 <tr class="markdownTableBody" class="markdownTableRowEven">
 <td class="markdownTableBodyNone">data size </td><td class="markdownTableBodyNone">82 bytes </td><td class="markdownTableBodyNone">66 bytes  </td></tr>
 </table>
@@ -875,7 +875,7 @@ $(document).ready(function(){initNavTree('tutorial.html',''); initResizable(); }
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone">Arduino API </th><th class="markdownTableHeadNone">FastArduino  </th></tr>
 <tr class="markdownTableBody" class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">code size </td><td class="markdownTableBodyNone">1102 bytes </td><td class="markdownTableBodyNone">288 bytes  </td></tr>
+<td class="markdownTableBodyNone">code size </td><td class="markdownTableBodyNone">1102 bytes </td><td class="markdownTableBodyNone">296 bytes  </td></tr>
 <tr class="markdownTableBody" class="markdownTableRowEven">
 <td class="markdownTableBodyNone">data size </td><td class="markdownTableBodyNone">9 bytes </td><td class="markdownTableBodyNone">0 byte  </td></tr>
 </table>

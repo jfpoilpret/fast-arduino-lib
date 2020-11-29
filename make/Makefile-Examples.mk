@@ -146,7 +146,7 @@ EXAMPLES_BREADBOARD_ATTINYX4=	complete/Conway					\
 								misc/IOStreams1					\
 								misc/ArrayCheck					\
 								misc/InitializerListCheck		\
-								misc/LifeCycleCheck				\
+								misc/LifecycleCheck				\
 								analog/AnalogComparator1		\
 								analog/AnalogComparator2		\
 								analog/AnalogComparator3		\

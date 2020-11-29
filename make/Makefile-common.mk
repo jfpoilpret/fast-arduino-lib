@@ -84,8 +84,14 @@ objdump:=$(avr_tool_path)avr-objdump
 objsize:=$(avr_tool_path)avr-size
 
 # Flags for compilation and build
-cxxflags:= -mmcu=$(MCU) -DF_CPU=$(F_CPU) -D$(VARIANT) -DNO_ABI -fno-exceptions -Wextra -flto -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues -g -Wall $(includes) -std=c++17 
-ldflags = -mmcu=$(MCU) -DF_CPU=$(F_CPU) -D$(VARIANT) -fno-exceptions -Wextra -flto -std=c++17 -felide-constructors -Os -ffunction-sections -fdata-sections -mcall-prologues -Wl,--gc-sections -Wl,--relax -Wl,-Map,$@.map
+#NOTE initial common flags (9.2)
+commonflags:= -mmcu=$(MCU) -DF_CPU=$(F_CPU) -D$(VARIANT) -std=c++17 -Wall -Wextra -Os -fno-exceptions -flto -felide-constructors -ffunction-sections -fdata-sections -mcall-prologues
+
+# Additional flags (for testing optimization) can be set to the following variable used with GCC 10.2
+extraflags:= --param=max-inline-insns-auto=20 --param=max-inline-insns-single=20 --param=early-inlining-insns=20
+
+cxxflags:= $(commonflags) $(extraflags) -DNO_ABI $(includes) -g0
+ldflags = $(commonflags) $(extraflags) -Wl,--gc-sections -Wl,--relax -Wl,-Map,$@.map
 depflags = -MT $@ -MMD -MP -MF $(depdir)/$*.Td
 
 compile.cc = $(cxx) $(depflags) $(cxxflags) $(ADDITIONAL_CXX_OPTIONS) -c -o $@

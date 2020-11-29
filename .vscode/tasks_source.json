@@ -4,20 +4,31 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Generate Documentation",
-            "type": "shell",
-            "command": "make doco",
-            "group": "none",
+            "label":"FastArduino - Build",
+            "type": "fastarduino",
+            "command": "build",
+            "group": "build",
             "presentation": {
                 "echo": true,
                 "reveal": "always",
                 "focus": false,
                 "panel": "shared"
             },
-            "problemMatcher": []
+            "problemMatcher": [ "$avrgcc" ]
         },
         {
-            "label": "Clean all examples",
+            "label":"FastArduino - Flash",
+            "type": "fastarduino",
+            "command": "flash",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "FastArduino - Clean all examples",
             "type": "shell",
             "command": "make clean-examples ${FA_MAKE_OPTIONS}",
             "group": "none",
@@ -30,7 +41,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Build all examples",
+            "label": "FastArduino - Build all examples",
             "type": "shell",
             "command": "make examples ${FA_MAKE_OPTIONS}",
             "group": "build",
@@ -43,7 +54,7 @@
             "problemMatcher": [ "$avrgcc" ]
         },
         {
-            "label": "Clean all examples in all targets",
+            "label": "FastArduino - Clean all examples in all targets",
             "type": "shell",
             "command": "make clean-examples-all ${FA_MAKE_OPTIONS}",
             "group": "none",
