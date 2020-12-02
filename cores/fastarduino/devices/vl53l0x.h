@@ -103,7 +103,13 @@ namespace devices::vl53l0x
 		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
 		// Forward declarations needed by compiler
-		class ReadByteRegisterFuture;
+		template<uint8_t REGISTER> class ReadByteRegisterFuture;
+
+		//TODO registers
+		static constexpr const uint8_t REG_IDENTIFICATION_MODEL_ID = 0xC0;
+		static constexpr const uint8_t REG_IDENTIFICATION_REVISION_ID = 0xC2;
+		static constexpr const uint8_t REG_POWER_MANAGEMENT = 0x80;
+		static constexpr const uint8_t REG_RESULT_RANGE_STATUS = 0x14;
 
 	public:
 		//TODO useful enums go here (Status, Ranging mode...)
@@ -117,57 +123,25 @@ namespace devices::vl53l0x
 
 		// Asynchronous API
 		//==================
-		class GetModelFuture : public ReadByteRegisterFuture
-		{
-		public:
-			/// @cond notdocumented
-			explicit GetModelFuture() : ReadByteRegisterFuture{REG_IDENTIFICATION_MODEL_ID} {}
-			GetModelFuture(GetModelFuture&&) = default;
-			GetModelFuture& operator=(GetModelFuture&&) = default;
-			/// @endcond
-		};
+		using GetModelFuture = ReadByteRegisterFuture<REG_IDENTIFICATION_MODEL_ID>;
 		int get_model(PROXY<GetModelFuture> future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
 		}
 
-		class GetRevisionFuture : public ReadByteRegisterFuture
-		{
-		public:
-			/// @cond notdocumented
-			explicit GetRevisionFuture() : ReadByteRegisterFuture{REG_IDENTIFICATION_REVISION_ID} {}
-			GetRevisionFuture(GetRevisionFuture&&) = default;
-			GetRevisionFuture& operator=(GetRevisionFuture&&) = default;
-			/// @endcond
-		};
+		using GetRevisionFuture = ReadByteRegisterFuture<REG_IDENTIFICATION_REVISION_ID>;
 		int get_revision(PROXY<GetRevisionFuture> future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
 		}
 
-		class GetPowerModeFuture : public ReadByteRegisterFuture
-		{
-		public:
-			/// @cond notdocumented
-			explicit GetPowerModeFuture() : ReadByteRegisterFuture{REG_POWER_MANAGEMENT} {}
-			GetPowerModeFuture(GetPowerModeFuture&&) = default;
-			GetPowerModeFuture& operator=(GetPowerModeFuture&&) = default;
-			/// @endcond
-		};
+		using GetPowerModeFuture = ReadByteRegisterFuture<REG_POWER_MANAGEMENT>;
 		int get_power_mode(PROXY<GetPowerModeFuture> future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
 		}
 
-		class GetRangeStatusFuture : public ReadByteRegisterFuture
-		{
-		public:
-			/// @cond notdocumented
-			explicit GetRangeStatusFuture() : ReadByteRegisterFuture{REG_RESULT_RANGE_STATUS} {}
-			GetRangeStatusFuture(GetRangeStatusFuture&&) = default;
-			GetRangeStatusFuture& operator=(GetRangeStatusFuture&&) = default;
-			/// @endcond
-		};
+		using GetRangeStatusFuture = ReadByteRegisterFuture<REG_RESULT_RANGE_STATUS>;
 		int get_range_status(PROXY<GetRangeStatusFuture> future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
@@ -213,23 +187,18 @@ namespace devices::vl53l0x
 	private:
 		static constexpr const uint8_t DEFAULT_DEVICE_ADDRESS = 0x52;
 
-		//TODO registers
-		static constexpr const uint8_t REG_IDENTIFICATION_MODEL_ID = 0xC0;
-		static constexpr const uint8_t REG_IDENTIFICATION_REVISION_ID = 0xC2;
-		static constexpr const uint8_t REG_POWER_MANAGEMENT = 0x80;
-		static constexpr const uint8_t REG_RESULT_RANGE_STATUS = 0x14;
-
 		// Future to read a byte register
 		//TODO better as a template (would ease definition of specialized futures)
 		//TODO also use register type (uint8, uint16 or uint32) as template arg and specialize for endianness correction
 		//TODO maybe also define template functions (not sure using would work here?)
+		template<uint8_t REGISTER>
 		class ReadByteRegisterFuture: public FUTURE<uint8_t, uint8_t>
 		{
 			using PARENT = FUTURE<uint8_t, uint8_t>;
 		public:
-			explicit ReadByteRegisterFuture(const uint8_t reg) : PARENT{reg} {}
-			ReadByteRegisterFuture(ReadByteRegisterFuture&&) = default;
-			ReadByteRegisterFuture& operator=(ReadByteRegisterFuture&&) = default;
+			explicit ReadByteRegisterFuture() : PARENT{REGISTER} {}
+			ReadByteRegisterFuture(ReadByteRegisterFuture<REGISTER>&&) = default;
+			ReadByteRegisterFuture& operator=(ReadByteRegisterFuture<REGISTER>&&) = default;
 		};
 
 		//TODO utility functions
