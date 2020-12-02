@@ -72,21 +72,48 @@ namespace devices
 
 namespace devices::vl53l0x
 {
-	//TODO use this type in API instead of uint8_t!
-	enum class PowerMode : uint8_t
+	enum class DeviceError : uint8_t
 	{
-		POWERDOWN = 0,
-		WAIT_STATICINIT = 1,
-		STANDBY = 2,
-		IDLE = 3,
-		RUNNING = 4,
-		UNKNOWN = 98,
-		ERROR = 99
+		NONE                        = 0,
+		VCSELCONTINUITYTESTFAILURE  = 1,
+		VCSELWATCHDOGTESTFAILURE    = 2,
+		NOVHVVALUEFOUND             = 3,
+		MSRCNOTARGET                = 4,
+		SNRCHECK                    = 5,
+		RANGEPHASECHECK             = 6,
+		SIGMATHRESHOLDCHECK         = 7,
+		TCC                         = 8,
+		PHASECONSISTENCY            = 9,
+		MINCLIP                     = 10,
+		RANGECOMPLETE               = 11,
+		ALGOUNDERFLOW               = 12,
+		ALGOOVERFLOW                = 13,
+		RANGEIGNORETHRESHOLD        = 14,
+		UNKNOWN                     = 15
 	};
 
-	//TODO use type for RangeStatus (2 parts: error status and data_ready)
-	// see VL53L0X_DeviceError in vl53l0x_device.h
-	// see VL53L0X_GetDeviceErrorStatus and VL53L0X_GetMeasurementDataReady in vl53l0x_api.h
+	class DeviceStatus
+	{
+	public:
+		DeviceStatus() = default;
+		DeviceError error() const
+		{
+			return DeviceError((status_ >> 3) & 0x0F);
+		}
+		bool data_ready() const
+		{
+			return status_ & 0x01;
+		}
+
+	private:
+		uint8_t status_ = 0;
+	};
+
+	enum class PowerMode : uint8_t
+	{
+		STANDBY = 0,
+		IDLE = 1
+	};
 
 	/**
 	 * I2C device driver for the VL53L0X ToF ranging chip.
@@ -103,7 +130,8 @@ namespace devices::vl53l0x
 		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
 		// Forward declarations needed by compiler
-		template<uint8_t REGISTER> class ReadByteRegisterFuture;
+		template<uint8_t REGISTER, typename T = uint8_t> class ReadByteRegisterFuture;
+		// Utility functions used every time a register gets read or written
 		template<typename F> int async_read(PROXY<F> future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
@@ -145,13 +173,13 @@ namespace devices::vl53l0x
 			return async_read(future);
 		}
 
-		using GetPowerModeFuture = ReadByteRegisterFuture<REG_POWER_MANAGEMENT>;
+		using GetPowerModeFuture = ReadByteRegisterFuture<REG_POWER_MANAGEMENT, PowerMode>;
 		int get_power_mode(PROXY<GetPowerModeFuture> future)
 		{
 			return async_read(future);
 		}
 
-		using GetRangeStatusFuture = ReadByteRegisterFuture<REG_RESULT_RANGE_STATUS>;
+		using GetRangeStatusFuture = ReadByteRegisterFuture<REG_RESULT_RANGE_STATUS, DeviceStatus>;
 		int get_range_status(PROXY<GetRangeStatusFuture> future)
 		{
 			return async_read(future);
@@ -177,11 +205,11 @@ namespace devices::vl53l0x
 		{
 			return sync_read<GetModelFuture>(model);
 		}
-		bool get_power_mode(uint8_t& power_mode)
+		bool get_power_mode(PowerMode& power_mode)
 		{
 			return sync_read<GetPowerModeFuture>(power_mode);
 		}
-		bool get_range_status(uint8_t& range_status)
+		bool get_range_status(DeviceStatus& range_status)
 		{
 			return sync_read<GetRangeStatusFuture>(range_status);
 		}
@@ -190,17 +218,16 @@ namespace devices::vl53l0x
 		static constexpr const uint8_t DEFAULT_DEVICE_ADDRESS = 0x52;
 
 		// Future to read a byte register
-		//TODO better as a template (would ease definition of specialized futures)
 		//TODO also use register type (uint8, uint16 or uint32) as template arg and specialize for endianness correction
-		//TODO maybe also define template functions (not sure using would work here?)
-		template<uint8_t REGISTER>
-		class ReadByteRegisterFuture: public FUTURE<uint8_t, uint8_t>
+		template<uint8_t REGISTER, typename T>
+		class ReadByteRegisterFuture: public FUTURE<T, uint8_t>
 		{
-			using PARENT = FUTURE<uint8_t, uint8_t>;
+			static_assert(sizeof(T) == 1, "T must be exactly one byte long");
+			using PARENT = FUTURE<T, uint8_t>;
 		public:
 			explicit ReadByteRegisterFuture() : PARENT{REGISTER} {}
-			ReadByteRegisterFuture(ReadByteRegisterFuture<REGISTER>&&) = default;
-			ReadByteRegisterFuture& operator=(ReadByteRegisterFuture<REGISTER>&&) = default;
+			ReadByteRegisterFuture(ReadByteRegisterFuture<REGISTER, T>&&) = default;
+			ReadByteRegisterFuture& operator=(ReadByteRegisterFuture<REGISTER, T>&&) = default;
 		};
 
 		//TODO utility functions

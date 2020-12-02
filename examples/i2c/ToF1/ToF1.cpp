@@ -75,7 +75,8 @@ using streams::dec;
 using streams::hex;
 using streams::endl;
 
-using TOF = devices::vl53l0x::VL53L0X<MANAGER>;
+using namespace devices::vl53l0x;
+using TOF = VL53L0X<MANAGER>;
 
 int main() __attribute__((OS_main));
 int main()
@@ -127,12 +128,16 @@ int main()
 	out << F("tof.get_model(result) = ") << ok << F(", result = ") << hex << result << endl;
 	DEBUG(out);
 
-	ok = tof.get_power_mode(result);
-	out << F("tof.get_power_mode(result) = ") << ok << F(", result = ") << hex << result << endl;
+	PowerMode mode;
+	ok = tof.get_power_mode(mode);
+	out << F("tof.get_power_mode(mode) = ") << ok << F(", mode = ") << dec << uint8_t(mode) << endl;
 	DEBUG(out);
 
-	ok = tof.get_range_status(result);
-	out << F("tof.get_range_status(result) = ") << ok << F(", result = ") << hex << result << endl;
+	DeviceStatus status;
+	ok = tof.get_range_status(status);
+	out << F("tof.get_range_status(status) = ") << ok 
+		<< F(", error = ") << dec << uint8_t(status.error())
+		<< F(", data_ready = ") << status.data_ready() << endl;
 	DEBUG(out);
 
 	manager.end();
