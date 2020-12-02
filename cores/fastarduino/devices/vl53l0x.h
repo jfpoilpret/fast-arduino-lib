@@ -104,6 +104,16 @@ namespace devices::vl53l0x
 
 		// Forward declarations needed by compiler
 		template<uint8_t REGISTER> class ReadByteRegisterFuture;
+		template<typename F> int async_read(PROXY<F> future)
+		{
+			return this->launch_commands(future, {this->write(), this->read()});
+		} 
+		template<typename F, typename T = uint8_t> bool sync_read(T& result)
+		{
+			F future{};
+			if (async_read<F>(future) != 0) return false;
+			return future.get(result);
+		} 
 
 		//TODO registers
 		static constexpr const uint8_t REG_IDENTIFICATION_MODEL_ID = 0xC0;
@@ -126,25 +136,25 @@ namespace devices::vl53l0x
 		using GetModelFuture = ReadByteRegisterFuture<REG_IDENTIFICATION_MODEL_ID>;
 		int get_model(PROXY<GetModelFuture> future)
 		{
-			return this->launch_commands(future, {this->write(), this->read()});
+			return async_read(future);
 		}
 
 		using GetRevisionFuture = ReadByteRegisterFuture<REG_IDENTIFICATION_REVISION_ID>;
 		int get_revision(PROXY<GetRevisionFuture> future)
 		{
-			return this->launch_commands(future, {this->write(), this->read()});
+			return async_read(future);
 		}
 
 		using GetPowerModeFuture = ReadByteRegisterFuture<REG_POWER_MANAGEMENT>;
 		int get_power_mode(PROXY<GetPowerModeFuture> future)
 		{
-			return this->launch_commands(future, {this->write(), this->read()});
+			return async_read(future);
 		}
 
 		using GetRangeStatusFuture = ReadByteRegisterFuture<REG_RESULT_RANGE_STATUS>;
 		int get_range_status(PROXY<GetRangeStatusFuture> future)
 		{
-			return this->launch_commands(future, {this->write(), this->read()});
+			return async_read(future);
 		}
 
 		// Synchronous API
@@ -161,27 +171,19 @@ namespace devices::vl53l0x
 
 		bool get_revision(uint8_t& revision)
 		{
-			GetRevisionFuture future{};
-			if (get_revision(PARENT::make_proxy(future)) != 0) return false;
-			return future.get(revision);
+			return sync_read<GetRevisionFuture>(revision);
 		}
 		bool get_model(uint8_t& model)
 		{
-			GetModelFuture future{};
-			if (get_model(PARENT::make_proxy(future)) != 0) return false;
-			return future.get(model);
+			return sync_read<GetModelFuture>(model);
 		}
 		bool get_power_mode(uint8_t& power_mode)
 		{
-			GetPowerModeFuture future{};
-			if (get_power_mode(PARENT::make_proxy(future)) != 0) return false;
-			return future.get(power_mode);
+			return sync_read<GetPowerModeFuture>(power_mode);
 		}
 		bool get_range_status(uint8_t& range_status)
 		{
-			GetRangeStatusFuture future{};
-			if (get_range_status(PARENT::make_proxy(future)) != 0) return false;
-			return future.get(range_status);
+			return sync_read<GetRangeStatusFuture>(range_status);
 		}
 
 	private:
