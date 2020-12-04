@@ -48,6 +48,8 @@ namespace devices
 
 //TODO - infer on grouping multiple futures
 //TODO - infer on having a future value based on result from another future...
+//			- use some kind of PlaceHolder updated by Future 1 and used by Future 2?
+//			- use I2C events?
 //TODO - use PROGMEM (flash memory) for long sequences of bytes to be sent?
 //TODO - implement low-level API step by step
 //       - init_data
@@ -109,11 +111,121 @@ namespace devices::vl53l0x
 		uint8_t status_ = 0;
 	};
 
+	// enum class DeviceMode : uint8_t
+	// {
+	// 	SINGLE_RANGING				= 0,
+	// 	CONTINUOUS_RANGING			= 1,
+	// 	SINGLE_HISTOGRAM			= 2,
+	// 	CONTINUOUS_TIMED_RANGING	= 3,
+	// 	SINGLE_ALS					= 10,
+	// 	GPIO_DRIVE					= 20,
+	// 	GPIO_OSC					= 21
+	// };
+
 	enum class PowerMode : uint8_t
 	{
 		STANDBY = 0,
 		IDLE = 1
 	};
+
+	class SequenceSteps
+	{
+	private:
+		static constexpr uint8_t TCC = bits::BV8(4);
+		static constexpr uint8_t DSS = bits::BV8(3);
+		static constexpr uint8_t MSRC = bits::BV8(2);
+		static constexpr uint8_t PRE_RANGE = bits::BV8(6);
+		static constexpr uint8_t FINAL_RANGE = bits::BV8(7);
+
+	public:
+		static constexpr SequenceSteps create()
+		{
+			return SequenceSteps{};
+		}
+		constexpr SequenceSteps() = default;
+
+		constexpr SequenceSteps tcc()
+		{
+			return SequenceSteps{uint8_t(steps_ | TCC)};
+		}
+		constexpr SequenceSteps dss()
+		{
+			return SequenceSteps{uint8_t(steps_ | DSS)};
+		}
+		constexpr SequenceSteps msrc()
+		{
+			return SequenceSteps{uint8_t(steps_ | MSRC)};
+		}
+		constexpr SequenceSteps pre_range()
+		{
+			return SequenceSteps{uint8_t(steps_ | PRE_RANGE)};
+		}
+		constexpr SequenceSteps final_range()
+		{
+			return SequenceSteps{uint8_t(steps_ | FINAL_RANGE)};
+		}
+
+		constexpr SequenceSteps no_tcc()
+		{
+			return SequenceSteps{uint8_t(steps_ & ~TCC)};
+		}
+		constexpr SequenceSteps no_dss()
+		{
+			return SequenceSteps{uint8_t(steps_ & ~DSS)};
+		}
+		constexpr SequenceSteps no_msrc()
+		{
+			return SequenceSteps{uint8_t(steps_ & ~MSRC)};
+		}
+		constexpr SequenceSteps no_pre_range()
+		{
+			return SequenceSteps{uint8_t(steps_ & ~PRE_RANGE)};
+		}
+		constexpr SequenceSteps no_final_range()
+		{
+			return SequenceSteps{uint8_t(steps_ & ~FINAL_RANGE)};
+		}
+
+		uint8_t value() const
+		{
+			return steps_;
+		}
+		bool is_tcc() const
+		{
+			return steps_ & TCC;
+		}
+		bool is_dss() const
+		{
+			return steps_ & DSS;
+		}
+		bool is_msrc() const
+		{
+			return steps_ & MSRC;
+		}
+		bool is_pre_range() const
+		{
+			return steps_ & PRE_RANGE;
+		}
+		bool is_final_range() const
+		{
+			return steps_ & FINAL_RANGE;
+		}
+
+	private:
+		constexpr SequenceSteps(uint8_t steps) : steps_{steps} {}
+
+		uint8_t steps_ = 0;
+	};
+
+	// enum class CheckEnable : uint8_t
+	// {
+	// 	SIGMA_FINAL_RANGE          = 0,
+	// 	SIGNAL_RATE_FINAL_RANGE    = 1,
+	// 	SIGNAL_REF_CLIP            = 2,
+	// 	RANGE_IGNORE_THRESHOLD     = 3,
+	// 	SIGNAL_RATE_MSRC           = 4,
+	// 	SIGNAL_RATE_PRE_RANGE      = 5
+	// };
 
 	/**
 	 * I2C device driver for the VL53L0X ToF ranging chip.
@@ -131,23 +243,35 @@ namespace devices::vl53l0x
 
 		// Forward declarations needed by compiler
 		template<uint8_t REGISTER, typename T = uint8_t> class ReadByteRegisterFuture;
+		template<uint8_t REGISTER, typename T = uint8_t> class WriteByteRegisterFuture;
 		// Utility functions used every time a register gets read or written
 		template<typename F> int async_read(PROXY<F> future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
-		} 
+		}
 		template<typename F, typename T = uint8_t> bool sync_read(T& result)
 		{
 			F future{};
 			if (async_read<F>(future) != 0) return false;
 			return future.get(result);
-		} 
+		}
+		template<typename F> int async_write(PROXY<F> future)
+		{
+			return this->launch_commands(future, {this->write()});
+		}
+		template<typename F, typename T = uint8_t> bool sync_write(const T& value)
+		{
+			F future{value};
+			if (async_write<F>(future) != 0) return false;
+			return (future.await() == future::FutureStatus::READY);
+		}
 
 		//TODO registers
 		static constexpr const uint8_t REG_IDENTIFICATION_MODEL_ID = 0xC0;
 		static constexpr const uint8_t REG_IDENTIFICATION_REVISION_ID = 0xC2;
 		static constexpr const uint8_t REG_POWER_MANAGEMENT = 0x80;
 		static constexpr const uint8_t REG_RESULT_RANGE_STATUS = 0x14;
+		static constexpr const uint8_t REG_SYSTEM_SEQUENCE_CONFIG = 0x01;
 
 	public:
 		//TODO useful enums go here (Status, Ranging mode...)
@@ -185,6 +309,18 @@ namespace devices::vl53l0x
 			return async_read(future);
 		}
 
+		using GetSequenceStepsFuture = ReadByteRegisterFuture<REG_SYSTEM_SEQUENCE_CONFIG, SequenceSteps>;
+		int get_sequence_steps(PROXY<GetSequenceStepsFuture> future)
+		{
+			return async_read(future);
+		}
+
+		using SetSequenceStepsFuture = WriteByteRegisterFuture<REG_SYSTEM_SEQUENCE_CONFIG, SequenceSteps>;
+		int set_sequence_steps(PROXY<SetSequenceStepsFuture> future)
+		{
+			return async_write(future);
+		}
+
 		// Synchronous API
 		//=================
 		bool set_address(uint8_t device_address)
@@ -213,6 +349,14 @@ namespace devices::vl53l0x
 		{
 			return sync_read<GetRangeStatusFuture>(range_status);
 		}
+		bool get_sequence_steps(SequenceSteps& sequence_steps)
+		{
+			return sync_read<GetSequenceStepsFuture>(sequence_steps);
+		}
+		bool set_sequence_steps(SequenceSteps sequence_steps)
+		{
+			return sync_write<SetSequenceStepsFuture>(sequence_steps);
+		}
 
 	private:
 		static constexpr const uint8_t DEFAULT_DEVICE_ADDRESS = 0x52;
@@ -228,6 +372,27 @@ namespace devices::vl53l0x
 			explicit ReadByteRegisterFuture() : PARENT{REGISTER} {}
 			ReadByteRegisterFuture(ReadByteRegisterFuture<REGISTER, T>&&) = default;
 			ReadByteRegisterFuture& operator=(ReadByteRegisterFuture<REGISTER, T>&&) = default;
+		};
+
+		template<typename T> class WriteContent
+		{
+		public:
+			WriteContent(uint8_t reg, const T& value) : register_{reg}, value_{value} {}
+
+		private:
+			const uint8_t register_;
+			const T value_; 
+		};
+
+		template<uint8_t REGISTER, typename T>
+		class WriteByteRegisterFuture: public FUTURE<void, WriteContent<T>>
+		{
+			static_assert(sizeof(T) == 1, "T must be exactly one byte long");
+			using PARENT = FUTURE<void, WriteContent<T>>;
+		public:
+			explicit WriteByteRegisterFuture(const T& value) : PARENT{WriteContent{REGISTER, value}} {}
+			WriteByteRegisterFuture(WriteByteRegisterFuture<REGISTER, T>&&) = default;
+			WriteByteRegisterFuture& operator=(WriteByteRegisterFuture<REGISTER, T>&&) = default;
 		};
 
 		//TODO utility functions
