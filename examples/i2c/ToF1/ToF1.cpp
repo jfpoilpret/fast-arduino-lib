@@ -74,9 +74,19 @@ REGISTER_I2C_ISR(MANAGER)
 using streams::dec;
 using streams::hex;
 using streams::endl;
+using streams::flush;
 
 using namespace devices::vl53l0x;
 using TOF = VL53L0X<MANAGER>;
+
+void trace(streams::ostream& out, SequenceSteps steps)
+{
+	out << F("TCC=") << steps.is_tcc()
+		<< F(", DSS=") << steps.is_dss()
+		<< F(", MSRC=") << steps.is_msrc()
+		<< F(", PRE_RANGE=") << steps.is_pre_range()
+		<< F(", FINAL_RANGE=") << steps.is_final_range() << endl;
+}
 
 int main() __attribute__((OS_main));
 int main()
@@ -117,8 +127,6 @@ int main()
 	manager.begin();
 
 	out << F("Read VL53L0X status") << endl;
-	//TODO read all device info and display
-
 	uint8_t result = 0;
 	bool ok = tof.get_revision(result);
 	out << F("tof.get_revision(result) = ") << ok << F(", result = ") << hex << result << endl;
@@ -128,7 +136,7 @@ int main()
 	out << F("tof.get_model(result) = ") << ok << F(", result = ") << hex << result << endl;
 	DEBUG(out);
 
-	PowerMode mode;
+	PowerMode mode = PowerMode::STANDBY;
 	ok = tof.get_power_mode(mode);
 	out << F("tof.get_power_mode(mode) = ") << ok << F(", mode = ") << dec << uint8_t(mode) << endl;
 	DEBUG(out);
@@ -138,6 +146,24 @@ int main()
 	out << F("tof.get_range_status(status) = ") << ok 
 		<< F(", error = ") << dec << uint8_t(status.error())
 		<< F(", data_ready = ") << status.data_ready() << endl;
+	DEBUG(out);
+
+	SequenceSteps steps1;
+	ok = tof.get_sequence_steps(steps1);
+	out << F("tof.get_sequence_steps(status) = ") << ok << F(", steps =") << flush;
+	trace(out, steps1);
+	DEBUG(out);
+
+	constexpr SequenceSteps steps2 = SequenceSteps::create().tcc().pre_range().final_range();
+	out << F("steps2 = ") << hex << steps2.value() << endl;
+	ok = tof.set_sequence_steps(steps2);
+	out << F("tof.get_sequence_steps(status) = ") << ok << endl;
+	DEBUG(out);
+
+	SequenceSteps steps3;
+	ok = tof.get_sequence_steps(steps3);
+	out << F("tof.get_sequence_steps(status) = ") << ok << F(", steps =") << flush;
+	trace(out, steps3);
 	DEBUG(out);
 
 	manager.end();
