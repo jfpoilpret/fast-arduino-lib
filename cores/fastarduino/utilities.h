@@ -385,6 +385,27 @@ namespace utils
 		swap_bytes((uint16_t&) value);
 	}
 
+	/**
+	 * Reverse 4 bytes of a 4-bytes integer. Useful to convert from big-endian to 
+	 * small-endian (AVR).
+	 * @param value value to convert in place (reference)
+	 */
+	inline void swap_bytes(uint32_t& value)
+	{
+		value =	(value >> 24) | ((value & 0x00FF0000UL) >> 8) |
+				((value & 0x0000FF00UL) << 8) | ((value & 0x000000FFUL) << 24);
+	}
+
+	/**
+	 * Reverse 4 bytes of a 4-bytes integer. Useful to convert from big-endian to 
+	 * small-endian (AVR).
+	 * @param value value to convert in place (reference)
+	 */
+	inline void swap_bytes(int32_t& value)
+	{
+		swap_bytes((uint32_t&) value);
+	}
+
 	/// @cond notdocumented
 	template<typename T> union ToUint8
 	{
