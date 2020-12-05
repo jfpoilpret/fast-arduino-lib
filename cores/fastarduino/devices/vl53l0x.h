@@ -74,24 +74,48 @@ namespace devices
 
 namespace devices::vl53l0x
 {
+	// static utilities to support fiexed point 9/7 bits used by VL53L0X chip
+	class FixPoint9_7
+	{
+	public:
+		static constexpr bool is_valid(float value)
+		{
+			return ((value >= 0.0) && (value < float(1 << INTEGRAL_BITS)));
+		}
+
+		static constexpr uint16_t convert(float value)
+		{
+			return is_valid(value) ? uint16_t(value * (1 << DECIMAL_BITS)) : 0U;
+		}
+
+		static constexpr float convert(uint16_t value)
+		{
+			return value / (1 << DECIMAL_BITS);
+		}
+
+	private:
+		static constexpr INTEGRAL_BITS = 9;
+		static constexpr DECIMAL_BITS = 7;
+	};
+
 	enum class DeviceError : uint8_t
 	{
-		NONE                        = 0,
-		VCSELCONTINUITYTESTFAILURE  = 1,
-		VCSELWATCHDOGTESTFAILURE    = 2,
-		NOVHVVALUEFOUND             = 3,
-		MSRCNOTARGET                = 4,
-		SNRCHECK                    = 5,
-		RANGEPHASECHECK             = 6,
-		SIGMATHRESHOLDCHECK         = 7,
-		TCC                         = 8,
-		PHASECONSISTENCY            = 9,
-		MINCLIP                     = 10,
-		RANGECOMPLETE               = 11,
-		ALGOUNDERFLOW               = 12,
-		ALGOOVERFLOW                = 13,
-		RANGEIGNORETHRESHOLD        = 14,
-		UNKNOWN                     = 15
+		NONE                           = 0,
+		VCSEL_CONTINUITY_TEST_FAILURE  = 1,
+		VCSEL_WATCHDOG_TEST_FAILURE    = 2,
+		NO_VHV_VALUE_FOUND             = 3,
+		MSRC_NO_TARGET                 = 4,
+		SNR_CHECK                      = 5,
+		RANGE_PHASE_CHECK              = 6,
+		SIGMA_THRESHOLD_CHECK          = 7,
+		TCC                            = 8,
+		PHASE_CONSISTENCY              = 9,
+		MIN_CLIP                       = 10,
+		RANGE_COMPLETE                 = 11,
+		ALGO_UNDERFLOW                 = 12,
+		ALGO_OVERFLOW                  = 13,
+		RANGE_IGNORE_THRESHOLD         = 14,
+		UNKNOWN                        = 15
 	};
 
 	class DeviceStatus
@@ -126,6 +150,14 @@ namespace devices::vl53l0x
 	{
 		STANDBY = 0,
 		IDLE = 1
+	};
+
+	enum class VcselPeriodType : uint8_t
+	{
+		// static constexpr const uint8_t REG_PRE_RANGE_CONFIG_VCSEL_PERIOD = 0x50;
+		PRE_RANGE = 0x50,
+		// static constexpr const uint8_t REG_FINAL_RANGE_CONFIG_VCSEL_PERIOD = 0x70;
+		FINAL_RANGE = 0x70
 	};
 
 	class SequenceSteps
@@ -227,6 +259,36 @@ namespace devices::vl53l0x
 	// 	SIGNAL_RATE_PRE_RANGE      = 5
 	// };
 
+	//TODO the following helpers should be put somewhere else maybe (utilities.h?) or be hidden somehow
+	template<typename T> T change_endianness(const T& value)
+	{
+		return value;
+	}
+	template<> uint16_t change_endianness(const uint16_t& value)
+	{
+		uint16_t temp = value;
+		utils::swap_bytes(temp);
+		return temp;
+	}
+	template<> int16_t change_endianness(const int16_t& value)
+	{
+		int16_t temp = value;
+		utils::swap_bytes(temp);
+		return temp;
+	}
+	template<> uint32_t change_endianness(const uint32_t& value)
+	{
+		uint32_t temp = value;
+		utils::swap_bytes(temp);
+		return temp;
+	}
+	template<> int32_t change_endianness(const int32_t& value)
+	{
+		int32_t temp = value;
+		utils::swap_bytes(temp);
+		return temp;
+	}
+
 	/**
 	 * I2C device driver for the VL53L0X ToF ranging chip.
 	 * This chip only supports both standard and fast I2C modes.
@@ -242,8 +304,8 @@ namespace devices::vl53l0x
 		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
 		// Forward declarations needed by compiler
-		template<uint8_t REGISTER, typename T = uint8_t> class ReadByteRegisterFuture;
-		template<uint8_t REGISTER, typename T = uint8_t> class WriteByteRegisterFuture;
+		template<uint8_t REGISTER, typename T = uint8_t> class ReadRegisterFuture;
+		template<uint8_t REGISTER, typename T = uint8_t> class WriteRegisterFuture;
 		// Utility functions used every time a register gets read or written
 		template<typename F> int async_read(PROXY<F> future)
 		{
@@ -272,6 +334,8 @@ namespace devices::vl53l0x
 		static constexpr const uint8_t REG_POWER_MANAGEMENT = 0x80;
 		static constexpr const uint8_t REG_RESULT_RANGE_STATUS = 0x14;
 		static constexpr const uint8_t REG_SYSTEM_SEQUENCE_CONFIG = 0x01;
+		static constexpr const uint8_t REG_PRE_RANGE_CONFIG_VCSEL_PERIOD = 0x50;
+		static constexpr const uint8_t REG_FINAL_RANGE_CONFIG_VCSEL_PERIOD = 0x70;
 
 	public:
 		//TODO useful enums go here (Status, Ranging mode...)
@@ -285,38 +349,81 @@ namespace devices::vl53l0x
 
 		// Asynchronous API
 		//==================
-		using GetModelFuture = ReadByteRegisterFuture<REG_IDENTIFICATION_MODEL_ID>;
+		using GetModelFuture = ReadRegisterFuture<REG_IDENTIFICATION_MODEL_ID>;
 		int get_model(PROXY<GetModelFuture> future)
 		{
 			return async_read(future);
 		}
 
-		using GetRevisionFuture = ReadByteRegisterFuture<REG_IDENTIFICATION_REVISION_ID>;
+		using GetRevisionFuture = ReadRegisterFuture<REG_IDENTIFICATION_REVISION_ID>;
 		int get_revision(PROXY<GetRevisionFuture> future)
 		{
 			return async_read(future);
 		}
 
-		using GetPowerModeFuture = ReadByteRegisterFuture<REG_POWER_MANAGEMENT, PowerMode>;
+		using GetPowerModeFuture = ReadRegisterFuture<REG_POWER_MANAGEMENT, PowerMode>;
 		int get_power_mode(PROXY<GetPowerModeFuture> future)
 		{
 			return async_read(future);
 		}
 
-		using GetRangeStatusFuture = ReadByteRegisterFuture<REG_RESULT_RANGE_STATUS, DeviceStatus>;
+		using GetRangeStatusFuture = ReadRegisterFuture<REG_RESULT_RANGE_STATUS, DeviceStatus>;
 		int get_range_status(PROXY<GetRangeStatusFuture> future)
 		{
 			return async_read(future);
 		}
 
-		using GetSequenceStepsFuture = ReadByteRegisterFuture<REG_SYSTEM_SEQUENCE_CONFIG, SequenceSteps>;
+		using GetSequenceStepsFuture = ReadRegisterFuture<REG_SYSTEM_SEQUENCE_CONFIG, SequenceSteps>;
 		int get_sequence_steps(PROXY<GetSequenceStepsFuture> future)
 		{
 			return async_read(future);
 		}
 
-		using SetSequenceStepsFuture = WriteByteRegisterFuture<REG_SYSTEM_SEQUENCE_CONFIG, SequenceSteps>;
+		using SetSequenceStepsFuture = WriteRegisterFuture<REG_SYSTEM_SEQUENCE_CONFIG, SequenceSteps>;
 		int set_sequence_steps(PROXY<SetSequenceStepsFuture> future)
+		{
+			return async_write(future);
+		}
+
+		template<VcselPeriodType TYPE>
+		class GetVcselPulsePeriodFuture : public ReadRegisterFuture<uint8_t(TYPE)>
+		{
+			using PARENT = ReadRegisterFuture<uint8_t(TYPE)>;
+
+		public:
+			explicit GetVcselPulsePeriodFuture() : PARENT{} {}
+			bool get(uint8_t& result)
+			{
+				if (!PARENT::get(result)) return false;
+				result = (result + 1) << 1;
+				return true;
+			}
+			GetVcselPulsePeriodFuture(GetVcselPulsePeriodFuture<TYPE>&&) = default;
+			GetVcselPulsePeriodFuture& operator=(GetVcselPulsePeriodFuture<TYPE>&&) = default;
+		};
+		template<VcselPeriodType TYPE>
+		int get_vcsel_pulse_period(PROXY<GetVcselPulsePeriodFuture<TYPE>> future)
+		{
+			return async_read(future);
+		}
+
+		template<VcselPeriodType TYPE>
+		class SetVcselPulsePeriodFuture : public WriteRegisterFuture<uint8_t(TYPE)>
+		{
+			using PARENT = WriteRegisterFuture<uint8_t(TYPE)>;
+			static uint8_t encode_period(uint8_t period)
+			{
+				return (period >> 1) - 1;
+			}
+
+		public:
+			explicit SetVcselPulsePeriodFuture(uint8_t period_pclks) : PARENT{encode_period(period_pclks)} {}
+			SetVcselPulsePeriodFuture(SetVcselPulsePeriodFuture<TYPE>&&) = default;
+			SetVcselPulsePeriodFuture& operator=(SetVcselPulsePeriodFuture<TYPE>&&) = default;
+			//TODO check compliance of period_clicks
+		};
+		template<VcselPeriodType TYPE>
+		int set_vcsel_pulse_period(PROXY<SetVcselPulsePeriodFuture<TYPE>> future)
 		{
 			return async_write(future);
 		}
@@ -357,27 +464,47 @@ namespace devices::vl53l0x
 		{
 			return sync_write<SetSequenceStepsFuture>(sequence_steps);
 		}
+		template<VcselPeriodType TYPE>
+		bool get_vcsel_pulse_period(uint8_t& period)
+		{
+			return sync_read<GetVcselPulsePeriodFuture<TYPE>>(period);
+		}
+		//TODO Much more complex process needed here: to be thought about further!
+		template<VcselPeriodType TYPE>
+		bool set_vcsel_pulse_period(uint8_t period)
+		{
+			//FIXME check period!
+			return sync_write<SetVcselPulsePeriodFuture<TYPE>>(period);
+		}
 
 	private:
 		static constexpr const uint8_t DEFAULT_DEVICE_ADDRESS = 0x52;
 
-		// Future to read a byte register
-		//TODO also use register type (uint8, uint16 or uint32) as template arg and specialize for endianness correction
+		//TODO Add transformer functor to template?
+		// Future to read a register
 		template<uint8_t REGISTER, typename T>
-		class ReadByteRegisterFuture: public FUTURE<T, uint8_t>
+		class ReadRegisterFuture: public FUTURE<T, uint8_t>
 		{
 			static_assert(sizeof(T) == 1, "T must be exactly one byte long");
 			using PARENT = FUTURE<T, uint8_t>;
 		public:
-			explicit ReadByteRegisterFuture() : PARENT{REGISTER} {}
-			ReadByteRegisterFuture(ReadByteRegisterFuture<REGISTER, T>&&) = default;
-			ReadByteRegisterFuture& operator=(ReadByteRegisterFuture<REGISTER, T>&&) = default;
+			explicit ReadRegisterFuture() : PARENT{REGISTER} {}
+			bool get(T& result)
+			{
+				if (!PARENT::get(result)) return false;
+				change_endianness(result);
+				return true;
+			}
+			ReadRegisterFuture(ReadRegisterFuture<REGISTER, T>&&) = default;
+			ReadRegisterFuture& operator=(ReadRegisterFuture<REGISTER, T>&&) = default;
 		};
 
+		//TODO Add transformer functor to template?
+		//TODO Add checker functor to template?
 		template<typename T> class WriteContent
 		{
 		public:
-			WriteContent(uint8_t reg, const T& value) : register_{reg}, value_{value} {}
+			WriteContent(uint8_t reg, const T& value) : register_{reg}, value_{change_endianness(value)} {}
 
 		private:
 			const uint8_t register_;
@@ -385,14 +512,14 @@ namespace devices::vl53l0x
 		};
 
 		template<uint8_t REGISTER, typename T>
-		class WriteByteRegisterFuture: public FUTURE<void, WriteContent<T>>
+		class WriteRegisterFuture: public FUTURE<void, WriteContent<T>>
 		{
 			static_assert(sizeof(T) == 1, "T must be exactly one byte long");
 			using PARENT = FUTURE<void, WriteContent<T>>;
 		public:
-			explicit WriteByteRegisterFuture(const T& value) : PARENT{WriteContent{REGISTER, value}} {}
-			WriteByteRegisterFuture(WriteByteRegisterFuture<REGISTER, T>&&) = default;
-			WriteByteRegisterFuture& operator=(WriteByteRegisterFuture<REGISTER, T>&&) = default;
+			explicit WriteRegisterFuture(const T& value) : PARENT{WriteContent{REGISTER, value}} {}
+			WriteRegisterFuture(WriteRegisterFuture<REGISTER, T>&&) = default;
+			WriteRegisterFuture& operator=(WriteRegisterFuture<REGISTER, T>&&) = default;
 		};
 
 		//TODO utility functions
