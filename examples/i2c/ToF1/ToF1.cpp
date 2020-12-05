@@ -166,5 +166,11 @@ int main()
 	trace(out, steps3);
 	DEBUG(out);
 
+	uint8_t period = 0;
+	ok = tof.get_vcsel_pulse_period<VcselPeriodType::PRE_RANGE>(period);
+	out << F("tof.get_vcsel_pulse_period<PRE_RANGE>(period) = ") << ok << F(", period = ") << dec << period << endl;
+	ok = tof.get_vcsel_pulse_period<VcselPeriodType::FINAL_RANGE>(period);
+	out << F("tof.get_vcsel_pulse_period<FINAL_RANGE>(period) = ") << ok << F(", period = ") << dec << period << endl;
+
 	manager.end();
 }
