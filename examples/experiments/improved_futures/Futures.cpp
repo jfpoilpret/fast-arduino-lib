@@ -47,10 +47,8 @@ using namespace containers;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 128;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
-//TODO do we need more listener? (one on input, one on output also?)
-// NOTE: can be useful when a single Future needs to know when it has been updated to modify itself...
+//TODO - example: self listening Future to change its INPUT based on OUTPUT
 
-//TODO shall we deal with number of status received or just check the last future?
 // template<typename F, uint8_t SIZE> class FuturesGroup : public FutureListener<F>
 // {
 // 	//TODO ensure F is a proper future (need specific traits...)
@@ -147,6 +145,39 @@ public:
 	MyFuture& operator=(MyFuture&&) = default;
 };
 
+struct UpdateRegister
+{
+	UpdateRegister(uint8_t reg_index)
+	{
+		data[0] = data[1] = reg_index;
+	}
+
+	uint8_t data[3] = {0 ,0, 0};
+};
+class UpdateRegisterFuture : public Future<uint8_t, UpdateRegister>, public FutureOutputListener<AbstractFuture>
+{
+	using PARENT = Future<uint8_t, UpdateRegister>;
+
+public:
+	UpdateRegisterFuture(uint8_t reg_index, uint8_t set_mask)
+		:	PARENT{UpdateRegister{reg_index}, nullptr, this}, set_mask_{set_mask} {}
+	UpdateRegisterFuture(UpdateRegisterFuture&&) = default;
+	UpdateRegisterFuture& operator=(UpdateRegisterFuture&&) = default;
+
+	void on_output_change(
+		UNUSED const AbstractFuture& future, UNUSED uint8_t* output_data, uint8_t* output_current) override
+	{
+		// Only one call expected, directly get output value and change it
+		uint8_t value = *(output_current - 1);
+		value |= set_mask_;
+		//TODO const_cast not good here, maybe overload Future get_input() to provide const and non-const flavours
+		const_cast<UpdateRegister&>(get_input()).data[2] = value;
+	}
+
+private:
+	uint8_t set_mask_;
+};
+
 int main() __attribute__((OS_main));
 int main()
 {
@@ -161,10 +192,9 @@ int main()
 	out << boolalpha << showbase;
 
 	FutureListener listener{out};
-	MyFuture f1{listener};
 
 	// Start feeding future and check output
-	//TODO
+	MyFuture f1{listener};
 	out << F("set_future_value(0x11)") << endl;
 	f1.set_future_value_(uint8_t(0x11));
 
@@ -182,6 +212,7 @@ int main()
 	out << F("f1.get(result) = ") << f1.get(result) << endl;
 	out << F("result = ") << hex << result << endl;
 
+	// Start feeding future, force error and check output
 	MyFuture f2{listener};
 	f2.set_future_value_(uint8_t(0x55));
 	f2.set_future_finish_();
@@ -189,5 +220,14 @@ int main()
 	out << F("f2.status() = ") << f2.status() << endl;
 	out << F("f2.error() = ") << dec << f2.error() << endl;
 
-
+	UpdateRegisterFuture f3{0xF7, 0x12};
+	uint8_t data = 0;
+	out << F("f3.get_storage_value_(data) = ") << f3.get_storage_value_(data) << endl;
+	out << F("data = ") << hex << data << endl;
+	out << F("f3.set_future_value_(0x40) = ") << f3.set_future_value_(uint8_t(0x40)) << endl;
+	out << F("f3.get_storage_value_(data) = ") << f3.get_storage_value_(data) << endl;
+	out << F("data = ") << hex << data << endl;
+	out << F("f3.get_storage_value_(data) = ") << f3.get_storage_value_(data) << endl;
+	out << F("data = ") << hex << data << endl;
+	out << F("f3.status() = ") << f3.status() << endl;
 }
