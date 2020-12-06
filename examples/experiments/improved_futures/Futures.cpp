@@ -49,7 +49,6 @@ using namespace containers;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 128;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
-//TODO - make on_change...() private and check if OK
 //TODO - perform checks on FuturesGroup
 
 // template<typename F, uint8_t SIZE> class FuturesGroup
@@ -149,6 +148,7 @@ public:
 	UpdateRegisterFuture(UpdateRegisterFuture&&) = default;
 	UpdateRegisterFuture& operator=(UpdateRegisterFuture&&) = default;
 
+private:
 	void on_output_change(
 		UNUSED const ABSTRACTFUTURE& future, UNUSED uint8_t* output_data, uint8_t* output_current) override
 	{
@@ -159,7 +159,6 @@ public:
 		const_cast<UpdateRegister&>(get_input()).data[2] = value;
 	}
 
-private:
 	uint8_t set_mask_;
 };
 
