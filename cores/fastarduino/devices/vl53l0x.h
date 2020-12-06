@@ -35,6 +35,7 @@
 #include "../utilities.h"
 #include "../i2c_handler.h"
 #include "../i2c_device.h"
+#include "vl53l0x_internals.h"
 
 namespace devices
 {
@@ -46,10 +47,11 @@ namespace devices
 	}
 }
 
-//TODO - infer on grouping multiple futures
 //TODO - infer on having a future value based on result from another future...
 //			- use some kind of PlaceHolder updated by Future 1 and used by Future 2?
 //			- use I2C events?
+//TODO - infer on grouping multiple futures
+
 //TODO - use PROGMEM (flash memory) for long sequences of bytes to be sent?
 //TODO - implement low-level API step by step
 //       - init_data
@@ -90,12 +92,12 @@ namespace devices::vl53l0x
 
 		static constexpr float convert(uint16_t value)
 		{
-			return value / (1 << DECIMAL_BITS);
+			return value / float(1 << DECIMAL_BITS);
 		}
 
 	private:
-		static constexpr INTEGRAL_BITS = 9;
-		static constexpr DECIMAL_BITS = 7;
+		static constexpr uint16_t INTEGRAL_BITS = 9;
+		static constexpr uint16_t DECIMAL_BITS = 7;
 	};
 
 	enum class DeviceError : uint8_t
@@ -336,10 +338,10 @@ namespace devices::vl53l0x
 		static constexpr const uint8_t REG_SYSTEM_SEQUENCE_CONFIG = 0x01;
 		static constexpr const uint8_t REG_PRE_RANGE_CONFIG_VCSEL_PERIOD = 0x50;
 		static constexpr const uint8_t REG_FINAL_RANGE_CONFIG_VCSEL_PERIOD = 0x70;
+		static constexpr const uint8_t REG_FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT = 0x44;
+		static constexpr const uint8_t REG_MSRC_CONFIG_CONTROL = 0x60;
 
 	public:
-		//TODO useful enums go here (Status, Ranging mode...)
-
 		/**
 		 * Create a new device driver for a VL53L0X chip.
 		 * 
@@ -428,6 +430,65 @@ namespace devices::vl53l0x
 			return async_write(future);
 		}
 
+		class GetSignalRateLimitFuture : 
+			public ReadRegisterFuture<REG_FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, uint16_t>
+		{
+			using PARENT = ReadRegisterFuture<REG_FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, uint16_t>;
+
+		public:
+			explicit GetSignalRateLimitFuture() : PARENT{} {}
+			GetSignalRateLimitFuture(GetSignalRateLimitFuture&&) = default;
+			GetSignalRateLimitFuture& operator=(GetSignalRateLimitFuture&&) = default;
+
+			bool get(float& result)
+			{
+				uint16_t temp = 0;
+				if (!PARENT::get(temp)) return false;
+				result = FixPoint9_7::convert(temp);
+				return true;
+			}
+		};
+		int get_signal_rate_limit(PROXY<GetSignalRateLimitFuture> future)
+		{
+			return async_read(future);
+		}
+
+		class SetSignalRateLimitFuture : 
+			public WriteRegisterFuture<REG_FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, uint16_t>
+		{
+			using PARENT = WriteRegisterFuture<REG_FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, uint16_t>;
+
+		public:
+			explicit SetSignalRateLimitFuture(float signal_rate) : PARENT{FixPoint9_7::convert(signal_rate)} {}
+			SetSignalRateLimitFuture(SetSignalRateLimitFuture&&) = default;
+			SetSignalRateLimitFuture& operator=(SetSignalRateLimitFuture&&) = default;
+		};
+		int set_signal_rate_limit(PROXY<SetSignalRateLimitFuture> future)
+		{
+			return async_write(future);
+		}
+
+		class InitDataFuture : public FUTURE<uint8_t[vl53l0x_internals::INIT_DATA_BUFFER_READ_SIZE], 
+			uint8_t[vl53l0x_internals::INIT_DATA_BUFFER_WRITE_SIZE]>
+		{
+			using PARENT = FUTURE<uint8_t[vl53l0x_internals::INIT_DATA_BUFFER_READ_SIZE],
+				uint8_t[vl53l0x_internals::INIT_DATA_BUFFER_WRITE_SIZE]>;
+
+		public:
+			InitDataFuture() : PARENT{} {}
+
+		};
+
+		int init_data_first()
+		{
+			//TODO
+		}
+
+		int init_static_second()
+		{
+			//TODO
+		}
+
 		// Synchronous API
 		//=================
 		bool set_address(uint8_t device_address)
@@ -436,8 +497,10 @@ namespace devices::vl53l0x
 			// set_device(device_address);
 		}
 
-		bool init_first_once() {}
-		bool init_second() {}
+		// bool init_data_first()
+		// {
+
+		// }
 		//TODO define all needed API here
 
 		bool get_revision(uint8_t& revision)
@@ -477,6 +540,15 @@ namespace devices::vl53l0x
 			return sync_write<SetVcselPulsePeriodFuture<TYPE>>(period);
 		}
 
+		bool get_signal_rate_limit(float& signal_rate)
+		{
+			return sync_read<GetSignalRateLimitFuture, float>(signal_rate);
+		}
+		bool set_signal_rate_limit(float signal_rate)
+		{
+			return sync_write<SetSignalRateLimitFuture, float>(signal_rate);
+		}
+
 	private:
 		static constexpr const uint8_t DEFAULT_DEVICE_ADDRESS = 0x52;
 
@@ -485,14 +557,13 @@ namespace devices::vl53l0x
 		template<uint8_t REGISTER, typename T>
 		class ReadRegisterFuture: public FUTURE<T, uint8_t>
 		{
-			static_assert(sizeof(T) == 1, "T must be exactly one byte long");
 			using PARENT = FUTURE<T, uint8_t>;
 		public:
 			explicit ReadRegisterFuture() : PARENT{REGISTER} {}
 			bool get(T& result)
 			{
 				if (!PARENT::get(result)) return false;
-				change_endianness(result);
+				result = change_endianness(result);
 				return true;
 			}
 			ReadRegisterFuture(ReadRegisterFuture<REGISTER, T>&&) = default;
@@ -514,7 +585,6 @@ namespace devices::vl53l0x
 		template<uint8_t REGISTER, typename T>
 		class WriteRegisterFuture: public FUTURE<void, WriteContent<T>>
 		{
-			static_assert(sizeof(T) == 1, "T must be exactly one byte long");
 			using PARENT = FUTURE<void, WriteContent<T>>;
 		public:
 			explicit WriteRegisterFuture(const T& value) : PARENT{WriteContent{REGISTER, value}} {}
