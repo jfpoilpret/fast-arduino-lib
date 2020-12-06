@@ -160,6 +160,20 @@ namespace future
 	streams::ostream& operator<<(streams::ostream& out, future::FutureStatus s);
 	/// @endcond
 
+	//TODO DOCS
+	template<typename F> class FutureStatusListener
+	{
+	protected:
+		virtual void on_status_change(const F& future, FutureStatus new_status) = 0;
+		friend F;
+	};
+	template<typename F> class FutureOutputListener
+	{
+	protected:
+		virtual void on_output_change(const F& future, uint8_t* output_data, uint8_t* output_current) = 0;
+		friend F;
+	};
+
 	/**
 	 * Base class for all `Future`s.
 	 * This defines most API and implementation of a Future.
@@ -363,7 +377,10 @@ namespace future
 			if (status_ != FutureStatus::NOT_READY)
 				return false;
 			if (output_size_ == 0)
+			{
 				status_ = FutureStatus::READY;
+				callback_status();
+			}
 			return true;
 		}
 
@@ -400,8 +417,12 @@ namespace future
 			*output_current_++ = chunk;
 			// Is that the last chunk?
 			--output_size_;
+			callback_output();
 			if (output_size_ == 0)
+			{
 				status_ = FutureStatus::READY;
+				callback_status();
+			}
 			return true;
 		}
 
@@ -502,15 +523,21 @@ namespace future
 				return false;
 			error_ = error;
 			status_ = FutureStatus::ERROR;
+			callback_status();
 			return true;
 		}
 
 	protected:
 		/// @cond notdocumented
+		using STATUS_LISTENER = FutureStatusListener<AbstractFuture>;
+		using OUTPUT_LISTENER = FutureOutputListener<AbstractFuture>;
+
 		// "default" constructor
-		AbstractFuture(uint8_t* output_data, uint8_t output_size, uint8_t* input_data, uint8_t input_size)
+		AbstractFuture(uint8_t* output_data, uint8_t output_size, uint8_t* input_data, uint8_t input_size,
+			STATUS_LISTENER* status_listener = nullptr,	OUTPUT_LISTENER* output_listener = nullptr)
 			:	output_data_{output_data}, output_current_{output_data}, output_size_{output_size},
-				input_data_{input_data}, input_current_{input_data}, input_size_{input_size} {}
+				input_data_{input_data}, input_current_{input_data}, input_size_{input_size},
+				status_listener_{status_listener}, output_listener_{output_listener} {}
 
 		// these constructors are forbidden (subclass ctors shall call above move/copy ctor instead)
 		AbstractFuture(const AbstractFuture&) = delete;
@@ -531,6 +558,9 @@ namespace future
 		void move_(AbstractFuture&& that, uint8_t full_output_size, uint8_t full_input_size)
 		{
 			// Now copy all attributes from rhs (output_data_ was already initialized when this was constructed)
+			status_listener_ = that.status_listener_;
+			output_listener_ = that.output_listener_;
+
 			const FutureStatus status = that.status_;
 			status_ = status;
 			// Make rhs Future invalid
@@ -551,6 +581,18 @@ namespace future
 		/// @endcond
 
 	private:
+		void callback_status()
+		{
+			if (status_listener_ != nullptr)
+				status_listener_->on_status_change(*this, status_);
+		}
+		
+		void callback_output()
+		{
+			if (output_listener_ != nullptr)
+				output_listener_->on_output_change(*this, output_data_, output_current_);
+		}
+		
 		volatile FutureStatus status_ = FutureStatus::NOT_READY;
 		int error_ = 0;
 
@@ -561,6 +603,9 @@ namespace future
 		uint8_t* input_data_ = nullptr;
 		uint8_t* input_current_ = nullptr;
 		uint8_t input_size_ = 0;
+
+		STATUS_LISTENER* status_listener_ = nullptr;
+		OUTPUT_LISTENER* output_listener_ = nullptr;
 	};
 
 	/**
@@ -608,6 +653,7 @@ namespace future
 		/** Size of the input value of this Future. */
 		static constexpr uint8_t IN_SIZE = sizeof(IN);
 
+		//TODO UPDATE DOCS
 		/** 
 		 * Construct a new Future.
 		 * The created Future is in `FutureStatus::NOT_READY` status.
@@ -621,8 +667,10 @@ namespace future
 		 * @sa status()
 		 * @sa FutureStatus
 		 */
-		explicit Future(const IN& input = IN{})
-			: AbstractFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}, input_{input} {}
+		explicit Future(const IN& input = IN{}, STATUS_LISTENER* status_listener = nullptr,
+			OUTPUT_LISTENER* output_listener = nullptr)
+			:	AbstractFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN), 
+					status_listener, output_listener}, input_{input} {}
 
 		/// @cond notdocumented
 		~Future() = default;
@@ -739,7 +787,8 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = sizeof(OUT);
 		static constexpr uint8_t IN_SIZE = 0;
 
-		Future() : AbstractFuture{output_buffer_, sizeof(OUT), nullptr, 0} {}
+		Future(STATUS_LISTENER* status_listener = nullptr, OUTPUT_LISTENER* output_listener = nullptr)
+		: AbstractFuture{output_buffer_, sizeof(OUT), nullptr, 0, status_listener, output_listener} {}
 		~Future() = default;
 
 		Future(Future&& that) : AbstractFuture{output_buffer_, sizeof(OUT), nullptr, 0}
@@ -796,8 +845,8 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = 0;
 		static constexpr uint8_t IN_SIZE = sizeof(IN);
 
-		explicit Future(const IN& input = IN{})
-			: AbstractFuture{nullptr, 0, input_buffer_, sizeof(IN)}, input_{input} {}
+		explicit Future(const IN& input = IN{}, STATUS_LISTENER* status_listener = nullptr)
+			: AbstractFuture{nullptr, 0, input_buffer_, sizeof(IN), status_listener}, input_{input} {}
 		~Future() = default;
 
 		Future(Future&& that) : AbstractFuture{nullptr, 0, input_buffer_, sizeof(IN)}
@@ -862,7 +911,8 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = 0;
 		static constexpr uint8_t IN_SIZE = 0;
 
-		Future() : AbstractFuture{nullptr, 0,nullptr, 0} {}
+		Future(STATUS_LISTENER* status_listener = nullptr)
+		: AbstractFuture{nullptr, 0,nullptr, 0, status_listener} {}
 		~Future() = default;
 
 		Future(Future&& that) : AbstractFuture{nullptr, 0, nullptr, 0}
@@ -950,6 +1000,7 @@ namespace future
 
 		bool set_future_finish_()
 		{
+			callback_status();
 			return true;
 		}
 
@@ -957,6 +1008,9 @@ namespace future
 		{
 			// Update Future value chunk
 			*output_current_++ = chunk;
+			//TODO Check if this affects current usage!
+			--output_size_;
+			callback_output();
 			return true;
 		}
 
@@ -977,16 +1031,22 @@ namespace future
 		bool set_future_error_(int error)
 		{
 			error_ = error;
+			callback_status();
 			return true;
 		}
 		/// @endcond
 
 	protected:
 		/// @cond notdocumented
+		using STATUS_LISTENER = FutureStatusListener<AbstractFakeFuture>;
+		using OUTPUT_LISTENER = FutureOutputListener<AbstractFakeFuture>;
+		
 		// "default" constructor
-		AbstractFakeFuture(uint8_t* output_data, uint8_t output_size, uint8_t* input_data, uint8_t input_size)
+		AbstractFakeFuture(uint8_t* output_data, uint8_t output_size, uint8_t* input_data, uint8_t input_size,
+			STATUS_LISTENER* status_listener = nullptr, OUTPUT_LISTENER* output_listener = nullptr)
 			:	output_current_{output_data}, output_size_{output_size},
-				input_current_{input_data}, input_size_{input_size} {}
+				input_current_{input_data}, input_size_{input_size},
+				status_listener_{status_listener}, output_listener_{output_listener} {}
 
 		// these constructors are forbidden (subclass ctors shall call above move/copy ctor instead)
 		AbstractFakeFuture(const AbstractFakeFuture&) = delete;
@@ -1005,6 +1065,18 @@ namespace future
 		/// @endcond
 
 	private:
+		void callback_status()
+		{
+			if (status_listener_ != nullptr)
+				status_listener_->on_status_change(*this, status());
+		}
+		
+		void callback_output()
+		{
+			if (output_listener_ != nullptr)
+				output_listener_->on_output_change(*this, nullptr, output_current_);
+		}
+
 		int error_ = 0;
 
 		uint8_t* output_current_ = nullptr;
@@ -1012,6 +1084,9 @@ namespace future
 		
 		uint8_t* input_current_ = nullptr;
 		uint8_t input_size_ = 0;
+
+		STATUS_LISTENER* status_listener_ = nullptr;
+		OUTPUT_LISTENER* output_listener_ = nullptr;
 	};
 
 	/**
@@ -1035,8 +1110,10 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = sizeof(OUT);
 		static constexpr uint8_t IN_SIZE = sizeof(IN);
 
-		explicit FakeFuture(const IN& input = IN{})
-			: AbstractFakeFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}, input_{input} {}
+		explicit FakeFuture(const IN& input = IN{}, 
+			STATUS_LISTENER* status_listener = nullptr, OUTPUT_LISTENER* output_listener = nullptr)
+			:	AbstractFakeFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN),
+				status_listener, output_listener}, input_{input} {}
 
 		~FakeFuture() = default;
 
@@ -1085,8 +1162,9 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = sizeof(OUT);
 		static constexpr uint8_t IN_SIZE = 0;
 
-		FakeFuture()
-			: AbstractFakeFuture{output_buffer_, sizeof(OUT), nullptr, 0} {}
+		FakeFuture(STATUS_LISTENER* status_listener = nullptr, OUTPUT_LISTENER* output_listener = nullptr)
+			:	AbstractFakeFuture{output_buffer_, sizeof(OUT), nullptr, 0,
+				status_listener, output_listener} {}
 
 		~FakeFuture() = default;
 
@@ -1118,8 +1196,8 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = 0;
 		static constexpr uint8_t IN_SIZE = sizeof(IN);
 
-		explicit FakeFuture(const IN& input = IN{})
-			: AbstractFakeFuture{nullptr, 0, input_buffer_, sizeof(IN)}, input_{input} {}
+		explicit FakeFuture(const IN& input = IN{}, STATUS_LISTENER* status_listener = nullptr)
+			: AbstractFakeFuture{nullptr, 0, input_buffer_, sizeof(IN), status_listener}, input_{input} {}
 
 		~FakeFuture() = default;
 
@@ -1160,8 +1238,8 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = 0;
 		static constexpr uint8_t IN_SIZE = 0;
 
-		FakeFuture()
-			: AbstractFakeFuture{nullptr, 0, nullptr, 0} {}
+		FakeFuture(STATUS_LISTENER* status_listener = nullptr)
+			: AbstractFakeFuture{nullptr, 0, nullptr, 0, status_listener} {}
 
 		~FakeFuture() = default;
 
@@ -1171,6 +1249,9 @@ namespace future
 		}
 	};
 	/// @endcond
+
+	//TODO Add FuturesGroup somehow
+
 }
 
 #endif /* FUTURE_HH */
