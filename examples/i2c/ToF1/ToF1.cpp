@@ -73,6 +73,7 @@ REGISTER_I2C_ISR(MANAGER)
 
 using streams::dec;
 using streams::hex;
+using streams::fixed;
 using streams::endl;
 using streams::flush;
 
@@ -171,6 +172,16 @@ int main()
 	out << F("tof.get_vcsel_pulse_period<PRE_RANGE>(period) = ") << ok << F(", period = ") << dec << period << endl;
 	ok = tof.get_vcsel_pulse_period<VcselPeriodType::FINAL_RANGE>(period);
 	out << F("tof.get_vcsel_pulse_period<FINAL_RANGE>(period) = ") << ok << F(", period = ") << dec << period << endl;
+
+	float signal_rate = 0.0;
+	ok = tof.get_signal_rate_limit(signal_rate);
+	out << F("tof.get_signal_rate_limit(signal_rate) = ") << ok << F(", signal_rate = ")
+		<< fixed << signal_rate << endl;
+	ok = tof.set_signal_rate_limit(0.5f);
+	out << F("tof.set_signal_rate_limit(0.5) = ") << ok << endl;
+	ok = tof.get_signal_rate_limit(signal_rate);
+	out << F("tof.get_signal_rate_limit(signal_rate) = ") << ok << F(", signal_rate = ")
+		<< fixed << signal_rate << endl;
 
 	manager.end();
 }
