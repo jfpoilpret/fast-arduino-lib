@@ -24,20 +24,19 @@
 //	- much harder to implement properly
 
 #include <fastarduino/future.h>
-#include <fastarduino/initializer_list.h>
+#include <fastarduino/array.h>
 
 #include <fastarduino/time.h>
 #include <fastarduino/uart.h>
 #include <fastarduino/iomanip.h>
 #include <fastarduino/flash.h>
-#include <fastarduino/array.h>
 
 #include <fastarduino/tests/assertions.h>
 
 // Register vector for UART (used for debug)
 REGISTER_UATX_ISR(0)
 
-// #define REAL_FUTURE
+#define REAL_FUTURE
 
 // Example starts here
 //=====================
@@ -49,49 +48,85 @@ using namespace containers;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 128;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
-//TODO - perform checks on FuturesGroup
+template<typename F, uint8_t SIZE> class FuturesGroup
+{
+	//TODO ensure F is a proper future (need specific traits...)
+public:
+	FutureStatus status() const
+	{
+		if (status_ != FutureStatus::NOT_READY)
+			return status_;
 
-// template<typename F, uint8_t SIZE> class FuturesGroup
-// {
-// 	//TODO ensure F is a proper future (need specific traits...)
-// public:
-// 	//TODO how to deal with move constructor?
-// 	FutureStatus status() const
-// 	{
-// 		//TODO find status among all futures (or only last one?)
-// 		return status_;
-// 	}
+		uint8_t count_ready = 0;
+		for (F* future: futures_)
+		{
+			FutureStatus temp_status = future->status();
+			switch (temp_status)
+			{
+				case FutureStatus::ERROR:
+				error_ = future->error();
+				// intentional fallthrough
 
-// 	FutureStatus await() const
-// 	{
-// 		while (true)
-// 		{
-// 			FutureStatus temp_status = status();
-// 			if (temp_status != FutureStatus::NOT_READY)
-// 				return temp_status;
-// 			time::yield();
-// 		}
-// 	}
+				case FutureStatus::INVALID:
+				status_ = temp_status;
+				return temp_status;
 
-// 	int error() const
-// 	{
-// 		return error_;
-// 	}
+				case FutureStatus::READY:
+				++count_ready;
+				break;
 
-// protected:
-// 	FuturesGroup(std::initializer_list<F&> futures)
-// 	{
-// 		static_assert(
-// 			futures.size() == SIZE, "FuturesGroup constructor must be initialized with exactly SIZE parameters");
-// 		F** temp = futures_;
-// 		for (F& future: futures)
-// 			*temp++ = future;
-// 	}
-// 
-// private:
-// 	F* futures_[SIZE];
-// 	uint8_t count_ready_ = 0;
-// };
+				case FutureStatus::NOT_READY:
+				break;
+			}
+		}
+		if (count_ready == SIZE)
+		{
+			status_ = FutureStatus::READY;
+			return FutureStatus::READY;
+		}
+		return FutureStatus::NOT_READY;
+	}
+
+	FutureStatus await() const
+	{
+		while (true)
+		{
+			FutureStatus temp_status = status();
+			if (temp_status != FutureStatus::NOT_READY)
+				return temp_status;
+			time::yield();
+		}
+	}
+
+	int error() const
+	{
+		FutureStatus status = await();
+		switch (status)
+		{
+			case FutureStatus::READY:
+			return 0;
+
+			case FutureStatus::ERROR:
+			return error_;
+
+			default:
+			// This should never happen
+			return errors::EINVAL;
+		}
+	}
+
+protected:
+	FuturesGroup(containers::array<F*, SIZE> futures) : futures_{futures} {}
+	FuturesGroup(FuturesGroup&&) = default;
+	FuturesGroup& operator=(FuturesGroup&&) = default;
+	FuturesGroup(const FuturesGroup&) = delete;
+	FuturesGroup& operator=(const FuturesGroup&) = delete;
+
+private:
+	containers::array<F*, SIZE> futures_;
+	mutable FutureStatus status_ = FutureStatus::NOT_READY;
+	mutable int error_ = 0;
+};
 
 #ifdef REAL_FUTURE
 #define ABSTRACTFUTURE AbstractFuture
@@ -162,6 +197,29 @@ private:
 	uint8_t set_mask_;
 };
 
+template<uint8_t SIZE> using GROUP = FuturesGroup<ABSTRACTFUTURE, SIZE>;
+
+class MyGroup : public GROUP<2>
+{
+	using PARENT = GROUP<2>;
+public:
+	MyGroup(FutureListener& listener) : PARENT{{&f1_, &f2_}}, f1_{listener}, f2_{listener} {} 
+
+	MyFuture& get_f1()
+	{
+		return f1_;
+	}
+
+	MyFuture& get_f2()
+	{
+		return f2_;
+	}
+
+private:
+	MyFuture f1_;
+	MyFuture f2_;
+};
+
 int main() __attribute__((OS_main));
 int main()
 {
@@ -214,4 +272,40 @@ int main()
 	out << F("f3.get_storage_value_(data) = ") << f3.get_storage_value_(data) << endl;
 	out << F("data = ") << hex << data << endl;
 	out << F("f3.status() = ") << f3.status() << endl;
+
+	// Group of futures
+	out << F("Testing group of futures #1") << endl;
+	MyGroup group{listener};
+	out << F("group.status() = ") << group.status() << endl;
+	out << F("set_future_value(0x11)") << endl;
+	group.get_f1().set_future_value_(uint8_t(0x11));
+	out << F("group.status() = ") << group.status() << endl;
+
+	out << F("set_future_value(0x22)") << endl;
+	group.get_f1().set_future_value_(uint8_t(0x22));
+	out << F("group.status() = ") << group.status() << endl;
+
+	out << F("set_future_value(0x33)") << endl;
+	group.get_f1().set_future_value_(uint8_t(0x33));
+	out << F("group.status() = ") << group.status() << endl;
+
+	out << F("set_future_value(0x44)") << endl;
+	group.get_f1().set_future_value_(uint8_t(0x44));
+	out << F("group.status() = ") << group.status() << endl;
+
+	out << F("f1.status() = ") << group.get_f1().status() << endl;
+	result = 0;
+	out << F("f1.get(result) = ") << group.get_f1().get(result) << endl;
+	out << F("result = ") << hex << result << endl;
+
+	out << F("Testing group of futures #2") << endl;
+	group.get_f2().set_future_value_(uint8_t(0x55));
+	out << F("group.status() = ") << group.status() << endl;
+	group.get_f2().set_future_finish_();
+	out << F("group.status() = ") << group.status() << endl;
+	group.get_f2().set_future_error_(-10);
+	out << F("group.status() = ") << group.status() << endl;
+	out << F("f2.status() = ") << group.get_f2().status() << endl;
+	out << F("f2.error() = ") << dec << group.get_f2().error() << endl;
+	out << F("group.error() = ") << group.error() << endl;
 }
