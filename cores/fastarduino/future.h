@@ -161,16 +161,54 @@ namespace future
 	streams::ostream& operator<<(streams::ostream& out, future::FutureStatus s);
 	/// @endcond
 
-	//TODO DOCS
+	/**
+	 * Listener is the interface allowing to listen to changes of a Future status.
+	 * This may be added to any Future at construction time.
+	 * 
+	 * @tparam F the type of Future to listen to; this may be `AbstractFuture`,
+	 * `AbstractFakeFuture`, or any subclass of these.
+	 * 
+	 * @sa Future
+	 * @sa FutureStatus
+	 * @sa FutureOutputListener
+	 */
 	template<typename F> class FutureStatusListener
 	{
 	protected:
+		/**
+		 * Called whenever a listened-to Future changes its FutureStatus.
+		 * @param future a reference to the Future which status has changed
+		 * @param new_status the new FutureStatus of @p future
+		 */
 		virtual void on_status_change(const F& future, FutureStatus new_status) = 0;
 		friend F;
 	};
+
+	/**
+	 * Listener is the interface allowing to listen to changes of a Future output
+	 * buffer (while being fed by a producer).
+	 * This may be added to any Future at construction time.
+	 * 
+	 * @tparam F the type of Future to listen to; this may be `AbstractFuture`,
+	 * `AbstractFakeFuture`, or any subclass of these.
+	 * 
+	 * @sa Future
+	 * @sa FutureStatus
+	 * @sa FutureStatusListener
+	 */
 	template<typename F> class FutureOutputListener
 	{
 	protected:
+		/**
+		 * Called whenever a listened-to Future has its output buffer changed.
+		 * This is called for every byte added to the output buffer.
+		 * @param future a reference to the Future which output has been updated
+		 * @param output_data pointer to the beginning of @p future output buffer;
+		 * will be `null` if @p future is an `AbstractFakeFuture` or subclass.
+		 * @param output_current pointer to the next byte to be written to 
+		 * @p future output buffer; `*(9)output_current - 1)` points to the byte
+		 * newly added.
+		 */
 		virtual void on_output_change(const F& future, uint8_t* output_data, uint8_t* output_current) = 0;
 		friend F;
 	};
@@ -654,7 +692,6 @@ namespace future
 		/** Size of the input value of this Future. */
 		static constexpr uint8_t IN_SIZE = sizeof(IN);
 
-		//TODO UPDATE DOCS
 		/** 
 		 * Construct a new Future.
 		 * The created Future is in `FutureStatus::NOT_READY` status.
@@ -663,6 +700,10 @@ namespace future
 		 * 
 		 * @param input a value to be copied to this Future input storage value;
 		 * this argument does not exist when @p IN is `void`.
+		 * @param status_listener an optional listener to status changes on this 
+		 * future
+		 * @param output_listener an optional listener to output buffer changes on 
+		 * this future
 		 * 
 		 * @sa AbstractFuture
 		 * @sa status()
@@ -1307,7 +1348,18 @@ namespace future
 	};
 	/// @endcond
 
-	//TODO API DOC
+	//TODO optimize code size by refactoring to an abstract class without SIZE
+	/**
+	 * Abstract class to allow aggregation of several futures.
+	 * This allows to `await()` for all futures, or query the overall `status()`
+	 * of the group.
+	 * 
+	 * TODO code sample on how to use (define subclass example)
+	 * 
+	 * @tparam F the type of Future to aggregate int this group; this shall be
+	 * either `AbstractFuture` or `AbstractFakeFuture`.
+	 * @tparam SIZE the number of futures in this group
+	 */
 	template<typename F, uint8_t SIZE> class FuturesGroup
 	{
 		static_assert(Future_trait<F>::IS_FUTURE, "F must be a Future");
@@ -1315,6 +1367,7 @@ namespace future
 		static_assert(SIZE > 1, "SIZE must be at least 2");
 
 	public:
+		//TODO API DOC
 		FutureStatus status() const
 		{
 			if (status_ != FutureStatus::NOT_READY)
@@ -1350,6 +1403,7 @@ namespace future
 			return FutureStatus::NOT_READY;
 		}
 
+		//TODO API DOC
 		FutureStatus await() const
 		{
 			while (true)
@@ -1361,6 +1415,7 @@ namespace future
 			}
 		}
 
+		//TODO API DOC
 		int error() const
 		{
 			FutureStatus status = await();
@@ -1379,6 +1434,7 @@ namespace future
 		}
 
 	protected:
+		//TODO API DOC
 		FuturesGroup(containers::array<F*, SIZE> futures) : futures_{futures} {}
 		/// @cond notdocumented
 		FuturesGroup(FuturesGroup&&) = default;
