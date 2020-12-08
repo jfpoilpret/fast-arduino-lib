@@ -24,14 +24,10 @@
 //	- much harder to implement properly
 
 #include <fastarduino/future.h>
-#include <fastarduino/array.h>
 
-#include <fastarduino/time.h>
 #include <fastarduino/uart.h>
 #include <fastarduino/iomanip.h>
 #include <fastarduino/flash.h>
-
-#include <fastarduino/tests/assertions.h>
 
 // Register vector for UART (used for debug)
 REGISTER_UATX_ISR(0)
