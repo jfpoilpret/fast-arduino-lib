@@ -1349,22 +1349,10 @@ namespace future
 	/// @endcond
 
 	//TODO optimize code size by refactoring to an abstract class without SIZE
-	/**
-	 * Abstract class to allow aggregation of several futures.
-	 * This allows to `await()` for all futures, or query the overall `status()`
-	 * of the group.
-	 * 
-	 * TODO code sample on how to use (define subclass example)
-	 * 
-	 * @tparam F the type of Future to aggregate int this group; this shall be
-	 * either `AbstractFuture` or `AbstractFakeFuture`.
-	 * @tparam SIZE the number of futures in this group
-	 */
-	template<typename F, uint8_t SIZE> class FuturesGroup
+	template<typename F> class AbstractFuturesGroup
 	{
 		static_assert(Future_trait<F>::IS_FUTURE, "F must be a Future");
 		static_assert(Future_trait<F>::IS_ABSTRACT, "F must be an abstract Future");
-		static_assert(SIZE > 1, "SIZE must be at least 2");
 
 	public:
 		//TODO API DOC
@@ -1374,18 +1362,20 @@ namespace future
 				return status_;
 
 			uint8_t count_ready = 0;
-			for (F* future: futures_)
+			F** futures = futures_;
+			for (uint8_t i = 0; i < size_; ++i)
 			{
-				FutureStatus temp_status = future->status();
-				switch (temp_status)
+				F* future = *futures++;
+				FutureStatus status = future->status();
+				switch (status)
 				{
 					case FutureStatus::ERROR:
 					error_ = future->error();
 					// intentional fallthrough
 
 					case FutureStatus::INVALID:
-					status_ = temp_status;
-					return temp_status;
+					status_ = status;
+					return status;
 
 					case FutureStatus::READY:
 					++count_ready;
@@ -1395,7 +1385,7 @@ namespace future
 					break;
 				}
 			}
-			if (count_ready == SIZE)
+			if (count_ready == size_)
 			{
 				status_ = FutureStatus::READY;
 				return FutureStatus::READY;
@@ -1408,9 +1398,9 @@ namespace future
 		{
 			while (true)
 			{
-				FutureStatus temp_status = status();
-				if (temp_status != FutureStatus::NOT_READY)
-					return temp_status;
+				FutureStatus status = this->status();
+				if (status != FutureStatus::NOT_READY)
+					return status;
 				time::yield();
 			}
 		}
@@ -1434,21 +1424,48 @@ namespace future
 		}
 
 	protected:
-		//TODO API DOC
-		FuturesGroup(containers::array<F*, SIZE> futures) : futures_{futures} {}
 		/// @cond notdocumented
-		FuturesGroup(FuturesGroup&&) = default;
-		FuturesGroup& operator=(FuturesGroup&&) = default;
-		FuturesGroup(const FuturesGroup&) = delete;
-		FuturesGroup& operator=(const FuturesGroup&) = delete;
+		AbstractFuturesGroup(F** futures, uint8_t size) : futures_{futures}, size_{size} {}
+		AbstractFuturesGroup(AbstractFuturesGroup&&) = default;
+		AbstractFuturesGroup& operator=(AbstractFuturesGroup&&) = default;
+		AbstractFuturesGroup(const AbstractFuturesGroup&) = delete;
+		AbstractFuturesGroup& operator=(const AbstractFuturesGroup&) = delete;
 		/// @endcond
 
 	private:
-		containers::array<F*, SIZE> futures_;
+		F** futures_;
+		uint8_t size_;
 		mutable FutureStatus status_ = FutureStatus::NOT_READY;
 		mutable int error_ = 0;
 	};
 
+	/**
+	 * Abstract class to allow aggregation of several futures.
+	 * This allows to `await()` for all futures, or query the overall `status()`
+	 * of the group.
+	 * 
+	 * TODO code sample on how to use (define subclass example)
+	 * 
+	 * @tparam F the type of Future to aggregate int this group; this shall be
+	 * either `AbstractFuture` or `AbstractFakeFuture`.
+	 * @tparam SIZE the number of futures in this group
+	 */
+	template<typename F, uint8_t SIZE> class FuturesGroup : public AbstractFuturesGroup<F>
+	{
+		static_assert(SIZE > 1, "SIZE must be at least 2");
+
+	protected:
+		//TODO API DOC
+		FuturesGroup(containers::array<F*, SIZE> futures)
+			: AbstractFuturesGroup<F>{futures.data(), SIZE}, futures_{futures} {}
+		/// @cond notdocumented
+		FuturesGroup(FuturesGroup&&) = default;
+		FuturesGroup& operator=(FuturesGroup&&) = default;
+		/// @endcond
+
+	private:
+		containers::array<F*, SIZE> futures_;
+	};
 }
 
 #endif /* FUTURE_HH */
