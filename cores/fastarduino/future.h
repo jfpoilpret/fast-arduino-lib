@@ -259,7 +259,7 @@ namespace future
 		 * @sa set_future_error_()
 		 * @sa errors::EINVAL
 		 */
-		int error()
+		int error() const
 		{
 			switch (await())
 			{
@@ -1017,7 +1017,7 @@ namespace future
 			return status();
 		}
 
-		int error()
+		int error() const
 		{
 			return error_;
 		}
@@ -1348,14 +1348,23 @@ namespace future
 	};
 	/// @endcond
 
-	//TODO optimize code size by refactoring to an abstract class without SIZE
 	template<typename F> class AbstractFuturesGroup
 	{
 		static_assert(Future_trait<F>::IS_FUTURE, "F must be a Future");
 		static_assert(Future_trait<F>::IS_ABSTRACT, "F must be an abstract Future");
 
 	public:
-		//TODO API DOC
+		/**
+		 * Compute a global status for this `FuturesGroup`, based on the status of each 
+		 * of its futures.
+		 * This will return:
+		 * - FutureStatus::READY if ALL its futures are ready
+		 * - FutureStatus::ERROR if ANY of its futures is in error
+		 * - FutureStatus::INVALID if ANY of its futures is invalid
+		 * - FutureStatus::NOT_READY if other cases, typically when no future is 
+		 * in error or invalid, and maybe some future are ready but not all, i.e.
+		 * at least one future is not ready.
+		 */
 		FutureStatus status() const
 		{
 			if (status_ != FutureStatus::NOT_READY)
@@ -1393,7 +1402,12 @@ namespace future
 			return FutureStatus::NOT_READY;
 		}
 
-		//TODO API DOC
+		/**
+		 * Await for all futures in this `FuturesGroup`.
+		 * Will return only when:
+		 * - either all futures are ready
+		 * - or at least one future is in error or invalid
+		 */
 		FutureStatus await() const
 		{
 			while (true)
@@ -1405,7 +1419,18 @@ namespace future
 			}
 		}
 
-		//TODO API DOC
+		/**
+		 * Wait until this FuturesGroup becomes ready or in error, then return the
+		 * error reported.
+		 * 
+		 * @retval 0 if all futures in this `FuturesGroup` are READY
+		 * @retval errors::EINVAL if any future in this `FuturesGroup` is INVALID
+		 * @return the actual error of the *first* future of this `FuturesGroup` 
+		 * which is in error
+		 * 
+		 * @sa await()
+		 * @sa errors::EINVAL
+		 */
 		int error() const
 		{
 			FutureStatus status = await();
@@ -1444,7 +1469,28 @@ namespace future
 	 * This allows to `await()` for all futures, or query the overall `status()`
 	 * of the group.
 	 * 
-	 * TODO code sample on how to use (define subclass example)
+	 * The following snippet shows how this must be sued to create an actual group 
+	 * of futures:
+	 * @code
+	 * class MyGroup : public FuturesGroup<AbstractFuture, 3>
+	 * {
+	 * public:
+	 *     MyGroup() : FuturesGroup<AbstractFuture, 3>{{&f1_, &f2_, &f3_}}, f1_{}, f2_{}, f3_{} {}
+	 * 
+	 *     F1& get_f1() { return f1_; }
+	 *     F2& get_f2() { return f2_; }
+	 *     F3& get_f3() { return f3_; }
+	 * 
+	 * private:
+	 *     MyFuture1 f1_;
+	 *     MyFuture2 f2_;
+	 *     MyFuture3 f3_;
+	 * };
+	 * @endcode
+	 * In that snippet, `MyGroup` embeds 3 different futures, each of a different type;
+	 * the 3 futures are constructed at `MyGroup` construction time, and their pointers
+	 * passed to the parent `FuturesGroup`.
+	 * Three getter mehtods allow teh application to access individual futures.
 	 * 
 	 * @tparam F the type of Future to aggregate int this group; this shall be
 	 * either `AbstractFuture` or `AbstractFakeFuture`.
@@ -1455,7 +1501,10 @@ namespace future
 		static_assert(SIZE > 1, "SIZE must be at least 2");
 
 	protected:
-		//TODO API DOC
+		/**
+		 * Create a new FuturesGroup for the list of provided @p futures pointers
+		 * array.
+		 */
 		FuturesGroup(containers::array<F*, SIZE> futures)
 			: AbstractFuturesGroup<F>{futures.data(), SIZE}, futures_{futures} {}
 		/// @cond notdocumented
