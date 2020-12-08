@@ -48,86 +48,6 @@ using namespace containers;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 128;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
-template<typename F, uint8_t SIZE> class FuturesGroup
-{
-	//TODO ensure F is a proper future (need specific traits...)
-public:
-	FutureStatus status() const
-	{
-		if (status_ != FutureStatus::NOT_READY)
-			return status_;
-
-		uint8_t count_ready = 0;
-		for (F* future: futures_)
-		{
-			FutureStatus temp_status = future->status();
-			switch (temp_status)
-			{
-				case FutureStatus::ERROR:
-				error_ = future->error();
-				// intentional fallthrough
-
-				case FutureStatus::INVALID:
-				status_ = temp_status;
-				return temp_status;
-
-				case FutureStatus::READY:
-				++count_ready;
-				break;
-
-				case FutureStatus::NOT_READY:
-				break;
-			}
-		}
-		if (count_ready == SIZE)
-		{
-			status_ = FutureStatus::READY;
-			return FutureStatus::READY;
-		}
-		return FutureStatus::NOT_READY;
-	}
-
-	FutureStatus await() const
-	{
-		while (true)
-		{
-			FutureStatus temp_status = status();
-			if (temp_status != FutureStatus::NOT_READY)
-				return temp_status;
-			time::yield();
-		}
-	}
-
-	int error() const
-	{
-		FutureStatus status = await();
-		switch (status)
-		{
-			case FutureStatus::READY:
-			return 0;
-
-			case FutureStatus::ERROR:
-			return error_;
-
-			default:
-			// This should never happen
-			return errors::EINVAL;
-		}
-	}
-
-protected:
-	FuturesGroup(containers::array<F*, SIZE> futures) : futures_{futures} {}
-	FuturesGroup(FuturesGroup&&) = default;
-	FuturesGroup& operator=(FuturesGroup&&) = default;
-	FuturesGroup(const FuturesGroup&) = delete;
-	FuturesGroup& operator=(const FuturesGroup&) = delete;
-
-private:
-	containers::array<F*, SIZE> futures_;
-	mutable FutureStatus status_ = FutureStatus::NOT_READY;
-	mutable int error_ = 0;
-};
-
 #ifdef REAL_FUTURE
 #define ABSTRACTFUTURE AbstractFuture
 #define FUTURE Future
@@ -190,8 +110,7 @@ private:
 		// Only one call expected, directly get output value and change it
 		uint8_t value = *(output_current - 1);
 		value |= set_mask_;
-		//TODO const_cast not good here, maybe overload Future get_input() to provide const and non-const flavours
-		const_cast<UpdateRegister&>(get_input()).data[2] = value;
+		get_input().data[2] = value;
 	}
 
 	uint8_t set_mask_;

@@ -24,6 +24,7 @@
 #define FUTURE_HH
 
 #include <string.h>
+#include "array.h"
 #include "errors.h"
 #include "move.h"
 #include "streams.h"
@@ -749,6 +750,16 @@ namespace future
 			return input_;
 		}
 
+		/**
+		 * Return the input storage value as it was initially set (or reset 
+		 * through `reset_input_()`), whatever the current state of this Future.
+		 * @sa reset_input_()
+		 */
+		IN& get_input()
+		{
+			return input_;
+		}
+
 	private:
 		void move(Future&& that)
 		{
@@ -878,6 +889,10 @@ namespace future
 
 	protected:
 		const IN& get_input() const
+		{
+			return input_;
+		}
+		IN& get_input()
 		{
 			return input_;
 		}
@@ -1134,6 +1149,10 @@ namespace future
 		{
 			return input_;
 		}
+		IN& get_input()
+		{
+			return input_;
+		}
 		/// @endcond
 
 	private:
@@ -1217,6 +1236,10 @@ namespace future
 		{
 			return input_;
 		}
+		IN& get_input()
+		{
+			return input_;
+		}
 
 	private:
 		union
@@ -1250,7 +1273,125 @@ namespace future
 	};
 	/// @endcond
 
-	//TODO Add FuturesGroup somehow
+	/// @cond notdocumented
+	// Specific traits for futures
+	template<typename F> struct Future_trait
+	{
+		static constexpr const bool IS_FUTURE = false;
+		static constexpr const bool IS_ABSTRACT = false;
+		static constexpr const bool IS_FAKE = false;
+	};
+	template<> struct Future_trait<AbstractFuture>
+	{
+		static constexpr const bool IS_FUTURE = true;
+		static constexpr const bool IS_ABSTRACT = true;
+		static constexpr const bool IS_FAKE = false;
+	};
+	template<typename OUT, typename IN> struct Future_trait<Future<OUT, IN>>
+	{
+		static constexpr const bool IS_FUTURE = true;
+		static constexpr const bool IS_ABSTRACT = false;
+		static constexpr const bool IS_FAKE = false;
+	};
+	template<> struct Future_trait<AbstractFakeFuture>
+	{
+		static constexpr const bool IS_FUTURE = true;
+		static constexpr const bool IS_ABSTRACT = true;
+		static constexpr const bool IS_FAKE = true;
+	};
+	template<typename OUT, typename IN> struct Future_trait<FakeFuture<OUT, IN>>
+	{
+		static constexpr const bool IS_FUTURE = true;
+		static constexpr const bool IS_ABSTRACT = false;
+		static constexpr const bool IS_FAKE = true;
+	};
+	/// @endcond
+
+	//TODO API DOC
+	template<typename F, uint8_t SIZE> class FuturesGroup
+	{
+		static_assert(Future_trait<F>::IS_FUTURE, "F must be a Future");
+		static_assert(Future_trait<F>::IS_ABSTRACT, "F must be an abstract Future");
+		static_assert(SIZE > 1, "SIZE must be at least 2");
+
+	public:
+		FutureStatus status() const
+		{
+			if (status_ != FutureStatus::NOT_READY)
+				return status_;
+
+			uint8_t count_ready = 0;
+			for (F* future: futures_)
+			{
+				FutureStatus temp_status = future->status();
+				switch (temp_status)
+				{
+					case FutureStatus::ERROR:
+					error_ = future->error();
+					// intentional fallthrough
+
+					case FutureStatus::INVALID:
+					status_ = temp_status;
+					return temp_status;
+
+					case FutureStatus::READY:
+					++count_ready;
+					break;
+
+					case FutureStatus::NOT_READY:
+					break;
+				}
+			}
+			if (count_ready == SIZE)
+			{
+				status_ = FutureStatus::READY;
+				return FutureStatus::READY;
+			}
+			return FutureStatus::NOT_READY;
+		}
+
+		FutureStatus await() const
+		{
+			while (true)
+			{
+				FutureStatus temp_status = status();
+				if (temp_status != FutureStatus::NOT_READY)
+					return temp_status;
+				time::yield();
+			}
+		}
+
+		int error() const
+		{
+			FutureStatus status = await();
+			switch (status)
+			{
+				case FutureStatus::READY:
+				return 0;
+
+				case FutureStatus::ERROR:
+				return error_;
+
+				default:
+				// This should never happen
+				return errors::EINVAL;
+			}
+		}
+
+	protected:
+		FuturesGroup(containers::array<F*, SIZE> futures) : futures_{futures} {}
+		/// @cond notdocumented
+		FuturesGroup(FuturesGroup&&) = default;
+		FuturesGroup& operator=(FuturesGroup&&) = default;
+		FuturesGroup(const FuturesGroup&) = delete;
+		FuturesGroup& operator=(const FuturesGroup&) = delete;
+		/// @endcond
+
+	private:
+		containers::array<F*, SIZE> futures_;
+		mutable FutureStatus status_ = FutureStatus::NOT_READY;
+		mutable int error_ = 0;
+	};
 
 }
 
