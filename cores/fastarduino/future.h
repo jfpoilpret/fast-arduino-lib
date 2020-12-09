@@ -1361,6 +1361,11 @@ namespace future
 	};
 	/// @endcond
 
+	/**
+	 * Abstract base class for FuturesGroup. You should never directly subclass this.
+	 * 
+	 * @sa FuturesGroup
+	 */
 	template<typename F> class AbstractFuturesGroup
 	{
 		static_assert(Future_trait<F>::IS_FUTURE, "F must be a Future");
@@ -1565,7 +1570,7 @@ namespace future
 		 * array.
 		 */
 		FuturesGroup(containers::array<F*, SIZE> futures)
-			: AbstractFuturesGroup<F>{futures.data(), SIZE}, futures_{futures} {}
+			: AbstractFuturesGroup<F>{futures_.data(), SIZE}, futures_{futures} {}
 		/// @cond notdocumented
 		FuturesGroup(FuturesGroup&&) = default;
 		FuturesGroup& operator=(FuturesGroup&&) = default;
