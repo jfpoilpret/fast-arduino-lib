@@ -567,6 +567,7 @@ namespace future
 		}
 
 	protected:
+		//TODO make it public and doc API!
 		/// @cond notdocumented
 		using STATUS_LISTENER = FutureStatusListener<AbstractFuture>;
 		using OUTPUT_LISTENER = FutureOutputListener<AbstractFuture>;
@@ -645,6 +646,8 @@ namespace future
 
 		STATUS_LISTENER* status_listener_ = nullptr;
 		OUTPUT_LISTENER* output_listener_ = nullptr;
+
+		template<typename F> friend class AbstractFuturesGroup;
 	};
 
 	/**
@@ -1093,6 +1096,7 @@ namespace future
 		/// @endcond
 
 	protected:
+		//TODO make it public!
 		/// @cond notdocumented
 		using STATUS_LISTENER = FutureStatusListener<AbstractFakeFuture>;
 		using OUTPUT_LISTENER = FutureOutputListener<AbstractFakeFuture>;
@@ -1143,6 +1147,8 @@ namespace future
 
 		STATUS_LISTENER* status_listener_ = nullptr;
 		OUTPUT_LISTENER* output_listener_ = nullptr;
+
+		template<typename F> friend class AbstractFuturesGroup;
 	};
 
 	/**
@@ -1353,6 +1359,13 @@ namespace future
 		static_assert(Future_trait<F>::IS_FUTURE, "F must be a Future");
 		static_assert(Future_trait<F>::IS_ABSTRACT, "F must be an abstract Future");
 
+	protected:
+		//TODO make it public and doc API!
+		/// @cond notdocumented
+		using STATUS_LISTENER = FutureStatusListener<F>;
+		using OUTPUT_LISTENER = FutureOutputListener<F>;
+		/// @endcond
+
 	public:
 		/**
 		 * Compute a global status for this `FuturesGroup`, based on the status of each 
@@ -1445,6 +1458,28 @@ namespace future
 				default:
 				// This should never happen
 				return errors::EINVAL;
+			}
+		}
+
+		//TODO DOC
+		void set_status_listener(STATUS_LISTENER* status_listener)
+		{
+			F** futures = futures_;
+			for (uint8_t i = 0; i < size_; ++i)
+			{
+				F* future = *futures++;
+				future->status_listener_ = status_listener;
+			}
+		}
+
+		//TODO DOC
+		void set_output_listener(OUTPUT_LISTENER* output_listener)
+		{
+			F** futures = futures_;
+			for (uint8_t i = 0; i < size_; ++i)
+			{
+				F* future = *futures++;
+				future->output_listener_ = output_listener;
 			}
 		}
 
