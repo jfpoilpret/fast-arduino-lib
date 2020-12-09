@@ -1,27 +1,8 @@
 /*
- * This program is a Proof of Concept for enhancement of Futures in order to:
- * - support Future dependencies (callbacks)
- * - support Futures grouping
- * 
- * The constraints:
- * - limit extra code
- * - limit extra time
- * - support both Future and FakeFuture
- * - compatibility with current usage of futures
+ * This program demonstrates the use Futures listeners and the new FuturesGroup API.
  * 
  * It just uses an Arduino UNO with USB console.
  */
-
-// Possible ways for callbacks:
-// - one or more listener ABC with virtual method(s) for various future changes
-//		- provided at construction time (additional args with default nullptr)
-//	+ easy to implement
-//	- virtual overhead of code size and speed (particularly from inside ISR)
-// - one functor on all Future and FakeFuture templates
-//		- default functor type (empty)
-//		- default arg value
-//	+ impact size/speed only when not empty and to the strict minimum
-//	- much harder to implement properly
 
 #include <fastarduino/future.h>
 
@@ -32,6 +13,7 @@
 // Register vector for UART (used for debug)
 REGISTER_UATX_ISR(0)
 
+// Comment to use FakeFuture instead of real Future
 #define REAL_FUTURE
 
 // Example starts here
@@ -188,39 +170,81 @@ int main()
 	out << F("data = ") << hex << data << endl;
 	out << F("f3.status() = ") << f3.status() << endl;
 
-	// Group of futures
-	out << F("Testing group of futures #1") << endl;
-	MyGroup group{listener};
-	out << F("group.status() = ") << group.status() << endl;
-	out << F("set_future_value(0x11)") << endl;
-	group.get_f1().set_future_value_(uint8_t(0x11));
-	out << F("group.status() = ") << group.status() << endl;
+	{
+		// Group of futures
+		out << F("Testing group of futures #1") << endl;
+		MyGroup group{listener};
+		out << F("group.status() = ") << group.status() << endl;
+		out << F("set_future_value(0x11)") << endl;
+		group.get_f1().set_future_value_(uint8_t(0x11));
+		out << F("group.status() = ") << group.status() << endl;
 
-	out << F("set_future_value(0x22)") << endl;
-	group.get_f1().set_future_value_(uint8_t(0x22));
-	out << F("group.status() = ") << group.status() << endl;
+		out << F("set_future_value(0x22)") << endl;
+		group.get_f1().set_future_value_(uint8_t(0x22));
+		out << F("group.status() = ") << group.status() << endl;
 
-	out << F("set_future_value(0x33)") << endl;
-	group.get_f1().set_future_value_(uint8_t(0x33));
-	out << F("group.status() = ") << group.status() << endl;
+		out << F("set_future_value(0x33)") << endl;
+		group.get_f1().set_future_value_(uint8_t(0x33));
+		out << F("group.status() = ") << group.status() << endl;
 
-	out << F("set_future_value(0x44)") << endl;
-	group.get_f1().set_future_value_(uint8_t(0x44));
-	out << F("group.status() = ") << group.status() << endl;
+		out << F("set_future_value(0x44)") << endl;
+		group.get_f1().set_future_value_(uint8_t(0x44));
+		out << F("group.status() = ") << group.status() << endl;
 
-	out << F("f1.status() = ") << group.get_f1().status() << endl;
-	result = 0;
-	out << F("f1.get(result) = ") << group.get_f1().get(result) << endl;
-	out << F("result = ") << hex << result << endl;
+		out << F("f1.status() = ") << group.get_f1().status() << endl;
+		result = 0;
+		out << F("f1.get(result) = ") << group.get_f1().get(result) << endl;
+		out << F("result = ") << hex << result << endl;
 
-	out << F("Testing group of futures #2") << endl;
-	group.get_f2().set_future_value_(uint8_t(0x55));
-	out << F("group.status() = ") << group.status() << endl;
-	group.get_f2().set_future_finish_();
-	out << F("group.status() = ") << group.status() << endl;
-	group.get_f2().set_future_error_(-10);
-	out << F("group.status() = ") << group.status() << endl;
-	out << F("f2.status() = ") << group.get_f2().status() << endl;
-	out << F("f2.error() = ") << dec << group.get_f2().error() << endl;
-	out << F("group.error() = ") << group.error() << endl;
+		out << F("Testing group of futures #2") << endl;
+		group.get_f2().set_future_value_(uint8_t(0x55));
+		out << F("group.status() = ") << group.status() << endl;
+		group.get_f2().set_future_finish_();
+		out << F("group.status() = ") << group.status() << endl;
+		group.get_f2().set_future_error_(-10);
+		out << F("group.status() = ") << group.status() << endl;
+		out << F("f2.status() = ") << group.get_f2().status() << endl;
+		out << F("f2.error() = ") << dec << group.get_f2().error() << endl;
+		out << F("group.error() = ") << group.error() << endl;
+	}
+
+	{
+		// Group of futures
+		out << F("Testing group of futures without any listener #1") << endl;
+		MyGroup group{listener};
+		group.set_output_listener(nullptr);
+		group.set_status_listener(nullptr);
+		out << F("group.status() = ") << group.status() << endl;
+		out << F("set_future_value(0x11)") << endl;
+		group.get_f1().set_future_value_(uint8_t(0x11));
+		out << F("group.status() = ") << group.status() << endl;
+
+		out << F("set_future_value(0x22)") << endl;
+		group.get_f1().set_future_value_(uint8_t(0x22));
+		out << F("group.status() = ") << group.status() << endl;
+
+		out << F("set_future_value(0x33)") << endl;
+		group.get_f1().set_future_value_(uint8_t(0x33));
+		out << F("group.status() = ") << group.status() << endl;
+
+		out << F("set_future_value(0x44)") << endl;
+		group.get_f1().set_future_value_(uint8_t(0x44));
+		out << F("group.status() = ") << group.status() << endl;
+
+		out << F("f1.status() = ") << group.get_f1().status() << endl;
+		result = 0;
+		out << F("f1.get(result) = ") << group.get_f1().get(result) << endl;
+		out << F("result = ") << hex << result << endl;
+
+		out << F("Testing group of futures without any listener #2") << endl;
+		group.get_f2().set_future_value_(uint8_t(0x55));
+		out << F("group.status() = ") << group.status() << endl;
+		group.get_f2().set_future_finish_();
+		out << F("group.status() = ") << group.status() << endl;
+		group.get_f2().set_future_error_(-10);
+		out << F("group.status() = ") << group.status() << endl;
+		out << F("f2.status() = ") << group.get_f2().status() << endl;
+		out << F("f2.error() = ") << dec << group.get_f2().error() << endl;
+		out << F("group.error() = ") << group.error() << endl;
+	}
 }
