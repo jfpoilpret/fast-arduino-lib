@@ -59,6 +59,7 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						misc/QueueCheck							\
 						misc/LinkedListCheck					\
 						misc/UtilsCheck							\
+						future/improved_futures					\
 						pci/PinChangeInterrupt4					\
 						sonar/Sonar10 sonar/Sonar11				\
 						i2c/DS1307RTC3 i2c/DS1307RTC4			\
