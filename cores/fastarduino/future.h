@@ -566,12 +566,20 @@ namespace future
 			return true;
 		}
 
-	protected:
-		//TODO make it public and doc API!
-		/// @cond notdocumented
+		/**
+		 * The type to use for status listeners for this type of Future.
+		 * @sa FutureStatusListener
+		 */
 		using STATUS_LISTENER = FutureStatusListener<AbstractFuture>;
+
+		/**
+		 * The type to use for output listeners for this type of Future.
+		 * @sa FutureOutputListener
+		 */
 		using OUTPUT_LISTENER = FutureOutputListener<AbstractFuture>;
 
+	protected:
+		/// @cond notdocumented
 		// "default" constructor
 		AbstractFuture(uint8_t* output_data, uint8_t output_size, uint8_t* input_data, uint8_t input_size,
 			STATUS_LISTENER* status_listener = nullptr,	OUTPUT_LISTENER* output_listener = nullptr)
@@ -1093,14 +1101,13 @@ namespace future
 			callback_status();
 			return true;
 		}
-		/// @endcond
 
-	protected:
-		//TODO make it public!
-		/// @cond notdocumented
 		using STATUS_LISTENER = FutureStatusListener<AbstractFakeFuture>;
 		using OUTPUT_LISTENER = FutureOutputListener<AbstractFakeFuture>;
+		/// @endcond
 		
+	protected:
+		/// @cond notdocumented
 		// "default" constructor
 		AbstractFakeFuture(uint8_t* output_data, uint8_t output_size, uint8_t* input_data, uint8_t input_size,
 			STATUS_LISTENER* status_listener = nullptr, OUTPUT_LISTENER* output_listener = nullptr)
@@ -1359,14 +1366,19 @@ namespace future
 		static_assert(Future_trait<F>::IS_FUTURE, "F must be a Future");
 		static_assert(Future_trait<F>::IS_ABSTRACT, "F must be an abstract Future");
 
-	protected:
-		//TODO make it public and doc API!
-		/// @cond notdocumented
-		using STATUS_LISTENER = FutureStatusListener<F>;
-		using OUTPUT_LISTENER = FutureOutputListener<F>;
-		/// @endcond
-
 	public:
+		/**
+		 * The type to use for status listeners for this type of Future.
+		 * @sa FutureStatusListener
+		 */
+		using STATUS_LISTENER = FutureStatusListener<F>;
+
+		/**
+		 * The type to use for output listeners for this type of Future.
+		 * @sa FutureOutputListener
+		 */
+		using OUTPUT_LISTENER = FutureOutputListener<F>;
+
 		/**
 		 * Compute a global status for this `FuturesGroup`, based on the status of each 
 		 * of its futures.
@@ -1461,7 +1473,13 @@ namespace future
 			}
 		}
 
-		//TODO DOC
+		/**
+		 * Add a status listener to all futures embedded in this FuturesGroup.
+		 * @warning The new @p status_listener will override any status listener
+		 * already registered with individual futures.
+		 * 
+		 * @sa FutureStatusListener
+		 */
 		void set_status_listener(STATUS_LISTENER* status_listener)
 		{
 			F** futures = futures_;
@@ -1472,7 +1490,13 @@ namespace future
 			}
 		}
 
-		//TODO DOC
+		/**
+		 * Add an output listener to all futures embedded in this FuturesGroup.
+		 * @warning The new @p output_listener will override any output listener
+		 * already registered with individual futures.
+		 * 
+		 * @sa FutureOutputListener
+		 */
 		void set_output_listener(OUTPUT_LISTENER* output_listener)
 		{
 			F** futures = futures_;
