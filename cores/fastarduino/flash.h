@@ -34,6 +34,15 @@ namespace flash
 	class FlashStorage;
 	/// @endcond
 
+	//TODO DOC
+	template<typename T = uint8_t>
+	T* read_flash(uint16_t address, T* buffer, uint8_t size)
+	{
+		uint8_t* ptr = (uint8_t*) buffer;
+		for (size_t i = 0; i < size * sizeof(T); ++i) *ptr++ = pgm_read_byte(address++);
+		return buffer;
+	}
+
 	/**
 	 * Read flash memory content at given @p address into @p item.
 	 * Note that type @p T should not have constructors as they will not be
@@ -41,7 +50,7 @@ namespace flash
 	 * 
 	 * @tparam T type of @p item
 	 * @param address the address to read from flash storage
-	 * @param item the item to read from flah storage
+	 * @param item the item to read from flash storage
 	 * @return a reference to read @p item
 	 */
 	template<typename T> T& read_flash(uint16_t address, T& item)
@@ -55,7 +64,7 @@ namespace flash
 	 * Read flash memory content at given @p address into @p item.
 	 * Note that type @p T should not have constructors as they will not be
 	 * properly called by this method.
-	 * The item shgould properly be defined in flash storage, as in:
+	 * The item should properly be defined in flash storage, as in:
 	 * @code
 	 * struct Dummy
 	 * {
@@ -74,7 +83,7 @@ namespace flash
 	 * 
 	 * @tparam T type of @p item
 	 * @param address the address to read from flash storage
-	 * @param item the item to read from flah storage
+	 * @param item the item to read from flash storage
 	 * @return a reference to read @p item
 	 */
 	template<typename T> T& read_flash(const T* address, T& item)
