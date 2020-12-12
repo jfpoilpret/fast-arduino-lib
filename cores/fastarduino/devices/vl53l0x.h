@@ -47,11 +47,6 @@ namespace devices
 	}
 }
 
-//TODO - infer on having a future value based on result from another future...
-//			- use some kind of PlaceHolder updated by Future 1 and used by Future 2?
-//			- use I2C events?
-//TODO - infer on grouping multiple futures
-
 //TODO - use PROGMEM (flash memory) for long sequences of bytes to be sent?
 //TODO - implement low-level API step by step
 //       - init_data
@@ -76,6 +71,8 @@ namespace devices
 
 namespace devices::vl53l0x
 {
+	namespace regs = vl53l0x_internals::registers;
+
 	// static utilities to support fiexed point 9/7 bits used by VL53L0X chip
 	class FixPoint9_7
 	{
@@ -293,7 +290,7 @@ namespace devices::vl53l0x
 
 	/**
 	 * I2C device driver for the VL53L0X ToF ranging chip.
-	 * This chip only supports both standard and fast I2C modes.
+	 * This chip supports both standard and fast I2C modes.
 	 * 
 	 * @tparam MANAGER one of FastArduino available I2C Manager
 	 */
@@ -309,6 +306,7 @@ namespace devices::vl53l0x
 		template<uint8_t REGISTER, typename T = uint8_t> class ReadRegisterFuture;
 		template<uint8_t REGISTER, typename T = uint8_t> class WriteRegisterFuture;
 		// Utility functions used every time a register gets read or written
+		//TODO refactor into I2CDevice? or subclass I2CDevice with register-based functions?
 		template<typename F> int async_read(PROXY<F> future)
 		{
 			return this->launch_commands(future, {this->write(), this->read()});
@@ -330,17 +328,6 @@ namespace devices::vl53l0x
 			return (future.await() == future::FutureStatus::READY);
 		}
 
-		//TODO registers
-		static constexpr const uint8_t REG_IDENTIFICATION_MODEL_ID = 0xC0;
-		static constexpr const uint8_t REG_IDENTIFICATION_REVISION_ID = 0xC2;
-		static constexpr const uint8_t REG_POWER_MANAGEMENT = 0x80;
-		static constexpr const uint8_t REG_RESULT_RANGE_STATUS = 0x14;
-		static constexpr const uint8_t REG_SYSTEM_SEQUENCE_CONFIG = 0x01;
-		static constexpr const uint8_t REG_PRE_RANGE_CONFIG_VCSEL_PERIOD = 0x50;
-		static constexpr const uint8_t REG_FINAL_RANGE_CONFIG_VCSEL_PERIOD = 0x70;
-		static constexpr const uint8_t REG_FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT = 0x44;
-		static constexpr const uint8_t REG_MSRC_CONFIG_CONTROL = 0x60;
-
 	public:
 		/**
 		 * Create a new device driver for a VL53L0X chip.
@@ -351,37 +338,37 @@ namespace devices::vl53l0x
 
 		// Asynchronous API
 		//==================
-		using GetModelFuture = ReadRegisterFuture<REG_IDENTIFICATION_MODEL_ID>;
+		using GetModelFuture = ReadRegisterFuture<regs::REG_IDENTIFICATION_MODEL_ID>;
 		int get_model(PROXY<GetModelFuture> future)
 		{
 			return async_read(future);
 		}
 
-		using GetRevisionFuture = ReadRegisterFuture<REG_IDENTIFICATION_REVISION_ID>;
+		using GetRevisionFuture = ReadRegisterFuture<regs::REG_IDENTIFICATION_REVISION_ID>;
 		int get_revision(PROXY<GetRevisionFuture> future)
 		{
 			return async_read(future);
 		}
 
-		using GetPowerModeFuture = ReadRegisterFuture<REG_POWER_MANAGEMENT, PowerMode>;
+		using GetPowerModeFuture = ReadRegisterFuture<regs::REG_POWER_MANAGEMENT, PowerMode>;
 		int get_power_mode(PROXY<GetPowerModeFuture> future)
 		{
 			return async_read(future);
 		}
 
-		using GetRangeStatusFuture = ReadRegisterFuture<REG_RESULT_RANGE_STATUS, DeviceStatus>;
+		using GetRangeStatusFuture = ReadRegisterFuture<regs::REG_RESULT_RANGE_STATUS, DeviceStatus>;
 		int get_range_status(PROXY<GetRangeStatusFuture> future)
 		{
 			return async_read(future);
 		}
 
-		using GetSequenceStepsFuture = ReadRegisterFuture<REG_SYSTEM_SEQUENCE_CONFIG, SequenceSteps>;
+		using GetSequenceStepsFuture = ReadRegisterFuture<regs::REG_SYSTEM_SEQUENCE_CONFIG, SequenceSteps>;
 		int get_sequence_steps(PROXY<GetSequenceStepsFuture> future)
 		{
 			return async_read(future);
 		}
 
-		using SetSequenceStepsFuture = WriteRegisterFuture<REG_SYSTEM_SEQUENCE_CONFIG, SequenceSteps>;
+		using SetSequenceStepsFuture = WriteRegisterFuture<regs::REG_SYSTEM_SEQUENCE_CONFIG, SequenceSteps>;
 		int set_sequence_steps(PROXY<SetSequenceStepsFuture> future)
 		{
 			return async_write(future);
@@ -431,9 +418,9 @@ namespace devices::vl53l0x
 		}
 
 		class GetSignalRateLimitFuture : 
-			public ReadRegisterFuture<REG_FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, uint16_t>
+			public ReadRegisterFuture<regs::REG_FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, uint16_t>
 		{
-			using PARENT = ReadRegisterFuture<REG_FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, uint16_t>;
+			using PARENT = ReadRegisterFuture<regs::REG_FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, uint16_t>;
 
 		public:
 			explicit GetSignalRateLimitFuture() : PARENT{} {}
@@ -454,9 +441,9 @@ namespace devices::vl53l0x
 		}
 
 		class SetSignalRateLimitFuture : 
-			public WriteRegisterFuture<REG_FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, uint16_t>
+			public WriteRegisterFuture<regs::REG_FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, uint16_t>
 		{
-			using PARENT = WriteRegisterFuture<REG_FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, uint16_t>;
+			using PARENT = WriteRegisterFuture<regs::REG_FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, uint16_t>;
 
 		public:
 			explicit SetSignalRateLimitFuture(float signal_rate) : PARENT{FixPoint9_7::convert(signal_rate)} {}
@@ -479,14 +466,26 @@ namespace devices::vl53l0x
 
 		};
 
+		//TODO shall we impose sync only init?
 		int init_data_first()
 		{
 			//TODO
+			// 1. 1.8V (default) or 2.8V (update VL53L0X_REG_VHV_CONFIG_PAD_SCL_SDA__EXTSUP_HV)
+			// 2. Set I2C standard mode (register 0x88)
+			// 3. Get stop_variable
+			// 4. Set check enable
+			// 5. Set check limits?
+			// 6. Set SYSTEM_SEQUENCE_CONFIG
 		}
 
 		int init_static_second()
 		{
 			//TODO
+			// 1. Get SPAD map
+			// 2. Ser reference SPADs
+			// 3. Load tuning settings
+			// 4. Set interrupt settings
+			//...
 		}
 
 		// Synchronous API
