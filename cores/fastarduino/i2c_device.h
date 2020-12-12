@@ -22,6 +22,7 @@
 #define I2C_DEVICE_HH
 
 #include "initializer_list.h"
+#include "iterator.h"
 #include "errors.h"
 #include "i2c.h"
 #include "future.h"
@@ -244,7 +245,7 @@ namespace i2c
 		 * @sa errors
 		 */
 		int launch_commands(
-			PROXY<ABSTRACT_FUTURE> proxy, std::initializer_list<I2CLightCommand> commands)
+			PROXY<ABSTRACT_FUTURE> proxy, utils::range<I2CLightCommand> commands)
 		{
 			uint8_t num_commands = commands.size();
 			if (num_commands == 0) return errors::EINVAL;
@@ -317,7 +318,7 @@ namespace i2c
 
 	private:
 		static bool check_commands(
-			uint8_t max_write, uint8_t max_read, const std::initializer_list<I2CLightCommand>& commands)
+			uint8_t max_write, uint8_t max_read, const utils::range<I2CLightCommand>& commands)
 		{
 			// Limit total number of bytes read or written in a transaction to 255
 			uint8_t total_read = 0;
