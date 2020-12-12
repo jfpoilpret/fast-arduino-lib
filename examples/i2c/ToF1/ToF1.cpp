@@ -173,6 +173,7 @@ int main()
 	ok = tof.get_vcsel_pulse_period<VcselPeriodType::FINAL_RANGE>(period);
 	out << F("tof.get_vcsel_pulse_period<FINAL_RANGE>(period) = ") << ok << F(", period = ") << dec << period << endl;
 
+	// The following block adds 4KB to program size (float arithmetic libs)
 	float signal_rate = 0.0;
 	ok = tof.get_signal_rate_limit(signal_rate);
 	out << F("tof.get_signal_rate_limit(signal_rate) = ") << ok << F(", signal_rate = ")
