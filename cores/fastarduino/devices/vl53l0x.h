@@ -71,7 +71,8 @@ namespace devices
 
 namespace devices::vl53l0x
 {
-	namespace regs = vl53l0x_internals::registers;
+	namespace internals = vl53l0x_internals;
+	namespace regs = internals::registers;
 
 	// static utilities to support fiexed point 9/7 bits used by VL53L0X chip
 	class FixPoint9_7
@@ -153,10 +154,8 @@ namespace devices::vl53l0x
 
 	enum class VcselPeriodType : uint8_t
 	{
-		// static constexpr const uint8_t REG_PRE_RANGE_CONFIG_VCSEL_PERIOD = 0x50;
-		PRE_RANGE = 0x50,
-		// static constexpr const uint8_t REG_FINAL_RANGE_CONFIG_VCSEL_PERIOD = 0x70;
-		FINAL_RANGE = 0x70
+		PRE_RANGE = regs::REG_PRE_RANGE_CONFIG_VCSEL_PERIOD,
+		FINAL_RANGE = regs::REG_FINAL_RANGE_CONFIG_VCSEL_PERIOD
 	};
 
 	class SequenceSteps
@@ -455,11 +454,11 @@ namespace devices::vl53l0x
 			return async_write(future);
 		}
 
-		class InitDataFuture : public FUTURE<uint8_t[vl53l0x_internals::INIT_DATA_BUFFER_READ_SIZE], 
-			uint8_t[vl53l0x_internals::INIT_DATA_BUFFER_WRITE_SIZE]>
+		class InitDataFuture : public FUTURE<uint8_t[internals::INIT_DATA_BUFFER_READ_SIZE], 
+			uint8_t[internals::INIT_DATA_BUFFER_WRITE_SIZE]>
 		{
-			using PARENT = FUTURE<uint8_t[vl53l0x_internals::INIT_DATA_BUFFER_READ_SIZE],
-				uint8_t[vl53l0x_internals::INIT_DATA_BUFFER_WRITE_SIZE]>;
+			using PARENT = FUTURE<uint8_t[internals::INIT_DATA_BUFFER_READ_SIZE],
+				uint8_t[internals::INIT_DATA_BUFFER_WRITE_SIZE]>;
 
 		public:
 			InitDataFuture() : PARENT{} {}
