@@ -85,33 +85,33 @@ namespace devices::vl53l0x_internals
 		static constexpr const uint8_t REG_ALGO_PHASECAL_CONFIG_TIMEOUT                = 0x30;
 	}
 
+	namespace regs = registers;
 
 	// Constants for init_data() method
 	//----------------------------------
 	// Write buffer
 	static constexpr uint8_t INIT_DATA_BUFFER[] PROGMEM =
 	{
-		// Read/write VHV_CONFIG_PAD_SCL_SDA__EXTSUP_HV to force 2.8V or keep 1.8V default
-		0x89, 
-		0x89, 0x01,
-		// Set I2C standard mode
+		// read/write VHV_CONFIG_PAD_SCL_SDA__EXTSUP_HV to force 2.8V or keep 1.8V default
+		regs::REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV, // 1 BYTE READ
+		regs::REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV, 0x01, // OVERWRITTEN BYTE
+		// set I2C standard mode
 		0x88, 0x00,
-		0x80, 0x01,
+		regs::REG_POWER_MANAGEMENT, 0x01,
 		0xFF, 0x01,
-		0x00, 0x00,
-		// Read stop variable here
-		0x91,
-		0x00, 0x01,
+		regs::REG_SYSRANGE_START, 0x00,
+		// read stop variable here
+		0x91, // 1 BYTE READ
+		regs::REG_SYSRANGE_START, 0x01,
 		0xFF, 0x00,
-		0x80, 0x00,
-		// Read REG_MSRC_CONFIG_CONTROL
-		0x60,
-		// Write REG_MSRC_CONFIG_CONTROL (disable SIGNAL_RATE_MSRC and SIGNAL_RATE_PRE_RANGE limit checks)
-		0x60, 0x12,
-		// set REG_FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT to 0.5
-		0x44, 0x00, 0x40,
-		// SYSTEM_SEQUENCE_CONFIG
-		0x01, 0xFF
+		regs::REG_POWER_MANAGEMENT, 0x00,
+		// read/write REG_MSRC_CONFIG_CONTROL to disable SIGNAL_RATE_MSRC and SIGNAL_RATE_PRE_RANGE limit checks
+		regs::REG_MSRC_CONFIG_CONTROL, // 1 BYTE READ
+		regs::REG_MSRC_CONFIG_CONTROL, 0x12, // OVERWRITTEN BYTE
+		// set signal rate limit to 0.25 MCPS (million counts per second) in FP9.7 format
+		regs::REG_FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, 0x00, 0x20,
+		// enable all sequence steps by default
+		regs::REG_SYSTEM_SEQUENCE_CONFIG, 0xFF
 	};
 	// Size of write buffer
 	static constexpr uint8_t INIT_DATA_BUFFER_WRITE_SIZE = sizeof(INIT_DATA_BUFFER);
@@ -119,8 +119,33 @@ namespace devices::vl53l0x_internals
 	static constexpr uint8_t INIT_DATA_BUFFER_READ_SIZE = 3;
 	// List of bytes count for each read/write (read is negative, write is positive)
 	static constexpr int8_t INIT_DATA_BUFFER_R_W[] PROGMEM = {1, -1, 2, 2, 2, 2, 2, 1, -1, 2, 2, 2, 1, -1, 2, 3, 2};
-	//TODO Index of value to write for REG_MSRC_CONFIG_CONTROL
-	static constexpr uint8_t INIT_DATA_BUFFER_MSRC_CONFIG_CONTROL_INDEX = 17;
+	static constexpr uint8_t INIT_DATA_BUFFER_RW_SIZE = sizeof(INIT_DATA_BUFFER_R_W);
+
+	// Index of value to read in future output buffer for REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV
+	static constexpr uint8_t INIT_DATA_BUFFER_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV_READ_INDEX = 0;
+	// Index of value to write in future input buffer for REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV
+	static constexpr uint8_t INIT_DATA_BUFFER_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV_WRITE_INDEX = 2;
+
+	// Index of value to read in future output buffer for stop variable
+	static constexpr uint8_t INIT_DATA_BUFFER_STOP_VARIABLE_READ_INDEX = 1;
+
+	// Index of value to read in future output buffer for REG_MSRC_CONFIG_CONTROL
+	static constexpr uint8_t INIT_DATA_BUFFER_MSRC_CONFIG_CONTROL_READ_INDEX = 2;
+	// Index of value to write in future input buffer for REG_MSRC_CONFIG_CONTROL
+	static constexpr uint8_t INIT_DATA_BUFFER_MSRC_CONFIG_CONTROL_WRITE_INDEX = 20;
+
+	// Value to force 2V8 in REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV register
+	static constexpr uint8_t VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV_SET_2V8 = 0x01;
+	// Value to disable SIGNAL_RATE_MSRC and SIGNAL_RATE_PRE_RANGE in REG_MSRC_CONFIG_CONTROL register
+	static constexpr uint8_t MSRC_CONFIG_CONTROL_INIT = 0x12;
+
+	// Constants for init_static() method
+	//-----------------------------------
+	// Write buffer
+	static constexpr uint8_t INIT_STATIC_BUFFER[] PROGMEM =
+	{
+		
+	};
 }
 
 #endif /* VL53L0X_INTERNALS_H */

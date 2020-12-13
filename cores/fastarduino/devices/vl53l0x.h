@@ -71,10 +71,12 @@ namespace devices
 
 namespace devices::vl53l0x
 {
+	/// @cond notdocumented
 	namespace internals = vl53l0x_internals;
 	namespace regs = internals::registers;
+	/// @endcond
 
-	// static utilities to support fiexed point 9/7 bits used by VL53L0X chip
+	// static utilities to support fixed point 9/7 bits used by VL53L0X chip
 	class FixPoint9_7
 	{
 	public:
@@ -299,11 +301,15 @@ namespace devices::vl53l0x
 	private:
 		using PARENT = i2c::I2CDevice<MANAGER>;
 		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
+		using ABSTRACT_FUTURE = typename PARENT::ABSTRACT_FUTURE;
 		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
+
+		using FUTURE_OUTPUT_LISTENER = future::FutureOutputListener<ABSTRACT_FUTURE>;
 
 		// Forward declarations needed by compiler
 		template<uint8_t REGISTER, typename T = uint8_t> class ReadRegisterFuture;
 		template<uint8_t REGISTER, typename T = uint8_t> class WriteRegisterFuture;
+
 		// Utility functions used every time a register gets read or written
 		//TODO refactor into I2CDevice? or subclass I2CDevice with register-based functions?
 		template<typename F> int async_read(PROXY<F> future)
@@ -454,34 +460,93 @@ namespace devices::vl53l0x
 			return async_write(future);
 		}
 
-		class InitDataFuture : public FUTURE<uint8_t[internals::INIT_DATA_BUFFER_READ_SIZE], 
-			uint8_t[internals::INIT_DATA_BUFFER_WRITE_SIZE]>
+		//TODO additional arguments for init? eg sequence steps, limits...
+		//TODO use template for voltage? (smaller code, no bloat risk since used only once)
+		class InitDataFuture :
+			public FUTURE<
+				containers::array<uint8_t, internals::INIT_DATA_BUFFER_READ_SIZE>,
+				containers::array<uint8_t, internals::INIT_DATA_BUFFER_WRITE_SIZE>>,
+			public FUTURE_OUTPUT_LISTENER
 		{
-			using PARENT = FUTURE<uint8_t[internals::INIT_DATA_BUFFER_READ_SIZE],
-				uint8_t[internals::INIT_DATA_BUFFER_WRITE_SIZE]>;
+			using INPUT_BUFFER = containers::array<uint8_t, internals::INIT_DATA_BUFFER_WRITE_SIZE>;
+			using PARENT = FUTURE<
+				containers::array<uint8_t, internals::INIT_DATA_BUFFER_READ_SIZE>,
+				containers::array<uint8_t, internals::INIT_DATA_BUFFER_WRITE_SIZE>>;
+
+			static INPUT_BUFFER input_buffer()
+			{
+				INPUT_BUFFER buffer{};
+				flash::read_flash(uint16_t(internals::INIT_DATA_BUFFER), buffer.data(), buffer.size());
+				return buffer;
+			}
 
 		public:
-			InitDataFuture() : PARENT{} {}
+			InitDataFuture(bool use_2V8 = true) : PARENT{input_buffer(), nullptr, this}, use_2V8_{use_2V8} {}
 
+			void set_stop_variable_holder(uint8_t& stop_variable)
+			{
+				stop_variable_ = &stop_variable;
+			}
+
+		private:
+			void on_output_change(
+				UNUSED const ABSTRACT_FUTURE& future, UNUSED  uint8_t* output_data, uint8_t* output_current) final
+			{
+				// Check when each of 3 important bytes is read, modify future input buffer accordingly
+				uint8_t value = *(output_current - 1);
+				switch (output_count_)
+				{
+					case internals::INIT_DATA_BUFFER_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV_READ_INDEX:
+					// - REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV: set bit 0 to use 2.8V instead of 1.8V
+					if (use_2V8_)
+						value |= internals::VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV_SET_2V8;
+					PARENT::get_input()[internals::INIT_DATA_BUFFER_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV_WRITE_INDEX] = value;
+					break;
+
+					case internals::INIT_DATA_BUFFER_STOP_VARIABLE_READ_INDEX:
+					// - 0x91: get stop variable value for later use
+					*stop_variable_ = value;
+					break;
+
+					case internals::INIT_DATA_BUFFER_MSRC_CONFIG_CONTROL_READ_INDEX:
+					// - REG_MSRC_CONFIG_CONTROL: set bits 1 and 4 to disable SIGNAL_RATE_MSRC & 
+					//   SIGNAL_RATE_PRE_RANGE limit checks
+					PARENT::get_input()[internals::INIT_DATA_BUFFER_MSRC_CONFIG_CONTROL_WRITE_INDEX] =
+						value | internals::MSRC_CONFIG_CONTROL_INIT;
+					break;
+
+					default:
+					//TODO BUG!!!
+					break;
+				}
+				++output_count_;
+			}
+
+			uint8_t output_count_ = 0;
+			uint8_t* stop_variable_ = nullptr;
+			bool use_2V8_;
 		};
 
-		//TODO shall we impose sync only init?
-		int init_data_first()
+		int init_data_first(InitDataFuture& future)
 		{
-			//TODO
-			// 1. 1.8V (default) or 2.8V (update VL53L0X_REG_VHV_CONFIG_PAD_SCL_SDA__EXTSUP_HV)
-			// 2. Set I2C standard mode (register 0x88)
-			// 3. Get stop_variable
-			// 4. Set check enable
-			// 5. Set check limits?
-			// 6. Set SYSTEM_SEQUENCE_CONFIG
+			// Set place holder for stop_variable
+			future.set_stop_variable_holder(stop_variable_);
+			// Prepare read()/write() commands
+
+			// Prepare commands list
+			const uint8_t SIZE = internals::INIT_DATA_BUFFER_RW_SIZE;
+			int8_t sizes[SIZE];
+			i2c::I2CLightCommand commands[SIZE];
+			prepare_commands(uint16_t(internals::INIT_DATA_BUFFER_R_W), sizes, commands, SIZE);
+			// launch commands
+			return this->launch_commands(future, commands);
 		}
 
 		int init_static_second()
 		{
 			//TODO
 			// 1. Get SPAD map
-			// 2. Ser reference SPADs
+			// 2. Set reference SPADs
 			// 3. Load tuning settings
 			// 4. Set interrupt settings
 			//...
@@ -547,8 +612,28 @@ namespace devices::vl53l0x
 			return sync_write<SetSignalRateLimitFuture, float>(signal_rate);
 		}
 
+		bool init_data_first(bool use_2V8 = true)
+		{
+			InitDataFuture future{use_2V8};
+			if (init_data_first(future) != 0) return false;
+			return (future.await() == future::FutureStatus::READY);
+		}
+
 	private:
 		static constexpr const uint8_t DEFAULT_DEVICE_ADDRESS = 0x52;
+
+		void prepare_commands(uint16_t address, const int8_t* sizes, i2c::I2CLightCommand* commands, uint8_t count)
+		{
+			flash::read_flash(address, sizes, count);
+			for (uint8_t i = 0; i < count; ++i)
+			{
+				const int8_t size = sizes[i];
+				if (size < 0)
+					commands[i] = this->read(-size);
+				else
+					commands[i] = this->write(size);
+			}
+		}
 
 		//TODO Add transformer functor to template?
 		// Future to read a register
@@ -592,7 +677,8 @@ namespace devices::vl53l0x
 
 		//TODO utility functions
 
-		//TODO stop variable (find better name?)
+		// Stop variable used across device invocations
+		uint8_t stop_variable_ = 0;
 	};
 }
 

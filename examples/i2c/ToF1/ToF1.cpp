@@ -41,7 +41,7 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 REGISTER_UATX_ISR(0)
 
 #ifdef DEBUG_I2C
-static constexpr const uint8_t DEBUG_SIZE = 64;
+static constexpr const uint8_t DEBUG_SIZE = 96;
 using DEBUGGER = i2c::debug::I2CDebugStatusRecorder<DEBUG_SIZE, DEBUG_SIZE>;
 #	if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
 using MANAGER = i2c::I2CAsyncStatusDebugManager<
@@ -172,6 +172,7 @@ int main()
 	out << F("tof.get_vcsel_pulse_period<PRE_RANGE>(period) = ") << ok << F(", period = ") << dec << period << endl;
 	ok = tof.get_vcsel_pulse_period<VcselPeriodType::FINAL_RANGE>(period);
 	out << F("tof.get_vcsel_pulse_period<FINAL_RANGE>(period) = ") << ok << F(", period = ") << dec << period << endl;
+	DEBUG(out);
 
 	// The following block adds 4KB to program size (float arithmetic libs)
 	float signal_rate = 0.0;
@@ -183,6 +184,13 @@ int main()
 	ok = tof.get_signal_rate_limit(signal_rate);
 	out << F("tof.get_signal_rate_limit(signal_rate) = ") << ok << F(", signal_rate = ")
 		<< fixed << signal_rate << endl;
+	DEBUG(out);
+
+	// Call first initialization step
+	out << F("Calling init_data_first()...") << endl;
+	ok = tof.init_data_first();
+	out << F("tof.init_data_first() = ") << ok << endl;
+	DEBUG(out);
 
 	manager.end();
 }
