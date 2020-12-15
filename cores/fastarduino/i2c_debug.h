@@ -348,6 +348,9 @@ namespace i2c::debug
 	class I2CDebugStatusLiveLogger : public i2c::status::I2CStatusLiveLogger, public I2CDebugLiveLogger
 	{
 	public:
+		using I2CDebugLiveLogger::operator();
+		using i2c::status::I2CStatusLiveLogger::operator();
+
 		/**
 		 * Create an I2CDebugLiveLogger that can trace live I2C notifications determined
 		 * by @p debug and @p trace list. I2C notifications are output to @p out.
