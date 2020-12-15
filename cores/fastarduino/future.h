@@ -595,6 +595,17 @@ namespace future
 
 		~AbstractFuture() = default;
 
+		// This method is called by subclasses to completely reset this future (for reuse from scratch)
+		void reset_(uint8_t* output_data, uint8_t output_size, uint8_t* input_data, uint8_t input_size)
+		{
+			status_ = FutureStatus::NOT_READY;
+			error_ = 0;
+			output_data_ = output_current_ = output_data;
+			output_size_ = output_size;
+			input_data_ = input_current_ = input_data;
+			input_size_ = input_size;
+		}
+
 		// This method is called by subclass to check if input is replaceable,
 		// i.e. it has not been read yet
 		bool can_replace_input_() const
@@ -742,6 +753,14 @@ namespace future
 		Future& operator=(const Future&) = delete;
 		/// @endcond
 
+		//TODO DOC
+		// This method completely resets this future (for reuse from scratch)
+		void reset_(const IN& input = IN{})
+		{
+			AbstractFuture::reset_(output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN));
+			input_ = input;
+		}
+
 		/**
 		 * Reset the input storage value held by this Future with a new value.
 		 * This is possible only if no consumer has started reading the current 
@@ -868,6 +887,12 @@ namespace future
 		Future(const Future&) = delete;
 		Future& operator=(const Future&) = delete;
 
+		// This method completely resets this future (for reuse from scratch)
+		void reset_()
+		{
+			AbstractFuture::reset_(output_buffer_, sizeof(OUT), nullptr, 0);
+		}
+
 		// The following method is blocking until this Future is ready
 		bool get(OUT& result)
 		{
@@ -925,6 +950,13 @@ namespace future
 
 		Future(const Future&) = delete;
 		Future& operator=(const Future&) = delete;
+
+		// This method completely resets this future (for reuse from scratch)
+		void reset_(const IN& input = IN{})
+		{
+			AbstractFuture::reset_(nullptr, 0, input_buffer_, sizeof(IN));
+			input_ = input;
+		}
 
 		bool reset_input_(const IN& input)
 		{
@@ -995,6 +1027,12 @@ namespace future
 
 		Future(const Future&) = delete;
 		Future& operator=(const Future&) = delete;
+
+		// This method completely resets this future (for reuse from scratch)
+		void reset_()
+		{
+			AbstractFuture::reset_(nullptr, 0, nullptr, 0);
+		}
 
 		// The following method is blocking until this Future is ready
 		bool get()
@@ -1123,6 +1161,16 @@ namespace future
 
 		~AbstractFakeFuture() = default;
 
+		// This method is called by subclasses to completely reset this future (for reuse from scratch)
+		void reset_(uint8_t* output_data, uint8_t output_size, uint8_t* input_data, uint8_t input_size)
+		{
+			error_ = 0;
+			output_current_ = output_data;
+			output_size_ = output_size;
+			input_current_ = input_data;
+			input_size_ = input_size;
+		}
+
 		// This method is called by subclass to check if input is replaceable,
 		// i.e. it has not been read yet
 		bool can_replace_input_() const
@@ -1186,6 +1234,13 @@ namespace future
 
 		~FakeFuture() = default;
 
+		// This method completely resets this future (for reuse from scratch)
+		void reset_(const IN& input = IN{})
+		{
+			AbstractFakeFuture::reset_(output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN));
+			input_ = input;
+		}
+
 		bool reset_input_(const IN& input)
 		{
 			input_ = input;
@@ -1241,6 +1296,12 @@ namespace future
 
 		~FakeFuture() = default;
 
+		// This method completely resets this future (for reuse from scratch)
+		void reset_()
+		{
+			AbstractFakeFuture::reset_(output_buffer_, sizeof(OUT), nullptr, 0);
+		}
+
 		bool get(OUT& result)
 		{
 			result = output_;
@@ -1273,6 +1334,13 @@ namespace future
 			: AbstractFakeFuture{nullptr, 0, input_buffer_, sizeof(IN), status_listener}, input_{input} {}
 
 		~FakeFuture() = default;
+
+		// This method completely resets this future (for reuse from scratch)
+		void reset_(const IN& input = IN{})
+		{
+			AbstractFakeFuture::reset_(nullptr, 0, input_buffer_, sizeof(IN));
+			input_ = input;
+		}
 
 		bool reset_input_(const IN& input)
 		{
@@ -1319,6 +1387,11 @@ namespace future
 			: AbstractFakeFuture{nullptr, 0, nullptr, 0, status_listener} {}
 
 		~FakeFuture() = default;
+
+		void reset_()
+		{
+			AbstractFakeFuture::reset_(nullptr, 0, nullptr, 0);
+		}
 
 		bool get()
 		{
