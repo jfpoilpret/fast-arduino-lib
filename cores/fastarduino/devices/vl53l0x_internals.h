@@ -115,24 +115,20 @@ namespace devices::vl53l0x_internals
 	};
 	// Size of write buffer
 	static constexpr uint8_t INIT_DATA_BUFFER_WRITE_SIZE = sizeof(INIT_DATA_BUFFER);
-	// Size of read buffer
-	static constexpr uint8_t INIT_DATA_BUFFER_READ_SIZE = 3;
-	// List of bytes count for each read/write (read is negative, write is positive)
-	static constexpr int8_t INIT_DATA_BUFFER_R_W[] PROGMEM = {1, -1, 2, 2, 2, 2, 2, 1, -1, 2, 2, 2, 1, -1, 2, 3, 2};
+	// List of futures and bytes count:
+	// - negative means write 1 byte (register) and read N bytes
+	// - positive means write 1 byte (register) followed by N bytes
+	//TODO rename to INIT_DATA_FUTURES
+	static constexpr int8_t INIT_DATA_BUFFER_R_W[] PROGMEM = {-1, 1, 1, 1, 1, 1, -1, 1, 1, 1, -1, 1, 2, 1};
 	static constexpr uint8_t INIT_DATA_BUFFER_RW_SIZE = sizeof(INIT_DATA_BUFFER_R_W);
 
-	// Index of value to read in future output buffer for REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV
-	static constexpr uint8_t INIT_DATA_BUFFER_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV_READ_INDEX = 0;
-	// Index of value to write in future input buffer for REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV
-	static constexpr uint8_t INIT_DATA_BUFFER_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV_WRITE_INDEX = 2;
-
-	// Index of value to read in future output buffer for stop variable
-	static constexpr uint8_t INIT_DATA_BUFFER_STOP_VARIABLE_READ_INDEX = 1;
-
-	// Index of value to read in future output buffer for REG_MSRC_CONFIG_CONTROL
-	static constexpr uint8_t INIT_DATA_BUFFER_MSRC_CONFIG_CONTROL_READ_INDEX = 2;
-	// Index of value to write in future input buffer for REG_MSRC_CONFIG_CONTROL
-	static constexpr uint8_t INIT_DATA_BUFFER_MSRC_CONFIG_CONTROL_WRITE_INDEX = 20;
+	//FIXME
+	// Index of Future which value must be modified for 2v8 change
+	static constexpr uint8_t INIT_DATA_FUTURE_VHV_CONFIG = 1;
+	// Index of Future at which we must get the stop_variable value
+	static constexpr uint8_t INIT_DATA_FUTURE_STOP_VARIABLE = 7;
+	// Index of Future which value must be modified for REG_MSRC_CONFIG_CONTROL
+	static constexpr uint8_t INIT_DATA_FUTURE_MSRC_CONFIG_CONTROL = 11;
 
 	// Value to force 2V8 in REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV register
 	static constexpr uint8_t VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV_SET_2V8 = 0x01;
@@ -141,12 +137,135 @@ namespace devices::vl53l0x_internals
 
 	// Constants for init_static() method
 	//-----------------------------------
-	// Write buffer
-	static constexpr uint8_t INIT_STATIC_BUFFER[] PROGMEM =
+	// Write buffer for first step of get SPA info
+	static constexpr uint8_t INIT_STATIC_1_BUFFER[] PROGMEM =
 	{
-		
+		0x80, 0x01,
+		0xFF, 0x01,
+		0x00, 0x00,
+		0xFF, 0x06,
+		0x83,
+		0x83, 0x04,
+		0xFF, 0x07,
+		0x81, 0x01,
+		0x80, 0x01,
+		0x94, 0x6B,
+		0x83, 0x00
+	};
+
+	// Between step1 and 2, we must wait for 0x83 register to be 0x00
+
+	// Write buffer for second step of get SPA info
+	static constexpr uint8_t INIT_STATIC_2_BUFFER[] PROGMEM =
+	{
+		0x83, 0x01,
+		0x92, // Read SPAD info byte
+		0x81, 0x00,
+		0xFF, 0x06,
+		0x83,
+		0x83, 0x04,
+		0xFF, 0x01,
+		0x00, 0x01,
+		0xFF, 0x00,
+		0x80, 0x00,
+		regs::REG_GLOBAL_CONFIG_SPAD_ENABLES_REF_0, // Read 6 bytes of SPAD
+
+		// set reference SPADs
+		0xFF, 0x01,
+		regs::REG_DYNAMIC_SPAD_REF_EN_START_OFFSET, 0x00,
+		regs::REG_DYNAMIC_SPAD_NUM_REQUESTED_REF_SPAD, 0x2C,
+		0xFF, 0x00,
+		regs::REG_GLOBAL_CONFIG_REF_EN_START_SELECT, 0xB4,
+		regs::REG_GLOBAL_CONFIG_SPAD_ENABLES_REF_0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+
+		// load tuning settings
+		0xFF, 0x01,
+		0x00, 0x00,
+		0xFF, 0x00,
+		0x09, 0x00,
+		0x10, 0x00,
+		0x11, 0x00,
+		0x24, 0x01,
+		0x25, 0xFF,
+		0x75, 0x00,
+		0xFF, 0x01,
+		0x4E, 0x2C,
+		0x48, 0x00,
+		0x30, 0x20,
+		0xFF, 0x00,
+		0x30, 0x09,
+		0x54, 0x00,
+		0x31, 0x04,
+		0x32, 0x03,
+		0x40, 0x83,
+		0x46, 0x25,
+		0x60, 0x00,
+		0x27, 0x00,
+		0x50, 0x06,
+		0x51, 0x00,
+		0x52, 0x96,
+		0x56, 0x08,
+		0x57, 0x30,
+		0x61, 0x00,
+		0x62, 0x00,
+		0x64, 0x00,
+		0x65, 0x00,
+		0x66, 0xA0,
+		0xFF, 0x01,
+		0x22, 0x32,
+		0x47, 0x14,
+		0x49, 0xFF,
+		0x4A, 0x00,
+		0xFF, 0x00,
+		0x7A, 0x0A,
+		0x7B, 0x00,
+		0x78, 0x21,
+		0xFF, 0x01,
+		0x23, 0x34,
+		0x42, 0x00,
+		0x44, 0xFF,
+		0x45, 0x26,
+		0x46, 0x05,
+		0x40, 0x40,
+		0x0E, 0x06,
+		0x20, 0x1A,
+		0x43, 0x40,
+		0xFF, 0x00,
+		0x34, 0x03,
+		0x35, 0x44,
+		0xFF, 0x01,
+		0x31, 0x04,
+		0x4B, 0x09,
+		0x4C, 0x05,
+		0x4D, 0x04,
+		0xFF, 0x00,
+		0x44, 0x00,
+		0x45, 0x20,
+		0x47, 0x08,
+		0x48, 0x28,
+		0x67, 0x00,
+		0x70, 0x04,
+		0x71, 0x01,
+		0x72, 0xFE,
+		0x76, 0x00,
+		0x77, 0x00,
+		0xFF, 0x01,
+		0x0D, 0x01,
+		0xFF, 0x00,
+		0x80, 0x01,
+		0x01, 0xF8,
+		0xFF, 0x01,
+		0x8E, 0x01,
+		0x00, 0x01,
+		0xFF, 0x00,
+		0x80, 0x00,
+
+		// set GPIO config TODO
+
+		// set sequence steps enable TODO
+
+		// recalculate timing budget TODO
 	};
 }
-
 #endif /* VL53L0X_INTERNALS_H */
 /// @endcond

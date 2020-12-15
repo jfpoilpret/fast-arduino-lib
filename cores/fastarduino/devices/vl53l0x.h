@@ -299,12 +299,14 @@ namespace devices::vl53l0x
 	class VL53L0X : public i2c::I2CDevice<MANAGER>
 	{
 	private:
+		using THIS = VL53L0X<MANAGER>;
 		using PARENT = i2c::I2CDevice<MANAGER>;
 		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
 		using ABSTRACT_FUTURE = typename PARENT::ABSTRACT_FUTURE;
 		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
 		using FUTURE_OUTPUT_LISTENER = future::FutureOutputListener<ABSTRACT_FUTURE>;
+		using FUTURE_STATUS_LISTENER = future::FutureStatusListener<ABSTRACT_FUTURE>;
 
 		// Forward declarations needed by compiler
 		template<uint8_t REGISTER, typename T = uint8_t> class ReadRegisterFuture;
@@ -339,6 +341,7 @@ namespace devices::vl53l0x
 		 * 
 		 * @param manager reference to a suitable MANAGER for this device
 		 */
+		//TODO check if we can use false as last arg instead
 		explicit VL53L0X(MANAGER& manager) : PARENT{manager, DEFAULT_DEVICE_ADDRESS, i2c::I2C_FAST, true} {}
 
 		// Asynchronous API
@@ -461,86 +464,195 @@ namespace devices::vl53l0x
 		}
 
 		//TODO additional arguments for init? eg sequence steps, limits...
-		//TODO use template for voltage? (smaller code, no bloat risk since used only once)
-		class InitDataFuture :
-			public FUTURE<
-				containers::array<uint8_t, internals::INIT_DATA_BUFFER_READ_SIZE>,
-				containers::array<uint8_t, internals::INIT_DATA_BUFFER_WRITE_SIZE>>,
-			public FUTURE_OUTPUT_LISTENER
+		class InitDataFuture : public FUTURE_STATUS_LISTENER
 		{
-			using INPUT_BUFFER = containers::array<uint8_t, internals::INIT_DATA_BUFFER_WRITE_SIZE>;
-			using PARENT = FUTURE<
-				containers::array<uint8_t, internals::INIT_DATA_BUFFER_READ_SIZE>,
-				containers::array<uint8_t, internals::INIT_DATA_BUFFER_WRITE_SIZE>>;
-
-			static INPUT_BUFFER input_buffer()
+			// Types of futures handled by this group
+			template<uint8_t SIZE> using FUTURE_WRITE = FUTURE<void, containers::array<uint8_t, SIZE + 1>>;
+			using FUTURE_READ = FUTURE<uint8_t, uint8_t>;
+			
+		public:
+			InitDataFuture()
 			{
-				INPUT_BUFFER buffer{};
-				flash::read_flash(uint16_t(internals::INIT_DATA_BUFFER), buffer.data(), buffer.size());
-				return buffer;
+				// Read list of futures settings from Flash
+				flash::read_flash(
+					uint16_t(internals::INIT_DATA_BUFFER_R_W), futures_, internals::INIT_DATA_BUFFER_RW_SIZE);
 			}
 
-		public:
-			InitDataFuture(bool use_2V8 = true) : PARENT{input_buffer(), nullptr, this}, use_2V8_{use_2V8} {}
-
-			void set_stop_variable_holder(uint8_t& stop_variable)
+			future::FutureStatus status() const
 			{
-				stop_variable_ = &stop_variable;
+				return status_;
+			}
+
+			future::FutureStatus await() const
+			{
+				while (true)
+				{
+					future::FutureStatus status = this->status();
+					if (status != future::FutureStatus::NOT_READY)
+						return status;
+					time::yield();
+				}
+			}
+
+			int error() const
+			{
+				future::FutureStatus status = await();
+				switch (status)
+				{
+					case future::FutureStatus::READY:
+					return 0;
+
+					case future::FutureStatus::ERROR:
+					return error_;
+
+					default:
+					// This should never happen
+					return errors::EINVAL;
+				}
 			}
 
 		private:
-			void on_output_change(
-				UNUSED const ABSTRACT_FUTURE& future, UNUSED  uint8_t* output_data, uint8_t* output_current) final
+			void set_device(THIS* device)
 			{
-				// Check when each of 3 important bytes is read, modify future input buffer accordingly
-				uint8_t value = *(output_current - 1);
-				switch (output_count_)
+				device_ = device;
+			}
+
+			// Launch next future from the list stored in flash)
+			bool next_future(bool change_value = false)
+			{
+				if (index_ >= internals::INIT_DATA_BUFFER_RW_SIZE)
 				{
-					case internals::INIT_DATA_BUFFER_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV_READ_INDEX:
-					// - REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV: set bit 0 to use 2.8V instead of 1.8V
-					if (use_2V8_)
-						value |= internals::VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV_SET_2V8;
-					PARENT::get_input()[internals::INIT_DATA_BUFFER_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV_WRITE_INDEX] = value;
+					if (status_ == future::FutureStatus::NOT_READY)
+						status_ = future::FutureStatus::READY;
+					return false;
+				}
+				const int8_t next = futures_[index_++];
+				const uint8_t reg = next_byte();
+				bool result;
+				switch (next)
+				{
+					case -1:
+					read_.reset_(reg);
+					result = check_launch(device_->launch_commands(read_, {device_->write(), device_->read()}));
+					break;
+					
+					case 1:
+					{
+						uint8_t value = next_byte();
+						if (change_value)
+							value = forced_value_;
+						write1_.reset_({reg, value});
+						result = check_launch(device_->launch_commands(write1_, {device_->write()}));
+					}
 					break;
 
-					case internals::INIT_DATA_BUFFER_STOP_VARIABLE_READ_INDEX:
-					// - 0x91: get stop variable value for later use
-					*stop_variable_ = value;
-					break;
-
-					case internals::INIT_DATA_BUFFER_MSRC_CONFIG_CONTROL_READ_INDEX:
-					// - REG_MSRC_CONFIG_CONTROL: set bits 1 and 4 to disable SIGNAL_RATE_MSRC & 
-					//   SIGNAL_RATE_PRE_RANGE limit checks
-					PARENT::get_input()[internals::INIT_DATA_BUFFER_MSRC_CONFIG_CONTROL_WRITE_INDEX] =
-						value | internals::MSRC_CONFIG_CONTROL_INIT;
+					case 2:
+					{
+						uint8_t val1 = next_byte();
+						uint8_t val2 = next_byte();
+						write2_.reset_({reg, val1, val2});
+						result = check_launch(device_->launch_commands(write2_, {device_->write()}));
+					}
 					break;
 
 					default:
-					//TODO BUG!!!
-					break;
+					result = false;
 				}
-				++output_count_;
+				return result;
 			}
 
-			uint8_t output_count_ = 0;
-			uint8_t* stop_variable_ = nullptr;
-			bool use_2V8_;
+			// Get the next byte, from the flash, to write to the device
+			uint8_t next_byte()
+			{
+				uint8_t data = 0;
+				return flash::read_flash(address_++, data);
+			}
+
+			// Check launch_commands() return and update own status if needed
+			bool check_launch(int launch)
+			{
+				if (launch == 0) return true;
+				error_ = launch;
+				status_ = future::FutureStatus::ERROR;
+				return false;
+			}
+
+			void on_status_change(UNUSED const ABSTRACT_FUTURE& future, future::FutureStatus status) final
+			{
+				//TODO
+				// First check that current future was executed successfully
+				if (status != future::FutureStatus::READY)
+				{
+					error_ = future.error();
+					status_ = status;
+					return;
+				}
+				// Check if next future needs change
+				bool force = false;
+				switch (index_)
+				{
+					case internals::INIT_DATA_FUTURE_VHV_CONFIG:
+					read_.get(forced_value_);
+					forced_value_ |= internals::VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV_SET_2V8;
+					force = true;
+					break;
+
+					case internals::INIT_DATA_FUTURE_STOP_VARIABLE:
+					read_.get(device_->stop_variable_);
+					break;
+
+					case internals::INIT_DATA_FUTURE_MSRC_CONFIG_CONTROL:
+					read_.get(forced_value_);
+					forced_value_ |= internals::MSRC_CONFIG_CONTROL_INIT;
+					force = true;
+					break;
+
+					default:
+					break;
+				}
+
+				next_future(force);
+			}
+
+			// The device that uses this future
+			THIS* device_ = nullptr;
+
+			// Information about futures to create and launch
+			uint16_t address_ = uint16_t(internals::INIT_DATA_BUFFER);
+			int8_t futures_[internals::INIT_DATA_BUFFER_RW_SIZE];
+			uint8_t index_ = 0;
+
+			// Value to use on next future if need to be forced
+			uint8_t forced_value_ = 0;
+
+			// Placeholders for dynamic futures
+			FUTURE_WRITE<1> write1_{{0}, this};
+			FUTURE_WRITE<2> write2_{{0, 0}, this};
+			FUTURE_READ read_{0, this};
+			// Global status for whole future group
+			future::FutureStatus status_ = future::FutureStatus::NOT_READY;
+			int error_ = 0;
+
+			friend THIS;
 		};
 
 		int init_data_first(InitDataFuture& future)
 		{
-			// Set place holder for stop_variable
-			future.set_stop_variable_holder(stop_variable_);
-			// Prepare read()/write() commands
-
-			// Prepare commands list
-			const uint8_t SIZE = internals::INIT_DATA_BUFFER_RW_SIZE;
-			int8_t sizes[SIZE];
-			i2c::I2CLightCommand commands[SIZE];
-			prepare_commands(uint16_t(internals::INIT_DATA_BUFFER_R_W), sizes, commands, SIZE);
-			// launch commands
-			return this->launch_commands(future, commands);
+			future.set_device(this);
+			// Launch init (2V8 setting)
+			if (!future.next_future())
+				return future.error();
 		}
+
+		// //TODO group of futures for static init
+		// class InitStaticGroup : public future::FuturesGroup, public FUTURE_STATUS_LISTENER
+		// {
+		// public:
+		// 	//TODO
+
+		// private:
+		// 	//TODO on_change
+		// };
 
 		int init_static_second()
 		{
@@ -560,10 +672,6 @@ namespace devices::vl53l0x
 			// set_device(device_address);
 		}
 
-		// bool init_data_first()
-		// {
-
-		// }
 		//TODO define all needed API here
 
 		bool get_revision(uint8_t& revision)
@@ -612,9 +720,9 @@ namespace devices::vl53l0x
 			return sync_write<SetSignalRateLimitFuture, float>(signal_rate);
 		}
 
-		bool init_data_first(bool use_2V8 = true)
+		bool init_data_first()
 		{
-			InitDataFuture future{use_2V8};
+			InitDataFuture future{};
 			if (init_data_first(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}

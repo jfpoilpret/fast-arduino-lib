@@ -42,15 +42,17 @@ REGISTER_UATX_ISR(0)
 
 #ifdef DEBUG_I2C
 static constexpr const uint8_t DEBUG_SIZE = 96;
-using DEBUGGER = i2c::debug::I2CDebugStatusRecorder<DEBUG_SIZE, DEBUG_SIZE>;
 #	if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
+using DEBUGGER = i2c::debug::I2CDebugStatusRecorder<DEBUG_SIZE, DEBUG_SIZE>;
+#define DEBUG(OUT) debugger.trace(OUT)
 using MANAGER = i2c::I2CAsyncStatusDebugManager<
 	i2c::I2CMode::FAST, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, DEBUGGER&, DEBUGGER&>;
 static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
 #	else
+using DEBUGGER = i2c::debug::I2CDebugStatusLiveLogger;
+#define DEBUG(OUT)
 using MANAGER = i2c::I2CSyncStatusDebugManager<i2c::I2CMode::FAST, DEBUGGER&, DEBUGGER&>;
 #	endif
-#define DEBUG(OUT) debugger.trace(OUT)
 #define RESET_DEBUG() debugger.reset()
 
 #else
@@ -104,7 +106,11 @@ int main()
 
 	// Initialize I2C async handler
 #ifdef DEBUG_I2C
+#	if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
 	DEBUGGER debugger;
+#	else
+	DEBUGGER debugger{out};
+#	endif
 #endif
 
 #if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
@@ -175,22 +181,25 @@ int main()
 	DEBUG(out);
 
 	// The following block adds 4KB to program size (float arithmetic libs)
-	float signal_rate = 0.0;
-	ok = tof.get_signal_rate_limit(signal_rate);
-	out << F("tof.get_signal_rate_limit(signal_rate) = ") << ok << F(", signal_rate = ")
-		<< fixed << signal_rate << endl;
-	ok = tof.set_signal_rate_limit(0.5f);
-	out << F("tof.set_signal_rate_limit(0.5) = ") << ok << endl;
-	ok = tof.get_signal_rate_limit(signal_rate);
-	out << F("tof.get_signal_rate_limit(signal_rate) = ") << ok << F(", signal_rate = ")
-		<< fixed << signal_rate << endl;
-	DEBUG(out);
+	// float signal_rate = 0.0;
+	// ok = tof.get_signal_rate_limit(signal_rate);
+	// out << F("tof.get_signal_rate_limit(signal_rate) = ") << ok << F(", signal_rate = ")
+	// 	<< fixed << signal_rate << endl;
+	// ok = tof.set_signal_rate_limit(0.5f);
+	// out << F("tof.set_signal_rate_limit(0.5) = ") << ok << endl;
+	// ok = tof.get_signal_rate_limit(signal_rate);
+	// out << F("tof.get_signal_rate_limit(signal_rate) = ") << ok << F(", signal_rate = ")
+	// 	<< fixed << signal_rate << endl;
+	// DEBUG(out);
 
 	// Call first initialization step
 	out << F("Calling init_data_first()...") << endl;
-	ok = tof.init_data_first();
-	out << F("tof.init_data_first() = ") << ok << endl;
+	TOF::InitDataFuture future{};
+	int error = tof.init_data_first(future);
+	out << F("tof.init_data_first(future) = ") << dec << error << endl;
+	time::delay_ms(100);
 	DEBUG(out);
+	out << F("future.status() = ") << future.status() << endl;
 
 	manager.end();
 }
