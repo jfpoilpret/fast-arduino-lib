@@ -17,7 +17,6 @@
  * This program uses FastArduino VL53L0X support API.
  * 
  * Wiring:
- * TODO (not sure)  NB: you should add pullup resistors (10K-22K typically) on both SDA and SCL lines.
  * - on ATmega328P based boards (including Arduino UNO):
  *   - A4 (PC4, SDA): connected to VL53L0X SDA pin
  *   - A5 (PC5, SCL): connected to VL53L0X SCL pin
@@ -32,7 +31,7 @@
 #include <fastarduino/devices/vl53l0x.h>
 
 #define DEBUG_I2C
-#define FORCE_SYNC
+// #define FORCE_SYNC
 
 static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
@@ -45,21 +44,24 @@ static constexpr const uint8_t DEBUG_SIZE = 96;
 #	if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
 using DEBUGGER = i2c::debug::I2CDebugStatusRecorder<DEBUG_SIZE, DEBUG_SIZE>;
 #define DEBUG(OUT) debugger.trace(OUT)
+#define RESET_DEBUG() debugger.reset()
 using MANAGER = i2c::I2CAsyncStatusDebugManager<
 	i2c::I2CMode::FAST, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, DEBUGGER&, DEBUGGER&>;
+static constexpr const uint8_t I2C_BUFFER_SIZE = 32;
 static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
 #	else
 using DEBUGGER = i2c::debug::I2CDebugStatusLiveLogger;
 #define DEBUG(OUT)
+#define RESET_DEBUG()
 using MANAGER = i2c::I2CSyncStatusDebugManager<i2c::I2CMode::FAST, DEBUGGER&, DEBUGGER&>;
 #	endif
-#define RESET_DEBUG() debugger.reset()
 
 #else
 
 #	if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
 using MANAGER = i2c::I2CAsyncManager<
 	i2c::I2CMode::FAST, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS>;
+static constexpr const uint8_t I2C_BUFFER_SIZE = 32;
 static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
 #	else
 using MANAGER = i2c::I2CSyncManager<i2c::I2CMode::FAST>;
@@ -200,6 +202,12 @@ int main()
 	time::delay_ms(100);
 	DEBUG(out);
 	out << F("future.status() = ") << future.status() << endl;
+
+	ok = tof.get_range_status(status);
+	out << F("tof.get_range_status(status) = ") << ok 
+		<< F(", error = ") << dec << uint8_t(status.error())
+		<< F(", data_ready = ") << status.data_ready() << endl;
+	DEBUG(out);
 
 	manager.end();
 }
