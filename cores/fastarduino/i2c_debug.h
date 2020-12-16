@@ -267,7 +267,25 @@ namespace i2c::debug
 				break;
 			}
 			if (display)
-				out_ << status << streams::hex << data << ' ' << streams::flush;
+			{
+				// Show data only if relevant
+				switch (status)
+				{
+					case i2c::DebugStatus::START:
+					case i2c::DebugStatus::REPEAT_START:
+					case i2c::DebugStatus::STOP:
+					case i2c::DebugStatus::RECV_ERROR:
+					case i2c::DebugStatus::RECV:
+					case i2c::DebugStatus::RECV_LAST:
+					case i2c::DebugStatus::SEND_ERROR:
+					case i2c::DebugStatus::SEND_OK:
+					out_ << status << streams::flush;
+					break;
+
+					default:
+					out_ << status << streams::hex << data << ' ' << streams::flush;
+				}
+			}
 		}
 		/// @endcond
 
