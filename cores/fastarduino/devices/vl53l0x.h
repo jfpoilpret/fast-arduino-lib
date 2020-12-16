@@ -316,7 +316,7 @@ namespace devices::vl53l0x
 		//TODO refactor into I2CDevice? or subclass I2CDevice with register-based functions?
 		template<typename F> int async_read(PROXY<F> future)
 		{
-			return this->launch_commands(future, {this->write(), this->read()});
+			return this->launch_commands(future, {this->write(), this->read(0, false, true)});
 		}
 		template<typename F, typename T = uint8_t> bool sync_read(T& result)
 		{
@@ -326,7 +326,7 @@ namespace devices::vl53l0x
 		}
 		template<typename F> int async_write(PROXY<F> future)
 		{
-			return this->launch_commands(future, {this->write()});
+			return this->launch_commands(future, {this->write(0, false, true)});
 		}
 		template<typename F, typename T = uint8_t> bool sync_write(const T& value)
 		{
@@ -341,8 +341,7 @@ namespace devices::vl53l0x
 		 * 
 		 * @param manager reference to a suitable MANAGER for this device
 		 */
-		//TODO check if we can use false as last arg instead
-		explicit VL53L0X(MANAGER& manager) : PARENT{manager, DEFAULT_DEVICE_ADDRESS, i2c::I2C_FAST, true} {}
+		explicit VL53L0X(MANAGER& manager) : PARENT{manager, DEFAULT_DEVICE_ADDRESS, i2c::I2C_FAST, false} {}
 
 		// Asynchronous API
 		//==================
@@ -529,11 +528,13 @@ namespace devices::vl53l0x
 				const int8_t next = futures_[index_++];
 				const uint8_t reg = next_byte();
 				bool result;
+				const bool stop = (index_ == internals::INIT_DATA_BUFFER_RW_SIZE);
 				switch (next)
 				{
 					case -1:
 					read_.reset_(reg);
-					result = check_launch(device_->launch_commands(read_, {device_->write(), device_->read()}));
+					result = check_launch(
+						device_->launch_commands(read_, {device_->write(), device_->read(0, false, stop)}));
 					break;
 					
 					case 1:
@@ -542,7 +543,8 @@ namespace devices::vl53l0x
 						if (change_value)
 							value = forced_value_;
 						write1_.reset_({reg, value});
-						result = check_launch(device_->launch_commands(write1_, {device_->write()}));
+						result = check_launch(
+							device_->launch_commands(write1_, {device_->write(0, false, stop)}));
 					}
 					break;
 
@@ -551,7 +553,8 @@ namespace devices::vl53l0x
 						uint8_t val1 = next_byte();
 						uint8_t val2 = next_byte();
 						write2_.reset_({reg, val1, val2});
-						result = check_launch(device_->launch_commands(write2_, {device_->write()}));
+						result = check_launch(
+							device_->launch_commands(write2_, {device_->write(0, false, stop)}));
 					}
 					break;
 
@@ -579,7 +582,6 @@ namespace devices::vl53l0x
 
 			void on_status_change(UNUSED const ABSTRACT_FUTURE& future, future::FutureStatus status) final
 			{
-				//TODO
 				// First check that current future was executed successfully
 				if (status != future::FutureStatus::READY)
 				{
@@ -639,7 +641,7 @@ namespace devices::vl53l0x
 		int init_data_first(InitDataFuture& future)
 		{
 			future.set_device(this);
-			// Launch init (2V8 setting)
+			// Launch init
 			if (!future.next_future())
 				return future.error();
 		}
@@ -782,8 +784,6 @@ namespace devices::vl53l0x
 			WriteRegisterFuture(WriteRegisterFuture<REGISTER, T>&&) = default;
 			WriteRegisterFuture& operator=(WriteRegisterFuture<REGISTER, T>&&) = default;
 		};
-
-		//TODO utility functions
 
 		// Stop variable used across device invocations
 		uint8_t stop_variable_ = 0;
