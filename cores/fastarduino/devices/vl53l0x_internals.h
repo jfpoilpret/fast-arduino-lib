@@ -113,16 +113,14 @@ namespace devices::vl53l0x_internals
 		// enable all sequence steps by default
 		regs::REG_SYSTEM_SEQUENCE_CONFIG, 0xFF
 	};
-	// Size of write buffer
-	static constexpr uint8_t INIT_DATA_BUFFER_WRITE_SIZE = sizeof(INIT_DATA_BUFFER);
+	// Size of write buffer TODO maybe useless...
+	static constexpr uint8_t INIT_DATA_BUFFER_SIZE = sizeof(INIT_DATA_BUFFER);
 	// List of futures and bytes count:
 	// - negative means write 1 byte (register) and read N bytes
 	// - positive means write 1 byte (register) followed by N bytes
-	//TODO rename to INIT_DATA_FUTURES
-	static constexpr int8_t INIT_DATA_BUFFER_R_W[] PROGMEM = {-1, 1, 1, 1, 1, 1, -1, 1, 1, 1, -1, 1, 2, 1};
-	static constexpr uint8_t INIT_DATA_BUFFER_RW_SIZE = sizeof(INIT_DATA_BUFFER_R_W);
+	static constexpr int8_t INIT_DATA_FUTURES[] PROGMEM = {-1, 1, 1, 1, 1, 1, -1, 1, 1, 1, -1, 1, 2, 1};
+	static constexpr uint8_t INIT_DATA_FUTURES_SIZE = sizeof(INIT_DATA_FUTURES);
 
-	//FIXME
 	// Index of Future which value must be modified for 2v8 change
 	static constexpr uint8_t INIT_DATA_FUTURE_VHV_CONFIG = 1;
 	// Index of Future at which we must get the stop_variable value
@@ -137,40 +135,38 @@ namespace devices::vl53l0x_internals
 
 	// Constants for init_static() method
 	//-----------------------------------
-	// Write buffer for first step of get SPA info
-	static constexpr uint8_t INIT_STATIC_1_BUFFER[] PROGMEM =
+	// Write buffer
+	static constexpr uint8_t INIT_STATIC_BUFFER[] PROGMEM =
 	{
-		0x80, 0x01,
+		// get SPAD info
+		regs::REG_POWER_MANAGEMENT, 0x01,
 		0xFF, 0x01,
-		0x00, 0x00,
+		regs::REG_SYSRANGE_START, 0x00,
 		0xFF, 0x06,
-		0x83,
-		0x83, 0x04,
+		0x83, // 1 BYTE READ
+		0x83, 0x04, // OVERWRITTEN BYTE
 		0xFF, 0x07,
 		0x81, 0x01,
-		0x80, 0x01,
+		regs::REG_POWER_MANAGEMENT, 0x01,
 		0x94, 0x6B,
-		0x83, 0x00
-	};
-
-	// Between step1 and 2, we must wait for 0x83 register to be 0x00
-
-	// Write buffer for second step of get SPA info
-	static constexpr uint8_t INIT_STATIC_2_BUFFER[] PROGMEM =
-	{
+		0x83, 0x00,
+		// wait until done
+		0x83, // 1 BYTE READ (loop wait until != 0x00 or "timeout")
 		0x83, 0x01,
-		0x92, // Read SPAD info byte
+		0x92, // 1 BYTE READ: SPAD info byte
 		0x81, 0x00,
 		0xFF, 0x06,
-		0x83,
-		0x83, 0x04,
+		0x83, // 1 BYTE READ
+		0x83, 0x04, // OVERWRITTEN BYTE
 		0xFF, 0x01,
-		0x00, 0x01,
+		regs::REG_SYSRANGE_START, 0x01,
 		0xFF, 0x00,
-		0x80, 0x00,
-		regs::REG_GLOBAL_CONFIG_SPAD_ENABLES_REF_0, // Read 6 bytes of SPAD
+		regs::REG_POWER_MANAGEMENT, 0x00,
 
-		// set reference SPADs
+		// get reference SPADs from NVM
+		regs::REG_GLOBAL_CONFIG_SPAD_ENABLES_REF_0, // 6 BYTES READ: RefGoodSpadMap
+
+		// set reference SPADs (after calculation)
 		0xFF, 0x01,
 		regs::REG_DYNAMIC_SPAD_REF_EN_START_OFFSET, 0x00,
 		regs::REG_DYNAMIC_SPAD_NUM_REQUESTED_REF_SPAD, 0x2C,
@@ -178,9 +174,9 @@ namespace devices::vl53l0x_internals
 		regs::REG_GLOBAL_CONFIG_REF_EN_START_SELECT, 0xB4,
 		regs::REG_GLOBAL_CONFIG_SPAD_ENABLES_REF_0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 
-		// load tuning settings
+		// load tuning settings (hard-coded defaults)
 		0xFF, 0x01,
-		0x00, 0x00,
+		regs::REG_SYSRANGE_START, 0x00,
 		0xFF, 0x00,
 		0x09, 0x00,
 		0x10, 0x00,
@@ -252,20 +248,64 @@ namespace devices::vl53l0x_internals
 		0xFF, 0x01,
 		0x0D, 0x01,
 		0xFF, 0x00,
-		0x80, 0x01,
+		regs::REG_POWER_MANAGEMENT, 0x01,
 		0x01, 0xF8,
 		0xFF, 0x01,
 		0x8E, 0x01,
-		0x00, 0x01,
+		regs::REG_SYSRANGE_START, 0x01,
 		0xFF, 0x00,
-		0x80, 0x00,
+		regs::REG_POWER_MANAGEMENT, 0x00,
 
-		// set GPIO config TODO
+		// set interrupt settings or not? what default?
+		regs::REG_SYSTEM_INTERRUPT_CONFIG_GPIO, 0x04,
+		regs::REG_GPIO_HV_MUX_ACTIVE_HIGH, // 1 BYTE READ
+		regs::REG_GPIO_HV_MUX_ACTIVE_HIGH, 0x10, // OVERWRITTEN BYTE
+		regs::REG_SYSTEM_INTERRUPT_CLEAR, 0x01,
 
-		// set sequence steps enable TODO
+		//TODO get current timing budget
 
+		// set sequence steps: disable MSRC and TCC by default
+		regs::REG_SYSTEM_SEQUENCE_CONFIG, 0xE8,
+
+		// recalculate timing budget
+		//TODO first get sequence step enables (should have them already!)
+		//TODO then get sequence timeouts (device-provided only?)
+		regs::REG_FINAL_RANGE_CONFIG_VCSEL_PERIOD, 0x00, 0x00
+	};
+
+	// Size of write buffer TODO maybe useless
+	static constexpr uint8_t INIT_STATIC_BUFFER_SIZE = sizeof(INIT_STATIC_BUFFER);
+	// List of futures and bytes count:
+	// - negative means write 1 byte (register) and read N bytes
+	// - positive means write 1 byte (register) followed by N bytes
+	//FIXME list of futures...
+	static constexpr int8_t INIT_STATIC_FUTURES[] PROGMEM = {
+		// get SPAD info
+		1, 1, 1, 1, -1, 1, 1, 1, 1, 1, 1, -1, 1, -1, 1, 1, -1, 1, 1, 1, 1, 1,
+		// get reference SPADs from NVM
+		-6,
+		// set reference SPADs (after calculation)
+		1, 1, 1, 1, 1, 6,
+		// load tuning settings (hard-coded defaults) 80 writes
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+		// set interrupt settings?
+		1, -1, 1, 1,
+		// get current timing budget TODO
+
+		// set sequence steps
+		1,
 		// recalculate timing budget TODO
 	};
+	static constexpr uint8_t INIT_STATIC_FUTURES_SIZE = sizeof(INIT_STATIC_FUTURES);
+	//TODO INDEX...
+
 }
 #endif /* VL53L0X_INTERNALS_H */
 /// @endcond

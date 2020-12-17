@@ -47,13 +47,11 @@ namespace devices
 	}
 }
 
-//TODO - use PROGMEM (flash memory) for long sequences of bytes to be sent?
 //TODO - implement low-level API step by step
-//       - init_data
 //       - static_init
-//       - calibration?
 //       - single ranging
 //       - status
+//       - calibration?
 // 
 //       - continuous ranging
 //       - set_address
@@ -65,7 +63,7 @@ namespace devices
 //       - ranging()
 //
 //TODO - check what of the remaing API shall be implemented or not
-//
+//TODO - define stream insertors for all enum types defined here
 // OPEN POINTS:
 // - calibration mode or only hard-coded calibration?
 
@@ -137,23 +135,13 @@ namespace devices::vl53l0x
 		uint8_t status_ = 0;
 	};
 
-	// enum class DeviceMode : uint8_t
-	// {
-	// 	SINGLE_RANGING				= 0,
-	// 	CONTINUOUS_RANGING			= 1,
-	// 	SINGLE_HISTOGRAM			= 2,
-	// 	CONTINUOUS_TIMED_RANGING	= 3,
-	// 	SINGLE_ALS					= 10,
-	// 	GPIO_DRIVE					= 20,
-	// 	GPIO_OSC					= 21
-	// };
-
 	enum class PowerMode : uint8_t
 	{
 		STANDBY = 0,
 		IDLE = 1
 	};
 
+	//TODO improve by setting list of available values for period_pclks?
 	enum class VcselPeriodType : uint8_t
 	{
 		PRE_RANGE = regs::REG_PRE_RANGE_CONFIG_VCSEL_PERIOD,
@@ -174,6 +162,11 @@ namespace devices::vl53l0x
 		{
 			return SequenceSteps{};
 		}
+		static constexpr SequenceSteps all()
+		{
+			return SequenceSteps{TCC | DSS | MSRC | PRE_RANGE | FINAL_RANGE};
+		}
+
 		constexpr SequenceSteps() = default;
 
 		constexpr SequenceSteps tcc()
@@ -249,19 +242,10 @@ namespace devices::vl53l0x
 		uint8_t steps_ = 0;
 	};
 
-	// enum class CheckEnable : uint8_t
-	// {
-	// 	SIGMA_FINAL_RANGE          = 0,
-	// 	SIGNAL_RATE_FINAL_RANGE    = 1,
-	// 	SIGNAL_REF_CLIP            = 2,
-	// 	RANGE_IGNORE_THRESHOLD     = 3,
-	// 	SIGNAL_RATE_MSRC           = 4,
-	// 	SIGNAL_RATE_PRE_RANGE      = 5
-	// };
-
 	//TODO the following helpers should be put somewhere else maybe (utilities.h?) or be hidden somehow
 	template<typename T> T change_endianness(const T& value)
 	{
+		static_assert(sizeof(T) == 1, "T must be 1 byte length.");
 		return value;
 	}
 	template<> uint16_t change_endianness(const uint16_t& value)
@@ -403,6 +387,7 @@ namespace devices::vl53l0x
 			return async_read(future);
 		}
 
+		//TODO rework (Group of futures?)
 		template<VcselPeriodType TYPE>
 		class SetVcselPulsePeriodFuture : public WriteRegisterFuture<uint8_t(TYPE)>
 		{
@@ -474,7 +459,7 @@ namespace devices::vl53l0x
 			{
 				// Read list of futures settings from Flash
 				flash::read_flash(
-					uint16_t(internals::INIT_DATA_BUFFER_R_W), futures_, internals::INIT_DATA_BUFFER_RW_SIZE);
+					uint16_t(internals::INIT_DATA_FUTURES), futures_, internals::INIT_DATA_FUTURES_SIZE);
 			}
 
 			future::FutureStatus status() const
@@ -519,7 +504,7 @@ namespace devices::vl53l0x
 			// Launch next future from the list stored in flash)
 			bool next_future(bool change_value = false)
 			{
-				if (index_ >= internals::INIT_DATA_BUFFER_RW_SIZE)
+				if (index_ >= internals::INIT_DATA_FUTURES_SIZE)
 				{
 					if (status_ == future::FutureStatus::NOT_READY)
 						status_ = future::FutureStatus::READY;
@@ -528,7 +513,7 @@ namespace devices::vl53l0x
 				const int8_t next = futures_[index_++];
 				const uint8_t reg = next_byte();
 				bool result;
-				const bool stop = (index_ == internals::INIT_DATA_BUFFER_RW_SIZE);
+				const bool stop = (index_ == internals::INIT_DATA_FUTURES_SIZE);
 				switch (next)
 				{
 					case -1:
@@ -621,7 +606,7 @@ namespace devices::vl53l0x
 
 			// Information about futures to create and launch
 			uint16_t address_ = uint16_t(internals::INIT_DATA_BUFFER);
-			int8_t futures_[internals::INIT_DATA_BUFFER_RW_SIZE];
+			int8_t futures_[internals::INIT_DATA_FUTURES_SIZE];
 			uint8_t index_ = 0;
 
 			// Value to use on next future if need to be forced
