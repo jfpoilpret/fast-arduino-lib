@@ -1290,7 +1290,7 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = sizeof(OUT);
 		static constexpr uint8_t IN_SIZE = 0;
 
-		FakeFuture(STATUS_LISTENER* status_listener = nullptr, OUTPUT_LISTENER* output_listener = nullptr)
+		explicit FakeFuture(STATUS_LISTENER* status_listener = nullptr, OUTPUT_LISTENER* output_listener = nullptr)
 			:	AbstractFakeFuture{output_buffer_, sizeof(OUT), nullptr, 0,
 				status_listener, output_listener} {}
 
@@ -1383,7 +1383,7 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = 0;
 		static constexpr uint8_t IN_SIZE = 0;
 
-		FakeFuture(STATUS_LISTENER* status_listener = nullptr)
+		explicit FakeFuture(STATUS_LISTENER* status_listener = nullptr)
 			: AbstractFakeFuture{nullptr, 0, nullptr, 0, status_listener} {}
 
 		~FakeFuture() = default;
