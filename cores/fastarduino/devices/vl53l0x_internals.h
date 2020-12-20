@@ -87,52 +87,177 @@ namespace devices::vl53l0x_internals
 
 	namespace regs = registers;
 
+	// For all futures using flash read-only date to write to device, the following
+	// convention is used
+	// 1. The whole array is broken down into individual lines, each representing an action
+	// 2. Each action is starting with an action byte
+	// 3. Each action byte will have additional bytes depending on its actual action
+	// 4. The last line uses action 0x00 (end of stream)
+	//
+	// Action bytes are defined as follows:
+	// - 0x00	end of stream marker (Future is complete)
+	// - 0x1H	write (1+H) bytes to the device; the action is followed by the register index and H bytes to write
+	// - 0x9H	same as 0x1H, but this is the last command for this future (force stop is needed)
+	// - 0x2H	read H bytes from device register, after writing the register index; 
+	//			the action is followed by the register index
+	// - 0xAH	same as 0x2H, but this is the last command for this future (force stop is needed)
+	// - 0x30	special marker, used by the Future code to do something special at this point; this is followed by
+	//			one byte that can be any free value indicating to code what shall be done
+	// - 0x31	special marker, to include another Future into this Future; this is followed by one byte
+	//			that can be any free value used to idnicate which Future shall be used
+	// - other codes are kept for future (and Future) use
+
+	// Action codes
+	//--------------
+	namespace action
+	{
+		static constexpr uint8_t END = 0x00;
+		static constexpr uint8_t WRITE = 0x10;
+		static constexpr uint8_t READ = 0x20;
+		static constexpr uint8_t MARKER = 0x30;
+		static constexpr uint8_t INCLUDE = 0x40;
+
+		static constexpr uint8_t STOP_MASK = 0x80;
+		static constexpr uint8_t ACTION_MASK = 0x70;
+		static constexpr uint8_t COUNT_MASK = 0x0F;
+
+		static constexpr uint8_t write(uint8_t count, bool stop = false)
+		{
+			return WRITE | (count & COUNT_MASK) | (stop ? STOP_MASK : 0x00);
+		}
+		static constexpr uint8_t read(uint8_t count, bool stop = false)
+		{
+			return READ | (count & COUNT_MASK) | (stop ? STOP_MASK : 0x00);
+		}
+		static constexpr bool is_write(uint8_t action)
+		{
+			return (action & ACTION_MASK) == WRITE;
+		}
+		static constexpr bool is_read(uint8_t action)
+		{
+			return (action & ACTION_MASK) == READ;
+		}
+		static constexpr bool is_stop(uint8_t action)
+		{
+			return action & STOP_MASK;
+		}
+		static constexpr uint8_t count(uint8_t action)
+		{
+			return action & COUNT_MASK;
+		}
+	}
+
+	// Constants for get_sequence_step_timeouts() method
+	//---------------------------------------------------
+	namespace sequence_step_timeouts
+	{
+		// Include markers
+		static constexpr uint8_t INCLUDE_VCSEL_PERIOD_PRE_RANGE = 1;
+		static constexpr uint8_t INCLUDE_VCSEL_PERIOD_FINAL_RANGE = 2;
+		// Special action markers
+		static constexpr uint8_t MARKER_VCSEL_PERIOD_PRE_RANGE = 1;
+		static constexpr uint8_t MARKER_VCSEL_PERIOD_FINAL_RANGE = 2;
+		static constexpr uint8_t MARKER_MSRC_CONFIG_TIMEOUT = 3;
+		static constexpr uint8_t MARKER_PRE_RANGE_TIMEOUT = 4;
+		static constexpr uint8_t MARKER_FINAL_RANGE_TIMEOUT = 5;
+
+		static constexpr uint8_t BUFFER[] PROGMEM =
+		{
+			// Call get_vcsel_pulse_period<VcselPeriodType::PRE_RANGE>
+			action::INCLUDE, INCLUDE_VCSEL_PERIOD_PRE_RANGE,
+			action::MARKER, MARKER_VCSEL_PERIOD_PRE_RANGE,
+			// Call get_vcsel_pulse_period<VcselPeriodType::FINAL_RANGE>
+			action::INCLUDE, INCLUDE_VCSEL_PERIOD_FINAL_RANGE,
+			action::MARKER, MARKER_VCSEL_PERIOD_FINAL_RANGE,
+			// Read MSRC CONFIG TIMEOUT (1 byte)
+			action::read(1), regs::REG_MSRC_CONFIG_TIMEOUT_MACROP,
+			action::MARKER, MARKER_MSRC_CONFIG_TIMEOUT,
+			// Read PRE_RANGE CONFIG TIMEOUT (2 bytes)
+			action::read(2), regs::REG_PRE_RANGE_CONFIG_TIMEOUT_MACROP_HI,
+			action::MARKER, MARKER_PRE_RANGE_TIMEOUT,
+			// Read FINAL_RANGE CONFIG TIMEOUT (2 bytes)
+			action::read(2, true), regs::REG_FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI,
+			action::MARKER, MARKER_FINAL_RANGE_TIMEOUT,
+			action::END
+		};
+	}
+
+	// Constants for set_vcsel_pulse_period<VcselPeriodType::PRE_RANGE>() method
+	//---------------------------------------------------------------------------
+	//TODO
+	namespace vcsel_period_data_pre_range
+	{
+		static constexpr uint8_t BUFFER[] PROGMEM =
+		{
+			// Get Sequence steps enable (include)
+
+			// Get Sequence steps timeouts (include)
+
+			// Write PRE_RANGE_CONFIG_VALID_PHASE (2 bytes)
+
+			// Apply VCSEL period (PRE_RANGE_CONFIG_VCSEL_PERIOD)
+
+			// set sequence step timeout (PRE_RANGE_CONFIG_TIMEOUT_MACROP_HI)
+
+			// set sequence step timeout (MSRC_CONFIG_TIMEOUT_MACROP)
+		};
+
+	}
+
+	// Constants for set_vcsel_pulse_period<VcselPeriodType::FINAL_RANGE>() method
+	//-----------------------------------------------------------------------------
+	//TODO
+	namespace vcsel_period_data_pre_range
+	{
+	}
+
 	// Constants for init_data() method
 	//----------------------------------
-	// Write buffer
-	static constexpr uint8_t INIT_DATA_BUFFER[] PROGMEM =
+	namespace init_data
 	{
-		// read/write VHV_CONFIG_PAD_SCL_SDA__EXTSUP_HV to force 2.8V or keep 1.8V default
-		regs::REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV, // 1 BYTE READ
-		regs::REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV, 0x01, // OVERWRITTEN BYTE
-		// set I2C standard mode
-		0x88, 0x00,
-		regs::REG_POWER_MANAGEMENT, 0x01,
-		0xFF, 0x01,
-		regs::REG_SYSRANGE_START, 0x00,
-		// read stop variable here
-		0x91, // 1 BYTE READ
-		regs::REG_SYSRANGE_START, 0x01,
-		0xFF, 0x00,
-		regs::REG_POWER_MANAGEMENT, 0x00,
-		// read/write REG_MSRC_CONFIG_CONTROL to disable SIGNAL_RATE_MSRC and SIGNAL_RATE_PRE_RANGE limit checks
-		regs::REG_MSRC_CONFIG_CONTROL, // 1 BYTE READ
-		regs::REG_MSRC_CONFIG_CONTROL, 0x12, // OVERWRITTEN BYTE
-		// set signal rate limit to 0.25 MCPS (million counts per second) in FP9.7 format
-		regs::REG_FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, 0x00, 0x20,
-		// enable all sequence steps by default
-		regs::REG_SYSTEM_SEQUENCE_CONFIG, 0xFF
-	};
-	// Size of write buffer TODO maybe useless...
-	static constexpr uint8_t INIT_DATA_BUFFER_SIZE = sizeof(INIT_DATA_BUFFER);
-	// List of futures and bytes count:
-	// - negative means write 1 byte (register) and read N bytes
-	// - positive means write 1 byte (register) followed by N bytes
-	static constexpr int8_t INIT_DATA_FUTURES[] PROGMEM = {-1, 1, 1, 1, 1, 1, -1, 1, 1, 1, -1, 1, 2, 1};
-	static constexpr uint8_t INIT_DATA_FUTURES_SIZE = sizeof(INIT_DATA_FUTURES);
+		// Marker after reading REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV
+		static constexpr uint8_t MARKER_VHV_CONFIG = 1;
+		// Marker after reading stop_variable
+		static constexpr uint8_t MARKER_STOP_VARIABLE = 2;
+		// Marker after reading REG_MSRC_CONFIG_CONTROL
+		static constexpr uint8_t MARKER_MSRC_CONFIG_CONTROL = 3;
 
-	// Index of Future which value must be modified for 2v8 change
-	static constexpr uint8_t INIT_DATA_FUTURE_VHV_CONFIG = 1;
-	// Index of Future at which we must get the stop_variable value
-	static constexpr uint8_t INIT_DATA_FUTURE_STOP_VARIABLE = 7;
-	// Index of Future which value must be modified for REG_MSRC_CONFIG_CONTROL
-	static constexpr uint8_t INIT_DATA_FUTURE_MSRC_CONFIG_CONTROL = 11;
+		// Write buffer
+		static constexpr uint8_t BUFFER[] PROGMEM =
+		{
+			// read/write VHV_CONFIG_PAD_SCL_SDA__EXTSUP_HV to force 2.8V or keep 1.8V default
+			action::read(1), regs::REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV, // 1 BYTE READ
+			action::MARKER, MARKER_VHV_CONFIG,
+			action::write(1), regs::REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV, 0x01, // OVERWRITTEN BYTE
+			// set I2C standard mode
+			action::write(1), 0x88, 0x00,
+			action::write(1), regs::REG_POWER_MANAGEMENT, 0x01,
+			action::write(1), 0xFF, 0x01,
+			action::write(1), regs::REG_SYSRANGE_START, 0x00,
+			// read stop variable here
+			action::read(1), 0x91, // 1 BYTE READ
+			action::MARKER, MARKER_STOP_VARIABLE,
+			action::write(1), regs::REG_SYSRANGE_START, 0x01,
+			action::write(1), 0xFF, 0x00,
+			action::write(1), regs::REG_POWER_MANAGEMENT, 0x00,
+			// read/write REG_MSRC_CONFIG_CONTROL to disable SIGNAL_RATE_MSRC and SIGNAL_RATE_PRE_RANGE limit checks
+			action::read(1), regs::REG_MSRC_CONFIG_CONTROL, // 1 BYTE READ
+			action::MARKER, MARKER_MSRC_CONFIG_CONTROL,
+			action::write(1), regs::REG_MSRC_CONFIG_CONTROL, 0x12, // OVERWRITTEN BYTE
+			// set signal rate limit to 0.25 MCPS (million counts per second) in FP9.7 format
+			action::write(2), regs::REG_FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, 0x00, 0x20,
+			// enable all sequence steps by default
+			action::write(1, true), regs::REG_SYSTEM_SEQUENCE_CONFIG, 0xFF,
+			action::END
+		};
 
-	// Value to force 2V8 in REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV register
-	static constexpr uint8_t VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV_SET_2V8 = 0x01;
-	// Value to disable SIGNAL_RATE_MSRC and SIGNAL_RATE_PRE_RANGE in REG_MSRC_CONFIG_CONTROL register
-	static constexpr uint8_t MSRC_CONFIG_CONTROL_INIT = 0x12;
+		// Value to force (OR) 2V8 in REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV register
+		static constexpr uint8_t VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV_SET_2V8 = 0x01;
+		// Value to disable (OR?) SIGNAL_RATE_MSRC and SIGNAL_RATE_PRE_RANGE in REG_MSRC_CONFIG_CONTROL register
+		static constexpr uint8_t MSRC_CONFIG_CONTROL_INIT = 0x12;
+	}
 
+	// TODO define specific namespace for each specific Future data
 	// Constants for init_static() method
 	//-----------------------------------
 	// Write buffer
@@ -263,14 +388,17 @@ namespace devices::vl53l0x_internals
 		regs::REG_SYSTEM_INTERRUPT_CLEAR, 0x01,
 
 		//TODO get current timing budget
+			// get sequence steps
+			// get sequence timeouts
+		
 
 		// set sequence steps: disable MSRC and TCC by default
 		regs::REG_SYSTEM_SEQUENCE_CONFIG, 0xE8,
 
-		// recalculate timing budget
-		//TODO first get sequence step enables (should have them already!)
-		//TODO then get sequence timeouts (device-provided only?)
-		regs::REG_FINAL_RANGE_CONFIG_VCSEL_PERIOD, 0x00, 0x00
+		//TODO recalculate timing budget
+			// get sequence steps
+			// get sequence timeouts
+		regs::REG_FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI, 0x00, 0x00,
 	};
 
 	// Size of write buffer TODO maybe useless

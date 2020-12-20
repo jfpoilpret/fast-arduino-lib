@@ -196,17 +196,34 @@ int main()
 
 	// Call first initialization step
 	out << F("Calling init_data_first()...") << endl;
-	TOF::InitDataFuture future{};
-	int error = tof.init_data_first(future);
+	TOF::InitDataFuture future1{};
+	int error = tof.init_data_first(future1);
 	out << F("tof.init_data_first(future) = ") << dec << error << endl;
 	time::delay_ms(100);
 	DEBUG(out);
-	out << F("future.status() = ") << future.status() << endl;
+	out << F("future.status() = ") << future1.status() << endl;
 
 	ok = tof.get_range_status(status);
 	out << F("tof.get_range_status(status) = ") << ok 
 		<< F(", error = ") << dec << uint8_t(status.error())
 		<< F(", data_ready = ") << status.data_ready() << endl;
+	DEBUG(out);
+
+	TOF::GetSequenceStepsTimeoutFuture future2{};
+	error = tof.get_sequence_steps_timeout(future2);
+	out << F("tof.get_sequence_steps_timeout(future) = ") << dec << error << endl;
+	time::delay_ms(100);
+	DEBUG(out);
+	out << F("future.status() = ") << future2.status() << endl;
+	SequenceStepsTimeout timeouts;
+	future2.get(timeouts);
+	out << F("tof.get_sequence_steps_timeout(timeouts) = ") << ok << flush
+		<< F(", pre_range_vcsel_period_pclks = ") << dec << timeouts.pre_range_vcsel_period_pclks() << flush
+		<< F(", final_range_vcsel_period_pclks = ") << dec << timeouts.final_range_vcsel_period_pclks() << flush
+		<< F(", msrc_dss_tcc_mclks = ") << dec << timeouts.msrc_dss_tcc_mclks() << flush
+		<< F(", pre_range_mclks = ") << dec << timeouts.pre_range_mclks() << flush
+		<< F(", final_range_mclks = ") << dec << timeouts.final_range_mclks()
+		<< endl;
 	DEBUG(out);
 
 	manager.end();
