@@ -230,7 +230,7 @@ namespace i2c
 				if (read && write)
 				{
 					error = this->device().launch_commands(
-						future, {this->device().read(), this->device().write(0, false, stop)});
+						future, {this->device().write(), this->device().read(0, false, stop)});
 				}
 				else if (read)
 				{
