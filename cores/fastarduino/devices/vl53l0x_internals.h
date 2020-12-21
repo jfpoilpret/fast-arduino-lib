@@ -147,41 +147,6 @@ namespace devices::vl53l0x_internals
 		}
 	}
 
-	// Constants for get_sequence_step_timeouts() method
-	//---------------------------------------------------
-	namespace sequence_step_timeouts
-	{
-		// Include markers
-		static constexpr uint8_t INCLUDE_VCSEL_PERIOD_PRE_RANGE = 1;
-		static constexpr uint8_t INCLUDE_VCSEL_PERIOD_FINAL_RANGE = 2;
-		// Special action markers
-		static constexpr uint8_t MARKER_VCSEL_PERIOD_PRE_RANGE = 1;
-		static constexpr uint8_t MARKER_VCSEL_PERIOD_FINAL_RANGE = 2;
-		static constexpr uint8_t MARKER_MSRC_CONFIG_TIMEOUT = 3;
-		static constexpr uint8_t MARKER_PRE_RANGE_TIMEOUT = 4;
-		static constexpr uint8_t MARKER_FINAL_RANGE_TIMEOUT = 5;
-
-		static constexpr uint8_t BUFFER[] PROGMEM =
-		{
-			// Call get_vcsel_pulse_period<VcselPeriodType::PRE_RANGE>
-			action::INCLUDE, INCLUDE_VCSEL_PERIOD_PRE_RANGE,
-			action::MARKER, MARKER_VCSEL_PERIOD_PRE_RANGE,
-			// Call get_vcsel_pulse_period<VcselPeriodType::FINAL_RANGE>
-			action::INCLUDE, INCLUDE_VCSEL_PERIOD_FINAL_RANGE,
-			action::MARKER, MARKER_VCSEL_PERIOD_FINAL_RANGE,
-			// Read MSRC CONFIG TIMEOUT (1 byte)
-			action::read(1), regs::REG_MSRC_CONFIG_TIMEOUT_MACROP,
-			action::MARKER, MARKER_MSRC_CONFIG_TIMEOUT,
-			// Read PRE_RANGE CONFIG TIMEOUT (2 bytes)
-			action::read(2), regs::REG_PRE_RANGE_CONFIG_TIMEOUT_MACROP_HI,
-			action::MARKER, MARKER_PRE_RANGE_TIMEOUT,
-			// Read FINAL_RANGE CONFIG TIMEOUT (2 bytes)
-			action::read(2, true), regs::REG_FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI,
-			action::MARKER, MARKER_FINAL_RANGE_TIMEOUT,
-			action::END
-		};
-	}
-
 	// Constants for set_vcsel_pulse_period<VcselPeriodType::PRE_RANGE>() method
 	//---------------------------------------------------------------------------
 	//TODO
