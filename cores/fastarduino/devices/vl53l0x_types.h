@@ -238,6 +238,9 @@ namespace devices::vl53l0x
 		}
 		uint16_t final_range_mclks() const
 		{
+			//FIXME actual result depends on step enable pre_range
+			// if (is_pre_range())
+			// 	return final_range_mclks_ - pre_range_mclks_;
 			return final_range_mclks_ + 1;
 		}
 
