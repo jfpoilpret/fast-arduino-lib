@@ -215,7 +215,7 @@ int main()
 	time::delay_ms(100);
 	DEBUG(out);
 	out << F("future.status() = ") << future2.status() << endl;
-	SequenceStepsTimeout timeouts;
+	SequenceStepsTimeout timeouts{};
 	future2.get(timeouts);
 	out << F("tof.get_sequence_steps_timeout(timeouts) = ") << ok << flush
 		<< F(", pre_range_vcsel_period_pclks = ") << dec << timeouts.pre_range_vcsel_period_pclks() << flush

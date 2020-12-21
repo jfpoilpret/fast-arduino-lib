@@ -21,6 +21,7 @@
 #ifndef I2C_DEVICE_HH
 #define I2C_DEVICE_HH
 
+#include "array.h"
 #include "initializer_list.h"
 #include "iterator.h"
 #include "errors.h"
@@ -28,6 +29,7 @@
 #include "future.h"
 #include "lifecycle.h"
 #include "i2c_handler.h"
+#include "utilities.h"
 
 namespace i2c
 {
@@ -82,10 +84,22 @@ namespace i2c
 		using MANAGER = MANAGER_;
 
 	private:
+		using THIS = I2CDevice<MANAGER>;
 		using MANAGER_TRAIT = I2CManager_trait<MANAGER>;
 		// Ensure MANAGER is an accepted I2C Manager type
 		static_assert(
 			MANAGER_TRAIT::IS_I2CMANAGER, "MANAGER_ must be a valid I2C Manager type");
+		// Internal type used by WriteRegisterFuture
+		template<typename T, bool BIG_ENDIAN> class WriteContent
+		{
+		public:
+			WriteContent(uint8_t reg, const T& value)
+				:	register_{reg}, value_{BIG_ENDIAN ? utils::change_endianness(value) : value} {}
+
+		private:
+			const uint8_t register_;
+			const T value_; 
+		};
 
 	protected:
 		/**
@@ -108,6 +122,215 @@ namespace i2c
 		 * by MANAGER type, whether it is asynchronous or synchronous.
 		 */
 		template<typename OUT, typename IN> using FUTURE = typename MANAGER::template FUTURE<OUT, IN>;
+
+		//TODO utility methods and types
+		//===============================
+
+		//TODO DOCS
+		using FUTURE_OUTPUT_LISTENER = future::FutureOutputListener<ABSTRACT_FUTURE>;
+		//TODO DOCS
+		using FUTURE_STATUS_LISTENER = future::FutureStatusListener<ABSTRACT_FUTURE>;
+
+		//TODO DOCS Futures group
+		class AbstractI2CFuture
+		{
+		public:
+			future::FutureStatus status() const
+			{
+				return status_;
+			}
+
+			future::FutureStatus await() const
+			{
+				while (true)
+				{
+					future::FutureStatus status = this->status();
+					if (status != future::FutureStatus::NOT_READY)
+						return status;
+					time::yield();
+				}
+			}
+
+			int error() const
+			{
+				future::FutureStatus status = await();
+				switch (status)
+				{
+					case future::FutureStatus::READY:
+					return 0;
+
+					case future::FutureStatus::ERROR:
+					return error_;
+
+					default:
+					// This should never happen
+					return errors::EINVAL;
+				}
+			}
+
+		protected:
+			AbstractI2CFuture() = default;
+
+			// Check launch_commands() return and update own status if needed
+			bool check_launch(int launch)
+			{
+				if (launch == 0) return true;
+				error_ = launch;
+				status_ = future::FutureStatus::ERROR;
+				return false;
+			}
+
+			THIS& device() const
+			{
+				return *device_;
+			}
+
+			// Global status for whole future group
+			volatile future::FutureStatus status_ = future::FutureStatus::NOT_READY;
+			volatile int error_ = 0;
+
+			void set_device(THIS* device)
+			{
+				device_ = device;
+			}
+
+		private:
+			// The device that uses this future
+			THIS* device_ = nullptr;
+			friend THIS;
+		};
+
+		class I2CFuturesGroup: public AbstractI2CFuture, public FUTURE_STATUS_LISTENER
+		{
+		protected:
+			I2CFuturesGroup(ABSTRACT_FUTURE** futures, uint8_t size) : futures_{futures}, size_{size} {}
+
+			bool start(THIS& device)
+			{
+				this->set_device(&device);
+				return next_future();
+			}
+
+		private:
+			bool next_future()
+			{
+				if (index_ == size_)
+				{
+					// Future is finished
+					if (this->status_ == future::FutureStatus::NOT_READY)
+						this->status_ = future::FutureStatus::READY;
+					return false;
+				}
+				ABSTRACT_FUTURE& future = *futures_[index_++];
+				// Check if future has read, write or both
+				const bool stop = (index_ == size_);
+				const bool read = future.get_future_value_size_();
+				const bool write = future.get_storage_value_size_();
+				int error = 0;
+				if (read && write)
+				{
+					error = this->device().launch_commands(
+						future, {this->device().read(), this->device().write(0, false, stop)});
+				}
+				else if (read)
+				{
+					error = this->device().launch_commands(future, {this->device().read(0, false, stop)});
+				}
+				else if (write)
+				{
+					error = this->device().launch_commands(future, {this->device().write(0, false, stop)});
+				}
+				else
+				{
+					error = errors::EILSEQ;
+				}
+				return this->check_launch(error);
+			}
+
+			void on_status_change(UNUSED const ABSTRACT_FUTURE& future, future::FutureStatus status)
+			{
+				// First check that current future was executed successfully
+				if (status != future::FutureStatus::READY)
+				{
+					this->error_ = future.error();
+					this->status_ = status;
+					return;
+				}
+				next_future();
+			}
+
+			ABSTRACT_FUTURE** futures_;
+			uint8_t size_;
+			uint8_t index_ = 0;
+		};
+
+		//TODO ComplexFuturesGroup here
+
+		// Future to read a register
+		//TODO Add transformer functor to template?
+		//TODO DOCS
+		template<typename T, bool BIG_ENDIAN = true>
+		class ReadRegisterFuture: public FUTURE<T, uint8_t>
+		{
+			using PARENT = FUTURE<T, uint8_t>;
+		public:
+			explicit ReadRegisterFuture(uint8_t reg,
+				FUTURE_STATUS_LISTENER* status_listener = nullptr,
+				FUTURE_OUTPUT_LISTENER* output_listener = nullptr)
+				:	PARENT{reg, status_listener, output_listener} {}
+			ReadRegisterFuture(ReadRegisterFuture&&) = default;
+			ReadRegisterFuture& operator=(ReadRegisterFuture&&) = default;
+
+			bool get(T& result)
+			{
+				if (!PARENT::get(result)) return false;
+				if (BIG_ENDIAN)
+					result = utils::change_endianness(result);
+				return true;
+			}
+		};
+
+		//TODO DOCS
+		template<uint8_t REGISTER, typename T, bool BIG_ENDIAN = true>
+		class TReadRegisterFuture: public ReadRegisterFuture<T, BIG_ENDIAN>
+		{
+			using PARENT = ReadRegisterFuture<T, BIG_ENDIAN>;
+		public:
+			explicit TReadRegisterFuture(
+				FUTURE_STATUS_LISTENER* status_listener = nullptr,
+				FUTURE_OUTPUT_LISTENER* output_listener = nullptr)
+				:	PARENT{REGISTER, status_listener, output_listener} {}
+			TReadRegisterFuture(TReadRegisterFuture&&) = default;
+			TReadRegisterFuture& operator=(TReadRegisterFuture&&) = default;
+		};
+
+		//TODO Add transformer functor to template?
+		//TODO Add checker functor to template?
+		//TODO DOCS
+		template<typename T, bool BIG_ENDIAN = true>
+		class WriteRegisterFuture: public FUTURE<void, WriteContent<T, BIG_ENDIAN>>
+		{
+			using CONTENT = WriteContent<T, BIG_ENDIAN>;
+			using PARENT = FUTURE<void, CONTENT>;
+		public:
+			explicit WriteRegisterFuture(
+				uint8_t reg, const T& value, 
+				FUTURE_STATUS_LISTENER* status_listener = nullptr)
+				:	PARENT{CONTENT{reg, value}, status_listener} {}
+			WriteRegisterFuture(WriteRegisterFuture&&) = default;
+			WriteRegisterFuture& operator=(WriteRegisterFuture&&) = default;
+		};
+
+		//TODO DOCS
+		template<uint8_t REGISTER, typename T, bool BIG_ENDIAN = true>
+		class TWriteRegisterFuture: public WriteRegisterFuture<T, BIG_ENDIAN>
+		{
+			using PARENT = WriteRegisterFuture<T, BIG_ENDIAN>;
+		public:
+			explicit TWriteRegisterFuture(const T& value) : PARENT{REGISTER, value} {}
+			TWriteRegisterFuture(TWriteRegisterFuture&&) = default;
+			TWriteRegisterFuture& operator=(TWriteRegisterFuture&&) = default;
+		};
 
 		/**
 		 * Create a new I2C device. This constructor must be called by a subclass
@@ -291,6 +514,32 @@ namespace i2c
 				handler_.last_command_pushed_();
 				return error;
 			}
+		}
+
+		//TODO DOCS
+		// Utility functions used every time a register gets read or written
+		template<typename F> int async_read(PROXY<F> future, bool stop = true)
+		{
+			return launch_commands(future, {write(), read(0, false, stop)});
+		}
+		//TODO DOCS
+		template<typename F, typename T = uint8_t> bool sync_read(T& result)
+		{
+			F future{};
+			if (async_read<F>(future) != 0) return false;
+			return future.get(result);
+		}
+		//TODO DOCS
+		template<typename F> int async_write(PROXY<F> future, bool stop = true)
+		{
+			return launch_commands(future, {write(0, false, stop)});
+		}
+		//TODO DOCS
+		template<typename F, typename T = uint8_t> bool sync_write(const T& value)
+		{
+			F future{value};
+			if (async_write<F>(future) != 0) return false;
+			return (future.await() == future::FutureStatus::READY);
 		}
 
 		/**

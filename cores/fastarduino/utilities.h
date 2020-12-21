@@ -474,6 +474,39 @@ namespace utils
 		else
 			return num_bits(mask >> 1, num);
 	}
+
+	//TODO DOCS
+	template<typename T> T inline change_endianness(const T& value)
+	{
+		static_assert(sizeof(T) == 1, "T must be 1 byte length.");
+		return value;
+	}
+	/// @cond notdocumented
+	template<> uint16_t inline change_endianness(const uint16_t& value)
+	{
+		uint16_t temp = value;
+		utils::swap_bytes(temp);
+		return temp;
+	}
+	template<> int16_t inline change_endianness(const int16_t& value)
+	{
+		int16_t temp = value;
+		utils::swap_bytes(temp);
+		return temp;
+	}
+	template<> uint32_t inline change_endianness(const uint32_t& value)
+	{
+		uint32_t temp = value;
+		utils::swap_bytes(temp);
+		return temp;
+	}
+	template<> int32_t inline change_endianness(const int32_t& value)
+	{
+		int32_t temp = value;
+		utils::swap_bytes(temp);
+		return temp;
+	}
+	/// @endcond
 }
 
 #endif /* UTILITIES_HH */
