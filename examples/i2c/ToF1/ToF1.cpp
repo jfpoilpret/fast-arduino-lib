@@ -222,8 +222,11 @@ int main()
 		<< F(", final_range_vcsel_period_pclks = ") << dec << timeouts.final_range_vcsel_period_pclks() << flush
 		<< F(", msrc_dss_tcc_mclks = ") << dec << timeouts.msrc_dss_tcc_mclks() << flush
 		<< F(", pre_range_mclks = ") << dec << timeouts.pre_range_mclks() << flush
-		<< F(", final_range_mclks = ") << dec << timeouts.final_range_mclks()
-		<< endl;
+		<< F(", final_range_mclks = ") << dec << timeouts.final_range_mclks() << endl;
+	//TODO check calculated values
+	out << F("timeouts.msrc_dss_tcc_us() = ") << dec << timeouts.msrc_dss_tcc_us() << flush
+		<< F(", timeouts.pre_range_us() = ") << dec << timeouts.pre_range_us() << flush
+		<< F(", timeouts.final_range_us() = ") << dec << timeouts.final_range_us() << endl;
 	DEBUG(out);
 
 	manager.end();
