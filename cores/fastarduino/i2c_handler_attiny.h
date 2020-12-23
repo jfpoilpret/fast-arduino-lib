@@ -286,6 +286,8 @@ namespace i2c
 	private:
 		using PARENT = AbstractI2CSyncManager<ATtinyI2CSyncHandler<MODE_, HAS_STATUS_, STATUS_HOOK_>, 
 			MODE_, HAS_LC_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_>;
+	
+	public:
 		using ABSTRACT_FUTURE = typename PARENT::ABSTRACT_FUTURE;
 		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
 		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;

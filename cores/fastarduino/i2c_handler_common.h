@@ -418,11 +418,12 @@ namespace i2c
 		using REG8 = board_traits::REG8;
 		using DEBUG = I2CDebugSupport<HAS_DEBUG_, DEBUG_HOOK_>;
 		using LC = I2CLifeCycleSupport<HAS_LC_>;
+
+	public:
 		using ABSTRACT_FUTURE = future::AbstractFakeFuture;
 		template<typename T> using PROXY = typename LC::template PROXY<T>;
 		template<typename OUT, typename IN> using FUTURE = future::FakeFuture<OUT, IN>;
 
-	public:
 		/**
 		 * Prepare and enable the MCU for I2C transmission.
 		 * Preparation includes setup of I2C pins (SDA and SCL).
