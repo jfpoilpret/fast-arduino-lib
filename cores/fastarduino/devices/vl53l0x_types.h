@@ -206,6 +206,30 @@ namespace devices::vl53l0x
 		uint8_t steps_ = 0;
 	};
 
+	class SPADInfo
+	{
+	private:
+		static constexpr uint8_t APERTURE = bits::BV8(7);
+		static constexpr uint8_t COUNT = bits::CBV8(7);
+
+	public:
+		SPADInfo() = default;
+		SPADInfo(uint8_t info) : info_{info} {}
+
+		bool is_aperture() const
+		{
+			return info_ & APERTURE;
+		}
+
+		uint8_t count() const
+		{
+			return info_ & COUNT;
+		}
+
+	private:
+		uint8_t info_ = 0;
+	};
+
 	class SequenceStepsTimeout
 	{
 	public:
