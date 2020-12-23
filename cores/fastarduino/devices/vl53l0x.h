@@ -35,6 +35,7 @@
 #include "../utilities.h"
 #include "../i2c_handler.h"
 #include "../i2c_device.h"
+#include "../i2c_device_utilities.h"
 #include "vl53l0x_internals.h"
 #include "vl53l0x_types.h"
 
@@ -74,7 +75,7 @@ namespace devices::vl53l0x
 	/// @cond notdocumented
 	namespace internals = vl53l0x_internals;
 	namespace regs = internals::registers;
-	namespace actions = internals::action;
+	namespace actions = i2c::actions;
 	/// @endcond
 
 	/**
@@ -97,16 +98,18 @@ namespace devices::vl53l0x
 		using FUTURE_STATUS_LISTENER = typename PARENT::FUTURE_STATUS_LISTENER;
 
 		template<typename T> 
-		using ReadRegisterFuture = typename PARENT::template ReadRegisterFuture<T, true>;
+		using ReadRegisterFuture = i2c::ReadRegisterFuture<MANAGER, T, true>;
 		template<typename T>
-		using WriteRegisterFuture = typename PARENT::template WriteRegisterFuture<T, true>;
+		using WriteRegisterFuture = i2c::WriteRegisterFuture<MANAGER, T, true>;
 
 		template<uint8_t REGISTER, typename T = uint8_t>
-		using TReadRegisterFuture = typename PARENT::template TReadRegisterFuture<REGISTER, T, true>;
+		using TReadRegisterFuture = i2c::TReadRegisterFuture<MANAGER, REGISTER, T, true>;
 		template<uint8_t REGISTER, typename T = uint8_t>
-		using TWriteRegisterFuture = typename PARENT::template TWriteRegisterFuture<REGISTER, T, true>;
+		using TWriteRegisterFuture = i2c::TWriteRegisterFuture<MANAGER, REGISTER, T, true>;
 
-		using I2CFuturesGroup = typename PARENT::I2CFuturesGroup;
+		using AbstractI2CFuture = i2c::AbstractI2CFuture<MANAGER>;
+		using I2CFuturesGroup = i2c::I2CFuturesGroup<MANAGER>;
+		using ComplexI2CFuturesGroup = i2c::ComplexI2CFuturesGroup<MANAGER>;
 
 		// Forward declarations needed by compiler
 		class AbstractGetVcselPulsePeriodFuture;
@@ -234,6 +237,153 @@ namespace devices::vl53l0x
 			return this->async_write(future);
 		}
 
+		class GetSPADInfoFuture : public ComplexI2CFuturesGroup
+		{
+			using ProcessAction = typename ComplexI2CFuturesGroup::ProcessAction;
+			// Types of futures handled by this group
+			template<uint8_t SIZE> using FUTURE_WRITE = FUTURE<void, containers::array<uint8_t, SIZE + 1>>;
+			using FUTURE_READ = FUTURE<uint8_t, uint8_t>;
+			
+		public:
+			GetSPADInfoFuture() : ComplexI2CFuturesGroup{uint16_t(internals::spad_info::BUFFER)} {}
+			//TODO Move ctor/asgn?
+
+			bool get(SPADInfo& info)
+			{
+				if (this->await() != future::FutureStatus::READY)
+					return false;
+				info = SPADInfo{info_};
+				return true;
+			}
+
+		protected:
+			bool start(THIS& device)
+			{
+				this->set_device(device);
+				return next_future();
+			}
+
+		private:
+			void process_marker(uint8_t marker)
+			{
+				namespace data = internals::spad_info;
+				// Check marker and act accordingly
+				switch (marker)
+				{
+					case data::MARKER_OVERWRITE_REG_DEVICE_STROBE:
+					read_.get(forced_value_);
+					forced_value_ |= data::REG_DEVICE_STROBE_FORCED_VALUE;
+					change_value_ = true;
+					break;
+
+					case data::MARKER_READ_SPAD_INFO:
+					read_.get(info_);
+					break;
+
+					case data::MARKER_WAIT_REG_DEVICE_STROBE:
+					wait();
+					break;
+
+					default:
+					//TODO ERROR
+					break;
+				}
+			}
+			
+			void wait()
+			{
+				uint8_t value = 0;
+				read_.get(value);
+				if (value == 0x00)
+				{
+					//TODO handle timeout!
+					this->loop();
+				}
+			}
+
+			bool process_read(UNUSED uint8_t count, bool stop)
+			{
+				const uint8_t reg = this->next_byte();
+				// Only one kind of read here (1 byte)
+				read_.reset_(reg);
+				return this->check_launch(
+					this->launch_commands(read_, {PARENT::write(), PARENT::read(0, false, stop)}));
+			}
+
+			bool process_write(uint8_t count, bool stop)
+			{
+				const uint8_t reg = this->next_byte();
+				// Only two kinds of write here (1 or 2 bytes)
+				if (count == 1)
+				{
+					uint8_t value = this->next_byte();
+					if (change_value_)
+						value = forced_value_;
+					write1_.reset_({reg, value});
+					return this->check_launch(
+						this->launch_commands(write1_, {PARENT::write(0, false, stop)}));
+				}
+				else
+				{
+					uint8_t val1 = this->next_byte();
+					uint8_t val2 = this->next_byte();
+					write2_.reset_({reg, val1, val2});
+					return this->check_launch(
+						this->launch_commands(write2_, {PARENT::write(0, false, stop)}));
+				}
+			}
+
+			// Launch next future from the list stored in flash)
+			bool next_future()
+			{
+				change_value_ = false;
+				ProcessAction action;
+				while ((action = this->process_action()) == ProcessAction::MARKER)
+				{
+					process_marker(this->next_byte());
+				}
+				if (action == ProcessAction::DONE)
+					return false;
+				if (action == ProcessAction::READ)
+					return process_read(this->count(), this->is_stop());
+				if (action == ProcessAction::WRITE)
+					return process_write(this->count(), this->is_stop());
+				// If we fall here , this is an error (no ProcessAction::INCLUDE in this group)
+				//TODO error
+				return false;
+			}
+
+			void on_status_change(UNUSED const ABSTRACT_FUTURE& future, future::FutureStatus status) final
+			{
+				// First check that current future was executed successfully
+				if (!this->check_status(future, status))
+					return;
+				next_future();
+			}
+
+			//TODO handle timeout (max loop iterations)...
+
+			// SPAD info once read from device
+			uint8_t info_ = 0;
+
+			bool change_value_ = false;
+			uint8_t forced_value_ = 0x00;
+
+			// Placeholders for dynamic futures
+			FUTURE_WRITE<1> write1_{{0}, this};
+			FUTURE_WRITE<2> write2_{{0, 0}, this};
+			FUTURE_READ read_{0, this};
+
+			friend THIS;
+		};
+		int get_SPAD_info(GetSPADInfoFuture& future)
+		{
+			// Launch init
+			if (!future.start(*this))
+				return future.error();
+			return 0;
+		}
+
 		class GetSequenceStepsTimeoutFuture : public I2CFuturesGroup
 		{
 		public:
@@ -260,7 +410,7 @@ namespace devices::vl53l0x
 			}
 
 		private:
-			// Placeholders for dynamic futures
+			// Actual futures  embedded in this group
 			TReadRegisterFuture<uint8_t(VcselPeriodType::PRE_RANGE)> readVcselPeriodPreRange_{this};
 			TReadRegisterFuture<uint8_t(VcselPeriodType::FINAL_RANGE)> readVcselPeriodFinalRange_{this};
 			TReadRegisterFuture<regs::REG_MSRC_CONFIG_TIMEOUT_MACROP> readMsrcTimeout_{this};
@@ -283,189 +433,138 @@ namespace devices::vl53l0x
 			// Launch init
 			if (!future.start(*this))
 				return future.error();
+			return 0;
 		}
 
 		//TODO additional arguments for init? eg sequence steps, limits...
-		class InitDataFuture : public FUTURE_STATUS_LISTENER
+		class InitDataFuture : public ComplexI2CFuturesGroup
 		{
+			using ProcessAction = typename ComplexI2CFuturesGroup::ProcessAction;
 			// Types of futures handled by this group
 			template<uint8_t SIZE> using FUTURE_WRITE = FUTURE<void, containers::array<uint8_t, SIZE + 1>>;
 			using FUTURE_READ = FUTURE<uint8_t, uint8_t>;
 			
 		public:
-			InitDataFuture() = default;
+			InitDataFuture() : ComplexI2CFuturesGroup{uint16_t(internals::init_data::BUFFER)} {}
 			//TODO Move ctor/asgn?
 
-			//TODO factor out all this common code! Where? In future.h?
-			future::FutureStatus status() const
+		protected:
+			bool start(THIS& device)
 			{
-				return status_;
-			}
-
-			future::FutureStatus await() const
-			{
-				while (true)
-				{
-					future::FutureStatus status = this->status();
-					if (status != future::FutureStatus::NOT_READY)
-						return status;
-					time::yield();
-				}
-			}
-
-			int error() const
-			{
-				future::FutureStatus status = await();
-				switch (status)
-				{
-					case future::FutureStatus::READY:
-					return 0;
-
-					case future::FutureStatus::ERROR:
-					return error_;
-
-					default:
-					// This should never happen
-					return errors::EINVAL;
-				}
+				this->set_device(device);
+				device_ = &device;
+				return next_future();
 			}
 
 		private:
-			void set_device(THIS* device)
+			void process_marker(uint8_t marker)
 			{
-				device_ = device;
+				namespace data = internals::init_data;
+				// Check marker and act accordingly
+				switch (marker)
+				{
+					case data::MARKER_VHV_CONFIG:
+					read_.get(forced_value_);
+					forced_value_ |= data::VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV_SET_2V8;
+					change_value_ = true;
+					break;
+
+					case data::MARKER_STOP_VARIABLE:
+					read_.get(device_->stop_variable_);
+					break;
+
+					case data::MARKER_MSRC_CONFIG_CONTROL:
+					read_.get(forced_value_);
+					forced_value_ |= data::MSRC_CONFIG_CONTROL_INIT;
+					change_value_ = true;
+					break;
+
+					default:
+					//TODO ERROR
+					break;
+				}
+			}
+
+			bool process_read(UNUSED uint8_t count, bool stop)
+			{
+				const uint8_t reg = this->next_byte();
+				// Only one kind of read here (1 byte)
+				read_.reset_(reg);
+				return this->check_launch(
+					this->launch_commands(read_, {PARENT::write(), PARENT::read(0, false, stop)}));
+			}
+
+			bool process_write(uint8_t count, bool stop)
+			{
+				const uint8_t reg = this->next_byte();
+				// Only two kinds of write here (1 or 2 bytes)
+				if (count == 1)
+				{
+					uint8_t value = this->next_byte();
+					if (change_value_)
+						value = forced_value_;
+					write1_.reset_({reg, value});
+					return this->check_launch(
+						this->launch_commands(write1_, {PARENT::write(0, false, stop)}));
+				}
+				else
+				{
+					uint8_t val1 = this->next_byte();
+					uint8_t val2 = this->next_byte();
+					write2_.reset_({reg, val1, val2});
+					return this->check_launch(
+						this->launch_commands(write2_, {PARENT::write(0, false, stop)}));
+				}
 			}
 
 			// Launch next future from the list stored in flash)
 			bool next_future()
 			{
-				namespace data = internals::init_data;
-
-				bool change_value = false;
-				uint8_t forced_value = 0x00;
-				int8_t action = next_byte();
-				if (action == actions::MARKER)
+				change_value_ = false;
+				ProcessAction action;
+				while ((action = this->process_action()) == ProcessAction::MARKER)
 				{
-					const int8_t marker = next_byte();
-					// Check marker and act accordingly
-					switch (marker)
-					{
-						case data::MARKER_VHV_CONFIG:
-						read_.get(forced_value);
-						forced_value |= data::VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV_SET_2V8;
-						change_value = true;
-						break;
-
-						case data::MARKER_STOP_VARIABLE:
-						read_.get(device_->stop_variable_);
-						break;
-
-						case data::MARKER_MSRC_CONFIG_CONTROL:
-						read_.get(forced_value);
-						forced_value |= data::MSRC_CONFIG_CONTROL_INIT;
-						change_value = true;
-						break;
-
-						default:
-						break;
-					}
-					// Proceed with next action immediately
-					action = next_byte();
+					process_marker(this->next_byte());
 				}
-
-				if (action == actions::END)
-				{
-					// Future is finished
-					if (status_ == future::FutureStatus::NOT_READY)
-						status_ = future::FutureStatus::READY;
+				if (action == ProcessAction::DONE)
 					return false;
-				}
-				// Either read or write future
-				const uint8_t reg = next_byte();
-				const uint8_t count = actions::count(action);
-				const bool stop = actions::is_stop(action);
-				if (actions::is_read(action))
-				{
-					// Only one kind of read here (1 byte)
-					read_.reset_(reg);
-					return check_launch(
-						device_->launch_commands(read_, {device_->write(), device_->read(0, false, stop)}));
-				}
-				else if (actions::is_write(action))
-				{
-					// Only two kinds of write here (1 or 2 bytes)
-					if (count == 1)
-					{
-						uint8_t value = next_byte();
-						if (change_value)
-							value = forced_value;
-						write1_.reset_({reg, value});
-						return check_launch(
-							device_->launch_commands(write1_, {device_->write(0, false, stop)}));
-					}
-					else
-					{
-						uint8_t val1 = next_byte();
-						uint8_t val2 = next_byte();
-						write2_.reset_({reg, val1, val2});
-						return check_launch(
-							device_->launch_commands(write2_, {device_->write(0, false, stop)}));
-					}
-				}
-				return false;
-			}
-
-			// Get the next byte, from the flash, to write to the device
-			uint8_t next_byte()
-			{
-				uint8_t data = 0;
-				return flash::read_flash(address_++, data);
-			}
-
-			// Check launch_commands() return and update own status if needed
-			bool check_launch(int launch)
-			{
-				if (launch == 0) return true;
-				error_ = launch;
-				status_ = future::FutureStatus::ERROR;
+				if (action == ProcessAction::READ)
+					return process_read(this->count(), this->is_stop());
+				if (action == ProcessAction::WRITE)
+					return process_write(this->count(), this->is_stop());
+				// If we fall here , this is an error (no ProcessAction::INCLUDE in this group)
+				//TODO error
 				return false;
 			}
 
 			void on_status_change(UNUSED const ABSTRACT_FUTURE& future, future::FutureStatus status) final
 			{
 				// First check that current future was executed successfully
-				if (status != future::FutureStatus::READY)
-				{
-					error_ = future.error();
-					status_ = status;
+				if (!this->check_status(future, status))
 					return;
-				}
 				next_future();
 			}
 
 			// The device that uses this future
 			THIS* device_ = nullptr;
 
-			// Information about futures to create and launch
-			uint16_t address_ = uint16_t(internals::init_data::BUFFER);
+			bool change_value_ = false;
+			uint8_t forced_value_ = 0x00;
 
 			// Placeholders for dynamic futures
 			FUTURE_WRITE<1> write1_{{0}, this};
 			FUTURE_WRITE<2> write2_{{0, 0}, this};
 			FUTURE_READ read_{0, this};
-			// Global status for whole future group
-			volatile future::FutureStatus status_ = future::FutureStatus::NOT_READY;
-			volatile int error_ = 0;
 
 			friend THIS;
 		};
 
 		int init_data_first(InitDataFuture& future)
 		{
-			future.set_device(this);
 			// Launch init
-			if (!future.next_future())
+			if (!future.start(*this))
 				return future.error();
+			return 0;
 		}
 
 		// //TODO group of futures for static init
@@ -544,6 +643,13 @@ namespace devices::vl53l0x
 			return this->template sync_write<SetSignalRateLimitFuture, float>(signal_rate);
 		}
 
+		bool get_SPAD_info(SPADInfo& info)
+		{
+			GetSPADInfoFuture future{};
+			if (get_SPAD_info(future) != 0) return false;
+			return future.get(info);
+		}
+
 		bool get_sequence_steps_timeout(SequenceStepsTimeout& timeouts)
 		{
 			GetSequenceStepsTimeoutFuture future{};
@@ -573,6 +679,80 @@ namespace devices::vl53l0x
 					commands[i] = this->write(size);
 			}
 		}
+
+		//TODO future for device strobe wait
+		class DeviceStrobeWaitFuture : public AbstractI2CFuture, public FUTURE_STATUS_LISTENER
+		{
+			using PARENT = AbstractI2CFuture;
+		public:
+			DeviceStrobeWaitFuture() = default;
+
+			bool start(THIS& device)
+			{
+				this->set_device(device);
+				return write_strobe(0x00, StrobeStep::STEP_INIT_STROBE);
+			}
+
+		private:
+			enum class StrobeStep : uint8_t
+			{
+				STEP_INIT_STROBE = 0,
+				STEP_READ_STROBE = 1,
+				STEP_EXIT_STROBE = 2
+			};
+
+			bool write_strobe(uint8_t value, StrobeStep next_step)
+			{
+				write_.reset_(value);
+				step_ = next_step;
+				return this->check_launch(this->launch_commands(write_, {PARENT::write(0, false, true)}));
+			}
+
+			void read_strobe()
+			{
+				read_.reset_();
+				this->check_launch(this->launch_commands(read_, {PARENT::write(), PARENT::read()}));
+			}
+
+			bool check_strobe()
+			{
+				uint8_t strobe = 0;
+				read_.get(strobe);
+				if (strobe != 0)
+					return write_strobe(0x01, StrobeStep::STEP_EXIT_STROBE);
+				if (++loop_ < MAX_LOOP) return true;
+				// Error timeout
+				return this->check_launch(errors::ETIME);
+			}
+
+			void on_status_change(const ABSTRACT_FUTURE& future, future::FutureStatus status) final
+			{
+				if (!this->check_status(future, status)) return;
+				switch (step_)
+				{
+					case StrobeStep::STEP_READ_STROBE:
+					if (!check_strobe()) return;
+					// Intentional fallthrough
+					
+					case StrobeStep::STEP_INIT_STROBE:
+					// Initial write strobe is finished, start loop reading probe
+					step_ = StrobeStep::STEP_READ_STROBE;
+					read_strobe();
+					break;
+					
+					case StrobeStep::STEP_EXIT_STROBE:
+					this->finish();
+					break;
+				}
+			}
+
+			static constexpr const uint16_t MAX_LOOP = 2000;
+
+			StrobeStep step_ = StrobeStep::STEP_INIT_STROBE;
+			uint16_t loop_ = 0;
+			TWriteRegisterFuture<regs::REG_DEVICE_STROBE> write_{0x00, this};
+			TReadRegisterFuture<regs::REG_DEVICE_STROBE> read_{this};
+		};
 
 		//TODO do we still need that intermediate class?
 		class AbstractGetVcselPulsePeriodFuture : public ReadRegisterFuture<uint8_t>

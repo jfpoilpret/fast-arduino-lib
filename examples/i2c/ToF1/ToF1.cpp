@@ -166,7 +166,7 @@ int main()
 	constexpr SequenceSteps steps2 = SequenceSteps::create().tcc().pre_range().final_range();
 	out << F("steps2 = ") << hex << steps2.value() << endl;
 	ok = tof.set_sequence_steps(steps2);
-	out << F("tof.get_sequence_steps(status) = ") << ok << endl;
+	out << F("tof.set_sequence_steps(status) = ") << ok << endl;
 	DEBUG(out);
 
 	SequenceSteps steps3;
@@ -208,6 +208,17 @@ int main()
 		<< F(", error = ") << dec << uint8_t(status.error())
 		<< F(", data_ready = ") << status.data_ready() << endl;
 	DEBUG(out);
+
+	TOF::GetSPADInfoFuture future3{};
+	error = tof.get_SPAD_info(future3);
+	out << F("tof.get_SPAD_info(future) = ") << dec << error << endl;
+	time::delay_ms(100);
+	DEBUG(out);
+	out << F("future.status() = ") << future3.status() << endl;
+	SPADInfo SPAD_info{};
+	future3.get(SPAD_info);
+	out << F("SPADInfo.is_aperture() = ") << SPAD_info.is_aperture() << flush
+		<< F(", SPADInfo.count() = ") << dec << SPAD_info.count() << endl;
 
 	TOF::GetSequenceStepsTimeoutFuture future2{};
 	error = tof.get_sequence_steps_timeout(future2);
