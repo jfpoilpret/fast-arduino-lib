@@ -176,7 +176,7 @@ namespace devices::vl53l0x_internals
 		// Marker after reading register 0x83 before owverwriting it
 		static constexpr uint8_t MARKER_OVERWRITE_REG_DEVICE_STROBE = 1;
 		// Marker for looping until register 0x83 is not 00
-		static constexpr uint8_t MARKER_WAIT_REG_DEVICE_STROBE = 2;
+		// static constexpr uint8_t MARKER_WAIT_REG_DEVICE_STROBE = 2;
 		// Marker after reading register 0x92 (SPAD info byte)
 		static constexpr uint8_t MARKER_READ_SPAD_INFO = 3;
 

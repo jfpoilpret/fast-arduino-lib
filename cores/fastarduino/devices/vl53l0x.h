@@ -107,12 +107,15 @@ namespace devices::vl53l0x
 		template<uint8_t REGISTER, typename T = uint8_t>
 		using TWriteRegisterFuture = i2c::TWriteRegisterFuture<MANAGER, REGISTER, T, true>;
 
-		using AbstractI2CFuture = i2c::AbstractI2CFuture<MANAGER>;
+		// using AbstractI2CFuture = i2c::AbstractI2CFuture<MANAGER>;
+		using AbstractI2CFuturesGroup = i2c::AbstractI2CFuturesGroup<MANAGER>;
 		using I2CFuturesGroup = i2c::I2CFuturesGroup<MANAGER>;
+		using I2CSameFutureGroup = i2c::I2CSameFutureGroup<MANAGER>;
 		using ComplexI2CFuturesGroup = i2c::ComplexI2CFuturesGroup<MANAGER>;
 
 		// Forward declarations needed by compiler
 		class AbstractGetVcselPulsePeriodFuture;
+		class DeviceStrobeWaitFuture;
 
 	public:
 		/**
@@ -239,18 +242,19 @@ namespace devices::vl53l0x
 
 		class GetSPADInfoFuture : public ComplexI2CFuturesGroup
 		{
-			using ProcessAction = typename ComplexI2CFuturesGroup::ProcessAction;
+			using PARENT = ComplexI2CFuturesGroup;
+			using ProcessAction = typename PARENT::ProcessAction;
 			// Types of futures handled by this group
 			template<uint8_t SIZE> using FUTURE_WRITE = FUTURE<void, containers::array<uint8_t, SIZE + 1>>;
 			using FUTURE_READ = FUTURE<uint8_t, uint8_t>;
 			
 		public:
-			GetSPADInfoFuture() : ComplexI2CFuturesGroup{uint16_t(internals::spad_info::BUFFER)} {}
+			GetSPADInfoFuture() : PARENT{uint16_t(internals::spad_info::BUFFER)} {}
 			//TODO Move ctor/asgn?
 
 			bool get(SPADInfo& info)
 			{
-				if (this->await() != future::FutureStatus::READY)
+				if (PARENT::await() != future::FutureStatus::READY)
 					return false;
 				info = SPADInfo{info_};
 				return true;
@@ -259,7 +263,7 @@ namespace devices::vl53l0x
 		protected:
 			bool start(THIS& device)
 			{
-				this->set_device(device);
+				PARENT::set_device(device);
 				return next_future();
 			}
 
@@ -280,34 +284,24 @@ namespace devices::vl53l0x
 					read_.get(info_);
 					break;
 
-					case data::MARKER_WAIT_REG_DEVICE_STROBE:
-					wait();
-					break;
-
 					default:
 					//TODO ERROR
 					break;
 				}
 			}
-			
-			void wait()
-			{
-				uint8_t value = 0;
-				read_.get(value);
-				if (value == 0x00)
-				{
-					//TODO handle timeout!
-					this->loop();
-				}
-			}
 
+			bool process_include()
+			{
+				//TODO
+			}
+			
 			bool process_read(UNUSED uint8_t count, bool stop)
 			{
 				const uint8_t reg = this->next_byte();
 				// Only one kind of read here (1 byte)
 				read_.reset_(reg);
-				return this->check_launch(
-					this->launch_commands(read_, {PARENT::write(), PARENT::read(0, false, stop)}));
+				return PARENT::check_error(
+					PARENT::launch_commands(read_, {PARENT::write(), PARENT::read(0, false, stop)}));
 			}
 
 			bool process_write(uint8_t count, bool stop)
@@ -320,16 +314,16 @@ namespace devices::vl53l0x
 					if (change_value_)
 						value = forced_value_;
 					write1_.reset_({reg, value});
-					return this->check_launch(
-						this->launch_commands(write1_, {PARENT::write(0, false, stop)}));
+					return PARENT::check_error(
+						PARENT::launch_commands(write1_, {PARENT::write(0, false, stop)}));
 				}
 				else
 				{
 					uint8_t val1 = this->next_byte();
 					uint8_t val2 = this->next_byte();
 					write2_.reset_({reg, val1, val2});
-					return this->check_launch(
-						this->launch_commands(write2_, {PARENT::write(0, false, stop)}));
+					return PARENT::check_error(
+						PARENT::launch_commands(write2_, {PARENT::write(0, false, stop)}));
 				}
 			}
 
@@ -344,6 +338,8 @@ namespace devices::vl53l0x
 				}
 				if (action == ProcessAction::DONE)
 					return false;
+				if (action == ProcessAction::INCLUDE)
+					return process_include();
 				if (action == ProcessAction::READ)
 					return process_read(this->count(), this->is_stop());
 				if (action == ProcessAction::WRITE)
@@ -355,10 +351,10 @@ namespace devices::vl53l0x
 
 			void on_status_change(UNUSED const ABSTRACT_FUTURE& future, future::FutureStatus status) final
 			{
+				PARENT::on_status_change(future, status);
 				// First check that current future was executed successfully
-				if (!this->check_status(future, status))
-					return;
-				next_future();
+				if (status == future::FutureStatus::READY)
+					next_future();
 			}
 
 			//TODO handle timeout (max loop iterations)...
@@ -373,6 +369,7 @@ namespace devices::vl53l0x
 			FUTURE_WRITE<1> write1_{{0}, this};
 			FUTURE_WRITE<2> write2_{{0, 0}, this};
 			FUTURE_READ read_{0, this};
+			DeviceStrobeWaitFuture strobe{};
 
 			friend THIS;
 		};
@@ -439,19 +436,20 @@ namespace devices::vl53l0x
 		//TODO additional arguments for init? eg sequence steps, limits...
 		class InitDataFuture : public ComplexI2CFuturesGroup
 		{
-			using ProcessAction = typename ComplexI2CFuturesGroup::ProcessAction;
+			using PARENT = ComplexI2CFuturesGroup;
+			using ProcessAction = typename PARENT::ProcessAction;
 			// Types of futures handled by this group
 			template<uint8_t SIZE> using FUTURE_WRITE = FUTURE<void, containers::array<uint8_t, SIZE + 1>>;
 			using FUTURE_READ = FUTURE<uint8_t, uint8_t>;
 			
 		public:
-			InitDataFuture() : ComplexI2CFuturesGroup{uint16_t(internals::init_data::BUFFER)} {}
+			InitDataFuture() : PARENT{uint16_t(internals::init_data::BUFFER)} {}
 			//TODO Move ctor/asgn?
 
 		protected:
 			bool start(THIS& device)
 			{
-				this->set_device(device);
+				PARENT::set_device(device);
 				device_ = &device;
 				return next_future();
 			}
@@ -490,8 +488,8 @@ namespace devices::vl53l0x
 				const uint8_t reg = this->next_byte();
 				// Only one kind of read here (1 byte)
 				read_.reset_(reg);
-				return this->check_launch(
-					this->launch_commands(read_, {PARENT::write(), PARENT::read(0, false, stop)}));
+				return PARENT::check_error(
+					PARENT::launch_commands(read_, {PARENT::write(), PARENT::read(0, false, stop)}));
 			}
 
 			bool process_write(uint8_t count, bool stop)
@@ -504,16 +502,16 @@ namespace devices::vl53l0x
 					if (change_value_)
 						value = forced_value_;
 					write1_.reset_({reg, value});
-					return this->check_launch(
-						this->launch_commands(write1_, {PARENT::write(0, false, stop)}));
+					return PARENT::check_error(
+						PARENT::launch_commands(write1_, {PARENT::write(0, false, stop)}));
 				}
 				else
 				{
 					uint8_t val1 = this->next_byte();
 					uint8_t val2 = this->next_byte();
 					write2_.reset_({reg, val1, val2});
-					return this->check_launch(
-						this->launch_commands(write2_, {PARENT::write(0, false, stop)}));
+					return PARENT::check_error(
+						PARENT::launch_commands(write2_, {PARENT::write(0, false, stop)}));
 				}
 			}
 
@@ -539,10 +537,10 @@ namespace devices::vl53l0x
 
 			void on_status_change(UNUSED const ABSTRACT_FUTURE& future, future::FutureStatus status) final
 			{
+				PARENT::on_status_change(future, status);
 				// First check that current future was executed successfully
-				if (!this->check_status(future, status))
-					return;
-				next_future();
+				if (status == future::FutureStatus::READY)
+					next_future();
 			}
 
 			// The device that uses this future
@@ -681,11 +679,14 @@ namespace devices::vl53l0x
 		}
 
 		//TODO future for device strobe wait
-		class DeviceStrobeWaitFuture : public AbstractI2CFuture, public FUTURE_STATUS_LISTENER
+		class DeviceStrobeWaitFuture : public AbstractI2CFuturesGroup
 		{
-			using PARENT = AbstractI2CFuture;
+			using PARENT = AbstractI2CFuturesGroup;
 		public:
-			DeviceStrobeWaitFuture() = default;
+			DeviceStrobeWaitFuture(FUTURE_STATUS_LISTENER* listener = nullptr) : PARENT{listener}
+			{
+				PARENT::init({&write_, &read_}, 0xFFFF);
+			}
 
 			bool start(THIS& device)
 			{
@@ -705,13 +706,13 @@ namespace devices::vl53l0x
 			{
 				write_.reset_(value);
 				step_ = next_step;
-				return this->check_launch(this->launch_commands(write_, {PARENT::write(0, false, true)}));
+				return PARENT::check_error(PARENT::launch_commands(write_, {PARENT::write(0, false, true)}));
 			}
 
 			void read_strobe()
 			{
 				read_.reset_();
-				this->check_launch(this->launch_commands(read_, {PARENT::write(), PARENT::read()}));
+				PARENT::check_error(PARENT::launch_commands(read_, {PARENT::write(), PARENT::read()}));
 			}
 
 			bool check_strobe()
@@ -722,12 +723,13 @@ namespace devices::vl53l0x
 					return write_strobe(0x01, StrobeStep::STEP_EXIT_STROBE);
 				if (++loop_ < MAX_LOOP) return true;
 				// Error timeout
-				return this->check_launch(errors::ETIME);
+				return PARENT::check_error(errors::ETIME);
 			}
 
 			void on_status_change(const ABSTRACT_FUTURE& future, future::FutureStatus status) final
 			{
-				if (!this->check_status(future, status)) return;
+				PARENT::on_status_change(future, status);
+				if (status != future::FutureStatus::READY) return;
 				switch (step_)
 				{
 					case StrobeStep::STEP_READ_STROBE:
@@ -741,7 +743,7 @@ namespace devices::vl53l0x
 					break;
 					
 					case StrobeStep::STEP_EXIT_STROBE:
-					this->finish();
+					PARENT::set_future_finish_();
 					break;
 				}
 			}
