@@ -24,7 +24,7 @@
 #define FUTURE_HH
 
 #include <string.h>
-#include "array.h"
+#include "iterator.h"
 #include "errors.h"
 #include "move.h"
 #include "streams.h"
@@ -1485,9 +1485,9 @@ namespace future
 
 		// This must be called from subclass constructor
 		//TODO DOCS
-		void init(std::initializer_list<F*> futures)
+		void init(utils::range<F*> futures, uint16_t actual_size = 0)
 		{
-			num_ready_ = futures.size();
+			num_ready_ = (actual_size != 0 ? actual_size : futures.size());
 			for (F* future: futures)
 				future->status_listener_ = this;
 		}
@@ -1498,8 +1498,7 @@ namespace future
 		AbstractFuturesGroup& operator=(const AbstractFuturesGroup&) = delete;
 		/// @endcond
 
-	private:
-		void on_status_change(const F& future, FutureStatus status) final
+		void on_status_change(const F& future, FutureStatus status) override
 		{
 			switch (status)
 			{
@@ -1521,7 +1520,8 @@ namespace future
 			}
 		}
 
-		uint8_t num_ready_ = 0;
+	private:
+		uint16_t num_ready_ = 0;
 	};
 }
 
