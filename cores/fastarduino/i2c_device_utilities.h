@@ -41,8 +41,8 @@ namespace i2c
 			:	register_{reg}, value_{BIG_ENDIAN ? utils::change_endianness(value) : value} {}
 
 	private:
-		const uint8_t register_;
-		const T value_; 
+		uint8_t register_;
+		T value_; 
 	};
 	/// @endcond
 
@@ -123,31 +123,258 @@ namespace i2c
 			:	PARENT{REGISTER, value, status_listener} {}
 		TWriteRegisterFuture(TWriteRegisterFuture&&) = default;
 		TWriteRegisterFuture& operator=(TWriteRegisterFuture&&) = default;
+
+		void reset_(const T& input = T{})
+		{
+			PARENT::reset_(WriteContent{REGISTER, input});
+		}
 	};
 
-	//TODO put to own header file? What name?
-	// For all I2C futures using flash read-only date to write to device, the following
-	// convention is used
-	// 1. The whole array is broken down into individual lines, each representing an action
-	// 2. Each action is starting with an action byte
-	// 3. Each action byte will have additional bytes depending on its actual action
-	// 4. The last line uses action 0x00 (end of stream)
-	//
-	// Action bytes are defined as follows:
-	// - 0x00	end of stream marker (Future is complete)
-	// - 0x1H	write (1+H) bytes to the device; the action is followed by the register index and H bytes to write
-	// - 0x9H	same as 0x1H, but this is the last command for this future (force stop is needed)
-	// - 0x2H	read H bytes from device register, after writing the register index; 
-	//			the action is followed by the register index
-	// - 0xAH	same as 0x2H, but this is the last command for this future (force stop is needed)
-	// - 0x30	special marker, used by the Future code to do something special at this point; this is followed by
-	//			one byte that can be any free value indicating to code what shall be done
-	// - 0x31	special marker, to include another Future into this Future; this is followed by one byte
-	//			that can be any free value used to idnicate which Future shall be used
-	// - other codes are kept for future (and Future) use
+	/// @cond notdocumented
+	// Forward declaration of I2CDevice
+	template<typename MANAGER> class I2CDevice;
+	/// @endcond
 
-	// Action codes
-	//--------------
+	template<typename MANAGER> class I2CFutureHelper
+	{
+		static_assert(I2CManager_trait<MANAGER>::IS_I2CMANAGER, "MANAGER must be an I2C Manager");
+
+	protected:
+		using DEVICE = I2CDevice<MANAGER>;
+		using ABSTRACT_FUTURE = typename MANAGER::ABSTRACT_FUTURE;
+		template<typename T> using PROXY = typename MANAGER::template PROXY<T>;
+
+		I2CFutureHelper() = default;
+
+		// Check launch_commands() return and update own status if needed
+		bool check_error(int error, ABSTRACT_FUTURE& target)
+		{
+			if (error == 0) return true;
+			target.set_future_error_(error);
+			return false;
+		}
+
+		bool check_status(const ABSTRACT_FUTURE& source, future::FutureStatus status, ABSTRACT_FUTURE& target)
+		{
+			// First check that current future was executed successfully
+			if (status != future::FutureStatus::READY)
+			{
+				target.set_future_error_(source.error());
+				return false;
+			}
+			return true;
+		}
+
+		static constexpr I2CLightCommand read(uint8_t read_count = 0, bool finish_future = false, bool stop = false)
+		{
+			return DEVICE::read(read_count, finish_future, stop);
+		}
+
+		static constexpr I2CLightCommand write(uint8_t write_count = 0, bool finish_future = false, bool stop = false)
+		{
+			return DEVICE::write(write_count, finish_future, stop);
+		}
+
+		int launch_commands(PROXY<ABSTRACT_FUTURE> proxy, utils::range<I2CLightCommand> commands)
+		{
+			return device_->launch_commands(proxy, commands);
+		}
+
+		void set_device(DEVICE& device)
+		{
+			device_ = &device;
+		}
+
+	private:
+		// The device that uses this future
+		DEVICE* device_ = nullptr;
+		friend DEVICE;
+	};
+
+	//TODO DOCS
+	template<typename MANAGER> class AbstractI2CFuturesGroup : 
+		public future::AbstractFuturesGroup<typename MANAGER::ABSTRACT_FUTURE>,
+		public I2CFutureHelper<MANAGER>
+	{
+		using HELPER = I2CFutureHelper<MANAGER>;
+		using GROUP = future::AbstractFuturesGroup<typename MANAGER::ABSTRACT_FUTURE>;
+
+	protected:
+		using ABSTRACT_FUTURE = typename MANAGER::ABSTRACT_FUTURE;
+		using STATUS_LISTENER = typename GROUP::STATUS_LISTENER;
+
+		AbstractI2CFuturesGroup(STATUS_LISTENER* status_listener = nullptr) : GROUP{status_listener} {}
+
+		// Check launch_commands() return and update own status if needed
+		bool check_error(int error)
+		{
+			return HELPER::check_error(error, *this);
+		}
+
+		bool check_status(const ABSTRACT_FUTURE& source, future::FutureStatus status)
+		{
+			return HELPER::check_status(source, status, *this);
+		}
+	};
+
+	//TODO DOCS
+	// This future groups several futures and executes them (on attached I2C device) all in sequence
+	// status() and error() are automatically updated
+	// Subclass should add get() method and return whatever is useful to caller (obtained from other futures)
+	template<typename MANAGER> class I2CFuturesGroup : 
+		public AbstractI2CFuturesGroup<MANAGER>
+	{
+		using PARENT = AbstractI2CFuturesGroup<MANAGER>;
+		using STATUS_LISTENER = typename PARENT::STATUS_LISTENER;
+		using ABSTRACT_FUTURE = typename PARENT::ABSTRACT_FUTURE;
+
+	protected:
+		I2CFuturesGroup(
+			ABSTRACT_FUTURE** futures, uint8_t size, STATUS_LISTENER* status_listener = nullptr)
+			: PARENT{status_listener}, futures_{futures}, size_{size} {}
+
+		bool start(typename PARENT::DEVICE& device)
+		{
+			PARENT::set_device(device);
+			return next_future();
+		}
+
+		void on_status_change(UNUSED const ABSTRACT_FUTURE& future, future::FutureStatus status) final
+		{
+			PARENT::on_status_change(future, status);
+			// First check that current future was executed successfully
+			if (status == future::FutureStatus::READY)
+				next_future();
+		}
+
+	private:
+		bool next_future()
+		{
+			if (index_ == size_)
+				// Future is finished
+				return false;
+
+			ABSTRACT_FUTURE& future = *futures_[index_++];
+			// Check if future has read, write or both
+			const bool stop = (index_ == size_);
+			const bool read = future.get_future_value_size_();
+			const bool write = future.get_storage_value_size_();
+			int error = 0;
+			if (read && write)
+			{
+				error = PARENT::launch_commands(future, {PARENT::write(), PARENT::read(0, false, stop)});
+			}
+			else if (read)
+			{
+				error = PARENT::launch_commands(future, {PARENT::read(0, false, stop)});
+			}
+			else if (write)
+			{
+				error = PARENT::launch_commands(future, {PARENT::write(0, false, stop)});
+			}
+			else
+			{
+				error = errors::EILSEQ;
+			}
+			return PARENT::check_error(error);
+		}
+
+		ABSTRACT_FUTURE** futures_;
+		uint8_t size_;
+		uint8_t index_ = 0;
+	};
+
+	//TODO DOCS
+	// This future executes several times the same future but with distinct input (I2C write) everytime
+	// template<typename F> 
+	template<typename MANAGER> class I2CSameFutureGroup : public AbstractI2CFuturesGroup<MANAGER>
+	{
+		using PARENT = AbstractI2CFuturesGroup<MANAGER>;
+		using STATUS_LISTENER = typename PARENT::STATUS_LISTENER;
+		using ABSTRACT_FUTURE = typename PARENT::ABSTRACT_FUTURE;
+		using F = WriteRegisterFuture<MANAGER, uint8_t, true>;
+		using CONTENT = WriteContent<uint8_t, true>;
+		static constexpr uint8_t FUTURE_SIZE = F::OUT_SIZE;
+
+	public:
+		I2CSameFutureGroup(uint16_t address, uint8_t size, STATUS_LISTENER* status_listener = nullptr)
+			: PARENT{status_listener}, address_{address}, size_{size}
+		{
+			PARENT::init({future_}, size / FUTURE_SIZE);
+		}
+
+	private:
+		bool start(typename PARENT::DEVICE& device)
+		{
+			PARENT::set_device(device);
+			return next_future();
+		}
+
+		bool next_future()
+		{
+			if (size_ == 0)
+				// Future is finished already
+				return false;
+
+			uint8_t reg = next_byte();
+			uint8_t val = next_byte();
+			const bool stop = (size_ == 0);
+			future_.reset_(CONTENT{reg, val});
+			return PARENT::check_error(
+				PARENT::launch_commands(future_, {PARENT::write(0, false, stop)}));
+		}
+
+		// Get the next byte, from the flash
+		uint8_t next_byte()
+		{
+			uint8_t data = 0;
+			--size_;
+			return flash::read_flash(address_++, data);
+		}
+
+		void on_status_change(const ABSTRACT_FUTURE& future, future::FutureStatus status) final
+		{
+			PARENT::on_status_change(future, status);
+			// First check that current future was executed successfully
+			if (status == future::FutureStatus::READY)
+				next_future();
+		}
+
+		// Address of flah mempry holding information about bytes to write
+		uint16_t address_;
+		uint8_t size_;
+		// The future reused for all writes
+		F future_{CONTENT{}};
+	};
+
+	/**
+	 * This namespace containes action codes for use in flash memory configuration arrays
+	 * used by ComplexI2CFuturesGroup.
+	 * 
+	 * For all I2C futures using flash read-only date to write to device, the following
+	 * convention is used:
+	 * 1. The whole array is broken down into individual lines, each representing an action
+	 * 2. Each action is starting with an action byte
+	 * 3. Each action byte will have additional bytes depending on its actual action
+	 * 4. The last line uses action 0x00 (end of stream)
+	 * 
+	 * Action bytes are defined as follows:
+	 * - 0x00	end of stream marker (Future is complete)
+	 * - 0x1H	write (1+H) bytes to the device; the action is followed by the register index and H bytes to write
+	 * - 0x9H	same as 0x1H, but this is the last command for this future (force stop is needed)
+	 * - 0x2H	read H bytes from device register, after writing the register index; 
+	 * 			the action is followed by the register index
+	 * - 0xAH	same as 0x2H, but this is the last command for this future (force stop is needed)
+	 * - 0x30	special marker, used by the Future code to do something special at this point; this is followed by
+	 * 			one byte that can be any free value indicating to code what shall be done
+	 * - 0x31	special marker to meorize the current flash address for looping back to it
+	 * 			when calling `ComplexI2CFuturesGroup.loop()` method.
+	 * - 0x40	special marker, to include another Future into this Future; this is followed by one byte
+	 * 			that can be any free value used to idnicate which Future shall be used
+	 * - other codes are kept for future (and Future) use
+	 * 
+	 * @sa ComplexI2CFuturesGroup
+	 */
 	namespace actions
 	{
 		static constexpr uint8_t END = 0x00;
@@ -187,238 +414,17 @@ namespace i2c
 		}
 	}
 
-	/// @cond notcodumented
-	// Forward declaration of I2CDevice
-	template<typename MANAGER> class I2CDevice;
-
-	template<typename MANAGER> class AbstractI2CFuture
-	{
-	public:
-		future::FutureStatus status() const
-		{
-			return status_;
-		}
-
-		future::FutureStatus await() const
-		{
-			while (true)
-			{
-				future::FutureStatus status = this->status();
-				if (status != future::FutureStatus::NOT_READY)
-					return status;
-				time::yield();
-			}
-		}
-
-		int error() const
-		{
-			future::FutureStatus status = await();
-			switch (status)
-			{
-				case future::FutureStatus::READY:
-				return 0;
-
-				case future::FutureStatus::ERROR:
-				return error_;
-
-				default:
-				// This should never happen
-				return errors::EINVAL;
-			}
-		}
-
-	protected:
-		using DEVICE = I2CDevice<MANAGER>;
-		using ABSTRACT_FUTURE = typename DEVICE::ABSTRACT_FUTURE;
-		template<typename T> using PROXY = typename DEVICE::template PROXY<T>;
-
-		AbstractI2CFuture() = default;
-
-		// Check launch_commands() return and update own status if needed
-		bool check_launch(int launch)
-		{
-			if (launch == 0) return true;
-			error_ = launch;
-			status_ = future::FutureStatus::ERROR;
-			return false;
-		}
-
-		void finish()
-		{
-			// Future is finished
-			if (status_ == future::FutureStatus::NOT_READY)
-				status_ = future::FutureStatus::READY;
-		}
-
-		bool check_status(const ABSTRACT_FUTURE& future, future::FutureStatus status)
-		{
-			// First check that current future was executed successfully
-			if (status != future::FutureStatus::READY)
-			{
-				error_ = future.error();
-				status_ = status;
-				return false;
-			}
-			return true;
-		}
-
-		static constexpr I2CLightCommand read(uint8_t read_count = 0, bool finish_future = false, bool stop = false)
-		{
-			return DEVICE::read(read_count, finish_future, stop);
-		}
-
-		static constexpr I2CLightCommand write(uint8_t write_count = 0, bool finish_future = false, bool stop = false)
-		{
-			return DEVICE::write(write_count, finish_future, stop);
-		}
-
-		int launch_commands(PROXY<ABSTRACT_FUTURE> proxy, utils::range<I2CLightCommand> commands)
-		{
-			return device_->launch_commands(proxy, commands);
-		}
-
-		// Global status for whole future group
-		volatile future::FutureStatus status_ = future::FutureStatus::NOT_READY;
-		volatile int error_ = 0;
-
-		void set_device(DEVICE& device)
-		{
-			device_ = &device;
-		}
-
-	private:
-		// The device that uses this future
-		DEVICE* device_ = nullptr;
-		friend DEVICE;
-	};
-	/// @endcond
-
 	//TODO DOCS
-	template<typename MANAGER> class I2CFuturesGroup : 
-		public AbstractI2CFuture<MANAGER>, public future::FutureStatusListener<typename MANAGER::ABSTRACT_FUTURE>
-	{
-		using PARENT = AbstractI2CFuture<MANAGER>;
-		using ABSTRACT_FUTURE = typename MANAGER::ABSTRACT_FUTURE;
-
-	protected:
-		I2CFuturesGroup(ABSTRACT_FUTURE** futures, uint8_t size) : futures_{futures}, size_{size} {}
-
-		bool start(typename PARENT::DEVICE& device)
-		{
-			this->set_device(device);
-			return next_future();
-		}
-
-	private:
-		bool next_future()
-		{
-			if (index_ == size_)
-			{
-				// Future is finished
-				this->finish();
-				return false;
-			}
-			ABSTRACT_FUTURE& future = *futures_[index_++];
-			// Check if future has read, write or both
-			const bool stop = (index_ == size_);
-			const bool read = future.get_future_value_size_();
-			const bool write = future.get_storage_value_size_();
-			int error = 0;
-			if (read && write)
-			{
-				error = this->launch_commands(future, {PARENT::write(), PARENT::read(0, false, stop)});
-			}
-			else if (read)
-			{
-				error = this->launch_commands(future, {PARENT::read(0, false, stop)});
-			}
-			else if (write)
-			{
-				error = this->launch_commands(future, {PARENT::write(0, false, stop)});
-			}
-			else
-			{
-				error = errors::EILSEQ;
-			}
-			return this->check_launch(error);
-		}
-
-		void on_status_change(UNUSED const ABSTRACT_FUTURE& future, future::FutureStatus status) final
-		{
-			// First check that current future was executed successfully
-			if (!this->check_status(future, status))
-				return;
-			next_future();
-		}
-
-		ABSTRACT_FUTURE** futures_;
-		uint8_t size_;
-		uint8_t index_ = 0;
-	};
-
-	// template<typename F> 
-	template<typename MANAGER> class I2CSameFutureGroup : 
-		public AbstractI2CFuture<MANAGER>, public future::FutureStatusListener<typename MANAGER::ABSTRACT_FUTURE>
-	{
-		using PARENT = AbstractI2CFuture<MANAGER>;
-		using CONTENT = WriteContent<uint8_t, true>;
-		using F = WriteRegisterFuture<MANAGER, uint8_t, true>;
-
-	public:
-		I2CSameFutureGroup(uint16_t address, uint8_t count) : address_{address}, count_{count} {}
-
-	private:
-		bool start(typename PARENT::DEVICE& device)
-		{
-			this->set_device(device);
-			return next_future();
-		}
-
-		bool next_future()
-		{
-			if (!count_)
-			{
-				// Future is finished
-				this->finish();
-				return false;
-			}
-			uint8_t reg = next_byte();
-			uint8_t val = next_byte();
-			const bool stop = (count_ == 0);
-			future_.reset_(CONTENT{reg, val});
-			return this->check_launch(
-				this->launch_commands(future_, {PARENT::write(0, false, stop)}));
-		}
-
-		// Get the next byte, from the flash
-		uint8_t next_byte()
-		{
-			uint8_t data = 0;
-			--count_;
-			return flash::read_flash(address_++, data);
-		}
-
-		void on_status_change(const typename PARENT::ABSTRACT_FUTURE& future, future::FutureStatus status) final
-		{
-			// First check that current future was executed successfully
-			if (!this->check_status(future, status))
-				return;
-			next_future();
-		}
-
-		// Address of flah mempry holding information about bytes to write
-		uint16_t address_;
-		uint8_t count_;
-		// The future reused for all writes
-		F future_{CONTENT{}, this};
-	};
-
 	//TODO template with list of sizes for read and write futures?
-	template<typename MANAGER> class ComplexI2CFuturesGroup :
-		public AbstractI2CFuture<MANAGER>, public future::FutureStatusListener<typename MANAGER::ABSTRACT_FUTURE>
+	template<typename MANAGER> class ComplexI2CFuturesGroup : public AbstractI2CFuturesGroup<MANAGER>
 	{
+		using PARENT = AbstractI2CFuturesGroup<MANAGER>;
+		using STATUS_LISTENER = typename PARENT::STATUS_LISTENER;
+		using ABSTRACT_FUTURE = typename PARENT::ABSTRACT_FUTURE;
+
 	protected:
-		ComplexI2CFuturesGroup(uint16_t flash_config) : address_{flash_config} {}
+		ComplexI2CFuturesGroup(uint16_t flash_config, STATUS_LISTENER* status_listener = nullptr)
+			: PARENT{status_listener}, address_{flash_config} {}
 
 		enum class ProcessAction : uint8_t
 		{
@@ -440,7 +446,7 @@ namespace i2c
 			if (action_ == actions::END)
 			{
 				// Future is finished
-				this->finish();
+				PARENT::set_future_finish_();
 				return ProcessAction::DONE;
 			}
 			if (action_ == actions::MARKER) return ProcessAction::MARKER;
@@ -449,8 +455,7 @@ namespace i2c
 			if (actions::is_write(action_)) return ProcessAction::WRITE;
 
 			// Error: unrecognized action code
-			this->error_ = errors::EILSEQ;
-			this->status_ = future::FutureStatus::READY;
+			PARENT::check_error(errors::EILSEQ);
 			return ProcessAction::DONE;
 		}
 

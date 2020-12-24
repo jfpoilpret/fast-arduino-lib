@@ -35,7 +35,7 @@ namespace i2c
 {
 	/// @cond notdocumented
 	// Forward declaration
-	template<typename MANAGER> class AbstractI2CFuture;
+	template<typename MANAGER> class I2CFutureHelper;
 	/// @endcond
 
 	// Trick to support MODE as I2CDevice constructor template argument (deducible)
@@ -381,7 +381,7 @@ namespace i2c
 		uint8_t device_ = 0;
 		MANAGER& handler_;
 		const uint8_t auto_stop_flags_;
-		friend class AbstractI2CFuture<MANAGER>;
+		friend class I2CFutureHelper<MANAGER>;
 	};
 }
 
