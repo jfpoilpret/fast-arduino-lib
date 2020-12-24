@@ -1435,173 +1435,6 @@ namespace future
 	/// @endcond
 
 	/**
-	 * Abstract base class for FuturesGroup. You should never directly subclass this.
-	 * 
-	 * @sa FuturesGroup
-	 */
-	template<typename F> class AbstractFuturesGroup
-	{
-		static_assert(Future_trait<F>::IS_FUTURE, "F must be a Future");
-		static_assert(Future_trait<F>::IS_ABSTRACT, "F must be an abstract Future");
-
-	public:
-		/**
-		 * The type to use for status listeners for this type of Future.
-		 * @sa FutureStatusListener
-		 */
-		using STATUS_LISTENER = FutureStatusListener<F>;
-
-		/**
-		 * The type to use for output listeners for this type of Future.
-		 * @sa FutureOutputListener
-		 */
-		using OUTPUT_LISTENER = FutureOutputListener<F>;
-
-		/**
-		 * Compute a global status for this `FuturesGroup`, based on the status of each 
-		 * of its futures.
-		 * This will return:
-		 * - FutureStatus::READY if ALL its futures are ready
-		 * - FutureStatus::ERROR if ANY of its futures is in error
-		 * - FutureStatus::INVALID if ANY of its futures is invalid
-		 * - FutureStatus::NOT_READY if other cases, typically when no future is 
-		 * in error or invalid, and maybe some future are ready but not all, i.e.
-		 * at least one future is not ready.
-		 */
-		FutureStatus status() const
-		{
-			if (status_ != FutureStatus::NOT_READY)
-				return status_;
-
-			uint8_t count_ready = 0;
-			F** futures = futures_;
-			for (uint8_t i = 0; i < size_; ++i)
-			{
-				F* future = *futures++;
-				FutureStatus status = future->status();
-				switch (status)
-				{
-					case FutureStatus::ERROR:
-					error_ = future->error();
-					// intentional fallthrough
-
-					case FutureStatus::INVALID:
-					status_ = status;
-					return status;
-
-					case FutureStatus::READY:
-					++count_ready;
-					break;
-
-					case FutureStatus::NOT_READY:
-					break;
-				}
-			}
-			if (count_ready == size_)
-			{
-				status_ = FutureStatus::READY;
-				return FutureStatus::READY;
-			}
-			return FutureStatus::NOT_READY;
-		}
-
-		/**
-		 * Await for all futures in this `FuturesGroup`.
-		 * Will return only when:
-		 * - either all futures are ready
-		 * - or at least one future is in error or invalid
-		 */
-		FutureStatus await() const
-		{
-			while (true)
-			{
-				FutureStatus status = this->status();
-				if (status != FutureStatus::NOT_READY)
-					return status;
-				time::yield();
-			}
-		}
-
-		/**
-		 * Wait until this FuturesGroup becomes ready or in error, then return the
-		 * error reported.
-		 * 
-		 * @retval 0 if all futures in this `FuturesGroup` are READY
-		 * @retval errors::EINVAL if any future in this `FuturesGroup` is INVALID
-		 * @return the actual error of the *first* future of this `FuturesGroup` 
-		 * which is in error
-		 * 
-		 * @sa await()
-		 * @sa errors::EINVAL
-		 */
-		int error() const
-		{
-			FutureStatus status = await();
-			switch (status)
-			{
-				case FutureStatus::READY:
-				return 0;
-
-				case FutureStatus::ERROR:
-				return error_;
-
-				default:
-				// This should never happen
-				return errors::EINVAL;
-			}
-		}
-
-		/**
-		 * Add a status listener to all futures embedded in this FuturesGroup.
-		 * @warning The new @p status_listener will override any status listener
-		 * already registered with individual futures.
-		 * 
-		 * @sa FutureStatusListener
-		 */
-		void set_status_listener(STATUS_LISTENER* status_listener)
-		{
-			F** futures = futures_;
-			for (uint8_t i = 0; i < size_; ++i)
-			{
-				F* future = *futures++;
-				future->status_listener_ = status_listener;
-			}
-		}
-
-		/**
-		 * Add an output listener to all futures embedded in this FuturesGroup.
-		 * @warning The new @p output_listener will override any output listener
-		 * already registered with individual futures.
-		 * 
-		 * @sa FutureOutputListener
-		 */
-		void set_output_listener(OUTPUT_LISTENER* output_listener)
-		{
-			F** futures = futures_;
-			for (uint8_t i = 0; i < size_; ++i)
-			{
-				F* future = *futures++;
-				future->output_listener_ = output_listener;
-			}
-		}
-
-	protected:
-		/// @cond notdocumented
-		AbstractFuturesGroup(F** futures, uint8_t size) : futures_{futures}, size_{size} {}
-		AbstractFuturesGroup(AbstractFuturesGroup&&) = default;
-		AbstractFuturesGroup& operator=(AbstractFuturesGroup&&) = default;
-		AbstractFuturesGroup(const AbstractFuturesGroup&) = delete;
-		AbstractFuturesGroup& operator=(const AbstractFuturesGroup&) = delete;
-		/// @endcond
-
-	private:
-		F** futures_;
-		uint8_t size_;
-		mutable FutureStatus status_ = FutureStatus::NOT_READY;
-		mutable int error_ = 0;
-	};
-
-	/**
 	 * Abstract class to allow aggregation of several futures.
 	 * This allows to `await()` for all futures, or query the overall `status()`
 	 * of the group.
@@ -1609,10 +1442,10 @@ namespace future
 	 * The following snippet shows how this must be sued to create an actual group 
 	 * of futures:
 	 * @code
-	 * class MyGroup : public FuturesGroup<AbstractFuture, 3>
+	 * class MyGroup : public AbstractFuturesGroup<AbstractFuture>
 	 * {
 	 * public:
-	 *     MyGroup() : FuturesGroup<AbstractFuture, 3>{{&f1_, &f2_, &f3_}}, f1_{}, f2_{}, f3_{} {}
+	 *     MyGroup() : AbstractFuturesGroup<AbstractFuture>{{&f1_, &f2_, &f3_}}, f1_{}, f2_{}, f3_{} {}
 	 * 
 	 *     F1& get_f1() { return f1_; }
 	 *     F2& get_f2() { return f2_; }
@@ -1633,24 +1466,62 @@ namespace future
 	 * either `AbstractFuture` or `AbstractFakeFuture`.
 	 * @tparam SIZE the number of futures in this group
 	 */
-	template<typename F, uint8_t SIZE> class FuturesGroup : public AbstractFuturesGroup<F>
+	template<typename F> class AbstractFuturesGroup : public F, public FutureStatusListener<F>
 	{
-		static_assert(SIZE > 1, "SIZE must be at least 2");
+		static_assert(Future_trait<F>::IS_FUTURE, "F must be a Future");
+		static_assert(Future_trait<F>::IS_ABSTRACT, "F must be an abstract Future");
+
+	public:
+		/**
+		 * The type to use for status listeners for this type of Future.
+		 * @sa FutureStatusListener
+		 */
+		using STATUS_LISTENER = FutureStatusListener<F>;
 
 	protected:
-		/**
-		 * Create a new FuturesGroup for the list of provided @p futures pointers
-		 * array.
-		 */
-		FuturesGroup(containers::array<F*, SIZE> futures)
-			: AbstractFuturesGroup<F>{futures_.data(), SIZE}, futures_{futures} {}
+		//TODO DOCS
+		explicit AbstractFuturesGroup(STATUS_LISTENER* status_listener = nullptr)
+			:	F{nullptr, 0, nullptr, 0, status_listener} {}
+
+		// This must be called from subclass constructor
+		//TODO DOCS
+		void init(std::initializer_list<F*> futures)
+		{
+			num_ready_ = futures.size();
+			for (F* future: futures)
+				future->status_listener_ = this;
+		}
 		/// @cond notdocumented
-		FuturesGroup(FuturesGroup&&) = default;
-		FuturesGroup& operator=(FuturesGroup&&) = default;
+		AbstractFuturesGroup(AbstractFuturesGroup&&) = delete;
+		AbstractFuturesGroup& operator=(AbstractFuturesGroup&&) = delete;
+		AbstractFuturesGroup(const AbstractFuturesGroup&) = delete;
+		AbstractFuturesGroup& operator=(const AbstractFuturesGroup&) = delete;
 		/// @endcond
 
 	private:
-		containers::array<F*, SIZE> futures_;
+		void on_status_change(const F& future, FutureStatus status) final
+		{
+			switch (status)
+			{
+				case FutureStatus::ERROR:
+				this->set_future_error_(future.error());
+				break;
+
+				case FutureStatus::INVALID:
+				this->set_future_error_(errors::EILSEQ);
+				break;
+
+				case FutureStatus::READY:
+				if (--num_ready_ == 0)
+					this->set_future_finish_();
+				break;
+
+				default:
+				break;
+			}
+		}
+
+		uint8_t num_ready_ = 0;
 	};
 }
 

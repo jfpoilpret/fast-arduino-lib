@@ -57,7 +57,7 @@ class MyFuture : public FUTURE<uint32_t, uint8_t>
 	static constexpr uint8_t REG_INDEX = 0x34;
 
 public:
-	MyFuture(FutureListener& listener) : PARENT{REG_INDEX, &listener, &listener} {}
+	MyFuture(FutureListener* listener = nullptr) : PARENT{REG_INDEX, listener, listener} {}
 	MyFuture(MyFuture&&) = default;
 	MyFuture& operator=(MyFuture&&) = default;
 };
@@ -94,13 +94,14 @@ private:
 	uint8_t set_mask_;
 };
 
-template<uint8_t SIZE> using GROUP = FuturesGroup<ABSTRACTFUTURE, SIZE>;
-
-class MyGroup : public GROUP<2>
+class MyGroup : public AbstractFuturesGroup<ABSTRACTFUTURE>
 {
-	using PARENT = GROUP<2>;
+	using PARENT = AbstractFuturesGroup<ABSTRACTFUTURE>;
 public:
-	MyGroup(FutureListener& listener) : PARENT{{&f1_, &f2_}}, f1_{listener}, f2_{listener} {} 
+	MyGroup(FutureListener& listener) : PARENT{&listener}
+	{
+		PARENT::init({&f1_, &f2_});
+	} 
 
 	MyFuture& get_f1()
 	{
@@ -113,8 +114,8 @@ public:
 	}
 
 private:
-	MyFuture f1_;
-	MyFuture f2_;
+	MyFuture f1_{};
+	MyFuture f2_{};
 };
 
 int main() __attribute__((OS_main));
@@ -133,7 +134,7 @@ int main()
 	FutureListener listener{out};
 
 	// Start feeding future and check output
-	MyFuture f1{listener};
+	MyFuture f1{&listener};
 	out << F("set_future_value(0x11)") << endl;
 	f1.set_future_value_(uint8_t(0x11));
 
@@ -152,7 +153,7 @@ int main()
 	out << F("result = ") << hex << result << endl;
 
 	// Start feeding future, force error and check output
-	MyFuture f2{listener};
+	MyFuture f2{&listener};
 	f2.set_future_value_(uint8_t(0x55));
 	f2.set_future_finish_();
 	f2.set_future_error_(-10);
@@ -172,7 +173,7 @@ int main()
 
 	{
 		// Group of futures
-		out << F("Testing group of futures #1") << endl;
+		out << F("Testing group of futures #1.1") << endl;
 		MyGroup group{listener};
 		out << F("group.status() = ") << group.status() << endl;
 		out << F("set_future_value(0x11)") << endl;
@@ -196,7 +197,7 @@ int main()
 		out << F("f1.get(result) = ") << group.get_f1().get(result) << endl;
 		out << F("result = ") << hex << result << endl;
 
-		out << F("Testing group of futures #2") << endl;
+		out << F("Testing group of futures #1.2") << endl;
 		group.get_f2().set_future_value_(uint8_t(0x55));
 		out << F("group.status() = ") << group.status() << endl;
 		group.get_f2().set_future_finish_();
@@ -210,10 +211,8 @@ int main()
 
 	{
 		// Group of futures
-		out << F("Testing group of futures without any listener #1") << endl;
+		out << F("Testing group of futures #2.1") << endl;
 		MyGroup group{listener};
-		group.set_output_listener(nullptr);
-		group.set_status_listener(nullptr);
 		out << F("group.status() = ") << group.status() << endl;
 		out << F("set_future_value(0x11)") << endl;
 		group.get_f1().set_future_value_(uint8_t(0x11));
@@ -236,12 +235,18 @@ int main()
 		out << F("f1.get(result) = ") << group.get_f1().get(result) << endl;
 		out << F("result = ") << hex << result << endl;
 
-		out << F("Testing group of futures without any listener #2") << endl;
+		out << F("Testing group of futures #2.2") << endl;
+		out << F("set_future_value(0x55)") << endl;
 		group.get_f2().set_future_value_(uint8_t(0x55));
 		out << F("group.status() = ") << group.status() << endl;
-		group.get_f2().set_future_finish_();
+		out << F("set_future_value(0x66)") << endl;
+		group.get_f2().set_future_value_(uint8_t(0x66));
 		out << F("group.status() = ") << group.status() << endl;
-		group.get_f2().set_future_error_(-10);
+		out << F("set_future_value(0x77)") << endl;
+		group.get_f2().set_future_value_(uint8_t(0x77));
+		out << F("group.status() = ") << group.status() << endl;
+		out << F("set_future_value(0x88)") << endl;
+		group.get_f2().set_future_value_(uint8_t(0x88));
 		out << F("group.status() = ") << group.status() << endl;
 		out << F("f2.status() = ") << group.get_f2().status() << endl;
 		out << F("f2.error() = ") << dec << group.get_f2().error() << endl;
