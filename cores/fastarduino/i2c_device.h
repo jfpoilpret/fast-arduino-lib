@@ -117,9 +117,6 @@ namespace i2c
 		 */
 		template<typename OUT, typename IN> using FUTURE = typename MANAGER::template FUTURE<OUT, IN>;
 
-		//TODO utility methods and types
-		//===============================
-
 		//TODO DOCS
 		using FUTURE_OUTPUT_LISTENER = future::FutureOutputListener<ABSTRACT_FUTURE>;
 		//TODO DOCS

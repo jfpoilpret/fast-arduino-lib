@@ -32,6 +32,7 @@
 #include "../bits.h"
 #include "vl53l0x_internals.h"
 
+//TODO - define stream insertors for all enum types defined here
 namespace devices::vl53l0x
 {
 	/// @cond notdocumented

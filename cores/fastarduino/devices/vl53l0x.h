@@ -49,7 +49,6 @@ namespace devices
 	}
 }
 
-//TODO externalize general types (defined outside class VL53L0X)
 //TODO - implement low-level API step by step
 //       - static_init
 //       - single ranging
@@ -66,7 +65,6 @@ namespace devices
 //       - ranging()
 //
 //TODO - check what of the remaing API shall be implemented or not
-//TODO - define stream insertors for all enum types defined here
 // OPEN POINTS:
 // - calibration mode or only hard-coded calibration?
 
@@ -564,16 +562,6 @@ namespace devices::vl53l0x
 				return future.error();
 			return 0;
 		}
-
-		// //TODO group of futures for static init
-		// class InitStaticGroup : public future::FuturesGroup, public FUTURE_STATUS_LISTENER
-		// {
-		// public:
-		// 	//TODO
-
-		// private:
-		// 	//TODO on_change
-		// };
 
 		int init_static_second()
 		{
