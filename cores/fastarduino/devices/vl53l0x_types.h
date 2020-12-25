@@ -30,6 +30,7 @@
 #define VL53L0X_TYPES_H
 
 #include "../bits.h"
+#include "../streams.h"
 #include "vl53l0x_internals.h"
 
 //TODO - define stream insertors for all enum types defined here
@@ -83,6 +84,8 @@ namespace devices::vl53l0x
 		UNKNOWN                        = 15
 	};
 
+	streams::ostream& operator<<(streams::ostream&, DeviceError);
+
 	class DeviceStatus
 	{
 	public:
@@ -100,11 +103,15 @@ namespace devices::vl53l0x
 		uint8_t status_ = 0;
 	};
 
+	streams::ostream& operator<<(streams::ostream&, DeviceStatus);
+
 	enum class PowerMode : uint8_t
 	{
 		STANDBY = 0,
 		IDLE = 1
 	};
+
+	streams::ostream& operator<<(streams::ostream&, PowerMode);
 
 	//TODO improve by setting list of available values for period_pclks?
 	enum class VcselPeriodType : uint8_t
@@ -207,6 +214,8 @@ namespace devices::vl53l0x
 		uint8_t steps_ = 0;
 	};
 
+	streams::ostream& operator<<(streams::ostream&, SequenceSteps);
+
 	class SPADInfo
 	{
 	private:
@@ -230,6 +239,8 @@ namespace devices::vl53l0x
 	private:
 		uint8_t info_ = 0;
 	};
+
+	streams::ostream& operator<<(streams::ostream&, SPADInfo);
 
 	class SequenceStepsTimeout
 	{
@@ -311,6 +322,8 @@ namespace devices::vl53l0x
 		uint16_t pre_range_mclks_ = 0;
 		uint16_t final_range_mclks_ = 0;
 	};
+
+	streams::ostream& operator<<(streams::ostream&, const SequenceStepsTimeout&);
 }
 
 #endif /* VL53L0X_TYPES_H */
