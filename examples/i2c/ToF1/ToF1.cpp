@@ -13,8 +13,8 @@
 //   limitations under the License.
 
 /*
- * Simple ranger example, using VL53L0X Time-of-flight range sensor I2C device.
- * This program uses FastArduino VL53L0X support API.
+ * Simple example, checking all get methods of VL53L0X Time-of-flight range
+ * sensor I2C device.
  * 
  * Wiring:
  * - on ATmega328P based boards (including Arduino UNO):
@@ -29,12 +29,16 @@
 #include <fastarduino/i2c_debug.h>
 #include <fastarduino/i2c_status.h>
 #include <fastarduino/devices/vl53l0x.h>
+#include <fastarduino/memory.h>
 
 #define DEBUG_I2C
 // #define FORCE_SYNC
 
+// static constexpr const i2c::I2CMode MODE = i2c::I2CMode::FAST;
+static constexpr const i2c::I2CMode MODE = i2c::I2CMode::STANDARD;
+
 static constexpr const board::USART UART = board::USART::USART0;
-static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 128;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 REGISTER_UATX_ISR(0)
@@ -46,25 +50,25 @@ using DEBUGGER = i2c::debug::I2CDebugStatusRecorder<DEBUG_SIZE, DEBUG_SIZE>;
 #define DEBUG(OUT) debugger.trace(OUT)
 #define RESET_DEBUG() debugger.reset()
 using MANAGER = i2c::I2CAsyncStatusDebugManager<
-	i2c::I2CMode::FAST, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, DEBUGGER&, DEBUGGER&>;
+	MODE, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS, DEBUGGER&, DEBUGGER&>;
 static constexpr const uint8_t I2C_BUFFER_SIZE = 32;
 static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
 #	else
 using DEBUGGER = i2c::debug::I2CDebugStatusLiveLogger;
 #define DEBUG(OUT)
 #define RESET_DEBUG()
-using MANAGER = i2c::I2CSyncStatusDebugManager<i2c::I2CMode::FAST, DEBUGGER&, DEBUGGER&>;
+using MANAGER = i2c::I2CSyncStatusDebugManager<MODE, DEBUGGER&, DEBUGGER&>;
 #	endif
 
 #else
 
 #	if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
 using MANAGER = i2c::I2CAsyncManager<
-	i2c::I2CMode::FAST, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS>;
+	MODE, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS>;
 static constexpr const uint8_t I2C_BUFFER_SIZE = 32;
 static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
 #	else
-using MANAGER = i2c::I2CSyncManager<i2c::I2CMode::FAST>;
+using MANAGER = i2c::I2CSyncManager<MODE>;
 #	endif
 #define DEBUG(OUT)
 #define RESET_DEBUG()
@@ -84,13 +88,9 @@ using streams::flush;
 using namespace devices::vl53l0x;
 using TOF = VL53L0X<MANAGER>;
 
-void trace(streams::ostream& out, SequenceSteps steps)
+void display_memory(streams::ostream& out)
 {
-	out << F("TCC=") << steps.is_tcc()
-		<< F(", DSS=") << steps.is_dss()
-		<< F(", MSRC=") << steps.is_msrc()
-		<< F(", PRE_RANGE=") << steps.is_pre_range()
-		<< F(", FINAL_RANGE=") << steps.is_final_range() << endl;
+	out << F("free mem=") << dec << memory::free_mem() << endl;
 }
 
 int main() __attribute__((OS_main));
@@ -102,7 +102,8 @@ int main()
 	// open UART for traces
 	serial::hard::UATX<UART> uart{output_buffer};
 	streams::ostream out = uart.out();
-	uart.begin(115200);
+	// uart.begin(115200);
+	uart.begin(230400);
 	out << streams::boolalpha;
 	out << F("Start") << endl;
 
@@ -129,116 +130,104 @@ int main()
 #	endif
 #endif
 
+	display_memory(out);
+
 	out << F("Instantiate VL53L0X") << endl;
 	TOF tof{manager};
+	display_memory(out);
 
 	out << F("Start I2C manager") << endl;
 	manager.begin();
+	display_memory(out);
 
 	out << F("Read VL53L0X status") << endl;
 	uint8_t result = 0;
 	bool ok = tof.get_revision(result);
+	display_memory(out);
 	out << F("tof.get_revision(result) = ") << ok << F(", result = ") << hex << result << endl;
 	DEBUG(out);
 
 	ok = tof.get_model(result);
+	display_memory(out);
 	out << F("tof.get_model(result) = ") << ok << F(", result = ") << hex << result << endl;
 	DEBUG(out);
 
 	PowerMode mode = PowerMode::STANDBY;
 	ok = tof.get_power_mode(mode);
-	out << F("tof.get_power_mode(mode) = ") << ok << F(", mode = ") << dec << uint8_t(mode) << endl;
+	display_memory(out);
+	out << F("tof.get_power_mode(mode) = ") << ok << F(", mode = ") << mode << endl;
 	DEBUG(out);
 
 	DeviceStatus status;
 	ok = tof.get_range_status(status);
+	display_memory(out);
 	out << F("tof.get_range_status(status) = ") << ok 
-		<< F(", error = ") << dec << uint8_t(status.error())
-		<< F(", data_ready = ") << status.data_ready() << endl;
+		<< F(", status = ") << status << endl;
 	DEBUG(out);
 
 	SequenceSteps steps1;
 	ok = tof.get_sequence_steps(steps1);
-	out << F("tof.get_sequence_steps(status) = ") << ok << F(", steps =") << flush;
-	trace(out, steps1);
-	DEBUG(out);
-
-	constexpr SequenceSteps steps2 = SequenceSteps::create().tcc().pre_range().final_range();
-	out << F("steps2 = ") << hex << steps2.value() << endl;
-	ok = tof.set_sequence_steps(steps2);
-	out << F("tof.set_sequence_steps(status) = ") << ok << endl;
-	DEBUG(out);
-
-	SequenceSteps steps3;
-	ok = tof.get_sequence_steps(steps3);
-	out << F("tof.get_sequence_steps(status) = ") << ok << F(", steps =") << flush;
-	trace(out, steps3);
+	display_memory(out);
+	out << F("tof.get_sequence_steps(status) = ") << ok << F(", steps =") << steps1 << endl;
 	DEBUG(out);
 
 	uint8_t period = 0;
 	ok = tof.get_vcsel_pulse_period<VcselPeriodType::PRE_RANGE>(period);
+	display_memory(out);
 	out << F("tof.get_vcsel_pulse_period<PRE_RANGE>(period) = ") << ok << F(", period = ") << dec << period << endl;
 	ok = tof.get_vcsel_pulse_period<VcselPeriodType::FINAL_RANGE>(period);
+	display_memory(out);
 	out << F("tof.get_vcsel_pulse_period<FINAL_RANGE>(period) = ") << ok << F(", period = ") << dec << period << endl;
 	DEBUG(out);
 
-	// The following block adds 4KB to program size (float arithmetic libs)
-	// float signal_rate = 0.0;
-	// ok = tof.get_signal_rate_limit(signal_rate);
-	// out << F("tof.get_signal_rate_limit(signal_rate) = ") << ok << F(", signal_rate = ")
-	// 	<< fixed << signal_rate << endl;
-	// ok = tof.set_signal_rate_limit(0.5f);
-	// out << F("tof.set_signal_rate_limit(0.5) = ") << ok << endl;
-	// ok = tof.get_signal_rate_limit(signal_rate);
-	// out << F("tof.get_signal_rate_limit(signal_rate) = ") << ok << F(", signal_rate = ")
-	// 	<< fixed << signal_rate << endl;
-	// DEBUG(out);
-
-	// Call first initialization step
-	out << F("Calling init_data_first()...") << endl;
-	TOF::InitDataFuture future1{};
-	int error = tof.init_data_first(future1);
-	out << F("tof.init_data_first(future) = ") << dec << error << endl;
-	time::delay_ms(100);
-	DEBUG(out);
-	out << F("future.status() = ") << future1.status() << endl;
-
-	ok = tof.get_range_status(status);
-	out << F("tof.get_range_status(status) = ") << ok 
-		<< F(", error = ") << dec << uint8_t(status.error())
-		<< F(", data_ready = ") << status.data_ready() << endl;
+	// The following block adds 3KB to program size (float arithmetic libs)
+	float signal_rate = 0.0;
+	ok = tof.get_signal_rate_limit(signal_rate);
+	display_memory(out);
+	out << F("tof.get_signal_rate_limit(signal_rate) = ") << ok << F(", signal_rate = ")
+		<< fixed << signal_rate << endl;
 	DEBUG(out);
 
 	TOF::GetSPADInfoFuture future3{};
-	error = tof.get_SPAD_info(future3);
+	int error = tof.get_SPAD_info(future3);
+	// while (true)
+	// 	display_memory(out);
+	//FIXME the following LOC gets executed then nothing!
 	out << F("tof.get_SPAD_info(future) = ") << dec << error << endl;
-	time::delay_ms(100);
+	// for (uint8_t i = 0; i < 10; ++i)
+	// {
+	// 	out << '.' << flush;
+	// 	time::delay_ms(100);
+	// }
+	// out << endl;
+	time::delay_ms(1000);
+	// time::delay_us(50);
 	DEBUG(out);
 	out << F("future.status() = ") << future3.status() << endl;
 	SPADInfo SPAD_info{};
 	future3.get(SPAD_info);
-	out << F("SPADInfo.is_aperture() = ") << SPAD_info.is_aperture() << flush
-		<< F(", SPADInfo.count() = ") << dec << SPAD_info.count() << endl;
+	out << F("SPADInfo = ") << SPAD_info << endl;
+	DEBUG(out);
 
-	TOF::GetSequenceStepsTimeoutFuture future2{};
-	error = tof.get_sequence_steps_timeout(future2);
-	out << F("tof.get_sequence_steps_timeout(future) = ") << dec << error << endl;
-	time::delay_ms(100);
-	DEBUG(out);
-	out << F("future.status() = ") << future2.status() << endl;
-	SequenceStepsTimeout timeouts{};
-	future2.get(timeouts);
-	out << F("tof.get_sequence_steps_timeout(timeouts) = ") << ok << flush
-		<< F(", pre_range_vcsel_period_pclks = ") << dec << timeouts.pre_range_vcsel_period_pclks() << flush
-		<< F(", final_range_vcsel_period_pclks = ") << dec << timeouts.final_range_vcsel_period_pclks() << flush
-		<< F(", msrc_dss_tcc_mclks = ") << dec << timeouts.msrc_dss_tcc_mclks() << flush
-		<< F(", pre_range_mclks = ") << dec << timeouts.pre_range_mclks() << flush
-		<< F(", final_range_mclks = ") << dec << timeouts.final_range_mclks() << endl;
-	//TODO check calculated values
-	out << F("timeouts.msrc_dss_tcc_us() = ") << dec << timeouts.msrc_dss_tcc_us() << flush
-		<< F(", timeouts.pre_range_us() = ") << dec << timeouts.pre_range_us() << flush
-		<< F(", timeouts.final_range_us() = ") << dec << timeouts.final_range_us() << endl;
-	DEBUG(out);
+	// TOF::GetSequenceStepsTimeoutFuture future2{};
+	// error = tof.get_sequence_steps_timeout(future2);
+	// out << F("tof.get_sequence_steps_timeout(future) = ") << dec << error << endl;
+	// time::delay_ms(100);
+	// DEBUG(out);
+	// out << F("future.status() = ") << future2.status() << endl;
+	// SequenceStepsTimeout timeouts{};
+	// future2.get(timeouts);
+	// out << F("tof.get_sequence_steps_timeout(timeouts) = ") << ok << flush
+	// 	<< F(", pre_range_vcsel_period_pclks = ") << dec << timeouts.pre_range_vcsel_period_pclks() << flush
+	// 	<< F(", final_range_vcsel_period_pclks = ") << dec << timeouts.final_range_vcsel_period_pclks() << flush
+	// 	<< F(", msrc_dss_tcc_mclks = ") << dec << timeouts.msrc_dss_tcc_mclks() << flush
+	// 	<< F(", pre_range_mclks = ") << dec << timeouts.pre_range_mclks() << flush
+	// 	<< F(", final_range_mclks = ") << dec << timeouts.final_range_mclks() << endl;
+	// // check calculated values
+	// out << F("timeouts.msrc_dss_tcc_us() = ") << dec << timeouts.msrc_dss_tcc_us() << flush
+	// 	<< F(", timeouts.pre_range_us() = ") << dec << timeouts.pre_range_us() << flush
+	// 	<< F(", timeouts.final_range_us() = ") << dec << timeouts.final_range_us() << endl;
+	// DEBUG(out);
 
 	manager.end();
 }
