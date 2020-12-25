@@ -88,6 +88,11 @@ namespace i2c
 			:	PARENT{REGISTER, status_listener, output_listener} {}
 		TReadRegisterFuture(TReadRegisterFuture&&) = default;
 		TReadRegisterFuture& operator=(TReadRegisterFuture&&) = default;
+
+		void reset_()
+		{
+			PARENT::reset_(REGISTER);
+		}
 	};
 
 	//TODO Add transformer functor to template?
@@ -183,6 +188,11 @@ namespace i2c
 		void set_device(DEVICE& device)
 		{
 			device_ = &device;
+		}
+
+		DEVICE& device()
+		{
+			return *device_;
 		}
 
 	private:

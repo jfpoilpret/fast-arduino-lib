@@ -247,7 +247,10 @@ namespace devices::vl53l0x
 			using FUTURE_READ = FUTURE<uint8_t, uint8_t>;
 			
 		public:
-			GetSPADInfoFuture() : PARENT{uint16_t(internals::spad_info::BUFFER)} {}
+			GetSPADInfoFuture() : PARENT{uint16_t(internals::spad_info::BUFFER)}
+			{
+				PARENT::init({&write1_, &write2_, &read_, &strobe_}, 0xFFFF);
+			}
 			//TODO Move ctor/asgn?
 
 			bool get(SPADInfo& info)
@@ -262,11 +265,12 @@ namespace devices::vl53l0x
 			bool start(THIS& device)
 			{
 				PARENT::set_device(device);
+				device_ = &device;
 				return next_future();
 			}
 
 		private:
-			void process_marker(uint8_t marker)
+			bool process_marker(uint8_t marker)
 			{
 				namespace data = internals::spad_info;
 				// Check marker and act accordingly
@@ -283,14 +287,18 @@ namespace devices::vl53l0x
 					break;
 
 					default:
-					//TODO ERROR
-					break;
+					// Error: unexpected marker
+					return PARENT::check_error(errors::EILSEQ);
 				}
+				return true;
 			}
 
-			bool process_include()
+			bool process_include(uint8_t include)
 			{
-				//TODO
+				if (include != internals::INCLUDE_DEVICE_STROBE_WAIT)
+					// Error: unexpected include
+					return PARENT::check_error(errors::EILSEQ);
+				return strobe_.start(*device_);
 			}
 			
 			bool process_read(UNUSED uint8_t count, bool stop)
@@ -332,22 +340,22 @@ namespace devices::vl53l0x
 				ProcessAction action;
 				while ((action = this->process_action()) == ProcessAction::MARKER)
 				{
-					process_marker(this->next_byte());
+					if (!process_marker(this->next_byte()))
+						return false;
 				}
 				if (action == ProcessAction::DONE)
 					return false;
 				if (action == ProcessAction::INCLUDE)
-					return process_include();
+					return process_include(this->next_byte());
 				if (action == ProcessAction::READ)
 					return process_read(this->count(), this->is_stop());
 				if (action == ProcessAction::WRITE)
 					return process_write(this->count(), this->is_stop());
-				// If we fall here , this is an error (no ProcessAction::INCLUDE in this group)
-				//TODO error
+				// It is impossible to fall here as all ProcessAction values have been tested before
 				return false;
 			}
 
-			void on_status_change(UNUSED const ABSTRACT_FUTURE& future, future::FutureStatus status) final
+			void on_status_change(const ABSTRACT_FUTURE& future, future::FutureStatus status) final
 			{
 				PARENT::on_status_change(future, status);
 				// First check that current future was executed successfully
@@ -355,7 +363,8 @@ namespace devices::vl53l0x
 					next_future();
 			}
 
-			//TODO handle timeout (max loop iterations)...
+			// The device that uses this future
+			THIS* device_ = nullptr;
 
 			// SPAD info once read from device
 			uint8_t info_ = 0;
@@ -367,7 +376,7 @@ namespace devices::vl53l0x
 			FUTURE_WRITE<1> write1_{{0}, this};
 			FUTURE_WRITE<2> write2_{{0, 0}, this};
 			FUTURE_READ read_{0, this};
-			DeviceStrobeWaitFuture strobe{};
+			DeviceStrobeWaitFuture strobe_{this};
 
 			friend THIS;
 		};
@@ -381,8 +390,12 @@ namespace devices::vl53l0x
 
 		class GetSequenceStepsTimeoutFuture : public I2CFuturesGroup
 		{
+			using PARENT = I2CFuturesGroup;
 		public:
-			GetSequenceStepsTimeoutFuture() : I2CFuturesGroup{futures_, NUM_FUTURES} {}
+			GetSequenceStepsTimeoutFuture() : PARENT{futures_, NUM_FUTURES}
+			{
+				PARENT::init(futures_);
+			}
 
 			bool get(SequenceStepsTimeout& timeouts)
 			{
@@ -441,7 +454,10 @@ namespace devices::vl53l0x
 			using FUTURE_READ = FUTURE<uint8_t, uint8_t>;
 			
 		public:
-			InitDataFuture() : PARENT{uint16_t(internals::init_data::BUFFER)} {}
+			InitDataFuture() : PARENT{uint16_t(internals::init_data::BUFFER)}
+			{
+				PARENT::init({&write1_, &write2_, &read_}, 0xFFFF);
+			}
 			//TODO Move ctor/asgn?
 
 		protected:
@@ -533,7 +549,7 @@ namespace devices::vl53l0x
 				return false;
 			}
 
-			void on_status_change(UNUSED const ABSTRACT_FUTURE& future, future::FutureStatus status) final
+			void on_status_change(const ABSTRACT_FUTURE& future, future::FutureStatus status) final
 			{
 				PARENT::on_status_change(future, status);
 				// First check that current future was executed successfully
@@ -707,11 +723,7 @@ namespace devices::vl53l0x
 			{
 				uint8_t strobe = 0;
 				read_.get(strobe);
-				if (strobe != 0)
-					return write_strobe(0x01, StrobeStep::STEP_EXIT_STROBE);
-				if (++loop_ < MAX_LOOP) return true;
-				// Error timeout
-				return PARENT::check_error(errors::ETIME);
+				return (strobe != 0);
 			}
 
 			void on_status_change(const ABSTRACT_FUTURE& future, future::FutureStatus status) final
@@ -721,7 +733,19 @@ namespace devices::vl53l0x
 				switch (step_)
 				{
 					case StrobeStep::STEP_READ_STROBE:
-					if (!check_strobe()) return;
+					if (check_strobe())
+					{
+						// Strobe is OK, go to last step
+						write_strobe(0x01, StrobeStep::STEP_EXIT_STROBE);
+						return;
+					}
+					if (++loop_ >= MAX_LOOP)
+					{
+						// Strobe is not OK after too many loops, abandon
+						PARENT::check_error(errors::ETIME);
+						return;
+					}
+					// Read strobe again
 					// Intentional fallthrough
 					
 					case StrobeStep::STEP_INIT_STROBE:

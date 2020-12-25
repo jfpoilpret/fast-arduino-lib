@@ -85,6 +85,7 @@ namespace devices::vl53l0x_internals
 		static constexpr const uint8_t REG_ALGO_PHASECAL_LIM                           = 0x30;
 		static constexpr const uint8_t REG_ALGO_PHASECAL_CONFIG_TIMEOUT                = 0x30;
 		static constexpr const uint8_t REG_DEVICE_STROBE                               = 0x83;
+		static constexpr const uint8_t REG_SPAD_INFO                                   = 0x92;
 	}
 
 	namespace regs = registers;
@@ -175,15 +176,12 @@ namespace devices::vl53l0x_internals
 	{
 		// Marker after reading register 0x83 before owverwriting it
 		static constexpr uint8_t MARKER_OVERWRITE_REG_DEVICE_STROBE = 1;
-		// Marker for looping until register 0x83 is not 00
-		// static constexpr uint8_t MARKER_WAIT_REG_DEVICE_STROBE = 2;
 		// Marker after reading register 0x92 (SPAD info byte)
-		static constexpr uint8_t MARKER_READ_SPAD_INFO = 3;
+		static constexpr uint8_t MARKER_READ_SPAD_INFO = 2;
 
 		// Write buffer
 		static constexpr uint8_t BUFFER[] PROGMEM =
 		{
-			// get SPAD info
 			actions::write(1), regs::REG_POWER_MANAGEMENT, 0x01,
 			actions::write(1), 0xFF, 0x01,
 			actions::write(1), regs::REG_SYSRANGE_START, 0x00,
@@ -197,15 +195,8 @@ namespace devices::vl53l0x_internals
 			actions::write(1), 0x94, 0x6B,
 
 			actions::INCLUDE, INCLUDE_DEVICE_STROBE_WAIT,
-			// device strobe wait
-			// actions::write(1), regs::REG_DEVICE_STROBE, 0x00,
-			// // wait until done
-			// actions::LOOP,
-			// actions::read(1), regs::REG_DEVICE_STROBE, // 1 BYTE READ (loop wait until != 0x00 or "timeout")
-			// actions::MARKER, MARKER_WAIT_REG_DEVICE_STROBE,
-			// actions::write(1), regs::REG_DEVICE_STROBE, 0x01,
 
-			actions::read(1), 0x92, // 1 BYTE READ: SPAD info byte
+			actions::read(1), regs::REG_SPAD_INFO, // 1 BYTE READ: SPAD info byte
 			actions::MARKER, MARKER_READ_SPAD_INFO,
 			actions::write(1), 0x81, 0x00,
 			actions::write(1), 0xFF, 0x06,
@@ -215,7 +206,7 @@ namespace devices::vl53l0x_internals
 			actions::write(1), 0xFF, 0x01,
 			actions::write(1), regs::REG_SYSRANGE_START, 0x01,
 			actions::write(1), 0xFF, 0x00,
-			actions::write(2, true), regs::REG_POWER_MANAGEMENT, 0x00,
+			actions::write(1, true), regs::REG_POWER_MANAGEMENT, 0x00,
 			actions::END
 		};
 
