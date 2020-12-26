@@ -36,13 +36,13 @@ namespace i2c
 	template<typename T, bool BIG_ENDIAN = true> class WriteContent
 	{
 	public:
-		WriteContent() : register_{0}, value_{0} {}
+		WriteContent() = default;
 		WriteContent(uint8_t reg, const T& value)
 			:	register_{reg}, value_{BIG_ENDIAN ? utils::change_endianness(value) : value} {}
 
 	private:
-		uint8_t register_;
-		T value_; 
+		uint8_t register_{};
+		T value_{}; 
 	};
 	/// @endcond
 
@@ -304,22 +304,23 @@ namespace i2c
 		using ABSTRACT_FUTURE = typename PARENT::ABSTRACT_FUTURE;
 		using F = WriteRegisterFuture<MANAGER, uint8_t, true>;
 		using CONTENT = WriteContent<uint8_t, true>;
-		static constexpr uint8_t FUTURE_SIZE = F::OUT_SIZE;
+		static constexpr uint8_t FUTURE_SIZE = F::IN_SIZE;
 
 	public:
 		I2CSameFutureGroup(uint16_t address, uint8_t size, STATUS_LISTENER* status_listener = nullptr)
 			: PARENT{status_listener}, address_{address}, size_{size}
 		{
-			PARENT::init({future_}, size / FUTURE_SIZE);
+			PARENT::init({&future_}, size / FUTURE_SIZE);
 		}
 
-	private:
+	protected:
 		bool start(typename PARENT::DEVICE& device)
 		{
 			PARENT::set_device(device);
 			return next_future();
 		}
 
+	private:
 		bool next_future()
 		{
 			if (size_ == 0)
@@ -354,7 +355,7 @@ namespace i2c
 		uint16_t address_;
 		uint8_t size_;
 		// The future reused for all writes
-		F future_{CONTENT{}};
+		F future_{0, 0};
 	};
 
 	/**
@@ -387,6 +388,7 @@ namespace i2c
 	 */
 	namespace actions
 	{
+		//TODO new type for OVERWRITE (meaning that bytes are provides outside)
 		static constexpr uint8_t END = 0x00;
 		static constexpr uint8_t WRITE = 0x10;
 		static constexpr uint8_t READ = 0x20;
@@ -423,6 +425,15 @@ namespace i2c
 			return action & COUNT_MASK;
 		}
 	}
+
+	//TODO DOCS
+	// Types of futures used in ComplexI2CFuturesGroup
+	template<typename MANAGER, uint8_t SIZE> 
+	using FUTURE_WRITE = typename MANAGER::FUTURE<void, containers::array<uint8_t, SIZE + 1>>;
+	template<typename MANAGER, uint8_t SIZE>
+	using FUTURE_READ = typename MANAGER::FUTURE<containers::array<uint8_t, SIZE>, uint8_t>;
+	template<typename MANAGER>
+	using FUTURE_READ1 = typename MANAGER::FUTURE<uint8_t, uint8_t>;
 
 	//TODO DOCS
 	//TODO template with list of sizes for read and write futures?
