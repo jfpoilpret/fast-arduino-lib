@@ -101,6 +101,41 @@ namespace devices::vl53l0x
 		return out << convert(mode) << streams::flush;
 	}
 
+	static const flash::FlashStorage* convert(GPIOFunction function)
+	{
+		switch (function)
+		{
+			case GPIOFunction::DISABLED: 
+			return F("DISABLED");
+
+			case GPIOFunction::LEVEL_LOW: 
+			return F("LEVEL_LOW");
+
+			case GPIOFunction::LEVEL_HIGH: 
+			return F("LEVEL_HIGH");
+
+			case GPIOFunction::OUT_OF_WINDOW: 
+			return F("OUT_OF_WINDOW");
+
+			case GPIOFunction::SAMPLE_READY: 
+			return F("SAMPLE_READY");
+		}
+	}
+
+	streams::ostream& operator<<(streams::ostream& out, GPIOFunction function)
+	{
+		return out << convert(function) << streams::flush;
+	}
+
+	streams::ostream& operator<<(streams::ostream& out, const GPIOSettings& settings)
+	{
+		return out	<< F("(GPIO function=")
+					<< streams::dec << settings.function() << streams::flush
+					<< F(", ") << (settings.high_polarity() ? F("HIGH") : F("LOW")) << F(" polarity") << streams::flush
+					<< F(", low_threshold=") << streams::hex << settings.low_threshold()  << streams::flush
+					<< F(", high_threshold=") << streams::hex << settings.high_threshold() << ')' << streams::flush;
+	}
+
 	static streams::ostream& with_without(streams::ostream& out, bool with, const flash::FlashStorage* label)
 	{
 		if (!with)
@@ -128,13 +163,13 @@ namespace devices::vl53l0x
 	{
 		return out	<< F("(pre_range_vcsel_period_pclks=")
 					<< streams::dec << timeouts.pre_range_vcsel_period_pclks() << streams::flush
-					<< F("final_range_vcsel_period_pclks")
+					<< F(", final_range_vcsel_period_pclks")
 					<< timeouts.final_range_vcsel_period_pclks() << streams::flush
-					<< F("msrc_dss_tcc_mclks")
+					<< F(", msrc_dss_tcc_mclks")
 					<< timeouts.msrc_dss_tcc_mclks() << streams::flush
-					<< F("pre_range_mclks")
+					<< F(", pre_range_mclks")
 					<< timeouts.pre_range_mclks() << streams::flush
-					<< F("final_range_mclks")
+					<< F(", final_range_mclks")
 					<< timeouts.final_range_mclks() << ')' << streams::flush;
 	}
 }

@@ -83,7 +83,6 @@ namespace devices::vl53l0x
 		RANGE_IGNORE_THRESHOLD         = 14,
 		UNKNOWN                        = 15
 	};
-
 	streams::ostream& operator<<(streams::ostream&, DeviceError);
 
 	class DeviceStatus
@@ -102,7 +101,6 @@ namespace devices::vl53l0x
 	private:
 		uint8_t status_ = 0;
 	};
-
 	streams::ostream& operator<<(streams::ostream&, DeviceStatus);
 
 	enum class PowerMode : uint8_t
@@ -110,8 +108,69 @@ namespace devices::vl53l0x
 		STANDBY = 0,
 		IDLE = 1
 	};
-
 	streams::ostream& operator<<(streams::ostream&, PowerMode);
+
+	enum class GPIOFunction : uint8_t
+	{
+		DISABLED = 0x00,
+		LEVEL_LOW = 0x01,
+		LEVEL_HIGH = 0x02,
+		OUT_OF_WINDOW = 0x03,
+		SAMPLE_READY = 0x04
+	};
+	streams::ostream& operator<<(streams::ostream&, GPIOFunction);
+
+	class GPIOSettings
+	{
+	public:
+		constexpr GPIOSettings() = default;
+		constexpr GPIOSettings(GPIOFunction function, bool high_polarity, 
+			uint16_t low_threshold = 0, uint16_t high_threshold = 0)
+			:	function_{function}, high_polarity_{high_polarity}, 
+				low_threshold_{low_threshold}, high_threshold_{high_threshold} {}
+
+		static constexpr GPIOSettings sample_ready(bool high_polarity = false)
+		{
+			return GPIOSettings{GPIOFunction::SAMPLE_READY, high_polarity};
+		}
+		static constexpr GPIOSettings low_threshold(uint16_t threshold, bool high_polarity = false)
+		{
+			return GPIOSettings{GPIOFunction::LEVEL_LOW, high_polarity, threshold};
+		}
+		static constexpr GPIOSettings high_threshold(uint16_t threshold, bool high_polarity = false)
+		{
+			return GPIOSettings{GPIOFunction::LEVEL_HIGH, high_polarity, 0, threshold};
+		}
+		static constexpr GPIOSettings out_of_window(
+			uint16_t low_threshold, uint16_t high_threshold, bool high_polarity = false)
+		{
+			return GPIOSettings{GPIOFunction::OUT_OF_WINDOW, high_polarity, low_threshold, high_threshold};
+		}
+
+		GPIOFunction function() const
+		{
+			return function_;
+		}
+		bool high_polarity() const
+		{
+			return high_polarity_;
+		}
+		uint16_t low_threshold() const
+		{
+			return low_threshold_;
+		}
+		uint16_t high_threshold() const
+		{
+			return high_threshold_;
+		}
+
+	private:
+		GPIOFunction function_ = GPIOFunction::DISABLED;
+		bool high_polarity_ = false;
+		uint16_t low_threshold_ = 0;
+		uint16_t high_threshold_ = 0;
+	};
+	streams::ostream& operator<<(streams::ostream&, const GPIOSettings&);
 
 	//TODO improve by setting list of available values for period_pclks?
 	enum class VcselPeriodType : uint8_t
