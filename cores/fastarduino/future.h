@@ -1479,6 +1479,8 @@ namespace future
 		using STATUS_LISTENER = FutureStatusListener<F>;
 
 	protected:
+		static constexpr const uint16_t NO_LIMIT = 0xFFFF;
+		
 		//TODO DOCS
 		explicit AbstractFuturesGroup(STATUS_LISTENER* status_listener = nullptr)
 			:	F{nullptr, 0, nullptr, 0, status_listener} {}
