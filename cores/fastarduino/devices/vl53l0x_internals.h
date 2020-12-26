@@ -93,7 +93,11 @@ namespace devices::vl53l0x_internals
 
 	// List of includable futures
 	static constexpr uint8_t INCLUDE_DEVICE_STROBE_WAIT = 1;
+	static constexpr uint8_t INCLUDE_LOAD_TUNING_SETTINGS = 2;
+	static constexpr uint8_t INCLUDE_GET_SPAD_INFO = 3;
+	static constexpr uint8_t INCLUDE_SET_GPIO_SETTINGS = 4;
 
+	//TODO remove extra overwritten bytes from BUFFERs and remove extra next_byte()
 
 	// Constants for set_vcsel_pulse_period<VcselPeriodType::PRE_RANGE>() method
 	//---------------------------------------------------------------------------
@@ -311,179 +315,47 @@ namespace devices::vl53l0x_internals
 	//------------------------------------
 	namespace init_static
 	{
+		// Marker after reading register 0x83 before owverwriting it
+		static constexpr uint8_t MARKER_GET_REFERENCE_SPADS = 1;
+
 		// Write buffer
-		static constexpr uint8_t INIT_STATIC_BUFFER[] PROGMEM =
+		static constexpr uint8_t BUFFER[] PROGMEM =
 		{
 			// get SPAD info
-			regs::REG_POWER_MANAGEMENT, 0x01,
-			0xFF, 0x01,
-			regs::REG_SYSRANGE_START, 0x00,
-			0xFF, 0x06,
-			0x83, // 1 BYTE READ
-			0x83, 0x04, // OVERWRITTEN BYTE
-			0xFF, 0x07,
-			0x81, 0x01,
-			regs::REG_POWER_MANAGEMENT, 0x01,
-			0x94, 0x6B,
-			0x83, 0x00,
-			// wait until done
-			0x83, // 1 BYTE READ (loop wait until != 0x00 or "timeout")
-			0x83, 0x01,
-			0x92, // 1 BYTE READ: SPAD info byte
-			0x81, 0x00,
-			0xFF, 0x06,
-			0x83, // 1 BYTE READ
-			0x83, 0x04, // OVERWRITTEN BYTE
-			0xFF, 0x01,
-			regs::REG_SYSRANGE_START, 0x01,
-			0xFF, 0x00,
-			regs::REG_POWER_MANAGEMENT, 0x00,
+			actions::INCLUDE, INCLUDE_GET_SPAD_INFO,
 
 			// get reference SPADs from NVM
-			regs::REG_GLOBAL_CONFIG_SPAD_ENABLES_REF_0, // 6 BYTES READ: RefGoodSpadMap
+			actions::read(6), regs::REG_GLOBAL_CONFIG_SPAD_ENABLES_REF_0, // 6 BYTES READ: RefGoodSpadMap
 
 			// set reference SPADs (after calculation)
-			0xFF, 0x01,
-			regs::REG_DYNAMIC_SPAD_REF_EN_START_OFFSET, 0x00,
-			regs::REG_DYNAMIC_SPAD_NUM_REQUESTED_REF_SPAD, 0x2C,
-			0xFF, 0x00,
-			regs::REG_GLOBAL_CONFIG_REF_EN_START_SELECT, 0xB4,
-			regs::REG_GLOBAL_CONFIG_SPAD_ENABLES_REF_0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
+			actions::write(1), 0xFF, 0x01,
+			actions::write(1), regs::REG_DYNAMIC_SPAD_REF_EN_START_OFFSET, 0x00,
+			actions::write(1), regs::REG_DYNAMIC_SPAD_NUM_REQUESTED_REF_SPAD, 0x2C,
+			actions::write(1), 0xFF, 0x00,
+			actions::write(1), regs::REG_GLOBAL_CONFIG_REF_EN_START_SELECT, 0xB4,
+			actions::MARKER, MARKER_GET_REFERENCE_SPADS,
+			actions::write(6), regs::REG_GLOBAL_CONFIG_SPAD_ENABLES_REF_0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
 
 			// load tuning settings (hard-coded defaults)
-			0xFF, 0x01,
-			regs::REG_SYSRANGE_START, 0x00,
-			0xFF, 0x00,
-			0x09, 0x00,
-			0x10, 0x00,
-			0x11, 0x00,
-			0x24, 0x01,
-			0x25, 0xFF,
-			0x75, 0x00,
-			0xFF, 0x01,
-			0x4E, 0x2C,
-			0x48, 0x00,
-			0x30, 0x20,
-			0xFF, 0x00,
-			0x30, 0x09,
-			0x54, 0x00,
-			0x31, 0x04,
-			0x32, 0x03,
-			0x40, 0x83,
-			0x46, 0x25,
-			0x60, 0x00,
-			0x27, 0x00,
-			0x50, 0x06,
-			0x51, 0x00,
-			0x52, 0x96,
-			0x56, 0x08,
-			0x57, 0x30,
-			0x61, 0x00,
-			0x62, 0x00,
-			0x64, 0x00,
-			0x65, 0x00,
-			0x66, 0xA0,
-			0xFF, 0x01,
-			0x22, 0x32,
-			0x47, 0x14,
-			0x49, 0xFF,
-			0x4A, 0x00,
-			0xFF, 0x00,
-			0x7A, 0x0A,
-			0x7B, 0x00,
-			0x78, 0x21,
-			0xFF, 0x01,
-			0x23, 0x34,
-			0x42, 0x00,
-			0x44, 0xFF,
-			0x45, 0x26,
-			0x46, 0x05,
-			0x40, 0x40,
-			0x0E, 0x06,
-			0x20, 0x1A,
-			0x43, 0x40,
-			0xFF, 0x00,
-			0x34, 0x03,
-			0x35, 0x44,
-			0xFF, 0x01,
-			0x31, 0x04,
-			0x4B, 0x09,
-			0x4C, 0x05,
-			0x4D, 0x04,
-			0xFF, 0x00,
-			0x44, 0x00,
-			0x45, 0x20,
-			0x47, 0x08,
-			0x48, 0x28,
-			0x67, 0x00,
-			0x70, 0x04,
-			0x71, 0x01,
-			0x72, 0xFE,
-			0x76, 0x00,
-			0x77, 0x00,
-			0xFF, 0x01,
-			0x0D, 0x01,
-			0xFF, 0x00,
-			regs::REG_POWER_MANAGEMENT, 0x01,
-			0x01, 0xF8,
-			0xFF, 0x01,
-			0x8E, 0x01,
-			regs::REG_SYSRANGE_START, 0x01,
-			0xFF, 0x00,
-			regs::REG_POWER_MANAGEMENT, 0x00,
+			actions::INCLUDE, INCLUDE_LOAD_TUNING_SETTINGS,
 
-			// set interrupt settings or not? what default?
-			regs::REG_SYSTEM_INTERRUPT_CONFIG_GPIO, 0x04,
-			regs::REG_GPIO_HV_MUX_ACTIVE_HIGH, // 1 BYTE READ
-			regs::REG_GPIO_HV_MUX_ACTIVE_HIGH, 0x10, // OVERWRITTEN BYTE
-			regs::REG_SYSTEM_INTERRUPT_CLEAR, 0x01,
+			// set interrupt settings with default?
+			actions::INCLUDE, INCLUDE_SET_GPIO_SETTINGS,
 
 			//TODO get current timing budget
 				// get sequence steps
 				// get sequence timeouts
-			
 
 			// set sequence steps: disable MSRC and TCC by default
-			regs::REG_SYSTEM_SEQUENCE_CONFIG, 0xE8,
+			actions::write(1), regs::REG_SYSTEM_SEQUENCE_CONFIG, 0xE8,
 
 			//TODO recalculate timing budget
 				// get sequence steps
 				// get sequence timeouts
-			regs::REG_FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI, 0x00, 0x00,
-		};
 
-		// Size of write buffer TODO maybe useless
-		static constexpr uint8_t INIT_STATIC_BUFFER_SIZE = sizeof(INIT_STATIC_BUFFER);
-		// List of futures and bytes count:
-		// - negative means write 1 byte (register) and read N bytes
-		// - positive means write 1 byte (register) followed by N bytes
-		//FIXME list of futures...
-		static constexpr int8_t INIT_STATIC_FUTURES[] PROGMEM = {
-			// get SPAD info
-			1, 1, 1, 1, -1, 1, 1, 1, 1, 1, 1, -1, 1, -1, 1, 1, -1, 1, 1, 1, 1, 1,
-			// get reference SPADs from NVM
-			-6,
-			// set reference SPADs (after calculation)
-			1, 1, 1, 1, 1, 6,
-			// load tuning settings (hard-coded defaults) 80 writes
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-			// set interrupt settings?
-			1, -1, 1, 1,
-			// get current timing budget TODO
-
-			// set sequence steps
-			1,
-			// recalculate timing budget TODO
+			actions::write(2, true), regs::REG_FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI, 0x00, 0x00,
+			actions::END
 		};
-		static constexpr uint8_t INIT_STATIC_FUTURES_SIZE = sizeof(INIT_STATIC_FUTURES);
-		//TODO INDEX...
 	}
 	
 	// TODO define specific namespace for each specific Future data
