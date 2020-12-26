@@ -382,10 +382,7 @@ namespace devices::vl53l0x
 		};
 		int get_SPAD_info(GetSPADInfoFuture& future)
 		{
-			// Launch init
-			if (!future.start(*this))
-				return future.error();
-			return 0;
+			return (future.start(*this) ? 0 : future.error());
 		}
 
 		class GetSequenceStepsTimeoutFuture : public I2CFuturesGroup
@@ -438,10 +435,108 @@ namespace devices::vl53l0x
 		};
 		int get_sequence_steps_timeout(GetSequenceStepsTimeoutFuture& future)
 		{
-			// Launch init
-			if (!future.start(*this))
-				return future.error();
-			return 0;
+			return (future.start(*this) ? 0 : future.error());
+		}
+
+		class GetGPIOSettingsFuture : public I2CFuturesGroup
+		{
+			using PARENT = I2CFuturesGroup;
+		public:
+			GetGPIOSettingsFuture() : PARENT{futures_, NUM_FUTURES}
+			{
+				PARENT::init(futures_);
+			}
+
+			bool get(GPIOSettings& settings)
+			{
+				if (this->await() != future::FutureStatus::READY)
+					return false;
+				GPIOFunction function = GPIOFunction::DISABLED;
+				read_config_.get(function);
+				uint8_t active_high = 0;
+				read_GPIO_active_high_.get(active_high);
+				uint16_t low_threshold = 0;
+				read_low_threshold_.get(low_threshold);
+				uint16_t high_threshold = 0;
+				read_high_threshold_.get(high_threshold);
+				settings = GPIOSettings{function, bool(active_high & 0x10), low_threshold, high_threshold};
+				return true;
+			}
+
+		private:
+			TReadRegisterFuture<regs::REG_SYSTEM_INTERRUPT_CONFIG_GPIO, GPIOFunction> read_config_{};
+			TReadRegisterFuture<regs::REG_GPIO_HV_MUX_ACTIVE_HIGH> read_GPIO_active_high_{};
+			TReadRegisterFuture<regs::REG_SYSTEM_THRESH_LOW, uint16_t> read_low_threshold_{};
+			TReadRegisterFuture<regs::REG_SYSTEM_THRESH_HIGH, uint16_t> read_high_threshold_{};
+
+			static constexpr uint8_t NUM_FUTURES = 4;
+			ABSTRACT_FUTURE* futures_[NUM_FUTURES] =
+			{
+				&read_config_,
+				&read_GPIO_active_high_,
+				&read_low_threshold_,
+				&read_high_threshold_
+			};
+
+			friend THIS;
+		};
+		int get_GPIO_settings(GetGPIOSettingsFuture& future)
+		{
+			return (future.start(*this) ? 0 : future.error());
+		}
+
+		class SetGPIOSettingsFuture : public I2CFuturesGroup
+		{
+			using PARENT = I2CFuturesGroup;
+		public:
+			SetGPIOSettingsFuture(const GPIOSettings& settings)
+				:	PARENT{futures_, NUM_FUTURES},
+					write_config_{settings.function()},
+					write_GPIO_active_high_{settings.high_polarity() ? 0x10 : 0x00},
+					write_low_threshold_{settings.low_threshold()},
+					write_high_threshold_{settings.high_threshold()}
+			{
+				PARENT::init(futures_);
+			}
+
+		private:
+			TWriteRegisterFuture<regs::REG_SYSTEM_INTERRUPT_CONFIG_GPIO, GPIOFunction> write_config_;
+			TWriteRegisterFuture<regs::REG_GPIO_HV_MUX_ACTIVE_HIGH> write_GPIO_active_high_;
+			TWriteRegisterFuture<regs::REG_SYSTEM_THRESH_LOW, uint16_t> write_low_threshold_;
+			TWriteRegisterFuture<regs::REG_SYSTEM_THRESH_HIGH, uint16_t> write_high_threshold_;
+
+			static constexpr uint8_t NUM_FUTURES = 4;
+			ABSTRACT_FUTURE* futures_[NUM_FUTURES] =
+			{
+				&write_config_,
+				&write_GPIO_active_high_,
+				&write_low_threshold_,
+				&write_high_threshold_
+			};
+
+			friend THIS;
+		};
+		int set_GPIO_settings(SetGPIOSettingsFuture& future)
+		{
+			return (future.start(*this) ? 0 : future.error());
+		}
+
+		using GetInterruptStatusFuture = TReadRegisterFuture<regs::REG_RESULT_INTERRUPT_STATUS>;
+		int get_interrupt_status(PROXY<GetInterruptStatusFuture> future)
+		{
+			return this->async_read(future);
+		}
+
+		//FIXME need to specify some value to clear interrupt! Not that simple?
+		class ClearInterruptFuture : public TWriteRegisterFuture<regs::REG_SYSTEM_INTERRUPT_CLEAR>
+		{
+			using PARENT = TWriteRegisterFuture<regs::REG_SYSTEM_INTERRUPT_CLEAR>;
+		public:
+			ClearInterruptFuture() : PARENT{0x01} {}
+		};
+		int clear_interrupt(PROXY<ClearInterruptFuture> future)
+		{
+			return this->async_write(future);
 		}
 
 		//TODO additional arguments for init? eg sequence steps, limits...
@@ -573,10 +668,24 @@ namespace devices::vl53l0x
 
 		int init_data_first(InitDataFuture& future)
 		{
-			// Launch init
-			if (!future.start(*this))
-				return future.error();
-			return 0;
+			return (future.start(*this) ? 0 : future.error());
+		}
+
+		//TODO
+		class LoadTuningSettingsFuture : public I2CSameFutureGroup
+		{
+			using PARENT = I2CSameFutureGroup;
+		public:
+			LoadTuningSettingsFuture(FUTURE_STATUS_LISTENER* status_listener = nullptr)
+				: PARENT{	uint16_t(internals::load_tuning_settings::BUFFER), 
+							internals::load_tuning_settings::BUFFER_SIZE, status_listener} {}
+
+
+		};
+
+		int load_tuning_settings(LoadTuningSettingsFuture& future)
+		{
+			return (future.start(*this) ? 0 : future.error());
 		}
 
 		int init_static_second()
@@ -657,6 +766,16 @@ namespace devices::vl53l0x
 			GetSequenceStepsTimeoutFuture future{};
 			if (get_sequence_steps_timeout(future) != 0) return false;
 			return future.get(timeouts);
+		}
+
+		bool get_interrupt_status(uint8_t& status)
+		{
+			return this->template sync_read<GetInterruptStatusFuture>(status);
+		}
+
+		bool clear_interrupt()
+		{
+			return this->template sync_write<ClearInterruptFuture>();
 		}
 
 		bool init_data_first()
