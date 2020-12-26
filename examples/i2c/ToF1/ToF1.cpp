@@ -140,94 +140,128 @@ int main()
 	manager.begin();
 	display_memory(out);
 
-	out << F("Read VL53L0X status") << endl;
 	uint8_t result = 0;
-	bool ok = tof.get_revision(result);
-	display_memory(out);
-	out << F("tof.get_revision(result) = ") << ok << F(", result = ") << hex << result << endl;
-	DEBUG(out);
+	bool ok = false;
+	int error = 0;
 
-	ok = tof.get_model(result);
-	display_memory(out);
-	out << F("tof.get_model(result) = ") << ok << F(", result = ") << hex << result << endl;
-	DEBUG(out);
+	{
+		out << F("Read VL53L0X status") << endl;
+		ok = tof.get_revision(result);
+		display_memory(out);
+		out << F("tof.get_revision(result) = ") << ok << F(", result = ") << hex << result << endl;
+		DEBUG(out);
+	}
 
-	PowerMode mode = PowerMode::STANDBY;
-	ok = tof.get_power_mode(mode);
-	display_memory(out);
-	out << F("tof.get_power_mode(mode) = ") << ok << F(", mode = ") << mode << endl;
-	DEBUG(out);
+	{
+		ok = tof.get_model(result);
+		display_memory(out);
+		out << F("tof.get_model(result) = ") << ok << F(", result = ") << hex << result << endl;
+		DEBUG(out);
+	}
 
-	DeviceStatus status;
-	ok = tof.get_range_status(status);
-	display_memory(out);
-	out << F("tof.get_range_status(status) = ") << ok 
-		<< F(", status = ") << status << endl;
-	DEBUG(out);
+	{
+		PowerMode mode = PowerMode::STANDBY;
+		ok = tof.get_power_mode(mode);
+		display_memory(out);
+		out << F("tof.get_power_mode(mode) = ") << ok << F(", mode = ") << mode << endl;
+		DEBUG(out);
+	}
 
-	SequenceSteps steps1;
-	ok = tof.get_sequence_steps(steps1);
-	display_memory(out);
-	out << F("tof.get_sequence_steps(status) = ") << ok << F(", steps =") << steps1 << endl;
-	DEBUG(out);
+	{
+		DeviceStatus status;
+		ok = tof.get_range_status(status);
+		display_memory(out);
+		out << F("tof.get_range_status(status) = ") << ok 
+			<< F(", status = ") << status << endl;
+		DEBUG(out);
+	}
 
-	uint8_t period = 0;
-	ok = tof.get_vcsel_pulse_period<VcselPeriodType::PRE_RANGE>(period);
-	display_memory(out);
-	out << F("tof.get_vcsel_pulse_period<PRE_RANGE>(period) = ") << ok << F(", period = ") << dec << period << endl;
-	ok = tof.get_vcsel_pulse_period<VcselPeriodType::FINAL_RANGE>(period);
-	display_memory(out);
-	out << F("tof.get_vcsel_pulse_period<FINAL_RANGE>(period) = ") << ok << F(", period = ") << dec << period << endl;
-	DEBUG(out);
+	{
+		SequenceSteps steps1;
+		ok = tof.get_sequence_steps(steps1);
+		display_memory(out);
+		out << F("tof.get_sequence_steps(status) = ") << ok << F(", steps =") << steps1 << endl;
+		DEBUG(out);
+	}
 
-	// The following block adds 3KB to program size (float arithmetic libs)
-	float signal_rate = 0.0;
-	ok = tof.get_signal_rate_limit(signal_rate);
-	display_memory(out);
-	out << F("tof.get_signal_rate_limit(signal_rate) = ") << ok << F(", signal_rate = ")
-		<< fixed << signal_rate << endl;
-	DEBUG(out);
+	{
+		uint8_t period = 0;
+		ok = tof.get_vcsel_pulse_period<VcselPeriodType::PRE_RANGE>(period);
+		display_memory(out);
+		out << F("tof.get_vcsel_pulse_period<PRE_RANGE>(period) = ") << ok << F(", period = ") << dec << period << endl;
+		ok = tof.get_vcsel_pulse_period<VcselPeriodType::FINAL_RANGE>(period);
+		display_memory(out);
+		out << F("tof.get_vcsel_pulse_period<FINAL_RANGE>(period) = ") << ok << F(", period = ") << dec << period << endl;
+		DEBUG(out);
+	}
 
-	TOF::GetSPADInfoFuture future3{};
-	int error = tof.get_SPAD_info(future3);
-	// while (true)
-	// 	display_memory(out);
-	//FIXME the following LOC gets executed then nothing!
-	out << F("tof.get_SPAD_info(future) = ") << dec << error << endl;
-	// for (uint8_t i = 0; i < 10; ++i)
-	// {
-	// 	out << '.' << flush;
-	// 	time::delay_ms(100);
-	// }
-	// out << endl;
-	time::delay_ms(1000);
-	// time::delay_us(50);
-	DEBUG(out);
-	out << F("future.status() = ") << future3.status() << endl;
-	SPADInfo SPAD_info{};
-	future3.get(SPAD_info);
-	out << F("SPADInfo = ") << SPAD_info << endl;
-	DEBUG(out);
+	{
+		// The following block adds 3KB to program size (float arithmetic libs)
+		float signal_rate = 0.0;
+		ok = tof.get_signal_rate_limit(signal_rate);
+		display_memory(out);
+		out << F("tof.get_signal_rate_limit(signal_rate) = ") << ok << F(", signal_rate = ")
+			<< fixed << signal_rate << endl;
+		DEBUG(out);
+	}
 
-	// TOF::GetSequenceStepsTimeoutFuture future2{};
-	// error = tof.get_sequence_steps_timeout(future2);
-	// out << F("tof.get_sequence_steps_timeout(future) = ") << dec << error << endl;
-	// time::delay_ms(100);
-	// DEBUG(out);
-	// out << F("future.status() = ") << future2.status() << endl;
-	// SequenceStepsTimeout timeouts{};
-	// future2.get(timeouts);
-	// out << F("tof.get_sequence_steps_timeout(timeouts) = ") << ok << flush
-	// 	<< F(", pre_range_vcsel_period_pclks = ") << dec << timeouts.pre_range_vcsel_period_pclks() << flush
-	// 	<< F(", final_range_vcsel_period_pclks = ") << dec << timeouts.final_range_vcsel_period_pclks() << flush
-	// 	<< F(", msrc_dss_tcc_mclks = ") << dec << timeouts.msrc_dss_tcc_mclks() << flush
-	// 	<< F(", pre_range_mclks = ") << dec << timeouts.pre_range_mclks() << flush
-	// 	<< F(", final_range_mclks = ") << dec << timeouts.final_range_mclks() << endl;
-	// // check calculated values
-	// out << F("timeouts.msrc_dss_tcc_us() = ") << dec << timeouts.msrc_dss_tcc_us() << flush
-	// 	<< F(", timeouts.pre_range_us() = ") << dec << timeouts.pre_range_us() << flush
-	// 	<< F(", timeouts.final_range_us() = ") << dec << timeouts.final_range_us() << endl;
-	// DEBUG(out);
+	{
+		TOF::GetSPADInfoFuture future3{};
+		error = tof.get_SPAD_info(future3);
+		display_memory(out);
+		out << F("tof.get_SPAD_info(future) = ") << dec << error << endl;
+		time::delay_ms(500);
+		DEBUG(out);
+		out << F("future.status() = ") << future3.status() << endl;
+		SPADInfo SPAD_info{};
+		future3.get(SPAD_info);
+		out << F("SPADInfo = ") << SPAD_info << endl;
+		DEBUG(out);
+	}
+
+	{
+		TOF::GetSequenceStepsTimeoutFuture future2{};
+		error = tof.get_sequence_steps_timeout(future2);
+		display_memory(out);
+		out << F("tof.get_sequence_steps_timeout(future) = ") << dec << error << endl;
+		time::delay_ms(100);
+		DEBUG(out);
+		out << F("future.status() = ") << future2.status() << endl;
+		SequenceStepsTimeout timeouts{};
+		future2.get(timeouts);
+		out << F("tof.get_sequence_steps_timeout(timeouts) = ") << ok << flush
+			<< F(", pre_range_vcsel_period_pclks = ") << dec << timeouts.pre_range_vcsel_period_pclks() << flush
+			<< F(", final_range_vcsel_period_pclks = ") << dec << timeouts.final_range_vcsel_period_pclks() << flush
+			<< F(", msrc_dss_tcc_mclks = ") << dec << timeouts.msrc_dss_tcc_mclks() << flush
+			<< F(", pre_range_mclks = ") << dec << timeouts.pre_range_mclks() << flush
+			<< F(", final_range_mclks = ") << dec << timeouts.final_range_mclks() << endl;
+		// check calculated values
+		out << F("timeouts.msrc_dss_tcc_us() = ") << dec << timeouts.msrc_dss_tcc_us() << flush
+			<< F(", timeouts.pre_range_us() = ") << dec << timeouts.pre_range_us() << flush
+			<< F(", timeouts.final_range_us() = ") << dec << timeouts.final_range_us() << endl;
+		DEBUG(out);
+	}
+
+	{
+		TOF::GetGPIOSettingsFuture future{};
+		error = tof.get_GPIO_settings(future);
+		display_memory(out);
+		out << F("tof.get_GPIO_settings(future) = ") << dec << error << endl;
+		time::delay_ms(100);
+		DEBUG(out);
+		out << F("future.status() = ") << future.status() << endl;
+		GPIOSettings settings{};
+		future.get(settings);
+		out << F("GPIO setting=") << settings << endl;
+	}
+
+	{
+		uint8_t status = 0;
+		ok = tof.get_interrupt_status(status);
+		display_memory(out);
+		out << F("tof.get_interrupt_status(status) = ") << ok
+			<< F(", status = ") << hex << status << endl;
+	}
 
 	manager.end();
 }
