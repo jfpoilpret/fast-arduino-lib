@@ -256,11 +256,11 @@ int main()
 	}
 
 	{
-		uint8_t status = 0;
+		InterruptStatus status{};
 		ok = tof.get_interrupt_status(status);
 		display_memory(out);
 		out << F("tof.get_interrupt_status(status) = ") << ok
-			<< F(", status = ") << hex << status << endl;
+			<< F(", status = ") << hex << uint8_t(status) << endl;
 	}
 
 	manager.end();

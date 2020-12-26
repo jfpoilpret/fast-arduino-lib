@@ -105,15 +105,22 @@ namespace devices::vl53l0x
 		template<uint8_t REGISTER, typename T = uint8_t>
 		using TWriteRegisterFuture = i2c::TWriteRegisterFuture<MANAGER, REGISTER, T, true>;
 
-		// using AbstractI2CFuture = i2c::AbstractI2CFuture<MANAGER>;
 		using AbstractI2CFuturesGroup = i2c::AbstractI2CFuturesGroup<MANAGER>;
 		using I2CFuturesGroup = i2c::I2CFuturesGroup<MANAGER>;
 		using I2CSameFutureGroup = i2c::I2CSameFutureGroup<MANAGER>;
 		using ComplexI2CFuturesGroup = i2c::ComplexI2CFuturesGroup<MANAGER>;
 
+		template<uint8_t SIZE> using FUTURE_WRITE = i2c::FUTURE_WRITE<MANAGER, SIZE>;
+		template<uint8_t SIZE> using FUTURE_READ = i2c::FUTURE_READ<MANAGER, SIZE>;
+		using FUTURE_READ1 = i2c::FUTURE_READ1<MANAGER>;
+
 		// Forward declarations needed by compiler
 		class AbstractGetVcselPulsePeriodFuture;
 		class DeviceStrobeWaitFuture;
+
+		static constexpr const uint8_t NUM_REF_SPADS = 48;
+		static constexpr const uint8_t SPADS_PER_BYTE = 8;
+		static constexpr const uint8_t NUM_REF_SPADS_BYTES = NUM_REF_SPADS / SPADS_PER_BYTE;
 
 	public:
 		/**
@@ -242,14 +249,11 @@ namespace devices::vl53l0x
 		{
 			using PARENT = ComplexI2CFuturesGroup;
 			using ProcessAction = typename PARENT::ProcessAction;
-			// Types of futures handled by this group
-			template<uint8_t SIZE> using FUTURE_WRITE = FUTURE<void, containers::array<uint8_t, SIZE + 1>>;
-			using FUTURE_READ = FUTURE<uint8_t, uint8_t>;
 			
 		public:
 			GetSPADInfoFuture() : PARENT{uint16_t(internals::spad_info::BUFFER)}
 			{
-				PARENT::init({&write1_, &write2_, &read_, &strobe_}, 0xFFFF);
+				PARENT::init({&write1_, &write2_, &read_, &strobe_}, PARENT::NO_LIMIT);
 			}
 			//TODO Move ctor/asgn?
 
@@ -375,7 +379,7 @@ namespace devices::vl53l0x
 			// Placeholders for dynamic futures
 			FUTURE_WRITE<1> write1_{{0}, this};
 			FUTURE_WRITE<2> write2_{{0, 0}, this};
-			FUTURE_READ read_{0, this};
+			FUTURE_READ1 read_{0, this};
 			DeviceStrobeWaitFuture strobe_{this};
 
 			friend THIS;
@@ -521,7 +525,7 @@ namespace devices::vl53l0x
 			return (future.start(*this) ? 0 : future.error());
 		}
 
-		using GetInterruptStatusFuture = TReadRegisterFuture<regs::REG_RESULT_INTERRUPT_STATUS>;
+		using GetInterruptStatusFuture = TReadRegisterFuture<regs::REG_RESULT_INTERRUPT_STATUS, InterruptStatus>;
 		int get_interrupt_status(PROXY<GetInterruptStatusFuture> future)
 		{
 			return this->async_read(future);
@@ -544,14 +548,11 @@ namespace devices::vl53l0x
 		{
 			using PARENT = ComplexI2CFuturesGroup;
 			using ProcessAction = typename PARENT::ProcessAction;
-			// Types of futures handled by this group
-			template<uint8_t SIZE> using FUTURE_WRITE = FUTURE<void, containers::array<uint8_t, SIZE + 1>>;
-			using FUTURE_READ = FUTURE<uint8_t, uint8_t>;
 			
 		public:
 			InitDataFuture() : PARENT{uint16_t(internals::init_data::BUFFER)}
 			{
-				PARENT::init({&write1_, &write2_, &read_}, 0xFFFF);
+				PARENT::init({&write1_, &write2_, &read_}, PARENT::NO_LIMIT);
 			}
 			//TODO Move ctor/asgn?
 
@@ -661,7 +662,7 @@ namespace devices::vl53l0x
 			// Placeholders for dynamic futures
 			FUTURE_WRITE<1> write1_{{0}, this};
 			FUTURE_WRITE<2> write2_{{0, 0}, this};
-			FUTURE_READ read_{0, this};
+			FUTURE_READ1 read_{0, this};
 
 			friend THIS;
 		};
@@ -680,7 +681,7 @@ namespace devices::vl53l0x
 				: PARENT{	uint16_t(internals::load_tuning_settings::BUFFER), 
 							internals::load_tuning_settings::BUFFER_SIZE, status_listener} {}
 
-
+			friend THIS;
 		};
 
 		int load_tuning_settings(LoadTuningSettingsFuture& future)
@@ -688,14 +689,183 @@ namespace devices::vl53l0x
 			return (future.start(*this) ? 0 : future.error());
 		}
 
-		int init_static_second()
+		class InitStaticFuture : public ComplexI2CFuturesGroup
 		{
-			//TODO
-			// 1. Get SPAD map
-			// 2. Set reference SPADs
-			// 3. Load tuning settings
-			// 4. Set interrupt settings
-			//...
+			using PARENT = ComplexI2CFuturesGroup;
+			using ProcessAction = typename PARENT::ProcessAction;
+			
+		public:
+			InitStaticFuture() : PARENT{uint16_t(internals::init_static::BUFFER)}
+			{
+				PARENT::init({
+					&write1_, &write2_, &write6_, 
+					&read1_, &read6_, 
+					&getSpadInfo_, &setGPIOSettings_, &loadTuningSettings_
+				}, PARENT::NO_LIMIT);
+			}
+			//TODO Move ctor/asgn?
+
+		protected:
+			bool start(THIS& device)
+			{
+				PARENT::set_device(device);
+				return next_future();
+			}
+
+			THIS& device()
+			{
+				return (THIS&) PARENT::device();
+			}
+
+		private:
+			bool process_include(uint8_t include)
+			{
+				switch (include)
+				{
+					case internals::INCLUDE_GET_SPAD_INFO:
+					return getSpadInfo_.start(device());
+
+					case internals::INCLUDE_LOAD_TUNING_SETTINGS:
+					return loadTuningSettings_.start(device());
+
+					case internals::INCLUDE_SET_GPIO_SETTINGS:
+					return setGPIOSettings_.start(device());
+
+					default:
+					// Error: unexpected include
+					return PARENT::check_error(errors::EILSEQ);
+				}
+			}
+			
+			bool process_marker(uint8_t marker)
+			{
+				namespace data = internals::init_static;
+				// Check marker and act accordingly
+				if (marker == data::MARKER_GET_REFERENCE_SPADS)
+				{
+					// Get SPAD info
+					SPADInfo info{};
+					getSpadInfo_.get(info);
+					// Get NVM ref SPADs
+					read6_.get(ref_spads_);
+					// Calculate reference spads
+					calculate_reference_SPADs(ref_spads_.data(), info);
+				}
+				else
+				{
+					// Error: unexpected marker
+					return PARENT::check_error(errors::EILSEQ);
+				}
+			}
+
+			bool process_read(UNUSED uint8_t count, bool stop)
+			{
+				const uint8_t reg = this->next_byte();
+				// Only one kind of read here (1 byte)
+				if (count == 1)
+				{
+					read1_.reset_(reg);
+					return PARENT::check_error(
+						PARENT::launch_commands(read1_, {PARENT::write(), PARENT::read(0, false, stop)}));
+				}
+				else if (count == 6)
+				{
+					read6_.reset_(reg);
+					return PARENT::check_error(
+						PARENT::launch_commands(read6_, {PARENT::write(), PARENT::read(0, false, stop)}));
+				}
+				else
+				{
+					// Error: unexpected read
+					return PARENT::check_error(errors::EILSEQ);
+				}
+			}
+
+			bool process_write(uint8_t count, bool stop)
+			{
+				const uint8_t reg = this->next_byte();
+				if (count == 1)
+				{
+					uint8_t value = this->next_byte();
+					write1_.reset_({reg, value});
+					return PARENT::check_error(
+						PARENT::launch_commands(write1_, {PARENT::write(0, false, stop)}));
+				}
+				else if (count == 2)
+				{
+					uint8_t val1 = this->next_byte();
+					uint8_t val2 = this->next_byte();
+					write2_.reset_({reg, val1, val2});
+					return PARENT::check_error(
+						PARENT::launch_commands(write2_, {PARENT::write(0, false, stop)}));
+				}
+				else if (count == 6)
+				{
+					// Skip 6 bytes
+					for (uint8_t i = 0; i < 6; ++i)
+						this->next_byte();
+					//FIXME review reset_() call here (will not work as is)
+					typename FUTURE_WRITE<6>::IN input{reg};
+					input.template set<NUM_REF_SPADS_BYTES>(1, ref_spads_.data());
+					write6_.reset_(input);
+					return PARENT::check_error(
+						PARENT::launch_commands(write6_, {PARENT::write(0, false, stop)}));
+				}
+				else
+				{
+					// Error: unexpected read
+					return PARENT::check_error(errors::EILSEQ);
+				}
+			}
+
+			// Launch next future from the list stored in flash)
+			bool next_future()
+			{
+				ProcessAction action;
+				while ((action = this->process_action()) == ProcessAction::MARKER)
+				{
+					if (!process_marker(this->next_byte()))
+						return false;
+				}
+				if (action == ProcessAction::DONE)
+					return false;
+				if (action == ProcessAction::INCLUDE)
+					return process_include(this->next_byte());
+				if (action == ProcessAction::READ)
+					return process_read(this->count(), this->is_stop());
+				if (action == ProcessAction::WRITE)
+					return process_write(this->count(), this->is_stop());
+				// It is impossible to fall here as all ProcessAction values have been tested before
+				return false;
+			}
+
+			void on_status_change(const ABSTRACT_FUTURE& future, future::FutureStatus status) final
+			{
+				PARENT::on_status_change(future, status);
+				// First check that current future was executed successfully
+				if (status == future::FutureStatus::READY)
+					next_future();
+			}
+
+			containers::array<uint8_t, NUM_REF_SPADS_BYTES> ref_spads_{};
+
+			// Futures included in this one
+			GetSPADInfoFuture getSpadInfo_{};
+			LoadTuningSettingsFuture loadTuningSettings_{};
+			SetGPIOSettingsFuture setGPIOSettings_{GPIOSettings::sample_ready()};
+			// Placeholders for dynamic futures
+			FUTURE_WRITE<1> write1_{};
+			FUTURE_WRITE<2> write2_{};
+			FUTURE_WRITE<6> write6_{};
+			FUTURE_READ1 read1_{};
+			FUTURE_READ<6> read6_{};
+
+			friend THIS;
+		};
+
+		int init_static_second(InitStaticFuture& future)
+		{
+			return (future.start(*this) ? 0 : future.error());
 		}
 
 		// Synchronous API
@@ -768,7 +938,7 @@ namespace devices::vl53l0x
 			return future.get(timeouts);
 		}
 
-		bool get_interrupt_status(uint8_t& status)
+		bool get_interrupt_status(InterruptStatus& status)
 		{
 			return this->template sync_read<GetInterruptStatusFuture>(status);
 		}
@@ -787,6 +957,29 @@ namespace devices::vl53l0x
 
 	private:
 		static constexpr const uint8_t DEFAULT_DEVICE_ADDRESS = 0x52;
+		static constexpr const uint8_t FIRST_APERTURE_SPAD = 12;
+
+		static void calculate_reference_SPADs(uint8_t ref_spads[NUM_REF_SPADS_BYTES], SPADInfo info)
+		{
+			const uint8_t count = info.count();
+			const uint8_t first_spad = (info.is_aperture() ? FIRST_APERTURE_SPAD : 0);
+			uint8_t enabled_spads = 0;
+			uint8_t spad = 0;
+			for (uint8_t i = 0; i < NUM_REF_SPADS_BYTES; ++i)
+			{
+				uint8_t& ref_spad = ref_spads[i];
+				for (uint8_t j = 0; j < SPADS_PER_BYTE; ++j)
+				{
+					if ((spad < first_spad) || (enabled_spads == count))
+						// Disable this SPAD as it should not be enabled
+						ref_spad &= bits::CBV8(j);
+					else if (ref_spad & bits::BV8(j))
+						// Just count the current SPAD as enabled
+						++enabled_spads;
+					++spad;
+				}
+			}
+		}
 
 		void prepare_commands(uint16_t address, const int8_t* sizes, i2c::I2CLightCommand* commands, uint8_t count)
 		{
@@ -808,7 +1001,7 @@ namespace devices::vl53l0x
 		public:
 			DeviceStrobeWaitFuture(FUTURE_STATUS_LISTENER* listener = nullptr) : PARENT{listener}
 			{
-				PARENT::init({&write_, &read_}, 0xFFFF);
+				PARENT::init({&write_, &read_}, PARENT::NO_LIMIT);
 			}
 
 			bool start(THIS& device)

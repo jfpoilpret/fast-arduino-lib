@@ -135,33 +135,62 @@ int main()
 	out << F("Start I2C manager") << endl;
 	manager.begin();
 
-	constexpr SequenceSteps steps2 = SequenceSteps::create().tcc().pre_range().final_range();
-	out << F("steps2 = ") << hex << steps2.value() << endl;
-	bool ok = tof.set_sequence_steps(steps2);
-	out << F("tof.set_sequence_steps(status) = ") << ok << endl;
-	DEBUG(out);
+	bool ok = false;
+	int error = 0;
 
-	ok = tof.set_signal_rate_limit(0.5f);
-	out << F("tof.set_signal_rate_limit(0.5) = ") << ok << endl;
-	DEBUG(out);
+	{
+	// constexpr SequenceSteps steps2 = SequenceSteps::create().tcc().pre_range().final_range();
+	// out << F("steps2 = ") << hex << steps2.value() << endl;
+	// ok = tof.set_sequence_steps(steps2);
+	// out << F("tof.set_sequence_steps(status) = ") << ok << endl;
+	// DEBUG(out);
+	}
 
-	// Call first initialization step
-	out << F("Calling init_data_first()...") << endl;
-	TOF::InitDataFuture future1{};
-	int error = tof.init_data_first(future1);
-	out << F("tof.init_data_first(future) = ") << dec << error << endl;
-	time::delay_ms(100);
-	DEBUG(out);
-	out << F("future.status() = ") << future1.status() << endl;
+	{
+		ok = tof.set_signal_rate_limit(0.5f);
+		out << F("tof.set_signal_rate_limit(0.5) = ") << ok << endl;
+		DEBUG(out);
+	}
 
-	DeviceStatus status;
-	ok = tof.get_range_status(status);
-	out << F("tof.get_range_status(status) = ") << ok 
-		<< F(", error = ") << dec << uint8_t(status.error())
-		<< F(", data_ready = ") << status.data_ready() << endl;
-	DEBUG(out);
+	{
+		// Call first initialization step
+		out << F("Calling init_data_first()...") << endl;
+		TOF::InitDataFuture future{};
+		error = tof.init_data_first(future);
+		out << F("tof.init_data_first(future) = ") << dec << error << endl;
+		time::delay_ms(100);
+		DEBUG(out);
+		out << F("future.status() = ") << future.status() << endl;
+	}
 
-	//TODO init_static() call
+	{
+		DeviceStatus status;
+		ok = tof.get_range_status(status);
+		out << F("tof.get_range_status(status) = ") << ok 
+			<< F(", error = ") << dec << uint8_t(status.error())
+			<< F(", data_ready = ") << status.data_ready() << endl;
+		DEBUG(out);
+	}
+
+	{
+		// Call second initialization step
+		out << F("Calling init_static_second()...") << endl;
+		TOF::InitStaticFuture future{};
+		error = tof.init_static_second(future);
+		out << F("tof.init_static_second(future) = ") << dec << error << endl;
+		time::delay_ms(100);
+		DEBUG(out);
+		out << F("future.status() = ") << future.status() << endl;
+	}
+
+	{
+		DeviceStatus status;
+		ok = tof.get_range_status(status);
+		out << F("tof.get_range_status(status) = ") << ok 
+			<< F(", error = ") << dec << uint8_t(status.error())
+			<< F(", data_ready = ") << status.data_ready() << endl;
+		DEBUG(out);
+	}
 
 	manager.end();
 }
