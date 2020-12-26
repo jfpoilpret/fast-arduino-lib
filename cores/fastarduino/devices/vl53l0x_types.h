@@ -33,7 +33,7 @@
 #include "../streams.h"
 #include "vl53l0x_internals.h"
 
-//TODO - define stream insertors for all enum types defined here
+//TODO DOCS for each type
 namespace devices::vl53l0x
 {
 	/// @cond notdocumented
@@ -172,6 +172,19 @@ namespace devices::vl53l0x
 	};
 	streams::ostream& operator<<(streams::ostream&, const GPIOSettings&);
 
+	class InterruptStatus
+	{
+	public:
+		InterruptStatus() = default;
+		operator uint8_t() const
+		{
+			return status_ & 0x07;
+		}
+
+	private:
+		uint8_t status_ = 0;
+	};
+
 	//TODO improve by setting list of available values for period_pclks?
 	enum class VcselPeriodType : uint8_t
 	{
@@ -304,7 +317,6 @@ namespace devices::vl53l0x
 	class SequenceStepsTimeout
 	{
 	public:
-		//TODO static method to calculate SequenceStepsTimeout from other values
 		SequenceStepsTimeout() = default;
 		//FIXME should be private and VL53L0X class declared friend
 		SequenceStepsTimeout(uint8_t pre_range_vcsel_period_pclks, uint8_t final_range_vcsel_period_pclks,
