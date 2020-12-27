@@ -31,39 +31,12 @@
 
 #include "../bits.h"
 #include "../streams.h"
-#include "vl53l0x_internals.h"
+#include "vl53l0x_registers.h"
+#include "vl53l0x_helpers.h"
 
 //TODO DOCS for each type
 namespace devices::vl53l0x
 {
-	/// @cond notdocumented
-	namespace regs = vl53l0x_internals::registers;
-	/// @endcond
-
-	// static utilities to support fixed point 9/7 bits used by VL53L0X chip
-	class FixPoint9_7
-	{
-	public:
-		static constexpr bool is_valid(float value)
-		{
-			return ((value >= 0.0) && (value < float(1 << INTEGRAL_BITS)));
-		}
-
-		static constexpr uint16_t convert(float value)
-		{
-			return is_valid(value) ? uint16_t(value * (1 << DECIMAL_BITS)) : 0U;
-		}
-
-		static constexpr float convert(uint16_t value)
-		{
-			return value / float(1 << DECIMAL_BITS);
-		}
-
-	private:
-		static constexpr uint16_t INTEGRAL_BITS = 9;
-		static constexpr uint16_t DECIMAL_BITS = 7;
-	};
-
 	enum class DeviceError : uint8_t
 	{
 		NONE                           = 0,
@@ -188,19 +161,12 @@ namespace devices::vl53l0x
 	//TODO improve by setting list of available values for period_pclks?
 	enum class VcselPeriodType : uint8_t
 	{
-		PRE_RANGE = regs::REG_PRE_RANGE_CONFIG_VCSEL_PERIOD,
-		FINAL_RANGE = regs::REG_FINAL_RANGE_CONFIG_VCSEL_PERIOD
+		PRE_RANGE = vl53l0x_registers::REG_PRE_RANGE_CONFIG_VCSEL_PERIOD,
+		FINAL_RANGE = vl53l0x_registers::REG_FINAL_RANGE_CONFIG_VCSEL_PERIOD
 	};
 
-	class SequenceSteps
+	class SequenceSteps : private vl53l0x_helpers::Steps
 	{
-	private:
-		static constexpr uint8_t TCC = bits::BV8(4);
-		static constexpr uint8_t DSS = bits::BV8(3);
-		static constexpr uint8_t MSRC = bits::BV8(2);
-		static constexpr uint8_t PRE_RANGE = bits::BV8(6);
-		static constexpr uint8_t FINAL_RANGE = bits::BV8(7);
-
 	public:
 		static constexpr SequenceSteps create()
 		{
