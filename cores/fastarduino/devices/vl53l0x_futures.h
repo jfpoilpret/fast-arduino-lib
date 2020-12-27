@@ -31,18 +31,105 @@
 
 namespace devices::vl53l0x
 {
-	/// @cond notdocumented
+	// Forward declaration
 	template<typename MANAGER> class VL53L0X;
-	/// @endcond
 }
+
 namespace devices::vl53l0x_futures
 {
-	/// @cond notdocumented
+	// Shortened aliases for various namespaces
 	namespace internals = vl53l0x_internals;
 	namespace regs = vl53l0x_registers;
 	namespace actions = i2c::actions;
-	/// @endcond
 
+	// static utilities to support fixed point 9/7 bits used by VL53L0X chip
+	class FixPoint9_7
+	{
+	public:
+		static constexpr bool is_valid(float value)
+		{
+			return ((value >= 0.0) && (value < float(1 << INTEGRAL_BITS)));
+		}
+
+		static constexpr uint16_t convert(float value)
+		{
+			return is_valid(value) ? uint16_t(value * (1 << DECIMAL_BITS)) : 0U;
+		}
+
+		static constexpr float convert(uint16_t value)
+		{
+			return value / float(1 << DECIMAL_BITS);
+		}
+
+	private:
+		static constexpr uint16_t INTEGRAL_BITS = 9;
+		static constexpr uint16_t DECIMAL_BITS = 7;
+	};
+
+	// Utilities for timing budget computations
+	class TimingBudgetUtilities
+	{
+	private:
+		static constexpr const uint32_t MIN_TIMING_BUDGET    = 20000UL;
+		static constexpr const uint16_t START_OVERHEAD       = 1910U;
+		static constexpr const uint16_t END_OVERHEAD         = 960U;
+		static constexpr const uint16_t MSRC_OVERHEAD        = 660U;
+		static constexpr const uint16_t TCC_OVERHEAD         = 590U;
+		static constexpr const uint16_t DSS_OVERHEAD         = 690U;
+		static constexpr const uint16_t PRE_RANGE_OVERHEAD   = 660U;
+		static constexpr const uint16_t FINAL_RANGE_OVERHEAD = 550U;
+
+	public:
+		static uint32_t calculate_measurement_timing_budget_us(
+			const vl53l0x::SequenceSteps steps, const vl53l0x::SequenceStepsTimeout& timeouts)
+		{
+			// start and end overhead times always present
+			uint32_t budget_us = START_OVERHEAD + END_OVERHEAD;
+
+			if (steps.is_tcc())
+				budget_us += timeouts.msrc_dss_tcc_us() + TCC_OVERHEAD;
+
+			if (steps.is_dss())
+				budget_us += 2 * (timeouts.msrc_dss_tcc_us() + DSS_OVERHEAD);
+			else if (steps.is_msrc())
+				budget_us += timeouts.msrc_dss_tcc_us() + MSRC_OVERHEAD;
+
+			if (steps.is_pre_range())
+				budget_us += timeouts.pre_range_us() + PRE_RANGE_OVERHEAD;
+
+			if (steps.is_final_range())
+				budget_us += timeouts.final_range_us() + FINAL_RANGE_OVERHEAD;
+
+			return budget_us;
+		}
+
+		static uint16_t calculate_final_range_timeout_mclks(
+			const vl53l0x::SequenceSteps steps, const vl53l0x::SequenceStepsTimeout& timeouts, uint32_t budget_us)
+		{
+			// Requested budget must be be above minimum allowed
+			if (budget_us < MIN_TIMING_BUDGET) return 0;
+			// This calculation is useless if there is no final range step
+			if (!steps.is_final_range()) return 0;
+
+			// Calculate current used budget without final range
+			uint32_t used_budget_us = 
+				calculate_measurement_timing_budget_us(steps.no_final_range(), timeouts);
+
+			// Now include final range and calculate difference
+			used_budget_us += FINAL_RANGE_OVERHEAD;
+			// Requested budget must be above calculated budget for all other steps
+			if (used_budget_us > budget_us) return 0;
+
+			// Calculate final range timeout in us
+			const uint32_t final_range_timeout_us = budget_us - used_budget_us;
+
+			//TODO finalize
+			// Deduce final range timeout in mclks
+			uint32_t final_range_timeout_mclks = 0;
+		}
+	};
+
+	// This fake class gathers all futures specific to VL53L0X device
 	template<typename MANAGER> struct Futures
 	{
 		// Ensure MANAGER is an accepted I2C Manager type
@@ -223,7 +310,7 @@ namespace devices::vl53l0x_futures
 			{
 				uint16_t temp = 0;
 				if (!PARENT::get(temp)) return false;
-				result = vl53l0x_helpers::FixPoint9_7::convert(temp);
+				result = FixPoint9_7::convert(temp);
 				return true;
 			}
 		};
@@ -235,7 +322,7 @@ namespace devices::vl53l0x_futures
 
 		public:
 			explicit SetSignalRateLimitFuture(float signal_rate)
-				:	PARENT{vl53l0x_helpers::FixPoint9_7::convert(signal_rate)} {}
+				:	PARENT{FixPoint9_7::convert(signal_rate)} {}
 			SetSignalRateLimitFuture(SetSignalRateLimitFuture&&) = default;
 			SetSignalRateLimitFuture& operator=(SetSignalRateLimitFuture&&) = default;
 		};

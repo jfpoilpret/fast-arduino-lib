@@ -32,7 +32,6 @@
 #include "../bits.h"
 #include "../streams.h"
 #include "vl53l0x_registers.h"
-#include "vl53l0x_helpers.h"
 
 //TODO DOCS for each type
 namespace devices::vl53l0x
@@ -165,8 +164,15 @@ namespace devices::vl53l0x
 		FINAL_RANGE = vl53l0x_registers::REG_FINAL_RANGE_CONFIG_VCSEL_PERIOD
 	};
 
-	class SequenceSteps : private vl53l0x_helpers::Steps
+	class SequenceSteps
 	{
+	private:
+		static constexpr uint8_t TCC = bits::BV8(4);
+		static constexpr uint8_t DSS = bits::BV8(3);
+		static constexpr uint8_t MSRC = bits::BV8(2);
+		static constexpr uint8_t PRE_RANGE = bits::BV8(6);
+		static constexpr uint8_t FINAL_RANGE = bits::BV8(7);
+
 	public:
 		static constexpr SequenceSteps create()
 		{
@@ -179,44 +185,44 @@ namespace devices::vl53l0x
 
 		constexpr SequenceSteps() = default;
 
-		constexpr SequenceSteps tcc()
+		constexpr SequenceSteps tcc() const
 		{
 			return SequenceSteps{uint8_t(steps_ | TCC)};
 		}
-		constexpr SequenceSteps dss()
+		constexpr SequenceSteps dss() const
 		{
 			return SequenceSteps{uint8_t(steps_ | DSS)};
 		}
-		constexpr SequenceSteps msrc()
+		constexpr SequenceSteps msrc() const
 		{
 			return SequenceSteps{uint8_t(steps_ | MSRC)};
 		}
-		constexpr SequenceSteps pre_range()
+		constexpr SequenceSteps pre_range() const
 		{
 			return SequenceSteps{uint8_t(steps_ | PRE_RANGE)};
 		}
-		constexpr SequenceSteps final_range()
+		constexpr SequenceSteps final_range() const
 		{
 			return SequenceSteps{uint8_t(steps_ | FINAL_RANGE)};
 		}
 
-		constexpr SequenceSteps no_tcc()
+		constexpr SequenceSteps no_tcc() const
 		{
 			return SequenceSteps{uint8_t(steps_ & ~TCC)};
 		}
-		constexpr SequenceSteps no_dss()
+		constexpr SequenceSteps no_dss() const
 		{
 			return SequenceSteps{uint8_t(steps_ & ~DSS)};
 		}
-		constexpr SequenceSteps no_msrc()
+		constexpr SequenceSteps no_msrc() const
 		{
 			return SequenceSteps{uint8_t(steps_ & ~MSRC)};
 		}
-		constexpr SequenceSteps no_pre_range()
+		constexpr SequenceSteps no_pre_range() const
 		{
 			return SequenceSteps{uint8_t(steps_ & ~PRE_RANGE)};
 		}
-		constexpr SequenceSteps no_final_range()
+		constexpr SequenceSteps no_final_range() const
 		{
 			return SequenceSteps{uint8_t(steps_ & ~FINAL_RANGE)};
 		}
@@ -253,32 +259,6 @@ namespace devices::vl53l0x
 	};
 
 	streams::ostream& operator<<(streams::ostream&, SequenceSteps);
-
-	class SPADInfo
-	{
-	private:
-		static constexpr uint8_t APERTURE = bits::BV8(7);
-		static constexpr uint8_t COUNT = bits::CBV8(7);
-
-	public:
-		SPADInfo() = default;
-		SPADInfo(uint8_t info) : info_{info} {}
-
-		bool is_aperture() const
-		{
-			return info_ & APERTURE;
-		}
-
-		uint8_t count() const
-		{
-			return info_ & COUNT;
-		}
-
-	private:
-		uint8_t info_ = 0;
-	};
-
-	streams::ostream& operator<<(streams::ostream&, SPADInfo);
 
 	class SequenceStepsTimeout
 	{
@@ -361,6 +341,32 @@ namespace devices::vl53l0x
 	};
 
 	streams::ostream& operator<<(streams::ostream&, const SequenceStepsTimeout&);
+
+	class SPADInfo
+	{
+	private:
+		static constexpr uint8_t APERTURE = bits::BV8(7);
+		static constexpr uint8_t COUNT = bits::CBV8(7);
+
+	public:
+		SPADInfo() = default;
+		SPADInfo(uint8_t info) : info_{info} {}
+
+		bool is_aperture() const
+		{
+			return info_ & APERTURE;
+		}
+
+		uint8_t count() const
+		{
+			return info_ & COUNT;
+		}
+
+	private:
+		uint8_t info_ = 0;
+	};
+
+	streams::ostream& operator<<(streams::ostream&, SPADInfo);
 }
 
 #endif /* VL53L0X_TYPES_H */
