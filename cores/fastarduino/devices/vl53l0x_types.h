@@ -31,11 +31,59 @@
 
 #include "../bits.h"
 #include "../streams.h"
+#include "../utilities.h"
 #include "vl53l0x_registers.h"
 
 //TODO DOCS for each type
 namespace devices::vl53l0x
 {
+	/// @cond notdocumented
+	class TimeoutUtilities
+	{
+	private:
+		static constexpr uint32_t PLL_PERIOD_PS = 1655UL;
+		static constexpr uint32_t MACRO_PERIOD_VCLKS = 2304UL;
+
+	public:
+		// timeout in macro periods must be encoded on 16 bits, as (LSB.2^MSB)+1
+		static constexpr uint16_t encode_timeout(uint32_t timeout_macro_clks)
+		{
+			if (timeout_macro_clks == 0UL) return 0U;
+			uint32_t lsb = timeout_macro_clks - 1UL;
+			uint16_t msb = 0;
+			while (lsb & 0xFFFFFF00UL)
+			{
+				lsb >>= 1;
+				++msb;
+			}
+			return utils::as_uint16_t(uint8_t(msb), uint8_t(lsb & 0xFFUL));
+		}
+
+		// timeout in macro periods is encoded on 16 bits, as (LSB.2^MSB)+1
+		static constexpr uint32_t decode_timeout(uint16_t encoded_timeout)
+		{
+			const uint32_t lsb = utils::low_byte(encoded_timeout);
+			const uint32_t msb = utils::high_byte(encoded_timeout);
+			return (lsb << msb) + 1UL;
+		}
+
+		static constexpr uint32_t calculate_macro_period_ps(uint8_t vcsel_period_pclks)
+		{
+			return ((PLL_PERIOD_PS * MACRO_PERIOD_VCLKS * vcsel_period_pclks) + 500UL) / 1000UL;
+		}
+		static constexpr uint32_t calculate_timeout_us(uint16_t timeout_period_mclks, uint8_t vcsel_period_pclks)
+		{
+			const uint32_t macro_period_ns = calculate_macro_period_ps(vcsel_period_pclks);
+			return ((timeout_period_mclks * macro_period_ns) + 500UL) / 1000UL;
+		}
+		static constexpr uint32_t calculate_timeout_mclks(uint16_t timeout_period_us, uint8_t vcsel_period_pclks)
+		{
+			const uint32_t macro_period_ns = calculate_macro_period_ps(vcsel_period_pclks);
+			return ((timeout_period_us * 1000UL) + (macro_period_ns / 2)) / macro_period_ns;
+		}
+	};
+	/// @endcond
+
 	enum class DeviceError : uint8_t
 	{
 		NONE                           = 0,
@@ -287,51 +335,32 @@ namespace devices::vl53l0x
 		}
 		uint16_t pre_range_mclks() const
 		{
-			return pre_range_mclks_ + 1;
+			return TimeoutUtilities::decode_timeout(pre_range_mclks_);
 		}
-		uint16_t final_range_mclks() const
+		uint16_t final_range_mclks(bool is_pre_range) const
 		{
-			//FIXME actual result depends on step enable pre_range
-			// if (is_pre_range())
-			// 	return final_range_mclks_ - pre_range_mclks_;
-			return final_range_mclks_ + 1;
+			uint16_t temp_final_range_mclks = TimeoutUtilities::decode_timeout(final_range_mclks_);
+			return (is_pre_range ? temp_final_range_mclks - pre_range_mclks() : temp_final_range_mclks);
 		}
 
 		// Following values are calculated from others
 		uint32_t msrc_dss_tcc_us() const
 		{
-			return calculate_timeout_us(msrc_dss_tcc_mclks(), pre_range_vcsel_period_pclks());
+			return TimeoutUtilities::calculate_timeout_us(msrc_dss_tcc_mclks(), pre_range_vcsel_period_pclks());
 		}
 
 		uint32_t pre_range_us() const
 		{
-			return calculate_timeout_us(pre_range_mclks(), pre_range_vcsel_period_pclks());
+			return TimeoutUtilities::calculate_timeout_us(pre_range_mclks(), pre_range_vcsel_period_pclks());
 		}
 
-		uint32_t final_range_us() const
+		uint32_t final_range_us(bool is_pre_range) const
 		{
-			return calculate_timeout_us(final_range_mclks(), final_range_vcsel_period_pclks());
+			return TimeoutUtilities::calculate_timeout_us(
+				final_range_mclks(is_pre_range), final_range_vcsel_period_pclks());
 		}
 
 	private:
-		static constexpr uint32_t PLL_PERIOD_PS = 1655UL;
-		static constexpr uint32_t MACRO_PERIOD_VCLKS = 2304UL;
-
-		static constexpr uint32_t calculate_macro_period_ps(uint8_t vcsel_period_pclks)
-		{
-			return ((PLL_PERIOD_PS * MACRO_PERIOD_VCLKS * vcsel_period_pclks) + 500UL) / 1000UL;
-		}
-		static constexpr uint32_t calculate_timeout_us(uint16_t timeout_period_mclks, uint8_t vcsel_period_pclks)
-		{
-			const uint32_t macro_period_ns = calculate_macro_period_ps(vcsel_period_pclks);
-			return ((timeout_period_mclks * macro_period_ns) + 500UL) / 1000UL;
-		}
-		static constexpr uint32_t calculate_timeout_mclks(uint16_t timeout_period_us, uint8_t vcsel_period_pclks)
-		{
-			const uint32_t macro_period_ns = calculate_macro_period_ps(vcsel_period_pclks);
-			return ((timeout_period_us * 1000UL) + (macro_period_ns / 2)) / macro_period_ns;
-		}
-
 		uint8_t pre_range_vcsel_period_pclks_ = 0;
 		uint8_t final_range_vcsel_period_pclks_ = 0;
 
