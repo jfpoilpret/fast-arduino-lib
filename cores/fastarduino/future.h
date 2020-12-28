@@ -1479,6 +1479,7 @@ namespace future
 		using STATUS_LISTENER = FutureStatusListener<F>;
 
 	protected:
+		//TODO DOCS
 		static constexpr const uint16_t NO_LIMIT = 0xFFFF;
 		
 		//TODO DOCS
@@ -1509,7 +1510,7 @@ namespace future
 				break;
 
 				case FutureStatus::INVALID:
-				this->set_future_error_(errors::EILSEQ);
+				this->set_future_error_(errors::EINVAL);
 				break;
 
 				case FutureStatus::READY:
