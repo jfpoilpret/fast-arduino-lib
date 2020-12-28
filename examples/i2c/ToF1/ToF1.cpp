@@ -93,6 +93,31 @@ void display_memory(streams::ostream& out)
 	out << F("free mem=") << dec << memory::free_mem() << endl;
 }
 
+void check_timing(streams::ostream& out, TOF& tof, SequenceSteps steps)
+{
+	bool ok = tof.set_sequence_steps(steps);
+	out << F("tof.set_sequence_steps(") << steps << F(") = ") << ok << endl;
+	out << endl;
+
+	SequenceStepsTimeout timeouts{};
+	ok = tof.get_sequence_steps_timeout(timeouts);
+	out << F("tof.get_sequence_steps_timeout(timeouts) = ") << ok << flush
+		<< F(", pre_range_vcsel_period_pclks = ") << dec << timeouts.pre_range_vcsel_period_pclks() << flush
+		<< F(", final_range_vcsel_period_pclks = ") << dec << timeouts.final_range_vcsel_period_pclks() << flush
+		<< F(", msrc_dss_tcc_mclks = ") << dec << timeouts.msrc_dss_tcc_mclks() << flush
+		<< F(", pre_range_mclks = ") << dec << timeouts.pre_range_mclks() << flush
+		<< F(", final_range_mclks = ") << dec << timeouts.final_range_mclks(steps.is_pre_range()) << endl;
+	out << F("timeouts.msrc_dss_tcc_us() = ") << dec << timeouts.msrc_dss_tcc_us() << flush
+		<< F(", timeouts.pre_range_us() = ") << dec << timeouts.pre_range_us() << flush
+		<< F(", timeouts.final_range_us() = ") << dec << timeouts.final_range_us(steps.is_pre_range()) << endl;
+	out << endl;
+
+	uint32_t budget_us = 0;
+	ok = tof.get_measurement_timing_budget(budget_us);
+	out << F("tof.get_measurement_timing_budget() = ") << ok << F(", budget_us = ") << dec << budget_us << endl;
+	out << endl;
+}
+
 int main() __attribute__((OS_main));
 int main()
 {
@@ -234,11 +259,11 @@ int main()
 			<< F(", final_range_vcsel_period_pclks = ") << dec << timeouts.final_range_vcsel_period_pclks() << flush
 			<< F(", msrc_dss_tcc_mclks = ") << dec << timeouts.msrc_dss_tcc_mclks() << flush
 			<< F(", pre_range_mclks = ") << dec << timeouts.pre_range_mclks() << flush
-			<< F(", final_range_mclks = ") << dec << timeouts.final_range_mclks() << endl;
+			<< F(", final_range_mclks = ") << dec << timeouts.final_range_mclks(true) << endl;
 		// check calculated values
 		out << F("timeouts.msrc_dss_tcc_us() = ") << dec << timeouts.msrc_dss_tcc_us() << flush
 			<< F(", timeouts.pre_range_us() = ") << dec << timeouts.pre_range_us() << flush
-			<< F(", timeouts.final_range_us() = ") << dec << timeouts.final_range_us() << endl;
+			<< F(", timeouts.final_range_us() = ") << dec << timeouts.final_range_us(true) << endl;
 		DEBUG(out);
 	}
 
@@ -261,6 +286,22 @@ int main()
 		display_memory(out);
 		out << F("tof.get_interrupt_status(status) = ") << ok
 			<< F(", status = ") << hex << uint8_t(status) << endl;
+	}
+
+	{
+		// Check timings
+		check_timing(out, tof, SequenceSteps::all());
+		DEBUG(out);
+		check_timing(out, tof, SequenceSteps::all().no_dss());
+		DEBUG(out);
+		check_timing(out, tof, SequenceSteps::all().no_tcc());
+		DEBUG(out);
+		check_timing(out, tof, SequenceSteps::all().no_msrc());
+		DEBUG(out);
+		check_timing(out, tof, SequenceSteps::all().no_pre_range());
+		DEBUG(out);
+		check_timing(out, tof, SequenceSteps::create().pre_range().final_range());
+		DEBUG(out);
 	}
 
 	manager.end();
