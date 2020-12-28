@@ -249,7 +249,7 @@ namespace i2c
 			return next_future();
 		}
 
-		void on_status_change(UNUSED const ABSTRACT_FUTURE& future, future::FutureStatus status) final
+		void on_status_change(const ABSTRACT_FUTURE& future, future::FutureStatus status) final
 		{
 			PARENT::on_status_change(future, status);
 			// First check that current future was executed successfully
@@ -284,7 +284,10 @@ namespace i2c
 			}
 			else
 			{
-				error = errors::EILSEQ;
+				//FIXME we consider that any other future is an I2CFuturesgroup, which might not always be correct!
+				I2CFuturesGroup& group = static_cast<I2CFuturesGroup&>(future);
+				if (!group.start(PARENT::device()))
+					error = errors::EILSEQ;
 			}
 			return PARENT::check_error(error);
 		}
