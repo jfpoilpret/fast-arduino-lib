@@ -35,6 +35,7 @@ namespace devices::vl53l0x
 	template<typename MANAGER> class VL53L0X;
 }
 
+//TODO review all futures to add args checks when needed
 namespace devices::vl53l0x_futures
 {
 	// Shortened aliases for various namespaces
@@ -98,7 +99,7 @@ namespace devices::vl53l0x_futures
 				budget_us += timeouts.pre_range_us() + PRE_RANGE_OVERHEAD;
 
 			if (steps.is_final_range())
-				budget_us += timeouts.final_range_us() + FINAL_RANGE_OVERHEAD;
+				budget_us += timeouts.final_range_us(steps.is_pre_range()) + FINAL_RANGE_OVERHEAD;
 
 			return budget_us;
 		}
@@ -123,9 +124,13 @@ namespace devices::vl53l0x_futures
 			// Calculate final range timeout in us
 			const uint32_t final_range_timeout_us = budget_us - used_budget_us;
 
-			//TODO finalize
 			// Deduce final range timeout in mclks
-			uint32_t final_range_timeout_mclks = 0;
+			uint32_t final_range_timeout_mclks = vl53l0x::TimeoutUtilities::calculate_timeout_mclks(
+				final_range_timeout_us, timeouts.final_range_vcsel_period_pclks());
+			if (steps.is_pre_range())
+				final_range_timeout_mclks += timeouts.pre_range_mclks();
+			
+			return vl53l0x::TimeoutUtilities::encode_timeout(final_range_timeout_mclks);
 		}
 	};
 
@@ -518,11 +523,11 @@ namespace devices::vl53l0x_futures
 			friend Futures;
 		};
 
-		class GetMeasurementTimingBudget : public I2CFuturesGroup
+		class GetMeasurementTimingBudgetFuture : public I2CFuturesGroup
 		{
 			using PARENT = I2CFuturesGroup;
 		public:
-			GetMeasurementTimingBudget()  : PARENT{futures_, NUM_FUTURES}
+			GetMeasurementTimingBudgetFuture()  : PARENT{futures_, NUM_FUTURES}
 			{
 				PARENT::init(futures_);
 			}
@@ -536,7 +541,10 @@ namespace devices::vl53l0x_futures
 				getSequenceSteps_.get(steps);
 				vl53l0x::SequenceStepsTimeout timeouts{};
 				getSequenceTimeouts_.get(timeouts);
-				//TODO Calculate timing budget (externalize?)
+				// Calculate timing budget
+				budget_us = 
+					TimingBudgetUtilities::calculate_measurement_timing_budget_us(steps, timeouts);
+				return true;
 			}
 
 		private:
@@ -549,6 +557,61 @@ namespace devices::vl53l0x_futures
 				&getSequenceSteps_,
 				&getSequenceTimeouts_
 			};
+
+			friend DEVICE;
+			friend Futures;
+		};
+
+		class SetMeasurementTimingBudgetFuture : public AbstractI2CFuturesGroup
+		{
+			using PARENT = AbstractI2CFuturesGroup;
+		public:
+			SetMeasurementTimingBudgetFuture(uint32_t budget_us, FUTURE_STATUS_LISTENER* listener = nullptr)
+				:	PARENT{listener}, budget_us_{budget_us}
+			{
+				PARENT::init({&getSequenceSteps_, &getSequenceTimeouts_, &writeBudget_});
+			}
+
+		protected:
+			bool start(DEVICE& device)
+			{
+				PARENT::set_device(device);
+				return PARENT::check_error(PARENT::launch_commands(getSequenceSteps_, {PARENT::write()}));
+			}
+
+			void reset_(uint32_t budget_us)
+			{
+				budget_us_ = budget_us;
+				PARENT::reset_(nullptr, 0, nullptr, 0);
+			}
+
+		private:
+			void on_status_change(const ABSTRACT_FUTURE& future, future::FutureStatus status) final
+			{
+				PARENT::on_status_change(future, status);
+				if (status != future::FutureStatus::READY) return;
+				if (&future == &getSequenceSteps_)
+				{
+					PARENT::check_error(PARENT::launch_commands(getSequenceTimeouts_, {PARENT::write()}));
+				}
+				else if (&future == &getSequenceTimeouts_)
+				{
+					// Calculate timing budget
+					vl53l0x::SequenceSteps steps{};
+					getSequenceSteps_.get(steps);
+					vl53l0x::SequenceStepsTimeout timeouts{};
+					getSequenceTimeouts_.get(timeouts);
+					uint16_t budget = 
+						TimingBudgetUtilities::calculate_final_range_timeout_mclks(steps, timeouts, budget_us_);
+					writeBudget_.reset_(budget);
+					PARENT::check_error(PARENT::launch_commands(writeBudget_, {PARENT::write(0, false, true)}));
+				}
+			}
+
+			uint32_t budget_us_;
+			GetSequenceStepsFuture getSequenceSteps_{};
+			GetSequenceStepsTimeoutFuture getSequenceTimeouts_{};
+			TWriteRegisterFuture<regs::REG_FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI, uint16_t> writeBudget_{0};
 
 			friend DEVICE;
 			friend Futures;
@@ -605,7 +668,7 @@ namespace devices::vl53l0x_futures
 			SetGPIOSettingsFuture(const vl53l0x::GPIOSettings& settings)
 				:	PARENT{futures_, NUM_FUTURES},
 					write_config_{settings.function()},
-					write_GPIO_active_high_{settings.high_polarity() ? 0x10 : 0x00},
+					write_GPIO_active_high_{uint8_t(settings.high_polarity() ? 0x10 : 0x00)},
 					write_low_threshold_{settings.low_threshold()},
 					write_high_threshold_{settings.high_threshold()}
 			{
@@ -789,9 +852,10 @@ namespace devices::vl53l0x_futures
 			InitStaticFuture() : PARENT{uint16_t(internals::init_static::BUFFER)}
 			{
 				PARENT::init({
-					&write1_, &write2_, &write6_, 
+					&write1_, &write6_, 
 					&read1_, &read6_, 
-					&getSpadInfo_, &setGPIOSettings_, &loadTuningSettings_
+					&getSpadInfo_, &setGPIOSettings_, &loadTuningSettings_,
+					&getTimingBudget_, &setTimingBudget_
 				}, PARENT::NO_LIMIT);
 			}
 			//TODO Move ctor/asgn?
@@ -821,6 +885,18 @@ namespace devices::vl53l0x_futures
 
 					case internals::INCLUDE_SET_GPIO_SETTINGS:
 					return setGPIOSettings_.start(device());
+
+					case internals::INCLUDE_GET_MEASUREMENT_TIMING:
+					return getTimingBudget_.start(device());
+
+					case internals::INCLUDE_SET_MEASUREMENT_TIMING:
+					{
+						//FIXME reset_() does not work here probably
+						uint32_t budget_us = 0;
+						getTimingBudget_.get(budget_us);
+						setTimingBudget_.reset_(budget_us);
+					}
+					return setTimingBudget_.start(device());
 
 					default:
 					// Error: unexpected include
@@ -882,20 +958,12 @@ namespace devices::vl53l0x_futures
 					return PARENT::check_error(
 						PARENT::launch_commands(write1_, {PARENT::write(0, false, stop)}));
 				}
-				else if (count == 2)
-				{
-					uint8_t val1 = this->next_byte();
-					uint8_t val2 = this->next_byte();
-					write2_.reset_({reg, val1, val2});
-					return PARENT::check_error(
-						PARENT::launch_commands(write2_, {PARENT::write(0, false, stop)}));
-				}
 				else if (count == 6)
 				{
 					// Skip 6 bytes
 					for (uint8_t i = 0; i < 6; ++i)
 						this->next_byte();
-					//FIXME review reset_() call here (will not work as is)
+					// Replace with 6 bytes obtained before
 					typename FUTURE_WRITE<6>::IN input{reg};
 					input.template set<NUM_REF_SPADS_BYTES>(1, ref_spads_.data());
 					write6_.reset_(input);
@@ -944,6 +1012,8 @@ namespace devices::vl53l0x_futures
 			GetSPADInfoFuture getSpadInfo_{};
 			LoadTuningSettingsFuture loadTuningSettings_{};
 			SetGPIOSettingsFuture setGPIOSettings_{vl53l0x::GPIOSettings::sample_ready()};
+			GetMeasurementTimingBudgetFuture getTimingBudget_{};
+			SetMeasurementTimingBudgetFuture setTimingBudget_{0};
 			// Placeholders for dynamic futures
 			FUTURE_WRITE<1> write1_{};
 			FUTURE_WRITE<2> write2_{};

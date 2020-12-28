@@ -288,8 +288,6 @@ namespace devices::vl53l0x_internals
 
 			// recalculate timing budget
 			actions::INCLUDE, INCLUDE_SET_MEASUREMENT_TIMING,
-			//TODO REMOVE Next action (part of set measurement timing)
-			actions::write(2, true), regs::REG_FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI, 0x00, 0x00,
 
 			actions::END
 		};

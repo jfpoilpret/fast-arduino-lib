@@ -182,8 +182,17 @@ namespace devices::vl53l0x
 			return (future.start(*this) ? 0 : future.error());
 		}
 
-		using GetMeasurementTimingBudget = typename FUTURES::GetMeasurementTimingBudget;
-		//TODO API
+		using GetMeasurementTimingBudgetFuture = typename FUTURES::GetMeasurementTimingBudgetFuture;
+		int get_measurement_timing_budget(GetMeasurementTimingBudgetFuture& future)
+		{
+			return (future.start(*this) ? 0 : future.error());
+		}
+
+		using SetMeasurementTimingBudgetFuture = typename FUTURES::SetMeasurementTimingBudgetFuture;
+		int set_measurement_timing_budget(SetMeasurementTimingBudgetFuture& future)
+		{
+			return (future.start(*this) ? 0 : future.error());
+		}
 
 		using GetGPIOSettingsFuture = typename FUTURES::GetGPIOSettingsFuture;
 		int get_GPIO_settings(GetGPIOSettingsFuture& future)
@@ -238,13 +247,13 @@ namespace devices::vl53l0x
 
 		//TODO define all needed API here
 
-		bool get_revision(uint8_t& revision)
-		{
-			return this->template sync_read<GetRevisionFuture>(revision);
-		}
 		bool get_model(uint8_t& model)
 		{
 			return this->template sync_read<GetModelFuture>(model);
+		}
+		bool get_revision(uint8_t& revision)
+		{
+			return this->template sync_read<GetRevisionFuture>(revision);
 		}
 		bool get_power_mode(PowerMode& power_mode)
 		{
@@ -298,6 +307,34 @@ namespace devices::vl53l0x
 			return future.get(timeouts);
 		}
 
+		bool get_measurement_timing_budget(uint32_t& budget_us)
+		{
+			GetMeasurementTimingBudgetFuture future{};
+			if (get_measurement_timing_budget(future) != 0) return false;
+			return future.get(budget_us);
+		}
+
+		bool set_measurement_timing_budget(uint32_t budget_us)
+		{
+			SetMeasurementTimingBudgetFuture future{budget_us};
+			if (set_measurement_timing_budget(future) == 0) return false;
+			return (future.await() == future::FutureStatus::READY);
+		}
+
+		bool get_GPIO_settings(GPIOSettings& settings)
+		{
+			GetGPIOSettingsFuture future{};
+			if (get_GPIO_settings(future) != 0) return false;
+			return future.get(settings);
+		}
+
+		bool set_GPIO_settings(const GPIOSettings& settings)
+		{
+			SetGPIOSettingsFuture future{};
+			if (set_GPIO_settings(future) != 0) return false;
+			return (future.await() == future::FutureStatus::READY);
+		}
+
 		bool get_interrupt_status(InterruptStatus& status)
 		{
 			return this->template sync_read<GetInterruptStatusFuture>(status);
@@ -312,6 +349,20 @@ namespace devices::vl53l0x
 		{
 			InitDataFuture future{};
 			if (init_data_first(future) != 0) return false;
+			return (future.await() == future::FutureStatus::READY);
+		}
+
+		bool load_tuning_settings()
+		{
+			LoadTuningSettingsFuture future{};
+			if (load_tuning_settings(future) != 0) return false;
+			return (future.await() == future::FutureStatus::READY);
+		}
+
+		bool init_static_second()
+		{
+			InitStaticFuture future{};
+			if (init_static_second(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
