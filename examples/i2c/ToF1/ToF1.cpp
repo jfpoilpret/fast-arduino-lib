@@ -34,8 +34,8 @@
 #define DEBUG_I2C
 // #define FORCE_SYNC
 
-// static constexpr const i2c::I2CMode MODE = i2c::I2CMode::FAST;
-static constexpr const i2c::I2CMode MODE = i2c::I2CMode::STANDARD;
+static constexpr const i2c::I2CMode MODE = i2c::I2CMode::FAST;
+// static constexpr const i2c::I2CMode MODE = i2c::I2CMode::STANDARD;
 
 static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 128;
