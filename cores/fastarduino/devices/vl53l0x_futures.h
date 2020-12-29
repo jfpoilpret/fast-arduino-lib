@@ -167,6 +167,108 @@ namespace devices::vl53l0x_futures
 		using FUTURE_READ1 = i2c::FUTURE_READ1<MANAGER>;
 
 		using GetSequenceStepsFuture = TReadRegisterFuture<regs::REG_SYSTEM_SEQUENCE_CONFIG, vl53l0x::SequenceSteps>;
+		using SetSequenceStepsFuture = TWriteRegisterFuture<regs::REG_SYSTEM_SEQUENCE_CONFIG, vl53l0x::SequenceSteps>;
+
+		class PerformSingleRefCalibrationFuture : public AbstractI2CFuturesGroup
+		{
+			using PARENT = AbstractI2CFuturesGroup;
+		public:
+			PerformSingleRefCalibrationFuture(
+				vl53l0x::SingleRefCalibrationTarget target, FUTURE_STATUS_LISTENER* listener = nullptr)
+				:	PARENT{listener}, writeSysRange_{uint8_t(target)}
+			{
+				PARENT::init({&writeSysRange_, &readInterrupt_, &clearInterrupt_}, PARENT::NO_LIMIT);
+			}
+
+			void reset_(vl53l0x::SingleRefCalibrationTarget target)
+			{
+				writeSysRange_.reset_(uint8_t(target));
+				PARENT::reset_(nullptr, 0, nullptr, 0);
+			}
+
+		protected:
+			bool start(typename PARENT::DEVICE& device)
+			{
+				PARENT::set_device(device);
+				return PARENT::check_error(PARENT::launch_commands(writeSysRange_, {PARENT::write()}));
+			}
+
+		private:
+			enum class RefCalibrationStep : uint8_t
+			{
+				STEP_INIT_SYSRANGE = 0,
+				STEP_READ_INTERRUPT = 1,
+				STEP_CLEAR_INTERRUPT = 2,
+				STEP_EXIT_SYSRANGE = 3
+			};
+
+			void read_interrupt()
+			{
+				readInterrupt_.reset_();
+				PARENT::check_error(PARENT::launch_commands(readInterrupt_, {PARENT::write(), PARENT::read()}));
+			}
+
+			bool check_interrupt()
+			{
+				vl53l0x::InterruptStatus interrupt{};
+				readInterrupt_.get(interrupt);
+				return (interrupt != 0);
+			}
+
+			void on_status_change(const ABSTRACT_FUTURE& future, future::FutureStatus status) final
+			{
+				PARENT::on_status_change(future, status);
+				if (status != future::FutureStatus::READY) return;
+				switch (step_)
+				{
+					case RefCalibrationStep::STEP_INIT_SYSRANGE:
+					// Initial SYSRANGE write is finished, start loop reading interrupt result
+					step_ = RefCalibrationStep::STEP_READ_INTERRUPT;
+					read_interrupt();
+					break;
+
+					case RefCalibrationStep::STEP_READ_INTERRUPT:
+					if (check_interrupt())
+					{
+						// Interrupt is OK, go to last step
+						step_ = RefCalibrationStep::STEP_CLEAR_INTERRUPT;
+						PARENT::check_error(PARENT::launch_commands(clearInterrupt_, {PARENT::write()}));
+						return;
+					}
+					if (++loop_ >= MAX_LOOP)
+					{
+						// Interrupt is not OK after too many loops, abandon
+						PARENT::check_error(errors::ETIME);
+						return;
+					}
+					// Read strobe again
+					read_interrupt();
+					break;
+
+					case RefCalibrationStep::STEP_CLEAR_INTERRUPT:
+					step_ = RefCalibrationStep::STEP_EXIT_SYSRANGE;
+					writeSysRange_.reset_(0x00);
+					PARENT::check_error(PARENT::launch_commands(writeSysRange_, {PARENT::write()}));
+					break;
+
+					case RefCalibrationStep::STEP_EXIT_SYSRANGE:
+					PARENT::set_future_finish_();
+					break;
+				}
+			}
+
+			static constexpr const uint16_t MAX_LOOP = 2000;
+
+			RefCalibrationStep step_ = RefCalibrationStep::STEP_INIT_SYSRANGE;
+			uint16_t loop_ = 0;
+
+			TWriteRegisterFuture<regs::REG_SYSRANGE_START> writeSysRange_;
+			TReadRegisterFuture<regs::REG_RESULT_INTERRUPT_STATUS, vl53l0x::InterruptStatus> readInterrupt_{};
+			TWriteRegisterFuture<regs::REG_SYSTEM_INTERRUPT_CLEAR> clearInterrupt_{0x01};
+
+			friend DEVICE;
+			friend Futures;
+		};
 
 		class DeviceStrobeWaitFuture : public AbstractI2CFuturesGroup
 		{
@@ -177,7 +279,7 @@ namespace devices::vl53l0x_futures
 				PARENT::init({&write_, &read_}, PARENT::NO_LIMIT);
 			}
 
-			//TODO make protected and declare proper friends?
+		protected:
 			bool start(DEVICE& device)
 			{
 				PARENT::set_device(device);
@@ -218,6 +320,12 @@ namespace devices::vl53l0x_futures
 				if (status != future::FutureStatus::READY) return;
 				switch (step_)
 				{
+					case StrobeStep::STEP_INIT_STROBE:
+					// Initial write strobe is finished, start loop reading probe
+					step_ = StrobeStep::STEP_READ_STROBE;
+					read_strobe();
+					break;
+					
 					case StrobeStep::STEP_READ_STROBE:
 					if (check_strobe())
 					{
@@ -232,11 +340,6 @@ namespace devices::vl53l0x_futures
 						return;
 					}
 					// Read strobe again
-					// Intentional fallthrough
-					
-					case StrobeStep::STEP_INIT_STROBE:
-					// Initial write strobe is finished, start loop reading probe
-					step_ = StrobeStep::STEP_READ_STROBE;
 					read_strobe();
 					break;
 					
@@ -252,6 +355,9 @@ namespace devices::vl53l0x_futures
 			uint16_t loop_ = 0;
 			TWriteRegisterFuture<regs::REG_DEVICE_STROBE> write_{0x00};
 			TReadRegisterFuture<regs::REG_DEVICE_STROBE> read_{};
+
+			friend DEVICE;
+			friend Futures;
 		};
 
 		//TODO do we still need that intermediate class?
@@ -284,7 +390,7 @@ namespace devices::vl53l0x_futures
 			GetVcselPulsePeriodFuture& operator=(GetVcselPulsePeriodFuture&&) = default;
 		};
 
-		//TODO rework (Group of futures?)
+		//FIXME rework (Group of futures?)
 		template<vl53l0x::VcselPeriodType TYPE>
 		class SetVcselPulsePeriodFuture : public TWriteRegisterFuture<uint8_t(TYPE)>
 		{
@@ -298,7 +404,6 @@ namespace devices::vl53l0x_futures
 			explicit SetVcselPulsePeriodFuture(uint8_t period_pclks) : PARENT{encode_period(period_pclks)} {}
 			SetVcselPulsePeriodFuture(SetVcselPulsePeriodFuture<TYPE>&&) = default;
 			SetVcselPulsePeriodFuture& operator=(SetVcselPulsePeriodFuture<TYPE>&&) = default;
-			//TODO check compliance of period_clicks
 		};
 
 		class GetSignalRateLimitFuture : 
@@ -332,6 +437,113 @@ namespace devices::vl53l0x_futures
 			SetSignalRateLimitFuture& operator=(SetSignalRateLimitFuture&&) = default;
 		};
 
+		class PerformRefCalibrationFuture : public ComplexI2CFuturesGroup
+		{
+			using PARENT = ComplexI2CFuturesGroup;
+			using ProcessAction = typename PARENT::ProcessAction;
+
+		public:
+			PerformRefCalibrationFuture(FUTURE_STATUS_LISTENER* listener = nullptr)
+				:	PARENT{uint16_t(internals::perform_ref_calibration::BUFFER), listener}
+			{
+				PARENT::init({&getSteps_, &setSteps_, &refCalibration_}, PARENT::NO_LIMIT);
+			}
+
+		protected:
+			bool start(DEVICE& device)
+			{
+				PARENT::set_device(device);
+				return next_future();
+			}
+
+		private:
+			using Target = vl53l0x::SingleRefCalibrationTarget;
+			static constexpr Target VHV_CALIBRATION = Target::VHV_CALIBRATION;
+			static constexpr Target PHASE_CALIBRATION = Target::PHASE_CALIBRATION;
+			
+			bool process_marker(UNUSED uint8_t marker)
+			{
+				// Error: unexpected marker
+				return PARENT::check_error(errors::EILSEQ);
+			}
+
+			bool process_include(uint8_t include)
+			{
+				vl53l0x::SingleRefCalibrationTarget target;
+				switch (include)
+				{
+					case internals::INCLUDE_PERFORM_REF_VHV_CALIBRATION:
+					target = VHV_CALIBRATION;
+					break;
+
+					case internals::INCLUDE_PERFORM_REF_PHASE_CALIBRATION:
+					target = PHASE_CALIBRATION;
+					break;
+
+					default:
+					// Error: unexpected include
+					return PARENT::check_error(errors::EILSEQ);
+				}
+
+				refCalibration_.reset_(target);
+				return refCalibration_.start(PARENT::device());
+			}
+
+			bool process_read(UNUSED uint8_t count, bool stop)
+			{
+				const uint8_t reg = this->next_byte();
+				getSteps_.reset_(reg);
+				return PARENT::check_error(
+					PARENT::launch_commands(getSteps_, {PARENT::write(), PARENT::read(0, false, stop)}));
+			}
+
+			bool process_write(UNUSED uint8_t count, bool stop)
+			{
+				const uint8_t reg = this->next_byte();
+				// Only one kind of write here (1 byte)
+				uint8_t value = this->next_byte();
+				if (value == 0x00)
+					getSteps_.get(value);
+				setSteps_.reset_({reg, value});
+				return PARENT::check_error(
+					PARENT::launch_commands(setSteps_, {PARENT::write(0, false, stop)}));
+			}
+
+			bool next_future()
+			{
+				ProcessAction action;
+				while ((action = this->process_action()) == ProcessAction::MARKER)
+				{
+					if (!process_marker(this->next_byte()))
+						return false;
+				}
+				if (action == ProcessAction::DONE)
+					return false;
+				if (action == ProcessAction::INCLUDE)
+					return process_include(this->next_byte());
+				if (action == ProcessAction::READ)
+					return process_read(this->count(), this->is_stop());
+				if (action == ProcessAction::WRITE)
+					return process_write(this->count(), this->is_stop());
+				// It is impossible to fall here as all ProcessAction values have been tested before
+				return false;
+			}
+
+			void on_status_change(const ABSTRACT_FUTURE& future, future::FutureStatus status) final
+			{
+				PARENT::on_status_change(future, status);
+				// First check that current future was executed successfully
+				if (status == future::FutureStatus::READY)
+					next_future();
+			}
+
+			FUTURE_READ1 getSteps_{};
+			FUTURE_WRITE<1> setSteps_{};
+			PerformSingleRefCalibrationFuture refCalibration_{VHV_CALIBRATION};
+
+			friend DEVICE;
+		};
+
 		class GetSPADInfoFuture : public ComplexI2CFuturesGroup
 		{
 			using PARENT = ComplexI2CFuturesGroup;
@@ -342,7 +554,6 @@ namespace devices::vl53l0x_futures
 			{
 				PARENT::init({&write1_, &write2_, &read_, &strobe_}, PARENT::NO_LIMIT);
 			}
-			//TODO Move ctor/asgn?
 
 			bool get(vl53l0x::SPADInfo& info)
 			{
@@ -702,7 +913,6 @@ namespace devices::vl53l0x_futures
 			ClearInterruptFuture() : PARENT{0x01} {}
 		};
 
-		//TODO additional arguments for init? eg sequence steps, limits...
 		class InitDataFuture : public ComplexI2CFuturesGroup
 		{
 			using PARENT = ComplexI2CFuturesGroup;
@@ -713,7 +923,6 @@ namespace devices::vl53l0x_futures
 			{
 				PARENT::init({&write1_, &write2_, &read_}, PARENT::NO_LIMIT);
 			}
-			//TODO Move ctor/asgn?
 
 		protected:
 			bool start(DEVICE& device)
@@ -747,7 +956,7 @@ namespace devices::vl53l0x_futures
 					break;
 
 					default:
-					//TODO ERROR
+					PARENT::check_error(errors::EILSEQ);
 					break;
 				}
 			}
@@ -800,8 +1009,7 @@ namespace devices::vl53l0x_futures
 				if (action == ProcessAction::WRITE)
 					return process_write(this->count(), this->is_stop());
 				// If we fall here , this is an error (no ProcessAction::INCLUDE in this group)
-				//TODO error
-				return false;
+				return PARENT::check_error(errors::EILSEQ);
 			}
 
 			void on_status_change(const ABSTRACT_FUTURE& future, future::FutureStatus status) final
@@ -858,7 +1066,6 @@ namespace devices::vl53l0x_futures
 					&getTimingBudget_, &setTimingBudget_
 				}, PARENT::NO_LIMIT);
 			}
-			//TODO Move ctor/asgn?
 
 		protected:
 			bool start(DEVICE& device)
@@ -891,7 +1098,6 @@ namespace devices::vl53l0x_futures
 
 					case internals::INCLUDE_SET_MEASUREMENT_TIMING:
 					{
-						//FIXME reset_() does not work here probably
 						uint32_t budget_us = 0;
 						getTimingBudget_.get(budget_us);
 						setTimingBudget_.reset_(budget_us);

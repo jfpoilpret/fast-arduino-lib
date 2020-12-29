@@ -150,6 +150,7 @@ namespace devices::vl53l0x
 			return this->async_read(future);
 		}
 
+		//FIXME Rework from scratch
 		template<VcselPeriodType TYPE> 
 		using SetVcselPulsePeriodFuture = typename FUTURES::SetVcselPulsePeriodFuture<TYPE>;
 		template<VcselPeriodType TYPE>
@@ -233,6 +234,12 @@ namespace devices::vl53l0x
 
 		using InitStaticFuture = typename FUTURES::InitStaticFuture;
 		int init_static_second(InitStaticFuture& future)
+		{
+			return (future.start(*this) ? 0 : future.error());
+		}
+
+		using PerformRefCalibrationFuture = typename FUTURES::PerformRefCalibrationFuture;
+		int perform_ref_calibration(PerformRefCalibrationFuture& future)
 		{
 			return (future.start(*this) ? 0 : future.error());
 		}
@@ -363,6 +370,27 @@ namespace devices::vl53l0x
 		{
 			InitStaticFuture future{};
 			if (init_static_second(future) != 0) return false;
+			return (future.await() == future::FutureStatus::READY);
+		}
+
+		bool perform_ref_calibration()
+		{
+			PerformRefCalibrationFuture future{};
+			if (perform_ref_calibration(future) != 0) return false;
+			return (future.await() == future::FutureStatus::READY);
+		}
+
+	protected:
+		using PerformSingleRefCalibrationFuture = typename FUTURES::PerformSingleRefCalibrationFuture;
+		int perform_single_ref_calibration(PerformSingleRefCalibrationFuture& future)
+		{
+			return (future.start(*this) ? 0 : future.error());
+		}
+
+		bool perform_single_ref_calibration(SingleRefCalibrationTarget target)
+		{
+			PerformSingleRefCalibrationFuture future{target};
+			if (perform_single_ref_calibration(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 

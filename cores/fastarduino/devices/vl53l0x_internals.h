@@ -34,36 +34,89 @@ namespace devices::vl53l0x_internals
 	static constexpr uint8_t INCLUDE_SET_GPIO_SETTINGS = 4;
 	static constexpr uint8_t INCLUDE_GET_MEASUREMENT_TIMING = 5;
 	static constexpr uint8_t INCLUDE_SET_MEASUREMENT_TIMING = 6;
+	static constexpr uint8_t INCLUDE_GET_SEQUENCE_STEPS = 7;
+	static constexpr uint8_t INCLUDE_SET_SEQUENCE_STEPS = 8;
+	static constexpr uint8_t INCLUDE_GET_SEQUENCE_STEPS_TIMEOUT = 9;
+	static constexpr uint8_t INCLUDE_PERFORM_REF_VHV_CALIBRATION = 10;
+	static constexpr uint8_t INCLUDE_PERFORM_REF_PHASE_CALIBRATION = 11;
 
 	//TODO remove extra overwritten bytes from BUFFERs and remove extra next_byte()
 
 	// Constants for set_vcsel_pulse_period<VcselPeriodType::PRE_RANGE>() method
 	//---------------------------------------------------------------------------
-	//TODO
+	//TODO LATER
 	namespace vcsel_period_data_pre_range
 	{
+		// Marker before writing REG_PRE_RANGE_CONFIG_VALID_PHASE_HIGH
+		static constexpr uint8_t MARKER_PHASE_CHECK_LIMIT = 1;
+		// Marker before writing REG_PRE_RANGE_CONFIG_VCSEL_PERIOD
+		static constexpr uint8_t MARKER_VSEL_PERIOD = 2;
+		// Marker before writing REG_PRE_RANGE_CONFIG_TIMEOUT_MACROP_HI
+		static constexpr uint8_t MARKER_PRE_RANGE_TIMEOUT = 3;
+		// Marker before writing REG_MSRC_CONFIG_TIMEOUT_MACROP
+		static constexpr uint8_t MARKER_MSRC_TIMEOUT = 4;
+		// Marker before writing to REG_SYSTEM_SEQUENCE_CONFIG (restore sequence steps)
+		static constexpr uint8_t MARKER_RESTORE_SEQUENCE = 5;
+
 		static constexpr uint8_t BUFFER[] PROGMEM =
 		{
 			// Get Sequence steps enable (include)
-
+			actions::INCLUDE, INCLUDE_GET_SEQUENCE_STEPS,
 			// Get Sequence steps timeouts (include)
-
+			actions::INCLUDE, INCLUDE_GET_SEQUENCE_STEPS_TIMEOUT,
 			// Write PRE_RANGE_CONFIG_VALID_PHASE (2 bytes)
-
+			actions::MARKER, MARKER_PHASE_CHECK_LIMIT,
+			actions::write(1), regs::REG_PRE_RANGE_CONFIG_VALID_PHASE_HIGH, 0x00,
+			actions::write(1), regs::REG_PRE_RANGE_CONFIG_VALID_PHASE_LOW, 0x08,
 			// Apply VCSEL period (PRE_RANGE_CONFIG_VCSEL_PERIOD)
-
-			// set sequence step timeout (PRE_RANGE_CONFIG_TIMEOUT_MACROP_HI)
-
-			// set sequence step timeout (MSRC_CONFIG_TIMEOUT_MACROP)
+			actions::MARKER, MARKER_VSEL_PERIOD,
+			actions::write(1), regs::REG_PRE_RANGE_CONFIG_VCSEL_PERIOD, 0x00,
+			// Set sequence step timeout (PRE_RANGE_CONFIG_TIMEOUT_MACROP_HI)
+			actions::MARKER, MARKER_PRE_RANGE_TIMEOUT,
+			actions::write(2), regs::REG_PRE_RANGE_CONFIG_TIMEOUT_MACROP_HI, 0x00, 0x00,
+			// Set sequence step timeout (MSRC_CONFIG_TIMEOUT_MACROP)
+			actions::MARKER, MARKER_MSRC_TIMEOUT,
+			actions::write(1), regs::REG_MSRC_CONFIG_TIMEOUT_MACROP,
+			// Re-apply timing budget (FIXME where from?)
+			actions::INCLUDE, INCLUDE_SET_MEASUREMENT_TIMING,
+			//TODO Perform phase calibration
+			actions::read(1), regs::REG_SYSTEM_SEQUENCE_CONFIG,
+			actions::write(1), regs::REG_SYSTEM_SEQUENCE_CONFIG, 0x02,
+			//TODO note the include is wrong
+			actions::INCLUDE, INCLUDE_PERFORM_REF_PHASE_CALIBRATION,
+			actions::MARKER, MARKER_RESTORE_SEQUENCE,
+			actions::write(1, true), regs::REG_SYSTEM_SEQUENCE_CONFIG, 0x00
 		};
-
 	}
 
 	// Constants for set_vcsel_pulse_period<VcselPeriodType::FINAL_RANGE>() method
 	//-----------------------------------------------------------------------------
-	//TODO
+	//TODO LATER
 	namespace vcsel_period_data_final_range
 	{
+	}
+
+	// Constants for perform_ref_calibration() method
+	//------------------------------------------------
+	namespace perform_ref_calibration
+	{
+		// Write buffer
+		static constexpr uint8_t BUFFER[] PROGMEM =
+		{
+			// Read sequence steps
+			actions::read(1), regs::REG_SYSTEM_SEQUENCE_CONFIG,
+			// Set steps for VHV calibration
+			actions::write(1), regs::REG_SYSTEM_SEQUENCE_CONFIG, 0x01,
+			// Perform single VHV calibration
+			actions::INCLUDE, INCLUDE_PERFORM_REF_VHV_CALIBRATION,
+			// Set steps for Phase calibration
+			actions::write(1), regs::REG_SYSTEM_SEQUENCE_CONFIG, 0x02,
+			// Perform single Phase calibration
+			actions::INCLUDE, INCLUDE_PERFORM_REF_PHASE_CALIBRATION,
+			// Restore sequence steps (NOTE: 0x00 is used as marker by the future to actually restore saved sequence)
+			actions::write(1, true), regs::REG_SYSTEM_SEQUENCE_CONFIG, 0x00,
+			actions::END
+		};
 	}
 
 	// Constants for init_data() method
@@ -293,8 +346,6 @@ namespace devices::vl53l0x_internals
 		};
 	}
 	
-	// TODO define specific namespace for each specific Future data
-
 }
 #endif /* VL53L0X_INTERNALS_H */
 /// @endcond
