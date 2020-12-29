@@ -205,7 +205,12 @@ namespace devices::vl53l0x
 		uint8_t status_ = 0;
 	};
 
-	//TODO improve by setting list of available values for period_pclks?
+	enum class SingleRefCalibrationTarget : uint8_t
+	{
+		PHASE_CALIBRATION = 0x01,
+		VHV_CALIBRATION = 0x41
+	};
+
 	enum class VcselPeriodType : uint8_t
 	{
 		PRE_RANGE = vl53l0x_registers::REG_PRE_RANGE_CONFIG_VCSEL_PERIOD,
