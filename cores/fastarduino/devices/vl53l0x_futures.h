@@ -1123,6 +1123,7 @@ namespace devices::vl53l0x_futures
 					read6_.get(ref_spads_);
 					// Calculate reference spads
 					calculate_reference_SPADs(ref_spads_.data(), info);
+					return true;
 				}
 				else
 				{
