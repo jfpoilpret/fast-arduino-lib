@@ -167,7 +167,6 @@ int main()
 
 	uint8_t result = 0;
 	bool ok = false;
-	int error = 0;
 
 	{
 		out << F("Read VL53L0X status") << endl;
@@ -231,29 +230,19 @@ int main()
 	}
 
 	{
-		TOF::GetSPADInfoFuture future3{};
-		error = tof.get_SPAD_info(future3);
-		display_memory(out);
-		out << F("tof.get_SPAD_info(future) = ") << dec << error << endl;
-		time::delay_ms(500);
-		DEBUG(out);
-		out << F("future.status() = ") << future3.status() << endl;
 		SPADInfo SPAD_info{};
-		future3.get(SPAD_info);
+		ok = tof.get_SPAD_info(SPAD_info);
+		display_memory(out);
+		out << F("tof.get_SPAD_info() = ") << ok << endl;
 		out << F("SPADInfo = ") << SPAD_info << endl;
 		DEBUG(out);
 	}
 
 	{
-		TOF::GetSequenceStepsTimeoutFuture future2{};
-		error = tof.get_sequence_steps_timeout(future2);
-		display_memory(out);
-		out << F("tof.get_sequence_steps_timeout(future) = ") << dec << error << endl;
-		time::delay_ms(100);
-		DEBUG(out);
-		out << F("future.status() = ") << future2.status() << endl;
 		SequenceStepsTimeout timeouts{};
-		future2.get(timeouts);
+		ok = tof.get_sequence_steps_timeout(timeouts);
+		display_memory(out);
+		out << F("tof.get_sequence_steps_timeout() = ") << ok << endl;
 		out << F("tof.get_sequence_steps_timeout(timeouts) = ") << ok << flush
 			<< F(", pre_range_vcsel_period_pclks = ") << dec << timeouts.pre_range_vcsel_period_pclks() << flush
 			<< F(", final_range_vcsel_period_pclks = ") << dec << timeouts.final_range_vcsel_period_pclks() << flush
@@ -268,16 +257,12 @@ int main()
 	}
 
 	{
-		TOF::GetGPIOSettingsFuture future{};
-		error = tof.get_GPIO_settings(future);
-		display_memory(out);
-		out << F("tof.get_GPIO_settings(future) = ") << dec << error << endl;
-		time::delay_ms(100);
-		DEBUG(out);
-		out << F("future.status() = ") << future.status() << endl;
 		GPIOSettings settings{};
-		future.get(settings);
+		ok = tof.get_GPIO_settings(settings);
+		display_memory(out);
+		out << F("tof.get_GPIO_settings() = ") << ok << endl;
 		out << F("GPIO setting=") << settings << endl;
+		DEBUG(out);
 	}
 
 	{

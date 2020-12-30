@@ -138,7 +138,6 @@ int main()
 	display_memory(out);
 
 	bool ok = false;
-	int error = 0;
 
 	{
 	// constexpr SequenceSteps steps2 = SequenceSteps::create().tcc().pre_range().final_range();
@@ -177,6 +176,7 @@ int main()
 	{
 		// Call second initialization step
 		out << F("Calling init_static_second()...") << endl;
+		//FIXME this fails on last included future...
 		ok = tof.init_static_second();
 		display_memory(out);
 		out << F("tof.init_static_second() = ") << ok << endl;
@@ -193,23 +193,23 @@ int main()
 		DEBUG(out);
 	}
 
-	{
-		// Perform reference calibration
-		ok = tof.perform_ref_calibration();
-		display_memory(out);
-		out << F("tof.perform_ref_calibration() = ") << ok << endl;
-		DEBUG(out);
-	}
+	// {
+	// 	// Perform reference calibration
+	// 	ok = tof.perform_ref_calibration();
+	// 	display_memory(out);
+	// 	out << F("tof.perform_ref_calibration() = ") << ok << endl;
+	// 	DEBUG(out);
+	// }
 
-	{
-		DeviceStatus status;
-		ok = tof.get_range_status(status);
-		display_memory(out);
-		out << F("tof.get_range_status(status) = ") << ok 
-			<< F(", error = ") << dec << uint8_t(status.error())
-			<< F(", data_ready = ") << status.data_ready() << endl;
-		DEBUG(out);
-	}
+	// {
+	// 	DeviceStatus status;
+	// 	ok = tof.get_range_status(status);
+	// 	display_memory(out);
+	// 	out << F("tof.get_range_status(status) = ") << ok 
+	// 		<< F(", error = ") << dec << uint8_t(status.error())
+	// 		<< F(", data_ready = ") << status.data_ready() << endl;
+	// 	DEBUG(out);
+	// }
 
 	manager.end();
 }
