@@ -456,7 +456,7 @@ namespace eeprom
 				// Some bits need to be erased (ie set to 1)
 				if (value == UINT8_MAX)
 					// Erase only
-					EECR_ = EEPM0;
+					EECR_ = bits::BV8(EEPM0);
 				else
 					// Combine Erase/Write operation
 					EECR_ = 0;
@@ -466,7 +466,7 @@ namespace eeprom
 				// No bit to be erased
 				if (diff)
 					// Some bits to be programmed (set to 0): Write only
-					EECR_ = EEPM1;
+					EECR_ = bits::BV8(EEPM1);
 				else
 					// old value == new value => do nothing
 					return;
@@ -486,7 +486,7 @@ namespace eeprom
 			uint8_t value = EEDR;
 			// Some bits need to be erased (ie set to 1)
 			if (value == UINT8_MAX) return false;
-			EECR_ = EEPM0;
+			EECR_ = bits::BV8(EEPM0);
 			EEDR_ = UINT8_MAX;
 			synchronized
 			{
@@ -796,7 +796,7 @@ namespace eeprom
 		{
 			WriteItem() = default;
 			WriteItem(uint8_t value1, uint8_t value2, uint8_t value3)
-			:	address{uint16_t(uint8_t(value1 << 4) | uint8_t(value2 >> 4))}, 
+			:	address{uint16_t(uint16_t(value1 << 4) | uint8_t(value2 >> 4))}, 
 				size{uint16_t(utils::is_zero(((value2 & 0x0F) << 8) | value3, E2END + 1))} {}
 
 			static uint8_t value1(uint16_t address, uint16_t size UNUSED)
