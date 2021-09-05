@@ -33,6 +33,8 @@
 #include "attiny_x4_traits.h"
 #elif defined(BREADBOARD_ATTINYX5)
 #include "attiny_x5_traits.h"
+#elif defined(BREADBOARD_ATMEGA644P)
+#include "atmega_xx4_traits.h"
 
 #else
 #error "board_traits.h: board not supported"

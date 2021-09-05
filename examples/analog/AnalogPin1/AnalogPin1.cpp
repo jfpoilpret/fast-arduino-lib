@@ -81,6 +81,14 @@ constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
 static constexpr const board::AnalogPin POT = board::AnalogPin::A1;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 constexpr const board::DigitalPin TX = board::DigitalPin::D1_PB1;
+#elif defined (BREADBOARD_ATMEGA644P)
+#define HARDWARE_UART 1
+#include <fastarduino/uart.h>
+static constexpr const board::AnalogPin POT = board::AnalogPin::A7;
+static constexpr const board::USART UART = board::USART::USART0;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+// Define vectors we need in the example
+REGISTER_UATX_ISR(0)
 #else
 #error "Current target is not yet supported!"
 #endif

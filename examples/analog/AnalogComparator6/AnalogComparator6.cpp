@@ -54,6 +54,13 @@ static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 #define HARDWARE_UART 0
 #include <fastarduino/soft_uart.h>
 static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
+#elif defined (BREADBOARD_ATMEGA644P)
+#define NUM_TIMER 1
+static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
+#define HARDWARE_UART 1
+#include <fastarduino/uart.h>
+static constexpr const board::USART UART = board::USART::USART0;
+REGISTER_UATX_ISR(0)
 #else
 #error "Current target is not yet supported!"
 #endif

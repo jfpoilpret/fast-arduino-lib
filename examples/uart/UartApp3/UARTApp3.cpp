@@ -63,6 +63,9 @@ constexpr const board::InterruptPin RX = board::InterruptPin::D0_PA0_PCI0;
 #elif defined (BREADBOARD_ATTINYX5)
 constexpr const board::DigitalPin TX = board::DigitalPin::D1_PB1;
 constexpr const board::InterruptPin RX = board::InterruptPin::D0_PB0_PCI0;
+#elif defined (BREADBOARD_ATMEGA644P)
+constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
+constexpr const board::InterruptPin RX = board::InterruptPin::D0_PA0_PCI0;
 #define PCI_NUM 0
 #else
 #error "Current target is not yet supported!"

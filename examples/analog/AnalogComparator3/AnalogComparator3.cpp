@@ -52,6 +52,9 @@ static constexpr const board::DigitalPin LED = board::DigitalPin::LED;
 #elif defined(BREADBOARD_ATTINYX5)
 static constexpr const board::AnalogPin INPUT = board::AnalogPin::A1;
 static constexpr const board::DigitalPin LED = board::DigitalPin::D4_PB4;
+#elif defined (BREADBOARD_ATMEGA644P)
+static constexpr const board::AnalogPin INPUT = board::AnalogPin::A0;
+static constexpr const board::DigitalPin LED = board::DigitalPin::LED;
 #else
 #error "Current target is not yet supported!"
 #endif

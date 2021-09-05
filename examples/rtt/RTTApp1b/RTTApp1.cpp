@@ -16,7 +16,7 @@
  * Real Time Timer example. Take #1
  * This program shows usage of FastArduino Timer-based RTT (Real Time Timer) support.
  * It checks RTT with all available timers of the target board.
- * For each available timer on the target platform, the program blinks a LED 5 
+ * For each available timer on the target platform, the program blinks a LED 4 
  * times with a period of 10 seconds.
  * 
  * Wiring:
@@ -59,6 +59,11 @@ REGISTER_RTT_ISR(1)
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
 REGISTER_RTT_ISR(1)
+#elif defined (BREADBOARD_ATMEGA644P)
+// Define vectors we need in the example
+REGISTER_RTT_ISR(0)
+REGISTER_RTT_ISR(1)
+REGISTER_RTT_ISR(2)
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -72,7 +77,7 @@ void check_timer()
 	timer::RTT<TIMER> rtt;
 	rtt.begin();
 	// Event Loop
-	for (uint8_t i = 0; i < 5; ++i)
+	for (uint8_t i = 0; i < 4; ++i)
 	{
 		rtt.delay(BLINK_DELAY);
 		led.toggle();
@@ -108,5 +113,9 @@ int main()
 	check_timer<board::Timer::TIMER3>();
 	check_timer<board::Timer::TIMER4>();
 	check_timer<board::Timer::TIMER5>();
+#elif defined (BREADBOARD_ATMEGA644P)
+	check_timer<board::Timer::TIMER0>();
+	check_timer<board::Timer::TIMER1>();
+	check_timer<board::Timer::TIMER2>();
 #endif
 }

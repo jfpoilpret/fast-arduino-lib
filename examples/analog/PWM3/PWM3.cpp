@@ -51,6 +51,10 @@ static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 static constexpr const board::PWMPin LED1 = board::PWMPin::D6_PA6_OC1A;
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
+#elif defined (BREADBOARD_ATMEGA644P)
+static constexpr const board::AnalogPin POT1 = board::AnalogPin::A0;
+static constexpr const board::PWMPin LED1 = board::PWMPin::D29_PD5_OC1A;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 #else
 #error "Current target is not yet supported!"
 #endif

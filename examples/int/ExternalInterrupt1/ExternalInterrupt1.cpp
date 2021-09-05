@@ -50,6 +50,8 @@ constexpr const board::ExternalInterruptPin SWITCH = board::ExternalInterruptPin
 constexpr const board::ExternalInterruptPin SWITCH = board::ExternalInterruptPin::D10_PB2_EXT0;
 #elif defined (BREADBOARD_ATTINYX5)
 constexpr const board::ExternalInterruptPin SWITCH = board::ExternalInterruptPin::D2_PB2_EXT0;
+#elif defined (BREADBOARD_ATMEGA644P)
+constexpr const board::ExternalInterruptPin SWITCH = board::ExternalInterruptPin::D26_PD2_EXT0;
 #else
 #error "Current target is not yet supported!"
 #endif

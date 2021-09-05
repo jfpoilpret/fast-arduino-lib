@@ -75,6 +75,15 @@ static constexpr const board::DigitalPin LED4 = board::DigitalPin::D4_PA4;
 static constexpr const board::DigitalPin LED5 = board::DigitalPin::D5_PA5;
 static constexpr const board::DigitalPin LED6 = board::DigitalPin::D6_PA6;
 static constexpr const board::DigitalPin LED7 = board::DigitalPin::D7_PA7;
+#elif defined (BREADBOARD_ATMEGA644P)
+static constexpr const board::DigitalPin LED0 = board::DigitalPin::D0_PA0;
+static constexpr const board::DigitalPin LED1 = board::DigitalPin::D1_PA1;
+static constexpr const board::DigitalPin LED2 = board::DigitalPin::D2_PA2;
+static constexpr const board::DigitalPin LED3 = board::DigitalPin::D3_PA3;
+static constexpr const board::DigitalPin LED4 = board::DigitalPin::D4_PA4;
+static constexpr const board::DigitalPin LED5 = board::DigitalPin::D5_PA5;
+static constexpr const board::DigitalPin LED6 = board::DigitalPin::D6_PA6;
+static constexpr const board::DigitalPin LED7 = board::DigitalPin::D7_PA7;
 #else
 #error "Current target is not yet supported!"
 #endif

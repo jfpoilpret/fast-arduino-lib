@@ -47,6 +47,9 @@ static constexpr const board::PWMPin OUTPUT = board::PWMPin::D10_PB2_OC0A;
 #elif defined(BREADBOARD_ATTINYX5)
 static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 static constexpr const board::PWMPin OUTPUT = board::PWMPin::D0_PB0_OC0A;
+#elif defined (BREADBOARD_ATMEGA644P)
+static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
+static constexpr const board::PWMPin OUTPUT = board::PWMPin::D11_PB3_OC0A;
 #else
 #error "Current target is not yet supported!"
 #endif

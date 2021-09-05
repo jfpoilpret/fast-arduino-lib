@@ -30,6 +30,10 @@
 static const board::USART USART = board::USART::USART0;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
+#elif defined (BREADBOARD_ATMEGA644P)
+static const board::USART USART = board::USART::USART0;
+// Define vectors we need in the example
+REGISTER_UATX_ISR(0)
 #else
 #error "Current target is not yet supported!"
 #endif

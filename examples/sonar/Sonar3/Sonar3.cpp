@@ -88,6 +88,17 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D9_PB1;
 static constexpr const board::InterruptPin ECHO = board::InterruptPin::D10_PB2_PCI1;
+#elif defined (BREADBOARD_ATMEGA644P)
+#define HARDWARE_UART 1
+#include <fastarduino/uart.h>
+static constexpr const board::USART UART = board::USART::USART0;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+REGISTER_UATX_ISR(0)
+#define TIMER_NUM 0
+#define PCI_NUM 0
+static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
+static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D0_PA0;
+static constexpr const board::InterruptPin ECHO = board::InterruptPin::D1_PA1_PCI0;
 #else
 #error "Current target is not yet supported!"
 #endif

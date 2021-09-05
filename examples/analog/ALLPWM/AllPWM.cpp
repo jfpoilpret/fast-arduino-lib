@@ -109,6 +109,13 @@ int main()
 #elif defined (BREADBOARD_ATTINYX5)
 	check_PWM<Timer::TIMER0, PWMPin::D0_PB0_OC0A>();
 	check_PWM<Timer::TIMER0, PWMPin::D1_PB1_OC0B>();
+#elif defined (BREADBOARD_ATMEGA644P)
+	check_PWM<Timer::TIMER0, PWMPin::D11_PB3_OC0A>();
+	check_PWM<Timer::TIMER0, PWMPin::D12_PB4_OC0B>();
+	check_PWM<Timer::TIMER1, PWMPin::D29_PD5_OC1A>();
+	check_PWM<Timer::TIMER1, PWMPin::D28_PD4_OC1B>();
+	check_PWM<Timer::TIMER2, PWMPin::D31_PD7_OC2A>();
+	check_PWM<Timer::TIMER2, PWMPin::D30_PD6_OC2B>();
 #else
 #error "Current target is not yet supported!"
 #endif

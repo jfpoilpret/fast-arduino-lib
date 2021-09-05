@@ -103,6 +103,16 @@ static const constexpr board::DigitalPin PIN_CE = board::DigitalPin::D4_PB4;
 static const constexpr board::Timer RTT_TIMER = board::Timer::TIMER0;
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
+#elif defined (BREADBOARD_ATMEGA644P)
+#define HAS_TRACE 1
+#define USART_NUM 0
+static const constexpr board::USART UART = board::USART::USART0;
+static const constexpr board::DigitalPin PIN_CONFIG = board::DigitalPin::D10_PB2;
+static const constexpr board::DigitalPin PIN_CSN = board::DigitalPin::D8_PB0;
+static const constexpr board::DigitalPin PIN_CE = board::DigitalPin::D9_PB1;
+static const constexpr board::Timer RTT_TIMER = board::Timer::TIMER2;
+// Define vectors we need in the example
+REGISTER_RTT_ISR(2)
 #else
 #error "Current target is not yet supported!"
 #endif

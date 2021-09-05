@@ -44,6 +44,8 @@ static constexpr const board::Port LED_PORT = board::Port::PORT_D;
 static constexpr const board::Port LED_PORT = board::Port::PORT_A;
 #elif defined (BREADBOARD_ATTINYX4)
 static constexpr const board::Port LED_PORT = board::Port::PORT_A;
+#elif defined (BREADBOARD_ATMEGA644P)
+static constexpr const board::Port LED_PORT = board::Port::PORT_A;
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -92,7 +94,7 @@ int main()
 	
 	// Start watchdog
 	watchdog::Watchdog<EVENT> watchdog{event_queue};
-	watchdog.begin(watchdog::TimeOut::TO_64ms);
+	watchdog.begin(watchdog::TimeOut::TO_500ms);
 	
 	// Event Loop
 	while (true)

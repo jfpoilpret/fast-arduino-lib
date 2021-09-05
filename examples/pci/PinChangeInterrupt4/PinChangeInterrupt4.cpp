@@ -53,6 +53,11 @@ constexpr const board::InterruptPin SWITCH_ON = board::InterruptPin::D0_PA0_PCI0
 constexpr const board::InterruptPin SWITCH_OFF = board::InterruptPin::D8_PB0_PCI1;
 #define PCINT_ON	0
 #define PCINT_OFF	1
+#elif defined (BREADBOARD_ATMEGA644P)
+constexpr const board::InterruptPin SWITCH_ON = board::InterruptPin::D9_PB1_PCI1;
+constexpr const board::InterruptPin SWITCH_OFF = board::InterruptPin::D0_PA0_PCI0;
+#define PCINT_ON	1
+#define PCINT_OFF	0
 #else
 #error "Current target is not yet supported!"
 #endif

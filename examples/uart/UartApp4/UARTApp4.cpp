@@ -57,6 +57,10 @@ constexpr const board::ExternalInterruptPin RX = board::ExternalInterruptPin::D2
 constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
 constexpr const board::ExternalInterruptPin RX = board::ExternalInterruptPin::D10_PB2_EXT0;
 #define INT_NUM 0
+#elif defined (BREADBOARD_ATMEGA644P)
+constexpr const board::DigitalPin TX = board::DigitalPin::D25_PD1;
+constexpr const board::ExternalInterruptPin RX = board::ExternalInterruptPin::D26_PD2_EXT0;
+#define INT_NUM 0
 #else
 #error "Current target is not yet supported!"
 #endif

@@ -44,6 +44,11 @@ static gpio::FastPort<board::Port::PORT_B> PortB;
 static gpio::FAST_PIN<board::DigitalPin::D0_PB0> PinD0{gpio::PinMode::INPUT};
 static gpio::FAST_PIN<board::DigitalPin::D1_PB1> PinD1{gpio::PinMode::INPUT_PULLUP};
 static gpio::FAST_PIN<board::DigitalPin::D2_PB2> PinD2{gpio::PinMode::OUTPUT};
+#elif defined (BREADBOARD_ATMEGA644P)
+static gpio::FastPort<board::Port::PORT_B> PortB;
+static gpio::FAST_PIN<board::DigitalPin::D8_PB0> PinD0{gpio::PinMode::INPUT};
+static gpio::FAST_PIN<board::DigitalPin::D9_PB1> PinD1{gpio::PinMode::INPUT_PULLUP};
+static gpio::FAST_PIN<board::DigitalPin::D10_PB2> PinD2{gpio::PinMode::OUTPUT};
 #else
 #error "Current target is not yet supported!"
 #endif

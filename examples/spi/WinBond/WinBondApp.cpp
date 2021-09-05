@@ -78,6 +78,14 @@ constexpr const board::DigitalPin CS = board::DigitalPin::D3_PB3;
 constexpr const board::DigitalPin TX = board::DigitalPin::D4_PB4;
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 constexpr const size_t DATA_SIZE = 128;
+#elif defined (BREADBOARD_ATMEGA644P)
+#include <fastarduino/uart.h>
+constexpr const board::DigitalPin CS = board::DigitalPin::D12_PB4;
+static const uint8_t OUTPUT_BUFFER_SIZE = 64;
+constexpr const size_t DATA_SIZE = 256;
+// Define vectors we need in the example
+constexpr const board::USART UART = board::USART::USART0;
+REGISTER_UATX_ISR(0)
 #else
 #error "Current target is not yet supported!"
 #endif

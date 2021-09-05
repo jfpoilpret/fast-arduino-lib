@@ -59,6 +59,12 @@ static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 static constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
 #define TIMER_NUM 1
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
+#elif defined (BREADBOARD_ATMEGA644P)
+#define HAS_UART 1
+#define UART_NUM 0
+static constexpr const board::USART UART = board::USART::USART0;
+#define TIMER_NUM 1
+static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 #else
 #error "Current target is not yet supported!"
 #endif
