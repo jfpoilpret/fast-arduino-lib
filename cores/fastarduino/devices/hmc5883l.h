@@ -386,6 +386,10 @@ namespace devices::magneto
 				utils::swap_bytes(fields.x);
 				utils::swap_bytes(fields.y);
 				utils::swap_bytes(fields.z);
+				// HMC5883L registers are in order X,Z,Y while Sensor3D is X,Y,Z
+				int16_t temp = fields.y;
+				fields.y = fields.z;
+				fields.z = temp;
 				return true;
 			}
 			/// @endcond
