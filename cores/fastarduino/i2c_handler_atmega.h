@@ -1390,10 +1390,10 @@ namespace i2c
 			using interrupt::HandlerHolder;
 			static_assert(I2CManager_trait<MANAGER>::IS_I2CMANAGER, "MANAGER must be an I2C Manager");
 			static_assert(I2CManager_trait<MANAGER>::IS_ASYNC, "MANAGER must be an asynchronous I2C Manager");
+			auto proxy = HandlerHolder<MANAGER>::handler()->current_proxy();
 			I2CCallback callback =  HandlerHolder<MANAGER>::handler()->i2c_change();
 			if (callback != I2CCallback::NONE)
 			{
-				auto proxy = HandlerHolder<MANAGER>::handler()->current_proxy();
 				CALLBACK_(callback, proxy);
 			}
 		}
@@ -1406,10 +1406,10 @@ namespace i2c
 			using interrupt::CallbackHandler;
 			static_assert(I2CManager_trait<MANAGER>::IS_I2CMANAGER, "MANAGER must be an I2C Manager");
 			static_assert(I2CManager_trait<MANAGER>::IS_ASYNC, "MANAGER must be an asynchronous I2C Manager");
+			auto proxy = HandlerHolder<MANAGER>::handler()->current_proxy();
 			I2CCallback callback =  HandlerHolder<MANAGER>::handler()->i2c_change();
 			if (callback != I2CCallback::NONE)
 			{
-				auto proxy = HandlerHolder<MANAGER>::handler()->current_proxy();
 				using HANDLER = 
 					CallbackHandler<void (HANDLER_::*)(I2CCallback, typename MANAGER::FUTURE_PROXY), CALLBACK_>;
 				HANDLER::call(callback, proxy);
