@@ -76,7 +76,7 @@ REGISTER_UATX_ISR(0)
 #endif
 
 // #define DEBUG_I2C
-#define FORCE_SYNC
+// #define FORCE_SYNC
 
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 using devices::magneto::DataOutput;
@@ -180,7 +180,7 @@ int main()
 	MAGNETOMETER compass{manager};
 	
 	bool ok = compass.begin(
-		OperatingMode::CONTINUOUS, Gain::GAIN_1_9GA, DataOutput::RATE_75HZ, SamplesAveraged::EIGHT_SAMPLES);
+		OperatingMode::CONTINUOUS, Gain::GAIN_4_0GA, DataOutput::RATE_75HZ, SamplesAveraged::EIGHT_SAMPLES);
 	out << dec << F("begin() ") << ok << '\n' << flush;
 	DEBUG(out);
 	trace_status(out, compass.status());
@@ -198,6 +198,7 @@ int main()
 		float heading = magnetic_heading(fields.x, fields.y);
 		out << F("Magnetic heading ") << heading << F(" rad\n") << flush;
 #endif
+		// trace_fields(out, fields);
 		compass.convert_fields_to_mGA(fields);
 		trace_fields(out, fields);
 		time::delay_ms(500);

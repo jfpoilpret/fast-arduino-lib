@@ -98,7 +98,7 @@ REGISTER_UATX_ISR(0)
 #error "Current target is not yet supported!"
 #endif
 
-#define DEBUG_I2C
+// #define DEBUG_I2C
 #define FORCE_SYNC
 
 // UART for traces
@@ -228,7 +228,7 @@ int main()
 	MAGNETOMETER compass{manager};
 	
 	bool ok = compass.begin(
-		OperatingMode::CONTINUOUS, Gain::GAIN_1_9GA, DataOutput::RATE_0_75HZ, SamplesAveraged::EIGHT_SAMPLES);
+		OperatingMode::CONTINUOUS, Gain::GAIN_4_0GA, DataOutput::RATE_0_75HZ, SamplesAveraged::EIGHT_SAMPLES);
 	out << dec << F("begin() ") << ok << endl;
 	DEBUG(out);
 	while (true)
