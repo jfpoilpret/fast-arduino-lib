@@ -118,7 +118,7 @@ public:
 		interrupt::register_handler(*this);
 	}
 
-	FutureStatus status()
+	FutureStatus status() const
 	{
 		return status_;
 	}
@@ -134,7 +134,7 @@ private:
 		status_ = proxy()->status();
 	}
 
-	FutureStatus status_ = FutureStatus::NOT_READY;
+	volatile FutureStatus status_ = FutureStatus::NOT_READY;
 	
 	DECL_I2C_ISR_HANDLERS_FRIEND
 };
