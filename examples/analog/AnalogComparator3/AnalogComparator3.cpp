@@ -34,6 +34,10 @@
  *   - D0 (PB0, AIN0): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - A1 (PB2): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - D4 (PB4): LED in series with 330 Ohm resistor, connected to ground
+ * - on ATmega644 based boards:
+ *   - D10 (PB2, AIN0): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - A0 (PA0): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D8 (PB0): LED in series with 330 Ohm resistor, connected to ground
  */
 
 #include <fastarduino/power.h>

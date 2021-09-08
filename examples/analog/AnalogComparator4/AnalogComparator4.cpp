@@ -33,6 +33,9 @@
  * - on ATtinyX5 based boards:
  *   - A1 (PB2): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - D4 (PB4): LED in series with 330 Ohm resistor, connected to ground
+ * - on ATmega644 based boards:
+ *   - A0 (PA0): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D8 (PB0): LED in series with 330 Ohm resistor, connected to ground
  */
 
 #include <fastarduino/power.h>

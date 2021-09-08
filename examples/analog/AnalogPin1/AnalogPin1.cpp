@@ -32,6 +32,9 @@
  * - on ATtinyX5 based boards:
  *   - A1: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - D1: TX output connected to Serial-USB allowing traces display on a PC terminal
+ * - on ATmega644 based boards:
+ *   - A7 (PA7): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D25 (PD1): TX connected to a Serial2USB converter
  */
 
 #include <fastarduino/time.h>

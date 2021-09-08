@@ -26,7 +26,10 @@
  *   - direct USB access
  * - on ATtinyX4 based boards:
  *   - D1 (PA1, AIN1): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
- *   - D8 (PB0): TX conencted to a Serial2USB converter
+ *   - D8 (PB0): TX connected to a Serial2USB converter
+ * - on ATmega644 based boards:
+ *   - D10 (PB2, AIN0): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D25 (PD1): TX connected to a Serial2USB converter
  */
 
 #include <fastarduino/time.h>

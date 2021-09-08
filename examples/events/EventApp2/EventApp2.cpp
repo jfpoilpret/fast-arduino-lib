@@ -30,6 +30,9 @@
  * - on ATtinyX4 based boards:
  *   - D0-D7 (port A) branch 8 LED (in series with 330 Ohm resistors to limit 
  *     current) connected to ground
+ * - on ATmega644 based boards:
+ *   - D0-D7 (port A): branch 8 LED (in series with 330 Ohm resistors to limit
+ *     current) connected to ground
  */
 
 #include <fastarduino/gpio.h>

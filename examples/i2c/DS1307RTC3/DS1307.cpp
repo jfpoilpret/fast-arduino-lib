@@ -32,6 +32,10 @@
  *   - D20 (PD1, SDA): connected to DS1307 SDA pin
  *   - D21 (PD0, SCL): connected to DS1307 SDA pin
  *   - direct USB access
+ * - on ATmega644 based boards:
+ *   - D17 (PC1, SDA): connected to MPU6050 SDA pin
+ *   - D16 (PC0, SCL): connected to MPU6050 SCL pin
+ *   - D25 (PD1): TX output connected to SerialUSB converter
  */
 
 #include <fastarduino/time.h>

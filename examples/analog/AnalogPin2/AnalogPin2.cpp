@@ -30,6 +30,9 @@
  * - on ATtinyX4 based boards:
  *   - A7: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - D0-D7 (port A) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
+ * - on ATmega644 based boards:
+ *   - A7 (PA7): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D8-D15 (port B): branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
  */
 
 #include <fastarduino/time.h>

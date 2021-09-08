@@ -30,16 +30,19 @@
  *   - A5 (PC5, SCL): connected to MCP23017 SCL pin
  * - on Arduino LEONARDO:
  *   - D2 (PD1, SDA): connected to MCP23017 SDA pin
- *   - D3 (PD0, SCL): connected to MCP23017 SDA pin
+ *   - D3 (PD0, SCL): connected to MCP23017 SCL pin
  * - on Arduino MEGA:
  *   - D20 (PD1, SDA): connected to MCP23017 SDA pin
- *   - D21 (PD0, SCL): connected to MCP23017 SDA pin
+ *   - D21 (PD0, SCL): connected to MCP23017 SCL pin
  * - on ATtinyX4 based boards:
  *   - D6 (PA6, SDA): connected to MCP23017 SDA pin
- *   - D4 (PA4, SCL): connected to MCP23017 SDA pin
+ *   - D4 (PA4, SCL): connected to MCP23017 SCL pin
  * - on ATtinyX5 based boards:
  *   - D0 (PB0, SDA): connected to MCP23017 SDA pin
- *   - D2 (PB2, SCL): connected to MCP23017 SDA pin
+ *   - D2 (PB2, SCL): connected to MCP23017 SCL pin
+ * - on ATmega644 based boards:
+ *   - D17 (PC1, SDA): connected to MCP23017 SDA pin
+ *   - D16 (PC0, SCL): connected to MCP23017 SCL pin
  */
 
 #include <fastarduino/time.h>

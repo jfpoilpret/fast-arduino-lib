@@ -38,6 +38,11 @@
  *   - D4 (PA4, SCL): connected to HMC5883L SCL pin
  *   - D8 (PB0, TX): connected to SerialUSB converter
  *   - D10 (PB2, EXT0): connected to HMC5883L DRDY pin
+ * - on ATmega644 based boards:
+ *   - D17 (PC1, SDA): connected to HMC5883L SDA pin
+ *   - D16 (PC0, SCL): connected to HMC5883L SCL pin
+ *   - D25 (PD1): TX output connected to SerialUSB converter
+ *   - D26 (PD2, EXT0): connected to HMC5883L DRDY pin
  */
 
 #include <fastarduino/int.h>

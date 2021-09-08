@@ -25,6 +25,8 @@
  *   - D1 (PA1): TX output connected to Serial-USB allowing traces display on a PC terminal
  * - on ATtinyX5 based boards:
  *   - D1 (PB1): TX output connected to Serial-USB allowing traces display on a PC terminal
+ * - on ATmega644 based boards:
+ *   - D25 (PD1): TX output connected to Serial-USB allowing traces display on a PC terminal
  */
 
 #include <fastarduino/time.h>

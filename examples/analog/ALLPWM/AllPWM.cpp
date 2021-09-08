@@ -27,6 +27,8 @@
  *   - PA5-7, PB2
  * - on ATtinyX5 based boards:
  *   - PB0, PB1
+ * - on ATmega644 based boards:
+ *   - D11 (PB3), D12 (PB4), D28 (PD4), D29 (PD5), D30 (PD6), D31 (PD7)
  */
 
 #include <fastarduino/time.h>

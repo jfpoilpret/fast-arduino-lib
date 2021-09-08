@@ -27,12 +27,16 @@
  *   - direct USB access
  * - on Arduino LEONARDO:
  *   - D2 (PD1, SDA): connected to DS1307 SDA pin
- *   - D3 (PD0, SCL): connected to DS1307 SDA pin
+ *   - D3 (PD0, SCL): connected to DS1307 SCL pin
  *   - direct USB access
  * - on Arduino MEGA:
  *   - D20 (PD1, SDA): connected to DS1307 SDA pin
- *   - D21 (PD0, SCL): connected to DS1307 SDA pin
+ *   - D21 (PD0, SCL): connected to DS1307 SCL pin
  *   - direct USB access
+ * - on ATmega644 based boards:
+ *   - D17 (PC1, SDA): connected to DS1307 SDA pin
+ *   - D16 (PC0, SCL): connected to DS1307 SCL pin
+ *   - D25 (PD1): TX output connected to SerialUSB converter
  */
 
 #include <fastarduino/time.h>

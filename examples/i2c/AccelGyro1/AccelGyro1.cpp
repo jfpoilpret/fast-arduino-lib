@@ -34,6 +34,10 @@
  *   - D6 (PA6, SDA): connected to MPU6050 SDA pin
  *   - D4 (PA4, SCL): connected to MPU6050 SDA pin
  *   - D8 (PB0, TX): connected to SerialUSB converter
+ * - on ATmega644 based boards:
+ *   - D17 (PC1, SDA): connected to MPU6050 SDA pin
+ *   - D16 (PC0, SCL): connected to MPU6050 SCL pin
+ *   - D25 (PD1): TX output connected to Serial-USB allowing traces display on a PC terminal
  */
 
 #include <fastarduino/time.h>

@@ -34,6 +34,10 @@
  *   - D6 (PA6, SDA): connected to HMC5883L SDA pin
  *   - D4 (PA4, SCL): connected to HMC5883L SDA pin
  *   - D8 (PB0, TX): connected to SerialUSB converter
+ * - on ATmega644 based boards:
+ *   - D17 (PC1, SDA): connected to HMC5883L SDA pin
+ *   - D16 (PC0, SCL): connected to HMC5883L SCL pin
+ *   - D25 (PD1): TX output connected to SerialUSB converter
  */
 
 #include <fastarduino/time.h>

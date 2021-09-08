@@ -41,6 +41,11 @@
  *   - A2 (PB4): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - D0 (PB0): LED connected to GND through a 1K resistor 
  *   - D1 (PB1): LED connected to GND through a 1K resistor 
+ * - on ATmega644 based boards:
+ *   - A0 (PA0): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - A1 (PA1): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D11 (PB3): LED connected to GND through a 1K resistor 
+ *   - D12 (PB4): LED connected to GND through a 1K resistor 
  */
 
 #include <fastarduino/time.h>

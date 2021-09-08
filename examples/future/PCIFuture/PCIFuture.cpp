@@ -33,6 +33,9 @@
  * - on ATtinyX5 breadboard
  *   - D0,2-4 (PB0,2-4, port B): branch 4 push buttons connected to GND
  *   - D1 (PB1) as TX to a Serial-USB converter
+ * - on ATmega644 based boards:
+ *   - D0-D7 (PA0-7, port A): branch 8 push buttons connected to GND
+ *   - D25 (PD1): TX output connected to Serial-USB allowing traces display on a PC terminal
  * 
  * Notes: if you do not connect as many buttons as expected, the example will still 
  * work but it will always show high bits for unconnected inputs.
