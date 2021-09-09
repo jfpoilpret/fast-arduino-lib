@@ -17,6 +17,8 @@
  * Wiring:
  * - Arduino UNO
  *   - Standard USB to console
+ * - on ATmega644 based boards:
+ *   - D25 (PD1): TX output connected through USB Serial converter to console for display
  */
 
 #include <fastarduino/tests/assertions.h>

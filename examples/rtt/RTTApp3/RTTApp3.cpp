@@ -28,6 +28,8 @@
  *   - D1 (PA1) as TX to a Serial-USB converter
  * - on ATtinyX5 based boards:
  *   - D1 (PB1) as TX to a Serial-USB converter
+ * - on ATmega644 based boards:
+ *   - D25 (PD1): TX output connected to SerialUSB converter
  */
 
 #include <fastarduino/realtime_timer.h>

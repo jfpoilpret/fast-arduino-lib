@@ -39,6 +39,8 @@
  *   - Use D1-D0 as TX-RX, connected to an Serial-USB converter
  * - on ATtinyX5 based boards:
  *   - Use D1-D0 as TX-RX, connected to an Serial-USB converter
+ * - on ATmega644 based boards:
+ *   - Use D1(PA1)-D0(PA0) as TX-RX, connected to an Serial-USB converter
  */
 
 #include <fastarduino/soft_uart.h>

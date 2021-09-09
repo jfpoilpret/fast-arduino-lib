@@ -27,6 +27,9 @@
  *   - Use standard TX/RX
  * - on ATmega328P based boards:
  *   - Use standard TX/RX connected to an Serial-USB converter
+ * - on ATmega644 based boards:
+ *   - D25 (PD1): TX output connected to an Serial-USB converter
+ *   - D24 (PD0): RX input connected to an Serial-USB converter
  * - on ATtinyX4/ATtinyX5 based boards:
  *   - NOT SUPPORTED
  */

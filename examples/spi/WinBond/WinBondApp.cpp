@@ -37,6 +37,9 @@
  * - on ATtinyX5 based boards:
  *   - D4 (TX) used for tracing program activities
  *   - D0 (MISO), D1 (MOSI), D2 (SCK), D3 (CS): SPI interface to WinBond
+ * - on ATmega644 based boards:
+ *   - D25 (PD1): TX output used for tracing program activities
+ *   - D12 (PB4, CS), D13 (PB5, MOSI), D14 (PB6, MISO), D15 (PB7, SCK): SPI interface to WinBond
  */
 
 #include <fastarduino/devices/winbond.h>

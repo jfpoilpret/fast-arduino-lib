@@ -33,6 +33,10 @@
  *   - D9 (PB1): connected to sonar trigger pin
  *   - D10 (PB2): connected to sonar echo pin
  *   - D8 (PB0): TX output connected to Serial-USB allowing traces display on a PC terminal
+ * - on ATmega644 based boards:
+ *   - D2 (PA2): connected to sonar trigger pin
+ *   - D3 (PA3): connected to sonar echo pin
+ *   - D25 (PD1): TX output connected to SerialUSB allowing traces display on a PC terminal
  */
 
 #include <fastarduino/boards/board.h>

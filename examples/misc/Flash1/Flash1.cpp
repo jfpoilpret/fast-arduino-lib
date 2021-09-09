@@ -22,6 +22,8 @@
  * - on Arduino boards: direct USB access
  * - on ATtinyX4 based boards:
  *   - D1: TX output connected to Serial-USB allowing traces display on a PC terminal
+ * - on ATmega644 based boards:
+ *   - D25 (PD1): TX output connected through USB Serial converter to console for display
  */
 
 #include <fastarduino/flash.h>

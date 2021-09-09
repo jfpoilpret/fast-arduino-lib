@@ -26,6 +26,8 @@
  *   - D10 (PB2): connect to a 5V passive piezo buzzer with the other lead connected to ground
  * - on ATtinyX5:
  *   - D0 (PB0): connect to a 5V passive piezo buzzer with the other lead connected to ground
+ * - on ATmega644 based boards:
+ *   - D11 (PB3): connect to a 5V passive piezo buzzer with the other lead connected to ground
  */
 
 // Example of square wave generation, using CTC mode and COM toggle

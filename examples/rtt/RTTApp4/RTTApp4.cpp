@@ -27,6 +27,8 @@
  *   - D7 (LED, PA7) connected to a LED through a 330Ohm resistor then linked to GND
  * - on ATtinyX5 based boards:
  *   - D0 (LED, PB0) connected to a LED through a 330Ohm resistor then linked to GND
+ * - on ATmega644 based boards:
+ *   - D8 (PB0) LED connected to ground through a resistor
  */
 
 #include <fastarduino/gpio.h>

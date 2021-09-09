@@ -34,6 +34,10 @@
  *   - A1 (PA1): connected to the wiper of a 10K pot or trimmer, which terminals are 
  *     connected between Vcc and Gnd
  *   - D10 (PB2): connected to servo signal pin (orange wire)
+ * - on ATmega644 based boards:
+ *   - A1 (PA1): connected to the wiper of a 10K pot or trimmer, which terminals are 
+ *     connected between Vcc and Gnd
+ *   - D11 (PB3): connected to servo signal pin (orange wire)
  */
 
 #include <fastarduino/boards/board.h>

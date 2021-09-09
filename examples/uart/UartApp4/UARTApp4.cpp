@@ -36,6 +36,8 @@
  *   - Use D52/D21 as TX/RX, connected to an Serial-USB converter
  * - on ATtinyX4 based boards:
  *   - Use D1-D10 as TX-RX, connected to an Serial-USB converter
+ * - on ATmega644 based boards:
+ *   - Use D25(PD1)-D26(PD2) as TX-RX, connected to an Serial-USB converter
  */
 
 #include <fastarduino/soft_uart.h>

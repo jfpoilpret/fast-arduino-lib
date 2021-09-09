@@ -25,6 +25,8 @@
  *   - standard USB connected to console for display
  * - on ATtinyX4 based boards:
  *   - D1 (PA1, TX): connected through USB Serial converter to console for display
+ * - on ATmega644 based boards:
+ *   - D25 (PD1): TX output connected through USB Serial converter to console for display
  */
 
 #include <fastarduino/flash.h>

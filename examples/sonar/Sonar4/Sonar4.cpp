@@ -24,7 +24,7 @@
  *   - D2: connected to sonar 1 trigger pin
  *   - D3: connected to sonar 1 echo pin
  *   - D4: connected to sonar 2 trigger pin
- *   - D5: connected to sonar 3 echo pin
+ *   - D5: connected to sonar 2 echo pin
  *   - Standard USB connected to console for measures display
  * - on Arduino MEGA:
  *   - D2: connected to sonar 1 trigger pin
@@ -41,9 +41,15 @@
  * - on ATtinyX4 based boards:
  *   - D0 (PA0): connected to sonar 1 trigger pin
  *   - D10 (PB2): connected to sonar 1 echo pin
- *   - D1 (PA1): connected to sonar 1 trigger pin
- *   - D9 (PB1): connected to sonar 1 echo pin
+ *   - D1 (PA1): connected to sonar 2 trigger pin
+ *   - D9 (PB1): connected to sonar 2 echo pin
  *   - D8 (PB0): TX output connected to Serial-USB allowing traces display on a PC terminal
+ * - on ATmega644 based boards:
+ *   - D0 (PA0): connected to sonar 1 trigger pin
+ *   - D1 (PA1): connected to sonar 1 echo pin
+ *   - D2 (PA0): connected to sonar 2 trigger pin
+ *   - D3 (PA1): connected to sonar 2 echo pin
+ *   - D25 (PD1): TX output connected to SerialUSB allowing traces display on a PC terminal
  */
 
 #include <fastarduino/boards/board.h>

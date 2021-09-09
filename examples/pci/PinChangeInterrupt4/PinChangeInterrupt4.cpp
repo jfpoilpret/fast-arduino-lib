@@ -32,6 +32,10 @@
  *   - D0 (PA0) branch a push button connected to ground
  *   - D8 (PB0) branch a push button connected to ground
  *   - D13 (PA7) LED connected to ground through a resistor
+ * - on ATmega644 based boards:
+ *   - D0 (PA0) branch a push button connected to ground
+ *   - D9 (PB1) branch a push button connected to ground
+ *   - D8 (PB0) LED connected to ground through a resistor
  */
 
 #include <fastarduino/gpio.h>

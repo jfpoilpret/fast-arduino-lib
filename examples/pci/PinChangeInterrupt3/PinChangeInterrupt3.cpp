@@ -41,6 +41,10 @@
  *   - D0-D3 (port A) branch 4 LED (in series with 330 Ohm resistors to limit 
  *     current) connected to ground
  *   - D8-D10 (port B) branch 3 buttons connected to ground
+ * - on ATmega644 based boards:
+ *   - D0-D3 (port A) branch 4 LED (in series with 330 Ohm resistors to limit 
+ *     current) connected to ground
+ *   - D8-D10 (port B) branch 3 buttons connected to ground
  */
 
 #include <fastarduino/gpio.h>

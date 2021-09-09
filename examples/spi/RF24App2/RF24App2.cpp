@@ -51,6 +51,12 @@
  *   - D4 (SCK), D6 (MISO), D5 (MOSI), D2 (CSN): SPI interface to NRF24L01+
  *   - D3 (CE): interface to NRF24L01+
  *   - D10 (EXT0, IRQ): interface to NRF24L01+
+ * - on ATmega644 based boards:
+ *   - D25 (PD1): TX output used for tracing program activities
+ *   - D10 (PB2): master/slave configuration pin
+ *   - D8 (PB0, CSN), D13 (PB5, MOSI), D14 (PB6, MISO), D15 (PB7, SCK): SPI interface to NRF24L01+
+ *   - D9 (PB1, CE): interface to NRF24L01+
+ *   - D26 (PD2, EXT0, IRQ): interface to NRF24L01+
  */
 
 #include <fastarduino/gpio.h>

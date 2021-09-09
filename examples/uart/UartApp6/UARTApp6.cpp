@@ -24,6 +24,8 @@
  *   - Use standard TX/RX
  * - on ATmega328P based boards:
  *   - Use standard TX/RX connected to an Serial-USB converter
+ * - on ATmega644 based boards:
+ *   - D25 (PD1): TX output connected through USB Serial converter to console for display
  * - on Arduino LEONARDO:
  *   - NOT PORTED
  * - on ATtinyX4/ATtinyX5 based boards:

@@ -34,6 +34,9 @@
  * - on ATtinyX5 based boards:
  *   - D1 (PCINT1, PB1) branch a push button connected to ground
  *   - D0 (PB0) LED connected to ground through a resistor
+ * - on ATmega644 based boards:
+ *   - D0 (PCINT0, PA0) branch a push button connected to ground
+ *   - D8 (PB0) LED connected to ground through a resistor
  */
 
 #include <fastarduino/gpio.h>

@@ -30,6 +30,9 @@
  * - on ATtinyX4 based boards:
  *   - D7 (PA7, ICP): connected to a push button connected to GND
  *   - D1 (PA1, TX): connected through USB Serial converter to console for display
+ * - on ATmega644 based boards:
+ *   - D30 (PD6, ICP): connected to a push button connected to GND
+ *   - D25 (PD1): TX output connected to SerialUSB converter
  */
 
 #include <fastarduino/flash.h>

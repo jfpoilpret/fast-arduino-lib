@@ -18,6 +18,9 @@
  * Wiring:
  * - on Arduino UNO, LEONARDO and MEGA:
  *   - Use standard TX/RX
+ * - on ATmega644 based boards:
+ *   - D25 (PD1): TX output connected to an Serial-USB converter
+ *   - D24 (PD0): RX input connected to an Serial-USB converter
  */
 
 #include <fastarduino/time.h>
