@@ -41,7 +41,7 @@ REGISTER_UATX_ISR(0)
 static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static constexpr const uint8_t MAX_LC_SLOTS = 16;
-#elif defined (BREADBOARD_ATMEGA644P)
+#elif defined (BREADBOARD_ATMEGAXX4P)
 #define HARD_UART
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART0;

@@ -84,7 +84,7 @@ constexpr const board::DigitalPin LED2 = board::DigitalPin::D1_PA1;
 constexpr const board::DigitalPin LED3 = board::DigitalPin::D2_PA2;
 constexpr const board::DigitalPin LED4 = board::DigitalPin::D3_PA3;
 #define PCI_NUM 1
-#elif defined (BREADBOARD_ATMEGA644P)
+#elif defined (BREADBOARD_ATMEGAXX4P)
 constexpr const board::InterruptPin SWITCH1 = board::InterruptPin::D0_PA0_PCI0;
 constexpr const board::InterruptPin SWITCH2 = board::InterruptPin::D1_PA1_PCI0;
 constexpr const board::InterruptPin SWITCH3 = board::InterruptPin::D2_PA2_PCI0;

@@ -68,7 +68,7 @@ static constexpr const board::DigitalPin TX = board::DigitalPin::D1_PB1;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
-#elif defined (BREADBOARD_ATMEGA644P)
+#elif defined (BREADBOARD_ATMEGAXX4P)
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;

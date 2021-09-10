@@ -95,7 +95,7 @@ static constexpr const board::InterruptPin SWITCH2 = board::InterruptPin::D9_PB1
 static constexpr const board::InterruptPin SWITCH3 = board::InterruptPin::D10_PB2_PCI1;
 static constexpr const board::Port SWITCH_PORT = board::Port::PORT_B;
 #define PCI_NUM 1
-#elif defined (BREADBOARD_ATMEGA644P)
+#elif defined (BREADBOARD_ATMEGAXX4P)
 static constexpr const uint8_t LED1 = board::MASK<board::DigitalPin::D0_PA0>();
 static constexpr const uint8_t LED2 = board::MASK<board::DigitalPin::D1_PA1>();
 static constexpr const uint8_t LED3 = board::MASK<board::DigitalPin::D2_PA2>();

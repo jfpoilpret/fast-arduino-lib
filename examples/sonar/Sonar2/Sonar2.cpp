@@ -92,7 +92,7 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D9_PB1;
 static constexpr const board::ExternalInterruptPin ECHO = board::ExternalInterruptPin::D10_PB2_EXT0;
-#elif defined (BREADBOARD_ATMEGA644P)
+#elif defined (BREADBOARD_ATMEGAXX4P)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART0;

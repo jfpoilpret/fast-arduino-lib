@@ -63,7 +63,7 @@ static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 constexpr const board::DigitalPin CS = board::DigitalPin::D3_PB3;
 constexpr const board::DigitalPin TX = board::DigitalPin::D4_PB4;
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
-#elif defined (BREADBOARD_ATMEGA644P)
+#elif defined (BREADBOARD_ATMEGAXX4P)
 #include <fastarduino/uart.h>
 constexpr const board::DigitalPin CS = board::DigitalPin::D7_PA7;
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;

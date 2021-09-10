@@ -83,7 +83,7 @@ static constexpr const board::PWMPin LED0 = board::PWMPin::D0_PB0_OC0A;
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A2;
 static constexpr const board::PWMPin LED1 = board::PWMPin::D1_PB1_OC0B;
 static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
-#elif defined (BREADBOARD_ATMEGA644P)
+#elif defined (BREADBOARD_ATMEGAXX4P)
 static constexpr const board::AnalogPin POT0 = board::AnalogPin::A0;
 static constexpr const board::PWMPin LED0 = board::PWMPin::D11_PB3_OC0A;
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;

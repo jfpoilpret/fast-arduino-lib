@@ -32,7 +32,7 @@
 static const board::USART USART = board::USART::USART0;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
-#elif defined (BREADBOARD_ATMEGA644P)
+#elif defined (BREADBOARD_ATMEGAXX4P)
 static const board::USART USART = board::USART::USART0;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)

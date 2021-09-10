@@ -81,7 +81,7 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						uart/UartApp11							\
 						uart/UartApp12							
 
-EXAMPLES_BREADBOARD_ATMEGA644P=	int/ExternalInterrupt3					\
+EXAMPLES_BREADBOARD_ATMEGAXX4P=	int/ExternalInterrupt3					\
 								analog/AnalogComparator1				\
 								analog/AnalogComparator2				\
 								analog/AnalogComparator3				\
@@ -213,7 +213,7 @@ endif
 REALLY_ALL_EXAMPLES =	${COMMON_EXAMPLES} ${EXAMPLES_ARDUINO_UNO} ${EXAMPLES_ARDUINO_LEONARDO} \
 						${EXAMPLES_ARDUINO_MEGA} ${EXAMPLES_ARDUINO_NANO} ${EXAMPLES_BREADBOARD_ATMEGA328P} \
 						${EXAMPLES_BREADBOARD_ATTINYX4} ${EXAMPLES_BREADBOARD_ATTINYX5} \
-						${EXAMPLES_BREADBOARD_ATMEGA644P}
+						${EXAMPLES_BREADBOARD_ATMEGAXX4P}
 
 # Special build target for all fastArduino examples
 # Need to export all necessary variables to submakes

@@ -47,7 +47,7 @@ static constexpr const board::Port LED_PORT = board::Port::PORT_D;
 static constexpr const board::Port LED_PORT = board::Port::PORT_A;
 #elif defined (BREADBOARD_ATTINYX4)
 static constexpr const board::Port LED_PORT = board::Port::PORT_A;
-#elif defined (BREADBOARD_ATMEGA644P)
+#elif defined (BREADBOARD_ATMEGAXX4P)
 static constexpr const board::Port LED_PORT = board::Port::PORT_A;
 #else
 #error "Current target is not yet supported!"

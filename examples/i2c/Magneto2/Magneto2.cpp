@@ -89,7 +89,7 @@ static constexpr const board::ExternalInterruptPin DRDY = board::ExternalInterru
 static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 #define INT_NUM 0
-#elif defined (BREADBOARD_ATMEGA644P)
+#elif defined (BREADBOARD_ATMEGAXX4P)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
 static constexpr const board::ExternalInterruptPin DRDY = board::ExternalInterruptPin::D26_PD2_EXT0;

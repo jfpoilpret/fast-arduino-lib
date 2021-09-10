@@ -57,7 +57,7 @@ static constexpr const board::Port LED_PORT = board::Port::PORT_A;
 static constexpr const board::Port SWITCH_PORT = board::Port::PORT_B;
 static constexpr const uint8_t SPEED_SHIFT = 0;
 static constexpr const uint8_t DIRECTION_MASK = 0x08;
-#elif defined (BREADBOARD_ATMEGA644P)
+#elif defined (BREADBOARD_ATMEGAXX4P)
 static constexpr const board::Port LED_PORT = board::Port::PORT_C;
 static constexpr const board::Port SWITCH_PORT = board::Port::PORT_B;
 static constexpr const uint8_t SPEED_SHIFT = 0;

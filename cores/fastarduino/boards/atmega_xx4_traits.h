@@ -272,40 +272,47 @@ namespace board_traits
 				|	(i & INPUT_CAPTURE ? bits::BV8(ICIE1) : 0);
 		}
 	};
-	// template<> struct Timer_trait<Timer::TIMER1>: 
-	// 	Timer_trait_impl<	uint16_t, TimerPrescalers::PRESCALERS_1_8_32_64_128_256_1024, 
-	// 						2,
-	// 						bits::BV8(WGM10, WGM11), bits::BV8(WGM12, WGM13), bits::BV8(CS10, CS11, CS12),
-	// 						bits::BV8(WGM10, WGM11), bits::BV8(WGM12),
-	// 						bits::BV8(WGM10, WGM11), 0,
-	// 						0, bits::BV8(WGM12), 
-	// 						R_(TCCR1A), R_(TCCR1B), R_(TCNT1), R_(OCR1A), 
-	// 						R_(TIMSK1), R_(TIFR1), 0xFF,
-	// 						R_(ICR1),
-	// 						0, bits::BV8(WGM12, WGM13),
-	// 						bits::BV8(WGM11), bits::BV8(WGM12, WGM13),
-	// 						bits::BV8(WGM11), bits::BV8(WGM13),
-	// 						DigitalPin::NONE, bits::BV8(ICES1), bits::BV8(ICNC1)>
-	// {
-	// 	static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
-	// 	{
-	// 		return (p == TIMER_PRESCALER::NO_PRESCALING ? bits::BV8(CS10) :
-	// 				p == TIMER_PRESCALER::DIV_8 ? bits::BV8(CS11) :
-	// 				p == TIMER_PRESCALER::DIV_32 ? bits::BV8(CS11, CS10) :
-	// 				p == TIMER_PRESCALER::DIV_64 ? bits::BV8(CS12) :
-	// 				p == TIMER_PRESCALER::DIV_128 ? bits::BV8(CS12, CS10) :
-	// 				p == TIMER_PRESCALER::DIV_256 ? bits::BV8(CS12, CS11) :
-	// 				bits::BV8(CS12, CS11, CS10));
-	// 	}
-	// 	static constexpr uint8_t TIMSK_int_mask(uint8_t i)
-	// 	{
-	// 		using namespace board_traits::TimerInterrupt;
-	// 		return	(i & OVERFLOW ? bits::BV8(TOIE1) : 0)
-	// 			|	(i & OUTPUT_COMPARE_A ? bits::BV8(OCIE1A) : 0)
-	// 			|	(i & OUTPUT_COMPARE_B ? bits::BV8(OCIE1B) : 0)
-	// 			|	(i & INPUT_CAPTURE ? bits::BV8(ICIE1) : 0);
-	// 	}
-	// };
+
+#ifdef __AVR_ATmega1284P__
+	template<> struct Timer_COM_trait<Timer::TIMER3, 0>: Timer_COM_trait_impl<
+		uint16_t, PWMPin::D14_PB6_OC3A, R_(OCR3A), 
+		bits::BV8(COM3A0, COM3A1), 0, bits::BV8(COM3A0), bits::BV8(COM3A1), bits::BV8(COM3A0, COM3A1)> {};
+	template<> struct Timer_COM_trait<Timer::TIMER3, 1>: Timer_COM_trait_impl<
+		uint16_t, PWMPin::D15_PB7_OC3B, R_(OCR3B), 
+		bits::BV8(COM3B0, COM3B1), 0, bits::BV8(COM3B0), bits::BV8(COM3B1), bits::BV8(COM3B0, COM3B1)> {};
+	template<> struct Timer_trait<Timer::TIMER3>: 
+		Timer_trait_impl<	uint16_t, TimerPrescalers::PRESCALERS_1_8_64_256_1024, 
+							2,
+							bits::BV8(WGM30, WGM31), bits::BV8(WGM32, WGM33), bits::BV8(CS30, CS31, CS32),
+							bits::BV8(WGM30, WGM31), bits::BV8(WGM32),
+							bits::BV8(WGM30, WGM31), 0,
+							0, bits::BV8(WGM32), 
+							R_(TCCR3A), R_(TCCR3B), R_(TCNT3), R_(OCR3A), 
+							R_(TIMSK3), R_(TIFR3), 0xFF,
+							R_(ICR3),
+							0, bits::BV8(WGM32, WGM33),
+							bits::BV8(WGM31), bits::BV8(WGM32, WGM33),
+							bits::BV8(WGM31), bits::BV8(WGM33),
+							DigitalPin::D13_PB5, bits::BV8(ICES3), bits::BV8(ICNC3)>
+	{
+		static constexpr uint8_t TCCRB_prescaler(TIMER_PRESCALER p)
+		{
+			return (p == TIMER_PRESCALER::NO_PRESCALING ? bits::BV8(CS30) :
+					p == TIMER_PRESCALER::DIV_8 ? bits::BV8(CS31) :
+					p == TIMER_PRESCALER::DIV_64 ? bits::BV8(CS30, CS31) :
+					p == TIMER_PRESCALER::DIV_256 ? bits::BV8(CS32) :
+					bits::BV8(CS32, CS30));
+		}
+		static constexpr uint8_t TIMSK_int_mask(uint8_t i)
+		{
+			using namespace board_traits::TimerInterrupt;
+			return	(i & OVERFLOW ? bits::BV8(TOIE3) : 0)
+				|	(i & OUTPUT_COMPARE_A ? bits::BV8(OCIE3A) : 0)
+				|	(i & OUTPUT_COMPARE_B ? bits::BV8(OCIE3B) : 0)
+				|	(i & INPUT_CAPTURE ? bits::BV8(ICIE3) : 0);
+		}
+	};
+#endif
 
 	template<> struct PWMPin_trait<PWMPin::D11_PB3_OC0A> : PWMPin_trait_impl<DigitalPin::D11_PB3, Timer::TIMER0, 0> {};
 	template<> struct PWMPin_trait<PWMPin::D12_PB4_OC0B> : PWMPin_trait_impl<DigitalPin::D12_PB4, Timer::TIMER0, 1> {};
@@ -313,6 +320,10 @@ namespace board_traits
 	template<> struct PWMPin_trait<PWMPin::D28_PD4_OC1B> : PWMPin_trait_impl<DigitalPin::D28_PD4, Timer::TIMER1, 1> {};
 	template<> struct PWMPin_trait<PWMPin::D31_PD7_OC2A> : PWMPin_trait_impl<DigitalPin::D31_PD7, Timer::TIMER2, 0> {};
 	template<> struct PWMPin_trait<PWMPin::D30_PD6_OC2B> : PWMPin_trait_impl<DigitalPin::D30_PD6, Timer::TIMER2, 1> {};
+#ifdef __AVR_ATmega1284P__
+	template<> struct PWMPin_trait<PWMPin::D14_PB6_OC3A> : PWMPin_trait_impl<DigitalPin::D14_PB6, Timer::TIMER3, 0> {};
+	template<> struct PWMPin_trait<PWMPin::D15_PB7_OC3B> : PWMPin_trait_impl<DigitalPin::D15_PB7, Timer::TIMER3, 1> {};
+#endif
 };
 
 // Macros to declare some ISR friends

@@ -51,7 +51,7 @@ static constexpr const uint8_t LED_MASK = 0xFF;
 static constexpr const board::AnalogPin POT = board::AnalogPin::A7;
 static constexpr const board::Port LED_PORT = board::Port::PORT_A;
 static constexpr const uint8_t LED_MASK = 0x7F;
-#elif defined (BREADBOARD_ATMEGA644P)
+#elif defined (BREADBOARD_ATMEGAXX4P)
 static constexpr const board::AnalogPin POT = board::AnalogPin::A7;
 static constexpr const board::Port LED_PORT = board::Port::PORT_B;
 static constexpr const uint8_t LED_MASK = 0xFF;

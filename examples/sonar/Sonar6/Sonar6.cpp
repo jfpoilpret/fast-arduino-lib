@@ -96,7 +96,7 @@ static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 #define PCI_NUM 1
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D0_PA0;
 static constexpr const board::InterruptPin ECHO = board::InterruptPin::D10_PB2_PCI1;
-#elif defined (BREADBOARD_ATMEGA644P)
+#elif defined (BREADBOARD_ATMEGAXX4P)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART0;

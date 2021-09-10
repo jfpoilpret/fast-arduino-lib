@@ -63,8 +63,16 @@ else ifeq ($(findstring ATmega328,$(CONF)),ATmega328)
 		PROGRAMMER:=ISP
 	endif
 else ifeq ($(findstring ATmega644,$(CONF)),ATmega644)
-	VARIANT:=BREADBOARD_ATMEGA644P
+	VARIANT:=BREADBOARD_ATMEGAXX4P
 	MCU:=atmega644p
+	ARCH:=avr5
+	F_CPU:=16000000UL
+	ifeq ($(PROGRAMMER),)
+		PROGRAMMER:=ISP
+	endif
+else ifeq ($(findstring ATmega1284,$(CONF)),ATmega1284)
+	VARIANT:=BREADBOARD_ATMEGAXX4P
+	MCU:=atmega1284p
 	ARCH:=avr5
 	F_CPU:=16000000UL
 	ifeq ($(PROGRAMMER),)

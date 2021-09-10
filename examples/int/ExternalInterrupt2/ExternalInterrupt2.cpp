@@ -64,7 +64,7 @@ REGISTER_INT_ISR_EMPTY(0, SWITCH)
 constexpr const board::ExternalInterruptPin SWITCH = board::ExternalInterruptPin::D2_PB2_EXT0;
 // Define vectors we need in the example
 REGISTER_INT_ISR_EMPTY(0, SWITCH)
-#elif defined (BREADBOARD_ATMEGA644P)
+#elif defined (BREADBOARD_ATMEGAXX4P)
 constexpr const board::ExternalInterruptPin SWITCH = board::ExternalInterruptPin::D26_PD2_EXT0;
 // Define vectors we need in the example
 REGISTER_INT_ISR_EMPTY(0, SWITCH)

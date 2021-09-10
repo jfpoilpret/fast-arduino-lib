@@ -70,7 +70,7 @@ constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 // PIN connected to servo signal
 constexpr const board::PWMPin SERVO_PIN1 = board::PWMPin::D6_PA6_OC1A;
 constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
-#elif defined (BREADBOARD_ATMEGA644P)
+#elif defined (BREADBOARD_ATMEGAXX4P)
 #define TIMER_NUM 1
 constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 // PIN connected to servo signal

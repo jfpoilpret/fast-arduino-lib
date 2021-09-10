@@ -61,7 +61,7 @@ REGISTER_RTT_ISR(1)
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
 REGISTER_RTT_ISR(1)
-#elif defined (BREADBOARD_ATMEGA644P)
+#elif defined (BREADBOARD_ATMEGAXX4P)
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
 REGISTER_RTT_ISR(1)
@@ -115,7 +115,7 @@ int main()
 	check_timer<board::Timer::TIMER3>();
 	check_timer<board::Timer::TIMER4>();
 	check_timer<board::Timer::TIMER5>();
-#elif defined (BREADBOARD_ATMEGA644P)
+#elif defined (BREADBOARD_ATMEGAXX4P)
 	check_timer<board::Timer::TIMER0>();
 	check_timer<board::Timer::TIMER1>();
 	check_timer<board::Timer::TIMER2>();

@@ -77,7 +77,7 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 #include <fastarduino/soft_uart.h>
 static constexpr const board::DigitalPin TX = board::DigitalPin::D3_PB3;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
-#elif defined (BREADBOARD_ATMEGA644P)
+#elif defined (BREADBOARD_ATMEGAXX4P)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART0;

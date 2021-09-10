@@ -33,7 +33,7 @@
 #include "attiny_x4_traits.h"
 #elif defined(BREADBOARD_ATTINYX5)
 #include "attiny_x5_traits.h"
-#elif defined(BREADBOARD_ATMEGA644P)
+#elif defined(BREADBOARD_ATMEGAXX4P)
 #include "atmega_xx4_traits.h"
 
 #else

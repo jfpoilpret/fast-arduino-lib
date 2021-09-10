@@ -108,7 +108,7 @@ static const constexpr board::DigitalPin PIN_CE = board::DigitalPin::D4_PB4;
 static const constexpr board::Timer RTT_TIMER = board::Timer::TIMER0;
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
-#elif defined (BREADBOARD_ATMEGA644P)
+#elif defined (BREADBOARD_ATMEGAXX4P)
 #define HAS_TRACE 1
 #define USART_NUM 0
 static const constexpr board::USART UART = board::USART::USART0;

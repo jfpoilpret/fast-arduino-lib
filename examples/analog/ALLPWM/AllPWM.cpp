@@ -29,6 +29,8 @@
  *   - PB0, PB1
  * - on ATmega644 based boards:
  *   - D11 (PB3), D12 (PB4), D28 (PD4), D29 (PD5), D30 (PD6), D31 (PD7)
+ * - on ATmega1284 based boards:
+ *   - D11 (PB3), D12 (PB4), D28 (PD4), D29 (PD5), D30 (PD6), D31 (PD7), D14 (PB6), D15 (PB7)
  */
 
 #include <fastarduino/time.h>
@@ -111,13 +113,17 @@ int main()
 #elif defined (BREADBOARD_ATTINYX5)
 	check_PWM<Timer::TIMER0, PWMPin::D0_PB0_OC0A>();
 	check_PWM<Timer::TIMER0, PWMPin::D1_PB1_OC0B>();
-#elif defined (BREADBOARD_ATMEGA644P)
+#elif defined (BREADBOARD_ATMEGAXX4P)
 	check_PWM<Timer::TIMER0, PWMPin::D11_PB3_OC0A>();
 	check_PWM<Timer::TIMER0, PWMPin::D12_PB4_OC0B>();
 	check_PWM<Timer::TIMER1, PWMPin::D29_PD5_OC1A>();
 	check_PWM<Timer::TIMER1, PWMPin::D28_PD4_OC1B>();
 	check_PWM<Timer::TIMER2, PWMPin::D31_PD7_OC2A>();
 	check_PWM<Timer::TIMER2, PWMPin::D30_PD6_OC2B>();
+#ifdef __AVR_ATmega1284P__
+	check_PWM<Timer::TIMER3, PWMPin::D14_PB6_OC3A>();
+	check_PWM<Timer::TIMER3, PWMPin::D15_PB7_OC3B>();
+#endif
 #else
 #error "Current target is not yet supported!"
 #endif

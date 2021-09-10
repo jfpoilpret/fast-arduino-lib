@@ -224,6 +224,10 @@ namespace board
 		D30_PD6_OC2B,
 		D31_PD7_OC2A,
 
+#ifdef __AVR_ATmega1284P__
+		D14_PB6_OC3A,
+		D15_PB7_OC3B,
+#endif
 		// FastArduino internal: DO NOT USE
 		NONE = UINT8_MAX
 	};
@@ -315,7 +319,11 @@ namespace board
 		/** Timer1 (16 bits) */
 		TIMER1 = 1,
 		/** Timer2 (8 bits) */
-		TIMER2 = 2
+		TIMER2 = 2,
+#ifdef __AVR_ATmega1284P__
+		/** Timer3 (16 bits) */
+		TIMER3 = 3
+#endif
 	};
 	
 	/**

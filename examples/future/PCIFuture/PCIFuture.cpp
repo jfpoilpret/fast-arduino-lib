@@ -91,7 +91,7 @@ static constexpr board::Port PORT = board::Port::PORT_B;
 static constexpr uint8_t PORT_MASK = 0x1C;
 static constexpr board::InterruptPin IPIN0 = board::InterruptPin::D0_PB0_PCI0;
 #define PCINT 0
-#elif defined (BREADBOARD_ATMEGA644P)
+#elif defined (BREADBOARD_ATMEGAXX4P)
 #define HARDWARE_UART 1
 #include <fastarduino/uart.h>
 static constexpr board::USART USART = board::USART::USART0;
