@@ -42,6 +42,7 @@ doco:
 	doxygen ./dox/doxyfile-leonardo
 	doxygen ./dox/doxyfile-mega
 	doxygen ./dox/doxyfile-atmega328
+	doxygen ./dox/doxyfile-atmegaxx4
 	doxygen ./dox/doxyfile-attinyx4
 	doxygen ./dox/doxyfile-attinyx5
 
