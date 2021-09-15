@@ -147,7 +147,7 @@ class gpio::FastPin&lt; PORT_, BIT_ &gt;</h3>
 
 <p>API that manipulates one digital IO pin of a given port. </p>
 <p>Implementation is highly optimized for size and speed: instances use no SRAM at all, most common methods use only 1 AVR instruction.</p>
-<p>Note that, although it has public constructors, you generally do not construct <code><a class="el" href="classgpio_1_1_fast_pin.html" title="API that manipulates one digital IO pin of a given port.">FastPin</a></code> instances directly. You better use <code><a class="el" href="classgpio_1_1_fast_pin_type.html" title="API that manipulates a given digital IO pin of a the target MCU.">FastPinType</a></code>, which is directly provided a <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU.">board::DigitalPin</a></code> constant, or even better, use <code>FAST_PIN</code> alias type. You may also obtain a <code><a class="el" href="classgpio_1_1_fast_pin.html" title="API that manipulates one digital IO pin of a given port.">FastPin</a></code> instance through <code><a class="el" href="classgpio_1_1_fast_port.html#ad239b42e4388126afe8242a01cd8eb2d" title="Create a FastPin instance for a given pin of this port.">FastPort::get_pin()</a></code>.</p>
+<p>Note that, although it has public constructors, you generally do not construct <code><a class="el" href="classgpio_1_1_fast_pin.html" title="API that manipulates one digital IO pin of a given port.">FastPin</a></code> instances directly. You better use <code><a class="el" href="classgpio_1_1_fast_pin_type.html" title="API that manipulates a given digital IO pin of a the target MCU.">FastPinType</a></code>, which is directly provided a <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of ATmega644, with reference to Arduino MEGA pins.">board::DigitalPin</a></code> constant, or even better, use <code>FAST_PIN</code> alias type. You may also obtain a <code><a class="el" href="classgpio_1_1_fast_pin.html" title="API that manipulates one digital IO pin of a given port.">FastPin</a></code> instance through <code><a class="el" href="classgpio_1_1_fast_port.html#ad239b42e4388126afe8242a01cd8eb2d" title="Create a FastPin instance for a given pin of this port.">FastPort::get_pin()</a></code>.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">PORT_</td><td>the target port to which this pin belongs </td></tr>
@@ -155,7 +155,7 @@ class gpio::FastPin&lt; PORT_, BIT_ &gt;</h3>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1" title="Defines all available ports of the target MCU.">board::Port</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1" title="Defines all available ports of ATmega644.">board::Port</a> </dd>
 <dd>
 <a class="el" href="classgpio_1_1_fast_pin_type.html" title="API that manipulates a given digital IO pin of a the target MCU.">gpio::FastPinType</a> </dd>
 <dd>

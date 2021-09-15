@@ -281,7 +281,7 @@ $(document).ready(function(){initNavTree('eeprom_8h_source.html',''); initResiza
 <div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;                <span class="comment">// Some bits need to be erased (ie set to 1)</span></div>
 <div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;                <span class="keywordflow">if</span> (value == UINT8_MAX)</div>
 <div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;                    <span class="comment">// Erase only</span></div>
-<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;                    EECR_ = EEPM0;</div>
+<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;                    EECR_ = <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(EEPM0);</div>
 <div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;                <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;                    <span class="comment">// Combine Erase/Write operation</span></div>
 <div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;                    EECR_ = 0;</div>
@@ -291,7 +291,7 @@ $(document).ready(function(){initNavTree('eeprom_8h_source.html',''); initResiza
 <div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;                <span class="comment">// No bit to be erased</span></div>
 <div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;                <span class="keywordflow">if</span> (diff)</div>
 <div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;                    <span class="comment">// Some bits to be programmed (set to 0): Write only</span></div>
-<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;                    EECR_ = EEPM1;</div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;                    EECR_ = <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(EEPM1);</div>
 <div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;                <span class="keywordflow">else</span></div>
 <div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;                    <span class="comment">// old value == new value =&gt; do nothing</span></div>
 <div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;                    <span class="keywordflow">return</span>;</div>
@@ -311,7 +311,7 @@ $(document).ready(function(){initNavTree('eeprom_8h_source.html',''); initResiza
 <div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;            uint8_t value = EEDR;</div>
 <div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;            <span class="comment">// Some bits need to be erased (ie set to 1)</span></div>
 <div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;            <span class="keywordflow">if</span> (value == UINT8_MAX) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;            EECR_ = EEPM0;</div>
+<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;            EECR_ = <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(EEPM0);</div>
 <div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;            EEDR_ = UINT8_MAX;</div>
 <div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;            <span class="keyword">synchronized</span></div>
 <div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;            {</div>
@@ -483,7 +483,7 @@ $(document).ready(function(){initNavTree('eeprom_8h_source.html',''); initResiza
 <div class="line"><a name="l00796"></a><span class="lineno">  796</span>&#160;        {</div>
 <div class="line"><a name="l00797"></a><span class="lineno">  797</span>&#160;            WriteItem() = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160;            WriteItem(uint8_t value1, uint8_t value2, uint8_t value3)</div>
-<div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160;            :   address{uint16_t(uint8_t(value1 &lt;&lt; 4) | uint8_t(value2 &gt;&gt; 4))}, </div>
+<div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160;            :   address{uint16_t(uint16_t(value1 &lt;&lt; 4) | uint8_t(value2 &gt;&gt; 4))}, </div>
 <div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160;                <a class="code" href="classeeprom_1_1_e_e_p_r_o_m.html#a0436da8b147296088a2903e65f1618c0">size</a>{uint16_t(<a class="code" href="namespaceutils.html#a3525bf2bf63c9f906bc9b952f0d54355">utils::is_zero</a>(((value2 &amp; 0x0F) &lt;&lt; 8) | value3, E2END + 1))} {}</div>
 <div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160; </div>
 <div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160;            <span class="keyword">static</span> uint8_t value1(uint16_t address, uint16_t <a class="code" href="classeeprom_1_1_e_e_p_r_o_m.html#a0436da8b147296088a2903e65f1618c0">size</a> <a class="code" href="defines_8h.html#addf5ec070e9499d36b7f2009ce736076">UNUSED</a>)</div>

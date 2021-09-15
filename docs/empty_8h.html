@@ -112,43 +112,276 @@ Include dependency graph for empty.h:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
 Namespaces</h2></td></tr>
 <tr class="memitem:namespaceboard"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html">board</a></td></tr>
-<tr class="memdesc:namespaceboard"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all types and constants specific to support a specific MCU target. <br /></td></tr>
+<tr class="memdesc:namespaceboard"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all types and constants specific to support Arduino MEGA board (ATmega644 MCU target). <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:a151323e5de5adf93f6bcdfdd64fa1eb1"><td class="memItemLeft" align="right" valign="top"><a id="a151323e5de5adf93f6bcdfdd64fa1eb1"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1">board::Port</a> : uint8_t </td></tr>
-<tr class="memdesc:a151323e5de5adf93f6bcdfdd64fa1eb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all available ports of the target MCU. <br /></td></tr>
+<tr class="memitem:a151323e5de5adf93f6bcdfdd64fa1eb1"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1">board::Port</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1a74be45e4297a389149136838447505eb">board::Port::PORT_A</a> = 0, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1a9cae7bfd8bd697a2b71b832915916500">board::Port::PORT_B</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1a5f445c05cec473774b9a58f12e2252b6">board::Port::PORT_C</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1a53fbafc8fef75a8d3417ae8882f94215">board::Port::PORT_D</a>, 
+<br />
+&#160;&#160;<b>NONE</b> = UINT8_MAX
+<br />
+ }</td></tr>
+<tr class="memdesc:a151323e5de5adf93f6bcdfdd64fa1eb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all available ports of the target MCU.  <a href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1">More...</a><br /></td></tr>
 <tr class="separator:a151323e5de5adf93f6bcdfdd64fa1eb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5082846fef8fdfb8c8cbcf1163c7b404"><td class="memItemLeft" align="right" valign="top"><a id="a5082846fef8fdfb8c8cbcf1163c7b404"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a> : uint8_t </td></tr>
-<tr class="memdesc:a5082846fef8fdfb8c8cbcf1163c7b404"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all available digital input/output pins of the target MCU. <br /></td></tr>
+<tr class="memitem:a5082846fef8fdfb8c8cbcf1163c7b404"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a1b4791863eac0cad982023695108413a">board::DigitalPin::D0_PA0</a> = 0, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a5c3e1a9b643351da64a981448c6229dc">board::DigitalPin::D1_PA1</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a1fb0c66db0bfeb3adafaf32b12d3d3a0">board::DigitalPin::D2_PA2</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a2f444f4702fbf96b230f90d88f32e497">board::DigitalPin::D3_PA3</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a891fc33be0e7a77c626fb213dffe1221">board::DigitalPin::D4_PA4</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404aabf943c5e7bd705c6be35c5163148259">board::DigitalPin::D5_PA5</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404aebc8ff00f91e28ff3ab4c411be0ed236">board::DigitalPin::D6_PA6</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a6177803f06bb7a03e33df460dcef7cd6">board::DigitalPin::D7_PA7</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a317ae89cfba39a1de2e372f4e84d93e1">board::DigitalPin::D8_PB0</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a976b1070dce595e300d4fe4721f1b2c9">board::DigitalPin::D9_PB1</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404ac6353169fc94df0f4b0e9aa0ea2779ec">board::DigitalPin::D10_PB2</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a3c934254a33169c1251e9b7712a4e4ce">board::DigitalPin::D11_PB3</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a689f139b0c4b610960038a99bf068c61">board::DigitalPin::D12_PB4</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404aef09c620fd7f759b163fb69e843b02d6">board::DigitalPin::D13_PB5</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a6dd4edc883593d23c484d849f8ee14bd">board::DigitalPin::D14_PB6</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a1aa1ef778289def2c932847aa64f6057">board::DigitalPin::D15_PB7</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a08d5cebcd6527811db743912bb48723c">board::DigitalPin::D16_PC0</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404ac640c2c7356c31e7156ec73c19edafb2">board::DigitalPin::D17_PC1</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a4aa52eae97dad32bc787a36d61479f5e">board::DigitalPin::D18_PC2</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a2ba18d905efb951e6292dacd777b890e">board::DigitalPin::D19_PC3</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a585cfe54518c5c78dd01292ab7ee24e2">board::DigitalPin::D20_PC4</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a6f8895e151ab9b46db98e3681974a5cf">board::DigitalPin::D21_PC5</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404ab663f5ac26be5c4563c0e18e6c51d126">board::DigitalPin::D22_PC6</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a6c3b2f9ea9751a17a973d403243b7ba8">board::DigitalPin::D23_PC7</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a6770cb53b685fa8d23adfdcad29e0cc6">board::DigitalPin::D24_PD0</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404ab0cd90796720c76dfeddd736c47ba984">board::DigitalPin::D25_PD1</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a91d8d369a15ba1bf05f25514cdc2e161">board::DigitalPin::D26_PD2</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a1486d877db077e816008c97221230c95">board::DigitalPin::D27_PD3</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a874a97dadc7af65aeab43241232d92bd">board::DigitalPin::D28_PD4</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a460496fd152c080c1755fde621d6ee0a">board::DigitalPin::D29_PD5</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a810f6638890d8fbdcb420eba92e3fe37">board::DigitalPin::D30_PD6</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a36cf606087b77ecfd2cb2566b86c7392">board::DigitalPin::D31_PD7</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404a53e0dbc06e48e3d381ac224fa8bae3df">board::DigitalPin::LED</a> = D8_PB0, 
+<br />
+&#160;&#160;<b>NONE</b> = 0XFF
+<br />
+ }</td></tr>
+<tr class="memdesc:a5082846fef8fdfb8c8cbcf1163c7b404"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all available digital input/output pins of the target MCU.  <a href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">More...</a><br /></td></tr>
 <tr class="separator:a5082846fef8fdfb8c8cbcf1163c7b404"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e3848368e5870b25acfc5b84d5fdf96"><td class="memItemLeft" align="right" valign="top"><a id="a5e3848368e5870b25acfc5b84d5fdf96"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a5e3848368e5870b25acfc5b84d5fdf96">board::AnalogClock</a> : uint8_t </td></tr>
+<tr class="memitem:a5e3848368e5870b25acfc5b84d5fdf96"><td class="memItemLeft" align="right" valign="top"><a id="a5e3848368e5870b25acfc5b84d5fdf96"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a5e3848368e5870b25acfc5b84d5fdf96">board::AnalogClock</a> : uint8_t { <br />
+&#160;&#160;<b>MAX_FREQ_50KHz</b> = 0, 
+<br />
+&#160;&#160;<b>MAX_FREQ_100KHz</b>, 
+<br />
+&#160;&#160;<b>MAX_FREQ_200KHz</b>, 
+<br />
+&#160;&#160;<b>MAX_FREQ_500KHz</b>, 
+<br />
+&#160;&#160;<b>MAX_FREQ_1MHz</b>
+<br />
+ }</td></tr>
 <tr class="memdesc:a5e3848368e5870b25acfc5b84d5fdf96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines available clocks of the target MCU, used for analog input. <br /></td></tr>
 <tr class="separator:a5e3848368e5870b25acfc5b84d5fdf96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afce4d1fd9c536a1cb4275682b46bc1f9"><td class="memItemLeft" align="right" valign="top"><a id="afce4d1fd9c536a1cb4275682b46bc1f9"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#afce4d1fd9c536a1cb4275682b46bc1f9">board::AnalogReference</a> : uint8_t </td></tr>
-<tr class="memdesc:afce4d1fd9c536a1cb4275682b46bc1f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines available voltage references of the target MCU, used for analog input. <br /></td></tr>
+<tr class="memitem:afce4d1fd9c536a1cb4275682b46bc1f9"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#afce4d1fd9c536a1cb4275682b46bc1f9">board::AnalogReference</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespaceboard.html#afce4d1fd9c536a1cb4275682b46bc1f9a73baa1f279879a52ff4215d3c9031d1f">board::AnalogReference::AREF</a> = 0, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#afce4d1fd9c536a1cb4275682b46bc1f9a7553837f2d19afc93f5bbc9d84e097f3">board::AnalogReference::AVCC</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#afce4d1fd9c536a1cb4275682b46bc1f9a4ceb5ba9f9538bc90aea81a78094db5e">board::AnalogReference::INTERNAL_1_1V</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#afce4d1fd9c536a1cb4275682b46bc1f9a3c8948359bbce404c8f35f18c9c14f3e">board::AnalogReference::INTERNAL_2_56V</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:afce4d1fd9c536a1cb4275682b46bc1f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines available voltage references of the target MCU, used for analog input.  <a href="namespaceboard.html#afce4d1fd9c536a1cb4275682b46bc1f9">More...</a><br /></td></tr>
 <tr class="separator:afce4d1fd9c536a1cb4275682b46bc1f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6ed32fa64dbf9169ccc11a040e11d313"><td class="memItemLeft" align="right" valign="top"><a id="a6ed32fa64dbf9169ccc11a040e11d313"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a6ed32fa64dbf9169ccc11a040e11d313">board::AnalogPin</a> : uint8_t </td></tr>
-<tr class="memdesc:a6ed32fa64dbf9169ccc11a040e11d313"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all available analog input pins of the target MCU. <br /></td></tr>
+<tr class="memitem:a6ed32fa64dbf9169ccc11a040e11d313"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a6ed32fa64dbf9169ccc11a040e11d313">board::AnalogPin</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a6ed32fa64dbf9169ccc11a040e11d313ad88c146dfafdea37a837778a92415bc2">board::AnalogPin::A0</a> = 0, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a6ed32fa64dbf9169ccc11a040e11d313a27f237e6b7f96587b6202ff3607ad88a">board::AnalogPin::A1</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a6ed32fa64dbf9169ccc11a040e11d313ac6bdf6f65f3845da9085e9ae5790b494">board::AnalogPin::A2</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a6ed32fa64dbf9169ccc11a040e11d313a6593d7b12fd418cdb35bbf438de72f66">board::AnalogPin::A3</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a6ed32fa64dbf9169ccc11a040e11d313a0c2f3adf2a48bab3adb470f4da57f3d0">board::AnalogPin::A4</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a6ed32fa64dbf9169ccc11a040e11d313ac6f2f93133905f75da4b02ccc19ab66a">board::AnalogPin::A5</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a6ed32fa64dbf9169ccc11a040e11d313a0b3d5609ee81e50809b7351e848e4698">board::AnalogPin::A6</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a6ed32fa64dbf9169ccc11a040e11d313abe523bdcc111d8113eb54f747d89d4d7">board::AnalogPin::A7</a>, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a6ed32fa64dbf9169ccc11a040e11d313aec822af60bc7412ff73aecb3edffa55c">board::AnalogPin::BANDGAP</a>, 
+<br />
+&#160;&#160;<b>NONE</b> = UINT8_MAX
+<br />
+ }</td></tr>
+<tr class="memdesc:a6ed32fa64dbf9169ccc11a040e11d313"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all available analog input pins of the target MCU.  <a href="namespaceboard.html#a6ed32fa64dbf9169ccc11a040e11d313">More...</a><br /></td></tr>
 <tr class="separator:a6ed32fa64dbf9169ccc11a040e11d313"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1283eb94244413c14c80cc2f3e8bcb3f"><td class="memItemLeft" align="right" valign="top"><a id="a1283eb94244413c14c80cc2f3e8bcb3f"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3f">board::PWMPin</a> : uint8_t </td></tr>
+<tr class="memitem:a1283eb94244413c14c80cc2f3e8bcb3f"><td class="memItemLeft" align="right" valign="top"><a id="a1283eb94244413c14c80cc2f3e8bcb3f"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3f">board::PWMPin</a> : uint8_t { <br />
+&#160;&#160;<b>D11_PB3_OC0A</b> = 0, 
+<br />
+&#160;&#160;<b>D12_PB4_OC0B</b>, 
+<br />
+&#160;&#160;<b>D28_PD4_OC1B</b>, 
+<br />
+&#160;&#160;<b>D29_PD5_OC1A</b>, 
+<br />
+&#160;&#160;<b>D30_PD6_OC2B</b>, 
+<br />
+&#160;&#160;<b>D31_PD7_OC2A</b>, 
+<br />
+&#160;&#160;<b>NONE</b> = UINT8_MAX
+<br />
+ }</td></tr>
 <tr class="memdesc:a1283eb94244413c14c80cc2f3e8bcb3f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all digital output pins of target MCU, capable of PWM output. <br /></td></tr>
 <tr class="separator:a1283eb94244413c14c80cc2f3e8bcb3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adea66670db50b076b2c145657aa587f7"><td class="memItemLeft" align="right" valign="top"><a id="adea66670db50b076b2c145657aa587f7"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#adea66670db50b076b2c145657aa587f7">board::ExternalInterruptPin</a> : uint8_t </td></tr>
+<tr class="memitem:adea66670db50b076b2c145657aa587f7"><td class="memItemLeft" align="right" valign="top"><a id="adea66670db50b076b2c145657aa587f7"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#adea66670db50b076b2c145657aa587f7">board::ExternalInterruptPin</a> : uint8_t { <br />
+&#160;&#160;<b>D26_PD2_EXT0</b> = 0, 
+<br />
+&#160;&#160;<b>D27_PD3_EXT1</b>, 
+<br />
+&#160;&#160;<b>D10_PB2_EXT2</b>
+<br />
+ }</td></tr>
 <tr class="memdesc:adea66670db50b076b2c145657aa587f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all digital output pins of target MCU, usable as direct external interrupt pins. <br /></td></tr>
 <tr class="separator:adea66670db50b076b2c145657aa587f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7abd24b042402c0691c0ad6db604e7da"><td class="memItemLeft" align="right" valign="top"><a id="a7abd24b042402c0691c0ad6db604e7da"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da">board::InterruptPin</a> : uint8_t </td></tr>
+<tr class="memitem:a7abd24b042402c0691c0ad6db604e7da"><td class="memItemLeft" align="right" valign="top"><a id="a7abd24b042402c0691c0ad6db604e7da"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da">board::InterruptPin</a> : uint8_t { <br />
+&#160;&#160;<b>D0_PA0_PCI0</b> = uint8_t(DigitalPin::D0_PA0), 
+<br />
+&#160;&#160;<b>D1_PA1_PCI0</b> = uint8_t(DigitalPin::D1_PA1), 
+<br />
+&#160;&#160;<b>D2_PA2_PCI0</b> = uint8_t(DigitalPin::D2_PA2), 
+<br />
+&#160;&#160;<b>D3_PA3_PCI0</b> = uint8_t(DigitalPin::D3_PA3), 
+<br />
+&#160;&#160;<b>D4_PA4_PCI0</b> = uint8_t(DigitalPin::D4_PA4), 
+<br />
+&#160;&#160;<b>D5_PA5_PCI0</b> = uint8_t(DigitalPin::D5_PA5), 
+<br />
+&#160;&#160;<b>D6_PA6_PCI0</b> = uint8_t(DigitalPin::D6_PA6), 
+<br />
+&#160;&#160;<b>D7_PA7_PCI0</b> = uint8_t(DigitalPin::D7_PA7), 
+<br />
+&#160;&#160;<b>D8_PB0_PCI1</b> = uint8_t(DigitalPin::D8_PB0), 
+<br />
+&#160;&#160;<b>D9_PB1_PCI1</b> = uint8_t(DigitalPin::D9_PB1), 
+<br />
+&#160;&#160;<b>D10_PB2_PCI1</b> = uint8_t(DigitalPin::D10_PB2), 
+<br />
+&#160;&#160;<b>D11_PB3_PCI1</b> = uint8_t(DigitalPin::D11_PB3), 
+<br />
+&#160;&#160;<b>D12_PB4_PCI1</b> = uint8_t(DigitalPin::D12_PB4), 
+<br />
+&#160;&#160;<b>D13_PB5_PCI1</b> = uint8_t(DigitalPin::D13_PB5), 
+<br />
+&#160;&#160;<b>D14_PB6_PCI1</b> = uint8_t(DigitalPin::D14_PB6), 
+<br />
+&#160;&#160;<b>D15_PB7_PCI1</b> = uint8_t(DigitalPin::D15_PB7), 
+<br />
+&#160;&#160;<b>D16_PC0_PCI2</b> = uint8_t(DigitalPin::D16_PC0), 
+<br />
+&#160;&#160;<b>D17_PC1_PCI2</b> = uint8_t(DigitalPin::D17_PC1), 
+<br />
+&#160;&#160;<b>D18_PC2_PCI2</b> = uint8_t(DigitalPin::D18_PC2), 
+<br />
+&#160;&#160;<b>D19_PC3_PCI2</b> = uint8_t(DigitalPin::D19_PC3), 
+<br />
+&#160;&#160;<b>D20_PC4_PCI2</b> = uint8_t(DigitalPin::D20_PC4), 
+<br />
+&#160;&#160;<b>D21_PC5_PCI2</b> = uint8_t(DigitalPin::D21_PC5), 
+<br />
+&#160;&#160;<b>D22_PC6_PCI2</b> = uint8_t(DigitalPin::D22_PC6), 
+<br />
+&#160;&#160;<b>D23_PC7_PCI2</b> = uint8_t(DigitalPin::D23_PC7), 
+<br />
+&#160;&#160;<b>D24_PD0_PCI3</b> = uint8_t(DigitalPin::D24_PD0), 
+<br />
+&#160;&#160;<b>D25_PD1_PCI3</b> = uint8_t(DigitalPin::D25_PD1), 
+<br />
+&#160;&#160;<b>D26_PD2_PCI3</b> = uint8_t(DigitalPin::D26_PD2), 
+<br />
+&#160;&#160;<b>D27_PD3_PCI3</b> = uint8_t(DigitalPin::D27_PD3), 
+<br />
+&#160;&#160;<b>D28_PD4_PCI3</b> = uint8_t(DigitalPin::D28_PD4), 
+<br />
+&#160;&#160;<b>D29_PD5_PCI3</b> = uint8_t(DigitalPin::D29_PD5), 
+<br />
+&#160;&#160;<b>D30_PD6_PCI3</b> = uint8_t(DigitalPin::D30_PD6), 
+<br />
+&#160;&#160;<b>D31_PD7_PCI3</b> = uint8_t(DigitalPin::D31_PD7)
+<br />
+ }</td></tr>
 <tr class="memdesc:a7abd24b042402c0691c0ad6db604e7da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all digital output pins of target MCU, usable as pin change interrupt (PCI) pins. <br /></td></tr>
 <tr class="separator:a7abd24b042402c0691c0ad6db604e7da"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8541ca1f10a050c4356d6ccd76d9a907"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">board::USART</a> : uint8_t </td></tr>
+<tr class="memitem:a8541ca1f10a050c4356d6ccd76d9a907"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">board::USART</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907ae4423159ddbc35ef0b6a05f8cc6185be">board::USART::USART0</a> = 0, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907a57df46e04f75bf3f3cbe158b110f2656">board::USART::USART1</a> = 1
+<br />
+ }</td></tr>
 <tr class="memdesc:a8541ca1f10a050c4356d6ccd76d9a907"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all USART modules of target MCU.  <a href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">More...</a><br /></td></tr>
 <tr class="separator:a8541ca1f10a050c4356d6ccd76d9a907"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa6b4a447b2fccb95185367644c3f28bb"><td class="memItemLeft" align="right" valign="top"><a id="aa6b4a447b2fccb95185367644c3f28bb"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bb">board::Timer</a> : uint8_t </td></tr>
-<tr class="memdesc:aa6b4a447b2fccb95185367644c3f28bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all timers available for target MCU. <br /></td></tr>
+<tr class="memitem:aa6b4a447b2fccb95185367644c3f28bb"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bb">board::Timer</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bba3796280163770b0769e370ecb8cc0e1e">board::Timer::TIMER0</a> = 0, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bba348f042a61f1305861ca45be3e592054">board::Timer::TIMER1</a> = 1, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bbad57d6591c17265fd7be950b8dc43c2d0">board::Timer::TIMER2</a> = 2
+<br />
+ }</td></tr>
+<tr class="memdesc:aa6b4a447b2fccb95185367644c3f28bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all timers available for target MCU.  <a href="namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bb">More...</a><br /></td></tr>
 <tr class="separator:aa6b4a447b2fccb95185367644c3f28bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae62717162088fee094efad7ff669183d"><td class="memItemLeft" align="right" valign="top"><a id="ae62717162088fee094efad7ff669183d"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#ae62717162088fee094efad7ff669183d">board::SleepMode</a> : uint8_t </td></tr>
-<tr class="memdesc:ae62717162088fee094efad7ff669183d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all available sleep modes for target MCU. <br /></td></tr>
+<tr class="memitem:ae62717162088fee094efad7ff669183d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceboard.html#ae62717162088fee094efad7ff669183d">board::SleepMode</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespaceboard.html#ae62717162088fee094efad7ff669183daa5daf7f2ebbba4975d61dab1c40188c7">board::SleepMode::IDLE</a> = SLEEP_MODE_IDLE, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#ae62717162088fee094efad7ff669183da36ab2555967907a8e2d175f412b03cf2">board::SleepMode::ADC_NOISE_REDUCTION</a> = SLEEP_MODE_ADC, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#ae62717162088fee094efad7ff669183da62f255a0405c1614801a52285695c501">board::SleepMode::POWER_DOWN</a> = SLEEP_MODE_PWR_DOWN, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#ae62717162088fee094efad7ff669183daf7b4def42367ade4dd11ac8ddc9ebd10">board::SleepMode::POWER_SAVE</a> = SLEEP_MODE_PWR_SAVE, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#ae62717162088fee094efad7ff669183daeea559d5c56d48e94e586f7fe000c0b1">board::SleepMode::STANDBY</a> = SLEEP_MODE_STANDBY, 
+<br />
+&#160;&#160;<a class="el" href="namespaceboard.html#ae62717162088fee094efad7ff669183da0049ab1a872122fa9587be568d9be4fa">board::SleepMode::EXTENDED_STANDBY</a> = SLEEP_MODE_EXT_STANDBY
+<br />
+ }</td></tr>
+<tr class="memdesc:ae62717162088fee094efad7ff669183d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines all available sleep modes for target MCU.  <a href="namespaceboard.html#ae62717162088fee094efad7ff669183d">More...</a><br /></td></tr>
 <tr class="separator:ae62717162088fee094efad7ff669183d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>

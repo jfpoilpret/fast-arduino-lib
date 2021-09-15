@@ -17,6 +17,7 @@ var NAVTREEINDEX0 =
 "annotated.html":[6,0],
 "array_8h_source.html":[7,0,0,6],
 "assertions_8h_source.html":[7,0,0,2,0],
+"atmega__xx4_8h_source.html":[7,0,0,0,0],
 "bits_8h.html":[7,0,0,7],
 "bits_8h.html#a0e79a970245c94e82bb33a44b43727ab":[7,0,0,7,14],
 "bits_8h.html#a17afee8fb8f509dbda0a5944d7a1ba31":[7,0,0,7,16],
@@ -36,7 +37,7 @@ var NAVTREEINDEX0 =
 "bits_8h.html#add87d7e690fc96fec5619b9f673050c6":[7,0,0,7,11],
 "bits_8h.html#af3e29db72a5d50fc0b1b684524e1c9a3":[7,0,0,7,13],
 "bits_8h_source.html":[7,0,0,7],
-"board_8h_source.html":[7,0,0,0,0],
+"board_8h_source.html":[7,0,0,0,1],
 "classanalog_1_1_analog_comparator.html":[6,0,0,0],
 "classanalog_1_1_analog_comparator.html#a02ee03edcecd22753b2a138e33de854f":[6,0,0,0,3],
 "classanalog_1_1_analog_comparator.html#a3d0efb8dbc256e15b437ab6d4ae4e7f3":[6,0,0,0,6],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "classdevices_1_1audio_1_1_tone_generator.html#a84b3c1b940adde79a79cca43ffcfc5eb":[6,0,2,0,3,7],
 "classdevices_1_1audio_1_1_tone_generator.html#aa0b1916ae575480da9985085d74dc18f":[6,0,2,0,3,5],
 "classdevices_1_1audio_1_1_tone_generator.html#ac834c6d0d291cdce1f7d257ab45721c3":[6,0,2,0,3,2],
-"classdevices_1_1audio_1_1_tone_generator.html#ae1b285ecb998f46504de143cc4ce1a67":[6,0,2,0,3,6],
-"classdevices_1_1audio_1_1_tone_generator.html#aee0c351832dfafbd7b29a90f7dbc70b1":[6,0,2,0,3,0]
+"classdevices_1_1audio_1_1_tone_generator.html#ae1b285ecb998f46504de143cc4ce1a67":[6,0,2,0,3,6]
 };

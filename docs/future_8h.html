@@ -94,6 +94,7 @@ $(document).ready(function(){initNavTree('future_8h.html',''); initResizable(); 
 <p>Utility API to handle the concept of futures.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;string.h&gt;</code><br />
+<code>#include &quot;array.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="errors_8h_source.html">errors.h</a>&quot;</code><br />
 <code>#include &quot;move.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="streams_8h_source.html">streams.h</a>&quot;</code><br />
@@ -103,31 +104,33 @@ Include dependency graph for future.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="future_8h__incl.png" border="0" usemap="#afastarduino_2future_8h" alt=""/></div>
 <map name="fastarduino_2future_8h" id="fastarduino_2future_8h">
-<area shape="rect" title="Utility API to handle the concept of futures." alt="" coords="173,5,324,32"/>
-<area shape="rect" title=" " alt="" coords="59,229,129,256"/>
-<area shape="rect" href="errors_8h.html" title="Common errors definition." alt="" coords="139,80,211,107"/>
-<area shape="rect" href="move_8h_source.html" title=" " alt="" coords="5,80,76,107"/>
-<area shape="rect" href="streams_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="453,80,540,107"/>
-<area shape="rect" href="time_8h.html" title="Simple time utilities." alt="" coords="662,379,726,405"/>
-<area shape="rect" href="types__traits_8h.html" title="Useful traits for common types." alt="" coords="11,304,121,331"/>
-<area shape="rect" title=" " alt="" coords="139,379,214,405"/>
-<area shape="rect" title=" " alt="" coords="360,603,431,629"/>
-<area shape="rect" href="defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="315,528,398,555"/>
-<area shape="rect" title=" " alt="" coords="535,155,605,181"/>
-<area shape="rect" href="queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="582,304,657,331"/>
-<area shape="rect" href="flash_8h.html" title="Flash memory utilities." alt="" coords="461,304,527,331"/>
-<area shape="rect" href="ios_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="306,155,359,181"/>
-<area shape="rect" href="streambuf_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="444,229,544,256"/>
-<area shape="rect" href="utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="569,453,651,480"/>
-<area shape="rect" href="board_8h_source.html" title=" " alt="" coords="551,528,669,555"/>
-<area shape="rect" title=" " alt="" coords="422,528,526,555"/>
-<area shape="rect" href="io_8h_source.html" title=" " alt="" coords="449,453,544,480"/>
-<area shape="rect" title=" " alt="" coords="745,453,881,480"/>
-<area shape="rect" title=" " alt="" coords="220,528,291,555"/>
-<area shape="rect" title=" " alt="" coords="332,379,459,405"/>
-<area shape="rect" title=" " alt="" coords="205,229,273,256"/>
-<area shape="rect" title=" " alt="" coords="297,229,368,256"/>
-<area shape="rect" href="virtual_8h.html" title="Small utilities to emulate virtual methods without extra vtabl." alt="" coords="213,304,289,331"/>
+<area shape="rect" title="Utility API to handle the concept of futures." alt="" coords="278,5,413,32"/>
+<area shape="rect" title=" " alt="" coords="94,229,159,256"/>
+<area shape="rect" href="array_8h_source.html" title=" " alt="" coords="751,229,812,256"/>
+<area shape="rect" href="errors_8h.html" title="Common errors definition." alt="" coords="264,80,331,107"/>
+<area shape="rect" href="move_8h_source.html" title=" " alt="" coords="549,80,613,107"/>
+<area shape="rect" href="streams_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="355,80,435,107"/>
+<area shape="rect" href="time_8h.html" title="Simple time utilities." alt="" coords="117,379,176,405"/>
+<area shape="rect" title=" " alt="" coords="524,603,588,629"/>
+<area shape="rect" href="initializer__list_8h_source.html" title=" " alt="" coords="728,304,835,331"/>
+<area shape="rect" title=" " alt="" coords="653,379,721,405"/>
+<area shape="rect" href="types__traits_8h.html" title="Useful traits for common types." alt="" coords="459,304,560,331"/>
+<area shape="rect" href="defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="444,528,519,555"/>
+<area shape="rect" title=" " alt="" coords="403,155,469,181"/>
+<area shape="rect" href="queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="171,304,239,331"/>
+<area shape="rect" href="flash_8h.html" title="Flash memory utilities." alt="" coords="373,304,435,331"/>
+<area shape="rect" href="ios_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="328,155,379,181"/>
+<area shape="rect" href="streambuf_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="461,229,552,256"/>
+<area shape="rect" href="utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="233,453,308,480"/>
+<area shape="rect" href="board_8h_source.html" title=" " alt="" coords="103,528,211,555"/>
+<area shape="rect" title=" " alt="" coords="236,528,329,555"/>
+<area shape="rect" href="io_8h_source.html" title=" " alt="" coords="343,453,430,480"/>
+<area shape="rect" title=" " alt="" coords="87,453,209,480"/>
+<area shape="rect" title=" " alt="" coords="354,528,419,555"/>
+<area shape="rect" title=" " alt="" coords="251,379,367,405"/>
+<area shape="rect" title=" " alt="" coords="235,229,298,256"/>
+<area shape="rect" title=" " alt="" coords="323,229,387,256"/>
+<area shape="rect" href="virtual_8h.html" title="Small utilities to emulate virtual methods without extra vtabl." alt="" coords="584,304,653,331"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -158,6 +161,12 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuture_1_1_future_status_listener.html">future::FutureStatusListener&lt; F &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Listener is the interface allowing to listen to changes of a <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a> status.  <a href="classfuture_1_1_future_status_listener.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuture_1_1_future_output_listener.html">future::FutureOutputListener&lt; F &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Listener is the interface allowing to listen to changes of a <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a> output buffer (while being fed by a producer).  <a href="classfuture_1_1_future_output_listener.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuture_1_1_abstract_future.html">future::AbstractFuture</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base class for all <code><a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a></code>s.  <a href="classfuture_1_1_abstract_future.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -169,6 +178,12 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuture_1_1_fake_future.html">future::FakeFuture&lt; OUT_, IN_ &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Actual <a class="el" href="classfuture_1_1_fake_future.html" title="Actual FakeFuture, it has the exact same API as Future and can be used in lieu of Future.">FakeFuture</a>, it has the exact same API as <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a> and can be used in lieu of <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a>.  <a href="classfuture_1_1_fake_future.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuture_1_1_abstract_futures_group.html">future::AbstractFuturesGroup&lt; F &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract base class for <a class="el" href="classfuture_1_1_futures_group.html" title="Abstract class to allow aggregation of several futures.">FuturesGroup</a>.  <a href="classfuture_1_1_abstract_futures_group.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuture_1_1_futures_group.html">future::FuturesGroup&lt; F, SIZE &gt;</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract class to allow aggregation of several futures.  <a href="classfuture_1_1_futures_group.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>

@@ -93,7 +93,7 @@ $(document).ready(function(){initNavTree('classdevices_1_1sonar_1_1_multi_h_c_s_
 </div><!--header-->
 <div class="contents">
 
-<p>This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins gathered and connected to only one MCU pin, and all echo pins connected to the same MCU <code><a class="el" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1" title="Defines all available ports of the target MCU.">board::Port</a></code>.  
+<p>This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins gathered and connected to only one MCU pin, and all echo pins connected to the same MCU <code><a class="el" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1" title="Defines all available ports of ATmega644.">board::Port</a></code>.  
  <a href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="sonar_8h_source.html">fastarduino/devices/sonar.h</a>&gt;</code></p>
@@ -140,7 +140,7 @@ Public Member Functions</h2></td></tr>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:af153ac82a0b22b25ec77c6e8444ce37f"><td class="memItemLeft" align="right" valign="top"><a id="af153ac82a0b22b25ec77c6e8444ce37f"></a>
 static constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#af153ac82a0b22b25ec77c6e8444ce37f">TRIGGER</a> = TRIGGER_</td></tr>
-<tr class="memdesc:af153ac82a0b22b25ec77c6e8444ce37f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU.">board::DigitalPin</a></code> connected to the sensors trigger pins. <br /></td></tr>
+<tr class="memdesc:af153ac82a0b22b25ec77c6e8444ce37f"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of ATmega644, with reference to Arduino MEGA pins.">board::DigitalPin</a></code> connected to the sensors trigger pins. <br /></td></tr>
 <tr class="separator:af153ac82a0b22b25ec77c6e8444ce37f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a864143a05372dfa850e3aacca778ef7f"><td class="memItemLeft" align="right" valign="top"><a id="a864143a05372dfa850e3aacca778ef7f"></a>
 static constexpr const <a class="el" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1">board::Port</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a864143a05372dfa850e3aacca778ef7f">ECHO_PORT</a> = ECHO_PORT_</td></tr>
@@ -167,7 +167,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>isr_handler</b></td
 <div class="textblock"><h3>template&lt;board::Timer NTIMER_, board::DigitalPin TRIGGER_, board::Port ECHO_PORT_, uint8_t ECHO_MASK_&gt;<br />
 class devices::sonar::MultiHCSR04&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ &gt;</h3>
 
-<p>This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins gathered and connected to only one MCU pin, and all echo pins connected to the same MCU <code><a class="el" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1" title="Defines all available ports of the target MCU.">board::Port</a></code>. </p>
+<p>This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins gathered and connected to only one MCU pin, and all echo pins connected to the same MCU <code><a class="el" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1" title="Defines all available ports of ATmega644.">board::Port</a></code>. </p>
 <p>With this class, all connected sonars start ranging at the same time. This method works exclusively in asynchronous mode.</p>
 <p>Note that, contrarily to the <code><a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html">HCSR04</a></code> class, this class does not handle calculation or storeage of echo pulse duration for all connected sonars; instead, it produces <code><a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html" title="This type holds information about events occurring within MultiHCSR04 handler.">SonarEvent</a></code>s upon each sonar event occurring:</p><ul>
 <li>echo pulse leading edge received</li>
@@ -177,7 +177,7 @@ class devices::sonar::MultiHCSR04&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ 
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">NTIMER_</td><td>the AVR timer of the <code><a class="el" href="classtimer_1_1_r_t_t.html" title="API to handle a real-time timer.">timer::RTT</a></code> to use for this <code><a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html" title="This template class supports up to 8 HC-SR04 sonars (or equivalent sensors), with their trigger pins ...">MultiHCSR04</a></code> </td></tr>
-    <tr><td class="paramname">TRIGGER_</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of the target MCU.">board::DigitalPin</a></code> connected to the sensors trigger pins; that can be any available pin. </td></tr>
+    <tr><td class="paramname">TRIGGER_</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of ATmega644, with reference to Arduino MEGA pins.">board::DigitalPin</a></code> connected to the sensors trigger pins; that can be any available pin. </td></tr>
     <tr><td class="paramname">ECHO_PORT_</td><td>the MCU port to which all echo pins of sonars handled by this class are connected; this port must support PCINT interrupts. </td></tr>
     <tr><td class="paramname">ECHO_MASK_</td><td>the mask determining which pins of <code>ECHO_PORT_</code> are actually connected to a real sonar echo pin; for each bit set, the matching pin must be able to generate a PCINT interrupt when its level changes.</td></tr>
   </table>

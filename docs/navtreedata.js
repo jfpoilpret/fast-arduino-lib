@@ -66,15 +66,15 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "abi_8cpp_source.html",
-"classdevices_1_1audio_1_1_tone_play.html",
-"classdevices_1_1servo_1_1_servo.html#a165bc69c89e2f2a5802d3c58bc1781cf",
-"classi2c_1_1_i2_c_device.html#a42d97ba6a206ff561962c1be1644e2d6",
-"classstreams_1_1ios__base.html#a345081e2763697e99665dbd025d16a58",
-"ds1307_8h.html#a0176db9eeb2875987a65d980904f7c52aaeec077355348d52b402ee15c453ad70",
-"int_8h.html#a27eee51cf0393a75a91aac0425e65d1bad5ef89cca31152290b30f50cd1d8c536",
-"namespacedevices_1_1audio_1_1_special_tone.html",
-"structinterrupt_1_1_p_c_i_type.html#ade102a62db31cff23ad88bb268037e5b",
-"utilities_8h.html#a3525bf2bf63c9f906bc9b952f0d54355"
+"classdevices_1_1audio_1_1_tone_generator.html#aee0c351832dfafbd7b29a90f7dbc70b1",
+"classdevices_1_1servo_1_1_servo.html",
+"classi2c_1_1_abstract_i2_c_sync_manager.html#aef118a71cc12e3e0c5740b7f499929cf",
+"classstd_1_1initializer__list.html",
+"classwatchdog_1_1_watchdog_signal.html#a080a9c4a33228be0eb5584fb64eb47ab",
+"future_8h_source.html",
+"mcp3201_8h.html#ae8ee69161dc4ece7ec34e94fdacbf3e6",
+"realtime__timer_8h.html#a2fa7e6297d6f853dea35cc5a9f213c46",
+"tones_8h.html#ad5cef39b1f81f50bd23e0a4f4cf555aaa1a2ddc2db4693cfd16d534cde5572cc1"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

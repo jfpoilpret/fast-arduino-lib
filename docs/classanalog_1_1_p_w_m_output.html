@@ -150,7 +150,7 @@ class analog::PWMOutput&lt; PWMPIN_, PULSED_ &gt;</h3>
 <p>Construct a new handler for a PWM output pin. </p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">PWMPIN_</td><td>the <code><a class="el" href="namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3f" title="Defines all digital output pins of target MCU, capable of PWM output.">board::PWMPin</a></code> to use as PWM output </td></tr>
+    <tr><td class="paramname">PWMPIN_</td><td>the <code><a class="el" href="namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3f" title="Defines all digital output pins of ATmega644, capable of PWM output.">board::PWMPin</a></code> to use as PWM output </td></tr>
     <tr><td class="paramname">PULSED_</td><td>whether to use a <code><a class="el" href="classtimer_1_1_pulse_timer.html" title="Special kind of timer::Timer, specialized in emitting pulses with accurate width, according to a slow...">timer::PulseTimer</a></code> instead of a <code><a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer.">timer::Timer</a></code>; this is useful when e.g. you want to use a PWM pin to manage a servo motor, where pulses shall be limited to a few ms but triggered every few dozen ms. </td></tr>
   </table>
   </dd>
