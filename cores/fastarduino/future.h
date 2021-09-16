@@ -175,6 +175,10 @@ namespace future
 	template<typename F> class FutureStatusListener
 	{
 	protected:
+		/// @cond notdocumented
+		virtual ~FutureStatusListener() = default;
+		/// @endcond
+
 		/**
 		 * Called whenever a listened-to Future changes its FutureStatus.
 		 * @param future a reference to the Future which status has changed
@@ -199,6 +203,10 @@ namespace future
 	template<typename F> class FutureOutputListener
 	{
 	protected:
+		/// @cond notdocumented
+		virtual ~FutureOutputListener() = default;
+		/// @endcond
+
 		/**
 		 * Called whenever a listened-to Future has its output buffer changed.
 		 * This is called for every byte added to the output buffer.
@@ -978,7 +986,7 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = 0;
 		static constexpr uint8_t IN_SIZE = 0;
 
-		Future(STATUS_LISTENER* status_listener = nullptr)
+		explicit Future(STATUS_LISTENER* status_listener = nullptr)
 		: AbstractFuture{nullptr, 0,nullptr, 0, status_listener} {}
 		~Future() = default;
 
@@ -1315,7 +1323,7 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = 0;
 		static constexpr uint8_t IN_SIZE = 0;
 
-		FakeFuture(STATUS_LISTENER* status_listener = nullptr)
+		explicit FakeFuture(STATUS_LISTENER* status_listener = nullptr)
 			: AbstractFakeFuture{nullptr, 0, nullptr, 0, status_listener} {}
 
 		~FakeFuture() = default;
@@ -1569,7 +1577,7 @@ namespace future
 		 * Create a new FuturesGroup for the list of provided @p futures pointers
 		 * array.
 		 */
-		FuturesGroup(containers::array<F*, SIZE> futures)
+		explicit FuturesGroup(containers::array<F*, SIZE> futures)
 			: AbstractFuturesGroup<F>{futures_.data(), SIZE}, futures_{futures} {}
 		/// @cond notdocumented
 		FuturesGroup(FuturesGroup&&) = default;
