@@ -87,7 +87,7 @@ $(document).ready(function(){initNavTree('future_8h_source.html',''); initResiza
 <div class="title">future.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="future_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//   Copyright 2016-2020 Jean-Francois Poilpret</span></div>
+<a href="future_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//   Copyright 2016-2021 Jean-Francois Poilpret</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//   you may not use this file except in compliance with the License.</span></div>
@@ -574,7 +574,7 @@ $(document).ready(function(){initNavTree('future_8h_source.html',''); initResiza
 <div class="line"><a name="l00978"></a><span class="lineno">  978</span>&#160;        <span class="keyword">static</span> constexpr uint8_t <a class="code" href="classfuture_1_1_future.html#a6f6f5f6800b717bbbb1c8448133b7f29">OUT_SIZE</a> = 0;</div>
 <div class="line"><a name="l00979"></a><span class="lineno">  979</span>&#160;        <span class="keyword">static</span> constexpr uint8_t <a class="code" href="classfuture_1_1_future.html#a6def7d5ddf6a530259c19481a774956f">IN_SIZE</a> = 0;</div>
 <div class="line"><a name="l00980"></a><span class="lineno">  980</span>&#160; </div>
-<div class="line"><a name="l00981"></a><span class="lineno">  981</span>&#160;        <a class="code" href="classfuture_1_1_future.html#a5f5afbf61ba1b465aee0a9a81ac5d346">Future</a>(<a class="code" href="classfuture_1_1_abstract_future.html#a9a3608ffef01603fb24c061a00a7946b">STATUS_LISTENER</a>* status_listener = <span class="keyword">nullptr</span>)</div>
+<div class="line"><a name="l00981"></a><span class="lineno">  981</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classfuture_1_1_future.html#a5f5afbf61ba1b465aee0a9a81ac5d346">Future</a>(<a class="code" href="classfuture_1_1_abstract_future.html#a9a3608ffef01603fb24c061a00a7946b">STATUS_LISTENER</a>* status_listener = <span class="keyword">nullptr</span>)</div>
 <div class="line"><a name="l00982"></a><span class="lineno">  982</span>&#160;        : AbstractFuture{<span class="keyword">nullptr</span>, 0,<span class="keyword">nullptr</span>, 0, status_listener} {}</div>
 <div class="line"><a name="l00983"></a><span class="lineno">  983</span>&#160;        ~<a class="code" href="classfuture_1_1_future.html#a5f5afbf61ba1b465aee0a9a81ac5d346">Future</a>() = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l00984"></a><span class="lineno">  984</span>&#160; </div>
@@ -882,7 +882,7 @@ $(document).ready(function(){initNavTree('future_8h_source.html',''); initResiza
 <div class="line"><a name="l01315"></a><span class="lineno"> 1315</span>&#160;        <span class="keyword">static</span> constexpr uint8_t OUT_SIZE = 0;</div>
 <div class="line"><a name="l01316"></a><span class="lineno"> 1316</span>&#160;        <span class="keyword">static</span> constexpr uint8_t IN_SIZE = 0;</div>
 <div class="line"><a name="l01317"></a><span class="lineno"> 1317</span>&#160; </div>
-<div class="line"><a name="l01318"></a><span class="lineno"> 1318</span>&#160;        FakeFuture(STATUS_LISTENER* status_listener = <span class="keyword">nullptr</span>)</div>
+<div class="line"><a name="l01318"></a><span class="lineno"> 1318</span>&#160;        <span class="keyword">explicit</span> FakeFuture(STATUS_LISTENER* status_listener = <span class="keyword">nullptr</span>)</div>
 <div class="line"><a name="l01319"></a><span class="lineno"> 1319</span>&#160;            : AbstractFakeFuture{<span class="keyword">nullptr</span>, 0, <span class="keyword">nullptr</span>, 0, status_listener} {}</div>
 <div class="line"><a name="l01320"></a><span class="lineno"> 1320</span>&#160; </div>
 <div class="line"><a name="l01321"></a><span class="lineno"> 1321</span>&#160;        ~FakeFuture() = <span class="keywordflow">default</span>;</div>
@@ -1039,7 +1039,7 @@ $(document).ready(function(){initNavTree('future_8h_source.html',''); initResiza
 <div class="line"><a name="l01565"></a><span class="lineno"> 1565</span>&#160;        static_assert(SIZE &gt; 1, <span class="stringliteral">&quot;SIZE must be at least 2&quot;</span>);</div>
 <div class="line"><a name="l01566"></a><span class="lineno"> 1566</span>&#160; </div>
 <div class="line"><a name="l01567"></a><span class="lineno"> 1567</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l01572"></a><span class="lineno"><a class="line" href="classfuture_1_1_futures_group.html#a2c3b6213320e533ab5f2b69a84590038"> 1572</a></span>&#160;        <a class="code" href="classfuture_1_1_futures_group.html#a2c3b6213320e533ab5f2b69a84590038">FuturesGroup</a>(<a class="code" href="classcontainers_1_1array.html">containers::array&lt;F*, SIZE&gt;</a> futures)</div>
+<div class="line"><a name="l01572"></a><span class="lineno"><a class="line" href="classfuture_1_1_futures_group.html#a2c3b6213320e533ab5f2b69a84590038"> 1572</a></span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classfuture_1_1_futures_group.html#a2c3b6213320e533ab5f2b69a84590038">FuturesGroup</a>(<a class="code" href="classcontainers_1_1array.html">containers::array&lt;F*, SIZE&gt;</a> futures)</div>
 <div class="line"><a name="l01573"></a><span class="lineno"> 1573</span>&#160;            : <a class="code" href="classfuture_1_1_abstract_futures_group.html">AbstractFuturesGroup</a>&lt;<a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>&gt;{futures_.<a class="code" href="classcontainers_1_1array.html#a3c0079f0dbe93b6963972bed1e751d84">data</a>(), SIZE}, futures_{futures} {}</div>
 <div class="line"><a name="l01575"></a><span class="lineno"> 1575</span>&#160;        <a class="code" href="classfuture_1_1_futures_group.html#a2c3b6213320e533ab5f2b69a84590038">FuturesGroup</a>(<a class="code" href="classfuture_1_1_futures_group.html#a2c3b6213320e533ab5f2b69a84590038">FuturesGroup</a>&amp;&amp;) = <span class="keywordflow">default</span>;</div>
 <div class="line"><a name="l01576"></a><span class="lineno"> 1576</span>&#160;        <a class="code" href="classfuture_1_1_futures_group.html#a2c3b6213320e533ab5f2b69a84590038">FuturesGroup</a>&amp; operator=(<a class="code" href="classfuture_1_1_futures_group.html#a2c3b6213320e533ab5f2b69a84590038">FuturesGroup</a>&amp;&amp;) = <span class="keywordflow">default</span>;</div>
