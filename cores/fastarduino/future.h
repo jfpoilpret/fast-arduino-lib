@@ -175,10 +175,6 @@ namespace future
 	template<typename F> class FutureStatusListener
 	{
 	protected:
-		/// @cond notdocumented
-		virtual ~FutureStatusListener() = default;
-		/// @endcond
-
 		/**
 		 * Called whenever a listened-to Future changes its FutureStatus.
 		 * @param future a reference to the Future which status has changed
@@ -203,10 +199,6 @@ namespace future
 	template<typename F> class FutureOutputListener
 	{
 	protected:
-		/// @cond notdocumented
-		virtual ~FutureOutputListener() = default;
-		/// @endcond
-
 		/**
 		 * Called whenever a listened-to Future has its output buffer changed.
 		 * This is called for every byte added to the output buffer.
