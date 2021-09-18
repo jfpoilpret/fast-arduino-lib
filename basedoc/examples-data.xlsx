@@ -1,116 +1,117 @@
-Example	Description	UNO		LEONARDO		MEGA		ATtiny84		ATtiny85	
-		code	data	code	data	code	data	code	data	code	data
-FastPin1	Simple IOPin, IOPort program (compile only, does nothing)	206	0	290	0	348	0	136	0	132	0
-FastPin2	LED blinker (IOPin)	154	0	238	0	282	0	84	0	80	0
-FastPin3	LED chaser (IOPort)	168	0	252	0	296	0	98	0		
-FastPin4	Configurable LED chaser (IOPort in/out)	232	0	322	0	360	0	162	0		
-FastPin5	LED chaser (IOMaskedPort)	486	0	570	0	614	0	416	0		
-PinChangeInterrupt1	Use PCI on push button to light LED	258	2	342	2	400	2	180	2	172	2
-PinChangeInterrupt2	Use PCI on 3 push buttons to light 4 LEDs (IOPin)	320	2	404	2	460	2	242	2		
-PinChangeInterrupt3	Use PCI on 3 push buttons to light 4 LEDs (IOPort)	288	2	356	2	426	2	210	2		
-PinChangeInterrupt4	LED command by 2 buttons (2 PCI ISR).	312	2			482	2	222	2		
-PinChangeInterrupt5MEGA	LED command by 3 buttons on MEGA specificities.					492	2				
-ExternalInterrupt1	LED switch based on button (INT ISR, power down)	246	2	330	2	388	2	174	2	170	2
-ExternalInterrupt2	LED switch based on button (empty ISR, power down)	196	0	280	0	324	0	124	0	120	0
-ExternalInterrupt3	LED switch based on 2 buttons (2 INT ISR, power down)	288	2	372	2	438	2				
-UartApp1	HW UART check with formatted output	2008	156	2092	156	2156	156				
-UartApp2	SW UARX/UATX with PCI	1130	130	1216	130	1266	130	1052	130	1048	130
-UartApp3	SW UART with PCI	1128	130	1198	130	1264	130	1050	130	1046	130
-UartApp4	SW UART with INT	1120	130	1200	130	1252	130	1054	130		
-UartApp5	HW UATX with flash string output	796	94			936	94				
-UartApp6	HW UART with iostream conversion checks	13298	162			13614	162				
-UartApp7	SW UATX timing debug example	804	64								
-UartApp8	SW UARX timing debug example	752	94								
-UartApp9	HW UART test of begin/end	3764	148			3986	148				
-UartApp10	HW UART test of begin/end	3718	146			3940	146				
-UartApp11	SW UART test of begin/end	4064	178								
-UartApp12	SW UART test of begin/end	3682	146								
-Flash1	Display (UATX) strings and structures from Flash	2144	74	2228	74	2288	74	2064	72		
-InputCapture1	Measure button switch duration through timer ICP (UATX)	2464	76	2548	76	2646	76	2406	42		
-RTTApp1b	Check all timers with RTT to blink a LED based on delay	794	6	888	6	1540	12	520	4	524	4
-RTTApp2	LED blinker based on RTT delay	370	2	454	2	506	2	296	2	300	2
-RTTApp3	Display (UART) RTT microseconds	2012	92	2096	92	2160	92	2014	90	2018	90
-RTTApp4	LED blinker based on RTTEventCallback (ISR)	1140	54	1224	54	1294	54	1066	54	1068	54
-TimerApp3	LED blinker based on CTC Timer (ISR)	234	2	318	2	374	2	148	2	138	2
-TimerApp4	LED blinker with dimmer based on 2 CTC Timers (2 ISR)	390	4	474	4	532	4	290	4	296	4
-TimerSuspendCheck	Unit tests of suspend/resume timer API	2324	74	2408	74	2468	74	2212	40		
-TimerTinyX5	LEDs blinker with ATtinyX5 timer mode specificities									350	0
-AnalogPin1	Display (UATX) analog value/voltage	1956	92	2040	92	2096	92	1836	90	1836	90
-AnalogPin2	Display analog input on 8 LEDs	198	0	282	0	326	0	122	0		
-ALLPWM	Dim LEDs connected to all available PWM pins of target MCU	1156	0	1238	0	3126	0	650	0	358	0
-PWM1	Dim 1 LED with a pot through 8bits PWM	274	0	358	0	400	0	184	0	186	0
-PWM2	Dim 2 LEDs with 2 pots through 8bits PWM	358	0	442	0	526	0	252	0	254	0
-PWM3	Dim 1 LEDs with 1 pot through 16bits PulseTimer	368	0	452	0	496	0	302	0		
-PWM4	Dim 2 LEDs with 2 pots through 8bits PulseTimer	554	2	638	2	684	2	528	2	530	2
-AnalogComparator1	Compares 2 analog inputs by polling	178	0					100	0	96	0
-AnalogComparator2	Compares 2 analog inputs by ISR	184	0					108	0	104	0
-AnalogComparator3	Compares 2 analog inputs by ISR	236	2	322	2			160	2	158	2
-AnalogComparator4	Compares 1 analog input to bandgap by ISR	250	2	336	2	388	2	168	2	166	2
-AnalogComparator5	Compares 2 analog inputs then 1 analog input to bandgap by ISR	336	2	424	2			242	2	242	2
-AnalogComparator6	Compares 1 analog input to bandgap by Input Capture	2520	76			2680	76	2432	74		
-EventApp1	8 LEDs chaser: events dispatcher, delay, IOPin	888	48	972	48	1020	48	818	48		
-EventApp2	8 LEDs chaser: events dispatcher, watchdog, IOPort	708	46	792	46	862	46	634	46		
-EventApp3	8 LEDs chaser: jobs scheduler, watchdog, IOPort	1106	52	1190	52	1260	52	1032	52		
-EventApp4	8 LEDs chaser: jobs scheduler, watchdog (power down), IOPort	1124	53	1208	53	1278	53	1050	53		
-EventApp5	LED blinker triggered and configured by buttons-generated events	560	2								
-EventApp6	LED blinker handled by watchdog-generated events	1090	52	1174	52	1244	52	1016	52	1012	52
-Eeprom1	Blocking EEPROM read/writes (UATX)	2430	104	2514	104	2574	104	2348	102	2344	102
-Eeprom2	Asynchronous EEPROM writes (UATX)	3378	382	3446	382	3524	382	3252	380		
-Eeprom3	Asynchronous EEPROM writes with callback (UATX)	3602	418	3670	418	3748	418	3478	416		
-Eeprom4	Check EEMEM variables to read/write EEPROM (UATX)	3234	162	3318	162	3388	162	3154	160		
-IOStreams1	Check ostream (SW UATX)							3264	64		
-IOStreams2	Check real Vs. null ostream	6020	94	6104	94	6194	94	5962	94	5958	94
-IOStreams3	Check ostream error handling (UART)	3792	184								
-ArrayCheck	Unit Tests for array container	2788	170					2708	104		
-InitializerListCheck	Unit Tests for initializer_list	2748	170					2722	104		
-LifecycleCheck	Unit Tests of lifecycle/proxy API	8042	140								
-FutureCheck	Unit Tests of future API	11160	146								
-FutureCheck2	Unit Tests of future API used with Lifecycle API	8992	146								
-QueueCheck	Unit Tests of queue container	4434	592								
-LinkedListCheck	Unit Tests of linked list container	6000	463								
-UtilsCheck	Unit Tests of conversion utilities	3272	230								
-I2CFakeDevice	Example to check a fake I2C device does not get wrongly detected	3834	240					3224	76		
-AccelGyro0	Check of MPU6050 FIFO push/pop (i2c)	3486	111	3570	111	3644	111	3484	84		
-AccelGyro1	Display (UATX) measures (gyro, accel) from MPU6050 (i2c)	3804	103	3888	103	3962	103	3826	76		
-AccelGyro2	Display (UATX) continuous measures (gyro, accel) from MPU6050 FIFO (i2c)	3962	113	4046	113	4120	113	4092	118		
-DS1307RTC1	Change RTC and display (UATX) date/time (i2c)	4396	298	4480	298	4556	298	3688	134	3684	134
-DS1307RTC2	Change RTC, display (UATX) date/time, use RAM and clock generation (i2c)	4698	102	4782	102	4842	102	4706	68	4702	68
-DS1307RTC3	Change RTC and display (UATX) date/time (i2c, asynchronous)	4994	272	5078	272	5154	272				
-DS1307RTC4	Change RTC and display (UATX) date/time (i2c, asynchronous, with callback)	5034	274	5118	274	5194	274				
-Magneto1	Display (UATX) measures (compass) from HMC5883L (i2c)	7866	84	7950	84	8030	84	3762	82		
-Magneto2	Display (UATX) measures (compass) from HMC5883L (i2c, with DRDY interrupt)	3236	107	3320	107	3402	107	3320	112		
-MultiADC00	Check MCP3x0x constexpr (compile only, does nothing)	132	0	200	0	260	0	62	0	58	0
-MultiADC01	MCP3008 pots reading and trace (UATX) (spi)	1974	74	2058	74	2152	74	1896	72	1892	72
-MultiADC02	MCP3X0X chips support compilation check (spi)	4294	74	4378	74	4518	74	4212	72	4208	72
-MultiIO1	LED chaser with config buttons and LEDs on MCP23017 2 ports (i2c)	1454	12	1538	12	1586	12	1452	12	1448	12
-MultiIO2	LED chaser with config buttons and LEDs on MCP23017 1 port (i2c)	1402	12	1486	12	1534	12	1400	12	1396	12
-MultiIO3	LED chaser with config buttons (callback function) and LEDs on MCP23017 2 ports (i2c)	1480	16								
-MultiIO4	LED chaser with config buttons (callback method) and LEDs on MCP23017 2 ports (i2c)	1488	14								
-MultiIO5	LED chaser with config buttons (callback method) and LEDs on MCP23008 (i2c)	1456	14					1454	14		
-MultiIO6	Multiple LED -switch mapper on MCP23008 (i2c)	4708	104								
-MultiIO7	Simple LED chaser on MCP23008 (i2c)	1040	0								
-Servo1	Servo controlled by a pot through 8bits pulse timer	642	2	726	2	778	2	594	2		
-Servo2	Servo controlled by a pot through 16bits pulse timer	562	0	646	0	690	0	488	0		
-RF24App1	NRF24L01P ping-pong (UATX except ATtiny), no IRQ (spi)	4140	224	4236	224	4432	224	1746	8	1298	6
-RF24App2	NRF24L01P ping-pong (UATX except ATtiny), IRQ (spi)	4166	224	4262	224	4458	224	1772	8		
-WinBond	Trace (UATX) WinBond flash chip read/writes (spi)	3406	330	3490	330	3618	330	3320	200	3316	200
-Sonar1	Display (UATX) sonar range meaures in blocking mode	2472	76	2556	76	2624	76	2436	74		
-Sonar2	Display (UATX) sonar range meaures in INT mode	2560	78	2726	78	2802	78	2636	76		
-Sonar3	Display (UATX) sonar range meaures in PCINT mode	2572	78	2738	78	2814	78	2640	76		
-Sonar4	Display (UATX) range meaures in PCINT mode from 2 distinct sonars	3006	80	3088	80	3160	80	2998	78		
-Sonar5	Display (UATX) range meaures in PCINT mode from 2 sonars sharing trigger	2962	80	3044	80	3116	80	2990	78		
-Sonar6	Display (UATX) sonar range meaures in PCINT mode with PCI callback	2766	80	2850	80	2926	80	2766	78		
-Sonar7	Display (UATX) sonar range meaures in PCINT mode with PCI/TIMEOUT callback	2910	80	2994	80	3070	80	2918	78		
-Sonar10	Light LEDS based on multiple sonars alarms with callbacks	2044	10								
-Sonar11	Light LEDS based on auto-trigger multiple sonars alarms with callbacks	2026	10								
-tones00	Tone player unit tests	3354	0	3924	0	3482	0	3308	0	3338	0
-tones0	Tone player from SRAM (TonePlay)	1232	218								
-tones1	Tone player from SRAM (QTonePlay)	990	284								
-tones2	Tone player from EEPROM (QTonePlay)	778	0								
-tones3	Tone player from Flash (QTonePlay)	1118	0								
-tones4	Tone player from SRAM, stoppable from external interrupt (QTonePlay)	1116	286								
-tones5	Tone player from SRAM, playing asynchronously from ISR (QTonePlay)	1428	288								
-tones6	Tone player from Flash, playing 2 channels asynchronously from RTT events (QTonePlay)	2218	42								
-tones7	Tone player from Flash, playing asynchronously from RTT events (QTonePlay)	1528	42								
-PCIFuture	Example of Future concept usage with PCI ISR	1946	76	2030	76	2046	76	1860	74	1858	74
-Conway	Game of Life (8x8 LED) 1KB Hackaday	2972	267	1168	0			994	0		
+Example	Description	UNO		LEONARDO		MEGA		ATtiny84		ATtiny85		ATmega644		ATmega1284	
+		code	data	code	data	code	data	code	data	code	data	code	data	code	data
+FastPin1	Simple IOPin, IOPort program (compile only, does nothing)	206	0	290	0	348	0	136	0	132	0	226	0	248	0
+FastPin2	LED blinker (IOPin)	154	0	238	0	282	0	84	0	80	0	174	0	190	0
+FastPin3	LED chaser (IOPort)	168	0	252	0	296	0	98	0			188	0	204	0
+FastPin4	Configurable LED chaser (IOPort in/out)	232	0	314	0	360	0	162	0			252	0	268	0
+FastPin5	LED chaser (IOMaskedPort)	486	0	570	0	614	0	416	0			506	0	522	0
+PinChangeInterrupt1	Use PCI on push button to light LED	258	2	342	2	400	2	180	2	172	2	278	2	306	2
+PinChangeInterrupt2	Use PCI on 3 push buttons to light 4 LEDs (IOPin)	320	2	404	2	460	2	242	2			340	2	368	2
+PinChangeInterrupt3	Use PCI on 3 push buttons to light 4 LEDs (IOPort)	288	2	356	2	426	2	210	2			308	2	332	2
+PinChangeInterrupt4	LED command by 2 buttons (2 PCI ISR).	312	2			482	2	222	2			332	2	372	2
+PinChangeInterrupt5MEGA	LED command by 3 buttons on MEGA specificities.					492	2								
+ExternalInterrupt1	LED switch based on button (INT ISR, power down)	246	2	330	2	388	2	174	2	170	2	266	2	294	2
+ExternalInterrupt2	LED switch based on button (empty ISR, power down)	196	0	280	0	324	0	124	0	120	0	216	0	232	0
+ExternalInterrupt3	LED switch based on 2 buttons (2 INT ISR, power down)	288	2	372	2	438	2					308	2	348	2
+UartApp1	HW UART check with formatted output	2020	156	2104	156	2168	156					2040	156	2076	156
+UartApp2	SW UARX/UATX with PCI	1190	130	1276	130	1326	130	1112	130	1108	130	1210	130	1234	130
+UartApp3	SW UART with PCI	1198	130	1268	130	1334	130	1120	130	1116	130	1218	130	1242	130
+UartApp4	SW UART with INT	1190	130	1270	130	1322	130	1124	130			1210	130	1234	130
+UartApp5	HW UATX with flash string output	774	94			914	94					794	94	822	94
+UartApp6	HW UART with iostream conversion checks	13380	162			13774	162					13400	162	13684	162
+UartApp7	SW UATX timing debug example	718	64												
+UartApp8	SW UARX timing debug example	758	94												
+UartApp9	HW UART test of begin/end	3774	148			3992	148					3794	148	3902	148
+UartApp10	HW UART test of begin/end	3682	146			3900	146					3702	146	3810	146
+UartApp11	SW UART test of begin/end	4086	178												
+UartApp12	SW UART test of begin/end	3686	146												
+Flash1	Display (UATX) strings and structures from Flash	2164	74	2248	74	2308	74	2062	72			2184	74	2212	74
+InputCapture1	Measure button switch duration through timer ICP (UATX)	2500	76	2584	76	2678	76	2444	42			2520	76	2564	76
+RTTApp1b	Check all timers with RTT to blink a LED based on delay	890	6	984	6	1790	12	568	4	574	4	910	6	950	6
+RTTApp2	LED blinker based on RTT delay	370	2	454	2	506	2	296	2	300	2	390	2	414	2
+RTTApp3	Display (UART) RTT microseconds	2040	92	2124	92	2188	92	2030	90	2034	90	2060	92	2096	92
+RTTApp4	LED blinker based on RTTEventCallback (ISR)	1126	54	1210	54	1280	54	1052	54	1054	54	1146	54	1180	54
+TimerApp3	LED blinker based on CTC Timer (ISR)	234	2	318	2	374	2	148	2	140	2	254	2	282	2
+TimerApp4	LED blinker with dimmer based on 2 CTC Timers (2 ISR)	390	4	474	4	532	4	290	4	298	4	410	4	442	4
+TimerSuspendCheck	Unit tests of suspend/resume timer API	2388	74	2472	74	2528	74	2262	40			2408	74	2436	74
+TimerTinyX5	LEDs blinker with ATtinyX5 timer mode specificities									358	0				
+AnalogPin1	Display (UATX) analog value/voltage	1914	92	1998	92	2054	92	1770	90	1770	90	1934	92	1962	92
+AnalogPin2	Display analog input on 8 LEDs	198	0	282	0	326	0	122	0			218	0	234	0
+ALLPWM	Dim LEDs connected to all available PWM pins of target MCU	1228	0	1320	0	3238	0	710	0	376	0	1248	0	1634	0
+PWM1	Dim 1 LED with a pot through 8bits PWM	274	0	358	0	400	0	184	0	186	0	294	0	310	0
+PWM2	Dim 2 LEDs with 2 pots through 8bits PWM	358	0	442	0	526	0	252	0	254	0	378	0	394	0
+PWM3	Dim 1 LEDs with 1 pot through 16bits PulseTimer	394	0	478	0	520	0	334	0			414	0	430	0
+PWM4	Dim 2 LEDs with 2 pots through 8bits PulseTimer	554	2	638	2	684	2	528	2	530	2	574	2	598	2
+AnalogComparator1	Compares 2 analog inputs by polling	178	0					100	0	96	0	198	0	214	0
+AnalogComparator2	Compares 2 analog inputs by ISR	184	0					108	0	104	0	204	0	220	0
+AnalogComparator3	Compares 2 analog inputs by ISR	236	2	322	2			160	2	158	2	256	2	284	2
+AnalogComparator4	Compares 1 analog input to bandgap by ISR	250	2	336	2	388	2	168	2	166	2	270	2	294	2
+AnalogComparator5	Compares 2 analog inputs then 1 analog input to bandgap by ISR	346	2	434	2			252	2	252	2	366	2	390	2
+AnalogComparator6	Compares 1 analog input to bandgap by Input Capture	2556	76			2712	76	2458	74			2576	76	2620	76
+EventApp1	8 LEDs chaser: events dispatcher, delay, IOPin	854	48	938	48	986	48	784	48			874	48	894	48
+EventApp2	8 LEDs chaser: events dispatcher, watchdog, IOPort	694	46	778	46	848	46	620	46			714	46	748	46
+EventApp3	8 LEDs chaser: jobs scheduler, watchdog, IOPort	1092	52	1176	52	1246	52	1018	52			1112	52	1146	52
+EventApp4	8 LEDs chaser: jobs scheduler, watchdog (power down), IOPort	1110	53	1194	53	1264	53	1036	53			1130	53	1164	53
+EventApp5	LED blinker triggered and configured by buttons-generated events	560	2												
+EventApp6	LED blinker handled by watchdog-generated events	1076	52	1160	52	1230	52	1002	52	998	52	1096	52	1130	52
+Eeprom1	Blocking EEPROM read/writes (UATX)	2688	104	2772	104	2828	104	2584	102	2580	102	2708	104	2736	104
+Eeprom2	Asynchronous EEPROM writes (UATX)	3480	422	3548	422	3626	422	3306	420			3500	422	3536	422
+Eeprom3	Asynchronous EEPROM writes with callback (UATX)	3702	458	3770	458	3848	458	3540	456			3722	458	3758	458
+Eeprom4	Check EEMEM variables to read/write EEPROM (UATX)	3250	162	3334	162	3404	162	3166	160			3270	162	3306	162
+IOStreams1	Check ostream (SW UATX)							3044	64						
+IOStreams2	Check real Vs. null ostream	6004	94	6088	94	6250	94	5922	94	5918	94	6024	94	6156	94
+IOStreams3	Check ostream error handling (UART)	3854	184												
+ArrayCheck	Unit Tests for array container	2770	170					2666	104						
+InitializerListCheck	Unit Tests for initializer_list	2834	170					2772	104						
+LifecycleCheck	Unit Tests of lifecycle/proxy API	8402	140					6624	74			8422	140	8452	140
+FutureCheck	Unit Tests of future API	10968	146									10988	146	11016	146
+FutureCheck2	Unit Tests of future API used with Lifecycle API	8930	146												
+QueueCheck	Unit Tests of queue container	4406	592												
+LinkedListCheck	Unit Tests of linked list container	5914	463												
+UtilsCheck	Unit Tests of conversion utilities	3242	230												
+I2CFakeDevice	Example to check a fake I2C device does not get wrongly detected	3942	240					3388	76						
+AccelGyro0	Check of MPU6050 FIFO push/pop (i2c)	4394	273	4478	273	4564	273	3706	84			4414	273	4456	273
+AccelGyro1	Display (UATX) measures (gyro, accel) from MPU6050 (i2c)	3940	103	4024	103	4098	103	3840	76			3960	103	3994	103
+AccelGyro2	Display (UATX) continuous measures (gyro, accel) from MPU6050 FIFO (i2c)	4264	113	4348	113	4422	113	4176	118			4284	113	4318	113
+DS1307RTC1	Change RTC and display (UATX) date/time (i2c)	5082	322	5166	322	5238	322	4416	158	4412	158	5102	322	5144	322
+DS1307RTC2	Change RTC, display (UATX) date/time, use RAM and clock generation (i2c)	4952	102	5036	102	5092	102	4952	68	4948	68	4972	102	5000	102
+DS1307RTC3	Change RTC and display (UATX) date/time (i2c, asynchronous)	5192	272	5276	272	5352	272					5212	272	5254	272
+DS1307RTC4	Change RTC and display (UATX) date/time (i2c, asynchronous, with callback)	5100	274	5184	274	5260	274					5120	274	5162	274
+Magneto1	Display (UATX) measures (compass) from HMC5883L (i2c)	8424	246	8508	246	8700	246	3870	82			8444	246	8604	246
+Magneto2	Display (UATX) measures (compass) from HMC5883L (i2c, with DRDY interrupt)	3342	107	3426	107	3508	107	3356	112			3362	107	3404	107
+MultiADC00	Check MCP3x0x constexpr (compile only, does nothing)	132	0	200	0	260	0	62	0	58	0	152	0	168	0
+MultiADC01	MCP3008 pots reading and trace (UATX) (spi)	2018	74	2102	74	2192	74	1918	72	1914	72	2038	74	2066	74
+MultiADC02	MCP3X0X chips support compilation check (spi)	4502	74	4586	74	4754	74	4396	72	4392	72	4522	74	4550	74
+MultiIO1	LED chaser with config buttons and LEDs on MCP23017 2 ports (i2c)	1594	12	1678	12	1726	12	1548	12	1544	12	1614	12	1634	12
+MultiIO2	LED chaser with config buttons and LEDs on MCP23017 1 port (i2c)	1546	12	1630	12	1678	12	1500	12	1496	12	1566	12	1586	12
+MultiIO3	LED chaser with config buttons (callback function) and LEDs on MCP23017 2 ports (i2c)	1638	16												
+MultiIO4	LED chaser with config buttons (callback method) and LEDs on MCP23017 2 ports (i2c)	1650	14												
+MultiIO5	LED chaser with config buttons (callback method) and LEDs on MCP23008 (i2c)	1606	14					1558	14						
+MultiIO6	Multiple LED -switch mapper on MCP23008 (i2c)	5096	104												
+MultiIO7	Simple LED chaser on MCP23008 (i2c)	1186	0												
+Servo1	Servo controlled by a pot through 8bits pulse timer	610	2	694	2	746	2	584	2			630	2	654	2
+Servo2	Servo controlled by a pot through 16bits pulse timer	562	0	646	0	690	0	508	0			582	0	598	0
+RF24App1	NRF24L01P ping-pong (UATX except ATtiny), no IRQ (spi)	4132	224	4228	224	4420	224	1680	8	1250	6	4150	224	4186	224
+RF24App2	NRF24L01P ping-pong (UATX except ATtiny), IRQ (spi)	4158	224	4254	224	4446	224	1724	8			4176	224	4212	224
+WinBond	Trace (UATX) WinBond flash chip read/writes (spi)	3338	330	3422	330	3534	330	3218	200	3214	200	3358	330	3386	330
+Sonar1	Display (UATX) sonar range meaures in blocking mode	2536	76	2620	76	2684	76	2490	74			2556	76	2592	76
+Sonar2	Display (UATX) sonar range meaures in INT mode	2632	78	2798	78	2870	78	2702	76			2652	78	2696	78
+Sonar3	Display (UATX) sonar range meaures in PCINT mode	2644	78	2810	78	2882	78	2706	76			2664	78	2708	78
+Sonar4	Display (UATX) range meaures in PCINT mode from 2 distinct sonars	3068	80	3150	80	3218	80	3072	78			3086	80	3130	80
+Sonar5	Display (UATX) range meaures in PCINT mode from 2 sonars sharing trigger	3058	80	3140	80	3208	80	3062	78			3078	80	3122	80
+Sonar6	Display (UATX) sonar range meaures in PCINT mode with PCI callback	2880	80	2964	80	3036	80	2878	78			2900	80	2944	80
+Sonar7	Display (UATX) sonar range meaures in PCINT mode with PCI/TIMEOUT callback	3022	80	3106	80	3178	80	3028	78			3042	80	3086	80
+Sonar10	Light LEDS based on multiple sonars alarms with callbacks	1928	10												
+Sonar11	Light LEDS based on auto-trigger multiple sonars alarms with callbacks	2020	10												
+tones00	Tone player unit tests	3332	0	3902	0	3460	0	3286	0	3290	0	3352	0	3368	0
+tones0	Tone player from SRAM (TonePlay)	1246	218												
+tones1	Tone player from SRAM (QTonePlay)	986	284												
+tones2	Tone player from EEPROM (QTonePlay)	774	0												
+tones3	Tone player from Flash (QTonePlay)	1114	0												
+tones4	Tone player from SRAM, stoppable from external interrupt (QTonePlay)	1106	286												
+tones5	Tone player from SRAM, playing asynchronously from ISR (QTonePlay)	1430	288												
+tones6	Tone player from Flash, playing 2 channels asynchronously from RTT events (QTonePlay)	2226	42												
+tones7	Tone player from Flash, playing asynchronously from RTT events (QTonePlay)	1592	42												
+PCIFuture	Example of Future concept usage with PCI ISR	2096	76	2180	76	2196	76	2034	74	2032	74	2114	76	2150	76
+improved_futures	Example of FuturesGroup	5976	166									5996	166	6024	166
+Conway	Game of Life (8x8 LED) 1KB Hackaday	2962	275	1202	10			1022	10						
