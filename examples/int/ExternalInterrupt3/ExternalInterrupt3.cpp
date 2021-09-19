@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -32,6 +32,10 @@
  *   - D21 (INT0) branch a push button connected to ground
  *   - D20 (INT1) branch a push button connected to ground
  *   - D13 (PB7) LED connected to ground through a resistor
+ * - on ATmega644 based boards:
+ *   - D26 (INT0, PD2) branch a push button connected to ground
+ *   - D27 (INT1, PD3) branch a push button connected to ground
+ *   - D8 (PB0) LED connected to ground through a resistor
  */
 
 #include <fastarduino/gpio.h>
@@ -47,6 +51,9 @@ constexpr const board::ExternalInterruptPin SWITCH_OFF = board::ExternalInterrup
 #elif defined (ARDUINO_MEGA)
 constexpr const board::ExternalInterruptPin SWITCH_ON = board::ExternalInterruptPin::D21_PD0_EXT0;
 constexpr const board::ExternalInterruptPin SWITCH_OFF = board::ExternalInterruptPin::D20_PD1_EXT1;
+#elif defined (BREADBOARD_ATMEGAXX4P)
+constexpr const board::ExternalInterruptPin SWITCH_ON = board::ExternalInterruptPin::D26_PD2_EXT0;
+constexpr const board::ExternalInterruptPin SWITCH_OFF = board::ExternalInterruptPin::D27_PD3_EXT1;
 #else
 #error "Current target is not yet supported!"
 #endif

@@ -28,7 +28,7 @@
         120
     ],
     "editor.tabSize": 4,
-    "editor.autoIndent": true,
+    "editor.autoIndent": "full",
     "C_Cpp.clang_format_path": "/usr/bin/clang-format",
     "C_Cpp.clang_format_style": "file",
     "C_Cpp.autocomplete": "Default",
@@ -87,6 +87,30 @@
             "board": "ATmega328",
             "frequency": 8,
             "programmer": "ArduinoISP.cc"
+        },
+        "ATmega644-16MHz":
+        {
+            "board": "ATmega644",
+            "frequency": 16,
+            "programmer": "ArduinoISP.cc",
+            "fuses": 
+            {
+                "hfuse": "0xD8",
+                "lfuse": "0xF7",
+                "efuse": "0xFD"
+            }
+        },
+        "ATmega1284-16MHz":
+        {
+            "board": "ATmega1284",
+            "frequency": 16,
+            "programmer": "ArduinoISP.cc",
+            "fuses": 
+            {
+                "hfuse": "0xD8",
+                "lfuse": "0xF7",
+                "efuse": "0xFD"
+            }
         },
         "ATtiny84-8MHz":
         {

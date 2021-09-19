@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -44,6 +44,11 @@ static gpio::FastPort<board::Port::PORT_B> PortB;
 static gpio::FAST_PIN<board::DigitalPin::D0_PB0> PinD0{gpio::PinMode::INPUT};
 static gpio::FAST_PIN<board::DigitalPin::D1_PB1> PinD1{gpio::PinMode::INPUT_PULLUP};
 static gpio::FAST_PIN<board::DigitalPin::D2_PB2> PinD2{gpio::PinMode::OUTPUT};
+#elif defined (BREADBOARD_ATMEGAXX4P)
+static gpio::FastPort<board::Port::PORT_B> PortB;
+static gpio::FAST_PIN<board::DigitalPin::D8_PB0> PinD0{gpio::PinMode::INPUT};
+static gpio::FAST_PIN<board::DigitalPin::D9_PB1> PinD1{gpio::PinMode::INPUT_PULLUP};
+static gpio::FAST_PIN<board::DigitalPin::D10_PB2> PinD2{gpio::PinMode::OUTPUT};
 #else
 #error "Current target is not yet supported!"
 #endif

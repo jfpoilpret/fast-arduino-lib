@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -34,6 +34,9 @@
  * - on ATtinyX5 based boards:
  *   - D1 (PCINT1, PB1) branch a push button connected to ground
  *   - D0 (PB0) LED connected to ground through a resistor
+ * - on ATmega644 based boards:
+ *   - D0 (PCINT0, PA0) branch a push button connected to ground
+ *   - D8 (PB0) LED connected to ground through a resistor
  */
 
 #include <fastarduino/gpio.h>
@@ -54,6 +57,9 @@ constexpr const board::InterruptPin SWITCH = board::InterruptPin::D8_PB0_PCI1;
 #define PCI_NUM 1
 #elif defined (BREADBOARD_ATTINYX5)
 constexpr const board::InterruptPin SWITCH = board::InterruptPin::D1_PB1_PCI0;
+#define PCI_NUM 0
+#elif defined (BREADBOARD_ATMEGAXX4P)
+constexpr const board::InterruptPin SWITCH = board::InterruptPin::D0_PA0_PCI0;
 #define PCI_NUM 0
 #else
 #error "Current target is not yet supported!"

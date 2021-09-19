@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -18,6 +18,9 @@
  * Wiring:
  * - on Arduino UNO, LEONARDO and MEGA:
  *   - Use standard TX/RX
+ * - on ATmega644 based boards:
+ *   - D25 (PD1): TX output connected to an Serial-USB converter
+ *   - D24 (PD0): RX input connected to an Serial-USB converter
  */
 
 #include <fastarduino/time.h>

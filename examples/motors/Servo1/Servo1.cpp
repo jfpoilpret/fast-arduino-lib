@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -34,6 +34,10 @@
  *   - A1 (PA1): connected to the wiper of a 10K pot or trimmer, which terminals are 
  *     connected between Vcc and Gnd
  *   - D10 (PB2): connected to servo signal pin (orange wire)
+ * - on ATmega644 based boards:
+ *   - A1 (PA1): connected to the wiper of a 10K pot or trimmer, which terminals are 
+ *     connected between Vcc and Gnd
+ *   - D11 (PB3): connected to servo signal pin (orange wire)
  */
 
 #include <fastarduino/boards/board.h>
@@ -68,6 +72,13 @@ constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 // PIN connected to servo signal
 constexpr const board::PWMPin SERVO_PIN1 = board::PWMPin::D10_PB2_OC0A;
+constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
+#define REGISTER_PULSE_TIMER8_ISR REGISTER_PULSE_TIMER8_A_ISR
+#elif defined (BREADBOARD_ATMEGAXX4P)
+#define TIMER_NUM 0
+constexpr const board::Timer NTIMER = board::Timer::TIMER0;
+// PIN connected to servo signal
+constexpr const board::PWMPin SERVO_PIN1 = board::PWMPin::D11_PB3_OC0A;
 constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 #define REGISTER_PULSE_TIMER8_ISR REGISTER_PULSE_TIMER8_A_ISR
 #else

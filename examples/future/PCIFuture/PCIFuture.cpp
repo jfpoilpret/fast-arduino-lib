@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -33,6 +33,9 @@
  * - on ATtinyX5 breadboard
  *   - D0,2-4 (PB0,2-4, port B): branch 4 push buttons connected to GND
  *   - D1 (PB1) as TX to a Serial-USB converter
+ * - on ATmega644 based boards:
+ *   - D0-D7 (PA0-7, port A): branch 8 push buttons connected to GND
+ *   - D25 (PD1): TX output connected to Serial-USB allowing traces display on a PC terminal
  * 
  * Notes: if you do not connect as many buttons as expected, the example will still 
  * work but it will always show high bits for unconnected inputs.
@@ -88,6 +91,15 @@ static constexpr board::Port PORT = board::Port::PORT_B;
 static constexpr uint8_t PORT_MASK = 0x1C;
 static constexpr board::InterruptPin IPIN0 = board::InterruptPin::D0_PB0_PCI0;
 #define PCINT 0
+#elif defined (BREADBOARD_ATMEGAXX4P)
+#define HARDWARE_UART 1
+#include <fastarduino/uart.h>
+static constexpr board::USART USART = board::USART::USART0;
+static constexpr board::Port PORT = board::Port::PORT_A;
+static constexpr uint8_t PORT_MASK = 0xFF;
+static constexpr board::InterruptPin IPIN0 = board::InterruptPin::D0_PA0_PCI0;
+#define PCINT 0
+REGISTER_UATX_ISR(0)
 #else
 #error "Current target is not yet supported!"
 #endif

@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -28,6 +28,8 @@
  *   - D1 (PA1) as TX to a Serial-USB converter
  * - on ATtinyX5 based boards:
  *   - D1 (PB1) as TX to a Serial-USB converter
+ * - on ATmega644 based boards:
+ *   - D25 (PD1): TX output connected to SerialUSB converter
  */
 
 #include <fastarduino/realtime_timer.h>
@@ -66,6 +68,13 @@ static constexpr const board::DigitalPin TX = board::DigitalPin::D1_PB1;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
+#elif defined (BREADBOARD_ATMEGAXX4P)
+#include <fastarduino/uart.h>
+static constexpr const board::USART UART = board::USART::USART0;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+// Define vectors we need in the example
+REGISTER_RTT_ISR(0)
+REGISTER_UATX_ISR(0)
 #else
 #error "Current target is not yet supported!"
 #endif

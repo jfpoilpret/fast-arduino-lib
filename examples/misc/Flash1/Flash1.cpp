@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@
  * - on Arduino boards: direct USB access
  * - on ATtinyX4 based boards:
  *   - D1: TX output connected to Serial-USB allowing traces display on a PC terminal
+ * - on ATmega644 based boards:
+ *   - D25 (PD1): TX output connected through USB Serial converter to console for display
  */
 
 #include <fastarduino/flash.h>
@@ -52,6 +54,13 @@ REGISTER_UATX_ISR(0)
 #include <fastarduino/soft_uart.h>
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
+#elif defined (BREADBOARD_ATMEGAXX4P)
+#define HARDWARE_UART 1
+#include <fastarduino/uart.h>
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr const board::USART UART = board::USART::USART0;
+// Define vectors we need in the example
+REGISTER_UATX_ISR(0)
 #else
 #error "Current target is not yet supported!"
 #endif

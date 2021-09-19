@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -26,6 +26,8 @@
  *   - D10 (PB2): connect to a 5V passive piezo buzzer with the other lead connected to ground
  * - on ATtinyX5:
  *   - D0 (PB0): connect to a 5V passive piezo buzzer with the other lead connected to ground
+ * - on ATmega644 based boards:
+ *   - D11 (PB3): connect to a 5V passive piezo buzzer with the other lead connected to ground
  */
 
 // Example of square wave generation, using CTC mode and COM toggle
@@ -47,6 +49,9 @@ static constexpr const board::PWMPin OUTPUT = board::PWMPin::D10_PB2_OC0A;
 #elif defined(BREADBOARD_ATTINYX5)
 static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 static constexpr const board::PWMPin OUTPUT = board::PWMPin::D0_PB0_OC0A;
+#elif defined (BREADBOARD_ATMEGAXX4P)
+static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
+static constexpr const board::PWMPin OUTPUT = board::PWMPin::D11_PB3_OC0A;
 #else
 #error "Current target is not yet supported!"
 #endif

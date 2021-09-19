@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -41,6 +41,11 @@
  *   - A2 (PA2): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - D0 (PB0): LED connected to GND through a 1K resistor 
  *   - D1 (PB1): LED connected to GND through a 1K resistor 
+ * - on ATmega644 based boards:
+ *   - A0 (PA0): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - A1 (PA1): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D11 (PB3): LED connected to GND through a 1K resistor 
+ *   - D12 (PB4): LED connected to GND through a 1K resistor 
  */
 
 #include <fastarduino/time.h>
@@ -77,6 +82,12 @@ static constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 static constexpr const board::AnalogPin POT2 = board::AnalogPin::A2;
 static constexpr const board::PWMPin LED1 = board::PWMPin::D0_PB0_OC0A;
 static constexpr const board::PWMPin LED2 = board::PWMPin::D1_PB1_OC0B;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
+#elif defined (BREADBOARD_ATMEGAXX4P)
+static constexpr const board::AnalogPin POT1 = board::AnalogPin::A0;
+static constexpr const board::AnalogPin POT2 = board::AnalogPin::A1;
+static constexpr const board::PWMPin LED1 = board::PWMPin::D11_PB3_OC0A;
+static constexpr const board::PWMPin LED2 = board::PWMPin::D12_PB4_OC0B;
 static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 #else
 #error "Current target is not yet supported!"

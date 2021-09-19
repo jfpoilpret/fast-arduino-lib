@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@
  * Wiring:
  * - Arduino UNO
  *   - Standard USB to console
+ * - on ATmega644 based boards:
+ *   - D25 (PD1): TX output connected through USB Serial converter to console for display
  */
 
 #include <fastarduino/flash.h>
@@ -27,6 +29,10 @@
 #include <fastarduino/tests/assertions.h>
 
 #ifdef ARDUINO_UNO
+static const board::USART USART = board::USART::USART0;
+// Define vectors we need in the example
+REGISTER_UATX_ISR(0)
+#elif defined (BREADBOARD_ATMEGAXX4P)
 static const board::USART USART = board::USART::USART0;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)

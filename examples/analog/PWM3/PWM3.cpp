@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -28,6 +28,9 @@
  * - on ATtinyX4 based boards:
  *   - A1 (PA1): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - D6 (PA6): LED connected to GND through a 1K resistor 
+ * - on ATmega644 based boards:
+ *   - A0 (PA0): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D29 (PD5): LED connected to GND through a 1K resistor 
  */
 
 #include <fastarduino/time.h>
@@ -50,6 +53,10 @@ static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 #elif defined (BREADBOARD_ATTINYX4)
 static constexpr const board::AnalogPin POT1 = board::AnalogPin::A1;
 static constexpr const board::PWMPin LED1 = board::PWMPin::D6_PA6_OC1A;
+static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
+#elif defined (BREADBOARD_ATMEGAXX4P)
+static constexpr const board::AnalogPin POT1 = board::AnalogPin::A0;
+static constexpr const board::PWMPin LED1 = board::PWMPin::D29_PD5_OC1A;
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 #else
 #error "Current target is not yet supported!"

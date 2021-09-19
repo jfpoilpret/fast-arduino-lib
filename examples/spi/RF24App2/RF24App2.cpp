@@ -51,6 +51,12 @@
  *   - D4 (SCK), D6 (MISO), D5 (MOSI), D2 (CSN): SPI interface to NRF24L01+
  *   - D3 (CE): interface to NRF24L01+
  *   - D10 (EXT0, IRQ): interface to NRF24L01+
+ * - on ATmega644 based boards:
+ *   - D25 (PD1): TX output used for tracing program activities
+ *   - D10 (PB2): master/slave configuration pin
+ *   - D8 (PB0, CSN), D13 (PB5, MOSI), D14 (PB6, MISO), D15 (PB7, SCK): SPI interface to NRF24L01+
+ *   - D9 (PB1, CE): interface to NRF24L01+
+ *   - D26 (PD2, EXT0, IRQ): interface to NRF24L01+
  */
 
 #include <fastarduino/gpio.h>
@@ -100,6 +106,17 @@ static const constexpr board::DigitalPin PIN_CE = board::DigitalPin::D3_PA3;
 static const constexpr board::Timer RTT_TIMER = board::Timer::TIMER0;
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
+#elif defined (BREADBOARD_ATMEGAXX4P)
+#define HAS_TRACE 1
+#define USART_NUM 0
+static const constexpr board::USART UART = board::USART::USART0;
+static const constexpr board::ExternalInterruptPin PIN_IRQ = board::ExternalInterruptPin::D26_PD2_EXT0;
+static const constexpr board::DigitalPin PIN_CONFIG = board::DigitalPin::D10_PB2;
+static const constexpr board::DigitalPin PIN_CSN = board::DigitalPin::D8_PB0;
+static const constexpr board::DigitalPin PIN_CE = board::DigitalPin::D9_PB1;
+static const constexpr board::Timer RTT_TIMER = board::Timer::TIMER2;
+// Define vectors we need in the example
+REGISTER_RTT_ISR(2)
 #else
 #error "Current target is not yet supported!"
 #endif

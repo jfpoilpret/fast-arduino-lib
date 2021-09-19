@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -34,6 +34,10 @@
  *   - D6 (PA6, SDA): connected to HMC5883L SDA pin
  *   - D4 (PA4, SCL): connected to HMC5883L SDA pin
  *   - D8 (PB0, TX): connected to SerialUSB converter
+ * - on ATmega644 based boards:
+ *   - D17 (PC1, SDA): connected to HMC5883L SDA pin
+ *   - D16 (PC0, SCL): connected to HMC5883L SCL pin
+ *   - D25 (PD1): TX output connected to SerialUSB converter
  */
 
 #include <fastarduino/time.h>
@@ -63,12 +67,20 @@ REGISTER_UATX_ISR(1)
 #include <fastarduino/soft_uart.h>
 static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+#elif defined (BREADBOARD_ATMEGAXX4P)
+#define HARDWARE_UART 1
+#include <fastarduino/uart.h>
+static constexpr const board::USART UART = board::USART::USART0;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
+// Define vectors we need in the example
+REGISTER_UATX_ISR(0)
 #else
 #error "Current target is not yet supported!"
 #endif
 
 // #define DEBUG_I2C
-#define FORCE_SYNC
+// #define FORCE_SYNC
 
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 using devices::magneto::DataOutput;
@@ -172,7 +184,7 @@ int main()
 	MAGNETOMETER compass{manager};
 	
 	bool ok = compass.begin(
-		OperatingMode::CONTINUOUS, Gain::GAIN_1_9GA, DataOutput::RATE_75HZ, SamplesAveraged::EIGHT_SAMPLES);
+		OperatingMode::CONTINUOUS, Gain::GAIN_4_0GA, DataOutput::RATE_75HZ, SamplesAveraged::EIGHT_SAMPLES);
 	out << dec << F("begin() ") << ok << '\n' << flush;
 	DEBUG(out);
 	trace_status(out, compass.status());
@@ -190,6 +202,7 @@ int main()
 		float heading = magnetic_heading(fields.x, fields.y);
 		out << F("Magnetic heading ") << heading << F(" rad\n") << flush;
 #endif
+		// trace_fields(out, fields);
 		compass.convert_fields_to_mGA(fields);
 		trace_fields(out, fields);
 		time::delay_ms(500);

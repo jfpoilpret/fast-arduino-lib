@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -1010,7 +1010,7 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = 0;
 		static constexpr uint8_t IN_SIZE = 0;
 
-		Future(STATUS_LISTENER* status_listener = nullptr)
+		explicit Future(STATUS_LISTENER* status_listener = nullptr)
 		: AbstractFuture{nullptr, 0,nullptr, 0, status_listener} {}
 		~Future() = default;
 

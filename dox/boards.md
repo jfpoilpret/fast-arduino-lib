@@ -12,6 +12,7 @@ MCU selection at compile-time is done by setting the following pre-processor mac
     - `ARDUINO_NANO`
     - `ARDUINO_LEONARDO`
     - `BREADBOARD_ATMEGA328P`
+    - `BREADBOARD_ATMEGAXX4`
     - `BREADBOARD_ATTINYX4`
     - `BREADBOARD_ATTINYX5`
     - `ARDUINO_MEGA`
@@ -22,6 +23,10 @@ In addition, the following option shall be set at compile time:
 - `-mmcu=<MCU>` where `<MCU>` is the code of the target MCU as understood by the AVR build toolchain:
     - `atmega328`
     - `atmega32u4`
+    - `atmega164`
+    - `atmega324`
+    - `atmega644`
+    - `atmega1284`
     - `attiny84`
     - `attiny85`
     - `atmega2560`
@@ -38,6 +43,7 @@ For each of the following supported targets, you can find the documentation of i
 - [Arduino UNO](boards/uno/namespaceboard.html)
 - [Arduino NANO](boards/nano/namespaceboard.html)
 - [ATmega328P based board](boards/atmega328/namespaceboard.html)
+- [ATmegaXX4 based board](boards/atmegaxx4/namespaceboard.html)
 - [ATtinyX4 based board](boards/attinyx4/namespaceboard.html)
 - [ATtinyX5 based board](boards/attinyx5/namespaceboard.html)
 - [Arduino LEONARDO](boards/leonardo/namespaceboard.html)

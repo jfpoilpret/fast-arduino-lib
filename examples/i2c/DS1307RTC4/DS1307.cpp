@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -27,12 +27,16 @@
  *   - direct USB access
  * - on Arduino LEONARDO:
  *   - D2 (PD1, SDA): connected to DS1307 SDA pin
- *   - D3 (PD0, SCL): connected to DS1307 SDA pin
+ *   - D3 (PD0, SCL): connected to DS1307 SCL pin
  *   - direct USB access
  * - on Arduino MEGA:
  *   - D20 (PD1, SDA): connected to DS1307 SDA pin
- *   - D21 (PD0, SCL): connected to DS1307 SDA pin
+ *   - D21 (PD0, SCL): connected to DS1307 SCL pin
  *   - direct USB access
+ * - on ATmega644 based boards:
+ *   - D17 (PC1, SDA): connected to DS1307 SDA pin
+ *   - D16 (PC0, SCL): connected to DS1307 SCL pin
+ *   - D25 (PD1): TX output connected to SerialUSB converter
  */
 
 #include <fastarduino/time.h>
@@ -67,6 +71,14 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static constexpr uint8_t I2C_BUFFER_SIZE = 32;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(1)
+#elif defined (BREADBOARD_ATMEGAXX4P)
+#define HARDWARE_UART 1
+#include <fastarduino/uart.h>
+static constexpr const board::USART UART = board::USART::USART0;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+static constexpr uint8_t I2C_BUFFER_SIZE = 32;
+// Define vectors we need in the example
+REGISTER_UATX_ISR(0)
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -110,7 +122,7 @@ public:
 		interrupt::register_handler(*this);
 	}
 
-	FutureStatus status()
+	FutureStatus status() const
 	{
 		return status_;
 	}
@@ -126,7 +138,7 @@ private:
 		status_ = proxy()->status();
 	}
 
-	FutureStatus status_ = FutureStatus::NOT_READY;
+	volatile FutureStatus status_ = FutureStatus::NOT_READY;
 	
 	DECL_I2C_ISR_HANDLERS_FRIEND
 };

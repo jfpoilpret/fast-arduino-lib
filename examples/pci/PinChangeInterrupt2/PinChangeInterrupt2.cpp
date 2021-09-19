@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -38,6 +38,10 @@
  *   - D0-D3 (port A) branch 4 LED (in series with 330 Ohm resistors to limit 
  *     current) connected to ground
  *   - D8-D10 (port B) branch 3 buttons connected to ground
+ * - on ATmega644 based boards:
+ *   - D16-D19 (port C) branch 4 LED (in series with 330 Ohm resistors to limit 
+ *     current) connected to ground
+ *   - D0-D2 (port A) branch 3 buttons connected to ground
  */
 
 #include <fastarduino/gpio.h>
@@ -80,6 +84,15 @@ constexpr const board::DigitalPin LED2 = board::DigitalPin::D1_PA1;
 constexpr const board::DigitalPin LED3 = board::DigitalPin::D2_PA2;
 constexpr const board::DigitalPin LED4 = board::DigitalPin::D3_PA3;
 #define PCI_NUM 1
+#elif defined (BREADBOARD_ATMEGAXX4P)
+constexpr const board::InterruptPin SWITCH1 = board::InterruptPin::D0_PA0_PCI0;
+constexpr const board::InterruptPin SWITCH2 = board::InterruptPin::D1_PA1_PCI0;
+constexpr const board::InterruptPin SWITCH3 = board::InterruptPin::D2_PA2_PCI0;
+constexpr const board::DigitalPin LED1 = board::DigitalPin::D16_PC0;
+constexpr const board::DigitalPin LED2 = board::DigitalPin::D17_PC1;
+constexpr const board::DigitalPin LED3 = board::DigitalPin::D18_PC2;
+constexpr const board::DigitalPin LED4 = board::DigitalPin::D19_PC3;
+#define PCI_NUM 0
 #else
 #error "Current target is not yet supported!"
 #endif

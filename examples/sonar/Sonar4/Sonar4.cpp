@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
  *   - D2: connected to sonar 1 trigger pin
  *   - D3: connected to sonar 1 echo pin
  *   - D4: connected to sonar 2 trigger pin
- *   - D5: connected to sonar 3 echo pin
+ *   - D5: connected to sonar 2 echo pin
  *   - Standard USB connected to console for measures display
  * - on Arduino MEGA:
  *   - D2: connected to sonar 1 trigger pin
@@ -41,9 +41,15 @@
  * - on ATtinyX4 based boards:
  *   - D0 (PA0): connected to sonar 1 trigger pin
  *   - D10 (PB2): connected to sonar 1 echo pin
- *   - D1 (PA1): connected to sonar 1 trigger pin
- *   - D9 (PB1): connected to sonar 1 echo pin
+ *   - D1 (PA1): connected to sonar 2 trigger pin
+ *   - D9 (PB1): connected to sonar 2 echo pin
  *   - D8 (PB0): TX output connected to Serial-USB allowing traces display on a PC terminal
+ * - on ATmega644 based boards:
+ *   - D0 (PA0): connected to sonar 1 trigger pin
+ *   - D1 (PA1): connected to sonar 1 echo pin
+ *   - D2 (PA0): connected to sonar 2 trigger pin
+ *   - D3 (PA1): connected to sonar 2 echo pin
+ *   - D25 (PD1): TX output connected to SerialUSB allowing traces display on a PC terminal
  */
 
 #include <fastarduino/boards/board.h>
@@ -105,6 +111,19 @@ static constexpr const board::DigitalPin TRIGGER1 = board::DigitalPin::D0_PA0;
 static constexpr const board::InterruptPin ECHO1 = board::InterruptPin::D10_PB2_PCI1;
 static constexpr const board::DigitalPin TRIGGER2 = board::DigitalPin::D1_PA1;
 static constexpr const board::InterruptPin ECHO2 = board::InterruptPin::D9_PB1_PCI1;
+#elif defined (BREADBOARD_ATMEGAXX4P)
+#define HARDWARE_UART 1
+#include <fastarduino/uart.h>
+static constexpr const board::USART UART = board::USART::USART0;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+REGISTER_UATX_ISR(0)
+#define TIMER_NUM 1
+static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
+#define PCI_NUM 0
+static constexpr const board::DigitalPin TRIGGER1 = board::DigitalPin::D0_PA0;
+static constexpr const board::InterruptPin ECHO1 = board::InterruptPin::D1_PA1_PCI0;
+static constexpr const board::DigitalPin TRIGGER2 = board::DigitalPin::D2_PA2;
+static constexpr const board::InterruptPin ECHO2 = board::InterruptPin::D3_PA3_PCI0;
 #else
 #error "Current target is not yet supported!"
 #endif

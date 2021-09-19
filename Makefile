@@ -1,5 +1,5 @@
 #
-#   Copyright 2016-2020 Jean-Francois Poilpret
+#   Copyright 2016-2021 Jean-Francois Poilpret
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -42,6 +42,7 @@ doco:
 	doxygen ./dox/doxyfile-leonardo
 	doxygen ./dox/doxyfile-mega
 	doxygen ./dox/doxyfile-atmega328
+	doxygen ./dox/doxyfile-atmegaxx4
 	doxygen ./dox/doxyfile-attinyx4
 	doxygen ./dox/doxyfile-attinyx5
 
