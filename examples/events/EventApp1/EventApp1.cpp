@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -27,6 +27,9 @@
  *     current) connected to ground
  * - on ATtinyX4 based boards:
  *   - D0-D7 (port A) branch 8 LED (in series with 330 Ohm resistors to limit 
+ *     current) connected to ground
+ * - on ATmega644 based boards:
+ *   - D0-D7 (port A): branch 8 LED (in series with 330 Ohm resistors to limit
  *     current) connected to ground
  */
 
@@ -67,6 +70,15 @@ static constexpr const board::DigitalPin LED5 = board::DigitalPin::D27_PA5;
 static constexpr const board::DigitalPin LED6 = board::DigitalPin::D28_PA6;
 static constexpr const board::DigitalPin LED7 = board::DigitalPin::D29_PA7;
 #elif defined (BREADBOARD_ATTINYX4)
+static constexpr const board::DigitalPin LED0 = board::DigitalPin::D0_PA0;
+static constexpr const board::DigitalPin LED1 = board::DigitalPin::D1_PA1;
+static constexpr const board::DigitalPin LED2 = board::DigitalPin::D2_PA2;
+static constexpr const board::DigitalPin LED3 = board::DigitalPin::D3_PA3;
+static constexpr const board::DigitalPin LED4 = board::DigitalPin::D4_PA4;
+static constexpr const board::DigitalPin LED5 = board::DigitalPin::D5_PA5;
+static constexpr const board::DigitalPin LED6 = board::DigitalPin::D6_PA6;
+static constexpr const board::DigitalPin LED7 = board::DigitalPin::D7_PA7;
+#elif defined (BREADBOARD_ATMEGAXX4P)
 static constexpr const board::DigitalPin LED0 = board::DigitalPin::D0_PA0;
 static constexpr const board::DigitalPin LED1 = board::DigitalPin::D1_PA1;
 static constexpr const board::DigitalPin LED2 = board::DigitalPin::D2_PA2;

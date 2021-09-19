@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -386,6 +386,10 @@ namespace devices::magneto
 				utils::swap_bytes(fields.x);
 				utils::swap_bytes(fields.y);
 				utils::swap_bytes(fields.z);
+				// HMC5883L registers are in order X,Z,Y while Sensor3D is X,Y,Z
+				int16_t temp = fields.y;
+				fields.y = fields.z;
+				fields.z = temp;
 				return true;
 			}
 			/// @endcond

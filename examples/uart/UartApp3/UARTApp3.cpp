@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -39,6 +39,8 @@
  *   - Use D1-D0 as TX-RX, connected to an Serial-USB converter
  * - on ATtinyX5 based boards:
  *   - Use D1-D0 as TX-RX, connected to an Serial-USB converter
+ * - on ATmega644 based boards:
+ *   - Use D1(PA1)-D0(PA0) as TX-RX, connected to an Serial-USB converter
  */
 
 #include <fastarduino/soft_uart.h>
@@ -63,6 +65,10 @@ constexpr const board::InterruptPin RX = board::InterruptPin::D0_PA0_PCI0;
 #elif defined (BREADBOARD_ATTINYX5)
 constexpr const board::DigitalPin TX = board::DigitalPin::D1_PB1;
 constexpr const board::InterruptPin RX = board::InterruptPin::D0_PB0_PCI0;
+#define PCI_NUM 0
+#elif defined (BREADBOARD_ATMEGAXX4P)
+constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
+constexpr const board::InterruptPin RX = board::InterruptPin::D0_PA0_PCI0;
 #define PCI_NUM 0
 #else
 #error "Current target is not yet supported!"

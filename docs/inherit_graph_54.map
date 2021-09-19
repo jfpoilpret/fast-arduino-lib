@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classevents_1_1_event.html" title="A standard Event as managed by FastArduino event API." alt="" coords="5,5,155,32"/>
+<area shape="rect" id="node1" href="$classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM." alt="" coords="5,5,135,32"/>
+<area shape="rect" id="node2" href="$classeeprom_1_1_queued_writer.html" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data..." alt="" coords="183,5,335,32"/>
 </map>

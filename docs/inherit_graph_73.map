@@ -1,4 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classi2c_1_1_abstract_i2_c_sync_manager.html" title=" " alt="" coords="5,5,300,91"/>
-<area shape="rect" id="node2" href="$classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title="Abstract synchronous I2C Manager for ATmega architecture." alt="" coords="348,13,596,83"/>
+<area shape="rect" id="node1" href="$classi2c_1_1_abstract_i2_c_async_manager.html" title=" " alt="" coords="5,5,224,91"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_i2_c_async_l_c_status_debug_manager.html" title="Asynchronous I2C Manager for ATmega architecture with debug and status notification facilities and su..." alt="" coords="272,20,532,76"/>
 </map>

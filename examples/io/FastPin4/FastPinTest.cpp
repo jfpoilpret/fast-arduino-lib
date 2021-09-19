@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -29,6 +29,9 @@
  * - on ATtinyX4 based boards:
  *   - D0-D7 (port A) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
  *   - D8-D10 (port B) branch 3 switches connected to ground
+ * - on ATmega644 based boards:
+ *   - D16-D23 (port C) branch 8 LED (in series with 330 Ohm resistors to limit current) connected to ground
+ *   - D8-D11 (port B) branch 4 switches connected to ground
  */
 
 #include <fastarduino/gpio.h>
@@ -51,6 +54,11 @@ static constexpr const uint8_t SPEED_SHIFT = 0;
 static constexpr const uint8_t DIRECTION_MASK = 0x08;
 #elif defined (BREADBOARD_ATTINYX4)
 static constexpr const board::Port LED_PORT = board::Port::PORT_A;
+static constexpr const board::Port SWITCH_PORT = board::Port::PORT_B;
+static constexpr const uint8_t SPEED_SHIFT = 0;
+static constexpr const uint8_t DIRECTION_MASK = 0x08;
+#elif defined (BREADBOARD_ATMEGAXX4P)
+static constexpr const board::Port LED_PORT = board::Port::PORT_C;
 static constexpr const board::Port SWITCH_PORT = board::Port::PORT_B;
 static constexpr const uint8_t SPEED_SHIFT = 0;
 static constexpr const uint8_t DIRECTION_MASK = 0x08;

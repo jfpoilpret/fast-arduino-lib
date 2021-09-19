@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -63,6 +63,13 @@ static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 constexpr const board::DigitalPin CS = board::DigitalPin::D3_PB3;
 constexpr const board::DigitalPin TX = board::DigitalPin::D4_PB4;
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
+#elif defined (BREADBOARD_ATMEGAXX4P)
+#include <fastarduino/uart.h>
+constexpr const board::DigitalPin CS = board::DigitalPin::D7_PA7;
+static const uint8_t OUTPUT_BUFFER_SIZE = 64;
+// Define vectors we need in the example
+constexpr const board::USART UART = board::USART::USART0;
+REGISTER_UATX_ISR(0)
 #else
 #error "Current target is not yet supported!"
 #endif

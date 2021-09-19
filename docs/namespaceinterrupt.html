@@ -26,6 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
+   &#160;<span id="projectnumber">v1.7</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -111,7 +112,7 @@ Classes</h2></td></tr>
 Typedefs</h2></td></tr>
 <tr class="memitem:a440f2d705bc60755a4f81a105caef15c"><td class="memTemplParams" colspan="2">template&lt;board::InterruptPin PIN&gt; </td></tr>
 <tr class="memitem:a440f2d705bc60755a4f81a105caef15c"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceinterrupt.html#a440f2d705bc60755a4f81a105caef15c">PCI_SIGNAL</a> = typename <a class="el" href="structinterrupt_1_1_p_c_i_type.html">PCIType</a>&lt; PIN &gt;::TYPE</td></tr>
-<tr class="memdesc:a440f2d705bc60755a4f81a105caef15c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Useful alias type to the <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector.">PCISignal</a></code> type matching a given <code><a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da" title="Defines all digital output pins of target MCU, usable as pin change interrupt (PCI) pins.">board::InterruptPin</a></code>.  <a href="namespaceinterrupt.html#a440f2d705bc60755a4f81a105caef15c">More...</a><br /></td></tr>
+<tr class="memdesc:a440f2d705bc60755a4f81a105caef15c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Useful alias type to the <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector.">PCISignal</a></code> type matching a given <code><a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da" title="Defines all digital output pins of ATmega644, usable as pin change interrupt (PCI) pins.">board::InterruptPin</a></code>.  <a href="namespaceinterrupt.html#a440f2d705bc60755a4f81a105caef15c">More...</a><br /></td></tr>
 <tr class="separator:a440f2d705bc60755a4f81a105caef15c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a459d16100bfb1d4613f3a868a190c892"><td class="memTemplParams" colspan="2"><a id="a459d16100bfb1d4613f3a868a190c892"></a>
 template&lt;board::Port PORT&gt; </td></tr>
@@ -163,7 +164,7 @@ template&lt;board::InterruptPin PIN&gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Useful alias type to the <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector.">PCISignal</a></code> type matching a given <code><a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da" title="Defines all digital output pins of target MCU, usable as pin change interrupt (PCI) pins.">board::InterruptPin</a></code>. </p>
+<p>Useful alias type to the <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector.">PCISignal</a></code> type matching a given <code><a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da" title="Defines all digital output pins of ATmega644, usable as pin change interrupt (PCI) pins.">board::InterruptPin</a></code>. </p>
 <p>The following snippet demonstrates usage of <code>PCI_SIGNAL</code> to declare a <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector.">PCISignal</a></code> instance for later use in a function:</p>
 <div class="fragment"><div class="line"><span class="keywordtype">void</span> f()</div>
 <div class="line">{</div>
@@ -261,7 +262,7 @@ template&lt;typename Handler &gt; </div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="anamespaceinterrupt_html_a440f2d705bc60755a4f81a105caef15c"><div class="ttname"><a href="namespaceinterrupt.html#a440f2d705bc60755a4f81a105caef15c">interrupt::PCI_SIGNAL</a></div><div class="ttdeci">typename PCIType&lt; PIN &gt;::TYPE PCI_SIGNAL</div><div class="ttdoc">Useful alias type to the PCISignal type matching a given board::InterruptPin.</div><div class="ttdef"><b>Definition:</b> <a href="pci_8h_source.html#l00567">pci.h:567</a></div></div>
-<div class="ttc" id="anamespaceboard_html_a7abd24b042402c0691c0ad6db604e7da"><div class="ttname"><a href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da">board::InterruptPin</a></div><div class="ttdeci">InterruptPin</div><div class="ttdoc">Defines all digital output pins of target MCU, usable as pin change interrupt (PCI) pins.</div><div class="ttdef"><b>Definition:</b> <a href="empty_8h_source.html#l00097">empty.h:98</a></div></div>
+<div class="ttc" id="anamespaceboard_html_a7abd24b042402c0691c0ad6db604e7da"><div class="ttname"><a href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da">board::InterruptPin</a></div><div class="ttdeci">InterruptPin</div><div class="ttdoc">Defines all digital output pins of ATmega644, usable as pin change interrupt (PCI) pins.</div><div class="ttdef"><b>Definition:</b> <a href="atmega__xx4_8h_source.html#l00258">atmega_xx4.h:259</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

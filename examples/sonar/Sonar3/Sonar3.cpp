@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -35,6 +35,10 @@
  *   - D9 (PB1): connected to sonar trigger pin
  *   - D10 (PB2): connected to sonar echo pin
  *   - D8 (PB0): TX output connected to Serial-USB allowing traces display on a PC terminal
+ * - on ATmega644 based boards:
+ *   - D0 (PA0): connected to sonar trigger pin
+ *   - D1 (PA1): connected to sonar echo pin
+ *   - D25 (PD1): TX output connected to SerialUSB allowing traces display on a PC terminal
  */
 
 #include <fastarduino/boards/board.h>
@@ -88,6 +92,17 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D9_PB1;
 static constexpr const board::InterruptPin ECHO = board::InterruptPin::D10_PB2_PCI1;
+#elif defined (BREADBOARD_ATMEGAXX4P)
+#define HARDWARE_UART 1
+#include <fastarduino/uart.h>
+static constexpr const board::USART UART = board::USART::USART0;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+REGISTER_UATX_ISR(0)
+#define TIMER_NUM 0
+#define PCI_NUM 0
+static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
+static constexpr const board::DigitalPin TRIGGER = board::DigitalPin::D0_PA0;
+static constexpr const board::InterruptPin ECHO = board::InterruptPin::D1_PA1_PCI0;
 #else
 #error "Current target is not yet supported!"
 #endif

@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -37,6 +37,9 @@
  * - on ATtinyX5 based boards:
  *   - D4 (TX) used for tracing program activities
  *   - D0 (MISO), D1 (MOSI), D2 (SCK), D3 (CS): SPI interface to WinBond
+ * - on ATmega644 based boards:
+ *   - D25 (PD1): TX output used for tracing program activities
+ *   - D12 (PB4, CS), D13 (PB5, MOSI), D14 (PB6, MISO), D15 (PB7, SCK): SPI interface to WinBond
  */
 
 #include <fastarduino/devices/winbond.h>
@@ -78,6 +81,14 @@ constexpr const board::DigitalPin CS = board::DigitalPin::D3_PB3;
 constexpr const board::DigitalPin TX = board::DigitalPin::D4_PB4;
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 constexpr const size_t DATA_SIZE = 128;
+#elif defined (BREADBOARD_ATMEGAXX4P)
+#include <fastarduino/uart.h>
+constexpr const board::DigitalPin CS = board::DigitalPin::D12_PB4;
+static const uint8_t OUTPUT_BUFFER_SIZE = 64;
+constexpr const size_t DATA_SIZE = 256;
+// Define vectors we need in the example
+constexpr const board::USART UART = board::USART::USART0;
+REGISTER_UATX_ISR(0)
 #else
 #error "Current target is not yet supported!"
 #endif

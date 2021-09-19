@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -978,7 +978,7 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = 0;
 		static constexpr uint8_t IN_SIZE = 0;
 
-		Future(STATUS_LISTENER* status_listener = nullptr)
+		explicit Future(STATUS_LISTENER* status_listener = nullptr)
 		: AbstractFuture{nullptr, 0,nullptr, 0, status_listener} {}
 		~Future() = default;
 
@@ -1315,7 +1315,7 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = 0;
 		static constexpr uint8_t IN_SIZE = 0;
 
-		FakeFuture(STATUS_LISTENER* status_listener = nullptr)
+		explicit FakeFuture(STATUS_LISTENER* status_listener = nullptr)
 			: AbstractFakeFuture{nullptr, 0, nullptr, 0, status_listener} {}
 
 		~FakeFuture() = default;
@@ -1569,7 +1569,7 @@ namespace future
 		 * Create a new FuturesGroup for the list of provided @p futures pointers
 		 * array.
 		 */
-		FuturesGroup(containers::array<F*, SIZE> futures)
+		explicit FuturesGroup(containers::array<F*, SIZE> futures)
 			: AbstractFuturesGroup<F>{futures_.data(), SIZE}, futures_{futures} {}
 		/// @cond notdocumented
 		FuturesGroup(FuturesGroup&&) = default;

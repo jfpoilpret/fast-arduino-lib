@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -26,7 +26,10 @@
  *   - direct USB access
  * - on ATtinyX4 based boards:
  *   - D1 (PA1, AIN1): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
- *   - D8 (PB0): TX conencted to a Serial2USB converter
+ *   - D8 (PB0): TX connected to a Serial2USB converter
+ * - on ATmega644 based boards:
+ *   - D10 (PB2, AIN0): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D25 (PD1): TX connected to a Serial2USB converter
  */
 
 #include <fastarduino/time.h>
@@ -54,6 +57,13 @@ static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 #define HARDWARE_UART 0
 #include <fastarduino/soft_uart.h>
 static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
+#elif defined (BREADBOARD_ATMEGAXX4P)
+#define NUM_TIMER 1
+static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
+#define HARDWARE_UART 1
+#include <fastarduino/uart.h>
+static constexpr const board::USART UART = board::USART::USART0;
+REGISTER_UATX_ISR(0)
 #else
 #error "Current target is not yet supported!"
 #endif

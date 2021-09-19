@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -33,6 +33,8 @@
 #include "attiny_x4.h"
 #elif defined(BREADBOARD_ATTINYX5)
 #include "attiny_x5.h"
+#elif defined(BREADBOARD_ATMEGAXX4P)
+#include "atmega_xx4.h"
 
 #else
 #error "board.h: board not supported"

@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
  * Real Time Timer example. Take #1
  * This program shows usage of FastArduino Timer-based RTT (Real Time Timer) support.
  * It checks RTT with all available timers of the target board.
- * For each available timer on the target platform, the program blinks a LED 5 
+ * For each available timer on the target platform, the program blinks a LED 4 
  * times with a period of 10 seconds.
  * 
  * Wiring:
@@ -28,6 +28,8 @@
  *   - D7 (LED, PA7) connected to a LED through a 330Ohm resistor then linked to GND
  * - on ATtinyX5 based boards:
  *   - D0 (LED, PB0) connected to a LED through a 330Ohm resistor then linked to GND
+ * - on ATmega644 based boards:
+ *   - D8 (PB0) LED connected to ground through a resistor
  */
 
 #include <fastarduino/gpio.h>
@@ -59,6 +61,11 @@ REGISTER_RTT_ISR(1)
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
 REGISTER_RTT_ISR(1)
+#elif defined (BREADBOARD_ATMEGAXX4P)
+// Define vectors we need in the example
+REGISTER_RTT_ISR(0)
+REGISTER_RTT_ISR(1)
+REGISTER_RTT_ISR(2)
 #else
 #error "Current target is not yet supported!"
 #endif
@@ -72,7 +79,7 @@ void check_timer()
 	timer::RTT<TIMER> rtt;
 	rtt.begin();
 	// Event Loop
-	for (uint8_t i = 0; i < 5; ++i)
+	for (uint8_t i = 0; i < 4; ++i)
 	{
 		rtt.delay(BLINK_DELAY);
 		led.toggle();
@@ -108,5 +115,9 @@ int main()
 	check_timer<board::Timer::TIMER3>();
 	check_timer<board::Timer::TIMER4>();
 	check_timer<board::Timer::TIMER5>();
+#elif defined (BREADBOARD_ATMEGAXX4P)
+	check_timer<board::Timer::TIMER0>();
+	check_timer<board::Timer::TIMER1>();
+	check_timer<board::Timer::TIMER2>();
 #endif
 }

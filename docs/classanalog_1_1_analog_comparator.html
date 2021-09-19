@@ -26,6 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
+   &#160;<span id="projectnumber">v1.7</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -183,7 +184,7 @@ template&lt;board::AnalogPin INPUT1 = board::AnalogPin::NONE, bool INPUT0_BANDGA
 <p>Note that this method is synchronized, i.e. it disables all interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classanalog_1_1_analog_comparator.html#a3d0efb8dbc256e15b437ab6d4ae4e7f3" title="Start operations of the Analog Comparator.">begin_()</a></code> instead.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">INPUT1</td><td>which <code><a class="el" href="namespaceboard.html#a6ed32fa64dbf9169ccc11a040e11d313" title="Defines all available analog input pins of the target MCU.">board::AnalogPin</a></code> is used as comparator negative input; if <code>board::AnalogPin::NONE</code> (the default), then AIN1 pin will be used, instead of any analog input pin. If the target MCU does not support AIN1 or the provided <code>AnalogPin</code>, compilation will fail with an explicit assertion error. </td></tr>
+    <tr><td class="paramname">INPUT1</td><td>which <code><a class="el" href="namespaceboard.html#a6ed32fa64dbf9169ccc11a040e11d313" title="Defines all available analog input pins of ATmega644, with reference to Arduino MEGA pins.">board::AnalogPin</a></code> is used as comparator negative input; if <code>board::AnalogPin::NONE</code> (the default), then AIN1 pin will be used, instead of any analog input pin. If the target MCU does not support AIN1 or the provided <code>AnalogPin</code>, compilation will fail with an explicit assertion error. </td></tr>
     <tr><td class="paramname">INPUT0_BANDGAP</td><td>if <code>true</code>, then use bandgap reference voltage (typically 1.1V) as comparator positive input, instead of AIN0 pin; if <code>false</code>, AIN0 pin will be used. If the target MCU has no AIN0 pin, and <code>INPUT0_BANDGAP</code> is <code>false</code>, compilation will fail with an explicit assertion error.</td></tr>
   </table>
   </dd>
@@ -323,7 +324,7 @@ template&lt;board::AnalogPin INPUT1 = board::AnalogPin::NONE, bool INPUT0_BANDGA
 <p>Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classanalog_1_1_analog_comparator.html#a02ee03edcecd22753b2a138e33de854f" title="Start operations of the Analog Comparator.">begin()</a></code> instead.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">INPUT1</td><td>which <code><a class="el" href="namespaceboard.html#a6ed32fa64dbf9169ccc11a040e11d313" title="Defines all available analog input pins of the target MCU.">board::AnalogPin</a></code> is used as comparator negative input; if <code>board::AnalogPin::NONE</code> (the default), then AIN1 pin will be used, instead of any analog input pin. If the target MCU does not support AIN1 or the provided <code>AnalogPin</code>, compilation will fail with an explicit assertion error. </td></tr>
+    <tr><td class="paramname">INPUT1</td><td>which <code><a class="el" href="namespaceboard.html#a6ed32fa64dbf9169ccc11a040e11d313" title="Defines all available analog input pins of ATmega644, with reference to Arduino MEGA pins.">board::AnalogPin</a></code> is used as comparator negative input; if <code>board::AnalogPin::NONE</code> (the default), then AIN1 pin will be used, instead of any analog input pin. If the target MCU does not support AIN1 or the provided <code>AnalogPin</code>, compilation will fail with an explicit assertion error. </td></tr>
     <tr><td class="paramname">INPUT0_BANDGAP</td><td>if <code>true</code>, then use bandgap reference voltage (typically 1.1V) as comparator positive input, instead of AIN0 pin; if <code>false</code>, AIN0 pin will be used. If the target MCU has no AIN0 pin, and <code>INPUT0_BANDGAP</code> is <code>false</code>, compilation will fail with an explicit assertion error.</td></tr>
   </table>
   </dd>

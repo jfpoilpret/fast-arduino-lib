@@ -26,6 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
+   &#160;<span id="projectnumber">v1.7</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -401,7 +402,7 @@ template&lt;board::DigitalPin CS&gt; </div>
 </div><div class="memdoc">
 
 <p>Wait until any erase or write operation is finished. </p>
-<p>This method continuously reads the <a class="el" href="structdevices_1_1_win_bond_1_1_status.html" title="This type maps WinBond Status register (§6.1) to more readable pieces.">Status</a> register and check the BUSY bit (§6.1.1). If the chip is busy, then the method yields time, i.e. put the MCU to sleep according to the default <code><a class="el" href="namespaceboard.html#ae62717162088fee094efad7ff669183d" title="Defines all available sleep modes for target MCU.">board::SleepMode</a></code>. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>This method continuously reads the <a class="el" href="structdevices_1_1_win_bond_1_1_status.html" title="This type maps WinBond Status register (§6.1) to more readable pieces.">Status</a> register and check the BUSY bit (§6.1.1). If the chip is busy, then the method yields time, i.e. put the MCU to sleep according to the default <code><a class="el" href="namespaceboard.html#ae62717162088fee094efad7ff669183d" title="Defines all available sleep modes for ATmega644.">board::SleepMode</a></code>. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">timeout_ms</td><td>the maximum time, in milliseconds, to wait for the chip to be ready </td></tr>
   </table>

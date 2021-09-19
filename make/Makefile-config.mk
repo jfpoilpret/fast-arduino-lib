@@ -1,4 +1,4 @@
-#   Copyright 2016-2020 Jean-Francois Poilpret
+#   Copyright 2016-2021 Jean-Francois Poilpret
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -59,6 +59,22 @@ else ifeq ($(findstring ATmega328,$(CONF)),ATmega328)
 	MCU:=atmega328p
 	ARCH:=avr5
 	F_CPU:=8000000UL
+	ifeq ($(PROGRAMMER),)
+		PROGRAMMER:=ISP
+	endif
+else ifeq ($(findstring ATmega644,$(CONF)),ATmega644)
+	VARIANT:=BREADBOARD_ATMEGAXX4P
+	MCU:=atmega644p
+	ARCH:=avr5
+	F_CPU:=16000000UL
+	ifeq ($(PROGRAMMER),)
+		PROGRAMMER:=ISP
+	endif
+else ifeq ($(findstring ATmega1284,$(CONF)),ATmega1284)
+	VARIANT:=BREADBOARD_ATMEGAXX4P
+	MCU:=atmega1284p
+	ARCH:=avr5
+	F_CPU:=16000000UL
 	ifeq ($(PROGRAMMER),)
 		PROGRAMMER:=ISP
 	endif

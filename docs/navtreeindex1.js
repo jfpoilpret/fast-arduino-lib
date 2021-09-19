@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"classdevices_1_1audio_1_1_tone_generator.html#aee0c351832dfafbd7b29a90f7dbc70b1":[6,0,2,0,3,0],
 "classdevices_1_1audio_1_1_tone_play.html":[6,0,2,0,4],
 "classdevices_1_1audio_1_1_tone_play.html#a06802c14e9aaabaa8bb98c0d50c96913":[6,0,2,0,4,8],
 "classdevices_1_1audio_1_1_tone_play.html#a3468a8016e6d114f5813b5d4edd8569d":[6,0,2,0,4,4],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "classdevices_1_1rtc_1_1_d_s1307_1_1_halt_clock_future.html":[6,0,2,5,0,5],
 "classdevices_1_1rtc_1_1_d_s1307_1_1_set_datetime_future.html":[6,0,2,5,0,6],
 "classdevices_1_1rtc_1_1_d_s1307_1_1_set_ram1_future.html":[6,0,2,5,0,7],
-"classdevices_1_1rtc_1_1_d_s1307_1_1_set_ram_future.html":[6,0,2,5,0,8],
-"classdevices_1_1servo_1_1_servo.html":[6,0,2,6,0]
+"classdevices_1_1rtc_1_1_d_s1307_1_1_set_ram_future.html":[6,0,2,5,0,8]
 };

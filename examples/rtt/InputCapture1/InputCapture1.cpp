@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -30,6 +30,9 @@
  * - on ATtinyX4 based boards:
  *   - D7 (PA7, ICP): connected to a push button connected to GND
  *   - D1 (PA1, TX): connected through USB Serial converter to console for display
+ * - on ATmega644 based boards:
+ *   - D30 (PD6, ICP): connected to a push button connected to GND
+ *   - D25 (PD1): TX output connected to SerialUSB converter
  */
 
 #include <fastarduino/flash.h>
@@ -57,6 +60,12 @@ static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 #elif defined (BREADBOARD_ATTINYX4)
 #define HAS_UART 0
 static constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
+#define TIMER_NUM 1
+static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
+#elif defined (BREADBOARD_ATMEGAXX4P)
+#define HAS_UART 1
+#define UART_NUM 0
+static constexpr const board::USART UART = board::USART::USART0;
 #define TIMER_NUM 1
 static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 #else

@@ -26,6 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
+   &#160;<span id="projectnumber">v1.7</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -86,7 +87,7 @@ $(document).ready(function(){initNavTree('tone__player_8h_source.html',''); init
 <div class="title">tone_player.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="tone__player_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//   Copyright 2016-2020 Jean-Francois Poilpret</span></div>
+<a href="tone__player_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//   Copyright 2016-2021 Jean-Francois Poilpret</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//   you may not use this file except in compliance with the License.</span></div>
@@ -314,7 +315,7 @@ $(document).ready(function(){initNavTree('tone__player_8h_source.html',''); init
 <div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;        }</div>
 <div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;        <span class="keyword">static</span> constexpr uint8_t flags(<a class="code" href="namespacedevices_1_1audio.html#ad5cef39b1f81f50bd23e0a4f4cf555aa">Tone</a> tone)</div>
 <div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;        {</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;            <span class="keywordflow">if</span> (tone == Tone::SILENCE) <span class="keywordflow">return</span> NONE;</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;            <span class="keywordflow">if</span> (tone == Tone::SILENCE) <span class="keywordflow">return</span> <a class="code" href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1a74be45e4297a389149136838447505eb">NONE</a>;</div>
 <div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;            <span class="keywordflow">if</span> (tone == <a class="code" href="namespacedevices_1_1audio_1_1_special_tone.html#a4221d7dbfd3adda995e653697bdf28a1">SpecialTone::END</a>) <span class="keywordflow">return</span> <a class="code" href="namespacedevices_1_1audio_1_1_special_tone.html#a4221d7dbfd3adda995e653697bdf28a1">END</a>;</div>
 <div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;            <span class="keywordflow">if</span> (tone == <a class="code" href="namespacedevices_1_1audio_1_1_special_tone.html#a491005c61adc2452fbe67c0727e868bd">SpecialTone::REPEAT_START</a>) <span class="keywordflow">return</span> <a class="code" href="namespacedevices_1_1audio_1_1_special_tone.html#a491005c61adc2452fbe67c0727e868bd">REPEAT_START</a>;</div>
 <div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;            <span class="keywordflow">if</span> (tone == <a class="code" href="namespacedevices_1_1audio_1_1_special_tone.html#a2a8d80fcee09ad51b4592cd15edcbea1">SpecialTone::REPEAT_END</a>) <span class="keywordflow">return</span> <a class="code" href="namespacedevices_1_1audio_1_1_special_tone.html#a2a8d80fcee09ad51b4592cd15edcbea1">REPEAT_END</a>;</div>
@@ -683,6 +684,7 @@ $(document).ready(function(){initNavTree('tone__player_8h_source.html',''); init
 <div class="ttc" id="aclassdevices_1_1audio_1_1_tone_player_html_a4300cb753680532170459718a402b9e9"><div class="ttname"><a href="classdevices_1_1audio_1_1_tone_player.html#a4300cb753680532170459718a402b9e9">devices::audio::TonePlayer::play_flash</a></div><div class="ttdeci">void play_flash(const TONE_PLAY *melody, uint8_t bpm)</div><div class="ttdoc">Play a melody, defined by a sequence of TONE_PLAYs, stored in Flash.</div><div class="ttdef"><b>Definition:</b> <a href="tone__player_8h_source.html#l00759">tone_player.h:759</a></div></div>
 <div class="ttc" id="anamespacei2c_html_adb5bfde92afd6cbc048d1ee7472bf394"><div class="ttname"><a href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394">i2c::Status</a></div><div class="ttdeci">Status</div><div class="ttdoc">Transmission status codes.</div><div class="ttdef"><b>Definition:</b> <a href="i2c_8h_source.html#l00065">i2c.h:66</a></div></div>
 <div class="ttc" id="aclassdevices_1_1audio_1_1_tone_generator_html"><div class="ttname"><a href="classdevices_1_1audio_1_1_tone_generator.html">devices::audio::ToneGenerator</a></div><div class="ttdoc">API class for tone generation to a buzzer (or better an amplifier) connected to pin OUTPUT.</div><div class="ttdef"><b>Definition:</b> <a href="tones_8h_source.html#l00182">tones.h:183</a></div></div>
+<div class="ttc" id="anamespaceboard_html_a151323e5de5adf93f6bcdfdd64fa1eb1a74be45e4297a389149136838447505eb"><div class="ttname"><a href="namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1a74be45e4297a389149136838447505eb">board::Port::PORT_A</a></div><div class="ttdeci">@ PORT_A</div><div class="ttdoc">Port A (8 IO)</div></div>
 <div class="ttc" id="aclassdevices_1_1audio_1_1_q_tone_play_html_a17bfcc2c43ceafe338d5ed2f8a431be4"><div class="ttname"><a href="classdevices_1_1audio_1_1_q_tone_play.html#a17bfcc2c43ceafe338d5ed2f8a431be4">devices::audio::QTonePlay::QTonePlay</a></div><div class="ttdeci">constexpr QTonePlay(Tone tone, uint8_t value=0)</div><div class="ttdoc">Construct a &quot;special&quot; optimized tone play with the provided value.</div><div class="ttdef"><b>Definition:</b> <a href="tone__player_8h_source.html#l00300">tone_player.h:300</a></div></div>
 <div class="ttc" id="aclassdevices_1_1audio_1_1_tone_player_html"><div class="ttname"><a href="classdevices_1_1audio_1_1_tone_player.html">devices::audio::TonePlayer</a></div><div class="ttdoc">This API defines a player of melodies, defined as a sequence of tones and durations.</div><div class="ttdef"><b>Definition:</b> <a href="tone__player_8h_source.html#l00692">tone_player.h:693</a></div></div>
 <div class="ttc" id="aclasstimer_1_1_timer_html"><div class="ttname"><a href="classtimer_1_1_timer.html">timer::Timer&lt; NTIMER &gt;</a></div></div>

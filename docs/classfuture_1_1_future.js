@@ -2,10 +2,11 @@ var classfuture_1_1_future =
 [
     [ "OUT", "classfuture_1_1_future.html#a69fa180a31984104be53d4925c5361c9", null ],
     [ "IN", "classfuture_1_1_future.html#a137fd082483740594714b3a551ba64eb", null ],
-    [ "Future", "classfuture_1_1_future.html#a9fdeb99f37aefaca52740fdd65dd95e0", null ],
+    [ "Future", "classfuture_1_1_future.html#a5f5afbf61ba1b465aee0a9a81ac5d346", null ],
     [ "reset_input_", "classfuture_1_1_future.html#a2d63a2bd2a1f9284c7d1b2c19897bf62", null ],
     [ "get", "classfuture_1_1_future.html#a790fe9b24ef1c4f26df490a4f22635f9", null ],
     [ "get_input", "classfuture_1_1_future.html#a3c1c7f9d103e5fe0e3a83905d20ab3a1", null ],
+    [ "get_input", "classfuture_1_1_future.html#a8dc77d2524e2e8555269860b5252b2d8", null ],
     [ "OUT_SIZE", "classfuture_1_1_future.html#a6f6f5f6800b717bbbb1c8448133b7f29", null ],
     [ "IN_SIZE", "classfuture_1_1_future.html#a6def7d5ddf6a530259c19481a774956f", null ],
     [ "output_", "classfuture_1_1_future.html#a84d1ca81828f2d5da50048dac3d79638", null ],

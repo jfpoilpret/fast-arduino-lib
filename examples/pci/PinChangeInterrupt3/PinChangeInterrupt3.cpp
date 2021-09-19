@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -38,6 +38,10 @@
  *     current) connected to ground
  *   - D53-D51 (port B) branch 3 buttons connected to ground
  * - on ATtinyX4 based boards:
+ *   - D0-D3 (port A) branch 4 LED (in series with 330 Ohm resistors to limit 
+ *     current) connected to ground
+ *   - D8-D10 (port B) branch 3 buttons connected to ground
+ * - on ATmega644 based boards:
  *   - D0-D3 (port A) branch 4 LED (in series with 330 Ohm resistors to limit 
  *     current) connected to ground
  *   - D8-D10 (port B) branch 3 buttons connected to ground
@@ -81,6 +85,17 @@ static constexpr const board::InterruptPin SWITCH3 = board::InterruptPin::D51_PB
 static constexpr const board::Port SWITCH_PORT = board::Port::PORT_B;
 #define PCI_NUM 0
 #elif defined (BREADBOARD_ATTINYX4)
+static constexpr const uint8_t LED1 = board::MASK<board::DigitalPin::D0_PA0>();
+static constexpr const uint8_t LED2 = board::MASK<board::DigitalPin::D1_PA1>();
+static constexpr const uint8_t LED3 = board::MASK<board::DigitalPin::D2_PA2>();
+static constexpr const uint8_t LED4 = board::MASK<board::DigitalPin::D3_PA3>();
+static constexpr const board::Port LED_PORT = board::Port::PORT_A;
+static constexpr const board::InterruptPin SWITCH1 = board::InterruptPin::D8_PB0_PCI1;
+static constexpr const board::InterruptPin SWITCH2 = board::InterruptPin::D9_PB1_PCI1;
+static constexpr const board::InterruptPin SWITCH3 = board::InterruptPin::D10_PB2_PCI1;
+static constexpr const board::Port SWITCH_PORT = board::Port::PORT_B;
+#define PCI_NUM 1
+#elif defined (BREADBOARD_ATMEGAXX4P)
 static constexpr const uint8_t LED1 = board::MASK<board::DigitalPin::D0_PA0>();
 static constexpr const uint8_t LED2 = board::MASK<board::DigitalPin::D1_PA1>();
 static constexpr const uint8_t LED3 = board::MASK<board::DigitalPin::D2_PA2>();

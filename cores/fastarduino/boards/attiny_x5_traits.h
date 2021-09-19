@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -146,6 +146,7 @@ namespace board_traits
 							0, 0,
 							0, 0,
 							board::DigitalPin::NONE,
+							0,
 							0,
 							R_(OCR1C)>
 	{

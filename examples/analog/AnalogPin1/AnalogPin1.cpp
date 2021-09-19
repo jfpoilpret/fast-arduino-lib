@@ -1,4 +1,4 @@
-//   Copyright 2016-2020 Jean-Francois Poilpret
+//   Copyright 2016-2021 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -32,6 +32,9 @@
  * - on ATtinyX5 based boards:
  *   - A1: connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
  *   - D1: TX output connected to Serial-USB allowing traces display on a PC terminal
+ * - on ATmega644 based boards:
+ *   - A7 (PA7): connected to the wiper of a 10K pot or trimmer, which terminals are connected between Vcc and Gnd
+ *   - D25 (PD1): TX connected to a Serial2USB converter
  */
 
 #include <fastarduino/time.h>
@@ -81,6 +84,14 @@ constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
 static constexpr const board::AnalogPin POT = board::AnalogPin::A1;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 constexpr const board::DigitalPin TX = board::DigitalPin::D1_PB1;
+#elif defined (BREADBOARD_ATMEGAXX4P)
+#define HARDWARE_UART 1
+#include <fastarduino/uart.h>
+static constexpr const board::AnalogPin POT = board::AnalogPin::A7;
+static constexpr const board::USART UART = board::USART::USART0;
+static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+// Define vectors we need in the example
+REGISTER_UATX_ISR(0)
 #else
 #error "Current target is not yet supported!"
 #endif

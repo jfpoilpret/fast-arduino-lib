@@ -1,9 +1,9 @@
 Latest News
 ===========
 
-FastArduino v1.6 has been released on 22nd November 2020.
-The implemented enhancements are listed [here](https://github.com/jfpoilpret/fast-arduino-lib/milestone/8?closed=1).
-Please note that this version breaks compatibility on I2C API, as described in further detail in the [release notes](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.6).
+FastArduino v1.7 has been released on 19th September 2021.
+The implemented enhancements are listed [here](https://github.com/jfpoilpret/fast-arduino-lib/milestone/9?closed=1).
+Please note that this version breaks compatibility on I2C API, as described in further detail in the [release notes](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.7).
 
 FastArduino
 ===========
@@ -44,7 +44,7 @@ One easy way to start a new project using FastArduino is to checkout [this proje
 Status
 ======
 
-Latest FastArduino release [**v1.6**](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.6) has been published on 22.11.2020.
+Latest FastArduino release [**v1.7**](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.7) has been published on 19.09.2021.
 
 In the current version, the project covers almost all features; a few missing, less important, features will be released in future versions (see roadmap below); the API of current features is deemed stable and should not change in the future.
 
@@ -97,6 +97,7 @@ As of now, the following platforms are supported (and tested):
 - Arduino MEGA
 - Arduino Leonardo (with only partial USB support)
 - Breadboard ATmega328 at 8MHz and 16MHz
+- Breadboard ATmega164/324/644/1284 at 8MHz and 16MHz (note: only 644 and 1284 were actually tested)
 - Breadboard ATtiny84 at 8MHz
 - Breadboard ATtiny85 at 8MHz
 
@@ -140,13 +141,14 @@ The roadmap of next activities and new supported features is the following:
 - [Milestone v1.4](https://github.com/jfpoilpret/fast-arduino-lib/milestone/6?closed=1) (released on 22.09.2019)
 - [Milestone v1.5](https://github.com/jfpoilpret/fast-arduino-lib/milestone/7?closed=1) (released on 18.01.2020)
 - [Milestone v1.6](https://github.com/jfpoilpret/fast-arduino-lib/milestone/8?closed=1) (released on 22.11.2020)
-- [Milestone v1.7](https://github.com/jfpoilpret/fast-arduino-lib/milestone/9) (31.08.2021)
+- [Milestone v1.7](https://github.com/jfpoilpret/fast-arduino-lib/milestone/9?closed=1) (released on 19.09.2021)
+- [Milestone v1.8](https://github.com/jfpoilpret/fast-arduino-lib/milestone/10) (31.12.2021)
 - [Milestone v2.0](https://github.com/jfpoilpret/fast-arduino-lib/milestone/3) (undefined date)
 - [Later](https://github.com/jfpoilpret/fast-arduino-lib/issues?q=is%3Aopen+is%3Aissue+no%3Amilestone)
 
 Documentation - no milestones
 -----------------------------
-- Document how to add support for other boards in Tutorial (1st half 2021)
+- Document how to add support for other boards in Tutorial (1st half 2022)
 
 Milestones dates are "best effort" and may change based on contributors' availability.
 
