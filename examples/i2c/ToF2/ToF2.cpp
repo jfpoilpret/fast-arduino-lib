@@ -167,10 +167,13 @@ int main()
 
 	{
 		// Call second initialization step
+		uint8_t debug1 = 0;
+		uint8_t debug2 = 0;
 		out << F("Calling init_static_second()...") << endl;
-		ok = tof.init_static_second(GPIOSettings::sample_ready(), SequenceSteps::all().no_msrc().no_tcc());
+		ok = tof.init_static_second(GPIOSettings::sample_ready(), SequenceSteps::all().no_msrc().no_tcc(), debug1, debug2);
 		display_memory(out);
 		out << F("tof.init_static_second() = ") << ok << endl;
+		out << F("DEBUG step = ") << dec << debug1 << F(", substep = ") << debug2 << endl;
 		DEBUG(out);
 	}
 

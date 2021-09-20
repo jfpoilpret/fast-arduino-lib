@@ -51,6 +51,7 @@ namespace devices
 	}
 }
 
+//TODO review which API can still be async/sync and those that are only sync
 //TODO - implement low-level API step by step
 //       - static_init
 //       - single ranging
@@ -171,12 +172,6 @@ namespace devices::vl53l0x
 			return this->async_write(future);
 		}
 
-		using GetSPADInfoFuture = typename FUTURES::GetSPADInfoFuture;
-		int get_SPAD_info(GetSPADInfoFuture& future)
-		{
-			return (future.start(*this) ? 0 : future.error());
-		}
-
 		using GetReferenceSPADsFuture = 
 			typename FUTURES::TReadRegisterFuture<regs::REG_GLOBAL_CONFIG_SPAD_ENABLES_REF_0, SPADReference>;
 		int get_reference_SPADs(PROXY<GetReferenceSPADsFuture> future)
@@ -293,18 +288,80 @@ namespace devices::vl53l0x
 
 		bool set_reference_SPADs(const SPADReference& spad_ref)
 		{
-			typename FUTURES::I2CSameFutureGroup pre_future{
-				uint16_t(internals::set_reference_spads::BUFFER), internals::set_reference_spads::BUFFER_SIZE};
-			if (!pre_future.start(*this)) return false;
-			if (pre_future.await() != future::FutureStatus::READY) return false;
+			if (!await_same_future_group(
+				internals::set_reference_spads::BUFFER, internals::set_reference_spads::BUFFER_SIZE))
+				return false;
 			return this->template sync_write<SetReferenceSPADsFuture, SPADReference>(spad_ref);
 		}
 
-		bool get_SPAD_info(SPADInfo& info)
+		//TODO Makes this API private (or protected in AbstractDevice?)
+		bool await_same_future_group(const uint8_t* buffer, uint8_t size)
 		{
-			GetSPADInfoFuture future{};
-			if (get_SPAD_info(future) != 0) return false;
-			return future.get(info);
+			typename FUTURES::I2CSameFutureGroup future{uint16_t(buffer), size};
+			if (!future.start(*this)) return false;
+			return (future.await() == future::FutureStatus::READY);
+		}
+
+		//TODO Makes this API private (or protected in AbstractDevice?)
+		bool await_device_strobe()
+		{
+			using READ_STROBE = typename FUTURES::TReadRegisterFuture<regs::REG_DEVICE_STROBE>;
+			using WRITE_STROBE = typename FUTURES::TWriteRegisterFuture<regs::REG_DEVICE_STROBE>;
+			// 1. Clear strobe
+			if (!this->template sync_write<WRITE_STROBE>(uint8_t(0x00))) return false;
+			// 2. Read strobe until !=0
+			uint16_t loops = MAX_LOOP;
+			while (loops--)
+			{
+				uint8_t strobe = 0;
+				if (!this->template sync_read<READ_STROBE>(strobe)) return false;
+				if (strobe != 0)
+					// 3. Set strobe
+					return this->template sync_write<WRITE_STROBE>(uint8_t(0x01));
+			}
+			return false;
+		}
+
+		bool get_SPAD_info(SPADInfo& info, uint8_t& debug)
+		{
+			using READ_SPAD = typename FUTURES::TReadRegisterFuture<regs::REG_SPAD_INFO, SPADInfo>;
+			using READ_STROBE = typename FUTURES::TReadRegisterFuture<regs::REG_DEVICE_STROBE>;
+			using WRITE_STROBE = typename FUTURES::TWriteRegisterFuture<regs::REG_DEVICE_STROBE>;
+			// 1. Write initial registers
+			debug = 1;
+			if (!await_same_future_group(internals::spad_info::BUFFER1, internals::spad_info::BUFFER1_SIZE))
+				return false;
+			// 2. Force strobe (read/write)
+			uint8_t strobe = 0;
+			debug = 2;
+			if (!this->template sync_read<READ_STROBE>(strobe)) return false;
+			strobe |= 0x04;
+			debug = 3;
+			if (!this->template sync_write<WRITE_STROBE>(strobe)) return false;
+			// 3. Write 2nd pass registers
+			debug = 4;
+			if (!await_same_future_group(internals::spad_info::BUFFER2, internals::spad_info::BUFFER2_SIZE))
+				return false;
+			// 4. Wait for strobe
+			debug = 5;
+			if (!await_device_strobe()) return false;
+			// 5. Read spad info
+			debug = 6;
+			if (!this->template sync_read<READ_SPAD>(info)) return false;
+			// 6. Write 3rd pass registers
+			debug = 7;
+			if (!await_same_future_group(internals::spad_info::BUFFER3, internals::spad_info::BUFFER3_SIZE))
+				return false;
+			// 7. Force strobe
+			strobe = 0;
+			debug = 8;
+			if (!this->template sync_read<READ_STROBE>(strobe)) return false;
+			strobe &= ~0x04;
+			debug = 9;
+			if (!this->template sync_write<WRITE_STROBE>(strobe)) return false;
+			// 8. Write last pass registers
+			debug = 10;
+			return await_same_future_group(internals::spad_info::BUFFER4, internals::spad_info::BUFFER4_SIZE);
 		}
 
 		bool get_sequence_steps_timeout(SequenceStepsTimeout& timeouts)
@@ -378,20 +435,17 @@ namespace devices::vl53l0x
 		bool read_stop_variable()
 		{
 			// Write prefix
-			typename FUTURES::I2CSameFutureGroup pre_future{
-				uint16_t(internals::stop_variable::PRE_BUFFER), internals::stop_variable::PRE_BUFFER_SIZE};
-			if (!pre_future.start(*this)) return false;
-			if (pre_future.await() != future::FutureStatus::READY) return false;
+			if (!await_same_future_group(
+				internals::stop_variable::PRE_BUFFER, internals::stop_variable::PRE_BUFFER_SIZE))
+				return false;
 
 			// Read stop variable
 			using READ_STOP_VAR = typename FUTURES::TReadRegisterFuture<0x91>;
 			if (!this->template sync_read<READ_STOP_VAR>(stop_variable_)) return false;
 
 			// Write suffix
-			typename FUTURES::I2CSameFutureGroup post_future{
-				uint16_t(internals::stop_variable::POST_BUFFER), internals::stop_variable::POST_BUFFER_SIZE};
-			if (!post_future.start(*this)) return false;
-			return (post_future.await() == future::FutureStatus::READY);
+			return await_same_future_group(
+				internals::stop_variable::POST_BUFFER, internals::stop_variable::POST_BUFFER_SIZE);
 		}
 
 		bool use_stop_variable()
@@ -432,27 +486,35 @@ namespace devices::vl53l0x
 			return (future.await() == future::FutureStatus::READY);
 		}
 
-		bool init_static_second(const GPIOSettings& settings, SequenceSteps steps)
+		bool init_static_second(const GPIOSettings& settings, SequenceSteps steps, uint8_t& debug1, uint8_t& debug2)
 		{
 			// 1. Get SPAD info
 			SPADInfo info;
-			if (!get_SPAD_info(info)) return false;
+			debug1 = 1;
+			if (!get_SPAD_info(info, debug2)) return false;
 			// 2. Get reference SPADs from NVM
 			SPADReference ref_spads;
+			debug1 = 2;
 			if (!get_reference_SPADs(ref_spads)) return false;
 			// 3. Calculate SPADs and set reference SPADs
 			FUTURES::calculate_reference_SPADs(ref_spads.spad_refs(), info);
+			debug1 = 3;
 			if (!set_reference_SPADs(ref_spads)) return false;
 			// 4. Load tuning settings
+			debug1 = 4;
 			if (!load_tuning_settings()) return false;
 			// 5. Set GPIO settings
+			debug1 = 5;
 			if (!set_GPIO_settings(settings)) return false;
 			// 6. Get current timing budget
 			uint32_t budget_us = 0UL;
+			debug1 = 6;
 			if (!get_measurement_timing_budget(budget_us)) return false;
 			// 7. Set sequence steps by default?
+			debug1 = 7;
 			if (!set_sequence_steps(steps)) return false;
 			// 8. Recalculate timing budget and set it
+			debug1 = 8;
 			return set_measurement_timing_budget(budget_us);
 		}
 

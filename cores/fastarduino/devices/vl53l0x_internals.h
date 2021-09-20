@@ -121,44 +121,42 @@ namespace devices::vl53l0x_internals
 	//--------------------------------------
 	namespace spad_info
 	{
-		// Marker after reading register 0x83 before owverwriting it
-		static constexpr uint8_t MARKER_OVERWRITE_REG_DEVICE_STROBE = 1;
-		// Marker after reading register 0x92 (SPAD info byte)
-		static constexpr uint8_t MARKER_READ_SPAD_INFO = 2;
-
-		// Write buffer
-		static constexpr uint8_t BUFFER[] PROGMEM =
+		// Write buffers
+		static constexpr uint8_t BUFFER1[] PROGMEM =
 		{
-			actions::write(1), regs::REG_POWER_MANAGEMENT, 0x01,
-			actions::write(1), 0xFF, 0x01,
-			actions::write(1), regs::REG_SYSRANGE_START, 0x00,
-			actions::write(1), 0xFF, 0x06,
-			actions::read(1), regs::REG_DEVICE_STROBE, // 1 BYTE READ
-			actions::MARKER, MARKER_OVERWRITE_REG_DEVICE_STROBE,
-			actions::write(1), regs::REG_DEVICE_STROBE, 0x04, // OVERWRITTEN BYTE
-			actions::write(1), 0xFF, 0x07,
-			actions::write(1), 0x81, 0x01,
-			actions::write(1), regs::REG_POWER_MANAGEMENT, 0x01,
-			actions::write(1), 0x94, 0x6B,
-
-			actions::INCLUDE, INCLUDE_DEVICE_STROBE_WAIT,
-
-			actions::read(1), regs::REG_SPAD_INFO, // 1 BYTE READ: SPAD info byte
-			actions::MARKER, MARKER_READ_SPAD_INFO,
-			actions::write(1), 0x81, 0x00,
-			actions::write(1), 0xFF, 0x06,
-			actions::read(1), regs::REG_DEVICE_STROBE, // 1 BYTE READ
-			actions::MARKER, MARKER_OVERWRITE_REG_DEVICE_STROBE,
-			actions::write(1), regs::REG_DEVICE_STROBE, 0x04, // OVERWRITTEN BYTE
-			actions::write(1), 0xFF, 0x01,
-			actions::write(1), regs::REG_SYSRANGE_START, 0x01,
-			actions::write(1), 0xFF, 0x00,
-			actions::write(1, true), regs::REG_POWER_MANAGEMENT, 0x00,
-			actions::END
+			regs::REG_POWER_MANAGEMENT, 0x01,
+			0xFF, 0x01,
+			regs::REG_SYSRANGE_START, 0x00,
+			0xFF, 0x06,
 		};
 
-		// Value to force (OR) into register 0x83 at 2 occurrences
-		static constexpr uint8_t REG_DEVICE_STROBE_FORCED_VALUE = 0x04;
+		static constexpr uint8_t BUFFER2[] PROGMEM =
+		{
+			0xFF, 0x07,
+			0x81, 0x01,
+			regs::REG_POWER_MANAGEMENT, 0x01,
+			0x94, 0x6B,
+		};
+
+		static constexpr uint8_t BUFFER3[] PROGMEM =
+		{
+			0x81, 0x00,
+			0xFF, 0x06,
+		};
+
+		static constexpr uint8_t BUFFER4[] PROGMEM =
+		{
+			0xFF, 0x01,
+			regs::REG_SYSRANGE_START, 0x01,
+			0xFF, 0x00,
+			regs::REG_POWER_MANAGEMENT, 0x00,
+		};
+
+		// Size of write buffers
+		static constexpr uint8_t BUFFER1_SIZE = sizeof(BUFFER1);
+		static constexpr uint8_t BUFFER2_SIZE = sizeof(BUFFER2);
+		static constexpr uint8_t BUFFER3_SIZE = sizeof(BUFFER3);
+		static constexpr uint8_t BUFFER4_SIZE = sizeof(BUFFER4);
 	}
 	
 	// Constants for load_tuning_settings() method
