@@ -169,8 +169,10 @@ namespace devices::vl53l0x
 					<< timeouts.msrc_dss_tcc_mclks() << streams::flush
 					<< F(", pre_range_mclks")
 					<< timeouts.pre_range_mclks() << streams::flush
-					<< F(", final_range_mclks")
-					<< timeouts.final_range_mclks() << ')' << streams::flush;
+					<< F(", final_range_mclks(with pre-range)")
+					<< timeouts.final_range_mclks(true) << ')' << streams::flush
+					<< F(", final_range_mclks(no pre-range)")
+					<< timeouts.final_range_mclks(false) << ')' << streams::flush;
 	}
 }
 
