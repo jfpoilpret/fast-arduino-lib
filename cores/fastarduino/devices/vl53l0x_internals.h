@@ -119,51 +119,25 @@ namespace devices::vl53l0x_internals
 		};
 	}
 
-	// Constants for init_data() method
-	//----------------------------------
-	//TODO remove after rework on init_data_first() method (sync only)
-	namespace init_data
+	namespace stop_variable
 	{
-		// Marker after reading REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV
-		static constexpr uint8_t MARKER_VHV_CONFIG = 1;
-		// Marker after reading stop_variable
-		static constexpr uint8_t MARKER_STOP_VARIABLE = 2;
-		// Marker after reading REG_MSRC_CONFIG_CONTROL
-		static constexpr uint8_t MARKER_MSRC_CONFIG_CONTROL = 3;
-
-		// Write buffer
-		static constexpr uint8_t BUFFER[] PROGMEM =
+		// Write buffers
+		static constexpr uint8_t PRE_BUFFER[] PROGMEM =
 		{
-			// read/write VHV_CONFIG_PAD_SCL_SDA__EXTSUP_HV to force 2.8V or keep 1.8V default
-			actions::read(1), regs::REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV, // 1 BYTE READ
-			actions::MARKER, MARKER_VHV_CONFIG,
-			actions::write(1), regs::REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV, 0x01, // OVERWRITTEN BYTE
-			// set I2C standard mode
-			actions::write(1), 0x88, 0x00,
-			actions::write(1), regs::REG_POWER_MANAGEMENT, 0x01,
-			actions::write(1), 0xFF, 0x01,
-			actions::write(1), regs::REG_SYSRANGE_START, 0x00,
-			// read stop variable here
-			actions::read(1), 0x91, // 1 BYTE READ
-			actions::MARKER, MARKER_STOP_VARIABLE,
-			actions::write(1), regs::REG_SYSRANGE_START, 0x01,
-			actions::write(1), 0xFF, 0x00,
-			actions::write(1), regs::REG_POWER_MANAGEMENT, 0x00,
-			// read/write REG_MSRC_CONFIG_CONTROL to disable SIGNAL_RATE_MSRC and SIGNAL_RATE_PRE_RANGE limit checks
-			actions::read(1), regs::REG_MSRC_CONFIG_CONTROL, // 1 BYTE READ
-			actions::MARKER, MARKER_MSRC_CONFIG_CONTROL,
-			actions::write(1), regs::REG_MSRC_CONFIG_CONTROL, 0x12, // OVERWRITTEN BYTE
-			// set signal rate limit to 0.25 MCPS (million counts per second) in FP9.7 format
-			actions::write(2), regs::REG_FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, 0x00, 0x20,
-			// enable all sequence steps by default
-			actions::write(1, true), regs::REG_SYSTEM_SEQUENCE_CONFIG, 0xFF,
-			actions::END
+			regs::REG_POWER_MANAGEMENT, 0x01,
+			0xFF, 0x01,
+			regs::REG_SYSRANGE_START, 0x00,
+		};
+		static constexpr uint8_t POST_BUFFER[] PROGMEM =
+		{
+			regs::REG_SYSRANGE_START, 0x01,
+			0xFF, 0x00,
+			regs::REG_POWER_MANAGEMENT, 0x00,
 		};
 
-		// Value to force (OR) 2V8 in REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV register
-		static constexpr uint8_t VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV_SET_2V8 = 0x01;
-		// Value to disable (OR?) SIGNAL_RATE_MSRC and SIGNAL_RATE_PRE_RANGE in REG_MSRC_CONFIG_CONTROL register
-		static constexpr uint8_t MSRC_CONFIG_CONTROL_INIT = 0x12;
+		// Size of write buffers
+		static constexpr uint8_t PRE_BUFFER_SIZE = sizeof(PRE_BUFFER);
+		static constexpr uint8_t POST_BUFFER_SIZE = sizeof(POST_BUFFER);
 	}
 
 	// Constants for get_SPAD_info() method

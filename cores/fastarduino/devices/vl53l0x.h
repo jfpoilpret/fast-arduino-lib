@@ -221,12 +221,6 @@ namespace devices::vl53l0x
 			return this->async_write(future);
 		}
 
-		using InitDataFuture = typename FUTURES::InitDataFuture;
-		int init_data_first(InitDataFuture& future)
-		{
-			return (future.start(*this) ? 0 : future.error());
-		}
-
 		using LoadTuningSettingsFuture = typename FUTURES::LoadTuningSettingsFuture;
 		int load_tuning_settings(LoadTuningSettingsFuture& future)
 		{
@@ -371,11 +365,70 @@ namespace devices::vl53l0x
 			return this->template sync_write<ClearInterruptFuture>();
 		}
 
+		bool force_io_2_8V()
+		{
+			using READ_VHV_CONFIG = typename FUTURES::TReadRegisterFuture<regs::REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV>;
+			using WRITE_VHV_CONFIG = typename FUTURES::TWriteRegisterFuture<regs::REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV>;
+			uint8_t config = 0;
+			if (!this->template sync_read<READ_VHV_CONFIG>(config)) return false;
+			config |= 0x01;
+			return this->template sync_write<WRITE_VHV_CONFIG>(config);
+		}
+
+		bool set_I2C_mode()
+		{
+			using WRITE_I2C_MODE = typename FUTURES::TWriteRegisterFuture<0x88>;
+			return this->template sync_write<WRITE_I2C_MODE>(uint8_t(0x00));
+		}
+
+		bool read_stop_variable()
+		{
+			// Write prefix
+			typename FUTURES::I2CSameFutureGroup pre_future{
+				uint16_t(internals::stop_variable::PRE_BUFFER), internals::stop_variable::PRE_BUFFER_SIZE};
+			if (!pre_future.start(*this)) return false;
+			if (pre_future.await() != future::FutureStatus::READY) return false;
+
+			// Read stop variable
+			using READ_STOP_VAR = typename FUTURES::TReadRegisterFuture<0x91>;
+			if (!this->template sync_read<READ_STOP_VAR>(stop_variable_)) return false;
+
+			// Write suffix
+			typename FUTURES::I2CSameFutureGroup post_future{
+				uint16_t(internals::stop_variable::POST_BUFFER), internals::stop_variable::POST_BUFFER_SIZE};
+			if (!post_future.start(*this)) return false;
+			return (post_future.await() == future::FutureStatus::READY);
+		}
+
+		bool use_stop_variable()
+		{
+			//TODO
+		}
+
+		bool disable_signal_rate_limit_checks()
+		{
+			using READ_MSRC_CONFIG = typename FUTURES::TReadRegisterFuture<regs::REG_MSRC_CONFIG_CONTROL>;
+			using WRITE_MSRC_CONFIG = typename FUTURES::TWriteRegisterFuture<regs::REG_MSRC_CONFIG_CONTROL>;
+			uint8_t config = 0;
+			if (!this->template sync_read<READ_MSRC_CONFIG>(config)) return false;
+			config |= 0x12;
+			return this->template sync_write<WRITE_MSRC_CONFIG>(config);
+		}
+
 		bool init_data_first()
 		{
-			InitDataFuture future{};
-			if (init_data_first(future) != 0) return false;
-			return (future.await() == future::FutureStatus::READY);
+			// 1. Force 2.8V for I/O (instead of default 1.8V)
+			if (!force_io_2_8V()) return false;
+			// 2. Set I2C standard mode
+			if (!set_I2C_mode()) return false;
+			// 3. Read stop variable here
+			if (!read_stop_variable()) return false;
+			// 4. Disable SIGNAL_RATE_MSRC and SIGNAL_RATE_PRE_RANGE limit checks
+			if (!disable_signal_rate_limit_checks()) return false;
+			// 5. Set signal rate limit to 0.25 MCPS (million counts per second) in FP9.7 format
+			if (!set_signal_rate_limit(0.25)) return false;
+			// 6. Enable all sequence steps by default
+			return set_sequence_steps(SequenceSteps::all());
 		}
 
 		bool load_tuning_settings()
