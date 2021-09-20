@@ -140,14 +140,6 @@ int main()
 	bool ok = false;
 
 	{
-	// constexpr SequenceSteps steps2 = SequenceSteps::create().tcc().pre_range().final_range();
-	// out << F("steps2 = ") << hex << steps2.value() << endl;
-	// ok = tof.set_sequence_steps(steps2);
-	// out << F("tof.set_sequence_steps(status) = ") << ok << endl;
-	// DEBUG(out);
-	}
-
-	{
 		ok = tof.set_signal_rate_limit(0.5f);
 		display_memory(out);
 		out << F("tof.set_signal_rate_limit(0.5) = ") << ok << endl;
