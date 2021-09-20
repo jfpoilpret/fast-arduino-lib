@@ -31,7 +31,7 @@
 #include <fastarduino/devices/vl53l0x.h>
 #include <fastarduino/memory.h>
 
-#define DEBUG_I2C
+// #define DEBUG_I2C
 // #define FORCE_SYNC
 
 static constexpr const i2c::I2CMode MODE = i2c::I2CMode::FAST;
@@ -100,7 +100,7 @@ int main()
 	// open UART for traces
 	serial::hard::UATX<UART> uart{output_buffer};
 	streams::ostream out = uart.out();
-	uart.begin(230400);
+	uart.begin(115200);
 	out << streams::boolalpha;
 	out << F("Start") << endl;
 
@@ -176,8 +176,7 @@ int main()
 	{
 		// Call second initialization step
 		out << F("Calling init_static_second()...") << endl;
-		//FIXME this fails on last included future...
-		ok = tof.init_static_second();
+		ok = tof.init_static_second(GPIOSettings::sample_ready(), SequenceSteps::all().no_msrc().no_tcc());
 		display_memory(out);
 		out << F("tof.init_static_second() = ") << ok << endl;
 		DEBUG(out);
