@@ -91,6 +91,17 @@ void display_memory(streams::ostream& out)
 	out << F("free mem=") << dec << memory::free_mem() << endl;
 }
 
+void display_status(streams::ostream& out, TOF& tof)
+{
+	DeviceStatus status;
+	bool ok = tof.get_range_status(status);
+	display_memory(out);
+	out << F("tof.get_range_status(status) = ") << ok 
+		<< F(", error = ") << dec << status.error()
+		<< F(", data_ready = ") << status.data_ready() << endl;
+	DEBUG(out);
+}
+
 int main() __attribute__((OS_main));
 int main()
 {
@@ -155,15 +166,7 @@ int main()
 		DEBUG(out);
 	}
 
-	{
-		DeviceStatus status;
-		ok = tof.get_range_status(status);
-		display_memory(out);
-		out << F("tof.get_range_status(status) = ") << ok 
-			<< F(", error = ") << dec << uint8_t(status.error())
-			<< F(", data_ready = ") << status.data_ready() << endl;
-		DEBUG(out);
-	}
+	display_status(out, tof);
 
 	{
 		// Call second initialization step
@@ -177,15 +180,7 @@ int main()
 		DEBUG(out);
 	}
 
-	{
-		DeviceStatus status;
-		ok = tof.get_range_status(status);
-		display_memory(out);
-		out << F("tof.get_range_status(status) = ") << ok 
-			<< F(", error = ") << dec << uint8_t(status.error())
-			<< F(", data_ready = ") << status.data_ready() << endl;
-		DEBUG(out);
-	}
+	display_status(out, tof);
 
 	{
 		// Perform reference calibration
@@ -199,15 +194,7 @@ int main()
 		DEBUG(out);
 	}
 
-	{
-		DeviceStatus status;
-		ok = tof.get_range_status(status);
-		display_memory(out);
-		out << F("tof.get_range_status(status) = ") << ok 
-			<< F(", error = ") << dec << uint8_t(status.error())
-			<< F(", data_ready = ") << status.data_ready() << endl;
-		DEBUG(out);
-	}
+	display_status(out, tof);
 
 	manager.end();
 }
