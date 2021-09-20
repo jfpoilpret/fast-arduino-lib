@@ -33,8 +33,6 @@ namespace devices::vl53l0x_internals
 	static constexpr uint8_t INCLUDE_GET_SEQUENCE_STEPS_TIMEOUT = 9;
 	static constexpr uint8_t INCLUDE_PERFORM_REF_PHASE_CALIBRATION = 11;
 
-	//TODO remove extra overwritten bytes from BUFFERs and remove extra next_byte()
-
 	// Constants for set_vcsel_pulse_period<VcselPeriodType::PRE_RANGE>() method
 	//---------------------------------------------------------------------------
 	//TODO LATER
