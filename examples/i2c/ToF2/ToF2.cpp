@@ -196,5 +196,19 @@ int main()
 
 	display_status(out, tof);
 
+	{
+		// Start continuous ranging
+		ok = tof.start_continuous_ranging(1000U);
+		display_memory(out);
+		out << F("tof.start_continuous_ranging(1000) = ") << ok << endl;
+		DEBUG(out);
+	}
+
+	display_status(out, tof);
+
+	//TODO read continuous ranges now
+
+	//TODO stop continuous ranging
+
 	manager.end();
 }

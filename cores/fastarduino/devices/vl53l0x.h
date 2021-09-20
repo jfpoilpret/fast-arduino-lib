@@ -222,6 +222,9 @@ namespace devices::vl53l0x
 			return (future.start(*this) ? 0 : future.error());
 		}
 
+		//TODO Reading sensor range
+
+
 		// Synchronous API
 		//=================
 		bool set_address(uint8_t device_address)
@@ -451,6 +454,18 @@ namespace devices::vl53l0x
 		bool use_stop_variable()
 		{
 			//TODO
+			// Write prefix
+			if (!await_same_future_group(
+				internals::stop_variable::PRE_BUFFER, internals::stop_variable::PRE_BUFFER_SIZE))
+				return false;
+
+			// Read stop variable
+			using WRITE_STOP_VAR = typename FUTURES::TWriteRegisterFuture<0x91>;
+			if (!this->template sync_write<WRITE_STOP_VAR>(stop_variable_)) return false;
+
+			// Write suffix
+			return await_same_future_group(
+				internals::stop_variable::POST_BUFFER, internals::stop_variable::POST_BUFFER_SIZE);
 		}
 
 		bool disable_signal_rate_limit_checks()
@@ -461,6 +476,36 @@ namespace devices::vl53l0x
 			if (!this->template sync_read<READ_MSRC_CONFIG>(config)) return false;
 			config |= 0x12;
 			return this->template sync_write<WRITE_MSRC_CONFIG>(config);
+		}
+
+		bool start_continuous_ranging(uint16_t period_ms = 0)
+		{
+			using READ_OSC_CAL = typename FUTURES::TReadRegisterFuture<regs::REG_OSC_CALIBRATE_VAL, uint16_t>;
+			using WRITE_PERIOD = typename FUTURES::TWriteRegisterFuture<regs::REG_SYSTEM_INTERMEASUREMENT_PERIOD, uint32_t>;
+			using WRITE_SYSRANGE = typename FUTURES::TWriteRegisterFuture<regs::REG_SYSRANGE_START>;
+			if (!use_stop_variable()) return false;
+			uint8_t sys_range_start = 0x02;
+			if (period_ms)
+			{
+				uint16_t osc_calibrate = 0;
+				if (!this->template sync_read<READ_OSC_CAL>(osc_calibrate)) return false;
+				uint32_t actual_period = period_ms;
+				if (osc_calibrate) actual_period *= osc_calibrate;
+				if (!this->template sync_write<WRITE_PERIOD>(actual_period)) return false;
+				sys_range_start = 0x04;
+			}
+			return this->template sync_write<WRITE_SYSRANGE>(sys_range_start);
+		}
+
+		bool stop_continuous_ranging()
+		{
+			//TODO
+			// writeReg(SYSRANGE_START, 0x01); // VL53L0X_REG_SYSRANGE_MODE_SINGLESHOT
+			// writeReg(0xFF, 0x01);
+			// writeReg(0x00, 0x00);
+			// writeReg(0x91, 0x00);
+			// writeReg(0x00, 0x01);
+			// writeReg(0xFF, 0x00);
 		}
 
 		bool init_data_first()
