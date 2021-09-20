@@ -28,16 +28,9 @@ namespace devices::vl53l0x_internals
 	namespace actions = i2c::actions;
 
 	// List of includable futures
-	static constexpr uint8_t INCLUDE_DEVICE_STROBE_WAIT = 1;
-	static constexpr uint8_t INCLUDE_LOAD_TUNING_SETTINGS = 2;
-	static constexpr uint8_t INCLUDE_GET_SPAD_INFO = 3;
-	static constexpr uint8_t INCLUDE_SET_GPIO_SETTINGS = 4;
-	static constexpr uint8_t INCLUDE_GET_MEASUREMENT_TIMING = 5;
 	static constexpr uint8_t INCLUDE_SET_MEASUREMENT_TIMING = 6;
 	static constexpr uint8_t INCLUDE_GET_SEQUENCE_STEPS = 7;
-	static constexpr uint8_t INCLUDE_SET_SEQUENCE_STEPS = 8;
 	static constexpr uint8_t INCLUDE_GET_SEQUENCE_STEPS_TIMEOUT = 9;
-	static constexpr uint8_t INCLUDE_PERFORM_REF_VHV_CALIBRATION = 10;
 	static constexpr uint8_t INCLUDE_PERFORM_REF_PHASE_CALIBRATION = 11;
 
 	//TODO remove extra overwritten bytes from BUFFERs and remove extra next_byte()
