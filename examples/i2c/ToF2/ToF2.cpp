@@ -184,23 +184,27 @@ int main()
 		DEBUG(out);
 	}
 
-	// {
-	// 	// Perform reference calibration
-	// 	ok = tof.perform_ref_calibration();
-	// 	display_memory(out);
-	// 	out << F("tof.perform_ref_calibration() = ") << ok << endl;
-	// 	DEBUG(out);
-	// }
+	{
+		// Perform reference calibration
+		uint8_t debug1 = 0;
+		uint8_t debug2 = 0;
+		ok = tof.perform_ref_calibration(debug1, debug2);
+		display_memory(out);
+		out << F("tof.perform_ref_calibration() = ") << ok << endl;
+		out << F("DEBUG: reached step = ") << dec << debug1 << endl;
+		out << F("DEBUG: reached substep = ") << dec << debug2 << endl;
+		DEBUG(out);
+	}
 
-	// {
-	// 	DeviceStatus status;
-	// 	ok = tof.get_range_status(status);
-	// 	display_memory(out);
-	// 	out << F("tof.get_range_status(status) = ") << ok 
-	// 		<< F(", error = ") << dec << uint8_t(status.error())
-	// 		<< F(", data_ready = ") << status.data_ready() << endl;
-	// 	DEBUG(out);
-	// }
+	{
+		DeviceStatus status;
+		ok = tof.get_range_status(status);
+		display_memory(out);
+		out << F("tof.get_range_status(status) = ") << ok 
+			<< F(", error = ") << dec << uint8_t(status.error())
+			<< F(", data_ready = ") << status.data_ready() << endl;
+		DEBUG(out);
+	}
 
 	manager.end();
 }

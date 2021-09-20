@@ -227,12 +227,6 @@ namespace devices::vl53l0x
 			return (future.start(*this) ? 0 : future.error());
 		}
 
-		using PerformRefCalibrationFuture = typename FUTURES::PerformRefCalibrationFuture;
-		int perform_ref_calibration(PerformRefCalibrationFuture& future)
-		{
-			return (future.start(*this) ? 0 : future.error());
-		}
-
 		// Synchronous API
 		//=================
 		bool set_address(uint8_t device_address)
@@ -360,9 +354,9 @@ namespace devices::vl53l0x
 			return this->template sync_read<GetInterruptStatusFuture>(status);
 		}
 
-		bool clear_interrupt()
+		bool clear_interrupt(uint8_t clear_mask)
 		{
-			return this->template sync_write<ClearInterruptFuture>();
+			return this->template sync_write<ClearInterruptFuture>(clear_mask);
 		}
 
 		bool force_io_2_8V()
@@ -462,25 +456,58 @@ namespace devices::vl53l0x
 			return set_measurement_timing_budget(budget_us);
 		}
 
-		bool perform_ref_calibration()
+		bool perform_ref_calibration(uint8_t& debug1, uint8_t& debug2)
 		{
-			PerformRefCalibrationFuture future{};
-			if (perform_ref_calibration(future) != 0) return false;
-			return (future.await() == future::FutureStatus::READY);
+			using WRITE_STEPS = typename FUTURES::TWriteRegisterFuture<regs::REG_SYSTEM_SEQUENCE_CONFIG>;
+			// 1. Read current sequence steps
+			SequenceSteps steps;
+			debug1 = 1;
+			if (!get_sequence_steps(steps)) return false;
+			// 2. Set steps for VHV calibration
+			debug1 = 2;
+			if (!this->template sync_write<WRITE_STEPS>(uint8_t(0x01))) return false;
+			// 3. Perform single VHV calibration
+			debug1 = 3;
+			if (!perform_single_ref_calibration(SingleRefCalibrationTarget::VHV_CALIBRATION, debug2)) return false;
+			// 4. Set steps for Phase calibration
+			debug1 = 4;
+			if (!this->template sync_write<WRITE_STEPS>(uint8_t(0x02))) return false;
+			// 5. Perform single Phase calibration
+			debug1 = 5;
+			if (!perform_single_ref_calibration(SingleRefCalibrationTarget::PHASE_CALIBRATION, debug2)) return false;
+			// 6. Restore sequence steps (NOTE: 0x00 is used as marker by the future to actually restore saved sequence)
+			debug1 = 6;
+			return set_sequence_steps(steps);
 		}
 
 	protected:
-		using PerformSingleRefCalibrationFuture = typename FUTURES::PerformSingleRefCalibrationFuture;
-		int perform_single_ref_calibration(PerformSingleRefCalibrationFuture& future)
-		{
-			return (future.start(*this) ? 0 : future.error());
-		}
+		static constexpr const uint16_t MAX_LOOP = 2000;
 
-		bool perform_single_ref_calibration(SingleRefCalibrationTarget target)
+		bool perform_single_ref_calibration(SingleRefCalibrationTarget target, uint8_t& debug)
 		{
-			PerformSingleRefCalibrationFuture future{target};
-			if (perform_single_ref_calibration(future) != 0) return false;
-			return (future.await() == future::FutureStatus::READY);
+			using WRITE_SYS_RANGE = typename FUTURES::TWriteRegisterFuture<regs::REG_SYSRANGE_START>;
+			// 1. Write to register SYS RANGE
+			debug = 1;
+			if (!this->template sync_write<WRITE_SYS_RANGE>(uint8_t(target))) return false;
+			// 2. Read interrupt status until interrupt occurs
+			uint16_t loops = MAX_LOOP;
+			while (loops--)
+			{
+				InterruptStatus status;
+				debug = 2;
+				if (!get_interrupt_status(status)) return false;
+				if (status != 0)
+				{
+					// 3. Clear interrupt
+					debug = 3;
+					if (!clear_interrupt(0x01)) return false;
+					// 4. Write to register SYS RANGE
+					debug = 4;
+					return this->template sync_write<WRITE_SYS_RANGE>(uint8_t(0x00));
+				}
+			}
+			debug = 255;
+			return false;
 		}
 
 	private:

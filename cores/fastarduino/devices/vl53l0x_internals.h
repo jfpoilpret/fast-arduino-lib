@@ -96,29 +96,6 @@ namespace devices::vl53l0x_internals
 	{
 	}
 
-	// Constants for perform_ref_calibration() method
-	//------------------------------------------------
-	namespace perform_ref_calibration
-	{
-		// Write buffer
-		static constexpr uint8_t BUFFER[] PROGMEM =
-		{
-			// Read sequence steps
-			actions::read(1), regs::REG_SYSTEM_SEQUENCE_CONFIG,
-			// Set steps for VHV calibration
-			actions::write(1), regs::REG_SYSTEM_SEQUENCE_CONFIG, 0x01,
-			// Perform single VHV calibration
-			actions::INCLUDE, INCLUDE_PERFORM_REF_VHV_CALIBRATION,
-			// Set steps for Phase calibration
-			actions::write(1), regs::REG_SYSTEM_SEQUENCE_CONFIG, 0x02,
-			// Perform single Phase calibration
-			actions::INCLUDE, INCLUDE_PERFORM_REF_PHASE_CALIBRATION,
-			// Restore sequence steps (NOTE: 0x00 is used as marker by the future to actually restore saved sequence)
-			actions::write(1, true), regs::REG_SYSTEM_SEQUENCE_CONFIG, 0x00,
-			actions::END
-		};
-	}
-
 	namespace stop_variable
 	{
 		// Write buffers
