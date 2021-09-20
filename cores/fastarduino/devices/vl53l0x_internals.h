@@ -121,6 +121,7 @@ namespace devices::vl53l0x_internals
 
 	// Constants for init_data() method
 	//----------------------------------
+	//TODO remove after rework on init_data_first() method (sync only)
 	namespace init_data
 	{
 		// Marker after reading REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV
@@ -302,50 +303,24 @@ namespace devices::vl53l0x_internals
 		static constexpr uint8_t BUFFER_SIZE = sizeof(BUFFER);
 	}
 
-	// Constants for init_static() method
-	//------------------------------------
-	namespace init_static
+	// Constants for set_reference_SPADs() method
+	//--------------------------------------------
+	namespace set_reference_spads
 	{
-		// Marker after reading register 0x83 before owverwriting it
-		static constexpr uint8_t MARKER_GET_REFERENCE_SPADS = 1;
-
 		// Write buffer
 		static constexpr uint8_t BUFFER[] PROGMEM =
 		{
-			// get SPAD info
-			actions::INCLUDE, INCLUDE_GET_SPAD_INFO,
-
-			// get reference SPADs from NVM
-			actions::read(6), regs::REG_GLOBAL_CONFIG_SPAD_ENABLES_REF_0, // 6 BYTES READ: RefGoodSpadMap
-
-			// set reference SPADs (after calculation)
-			actions::write(1), 0xFF, 0x01,
-			actions::write(1), regs::REG_DYNAMIC_SPAD_REF_EN_START_OFFSET, 0x00,
-			actions::write(1), regs::REG_DYNAMIC_SPAD_NUM_REQUESTED_REF_SPAD, 0x2C,
-			actions::write(1), 0xFF, 0x00,
-			actions::write(1), regs::REG_GLOBAL_CONFIG_REF_EN_START_SELECT, 0xB4,
-			actions::MARKER, MARKER_GET_REFERENCE_SPADS,
-			actions::write(6), regs::REG_GLOBAL_CONFIG_SPAD_ENABLES_REF_0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 
-
-			// load tuning settings (hard-coded defaults)
-			actions::INCLUDE, INCLUDE_LOAD_TUNING_SETTINGS,
-
-			// set interrupt settings with default?
-			actions::INCLUDE, INCLUDE_SET_GPIO_SETTINGS,
-
-			// get current timing budget
-			actions::INCLUDE, INCLUDE_GET_MEASUREMENT_TIMING,
-
-			// set sequence steps: disable MSRC and TCC by default
-			actions::write(1), regs::REG_SYSTEM_SEQUENCE_CONFIG, 0xE8,
-
-			// recalculate timing budget
-			actions::INCLUDE, INCLUDE_SET_MEASUREMENT_TIMING,
-
-			actions::END
+			0xFF, 0x01,
+			regs::REG_DYNAMIC_SPAD_REF_EN_START_OFFSET, 0x00,
+			regs::REG_DYNAMIC_SPAD_NUM_REQUESTED_REF_SPAD, 0x2C,
+			0xFF, 0x00,
+			regs::REG_GLOBAL_CONFIG_REF_EN_START_SELECT, 0xB4
 		};
+
+		// Size of write buffer
+		static constexpr uint8_t BUFFER_SIZE = sizeof(BUFFER);
 	}
-	
+
 }
 #endif /* VL53L0X_INTERNALS_H */
 /// @endcond

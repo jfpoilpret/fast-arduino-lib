@@ -177,6 +177,13 @@ namespace devices::vl53l0x
 			return (future.start(*this) ? 0 : future.error());
 		}
 
+		using GetReferenceSPADsFuture = 
+			typename FUTURES::TReadRegisterFuture<regs::REG_GLOBAL_CONFIG_SPAD_ENABLES_REF_0, SPADReference>;
+		int get_reference_SPADs(PROXY<GetReferenceSPADsFuture> future)
+		{
+			return this->async_read(future);
+		}
+
 		using GetSequenceStepsTimeoutFuture = typename FUTURES::GetSequenceStepsTimeoutFuture;
 		int get_sequence_steps_timeout(GetSequenceStepsTimeoutFuture& future)
 		{
@@ -185,12 +192,6 @@ namespace devices::vl53l0x
 
 		using GetMeasurementTimingBudgetFuture = typename FUTURES::GetMeasurementTimingBudgetFuture;
 		int get_measurement_timing_budget(GetMeasurementTimingBudgetFuture& future)
-		{
-			return (future.start(*this) ? 0 : future.error());
-		}
-
-		using SetMeasurementTimingBudgetFuture = typename FUTURES::SetMeasurementTimingBudgetFuture;
-		int set_measurement_timing_budget(SetMeasurementTimingBudgetFuture& future)
 		{
 			return (future.start(*this) ? 0 : future.error());
 		}
@@ -228,12 +229,6 @@ namespace devices::vl53l0x
 
 		using LoadTuningSettingsFuture = typename FUTURES::LoadTuningSettingsFuture;
 		int load_tuning_settings(LoadTuningSettingsFuture& future)
-		{
-			return (future.start(*this) ? 0 : future.error());
-		}
-
-		using InitStaticFuture = typename FUTURES::InitStaticFuture;
-		int init_static_second(InitStaticFuture& future)
 		{
 			return (future.start(*this) ? 0 : future.error());
 		}
@@ -300,6 +295,23 @@ namespace devices::vl53l0x
 			return this->template sync_write<SetSignalRateLimitFuture, float>(signal_rate);
 		}
 
+		bool get_reference_SPADs(SPADReference& spad_ref)
+		{
+			return this->template sync_read<GetReferenceSPADsFuture, SPADReference>(spad_ref);
+		}
+
+		using SetReferenceSPADsFuture = 
+			typename FUTURES::TWriteRegisterFuture<regs::REG_GLOBAL_CONFIG_SPAD_ENABLES_REF_0, SPADReference>;
+
+		bool set_reference_SPADs(const SPADReference& spad_ref)
+		{
+			typename FUTURES::I2CSameFutureGroup pre_future{
+				uint16_t(internals::set_reference_spads::BUFFER), internals::set_reference_spads::BUFFER_SIZE};
+			if (!pre_future.start(*this)) return false;
+			if (pre_future.await() != future::FutureStatus::READY) return false;
+			return this->template sync_write<SetReferenceSPADsFuture, SPADReference>(spad_ref);
+		}
+
 		bool get_SPAD_info(SPADInfo& info)
 		{
 			GetSPADInfoFuture future{};
@@ -323,9 +335,16 @@ namespace devices::vl53l0x
 
 		bool set_measurement_timing_budget(uint32_t budget_us)
 		{
-			SetMeasurementTimingBudgetFuture future{budget_us};
-			if (set_measurement_timing_budget(future) == 0) return false;
-			return (future.await() == future::FutureStatus::READY);
+			using WRITE_BUDGET = typename
+				FUTURES::TWriteRegisterFuture<regs::REG_FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI, uint16_t>;
+			SequenceSteps steps;
+			if (!get_sequence_steps(steps)) return false;
+			SequenceStepsTimeout timeouts;
+			if (!get_sequence_steps_timeout(timeouts)) return false;
+			// Calculate budget
+			uint16_t budget = devices::vl53l0x_futures::TimingBudgetUtilities::calculate_final_range_timeout_mclks(
+				steps, timeouts, budget_us);
+			return this->template sync_write<WRITE_BUDGET>(budget);
 		}
 
 		bool get_GPIO_settings(GPIOSettings& settings)
@@ -337,7 +356,7 @@ namespace devices::vl53l0x
 
 		bool set_GPIO_settings(const GPIOSettings& settings)
 		{
-			SetGPIOSettingsFuture future{};
+			SetGPIOSettingsFuture future{settings};
 			if (set_GPIO_settings(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
@@ -366,11 +385,28 @@ namespace devices::vl53l0x
 			return (future.await() == future::FutureStatus::READY);
 		}
 
-		bool init_static_second()
+		bool init_static_second(const GPIOSettings& settings, SequenceSteps steps)
 		{
-			InitStaticFuture future{};
-			if (init_static_second(future) != 0) return false;
-			return (future.await() == future::FutureStatus::READY);
+			// 1. Get SPAD info
+			SPADInfo info;
+			if (!get_SPAD_info(info)) return false;
+			// 2. Get reference SPADs from NVM
+			SPADReference ref_spads;
+			if (!get_reference_SPADs(ref_spads)) return false;
+			// 3. Calculate SPADs and set reference SPADs
+			FUTURES::calculate_reference_SPADs(ref_spads.spad_refs(), info);
+			if (!set_reference_SPADs(ref_spads)) return false;
+			// 4. Load tuning settings
+			if (!load_tuning_settings()) return false;
+			// 5. Set GPIO settings
+			if (!set_GPIO_settings(settings)) return false;
+			// 6. Get current timing budget
+			uint32_t budget_us = 0UL;
+			if (!get_measurement_timing_budget(budget_us)) return false;
+			// 7. Set sequence steps by default?
+			if (!set_sequence_steps(steps)) return false;
+			// 8. Recalculate timing budget and set it
+			return set_measurement_timing_budget(budget_us);
 		}
 
 		bool perform_ref_calibration()

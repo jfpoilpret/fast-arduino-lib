@@ -205,6 +205,27 @@ namespace devices::vl53l0x
 		uint8_t status_ = 0;
 	};
 
+	class SPADReference
+	{
+	public:
+		SPADReference() = default;
+		SPADReference(const uint8_t spad_refs[6])
+		{
+			memcpy(spad_refs_, spad_refs, 6);
+		}
+		const uint8_t* spad_refs() const
+		{
+			return spad_refs_;
+		}
+		uint8_t* spad_refs()
+		{
+			return spad_refs_;
+		}
+
+	private:
+		uint8_t spad_refs_[6];
+	};
+
 	enum class SingleRefCalibrationTarget : uint8_t
 	{
 		PHASE_CALIBRATION = 0x01,
