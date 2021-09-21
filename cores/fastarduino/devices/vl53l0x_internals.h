@@ -108,6 +108,23 @@ namespace devices::vl53l0x_internals
 		static constexpr uint8_t POST_BUFFER_SIZE = sizeof(POST_BUFFER);
 	}
 
+	namespace stop_continuous_ranging
+	{
+		// Write buffers
+		static constexpr uint8_t BUFFER[] PROGMEM =
+		{
+			regs::REG_SYSRANGE_START, 0x01,
+			0xFF, 0x01,
+			regs::REG_SYSRANGE_START, 0x00,
+			0x91, 0x00,
+			regs::REG_SYSRANGE_START, 0x01,
+			0xFF, 0x00,
+		};
+
+		// Size of write buffers
+		static constexpr uint8_t BUFFER_SIZE = sizeof(BUFFER);
+	}
+
 	// Constants for get_SPAD_info() method
 	//--------------------------------------
 	namespace spad_info

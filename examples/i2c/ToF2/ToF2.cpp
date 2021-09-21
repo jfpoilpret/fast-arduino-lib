@@ -204,11 +204,20 @@ int main()
 		DEBUG(out);
 	}
 
-	display_status(out, tof);
+	for (uint8_t i = 0; i < 30; ++i)
+	{
+		//TODO read continuous ranges now
+		display_status(out, tof);
+		time::delay_ms(1000U);
+	}
 
-	//TODO read continuous ranges now
-
-	//TODO stop continuous ranging
+	{
+		// Start continuous ranging
+		ok = tof.stop_continuous_ranging();
+		display_memory(out);
+		out << F("tof.stop_continuous_ranging() = ") << ok << endl;
+		DEBUG(out);
+	}
 
 	manager.end();
 }

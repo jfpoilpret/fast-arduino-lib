@@ -499,13 +499,8 @@ namespace devices::vl53l0x
 
 		bool stop_continuous_ranging()
 		{
-			//TODO
-			// writeReg(SYSRANGE_START, 0x01); // VL53L0X_REG_SYSRANGE_MODE_SINGLESHOT
-			// writeReg(0xFF, 0x01);
-			// writeReg(0x00, 0x00);
-			// writeReg(0x91, 0x00);
-			// writeReg(0x00, 0x01);
-			// writeReg(0xFF, 0x00);
+			return await_same_future_group(
+				internals::stop_continuous_ranging::BUFFER, internals::stop_continuous_ranging::BUFFER_SIZE);
 		}
 
 		bool init_data_first()
