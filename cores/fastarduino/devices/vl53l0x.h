@@ -102,28 +102,15 @@ namespace devices::vl53l0x
 		 */
 		explicit VL53L0X(MANAGER& manager) : PARENT{manager, DEFAULT_DEVICE_ADDRESS, i2c::I2C_FAST, false} {}
 
+		//TODO Review all API to include arguments check whenever needed!
+
 		// Asynchronous API
 		//==================
-		//TODO sync-only?
 		using GetRangeStatusFuture = 
 			typename FUTURES::TReadRegisterFuture<regs::REG_RESULT_RANGE_STATUS, DeviceStatus>;
 		int get_range_status(PROXY<GetRangeStatusFuture> future)
 		{
 			return this->async_read(future);
-		}
-
-		//TODO sync-only
-		using GetSequenceStepsTimeoutFuture = typename FUTURES::GetSequenceStepsTimeoutFuture;
-		int get_sequence_steps_timeout(GetSequenceStepsTimeoutFuture& future)
-		{
-			return (future.start(*this) ? 0 : future.error());
-		}
-
-		//TODO sync-only
-		using GetMeasurementTimingBudgetFuture = typename FUTURES::GetMeasurementTimingBudgetFuture;
-		int get_measurement_timing_budget(GetMeasurementTimingBudgetFuture& future)
-		{
-			return (future.start(*this) ? 0 : future.error());
 		}
 
 		using GetGPIOSettingsFuture = typename FUTURES::GetGPIOSettingsFuture;
@@ -151,14 +138,6 @@ namespace devices::vl53l0x
 			return this->async_write(future);
 		}
 
-		//TODO sync-only
-		//TODO private only
-		using LoadTuningSettingsFuture = typename FUTURES::LoadTuningSettingsFuture;
-		int load_tuning_settings(LoadTuningSettingsFuture& future)
-		{
-			return (future.start(*this) ? 0 : future.error());
-		}
-
 		//TODO Reading sensor range
 
 
@@ -169,8 +148,6 @@ namespace devices::vl53l0x
 			//TODO
 			// set_device(device_address);
 		}
-
-		//TODO define all needed API here
 
 		bool get_model(uint8_t& model)
 		{
@@ -203,30 +180,123 @@ namespace devices::vl53l0x
 				typename FUTURES::TWriteRegisterFuture<regs::REG_SYSTEM_SEQUENCE_CONFIG, SequenceSteps>;
 			return this->template sync_write<SetSequenceStepsFuture>(sequence_steps);
 		}
+
 		template<VcselPeriodType TYPE>
 		bool get_vcsel_pulse_period(uint8_t& period)
 		{
-			using GetVcselPulsePeriodFuture = typename FUTURES::GetVcselPulsePeriodFuture<TYPE>;
-			return this->template sync_read<GetVcselPulsePeriodFuture>(period);
+			using GetVcselPulsePeriodFuture = typename FUTURES::TReadRegisterFuture<uint8_t(TYPE)>;
+			if (!this->template sync_read<GetVcselPulsePeriodFuture>(period)) return false;
+			period = decode_vcsel_period(period);
+			return true;
 		}
-		//TODO Much more complex process needed here: to be thought about further!
+
 		template<VcselPeriodType TYPE>
 		bool set_vcsel_pulse_period(uint8_t period)
 		{
+			//TODO directly call set_vcsel_pulse_period(VcselPeriodType type, uint8_t period)
+			// OLD code
 			using SetVcselPulsePeriodFuture = typename FUTURES::SetVcselPulsePeriodFuture<TYPE>;
-			//FIXME check period!
 			return this->template sync_write<SetVcselPulsePeriodFuture>(period);
+		}
+
+		//TODO Implement all steps
+		bool set_vcsel_pulse_period(VcselPeriodType type, uint8_t period)
+		{
+			// 0. Check period
+			if (!check_vcsel_period(type, period)) return false;
+			// 0. Encode period
+			uint8_t vcsel_period = encode_vcsel_period(period);
+			// 1. Read sequence steps enables
+			SequenceSteps steps;
+			if (!get_sequence_steps(steps)) return false;
+			// 2. Read sequence steps timeouts
+			SequenceStepsTimeout timeouts;
+			if (!get_sequence_steps_timeout(timeouts)) return false;
+			if (type == VcselPeriodType::PRE_RANGE)
+			{
+				// 3.1. [PRE_RANGE]
+				using WRITE_PHASE_HIGH = 
+					typename FUTURES::TWriteRegisterFuture<regs::REG_PRE_RANGE_CONFIG_VALID_PHASE_HIGH>;
+				using WRITE_PHASE_LOW = 
+					typename FUTURES::TWriteRegisterFuture<regs::REG_PRE_RANGE_CONFIG_VALID_PHASE_LOW>;
+				using WRITE_VCSEL = 
+					typename FUTURES::TWriteRegisterFuture<regs::REG_PRE_RANGE_CONFIG_VCSEL_PERIOD>;
+				using WRITE_RANGE_TIMEOUT = 
+					typename FUTURES::TWriteRegisterFuture<regs::REG_PRE_RANGE_CONFIG_TIMEOUT_MACROP_HI, uint16_t>;
+				using WRITE_MSRC_TIMEOUT = 
+					typename FUTURES::TWriteRegisterFuture<regs::REG_MSRC_CONFIG_TIMEOUT_MACROP>;
+
+				// 3.1.1. Write PRE_RANGE_CONFIG_VALID_PHASE_HIGH
+				uint8_t phase_high = 0;
+				switch (period)
+				{
+					case 12:
+					phase_high = 0x18;
+					break;
+
+					case 14:
+					phase_high = 0x30;
+					break;
+					
+					case 16:
+					phase_high = 0x40;
+					break;
+					
+					case 18:
+					phase_high = 0x50;
+					break;
+					
+					default:
+					break;
+				}
+				if (!this->template sync_write<WRITE_PHASE_HIGH>(phase_high)) return false;
+				// 3.1.2. Write PRE_RANGE_CONFIG_VALID_PHASE_LOW
+				if (!this->template sync_write<WRITE_PHASE_LOW>(uint8_t(0x08))) return false;
+				// 3.1.3. Write PRE_RANGE_CONFIG_VCSEL_PERIOD
+				if (!this->template sync_write<WRITE_VCSEL>(vcsel_period)) return false;
+				// 3.1.4. Write PRE_RANGE_CONFIG_TIMEOUT_MACROP_HI
+				//TODO calculate timeout
+				uint16_t todo = 0;
+				if (!this->template sync_write<WRITE_RANGE_TIMEOUT>(todo)) return false;
+				// 3.1.5. Write MSRC_CONFIG_TIMEOUT_MACROP
+				//TODO calculate timeout
+				uint16_t todo2 = 0;
+				if (!this->template sync_write<WRITE_MSRC_TIMEOUT>(uint8_t(todo2))) return false;
+			}
+			else
+			{
+				//TODO
+				// 3.2. [FINAL_RANGE]
+				// 3.2.1. Write FINAL_RANGE_CONFIG_VALID_PHASE_HIGH
+				// 3.2.2. Write FINAL_RANGE_CONFIG_VALID_PHASE_LOW
+				// 3.2.3. Write GLOBAL_CONFIG_VCSEL_WIDTH
+				// 3.2.4. Write ALGO_PHASECAL_CONFIG_TIMEOUT
+				// 3.2.5. Write ALGO_PHASECAL_LIM
+				// 3.2.6. Write FINAL_RANGE_CONFIG_VCSEL_PERIOD
+				// 3.2.7. Write FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI
+			}
+			// 4. Set measurement timeingbudget
+			// 5. Perform phase calibration
+			// OLD code TODO remove
+			return false;
 		}
 
 		bool get_signal_rate_limit(float& signal_rate)
 		{
-			using GetSignalRateLimitFuture = typename FUTURES::GetSignalRateLimitFuture;
-			return this->template sync_read<GetSignalRateLimitFuture, float>(signal_rate);
+			using GetSignalRateLimitFuture = 
+				typename FUTURES::TReadRegisterFuture<regs::REG_FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, uint16_t>;
+			uint16_t temp = 0;
+			if (!this->template sync_read<GetSignalRateLimitFuture>(temp)) return false;
+			signal_rate = devices::vl53l0x_futures::FixPoint9_7::convert(temp);
+			return true;
 		}
+
 		bool set_signal_rate_limit(float signal_rate)
 		{
-			using SetSignalRateLimitFuture = typename FUTURES::SetSignalRateLimitFuture;
-			return this->template sync_write<SetSignalRateLimitFuture, float>(signal_rate);
+			using SetSignalRateLimitFuture = 
+				typename FUTURES::TWriteRegisterFuture<regs::REG_FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, uint16_t>;
+			return this->template sync_write<SetSignalRateLimitFuture>(
+				devices::vl53l0x_futures::FixPoint9_7::convert(signal_rate));
 		}
 
 		bool get_reference_SPADs(SPADReference& spad_ref)
@@ -236,43 +306,14 @@ namespace devices::vl53l0x
 			return this->template sync_read<GetReferenceSPADsFuture, SPADReference>(spad_ref);
 		}
 
-		using SetReferenceSPADsFuture = 
-			typename FUTURES::TWriteRegisterFuture<regs::REG_GLOBAL_CONFIG_SPAD_ENABLES_REF_0, SPADReference>;
-
 		bool set_reference_SPADs(const SPADReference& spad_ref)
 		{
+			using SetReferenceSPADsFuture = 
+				typename FUTURES::TWriteRegisterFuture<regs::REG_GLOBAL_CONFIG_SPAD_ENABLES_REF_0, SPADReference>;
 			if (!await_same_future_group(
 				internals::set_reference_spads::BUFFER, internals::set_reference_spads::BUFFER_SIZE))
 				return false;
 			return this->template sync_write<SetReferenceSPADsFuture, SPADReference>(spad_ref);
-		}
-
-		//TODO Makes this API private (or protected in AbstractDevice?)
-		bool await_same_future_group(const uint8_t* buffer, uint8_t size)
-		{
-			typename FUTURES::I2CSameFutureGroup future{uint16_t(buffer), size};
-			if (!future.start(*this)) return false;
-			return (future.await() == future::FutureStatus::READY);
-		}
-
-		//TODO Makes this API private (or protected in AbstractDevice?)
-		bool await_device_strobe()
-		{
-			using READ_STROBE = typename FUTURES::TReadRegisterFuture<regs::REG_DEVICE_STROBE>;
-			using WRITE_STROBE = typename FUTURES::TWriteRegisterFuture<regs::REG_DEVICE_STROBE>;
-			// 1. Clear strobe
-			if (!this->template sync_write<WRITE_STROBE>(uint8_t(0x00))) return false;
-			// 2. Read strobe until !=0
-			uint16_t loops = MAX_LOOP;
-			while (loops--)
-			{
-				uint8_t strobe = 0;
-				if (!this->template sync_read<READ_STROBE>(strobe)) return false;
-				if (strobe != 0)
-					// 3. Set strobe
-					return this->template sync_write<WRITE_STROBE>(uint8_t(0x01));
-			}
-			return false;
 		}
 
 		bool get_SPAD_info(SPADInfo& info)
@@ -307,20 +348,41 @@ namespace devices::vl53l0x
 			return await_same_future_group(internals::spad_info::BUFFER4, internals::spad_info::BUFFER4_SIZE);
 		}
 
-		//TODO rewrite with sync_read
 		bool get_sequence_steps_timeout(SequenceStepsTimeout& timeouts)
 		{
-			GetSequenceStepsTimeoutFuture future{};
-			if (get_sequence_steps_timeout(future) != 0) return false;
-			return future.get(timeouts);
+			using READ_MSRC_TIMEOUT = typename FUTURES::TReadRegisterFuture<regs::REG_MSRC_CONFIG_TIMEOUT_MACROP>;
+			using READ_PRERANGE_TIMEOUT =
+				typename FUTURES::TReadRegisterFuture<regs::REG_PRE_RANGE_CONFIG_TIMEOUT_MACROP_HI, uint16_t>;
+			using READ_FINALRANGE_TIMEOUT =
+				typename FUTURES::TReadRegisterFuture<regs::REG_FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI, uint16_t>;
+			
+			uint8_t pre_range_vcsel_period_pclks = 0;
+			if (!get_vcsel_pulse_period<VcselPeriodType::PRE_RANGE>(pre_range_vcsel_period_pclks)) return false;
+			uint8_t final_range_vcsel_period_pclks = 0;
+			if (!get_vcsel_pulse_period<VcselPeriodType::FINAL_RANGE>(final_range_vcsel_period_pclks)) return false;
+			uint8_t msrc_dss_tcc_mclks = 0;
+			if (!this->template sync_read<READ_MSRC_TIMEOUT>(msrc_dss_tcc_mclks)) return false;
+			uint16_t pre_range_mclks = 0;
+			if (!this->template sync_read<READ_PRERANGE_TIMEOUT>(pre_range_mclks)) return false;
+			uint16_t final_range_mclks = 0;
+			if (!this->template sync_read<READ_FINALRANGE_TIMEOUT>(final_range_mclks)) return false;
+
+			timeouts = vl53l0x::SequenceStepsTimeout{
+				pre_range_vcsel_period_pclks, final_range_vcsel_period_pclks,
+				msrc_dss_tcc_mclks, pre_range_mclks, final_range_mclks};
+			return true;
 		}
 
-		//TODO rewrite with sync_read
 		bool get_measurement_timing_budget(uint32_t& budget_us)
 		{
-			GetMeasurementTimingBudgetFuture future{};
-			if (get_measurement_timing_budget(future) != 0) return false;
-			return future.get(budget_us);
+			// Get steps and timeouts
+			SequenceSteps steps{};
+			if (!get_sequence_steps(steps)) return false;
+			SequenceStepsTimeout timeouts{};
+			if (!get_sequence_steps_timeout(timeouts)) return false;
+			// Calculate timing budget
+			budget_us = calculate_measurement_timing_budget_us(steps, timeouts);
+			return true;
 		}
 
 		bool set_measurement_timing_budget(uint32_t budget_us)
@@ -332,7 +394,7 @@ namespace devices::vl53l0x
 			SequenceStepsTimeout timeouts;
 			if (!get_sequence_steps_timeout(timeouts)) return false;
 			// Calculate budget
-			uint16_t budget = devices::vl53l0x_futures::TimingBudgetUtilities::calculate_final_range_timeout_mclks(
+			uint16_t budget = calculate_final_range_timeout_mclks(
 				steps, timeouts, budget_us);
 			return this->template sync_write<WRITE_BUDGET>(budget);
 		}
@@ -374,6 +436,108 @@ namespace devices::vl53l0x
 			return this->template sync_write<ClearInterruptFuture>(clear_mask);
 		}
 
+		bool start_continuous_ranging(uint16_t period_ms = 0)
+		{
+			using READ_OSC_CAL = typename FUTURES::TReadRegisterFuture<regs::REG_OSC_CALIBRATE_VAL, uint16_t>;
+			using WRITE_PERIOD = typename FUTURES::TWriteRegisterFuture<regs::REG_SYSTEM_INTERMEASUREMENT_PERIOD, uint32_t>;
+			using WRITE_SYSRANGE = typename FUTURES::TWriteRegisterFuture<regs::REG_SYSRANGE_START>;
+			if (!use_stop_variable()) return false;
+			uint8_t sys_range_start = 0x02;
+			if (period_ms)
+			{
+				uint16_t osc_calibrate = 0;
+				if (!this->template sync_read<READ_OSC_CAL>(osc_calibrate)) return false;
+				uint32_t actual_period = period_ms;
+				if (osc_calibrate) actual_period *= osc_calibrate;
+				if (!this->template sync_write<WRITE_PERIOD>(actual_period)) return false;
+				sys_range_start = 0x04;
+			}
+			return this->template sync_write<WRITE_SYSRANGE>(sys_range_start);
+		}
+
+		//TODO API to read range async directly, to read range with preliminary wait interrupt (sync + async)
+		// This API shall be used only after InterruptStatus != 0, Interrupt Status should be clear immediately after it
+		using GetDirectRangeFuture = typename FUTURES::TReadRegisterFuture<regs::REG_RESULT_RANGE_STATUS + 10, uint16_t>;
+		int get_direct_range(PROXY<GetDirectRangeFuture> future)
+		{
+			return this->async_read(future);
+		}
+		bool get_direct_range(uint16_t& range_mm)
+		{
+			return this->template sync_read<GetDirectRangeFuture>(range_mm);
+		}
+
+		bool stop_continuous_ranging()
+		{
+			return await_same_future_group(
+				internals::stop_continuous_ranging::BUFFER, internals::stop_continuous_ranging::BUFFER_SIZE);
+		}
+
+		bool init_data_first()
+		{
+			// 1. Force 2.8V for I/O (instead of default 1.8V)
+			if (!force_io_2_8V()) return false;
+			// 2. Set I2C standard mode
+			if (!set_I2C_mode()) return false;
+			// 3. Read stop variable here
+			if (!read_stop_variable()) return false;
+			// 4. Disable SIGNAL_RATE_MSRC and SIGNAL_RATE_PRE_RANGE limit checks
+			if (!disable_signal_rate_limit_checks()) return false;
+			// 5. Set signal rate limit to 0.25 MCPS (million counts per second) in FP9.7 format
+			if (!set_signal_rate_limit(0.25)) return false;
+			// 6. Enable all sequence steps by default
+			return set_sequence_steps((SequenceSteps) 0xFF);
+		}
+
+		bool init_static_second(const GPIOSettings& settings, SequenceSteps steps)
+		{
+			// 1. Get SPAD info
+			SPADInfo info;
+			if (!get_SPAD_info(info)) return false;
+			// 2. Get reference SPADs from NVM
+			SPADReference ref_spads;
+			if (!get_reference_SPADs(ref_spads)) return false;
+			// 3. Calculate SPADs and set reference SPADs
+			calculate_reference_SPADs(ref_spads.spad_refs(), info);
+			if (!set_reference_SPADs(ref_spads)) return false;
+			// 4. Load tuning settings
+			if (!load_tuning_settings()) return false;
+			// 5. Set GPIO settings
+			if (!set_GPIO_settings(settings)) return false;
+			// 6. Get current timing budget
+			uint32_t budget_us = 0UL;
+			if (!get_measurement_timing_budget(budget_us)) return false;
+			// 7. Set sequence steps by default?
+			if (!set_sequence_steps(steps)) return false;
+			// 8. Recalculate timing budget and set it
+			return set_measurement_timing_budget(budget_us);
+		}
+
+		bool perform_ref_calibration(uint8_t& debug1, uint8_t& debug2)
+		{
+			using WRITE_STEPS = typename FUTURES::TWriteRegisterFuture<regs::REG_SYSTEM_SEQUENCE_CONFIG>;
+			// 1. Read current sequence steps
+			SequenceSteps steps;
+			debug1 = 1;
+			if (!get_sequence_steps(steps)) return false;
+			// 2. Set steps for VHV calibration
+			debug1 = 2;
+			if (!this->template sync_write<WRITE_STEPS>(uint8_t(0x01))) return false;
+			// 3. Perform single VHV calibration
+			debug1 = 3;
+			if (!perform_single_ref_calibration(SingleRefCalibrationTarget::VHV_CALIBRATION, debug2)) return false;
+			// 4. Set steps for Phase calibration
+			debug1 = 4;
+			if (!this->template sync_write<WRITE_STEPS>(uint8_t(0x02))) return false;
+			// 5. Perform single Phase calibration
+			debug1 = 5;
+			if (!perform_single_ref_calibration(SingleRefCalibrationTarget::PHASE_CALIBRATION, debug2)) return false;
+			// 6. Restore sequence steps (NOTE: 0x00 is used as marker by the future to actually restore saved sequence)
+			debug1 = 6;
+			return set_sequence_steps(steps);
+		}
+
+	private:
 		bool force_io_2_8V()
 		{
 			using READ_VHV_CONFIG = typename FUTURES::TReadRegisterFuture<regs::REG_VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV>;
@@ -432,116 +596,12 @@ namespace devices::vl53l0x
 			return this->template sync_write<WRITE_MSRC_CONFIG>(config);
 		}
 
-		bool start_continuous_ranging(uint16_t period_ms = 0)
-		{
-			using READ_OSC_CAL = typename FUTURES::TReadRegisterFuture<regs::REG_OSC_CALIBRATE_VAL, uint16_t>;
-			using WRITE_PERIOD = typename FUTURES::TWriteRegisterFuture<regs::REG_SYSTEM_INTERMEASUREMENT_PERIOD, uint32_t>;
-			using WRITE_SYSRANGE = typename FUTURES::TWriteRegisterFuture<regs::REG_SYSRANGE_START>;
-			if (!use_stop_variable()) return false;
-			uint8_t sys_range_start = 0x02;
-			if (period_ms)
-			{
-				uint16_t osc_calibrate = 0;
-				if (!this->template sync_read<READ_OSC_CAL>(osc_calibrate)) return false;
-				uint32_t actual_period = period_ms;
-				if (osc_calibrate) actual_period *= osc_calibrate;
-				if (!this->template sync_write<WRITE_PERIOD>(actual_period)) return false;
-				sys_range_start = 0x04;
-			}
-			return this->template sync_write<WRITE_SYSRANGE>(sys_range_start);
-		}
-
-		//TODO API to read range async directly, to read range with preliminary wait interrupt (sync + async)
-		// This API shall be used only after InterruptStatus != 0, Interrupt Status should be clear immediately after it
-		using GetDirectRangeFuture = typename FUTURES::TReadRegisterFuture<regs::REG_RESULT_RANGE_STATUS + 10, uint16_t>;
-		int get_direct_range(PROXY<GetDirectRangeFuture> future)
-		{
-			return this->async_read(future);
-		}
-		bool get_direct_range(uint16_t& range_mm)
-		{
-			return this->template sync_read<GetDirectRangeFuture>(range_mm);
-		}
-
-		bool stop_continuous_ranging()
-		{
-			return await_same_future_group(
-				internals::stop_continuous_ranging::BUFFER, internals::stop_continuous_ranging::BUFFER_SIZE);
-		}
-
-		bool init_data_first()
-		{
-			// 1. Force 2.8V for I/O (instead of default 1.8V)
-			if (!force_io_2_8V()) return false;
-			// 2. Set I2C standard mode
-			if (!set_I2C_mode()) return false;
-			// 3. Read stop variable here
-			if (!read_stop_variable()) return false;
-			// 4. Disable SIGNAL_RATE_MSRC and SIGNAL_RATE_PRE_RANGE limit checks
-			if (!disable_signal_rate_limit_checks()) return false;
-			// 5. Set signal rate limit to 0.25 MCPS (million counts per second) in FP9.7 format
-			if (!set_signal_rate_limit(0.25)) return false;
-			// 6. Enable all sequence steps by default
-			return set_sequence_steps((SequenceSteps) 0xFF);
-		}
-
-		//TODO rework sync only, private and private Future
 		bool load_tuning_settings()
 		{
-			LoadTuningSettingsFuture future{};
-			if (load_tuning_settings(future) != 0) return false;
-			return (future.await() == future::FutureStatus::READY);
+			return await_same_future_group(
+				internals::load_tuning_settings::BUFFER, internals::load_tuning_settings::BUFFER_SIZE);
 		}
 
-		bool init_static_second(const GPIOSettings& settings, SequenceSteps steps)
-		{
-			// 1. Get SPAD info
-			SPADInfo info;
-			if (!get_SPAD_info(info)) return false;
-			// 2. Get reference SPADs from NVM
-			SPADReference ref_spads;
-			if (!get_reference_SPADs(ref_spads)) return false;
-			// 3. Calculate SPADs and set reference SPADs
-			FUTURES::calculate_reference_SPADs(ref_spads.spad_refs(), info);
-			if (!set_reference_SPADs(ref_spads)) return false;
-			// 4. Load tuning settings
-			if (!load_tuning_settings()) return false;
-			// 5. Set GPIO settings
-			if (!set_GPIO_settings(settings)) return false;
-			// 6. Get current timing budget
-			uint32_t budget_us = 0UL;
-			if (!get_measurement_timing_budget(budget_us)) return false;
-			// 7. Set sequence steps by default?
-			if (!set_sequence_steps(steps)) return false;
-			// 8. Recalculate timing budget and set it
-			return set_measurement_timing_budget(budget_us);
-		}
-
-		bool perform_ref_calibration(uint8_t& debug1, uint8_t& debug2)
-		{
-			using WRITE_STEPS = typename FUTURES::TWriteRegisterFuture<regs::REG_SYSTEM_SEQUENCE_CONFIG>;
-			// 1. Read current sequence steps
-			SequenceSteps steps;
-			debug1 = 1;
-			if (!get_sequence_steps(steps)) return false;
-			// 2. Set steps for VHV calibration
-			debug1 = 2;
-			if (!this->template sync_write<WRITE_STEPS>(uint8_t(0x01))) return false;
-			// 3. Perform single VHV calibration
-			debug1 = 3;
-			if (!perform_single_ref_calibration(SingleRefCalibrationTarget::VHV_CALIBRATION, debug2)) return false;
-			// 4. Set steps for Phase calibration
-			debug1 = 4;
-			if (!this->template sync_write<WRITE_STEPS>(uint8_t(0x02))) return false;
-			// 5. Perform single Phase calibration
-			debug1 = 5;
-			if (!perform_single_ref_calibration(SingleRefCalibrationTarget::PHASE_CALIBRATION, debug2)) return false;
-			// 6. Restore sequence steps (NOTE: 0x00 is used as marker by the future to actually restore saved sequence)
-			debug1 = 6;
-			return set_sequence_steps(steps);
-		}
-
-	protected:
 		static constexpr const uint16_t MAX_LOOP = 2000;
 
 		bool perform_single_ref_calibration(SingleRefCalibrationTarget target, uint8_t& debug)
@@ -571,7 +631,167 @@ namespace devices::vl53l0x
 			return false;
 		}
 
-	private:
+		//TODO Move this API to AbstractDevice?
+		bool await_same_future_group(const uint8_t* buffer, uint8_t size)
+		{
+			typename FUTURES::I2CSameFutureGroup future{uint16_t(buffer), size};
+			if (!future.start(*this)) return false;
+			return (future.await() == future::FutureStatus::READY);
+		}
+
+		bool await_device_strobe()
+		{
+			using READ_STROBE = typename FUTURES::TReadRegisterFuture<regs::REG_DEVICE_STROBE>;
+			using WRITE_STROBE = typename FUTURES::TWriteRegisterFuture<regs::REG_DEVICE_STROBE>;
+			// 1. Clear strobe
+			if (!this->template sync_write<WRITE_STROBE>(uint8_t(0x00))) return false;
+			// 2. Read strobe until !=0
+			uint16_t loops = MAX_LOOP;
+			while (loops--)
+			{
+				uint8_t strobe = 0;
+				if (!this->template sync_read<READ_STROBE>(strobe)) return false;
+				if (strobe != 0)
+					// 3. Set strobe
+					return this->template sync_write<WRITE_STROBE>(uint8_t(0x01));
+			}
+			return false;
+		}
+
+		static constexpr bool check_vcsel_period(VcselPeriodType type, uint8_t period)
+		{
+			switch (type)
+			{
+				case VcselPeriodType::PRE_RANGE:
+				switch (period)
+				{
+					case 12:
+					case 14:
+					case 16:
+					case 18:
+					return true;
+
+					default:
+					break;
+				}
+				return false;
+
+				case VcselPeriodType::FINAL_RANGE:
+				switch (period)
+				{
+					case 8:
+					case 10:
+					case 12:
+					case 14:
+					return true;
+
+					default:
+					break;
+				}
+				return false;
+
+				default:
+				return false;
+			}
+		}
+
+		static constexpr uint8_t encode_vcsel_period(uint8_t period)
+		{
+			return (period >> 1) - 1;
+		}
+		static constexpr uint8_t decode_vcsel_period(uint8_t value)
+		{
+			return (value + 1) << 1;
+		}
+
+		static constexpr const uint8_t NUM_REF_SPADS = 48;
+		static constexpr const uint8_t SPADS_PER_BYTE = 8;
+		static constexpr const uint8_t NUM_REF_SPADS_BYTES = NUM_REF_SPADS / SPADS_PER_BYTE;
+		
+		static constexpr const uint8_t FIRST_APERTURE_SPAD = 12;
+		static void calculate_reference_SPADs(uint8_t ref_spads[NUM_REF_SPADS_BYTES], vl53l0x::SPADInfo info)
+		{
+			const uint8_t count = info.count();
+			const uint8_t first_spad = (info.is_aperture() ? FIRST_APERTURE_SPAD : 0);
+			uint8_t enabled_spads = 0;
+			uint8_t spad = 0;
+			for (uint8_t i = 0; i < NUM_REF_SPADS_BYTES; ++i)
+			{
+				uint8_t& ref_spad = ref_spads[i];
+				for (uint8_t j = 0; j < SPADS_PER_BYTE; ++j)
+				{
+					if ((spad < first_spad) || (enabled_spads == count))
+						// Disable this SPAD as it should not be enabled
+						ref_spad &= bits::CBV8(j);
+					else if (ref_spad & bits::BV8(j))
+						// Just count the current SPAD as enabled
+						++enabled_spads;
+					++spad;
+				}
+			}
+		}
+
+		static constexpr const uint32_t MIN_TIMING_BUDGET    = 20000UL;
+		static constexpr const uint16_t START_OVERHEAD       = 1910U;
+		static constexpr const uint16_t END_OVERHEAD         = 960U;
+		static constexpr const uint16_t MSRC_OVERHEAD        = 660U;
+		static constexpr const uint16_t TCC_OVERHEAD         = 590U;
+		static constexpr const uint16_t DSS_OVERHEAD         = 690U;
+		static constexpr const uint16_t PRE_RANGE_OVERHEAD   = 660U;
+		static constexpr const uint16_t FINAL_RANGE_OVERHEAD = 550U;
+
+		static uint32_t calculate_measurement_timing_budget_us(
+			const vl53l0x::SequenceSteps steps, const vl53l0x::SequenceStepsTimeout& timeouts)
+		{
+			// start and end overhead times always present
+			uint32_t budget_us = START_OVERHEAD + END_OVERHEAD;
+
+			if (steps.is_tcc())
+				budget_us += timeouts.msrc_dss_tcc_us() + TCC_OVERHEAD;
+
+			if (steps.is_dss())
+				budget_us += 2 * (timeouts.msrc_dss_tcc_us() + DSS_OVERHEAD);
+			else if (steps.is_msrc())
+				budget_us += timeouts.msrc_dss_tcc_us() + MSRC_OVERHEAD;
+
+			if (steps.is_pre_range())
+				budget_us += timeouts.pre_range_us() + PRE_RANGE_OVERHEAD;
+
+			if (steps.is_final_range())
+				budget_us += timeouts.final_range_us(steps.is_pre_range()) + FINAL_RANGE_OVERHEAD;
+
+			return budget_us;
+		}
+
+		static uint16_t calculate_final_range_timeout_mclks(
+			const vl53l0x::SequenceSteps steps, const vl53l0x::SequenceStepsTimeout& timeouts, uint32_t budget_us)
+		{
+			// Requested budget must be be above minimum allowed
+			if (budget_us < MIN_TIMING_BUDGET) return 0;
+			// This calculation is useless if there is no final range step
+			if (!steps.is_final_range()) return 0;
+
+			// Calculate current used budget without final range
+			uint32_t used_budget_us = 
+				calculate_measurement_timing_budget_us(steps.no_final_range(), timeouts);
+
+			// Now include final range and calculate difference
+			used_budget_us += FINAL_RANGE_OVERHEAD;
+			// Requested budget must be above calculated budget for all other steps
+			if (used_budget_us > budget_us) return 0;
+
+			// Calculate final range timeout in us
+			const uint32_t final_range_timeout_us = budget_us - used_budget_us;
+
+			// Deduce final range timeout in mclks
+			uint32_t final_range_timeout_mclks = vl53l0x::TimeoutUtilities::calculate_timeout_mclks(
+				final_range_timeout_us, timeouts.final_range_vcsel_period_pclks());
+			if (steps.is_pre_range())
+				final_range_timeout_mclks += timeouts.pre_range_mclks();
+			
+			return vl53l0x::TimeoutUtilities::encode_timeout(final_range_timeout_mclks);
+		}
+
 		static constexpr const uint8_t DEFAULT_DEVICE_ADDRESS = 0x52;
 
 		// Stop variable used across device invocations
