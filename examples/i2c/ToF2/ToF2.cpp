@@ -151,10 +151,10 @@ int main()
 	bool ok = false;
 
 	{
-		ok = tof.set_signal_rate_limit(0.5f);
-		display_memory(out);
-		out << F("tof.set_signal_rate_limit(0.5) = ") << ok << endl;
-		DEBUG(out);
+		// ok = tof.set_signal_rate_limit(0.5f);
+		// display_memory(out);
+		// out << F("tof.set_signal_rate_limit(0.5) = ") << ok << endl;
+		// DEBUG(out);
 	}
 
 	{
@@ -170,13 +170,11 @@ int main()
 
 	{
 		// Call second initialization step
-		uint8_t debug1 = 0;
-		uint8_t debug2 = 0;
 		out << F("Calling init_static_second()...") << endl;
-		ok = tof.init_static_second(GPIOSettings::sample_ready(), SequenceSteps::all().no_msrc().no_tcc(), debug1, debug2);
+		constexpr SequenceSteps STEPS = SequenceSteps::all().no_msrc().no_tcc();
+		ok = tof.init_static_second(GPIOSettings::sample_ready(), STEPS);
 		display_memory(out);
 		out << F("tof.init_static_second() = ") << ok << endl;
-		out << F("DEBUG step = ") << dec << debug1 << F(", substep = ") << debug2 << endl;
 		DEBUG(out);
 	}
 
@@ -204,11 +202,22 @@ int main()
 		DEBUG(out);
 	}
 
-	for (uint8_t i = 0; i < 30; ++i)
+	for (uint8_t i = 0; i < 60; ++i)
 	{
-		//TODO read continuous ranges now
-		display_status(out, tof);
-		time::delay_ms(1000U);
+		time::delay_ms(100U);
+		if (tof.await_interrupt())
+		{
+			display_status(out, tof);
+			DEBUG(out);
+			// Read continuous ranges now
+			uint16_t range = 0;
+			if (tof.get_direct_range(range))
+			{
+				out << F("Range = ") << dec << range << F("mm") << endl;
+			}
+			tof.clear_interrupt();
+			// DEBUG(out);
+		}
 	}
 
 	{

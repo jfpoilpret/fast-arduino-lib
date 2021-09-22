@@ -104,24 +104,7 @@ namespace devices::vl53l0x
 
 		// Asynchronous API
 		//==================
-		using GetModelFuture = typename FUTURES::TReadRegisterFuture<regs::REG_IDENTIFICATION_MODEL_ID>;
-		int get_model(PROXY<GetModelFuture> future)
-		{
-			return this->async_read(future);
-		}
-
-		using GetRevisionFuture = typename FUTURES::TReadRegisterFuture<regs::REG_IDENTIFICATION_REVISION_ID>;
-		int get_revision(PROXY<GetRevisionFuture> future)
-		{
-			return this->async_read(future);
-		}
-
-		using GetPowerModeFuture = typename FUTURES::TReadRegisterFuture<regs::REG_POWER_MANAGEMENT, PowerMode>;
-		int get_power_mode(PROXY<GetPowerModeFuture> future)
-		{
-			return this->async_read(future);
-		}
-
+		//TODO sync-only?
 		using GetRangeStatusFuture = 
 			typename FUTURES::TReadRegisterFuture<regs::REG_RESULT_RANGE_STATUS, DeviceStatus>;
 		int get_range_status(PROXY<GetRangeStatusFuture> future)
@@ -129,62 +112,14 @@ namespace devices::vl53l0x
 			return this->async_read(future);
 		}
 
-		using GetSequenceStepsFuture = 
-			typename FUTURES::TReadRegisterFuture<regs::REG_SYSTEM_SEQUENCE_CONFIG, SequenceSteps>;
-		int get_sequence_steps(PROXY<GetSequenceStepsFuture> future)
-		{
-			return this->async_read(future);
-		}
-
-		using SetSequenceStepsFuture = 
-			typename FUTURES::TWriteRegisterFuture<regs::REG_SYSTEM_SEQUENCE_CONFIG, SequenceSteps>;
-		int set_sequence_steps(PROXY<SetSequenceStepsFuture> future)
-		{
-			return this->async_write(future);
-		}
-
-		template<VcselPeriodType TYPE> 
-		using GetVcselPulsePeriodFuture = typename FUTURES::GetVcselPulsePeriodFuture<TYPE>;
-		template<VcselPeriodType TYPE>
-		int get_vcsel_pulse_period(PROXY<GetVcselPulsePeriodFuture<TYPE>> future)
-		{
-			return this->async_read(future);
-		}
-
-		//FIXME Rework from scratch
-		template<VcselPeriodType TYPE> 
-		using SetVcselPulsePeriodFuture = typename FUTURES::SetVcselPulsePeriodFuture<TYPE>;
-		template<VcselPeriodType TYPE>
-		int set_vcsel_pulse_period(PROXY<SetVcselPulsePeriodFuture<TYPE>> future)
-		{
-			return this->async_write(future);
-		}
-
-		using GetSignalRateLimitFuture = typename FUTURES::GetSignalRateLimitFuture;
-		int get_signal_rate_limit(PROXY<GetSignalRateLimitFuture> future)
-		{
-			return this->async_read(future);
-		}
-
-		using SetSignalRateLimitFuture = typename FUTURES::SetSignalRateLimitFuture;
-		int set_signal_rate_limit(PROXY<SetSignalRateLimitFuture> future)
-		{
-			return this->async_write(future);
-		}
-
-		using GetReferenceSPADsFuture = 
-			typename FUTURES::TReadRegisterFuture<regs::REG_GLOBAL_CONFIG_SPAD_ENABLES_REF_0, SPADReference>;
-		int get_reference_SPADs(PROXY<GetReferenceSPADsFuture> future)
-		{
-			return this->async_read(future);
-		}
-
+		//TODO sync-only
 		using GetSequenceStepsTimeoutFuture = typename FUTURES::GetSequenceStepsTimeoutFuture;
 		int get_sequence_steps_timeout(GetSequenceStepsTimeoutFuture& future)
 		{
 			return (future.start(*this) ? 0 : future.error());
 		}
 
+		//TODO sync-only
 		using GetMeasurementTimingBudgetFuture = typename FUTURES::GetMeasurementTimingBudgetFuture;
 		int get_measurement_timing_budget(GetMeasurementTimingBudgetFuture& future)
 		{
@@ -216,6 +151,8 @@ namespace devices::vl53l0x
 			return this->async_write(future);
 		}
 
+		//TODO sync-only
+		//TODO private only
 		using LoadTuningSettingsFuture = typename FUTURES::LoadTuningSettingsFuture;
 		int load_tuning_settings(LoadTuningSettingsFuture& future)
 		{
@@ -237,14 +174,17 @@ namespace devices::vl53l0x
 
 		bool get_model(uint8_t& model)
 		{
+			using GetModelFuture = typename FUTURES::TReadRegisterFuture<regs::REG_IDENTIFICATION_MODEL_ID>;
 			return this->template sync_read<GetModelFuture>(model);
 		}
 		bool get_revision(uint8_t& revision)
 		{
+			using GetRevisionFuture = typename FUTURES::TReadRegisterFuture<regs::REG_IDENTIFICATION_REVISION_ID>;
 			return this->template sync_read<GetRevisionFuture>(revision);
 		}
 		bool get_power_mode(PowerMode& power_mode)
 		{
+			using GetPowerModeFuture = typename FUTURES::TReadRegisterFuture<regs::REG_POWER_MANAGEMENT, PowerMode>;
 			return this->template sync_read<GetPowerModeFuture>(power_mode);
 		}
 		bool get_range_status(DeviceStatus& range_status)
@@ -253,36 +193,46 @@ namespace devices::vl53l0x
 		}
 		bool get_sequence_steps(SequenceSteps& sequence_steps)
 		{
+			using GetSequenceStepsFuture = 
+				typename FUTURES::TReadRegisterFuture<regs::REG_SYSTEM_SEQUENCE_CONFIG, SequenceSteps>;
 			return this->template sync_read<GetSequenceStepsFuture>(sequence_steps);
 		}
 		bool set_sequence_steps(SequenceSteps sequence_steps)
 		{
+			using SetSequenceStepsFuture = 
+				typename FUTURES::TWriteRegisterFuture<regs::REG_SYSTEM_SEQUENCE_CONFIG, SequenceSteps>;
 			return this->template sync_write<SetSequenceStepsFuture>(sequence_steps);
 		}
 		template<VcselPeriodType TYPE>
 		bool get_vcsel_pulse_period(uint8_t& period)
 		{
-			return this->template sync_read<GetVcselPulsePeriodFuture<TYPE>>(period);
+			using GetVcselPulsePeriodFuture = typename FUTURES::GetVcselPulsePeriodFuture<TYPE>;
+			return this->template sync_read<GetVcselPulsePeriodFuture>(period);
 		}
 		//TODO Much more complex process needed here: to be thought about further!
 		template<VcselPeriodType TYPE>
 		bool set_vcsel_pulse_period(uint8_t period)
 		{
+			using SetVcselPulsePeriodFuture = typename FUTURES::SetVcselPulsePeriodFuture<TYPE>;
 			//FIXME check period!
-			return this->template sync_write<SetVcselPulsePeriodFuture<TYPE>>(period);
+			return this->template sync_write<SetVcselPulsePeriodFuture>(period);
 		}
 
 		bool get_signal_rate_limit(float& signal_rate)
 		{
+			using GetSignalRateLimitFuture = typename FUTURES::GetSignalRateLimitFuture;
 			return this->template sync_read<GetSignalRateLimitFuture, float>(signal_rate);
 		}
 		bool set_signal_rate_limit(float signal_rate)
 		{
+			using SetSignalRateLimitFuture = typename FUTURES::SetSignalRateLimitFuture;
 			return this->template sync_write<SetSignalRateLimitFuture, float>(signal_rate);
 		}
 
 		bool get_reference_SPADs(SPADReference& spad_ref)
 		{
+			using GetReferenceSPADsFuture = 
+				typename FUTURES::TReadRegisterFuture<regs::REG_GLOBAL_CONFIG_SPAD_ENABLES_REF_0, SPADReference>;
 			return this->template sync_read<GetReferenceSPADsFuture, SPADReference>(spad_ref);
 		}
 
@@ -325,48 +275,39 @@ namespace devices::vl53l0x
 			return false;
 		}
 
-		bool get_SPAD_info(SPADInfo& info, uint8_t& debug)
+		bool get_SPAD_info(SPADInfo& info)
 		{
 			using READ_SPAD = typename FUTURES::TReadRegisterFuture<regs::REG_SPAD_INFO, SPADInfo>;
 			using READ_STROBE = typename FUTURES::TReadRegisterFuture<regs::REG_DEVICE_STROBE>;
 			using WRITE_STROBE = typename FUTURES::TWriteRegisterFuture<regs::REG_DEVICE_STROBE>;
 			// 1. Write initial registers
-			debug = 1;
 			if (!await_same_future_group(internals::spad_info::BUFFER1, internals::spad_info::BUFFER1_SIZE))
 				return false;
 			// 2. Force strobe (read/write)
 			uint8_t strobe = 0;
-			debug = 2;
 			if (!this->template sync_read<READ_STROBE>(strobe)) return false;
 			strobe |= 0x04;
-			debug = 3;
 			if (!this->template sync_write<WRITE_STROBE>(strobe)) return false;
 			// 3. Write 2nd pass registers
-			debug = 4;
 			if (!await_same_future_group(internals::spad_info::BUFFER2, internals::spad_info::BUFFER2_SIZE))
 				return false;
 			// 4. Wait for strobe
-			debug = 5;
 			if (!await_device_strobe()) return false;
 			// 5. Read spad info
-			debug = 6;
 			if (!this->template sync_read<READ_SPAD>(info)) return false;
 			// 6. Write 3rd pass registers
-			debug = 7;
 			if (!await_same_future_group(internals::spad_info::BUFFER3, internals::spad_info::BUFFER3_SIZE))
 				return false;
 			// 7. Force strobe
 			strobe = 0;
-			debug = 8;
 			if (!this->template sync_read<READ_STROBE>(strobe)) return false;
 			strobe &= ~0x04;
-			debug = 9;
 			if (!this->template sync_write<WRITE_STROBE>(strobe)) return false;
 			// 8. Write last pass registers
-			debug = 10;
 			return await_same_future_group(internals::spad_info::BUFFER4, internals::spad_info::BUFFER4_SIZE);
 		}
 
+		//TODO rewrite with sync_read
 		bool get_sequence_steps_timeout(SequenceStepsTimeout& timeouts)
 		{
 			GetSequenceStepsTimeoutFuture future{};
@@ -374,6 +315,7 @@ namespace devices::vl53l0x
 			return future.get(timeouts);
 		}
 
+		//TODO rewrite with sync_read
 		bool get_measurement_timing_budget(uint32_t& budget_us)
 		{
 			GetMeasurementTimingBudgetFuture future{};
@@ -409,12 +351,25 @@ namespace devices::vl53l0x
 			return (future.await() == future::FutureStatus::READY);
 		}
 
+		bool await_interrupt(uint16_t loops = MAX_LOOP)
+		{
+			// Read interrupt until !=0
+			while (loops--)
+			{
+				InterruptStatus status;
+				if (!this->template sync_read<GetInterruptStatusFuture>(status)) return false;
+				if (status != 0)
+					return true;
+			}
+			return false;
+		}
+
 		bool get_interrupt_status(InterruptStatus& status)
 		{
 			return this->template sync_read<GetInterruptStatusFuture>(status);
 		}
 
-		bool clear_interrupt(uint8_t clear_mask)
+		bool clear_interrupt(uint8_t clear_mask = 0x01)
 		{
 			return this->template sync_write<ClearInterruptFuture>(clear_mask);
 		}
@@ -453,7 +408,6 @@ namespace devices::vl53l0x
 
 		bool use_stop_variable()
 		{
-			//TODO
 			// Write prefix
 			if (!await_same_future_group(
 				internals::stop_variable::PRE_BUFFER, internals::stop_variable::PRE_BUFFER_SIZE))
@@ -497,6 +451,18 @@ namespace devices::vl53l0x
 			return this->template sync_write<WRITE_SYSRANGE>(sys_range_start);
 		}
 
+		//TODO API to read range async directly, to read range with preliminary wait interrupt (sync + async)
+		// This API shall be used only after InterruptStatus != 0, Interrupt Status should be clear immediately after it
+		using GetDirectRangeFuture = typename FUTURES::TReadRegisterFuture<regs::REG_RESULT_RANGE_STATUS + 10, uint16_t>;
+		int get_direct_range(PROXY<GetDirectRangeFuture> future)
+		{
+			return this->async_read(future);
+		}
+		bool get_direct_range(uint16_t& range_mm)
+		{
+			return this->template sync_read<GetDirectRangeFuture>(range_mm);
+		}
+
 		bool stop_continuous_ranging()
 		{
 			return await_same_future_group(
@@ -516,9 +482,10 @@ namespace devices::vl53l0x
 			// 5. Set signal rate limit to 0.25 MCPS (million counts per second) in FP9.7 format
 			if (!set_signal_rate_limit(0.25)) return false;
 			// 6. Enable all sequence steps by default
-			return set_sequence_steps(SequenceSteps::all());
+			return set_sequence_steps((SequenceSteps) 0xFF);
 		}
 
+		//TODO rework sync only, private and private Future
 		bool load_tuning_settings()
 		{
 			LoadTuningSettingsFuture future{};
@@ -526,35 +493,27 @@ namespace devices::vl53l0x
 			return (future.await() == future::FutureStatus::READY);
 		}
 
-		bool init_static_second(const GPIOSettings& settings, SequenceSteps steps, uint8_t& debug1, uint8_t& debug2)
+		bool init_static_second(const GPIOSettings& settings, SequenceSteps steps)
 		{
 			// 1. Get SPAD info
 			SPADInfo info;
-			debug1 = 1;
-			if (!get_SPAD_info(info, debug2)) return false;
+			if (!get_SPAD_info(info)) return false;
 			// 2. Get reference SPADs from NVM
 			SPADReference ref_spads;
-			debug1 = 2;
 			if (!get_reference_SPADs(ref_spads)) return false;
 			// 3. Calculate SPADs and set reference SPADs
 			FUTURES::calculate_reference_SPADs(ref_spads.spad_refs(), info);
-			debug1 = 3;
 			if (!set_reference_SPADs(ref_spads)) return false;
 			// 4. Load tuning settings
-			debug1 = 4;
 			if (!load_tuning_settings()) return false;
 			// 5. Set GPIO settings
-			debug1 = 5;
 			if (!set_GPIO_settings(settings)) return false;
 			// 6. Get current timing budget
 			uint32_t budget_us = 0UL;
-			debug1 = 6;
 			if (!get_measurement_timing_budget(budget_us)) return false;
 			// 7. Set sequence steps by default?
-			debug1 = 7;
 			if (!set_sequence_steps(steps)) return false;
 			// 8. Recalculate timing budget and set it
-			debug1 = 8;
 			return set_measurement_timing_budget(budget_us);
 		}
 

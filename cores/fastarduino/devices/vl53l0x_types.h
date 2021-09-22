@@ -241,6 +241,7 @@ namespace devices::vl53l0x
 	class SequenceSteps
 	{
 	private:
+		static constexpr uint8_t FORCED_BITS = bits::BV8(5);
 		static constexpr uint8_t TCC = bits::BV8(4);
 		static constexpr uint8_t DSS = bits::BV8(3);
 		static constexpr uint8_t MSRC = bits::BV8(2);
@@ -327,9 +328,11 @@ namespace devices::vl53l0x
 		}
 
 	private:
-		constexpr SequenceSteps(uint8_t steps) : steps_{steps} {}
+		constexpr SequenceSteps(uint8_t steps) : steps_{uint8_t(steps | FORCED_BITS)} {}
 
-		uint8_t steps_ = 0;
+		uint8_t steps_ = FORCED_BITS;
+
+		template<typename MANAGER> friend class VL53L0X;
 	};
 
 	streams::ostream& operator<<(streams::ostream&, SequenceSteps);
