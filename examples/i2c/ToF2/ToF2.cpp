@@ -182,13 +182,9 @@ int main()
 
 	{
 		// Perform reference calibration
-		uint8_t debug1 = 0;
-		uint8_t debug2 = 0;
-		ok = tof.perform_ref_calibration(debug1, debug2);
+		ok = tof.perform_ref_calibration();
 		display_memory(out);
 		out << F("tof.perform_ref_calibration() = ") << ok << endl;
-		out << F("DEBUG: reached step = ") << dec << debug1 << endl;
-		out << F("DEBUG: reached substep = ") << dec << debug2 << endl;
 		DEBUG(out);
 	}
 
