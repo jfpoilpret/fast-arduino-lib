@@ -102,22 +102,6 @@ namespace devices::vl53l0x_futures
 		using GetSequenceStepsFuture = TReadRegisterFuture<regs::REG_SYSTEM_SEQUENCE_CONFIG, vl53l0x::SequenceSteps>;
 		using SetSequenceStepsFuture = TWriteRegisterFuture<regs::REG_SYSTEM_SEQUENCE_CONFIG, vl53l0x::SequenceSteps>;
 
-		//FIXME rework (Group of futures?)
-		// template<vl53l0x::VcselPeriodType TYPE>
-		// class SetVcselPulsePeriodFuture : public TWriteRegisterFuture<uint8_t(TYPE)>
-		// {
-		// 	using PARENT = TWriteRegisterFuture<uint8_t(TYPE)>;
-		// 	static uint8_t encode_period(uint8_t period)
-		// 	{
-		// 		return (period >> 1) - 1;
-		// 	}
-
-		// public:
-		// 	explicit SetVcselPulsePeriodFuture(uint8_t period_pclks) : PARENT{encode_period(period_pclks)} {}
-		// 	SetVcselPulsePeriodFuture(SetVcselPulsePeriodFuture<TYPE>&&) = default;
-		// 	SetVcselPulsePeriodFuture& operator=(SetVcselPulsePeriodFuture<TYPE>&&) = default;
-		// };
-
 		class GetGPIOSettingsFuture : public I2CFuturesGroup
 		{
 			using PARENT = I2CFuturesGroup;
