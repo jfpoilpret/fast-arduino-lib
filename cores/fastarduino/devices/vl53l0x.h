@@ -51,16 +51,10 @@ namespace devices
 	}
 }
 
-//TODO review which API can still be async/sync and those that are only sync
 //TODO - implement low-level API step by step
-//       - static_init
-//       - single ranging
-//       - status
 //       - calibration?
-// 
-//       - continuous ranging
+//       - ranging
 //       - set_address
-//       - interrupt handling
 //
 //TODO - implement high level API
 //       - begin()
