@@ -66,8 +66,8 @@ using TOF = VL53L0X<MANAGER>;
 static void display_status(streams::ostream& out, TOF& tof)
 {
 	DeviceStatus status;
-	CHECK_OK(tof.get_range_status(status));
-	out << F("tof.get_range_status(status) = ")
+	bool ok = tof.get_range_status(status);
+	out << F("tof.get_range_status(status) = ") << ok
 		<< F(", error = ") << dec << status.error()
 		<< F(", data_ready = ") << status.data_ready() << endl;
 }
@@ -83,10 +83,12 @@ static bool yes_no(streams::ostream& out, streams::istream& in, const flash::Fla
 		{
 			case 'y':
 			case 'Y':
+			out << endl;
 			return true;
 
 			case 'n':
 			case 'N':
+			out << endl;
 			return false;
 
 			default:
@@ -112,7 +114,11 @@ static uint8_t vcsel_period(streams::ostream& out, streams::istream& in, const f
 		uint16_t answer = 0;
 		in >> answer;
 		for (uint8_t i = 0; i < count; ++i)
-			if (answer == values[i]) return answer;
+			if (answer == values[i])
+			{
+				out << endl;
+				return answer;
+			}
 		out << F("Unauthorized value entered!") << endl;
 	}
 }
@@ -125,7 +131,10 @@ static float signal_rate(streams::ostream& out, streams::istream& in, float curr
 		double answer = 0;
 		in >> answer;
 		if (answer > 0.0 && answer <= 1.0)
+		{
+			out << endl;
 			return answer;
+		}
 		out << F("Only floats in ]0;1] are allowed!") << endl;
 	}
 }
@@ -138,7 +147,10 @@ static uint32_t timing_budget(streams::ostream& out, streams::istream& in, uint3
 		uint32_t budget = 0;
 		in >> budget;
 		if (budget > 0)
+		{
+			out << endl;
 			return budget;
+		}
 		out << F("Only positive numbers are allowed!") << endl;
 	}
 }
@@ -221,11 +233,11 @@ int main()
 
 	while (true)
 	{
-		time::delay_ms(100U);
+		time::delay_ms(995U);
 		// Read continuous ranges now
 		uint16_t range = 0;
-		CHECK_OK(tof.await_continuous_range(range));
+		if (tof.await_continuous_range(range))
+			out << F("Range = ") << dec << range << F("mm") << endl;
 		display_status(out, tof);
-		out << F("Range = ") << dec << range << F("mm") << endl;
 	}
 }
