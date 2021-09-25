@@ -163,15 +163,15 @@ namespace devices::vl53l0x
 	{
 		return out	<< F("(pre_range_vcsel_period_pclks=")
 					<< streams::dec << timeouts.pre_range_vcsel_period_pclks() << streams::flush
-					<< F(", final_range_vcsel_period_pclks")
+					<< F(", final_range_vcsel_period_pclks=")
 					<< timeouts.final_range_vcsel_period_pclks() << streams::flush
-					<< F(", msrc_dss_tcc_mclks")
+					<< F(", msrc_dss_tcc_mclks=")
 					<< timeouts.msrc_dss_tcc_mclks() << streams::flush
-					<< F(", pre_range_mclks")
+					<< F(", pre_range_mclks=")
 					<< timeouts.pre_range_mclks() << streams::flush
-					<< F(", final_range_mclks(with pre-range)")
+					<< F(", final_range_mclks(with pre-range)=")
 					<< timeouts.final_range_mclks(true) << ')' << streams::flush
-					<< F(", final_range_mclks(no pre-range)")
+					<< F(", final_range_mclks(no pre-range)=")
 					<< timeouts.final_range_mclks(false) << ')' << streams::flush;
 	}
 }
