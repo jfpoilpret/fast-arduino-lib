@@ -24,22 +24,22 @@
 
 namespace devices::vl53l0x_internals
 {
-	namespace regs = vl53l0x_registers;
+	using Register = devices::vl53l0x::Register;
 
 	namespace stop_variable
 	{
 		// Write buffers
 		static constexpr uint8_t PRE_BUFFER[] PROGMEM =
 		{
-			regs::REG_POWER_MANAGEMENT, 0x01,
+			uint8_t(Register::POWER_MANAGEMENT), 0x01,
 			0xFF, 0x01,
-			regs::REG_SYSRANGE_START, 0x00,
+			uint8_t(Register::SYSRANGE_START), 0x00,
 		};
 		static constexpr uint8_t POST_BUFFER[] PROGMEM =
 		{
-			regs::REG_SYSRANGE_START, 0x01,
+			uint8_t(Register::SYSRANGE_START), 0x01,
 			0xFF, 0x00,
-			regs::REG_POWER_MANAGEMENT, 0x00,
+			uint8_t(Register::POWER_MANAGEMENT), 0x00,
 		};
 
 		// Size of write buffers
@@ -52,11 +52,11 @@ namespace devices::vl53l0x_internals
 		// Write buffers
 		static constexpr uint8_t BUFFER[] PROGMEM =
 		{
-			regs::REG_SYSRANGE_START, 0x01,
+			uint8_t(Register::SYSRANGE_START), 0x01,
 			0xFF, 0x01,
-			regs::REG_SYSRANGE_START, 0x00,
-			0x91, 0x00,
-			regs::REG_SYSRANGE_START, 0x01,
+			uint8_t(Register::SYSRANGE_START), 0x00,
+			uint8_t(Register::SYSTEM_STOP_VARIABLE), 0x00,
+			uint8_t(Register::SYSRANGE_START), 0x01,
 			0xFF, 0x00,
 		};
 
@@ -71,9 +71,9 @@ namespace devices::vl53l0x_internals
 		// Write buffers
 		static constexpr uint8_t BUFFER1[] PROGMEM =
 		{
-			regs::REG_POWER_MANAGEMENT, 0x01,
+			uint8_t(Register::POWER_MANAGEMENT), 0x01,
 			0xFF, 0x01,
-			regs::REG_SYSRANGE_START, 0x00,
+			uint8_t(Register::SYSRANGE_START), 0x00,
 			0xFF, 0x06,
 		};
 
@@ -81,7 +81,7 @@ namespace devices::vl53l0x_internals
 		{
 			0xFF, 0x07,
 			0x81, 0x01,
-			regs::REG_POWER_MANAGEMENT, 0x01,
+			uint8_t(Register::POWER_MANAGEMENT), 0x01,
 			0x94, 0x6B,
 		};
 
@@ -94,9 +94,9 @@ namespace devices::vl53l0x_internals
 		static constexpr uint8_t BUFFER4[] PROGMEM =
 		{
 			0xFF, 0x01,
-			regs::REG_SYSRANGE_START, 0x01,
+			uint8_t(Register::SYSRANGE_START), 0x01,
 			0xFF, 0x00,
-			regs::REG_POWER_MANAGEMENT, 0x00,
+			uint8_t(Register::POWER_MANAGEMENT), 0x00,
 		};
 
 		// Size of write buffers
@@ -115,7 +115,7 @@ namespace devices::vl53l0x_internals
 		{
 			// load tuning settings (hard-coded defaults)
 			0xFF, 0x01,
-			regs::REG_SYSRANGE_START, 0x00,
+			uint8_t(Register::SYSRANGE_START), 0x00,
 			0xFF, 0x00,
 			0x09, 0x00,
 			0x10, 0x00,
@@ -187,13 +187,13 @@ namespace devices::vl53l0x_internals
 			0xFF, 0x01,
 			0x0D, 0x01,
 			0xFF, 0x00,
-			regs::REG_POWER_MANAGEMENT, 0x01,
+			uint8_t(Register::POWER_MANAGEMENT), 0x01,
 			0x01, 0xF8,
 			0xFF, 0x01,
 			0x8E, 0x01,
-			regs::REG_SYSRANGE_START, 0x01,
+			uint8_t(Register::SYSRANGE_START), 0x01,
 			0xFF, 0x00,
-			regs::REG_POWER_MANAGEMENT, 0x00
+			uint8_t(Register::POWER_MANAGEMENT), 0x00
 		};
 		// Size of write buffer
 		static constexpr uint8_t BUFFER_SIZE = sizeof(BUFFER);
@@ -207,10 +207,10 @@ namespace devices::vl53l0x_internals
 		static constexpr uint8_t BUFFER[] PROGMEM =
 		{
 			0xFF, 0x01,
-			regs::REG_DYNAMIC_SPAD_REF_EN_START_OFFSET, 0x00,
-			regs::REG_DYNAMIC_SPAD_NUM_REQUESTED_REF_SPAD, 0x2C,
+			uint8_t(Register::DYNAMIC_SPAD_REF_EN_START_OFFSET), 0x00,
+			uint8_t(Register::DYNAMIC_SPAD_NUM_REQUESTED_REF_SPAD), 0x2C,
 			0xFF, 0x00,
-			regs::REG_GLOBAL_CONFIG_REF_EN_START_SELECT, 0xB4
+			uint8_t(Register::GLOBAL_CONFIG_REF_EN_START_SELECT), 0xB4
 		};
 
 		// Size of write buffer

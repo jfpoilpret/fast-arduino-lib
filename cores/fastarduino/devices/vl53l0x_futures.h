@@ -38,31 +38,7 @@ namespace devices::vl53l0x
 namespace devices::vl53l0x_futures
 {
 	// Shortened aliases for various namespaces
-	namespace regs = vl53l0x_registers;
-
-	// static utilities to support fixed point 9/7 bits used by VL53L0X chip
-	class FixPoint9_7
-	{
-	public:
-		static constexpr bool is_valid(float value)
-		{
-			return ((value >= 0.0) && (value < float(1 << INTEGRAL_BITS)));
-		}
-
-		static constexpr uint16_t convert(float value)
-		{
-			return is_valid(value) ? uint16_t(value * (1 << DECIMAL_BITS)) : 0U;
-		}
-
-		static constexpr float convert(uint16_t value)
-		{
-			return value / float(1 << DECIMAL_BITS);
-		}
-
-	private:
-		static constexpr uint16_t INTEGRAL_BITS = 9;
-		static constexpr uint16_t DECIMAL_BITS = 7;
-	};
+	using Register = devices::vl53l0x::Register;
 
 	// This fake class gathers all futures specific to VL53L0X device
 	template<typename MANAGER> struct Futures
@@ -73,10 +49,10 @@ namespace devices::vl53l0x_futures
 		using DEVICE = vl53l0x::VL53L0X<MANAGER>;
 		using ABSTRACT_FUTURE = typename MANAGER::ABSTRACT_FUTURE;
 
-		template<uint8_t REGISTER, typename T = uint8_t>
-		using TReadRegisterFuture = i2c::TReadRegisterFuture<MANAGER, REGISTER, T, true>;
-		template<uint8_t REGISTER, typename T = uint8_t>
-		using TWriteRegisterFuture = i2c::TWriteRegisterFuture<MANAGER, REGISTER, T, true>;
+		template<Register REGISTER, typename T = uint8_t>
+		using TReadRegisterFuture = i2c::TReadRegisterFuture<MANAGER, uint8_t(REGISTER), T, true>;
+		template<Register REGISTER, typename T = uint8_t>
+		using TWriteRegisterFuture = i2c::TWriteRegisterFuture<MANAGER, uint8_t(REGISTER), T, true>;
 
 		using I2CFuturesGroup = i2c::I2CFuturesGroup<MANAGER>;
 		using I2CSameFutureGroup = i2c::I2CSameFutureGroup<MANAGER>;
@@ -107,10 +83,10 @@ namespace devices::vl53l0x_futures
 			}
 
 		private:
-			TReadRegisterFuture<regs::REG_SYSTEM_INTERRUPT_CONFIG_GPIO, vl53l0x::GPIOFunction> read_config_{};
-			TReadRegisterFuture<regs::REG_GPIO_HV_MUX_ACTIVE_HIGH> read_GPIO_active_high_{};
-			TReadRegisterFuture<regs::REG_SYSTEM_THRESH_LOW, uint16_t> read_low_threshold_{};
-			TReadRegisterFuture<regs::REG_SYSTEM_THRESH_HIGH, uint16_t> read_high_threshold_{};
+			TReadRegisterFuture<Register::SYSTEM_INTERRUPT_CONFIG_GPIO, vl53l0x::GPIOFunction> read_config_{};
+			TReadRegisterFuture<Register::GPIO_HV_MUX_ACTIVE_HIGH> read_GPIO_active_high_{};
+			TReadRegisterFuture<Register::SYSTEM_THRESH_LOW, uint16_t> read_low_threshold_{};
+			TReadRegisterFuture<Register::SYSTEM_THRESH_HIGH, uint16_t> read_high_threshold_{};
 
 			static constexpr uint8_t NUM_FUTURES = 4;
 			ABSTRACT_FUTURE* futures_[NUM_FUTURES] =
@@ -140,10 +116,10 @@ namespace devices::vl53l0x_futures
 			}
 
 		private:
-			TWriteRegisterFuture<regs::REG_SYSTEM_INTERRUPT_CONFIG_GPIO, vl53l0x::GPIOFunction> write_config_;
-			TWriteRegisterFuture<regs::REG_GPIO_HV_MUX_ACTIVE_HIGH> write_GPIO_active_high_;
-			TWriteRegisterFuture<regs::REG_SYSTEM_THRESH_LOW, uint16_t> write_low_threshold_;
-			TWriteRegisterFuture<regs::REG_SYSTEM_THRESH_HIGH, uint16_t> write_high_threshold_;
+			TWriteRegisterFuture<Register::SYSTEM_INTERRUPT_CONFIG_GPIO, vl53l0x::GPIOFunction> write_config_;
+			TWriteRegisterFuture<Register::GPIO_HV_MUX_ACTIVE_HIGH> write_GPIO_active_high_;
+			TWriteRegisterFuture<Register::SYSTEM_THRESH_LOW, uint16_t> write_low_threshold_;
+			TWriteRegisterFuture<Register::SYSTEM_THRESH_HIGH, uint16_t> write_high_threshold_;
 
 			static constexpr uint8_t NUM_FUTURES = 4;
 			ABSTRACT_FUTURE* futures_[NUM_FUTURES] =
@@ -158,9 +134,9 @@ namespace devices::vl53l0x_futures
 			friend Futures;
 		};
 
-		class ClearInterruptFuture : public TWriteRegisterFuture<regs::REG_SYSTEM_INTERRUPT_CLEAR>
+		class ClearInterruptFuture : public TWriteRegisterFuture<Register::SYSTEM_INTERRUPT_CLEAR>
 		{
-			using PARENT = TWriteRegisterFuture<regs::REG_SYSTEM_INTERRUPT_CLEAR>;
+			using PARENT = TWriteRegisterFuture<Register::SYSTEM_INTERRUPT_CLEAR>;
 		public:
 			ClearInterruptFuture(uint8_t clear_mask) : PARENT{clear_mask} {}
 		};

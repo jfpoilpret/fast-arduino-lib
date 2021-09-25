@@ -37,6 +37,30 @@
 //TODO DOCS for each type
 namespace devices::vl53l0x
 {
+	// static utilities to support fixed point 9/7 bits used by VL53L0X chip
+	class FixPoint9_7
+	{
+	public:
+		static constexpr bool is_valid(float value)
+		{
+			return ((value >= 0.0) && (value < float(1 << INTEGRAL_BITS)));
+		}
+
+		static constexpr uint16_t convert(float value)
+		{
+			return is_valid(value) ? uint16_t(value * (1 << DECIMAL_BITS)) : 0U;
+		}
+
+		static constexpr float convert(uint16_t value)
+		{
+			return value / float(1 << DECIMAL_BITS);
+		}
+
+	private:
+		static constexpr uint16_t INTEGRAL_BITS = 9;
+		static constexpr uint16_t DECIMAL_BITS = 7;
+	};
+
 	/// @cond notdocumented
 	class TimeoutUtilities
 	{
@@ -234,8 +258,8 @@ namespace devices::vl53l0x
 
 	enum class VcselPeriodType : uint8_t
 	{
-		PRE_RANGE = vl53l0x_registers::REG_PRE_RANGE_CONFIG_VCSEL_PERIOD,
-		FINAL_RANGE = vl53l0x_registers::REG_FINAL_RANGE_CONFIG_VCSEL_PERIOD
+		PRE_RANGE = uint8_t(vl53l0x::Register::PRE_RANGE_CONFIG_VCSEL_PERIOD),
+		FINAL_RANGE = uint8_t(vl53l0x::Register::FINAL_RANGE_CONFIG_VCSEL_PERIOD)
 	};
 
 	class SequenceSteps
