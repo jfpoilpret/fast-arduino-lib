@@ -227,16 +227,5 @@ int main()
 		CHECK_OK(tof.await_continuous_range(range));
 		display_status(out, tof);
 		out << F("Range = ") << dec << range << F("mm") << endl;
-		// if (tof.await_interrupt())
-		// {
-		// 	display_status(out, tof);
-		// 	// Read continuous ranges now
-		// 	uint16_t range = 0;
-		// 	if (tof.get_direct_range(range))
-		// 	{
-		// 		out << F("Range = ") << dec << range << F("mm") << endl;
-		// 	}
-		// 	tof.clear_interrupt();
-		// }
 	}
 }
