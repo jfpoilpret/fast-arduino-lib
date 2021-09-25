@@ -201,19 +201,27 @@ int main()
 	for (uint8_t i = 0; i < 60; ++i)
 	{
 		time::delay_ms(100U);
-		if (tof.await_interrupt())
-		{
-			display_status(out, tof);
-			DEBUG(out);
-			// Read continuous ranges now
-			uint16_t range = 0;
-			if (tof.get_direct_range(range))
-			{
-				out << F("Range = ") << dec << range << F("mm") << endl;
-			}
-			tof.clear_interrupt();
-			// DEBUG(out);
-		}
+		// Read continuous ranges now
+		uint16_t range = 0;
+		ok = tof.await_continuous_range(range);
+		display_memory(out);
+		out << F("tof.await_continuous_range() = ") << ok << endl;
+		display_status(out, tof);
+		if (ok)
+			out << F("Range = ") << dec << range << F("mm") << endl;
+		// if (tof.await_interrupt())
+		// {
+		// 	display_status(out, tof);
+		// 	DEBUG(out);
+		// 	// Read continuous ranges now
+		// 	uint16_t range = 0;
+		// 	if (tof.get_direct_range(range))
+		// 	{
+		// 		out << F("Range = ") << dec << range << F("mm") << endl;
+		// 	}
+		// 	tof.clear_interrupt();
+		// 	// DEBUG(out);
+		// }
 	}
 
 	{
