@@ -365,14 +365,6 @@ namespace devices::vl53l0x
 	{
 	public:
 		SequenceStepsTimeout() = default;
-		//FIXME should be private and VL53L0X class declared friend
-		SequenceStepsTimeout(uint8_t pre_range_vcsel_period_pclks, uint8_t final_range_vcsel_period_pclks,
-			uint8_t msrc_dss_tcc_mclks, uint16_t pre_range_mclks, uint16_t final_range_mclks)
-			:	pre_range_vcsel_period_pclks_{pre_range_vcsel_period_pclks},
-				final_range_vcsel_period_pclks_{final_range_vcsel_period_pclks},
-				msrc_dss_tcc_mclks_{msrc_dss_tcc_mclks},
-				pre_range_mclks_{pre_range_mclks},
-				final_range_mclks_{final_range_mclks} {}
 
 		uint8_t pre_range_vcsel_period_pclks() const
 		{
@@ -414,12 +406,22 @@ namespace devices::vl53l0x
 		}
 
 	private:
+		SequenceStepsTimeout(uint8_t pre_range_vcsel_period_pclks, uint8_t final_range_vcsel_period_pclks,
+			uint8_t msrc_dss_tcc_mclks, uint16_t pre_range_mclks, uint16_t final_range_mclks)
+			:	pre_range_vcsel_period_pclks_{pre_range_vcsel_period_pclks},
+				final_range_vcsel_period_pclks_{final_range_vcsel_period_pclks},
+				msrc_dss_tcc_mclks_{msrc_dss_tcc_mclks},
+				pre_range_mclks_{pre_range_mclks},
+				final_range_mclks_{final_range_mclks} {}
+
 		uint8_t pre_range_vcsel_period_pclks_ = 0;
 		uint8_t final_range_vcsel_period_pclks_ = 0;
 
 		uint8_t msrc_dss_tcc_mclks_ = 0;
 		uint16_t pre_range_mclks_ = 0;
 		uint16_t final_range_mclks_ = 0;
+
+		template<typename MANAGER> friend class VL53L0X;
 	};
 
 	streams::ostream& operator<<(streams::ostream&, const SequenceStepsTimeout&);
