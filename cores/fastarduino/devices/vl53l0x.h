@@ -52,11 +52,12 @@ namespace devices
 }
 
 //TODO - implement low-level API step by step
+//		 - read/write any known register? (very low-level API)
 //       - calibration?
 //       - ranging
 //       - set_address
 //
-//TODO - implement high level API
+//TODO - implement higher level API (including ranging profiles)
 //       - begin()
 //       - standby()
 //       - ranging()
@@ -70,7 +71,6 @@ namespace devices::vl53l0x
 	/// @cond notdocumented
 	namespace internals = vl53l0x_internals;
 	namespace regs = vl53l0x_registers;
-	namespace actions = i2c::actions;
 	/// @endcond
 
 	/**
@@ -517,6 +517,13 @@ namespace devices::vl53l0x
 			return this->template sync_write<WRITE_SYSRANGE>(sys_range_start);
 		}
 
+		bool await_continuous_range(uint16_t& range_mm, uint16_t loops = MAX_LOOP)
+		{
+			if (!await_interrupt(loops)) return false;
+			if (!get_direct_range(range_mm)) return false;
+			return clear_interrupt();
+		}
+
 		//TODO API to read range async directly, to read range with preliminary wait interrupt (sync + async)
 		// This API shall be used only after InterruptStatus != 0, Interrupt Status should be clear immediately after it
 		using GetDirectRangeFuture = typename FUTURES::TReadRegisterFuture<regs::REG_RESULT_RANGE_STATUS + 10, uint16_t>;
@@ -533,6 +540,23 @@ namespace devices::vl53l0x
 		{
 			return await_same_future_group(
 				internals::stop_continuous_ranging::BUFFER, internals::stop_continuous_ranging::BUFFER_SIZE);
+		}
+
+		bool await_single_range(uint16_t& range_mm, uint16_t loops = MAX_LOOP)
+		{
+			using READ_SYSRANGE = typename FUTURES::TReadRegisterFuture<regs::REG_SYSRANGE_START>;
+			using WRITE_SYSRANGE = typename FUTURES::TWriteRegisterFuture<regs::REG_SYSRANGE_START>;
+			if (!use_stop_variable()) return false;
+			if (!this->template sync_write<WRITE_SYSRANGE>(uint8_t(0x01))) return false;
+			// Read SYSRANGE until != 0x01
+			while (loops--)
+			{
+				uint8_t sys_range = 0;
+				if (!this->template sync_read<READ_SYSRANGE>(sys_range)) return false;
+				if (!(sys_range & 0x01))
+					return await_continuous_range(range_mm, loops);
+			}
+			return false;
 		}
 
 		bool init_data_first()
