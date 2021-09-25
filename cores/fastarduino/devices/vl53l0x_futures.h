@@ -25,7 +25,6 @@
 #include "../i2c_handler.h"
 #include "../i2c_device.h"
 #include "../i2c_device_utilities.h"
-#include "vl53l0x_internals.h"
 #include "vl53l0x_registers.h"
 #include "vl53l0x_types.h"
 
@@ -35,13 +34,11 @@ namespace devices::vl53l0x
 	template<typename MANAGER> class VL53L0X;
 }
 
-//TODO review all futures to add args checks when needed
+//TODO possibly remove this header (almost empty now) and add it directly to main vl53l0x header?
 namespace devices::vl53l0x_futures
 {
 	// Shortened aliases for various namespaces
-	namespace internals = vl53l0x_internals;
 	namespace regs = vl53l0x_registers;
-	namespace actions = i2c::actions;
 
 	// static utilities to support fixed point 9/7 bits used by VL53L0X chip
 	class FixPoint9_7
@@ -75,32 +72,14 @@ namespace devices::vl53l0x_futures
 
 		using DEVICE = vl53l0x::VL53L0X<MANAGER>;
 		using ABSTRACT_FUTURE = typename MANAGER::ABSTRACT_FUTURE;
-		template<typename OUT, typename IN> using FUTURE = typename MANAGER::template FUTURE<OUT, IN>;
-
-		using FUTURE_OUTPUT_LISTENER = future::FutureOutputListener<ABSTRACT_FUTURE>;
-		using FUTURE_STATUS_LISTENER = future::FutureStatusListener<ABSTRACT_FUTURE>;
-
-		template<typename T> 
-		using ReadRegisterFuture = i2c::ReadRegisterFuture<MANAGER, T, true>;
-		template<typename T>
-		using WriteRegisterFuture = i2c::WriteRegisterFuture<MANAGER, T, true>;
 
 		template<uint8_t REGISTER, typename T = uint8_t>
 		using TReadRegisterFuture = i2c::TReadRegisterFuture<MANAGER, REGISTER, T, true>;
 		template<uint8_t REGISTER, typename T = uint8_t>
 		using TWriteRegisterFuture = i2c::TWriteRegisterFuture<MANAGER, REGISTER, T, true>;
 
-		using AbstractI2CFuturesGroup = i2c::AbstractI2CFuturesGroup<MANAGER>;
 		using I2CFuturesGroup = i2c::I2CFuturesGroup<MANAGER>;
 		using I2CSameFutureGroup = i2c::I2CSameFutureGroup<MANAGER>;
-		using ComplexI2CFuturesGroup = i2c::ComplexI2CFuturesGroup<MANAGER>;
-
-		template<uint8_t SIZE> using FUTURE_WRITE = i2c::FUTURE_WRITE<MANAGER, SIZE>;
-		template<uint8_t SIZE> using FUTURE_READ = i2c::FUTURE_READ<MANAGER, SIZE>;
-		using FUTURE_READ1 = i2c::FUTURE_READ1<MANAGER>;
-
-		using GetSequenceStepsFuture = TReadRegisterFuture<regs::REG_SYSTEM_SEQUENCE_CONFIG, vl53l0x::SequenceSteps>;
-		using SetSequenceStepsFuture = TWriteRegisterFuture<regs::REG_SYSTEM_SEQUENCE_CONFIG, vl53l0x::SequenceSteps>;
 
 		class GetGPIOSettingsFuture : public I2CFuturesGroup
 		{

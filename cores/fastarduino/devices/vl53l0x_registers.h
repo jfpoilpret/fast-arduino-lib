@@ -21,7 +21,7 @@
 
 namespace devices::vl53l0x_registers
 {
-	//TODO review list to put aside unused registers
+	//TODO shouldn't that better be an enum class instead?
 	//TODO possibly review names to make them clearer
 	static constexpr const uint8_t REG_SYSRANGE_START                              = 0x00;
 	static constexpr const uint8_t REG_SYSTEM_THRESH_HIGH                          = 0x0C;
