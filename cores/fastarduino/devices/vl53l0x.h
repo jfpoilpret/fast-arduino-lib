@@ -456,6 +456,7 @@ namespace devices::vl53l0x
 			// Calculate budget
 			uint16_t budget = calculate_final_range_timeout_mclks(
 				steps, timeouts, budget_us);
+			if (budget == 0) return false;
 			return this->template sync_write<WRITE_BUDGET>(budget);
 		}
 
