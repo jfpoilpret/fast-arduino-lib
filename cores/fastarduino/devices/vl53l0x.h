@@ -131,8 +131,12 @@ namespace devices::vl53l0x
 			return this->async_write(future);
 		}
 
-		//TODO Reading sensor range
-
+		// This API shall be used only after InterruptStatus != 0, Interrupt Status should be clear immediately after it
+		using GetDirectRangeFuture = typename FUTURES::TReadRegisterFuture<Register::RESULT_RANGE_MILLIMETER, uint16_t>;
+		int get_direct_range(PROXY<GetDirectRangeFuture> future)
+		{
+			return this->async_read(future);
+		}
 
 		// Synchronous API
 		//=================
@@ -523,13 +527,7 @@ namespace devices::vl53l0x
 			return clear_interrupt();
 		}
 
-		//TODO API to read range async directly, to read range with preliminary wait interrupt (sync + async)
 		// This API shall be used only after InterruptStatus != 0, Interrupt Status should be clear immediately after it
-		using GetDirectRangeFuture = typename FUTURES::TReadRegisterFuture<Register::RESULT_RANGE_MILLIMETER, uint16_t>;
-		int get_direct_range(PROXY<GetDirectRangeFuture> future)
-		{
-			return this->async_read(future);
-		}
 		bool get_direct_range(uint16_t& range_mm)
 		{
 			return this->template sync_read<GetDirectRangeFuture>(range_mm);
