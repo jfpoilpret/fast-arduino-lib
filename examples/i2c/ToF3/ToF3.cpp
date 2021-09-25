@@ -223,12 +223,6 @@ int main()
 
 	display_status(out, tof);
 
-	// Perform reference calibration
-	//TODO is that really useful?
-	// CHECK_OK(tof.perform_ref_calibration());
-
-	display_status(out, tof);
-
 	// Feedback on all settings
 	out << F("Final settings") << endl;
 	out << F("Steps = ") << steps << endl;
