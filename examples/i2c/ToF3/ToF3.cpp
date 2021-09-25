@@ -224,9 +224,25 @@ int main()
 	display_status(out, tof);
 
 	// Perform reference calibration
-	CHECK_OK(tof.perform_ref_calibration());
+	//TODO is that really useful?
+	// CHECK_OK(tof.perform_ref_calibration());
 
 	display_status(out, tof);
+
+	// Feedback on all settings
+	out << F("Final settings") << endl;
+	out << F("Steps = ") << steps << endl;
+	CHECK_OK(tof.get_vcsel_pulse_period<VcselPeriodType::PRE_RANGE>(current_period));
+	out << F("VCSEL PRE-RANGE pulse period = ") << current_period << endl;
+	CHECK_OK(tof.get_vcsel_pulse_period<VcselPeriodType::FINAL_RANGE>(current_period));
+	out << F("VCSEL FINAL-RANGE pulse period = ") << current_period << endl;
+	CHECK_OK(tof.get_signal_rate_limit(rate));
+	out << F("Signal rate limit = ") << rate << endl;
+	CHECK_OK(tof.get_measurement_timing_budget(budget));
+	out << F("Measurement timing budget = ") << budget << F("us") << endl;
+	SequenceStepsTimeout timeouts;
+	CHECK_OK(tof.get_sequence_steps_timeout(timeouts));
+	out << F("Timeouts for each step = ") << timeouts << endl;
 
 	// Start continuous ranging
 	CHECK_OK(tof.start_continuous_ranging(1000U));
