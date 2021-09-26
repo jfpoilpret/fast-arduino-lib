@@ -262,14 +262,20 @@ namespace devices::vl53l0x
 		FINAL_RANGE = uint8_t(vl53l0x::Register::FINAL_RANGE_CONFIG_VCSEL_PERIOD)
 	};
 
+	//TODO Document each step: what it does, its impact on measurements and timing
 	class SequenceSteps
 	{
 	private:
 		static constexpr uint8_t FORCED_BITS = bits::BV8(5);
+		// TCC Target Center Check
 		static constexpr uint8_t TCC = bits::BV8(4);
+		// DSS Dynamic Spad Selection
 		static constexpr uint8_t DSS = bits::BV8(3);
+		// MSRC Minimum Signal Rate Check
 		static constexpr uint8_t MSRC = bits::BV8(2);
+		// PRE_RANGE Pre-Range Check
 		static constexpr uint8_t PRE_RANGE = bits::BV8(6);
+		// FINAL_RANGE Final-Range Check
 		static constexpr uint8_t FINAL_RANGE = bits::BV8(7);
 
 	public:
