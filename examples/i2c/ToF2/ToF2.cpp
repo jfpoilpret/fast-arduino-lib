@@ -183,6 +183,12 @@ int main()
 	display_status(out, tof);
 
 	{
+		uint32_t budget = 0;
+		ok = tof.get_measurement_timing_budget(budget);
+		out << F("Measurement timing budget = ") << budget << F("us") << endl;
+	}
+
+	{
 		// Start continuous ranging
 		ok = tof.start_continuous_ranging(1000U);
 		display_memory(out);
