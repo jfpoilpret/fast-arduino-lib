@@ -457,6 +457,16 @@ namespace devices::vl53l0x
 	};
 
 	streams::ostream& operator<<(streams::ostream&, SPADInfo);
+
+	enum class Profile : uint8_t
+	{
+		STANDARD = 0x00,
+		LONG_RANGE = 0x01,
+		STANDARD_ACCURATE = 0x02,
+		LONG_RANGE_ACCURATE = 0x03,
+		STANDARD_FAST = 0x04,
+		LONG_RANGE_FAST = 0x05,
+	};
 }
 
 #endif /* VL53L0X_TYPES_H */

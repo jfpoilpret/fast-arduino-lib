@@ -92,6 +92,34 @@ namespace devices::vl53l0x
 		 */
 		explicit VL53L0X(MANAGER& manager) : PARENT{manager, DEFAULT_DEVICE_ADDRESS, i2c::I2C_FAST, false} {}
 
+		// High-level API
+		bool begin(Profile profile)
+		{
+			if (!init_data_first()) return false;
+			uint8_t prof = uint8_t(profile);
+			if (!init_static_second(GPIOSettings::sample_ready(), SequenceSteps::create().pre_range().final_range()))
+				return false;
+			if (!perform_ref_calibration()) return false;
+			if (prof & 0x01)
+			{
+				// long range
+				if (!set_vcsel_pulse_period<VcselPeriodType::PRE_RANGE>(18)) return false;
+				if (!set_vcsel_pulse_period<VcselPeriodType::FINAL_RANGE>(14)) return false;
+				if (!set_signal_rate_limit(0.1)) return false;
+			}
+			if (prof & 0x02)
+			{
+				// accurate
+				if (!set_measurement_timing_budget(200000)) return false;
+			}
+			else if (prof & 0x04)
+			{
+				// fast
+				if (!set_measurement_timing_budget(20000)) return false;
+			}
+			return true;
+		}
+		
 		//TODO Review all API to include arguments check whenever needed!
 
 		// Asynchronous API
