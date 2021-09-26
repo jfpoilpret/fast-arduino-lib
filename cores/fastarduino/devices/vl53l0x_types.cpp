@@ -174,13 +174,13 @@ namespace devices::vl53l0x
 					<< F(", final_range_mclks(no pre-range)=")
 					<< timeouts.final_range_mclks(false) << ')' << streams::flush
 					<< F(", msrc_dss_tcc_us()=")
-					<< timeouts.msrc_dss_tcc_us() << 'us,' << streams::flush
+					<< timeouts.msrc_dss_tcc_us() << F("us,") << streams::flush
 					<< F(", pre_range_us()=")
-					<< timeouts.pre_range_us() << 'us,' << streams::flush
+					<< timeouts.pre_range_us() << F("us,") << streams::flush
 					<< F(", final_range_us(with pre-range)=")
-					<< timeouts.final_range_us(true) << 'us,' << streams::flush
+					<< timeouts.final_range_us(true) << F("us,") << streams::flush
 					<< F(", final_range_us(no pre-range)=")
-					<< timeouts.final_range_us(false) << 'us)' << streams::flush;
+					<< timeouts.final_range_us(false) << F("us)") << streams::flush;
 	}
 }
 
