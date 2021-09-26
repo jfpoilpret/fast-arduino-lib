@@ -374,11 +374,11 @@ namespace devices::vl53l0x
 
 		uint8_t pre_range_vcsel_period_pclks() const
 		{
-			return (pre_range_vcsel_period_pclks_ + 1) << 1;
+			return pre_range_vcsel_period_pclks_;
 		}
 		uint8_t final_range_vcsel_period_pclks() const
 		{
-			return (final_range_vcsel_period_pclks_ + 1) << 1;
+			return final_range_vcsel_period_pclks_;
 		}
 		uint16_t msrc_dss_tcc_mclks() const
 		{
