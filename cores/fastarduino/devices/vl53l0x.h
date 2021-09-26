@@ -52,9 +52,6 @@ namespace devices
 }
 
 //TODO - implement low-level API step by step
-//		 - read/write any known register? (very low-level API)
-//       - calibration?
-//       - ranging
 //       - set_address
 //
 //TODO - implement higher level API (including ranging profiles)
@@ -388,8 +385,6 @@ namespace devices::vl53l0x
 				typename FUTURES::TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, uint16_t>;
 			return this->template sync_write<SetSignalRateLimitFuture>(FixPoint9_7::convert(signal_rate));
 		}
-
-		//TODO additional config
 
 		bool get_reference_SPADs(SPADReference& spad_ref)
 		{
