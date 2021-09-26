@@ -256,6 +256,14 @@ int main()
 	}
 
 	{
+		uint32_t budget_us = 0;
+		ok = tof.get_measurement_timing_budget(budget_us);
+		out << F("tof.get_measurement_timing_budget() = ") << ok << F(", budget_us = ") << dec << budget_us << endl;
+		display_memory(out);
+		DEBUG(out);
+	}
+
+	{
 		GPIOSettings settings{};
 		ok = tof.get_GPIO_settings(settings);
 		display_memory(out);

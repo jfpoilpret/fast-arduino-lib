@@ -63,13 +63,14 @@ using TOF = VL53L0X<MANAGER>;
 
 #define CHECK_OK(STATEMENT) if (! STATEMENT) out << F(#STATEMENT) << F(" ERROR!") << endl
 
-static void display_status(streams::ostream& out, TOF& tof)
+static DeviceStatus display_status(streams::ostream& out, TOF& tof)
 {
 	DeviceStatus status;
 	bool ok = tof.get_range_status(status);
 	out << F("tof.get_range_status(status) = ") << ok
 		<< F(", error = ") << dec << status.error()
 		<< F(", data_ready = ") << status.data_ready() << endl;
+	return status;
 }
 
 static bool yes_no(streams::ostream& out, streams::istream& in, const flash::FlashStorage* label)
@@ -247,7 +248,13 @@ int main()
 		// Read continuous ranges now
 		uint16_t range = 0;
 		if (tof.await_continuous_range(range))
-			out << F("Range = ") << dec << range << F("mm") << endl;
-		display_status(out, tof);
+		{
+			DeviceStatus status;
+			bool ok = tof.get_range_status(status);
+			if (ok && status.error() == DeviceError::RANGE_COMPLETE)
+				out << F("Range = ") << dec << range << F("mm") << endl;
+			else
+				out << '.' << flush;
+		}
 	}
 }
