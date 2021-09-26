@@ -99,6 +99,18 @@ namespace devices::vl53l0x
 
 		// Asynchronous API
 		//==================
+		// Low-level API: use only if you know what you are doing!
+		template<Register REGISTER, typename T = uint8_t>
+		int get_register(PROXY<typename FUTURES::TReadRegisterFuture<REGISTER, T>> future)
+		{
+			return this->async_read(future);
+		}
+		template<Register REGISTER, typename T = uint8_t>
+		int set_register(PROXY<typename FUTURES::TWriteRegisterFuture<REGISTER, T>> future)
+		{
+			return this->async_write(future);
+		}
+
 		using GetRangeStatusFuture = 
 			typename FUTURES::TReadRegisterFuture<Register::RESULT_RANGE_STATUS, DeviceStatus>;
 		int get_range_status(PROXY<GetRangeStatusFuture> future)
@@ -140,6 +152,20 @@ namespace devices::vl53l0x
 
 		// Synchronous API
 		//=================
+		// Low-level API: use only if you know what you are doing!
+		template<Register REGISTER, typename T = uint8_t>
+		bool get_register(T& value)
+		{
+			using GetRegisterFuture = typename FUTURES::TReadRegisterFuture<REGISTER, T>;
+			return this->template sync_read<GetRegisterFuture>(value);
+		}
+		template<Register REGISTER, typename T = uint8_t>
+		bool set_register(T value)
+		{
+			using SetRegisterFuture = typename FUTURES::TWriteRegisterFuture<REGISTER, T>;
+			return this->template sync_write<SetRegisterFuture>(value);
+		}
+
 		bool set_address(uint8_t device_address)
 		{
 			//TODO
@@ -363,6 +389,8 @@ namespace devices::vl53l0x
 			return this->template sync_write<SetSignalRateLimitFuture>(FixPoint9_7::convert(signal_rate));
 		}
 
+		//TODO additional config
+
 		bool get_reference_SPADs(SPADReference& spad_ref)
 		{
 			using GetReferenceSPADsFuture = 
@@ -445,7 +473,7 @@ namespace devices::vl53l0x
 			SequenceStepsTimeout timeouts{};
 			if (!get_sequence_steps_timeout(timeouts)) return false;
 			// Calculate timing budget
-			budget_us = calculate_measurement_timing_budget_us(steps, timeouts);
+			budget_us = calculate_measurement_timing_budget_us(true, steps, timeouts);
 			return true;
 		}
 
@@ -458,8 +486,7 @@ namespace devices::vl53l0x
 			SequenceStepsTimeout timeouts;
 			if (!get_sequence_steps_timeout(timeouts)) return false;
 			// Calculate budget
-			uint16_t budget = calculate_final_range_timeout_mclks(
-				steps, timeouts, budget_us);
+			uint16_t budget = calculate_final_range_timeout_mclks(steps, timeouts, budget_us);
 			if (budget == 0) return false;
 			return this->template sync_write<WRITE_BUDGET>(budget);
 		}
@@ -804,7 +831,8 @@ namespace devices::vl53l0x
 		}
 
 		static constexpr const uint32_t MIN_TIMING_BUDGET    = 20000UL;
-		static constexpr const uint16_t START_OVERHEAD       = 1910U;
+		static constexpr const uint16_t START_OVERHEAD_SET   = 1320U;
+		static constexpr const uint16_t START_OVERHEAD_GET   = 1910U;
 		static constexpr const uint16_t END_OVERHEAD         = 960U;
 		static constexpr const uint16_t MSRC_OVERHEAD        = 660U;
 		static constexpr const uint16_t TCC_OVERHEAD         = 590U;
@@ -813,10 +841,10 @@ namespace devices::vl53l0x
 		static constexpr const uint16_t FINAL_RANGE_OVERHEAD = 550U;
 
 		static uint32_t calculate_measurement_timing_budget_us(
-			const vl53l0x::SequenceSteps steps, const vl53l0x::SequenceStepsTimeout& timeouts)
+			bool get, const vl53l0x::SequenceSteps steps, const vl53l0x::SequenceStepsTimeout& timeouts)
 		{
 			// start and end overhead times always present
-			uint32_t budget_us = START_OVERHEAD + END_OVERHEAD;
+			uint32_t budget_us = (get ? START_OVERHEAD_GET : START_OVERHEAD_SET) + END_OVERHEAD;
 
 			if (steps.is_tcc())
 				budget_us += timeouts.msrc_dss_tcc_us() + TCC_OVERHEAD;
@@ -845,7 +873,7 @@ namespace devices::vl53l0x
 
 			// Calculate current used budget without final range
 			uint32_t used_budget_us = 
-				calculate_measurement_timing_budget_us(steps.no_final_range(), timeouts);
+				calculate_measurement_timing_budget_us(false, steps.no_final_range(), timeouts);
 
 			// Now include final range and calculate difference
 			used_budget_us += FINAL_RANGE_OVERHEAD;
