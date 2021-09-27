@@ -261,131 +261,12 @@ namespace devices::vl53l0x
 			if (!get_sequence_steps_timeout(timeouts)) return false;
 			if (type == VcselPeriodType::PRE_RANGE)
 			{
-				// 3.1. [PRE_RANGE]
-				using WRITE_PHASE_HIGH = 
-					typename FUTURES::TWriteRegisterFuture<Register::PRE_RANGE_CONFIG_VALID_PHASE_HIGH>;
-				using WRITE_PHASE_LOW = 
-					typename FUTURES::TWriteRegisterFuture<Register::PRE_RANGE_CONFIG_VALID_PHASE_LOW>;
-				using WRITE_VCSEL = 
-					typename FUTURES::TWriteRegisterFuture<Register::PRE_RANGE_CONFIG_VCSEL_PERIOD>;
-				using WRITE_RANGE_TIMEOUT = 
-					typename FUTURES::TWriteRegisterFuture<Register::PRE_RANGE_CONFIG_TIMEOUT_MACROP_HI, uint16_t>;
-				using WRITE_MSRC_TIMEOUT = 
-					typename FUTURES::TWriteRegisterFuture<Register::MSRC_CONFIG_TIMEOUT_MACROP>;
-
-				// 3.1.1. Write PRE_RANGE_CONFIG_VALID_PHASE_HIGH
-				uint8_t phase_high = 0;
-				switch (period)
-				{
-					case 12:
-					phase_high = 0x18;
-					break;
-
-					case 14:
-					phase_high = 0x30;
-					break;
-					
-					case 16:
-					phase_high = 0x40;
-					break;
-					
-					case 18:
-					phase_high = 0x50;
-					break;
-					
-					default:
-					break;
-				}
-				if (!this->template sync_write<WRITE_PHASE_HIGH>(phase_high)) return false;
-				// 3.1.2. Write PRE_RANGE_CONFIG_VALID_PHASE_LOW
-				if (!this->template sync_write<WRITE_PHASE_LOW>(uint8_t(0x08))) return false;
-				// 3.1.3. Write PRE_RANGE_CONFIG_VCSEL_PERIOD
-				if (!this->template sync_write<WRITE_VCSEL>(vcsel_period)) return false;
-				// 3.1.4. Write PRE_RANGE_CONFIG_TIMEOUT_MACROP_HI
-				// Calculate new pre-range timeout
-				uint16_t pre_range_mclks = vl53l0x::TimeoutUtilities::encode_timeout(
-					vl53l0x::TimeoutUtilities::calculate_timeout_mclks(timeouts.pre_range_us(), period));
-				if (!this->template sync_write<WRITE_RANGE_TIMEOUT>(pre_range_mclks)) return false;
-				// 3.1.5. Write MSRC_CONFIG_TIMEOUT_MACROP
-				// Calculate new MSRC timeout
-				uint16_t msrc_mclks = vl53l0x::TimeoutUtilities::calculate_timeout_mclks(
-					timeouts.msrc_dss_tcc_us(), period);
-				msrc_mclks = (msrc_mclks > 256) ? 255 : (msrc_mclks - 1);
-				if (!this->template sync_write<WRITE_MSRC_TIMEOUT>(uint8_t(msrc_mclks))) return false;
+				if (!set_core_vcsel_pulse_period_pre_range(period, vcsel_period, timeouts)) return false;
 			}
 			else
 			{
-				// 3.2. [FINAL_RANGE]
-				using WRITE_PHASE_HIGH = 
-					typename FUTURES::TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_VALID_PHASE_HIGH>;
-				using WRITE_PHASE_LOW = 
-					typename FUTURES::TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_VALID_PHASE_LOW>;
-				using WRITE_VCSEL_WIDTH = 
-					typename FUTURES::TWriteRegisterFuture<Register::GLOBAL_CONFIG_VCSEL_WIDTH>;
-				using WRITE_PHASECAL_TIMEOUT = 
-					typename FUTURES::TWriteRegisterFuture<Register::ALGO_PHASECAL_CONFIG_TIMEOUT>;
-				using WRITE_PHASECAL_LIMIT = 
-					typename FUTURES::TWriteRegisterFuture<Register::ALGO_PHASECAL_LIM>;
-				using WRITE_RANGE_TIMEOUT = 
-					typename FUTURES::TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI, uint16_t>;
-				using WRITE_VCSEL = 
-					typename FUTURES::TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_VCSEL_PERIOD>;
-				// Determine values to write based on provided period
-				uint8_t phase_high = 0;
-				uint8_t vcsel_width = 0;
-				uint8_t phasecal_timeout = 0;
-				uint8_t phasecal_limit = 0;
-				switch (period)
-				{
-					case 8:
-					phase_high = 0x10;
-					vcsel_width = 0x02;
-					phasecal_timeout = 0x0C;
-					phasecal_limit = 0x30;
-					break;
-					
-					case 10:
-					phase_high = 0x28;
-					vcsel_width = 0x03;
-					phasecal_timeout = 0x09;
-					phasecal_limit = 0x20;
-					break;
-					
-					case 12:
-					phase_high = 0x38;
-					vcsel_width = 0x03;
-					phasecal_timeout = 0x08;
-					phasecal_limit = 0x20;
-					break;
-					
-					case 14:
-					phase_high = 0x48;
-					vcsel_width = 0x03;
-					phasecal_timeout = 0x07;
-					phasecal_limit = 0x20;
-					break;
-
-					default:
-					break;
-				}
-				// 3.2.1. Write FINAL_RANGE_CONFIG_VALID_PHASE_HIGH
-				if (!this->template sync_write<WRITE_PHASE_HIGH>(phase_high)) return false;
-				// 3.2.2. Write FINAL_RANGE_CONFIG_VALID_PHASE_LOW
-				if (!this->template sync_write<WRITE_PHASE_LOW>(uint8_t(0x08))) return false;
-				// 3.2.3. Write GLOBAL_CONFIG_VCSEL_WIDTH
-				if (!this->template sync_write<WRITE_VCSEL_WIDTH>(vcsel_width)) return false;
-				// 3.2.4. Write ALGO_PHASECAL_CONFIG_TIMEOUT
-				if (!this->template sync_write<WRITE_PHASECAL_TIMEOUT>(phasecal_timeout)) return false;
-				// 3.2.5. Write ALGO_PHASECAL_LIM
-				if (!this->template sync_write<WRITE_PHASECAL_LIMIT>(phasecal_limit)) return false;
-				// 3.2.6. Write FINAL_RANGE_CONFIG_VCSEL_PERIOD
-				if (!this->template sync_write<WRITE_VCSEL>(vcsel_period)) return false;
-				// 3.2.7. Write FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI
-				// Calculate new final-range timeout
-				uint16_t final_range_mclks = vl53l0x::TimeoutUtilities::encode_timeout(
-					vl53l0x::TimeoutUtilities::calculate_timeout_mclks(
-						timeouts.final_range_us(steps.is_pre_range()), period));
-				if (!this->template sync_write<WRITE_RANGE_TIMEOUT>(final_range_mclks)) return false;
+				if (!set_core_vcsel_pulse_period_final_range(period, vcsel_period, steps.is_pre_range(), timeouts))
+					return false;
 			}
 			// 4. Set measurement timing budget as before
 			if (!set_measurement_timing_budget(timing_budget)) return false;
@@ -780,37 +661,170 @@ namespace devices::vl53l0x
 			return false;
 		}
 
+		bool set_core_vcsel_pulse_period_pre_range(
+			uint8_t period, uint8_t vcsel_period, const SequenceStepsTimeout& timeouts)
+		{
+			// 3.1. [PRE_RANGE]
+			using WRITE_PHASE_HIGH = 
+				typename FUTURES::TWriteRegisterFuture<Register::PRE_RANGE_CONFIG_VALID_PHASE_HIGH>;
+			using WRITE_PHASE_LOW = 
+				typename FUTURES::TWriteRegisterFuture<Register::PRE_RANGE_CONFIG_VALID_PHASE_LOW>;
+			using WRITE_VCSEL = 
+				typename FUTURES::TWriteRegisterFuture<Register::PRE_RANGE_CONFIG_VCSEL_PERIOD>;
+			using WRITE_RANGE_TIMEOUT = 
+				typename FUTURES::TWriteRegisterFuture<Register::PRE_RANGE_CONFIG_TIMEOUT_MACROP_HI, uint16_t>;
+			using WRITE_MSRC_TIMEOUT = 
+				typename FUTURES::TWriteRegisterFuture<Register::MSRC_CONFIG_TIMEOUT_MACROP>;
+
+			// 3.1.1. Write PRE_RANGE_CONFIG_VALID_PHASE_HIGH
+			uint8_t phase_high = 0;
+			switch (period)
+			{
+				case 12:
+				phase_high = 0x18;
+				break;
+
+				case 14:
+				phase_high = 0x30;
+				break;
+				
+				case 16:
+				phase_high = 0x40;
+				break;
+				
+				case 18:
+				phase_high = 0x50;
+				break;
+				
+				default:
+				break;
+			}
+			if (!this->template sync_write<WRITE_PHASE_HIGH>(phase_high)) return false;
+			// 3.1.2. Write PRE_RANGE_CONFIG_VALID_PHASE_LOW
+			if (!this->template sync_write<WRITE_PHASE_LOW>(uint8_t(0x08))) return false;
+			// 3.1.3. Write PRE_RANGE_CONFIG_VCSEL_PERIOD
+			if (!this->template sync_write<WRITE_VCSEL>(vcsel_period)) return false;
+			// 3.1.4. Write PRE_RANGE_CONFIG_TIMEOUT_MACROP_HI
+			// Calculate new pre-range timeout
+			uint16_t pre_range_mclks = vl53l0x::TimeoutUtilities::encode_timeout(
+				vl53l0x::TimeoutUtilities::calculate_timeout_mclks(timeouts.pre_range_us(), period));
+			if (!this->template sync_write<WRITE_RANGE_TIMEOUT>(pre_range_mclks)) return false;
+			// 3.1.5. Write MSRC_CONFIG_TIMEOUT_MACROP
+			// Calculate new MSRC timeout
+			uint16_t msrc_mclks = vl53l0x::TimeoutUtilities::calculate_timeout_mclks(
+				timeouts.msrc_dss_tcc_us(), period);
+			msrc_mclks = (msrc_mclks > 256) ? 255 : (msrc_mclks - 1);
+			return this->template sync_write<WRITE_MSRC_TIMEOUT>(uint8_t(msrc_mclks));
+		}
+
+		bool set_core_vcsel_pulse_period_final_range(
+			uint8_t period, uint8_t vcsel_period, bool has_pre_range, const SequenceStepsTimeout& timeouts)
+		{
+			// 3.2. [FINAL_RANGE]
+			using WRITE_PHASE_HIGH = 
+				typename FUTURES::TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_VALID_PHASE_HIGH>;
+			using WRITE_PHASE_LOW = 
+				typename FUTURES::TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_VALID_PHASE_LOW>;
+			using WRITE_VCSEL_WIDTH = 
+				typename FUTURES::TWriteRegisterFuture<Register::GLOBAL_CONFIG_VCSEL_WIDTH>;
+			using WRITE_PHASECAL_TIMEOUT = 
+				typename FUTURES::TWriteRegisterFuture<Register::ALGO_PHASECAL_CONFIG_TIMEOUT>;
+			using WRITE_PHASECAL_LIMIT = 
+				typename FUTURES::TWriteRegisterFuture<Register::ALGO_PHASECAL_LIM>;
+			using WRITE_RANGE_TIMEOUT = 
+				typename FUTURES::TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI, uint16_t>;
+			using WRITE_VCSEL = 
+				typename FUTURES::TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_VCSEL_PERIOD>;
+			// Determine values to write based on provided period
+			uint8_t phase_high = 0;
+			uint8_t vcsel_width = 0;
+			uint8_t phasecal_timeout = 0;
+			uint8_t phasecal_limit = 0;
+			switch (period)
+			{
+				case 8:
+				phase_high = 0x10;
+				vcsel_width = 0x02;
+				phasecal_timeout = 0x0C;
+				phasecal_limit = 0x30;
+				break;
+				
+				case 10:
+				phase_high = 0x28;
+				vcsel_width = 0x03;
+				phasecal_timeout = 0x09;
+				phasecal_limit = 0x20;
+				break;
+				
+				case 12:
+				phase_high = 0x38;
+				vcsel_width = 0x03;
+				phasecal_timeout = 0x08;
+				phasecal_limit = 0x20;
+				break;
+				
+				case 14:
+				phase_high = 0x48;
+				vcsel_width = 0x03;
+				phasecal_timeout = 0x07;
+				phasecal_limit = 0x20;
+				break;
+
+				default:
+				break;
+			}
+			// 3.2.1. Write FINAL_RANGE_CONFIG_VALID_PHASE_HIGH
+			if (!this->template sync_write<WRITE_PHASE_HIGH>(phase_high)) return false;
+			// 3.2.2. Write FINAL_RANGE_CONFIG_VALID_PHASE_LOW
+			if (!this->template sync_write<WRITE_PHASE_LOW>(uint8_t(0x08))) return false;
+			// 3.2.3. Write GLOBAL_CONFIG_VCSEL_WIDTH
+			if (!this->template sync_write<WRITE_VCSEL_WIDTH>(vcsel_width)) return false;
+			// 3.2.4. Write ALGO_PHASECAL_CONFIG_TIMEOUT
+			if (!this->template sync_write<WRITE_PHASECAL_TIMEOUT>(phasecal_timeout)) return false;
+			// 3.2.5. Write ALGO_PHASECAL_LIM
+			if (!this->template sync_write<WRITE_PHASECAL_LIMIT>(phasecal_limit)) return false;
+			// 3.2.6. Write FINAL_RANGE_CONFIG_VCSEL_PERIOD
+			if (!this->template sync_write<WRITE_VCSEL>(vcsel_period)) return false;
+			// 3.2.7. Write FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI
+			// Calculate new final-range timeout
+			uint16_t final_range_mclks = vl53l0x::TimeoutUtilities::encode_timeout(
+				vl53l0x::TimeoutUtilities::calculate_timeout_mclks(
+					timeouts.final_range_us(has_pre_range), period));
+			return this->template sync_write<WRITE_RANGE_TIMEOUT>(final_range_mclks);
+		}
+
 		static constexpr bool check_vcsel_period(VcselPeriodType type, uint8_t period)
 		{
-			switch (type)
+			if (type == VcselPeriodType::PRE_RANGE)
+				return check_vcsel_period_pre_range(period);
+			else
+				return check_vcsel_period_final_range(period);
+		}
+
+		static constexpr bool check_vcsel_period_pre_range(uint8_t period)
+		{
+			switch (period)
 			{
-				case VcselPeriodType::PRE_RANGE:
-				switch (period)
-				{
-					case 12:
-					case 14:
-					case 16:
-					case 18:
-					return true;
+				case 12:
+				case 14:
+				case 16:
+				case 18:
+				return true;
 
-					default:
-					break;
-				}
+				default:
 				return false;
+			}
+		}
 
-				case VcselPeriodType::FINAL_RANGE:
-				switch (period)
-				{
-					case 8:
-					case 10:
-					case 12:
-					case 14:
-					return true;
-
-					default:
-					break;
-				}
-				return false;
+		static constexpr bool check_vcsel_period_final_range(uint8_t period)
+		{
+			switch (period)
+			{
+				case 8:
+				case 10:
+				case 12:
+				case 14:
+				return true;
 
 				default:
 				return false;
