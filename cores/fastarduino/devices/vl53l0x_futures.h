@@ -108,9 +108,12 @@ namespace devices::vl53l0x_futures
 			SetGPIOSettingsFuture(const vl53l0x::GPIOSettings& settings)
 				:	PARENT{futures_, NUM_FUTURES},
 					write_config_{settings.function()},
-					write_GPIO_active_high_{uint8_t(settings.high_polarity() ? 0x10 : 0x00)},
-					write_low_threshold_{settings.low_threshold()},
-					write_high_threshold_{settings.high_threshold()}
+					// The following hard-coded values look OK but this is not how it should be done!
+					//TODO GPIO_HV_MUX_ACTIVE_HIGH should first be read and then bit 4 clear or set
+					write_GPIO_active_high_{uint8_t(settings.high_polarity() ? 0x11 : 0x01)},
+					// Threshold values must be divided by 2, but nobody knows why
+					write_low_threshold_{settings.low_threshold() / 2},
+					write_high_threshold_{settings.high_threshold() / 2}
 			{
 				PARENT::init(futures_);
 			}
