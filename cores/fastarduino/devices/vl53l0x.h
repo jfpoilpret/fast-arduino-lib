@@ -32,6 +32,8 @@
 #include "../flash.h"
 #include "../i2c.h"
 #include "../future.h"
+#include "../realtime_timer.h"
+#include "../time.h"
 #include "../utilities.h"
 #include "../i2c_handler.h"
 #include "../i2c_device.h"
@@ -193,8 +195,11 @@ namespace devices::vl53l0x
 
 		bool set_address(uint8_t device_address)
 		{
-			//TODO
-			// set_device(device_address);
+			using SetAddressFuture = typename FUTURES::TWriteRegisterFuture<Register::I2C_SLAVE_DEVICE_ADDRESS>;
+			device_address &= 0x7F;
+			if (!this->template sync_write<SetAddressFuture>(device_address)) return false;
+			this->set_device(device_address << 1);
+			return true;
 		}
 
 		bool get_model(uint8_t& model)
@@ -409,6 +414,21 @@ namespace devices::vl53l0x
 			return (future.await() == future::FutureStatus::READY);
 		}
 
+		static constexpr uint16_t DEFAULT_TIMEOUT_MS = 100;
+		template<board::Timer TIMER>
+		bool await_interrupt(timer::RTT<TIMER>& rtt, uint16_t timeout_ms = DEFAULT_TIMEOUT_MS)
+		{
+			time::RTTTime end = rtt.time() + time::RTTTime{timeout_ms, 0};
+			while (rtt.time() < end)
+			{
+				InterruptStatus status;
+				if (!this->template sync_read<GetInterruptStatusFuture>(status)) return false;
+				if (status != 0)
+					return true;
+			}
+			return false;
+		}
+
 		bool await_interrupt(uint16_t loops = MAX_LOOP)
 		{
 			// Read interrupt until !=0
@@ -451,6 +471,14 @@ namespace devices::vl53l0x
 			return this->template sync_write<WRITE_SYSRANGE>(sys_range_start);
 		}
 
+		template<board::Timer TIMER> bool await_continuous_range(
+			timer::RTT<TIMER>& rtt, uint16_t& range_mm, uint16_t timeout_ms = DEFAULT_TIMEOUT_MS)
+		{
+			if (!await_interrupt(rtt, timeout_ms)) return false;
+			if (!get_direct_range(range_mm)) return false;
+			return clear_interrupt();
+		}
+
 		bool await_continuous_range(uint16_t& range_mm, uint16_t loops = MAX_LOOP)
 		{
 			if (!await_interrupt(loops)) return false;
@@ -468,6 +496,25 @@ namespace devices::vl53l0x
 		{
 			return await_same_future_group(
 				internals::stop_continuous_ranging::BUFFER, internals::stop_continuous_ranging::BUFFER_SIZE);
+		}
+
+		template<board::Timer TIMER>
+		bool await_single_range(timer::RTT<TIMER>& rtt, uint16_t& range_mm, uint16_t timeout_ms = DEFAULT_TIMEOUT_MS)
+		{
+			time::RTTTime end = rtt.time() + time::RTTTime{timeout_ms, 0};
+			using READ_SYSRANGE = typename FUTURES::TReadRegisterFuture<Register::SYSRANGE_START>;
+			using WRITE_SYSRANGE = typename FUTURES::TWriteRegisterFuture<Register::SYSRANGE_START>;
+			if (!use_stop_variable()) return false;
+			if (!this->template sync_write<WRITE_SYSRANGE>(uint8_t(0x01))) return false;
+			// Read SYSRANGE until != 0x01
+			while (rtt.time() < end)
+			{
+				uint8_t sys_range = 0;
+				if (!this->template sync_read<READ_SYSRANGE>(sys_range)) return false;
+				if (!(sys_range & 0x01))
+					return await_continuous_range(rtt, range_mm, timeout_ms);
+			}
+			return false;
 		}
 
 		bool await_single_range(uint16_t& range_mm, uint16_t loops = MAX_LOOP)
@@ -543,6 +590,32 @@ namespace devices::vl53l0x
 			if (!perform_single_ref_calibration(SingleRefCalibrationTarget::PHASE_CALIBRATION)) return false;
 			// 6. Restore sequence steps (NOTE: 0x00 is used as marker by the future to actually restore saved sequence)
 			return set_sequence_steps(steps);
+		}
+
+		bool reset_device()
+		{
+			using WRITE_RESET = typename FUTURES::TWriteRegisterFuture<Register::SOFT_RESET_GO2_SOFT_RESET_N>;
+			// Set reset bit
+			if (!this->template sync_write<WRITE_RESET>(uint8_t(0x00))) return false;
+			// Wait for some time
+			uint8_t model = 0;
+			do
+			{
+				if (!get_model(model)) return false;
+			}
+			while (model != 0);
+			time::delay_us(100);
+
+			// Release reset
+			if (!this->template sync_write<WRITE_RESET>(uint8_t(0x01))) return false;
+			// Wait until correct boot-up
+			do
+			{
+				if (!get_model(model)) return false;
+			}
+			while (model == 0);
+			time::delay_us(100);
+			return true;
 		}
 
 	private:
