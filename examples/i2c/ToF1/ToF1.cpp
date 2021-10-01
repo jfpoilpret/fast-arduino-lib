@@ -168,6 +168,14 @@ int main()
 	bool ok = false;
 
 	{
+		out << F("Reset VL53L0X device") << endl;
+		ok = tof.reset_device();
+		display_memory(out);
+		out << F("tof.reset_device() = ") << ok << endl;
+		DEBUG(out);
+	}
+
+	{
 		out << F("Read VL53L0X status") << endl;
 		ok = tof.get_revision(result);
 		display_memory(out);

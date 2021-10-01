@@ -101,6 +101,7 @@ namespace devices::vl53l0x_futures
 			friend Futures;
 		};
 
+		//TODO shall we always clear interrupt (0) at the end of GPIO settings?
 		class SetGPIOSettingsFuture : public I2CFuturesGroup
 		{
 			using PARENT = I2CFuturesGroup;
@@ -137,6 +138,8 @@ namespace devices::vl53l0x_futures
 			friend Futures;
 		};
 
+		//TODO could be replaced with a simple using?
+		//TODO In original API the method is more complex
 		class ClearInterruptFuture : public TWriteRegisterFuture<Register::SYSTEM_INTERRUPT_CLEAR>
 		{
 			using PARENT = TWriteRegisterFuture<Register::SYSTEM_INTERRUPT_CLEAR>;
