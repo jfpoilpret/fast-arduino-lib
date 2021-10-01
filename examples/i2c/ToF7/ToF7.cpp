@@ -70,8 +70,6 @@ using streams::flush;
 using namespace devices::vl53l0x;
 using TOF = VL53L0X<MANAGER>;
 
-//TODO use ISR to get range!
-
 #define CHECK_OK(STATEMENT) if (! STATEMENT) out << F(#STATEMENT) << F(" ERROR!") << endl
 
 class ToFController
@@ -101,7 +99,6 @@ private:
 	{
 		if (!gpio1_pin_.value()) gpio_ |= 0x01;
 		if (!gpio2_pin_.value()) gpio_ |= 0x02;
-		//TODO request (async) to get range
 	}
 
 	gpio::FAST_INT_PIN<GPIO1> gpio1_pin_{gpio::PinMode::INPUT};
@@ -147,9 +144,6 @@ int main()
 	gpio::FAST_PIN<SHDN2> shutdown2{gpio::PinMode::OUTPUT};
 	time::delay_ms(10);
 
-	// shutdown1.set();
-	// shutdown2.set();
-
 	// Activate TOF1 and set address
 	shutdown1.set();
 	time::delay_ms(2);
@@ -158,7 +152,7 @@ int main()
 	// Activate TOF2 and set address
 	shutdown2.set();
 	time::delay_ms(2);
-	tof2.set_address(0x2A);
+	CHECK_OK(tof2.set_address(0x2A));
 
 	ToFController controller;
 

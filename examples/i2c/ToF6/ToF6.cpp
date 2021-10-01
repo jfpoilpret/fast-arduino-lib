@@ -62,8 +62,6 @@ using streams::flush;
 using namespace devices::vl53l0x;
 using TOF = VL53L0X<MANAGER>;
 
-//TODO use ISR to get range!
-
 #define CHECK_OK(STATEMENT) if (! STATEMENT) out << F(#STATEMENT) << F(" ERROR!") << endl
 
 class ToFController
@@ -88,7 +86,6 @@ private:
 	void gpio_raised()
 	{
 		gpio_ = true;
-		//TODO request (async) to get range
 	}
 
 	TOF& tof_;
