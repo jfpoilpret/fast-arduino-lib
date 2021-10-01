@@ -23,6 +23,7 @@
  *   - direct USB access
  */
 
+#include <fastarduino/realtime_timer.h>
 #include <fastarduino/time.h>
 #include <fastarduino/uart.h>
 #include <fastarduino/i2c_handler.h>
@@ -37,6 +38,7 @@ static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 128;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
+REGISTER_RTT_ISR(0)
 REGISTER_UATX_ISR(0)
 
 #if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
@@ -118,13 +120,19 @@ int main()
 		out << F("tof.perform_ref_calibration() = ") << ok << endl;
 	}
 
+	timer::RTT<board::Timer::TIMER0> rtt;
+	rtt.begin();
+
 	for (uint8_t i = 0; i < 60; ++i)
 	{
 		time::delay_ms(1000U);
 		// Read continuous ranges now
 		uint16_t range = 0;
-		ok = tof.await_single_range(range);
+		time::RTTTime now = rtt.time();
+		ok = tof.await_single_range(rtt, range);
+		time::RTTTime duration = rtt.time() - now;
 		out << F("tof.await_single_range() = ") << ok << endl;
+		out << F("single range after ") << duration.millis() << "ms " << duration.micros() << "us" << streams::endl;
 		display_status(out, tof);
 		if (ok)
 			out << F("Range = ") << dec << range << F("mm") << endl;
