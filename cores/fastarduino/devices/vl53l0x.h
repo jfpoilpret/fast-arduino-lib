@@ -598,10 +598,10 @@ namespace devices::vl53l0x
 			// Set reset bit
 			if (!this->template sync_write<WRITE_RESET>(uint8_t(0x00))) return false;
 			// Wait for some time
-			uint8_t model = 0;
+			uint8_t model = 0xFF;
 			do
 			{
-				if (!get_model(model)) return false;
+				get_model(model);
 			}
 			while (model != 0);
 			time::delay_us(100);
@@ -609,9 +609,10 @@ namespace devices::vl53l0x
 			// Release reset
 			if (!this->template sync_write<WRITE_RESET>(uint8_t(0x01))) return false;
 			// Wait until correct boot-up
+			model = 0x00;
 			do
 			{
-				if (!get_model(model)) return false;
+				get_model(model);
 			}
 			while (model == 0);
 			time::delay_us(100);
