@@ -67,6 +67,8 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						i2c/MultiIO4 i2c/MultiIO5				\
 						i2c/MultiIO6 i2c/MultiIO7				\
 						i2c/I2CFakeDevice						\
+						i2c/ToF1 i2c/ToF2 i2c/ToF3 i2c/ToF4		\
+						i2c/ToF5 i2c/ToF6 i2c/ToF7				\
 						tones/tones0							\
 						tones/tones1 tones/tones2 tones/tones3	\
 						tones/tones4 tones/tones5 tones/tones6	\
