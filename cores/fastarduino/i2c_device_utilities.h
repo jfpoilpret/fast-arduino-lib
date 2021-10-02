@@ -21,7 +21,7 @@
 #ifndef I2C_DEVICE_UTILITIES_H
 #define I2C_DEVICE_UTILITIES_H
 
-// #include "array.h"
+#include "array.h"
 #include "flash.h"
 #include "future.h"
 #include "iterator.h"
@@ -47,7 +47,6 @@ namespace i2c
 	/// @endcond
 
 	// Future to read a register
-	//TODO Add transformer functor to template?
 	//TODO DOCS
 	template<typename MANAGER, typename T, bool BIG_ENDIAN = true>
 	class ReadRegisterFuture: public MANAGER::template FUTURE<T, uint8_t>
@@ -95,8 +94,6 @@ namespace i2c
 		}
 	};
 
-	//TODO Add transformer functor to template?
-	//TODO Add checker functor to template?
 	//TODO DOCS
 	template<typename MANAGER, typename T, bool BIG_ENDIAN = true>
 	class WriteRegisterFuture: public MANAGER::template FUTURE<void, WriteContent<T, BIG_ENDIAN>>
@@ -396,8 +393,9 @@ namespace i2c
 		F future_{0, 0};
 	};
 
+#ifdef EXPERIMENTAL_API
 	/**
-	 * This namespace containes action codes for use in flash memory configuration arrays
+	 * This namespace contains action codes for use in flash memory configuration arrays
 	 * used by ComplexI2CFuturesGroup.
 	 * 
 	 * For all I2C futures using flash read-only date to write to device, the following
@@ -426,7 +424,6 @@ namespace i2c
 	 */
 	namespace actions
 	{
-		//TODO new type for OVERWRITE (meaning that bytes are provides outside)
 		static constexpr uint8_t END = 0x00;
 		static constexpr uint8_t WRITE = 0x10;
 		static constexpr uint8_t READ = 0x20;
@@ -464,17 +461,6 @@ namespace i2c
 		}
 	}
 
-	//TODO DOCS
-	// Types of futures used in ComplexI2CFuturesGroup
-	template<typename MANAGER, uint8_t SIZE> 
-	using FUTURE_WRITE = typename MANAGER::FUTURE<void, containers::array<uint8_t, SIZE + 1>>;
-	template<typename MANAGER, uint8_t SIZE>
-	using FUTURE_READ = typename MANAGER::FUTURE<containers::array<uint8_t, SIZE>, uint8_t>;
-	template<typename MANAGER>
-	using FUTURE_READ1 = typename MANAGER::FUTURE<uint8_t, uint8_t>;
-
-	//TODO DOCS
-	//TODO template with list of sizes for read and write futures?
 	//FIXME wont't work in SYNC mode (too many recursion calls through future listeners)!!!
 	template<typename MANAGER> class ComplexI2CFuturesGroup : public AbstractI2CFuturesGroup<MANAGER>
 	{
@@ -496,7 +482,7 @@ namespace i2c
 			WRITE
 		};
 
-		//TODO Best API to do the most in superclass instead of subclass (and avoid templates)
+		//TODO Find better API to do the most in superclass instead of subclass (and avoid templates)
 		ProcessAction process_action()
 		{
 			while ((action_ = next_byte()) == actions::LOOP)
@@ -550,6 +536,7 @@ namespace i2c
 		// Current action code
 		uint8_t action_ = 0;
 	};
+#endif
 }
 
 #endif /* I2C_DEVICE_UTILITIES_H */
