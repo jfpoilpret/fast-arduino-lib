@@ -39,7 +39,6 @@
 #include "../i2c_device.h"
 #include "../i2c_device_utilities.h"
 #include "vl53l0x_internals.h"
-#include "vl53l0x_futures.h"
 #include "vl53l0x_registers.h"
 #include "vl53l0x_types.h"
 
@@ -53,15 +52,6 @@ namespace devices
 	}
 }
 
-//TODO - implement low-level API step by step
-//       - set_address
-//
-//TODO - implement higher level API (including ranging profiles)
-//       - begin()
-//       - standby()
-//       - ranging()
-//
-//TODO - check what of the remaing API shall be implemented or not
 // OPEN POINTS:
 // - calibration mode or only hard-coded calibration?
 
@@ -81,10 +71,17 @@ namespace devices::vl53l0x
 	class VL53L0X : public i2c::I2CDevice<MANAGER>
 	{
 	private:
-		using FUTURES = vl53l0x_futures::Futures<MANAGER>;
-
 		using PARENT = i2c::I2CDevice<MANAGER>;
+		using ABSTRACT_FUTURE = typename MANAGER::ABSTRACT_FUTURE;
 		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
+
+		template<Register REGISTER, typename T = uint8_t>
+		using TReadRegisterFuture = i2c::TReadRegisterFuture<MANAGER, uint8_t(REGISTER), T, true>;
+		template<Register REGISTER, typename T = uint8_t>
+		using TWriteRegisterFuture = i2c::TWriteRegisterFuture<MANAGER, uint8_t(REGISTER), T, true>;
+
+		using I2CFuturesGroup = i2c::I2CFuturesGroup<MANAGER>;
+		using I2CSameFutureGroup = i2c::I2CSameFutureGroup<MANAGER>;
 
 	public:
 		/**
@@ -128,50 +125,123 @@ namespace devices::vl53l0x
 		//==================
 		// Low-level API: use only if you know what you are doing!
 		template<Register REGISTER, typename T = uint8_t>
-		int get_register(PROXY<typename FUTURES::TReadRegisterFuture<REGISTER, T>> future)
+		int get_register(PROXY<TReadRegisterFuture<REGISTER, T>> future)
 		{
 			return this->async_read(future);
 		}
 		template<Register REGISTER, typename T = uint8_t>
-		int set_register(PROXY<typename FUTURES::TWriteRegisterFuture<REGISTER, T>> future)
+		int set_register(PROXY<TWriteRegisterFuture<REGISTER, T>> future)
 		{
 			return this->async_write(future);
 		}
 
-		using GetRangeStatusFuture = 
-			typename FUTURES::TReadRegisterFuture<Register::RESULT_RANGE_STATUS, DeviceStatus>;
+		using GetRangeStatusFuture = TReadRegisterFuture<Register::RESULT_RANGE_STATUS, DeviceStatus>;
 		int get_range_status(PROXY<GetRangeStatusFuture> future)
 		{
 			return this->async_read(future);
 		}
 
-		using GetGPIOSettingsFuture = typename FUTURES::GetGPIOSettingsFuture;
+		class GetGPIOSettingsFuture : public I2CFuturesGroup
+		{
+			using PARENT = I2CFuturesGroup;
+		public:
+			GetGPIOSettingsFuture() : PARENT{futures_, NUM_FUTURES}
+			{
+				PARENT::init(futures_);
+			}
+
+			bool get(vl53l0x::GPIOSettings& settings)
+			{
+				if (this->await() != future::FutureStatus::READY)
+					return false;
+				vl53l0x::GPIOFunction function = vl53l0x::GPIOFunction::DISABLED;
+				read_config_.get(function);
+				uint8_t active_high = 0;
+				read_GPIO_active_high_.get(active_high);
+				uint16_t low_threshold = 0;
+				read_low_threshold_.get(low_threshold);
+				uint16_t high_threshold = 0;
+				read_high_threshold_.get(high_threshold);
+				settings = vl53l0x::GPIOSettings{function, bool(active_high & 0x10), low_threshold, high_threshold};
+				return true;
+			}
+
+		private:
+			TReadRegisterFuture<Register::SYSTEM_INTERRUPT_CONFIG_GPIO, vl53l0x::GPIOFunction> read_config_{};
+			TReadRegisterFuture<Register::GPIO_HV_MUX_ACTIVE_HIGH> read_GPIO_active_high_{};
+			TReadRegisterFuture<Register::SYSTEM_THRESH_LOW, uint16_t> read_low_threshold_{};
+			TReadRegisterFuture<Register::SYSTEM_THRESH_HIGH, uint16_t> read_high_threshold_{};
+
+			static constexpr uint8_t NUM_FUTURES = 4;
+			ABSTRACT_FUTURE* futures_[NUM_FUTURES] =
+			{
+				&read_config_,
+				&read_GPIO_active_high_,
+				&read_low_threshold_,
+				&read_high_threshold_
+			};
+
+			friend VL53L0X<MANAGER>;
+		};
 		int get_GPIO_settings(GetGPIOSettingsFuture& future)
 		{
 			return (future.start(*this) ? 0 : future.error());
 		}
 
-		using SetGPIOSettingsFuture = typename FUTURES::SetGPIOSettingsFuture;
+		class SetGPIOSettingsFuture : public I2CFuturesGroup
+		{
+			using PARENT = I2CFuturesGroup;
+		public:
+			//TODO shall we always clear interrupt (0) at the end of GPIO settings?
+			SetGPIOSettingsFuture(const vl53l0x::GPIOSettings& settings)
+				:	PARENT{futures_, NUM_FUTURES},
+					write_config_{settings.function()},
+					// The following hard-coded values look OK but this is not how it should be done!
+					//TODO GPIO_HV_MUX_ACTIVE_HIGH should first be read and then bit 4 clear or set
+					write_GPIO_active_high_{uint8_t(settings.high_polarity() ? 0x11 : 0x01)},
+					// Threshold values must be divided by 2, but nobody knows why
+					write_low_threshold_{settings.low_threshold() / 2},
+					write_high_threshold_{settings.high_threshold() / 2}
+			{
+				PARENT::init(futures_);
+			}
+
+		private:
+			TWriteRegisterFuture<Register::SYSTEM_INTERRUPT_CONFIG_GPIO, vl53l0x::GPIOFunction> write_config_;
+			TWriteRegisterFuture<Register::GPIO_HV_MUX_ACTIVE_HIGH> write_GPIO_active_high_;
+			TWriteRegisterFuture<Register::SYSTEM_THRESH_LOW, uint16_t> write_low_threshold_;
+			TWriteRegisterFuture<Register::SYSTEM_THRESH_HIGH, uint16_t> write_high_threshold_;
+
+			static constexpr uint8_t NUM_FUTURES = 4;
+			ABSTRACT_FUTURE* futures_[NUM_FUTURES] =
+			{
+				&write_config_,
+				&write_GPIO_active_high_,
+				&write_low_threshold_,
+				&write_high_threshold_
+			};
+
+			friend VL53L0X<MANAGER>;
+		};
 		int set_GPIO_settings(SetGPIOSettingsFuture& future)
 		{
 			return (future.start(*this) ? 0 : future.error());
 		}
 
-		using GetInterruptStatusFuture = 
-			typename FUTURES::TReadRegisterFuture<Register::RESULT_INTERRUPT_STATUS, InterruptStatus>;
+		using GetInterruptStatusFuture = TReadRegisterFuture<Register::RESULT_INTERRUPT_STATUS, InterruptStatus>;
 		int get_interrupt_status(PROXY<GetInterruptStatusFuture> future)
 		{
 			return this->async_read(future);
 		}
 
-		using ClearInterruptFuture = typename FUTURES::ClearInterruptFuture;
+		using ClearInterruptFuture = TWriteRegisterFuture<Register::SYSTEM_INTERRUPT_CLEAR>;
 		int clear_interrupt(PROXY<ClearInterruptFuture> future)
 		{
 			return this->async_write(future);
 		}
 
 		// This API shall be used only after InterruptStatus != 0, Interrupt Status should be clear immediately after it
-		using GetDirectRangeFuture = typename FUTURES::TReadRegisterFuture<Register::RESULT_RANGE_MILLIMETER, uint16_t>;
+		using GetDirectRangeFuture = TReadRegisterFuture<Register::RESULT_RANGE_MILLIMETER, uint16_t>;
 		int get_direct_range(PROXY<GetDirectRangeFuture> future)
 		{
 			return this->async_read(future);
@@ -183,19 +253,19 @@ namespace devices::vl53l0x
 		template<Register REGISTER, typename T = uint8_t>
 		bool get_register(T& value)
 		{
-			using GetRegisterFuture = typename FUTURES::TReadRegisterFuture<REGISTER, T>;
+			using GetRegisterFuture = TReadRegisterFuture<REGISTER, T>;
 			return this->template sync_read<GetRegisterFuture>(value);
 		}
 		template<Register REGISTER, typename T = uint8_t>
 		bool set_register(T value)
 		{
-			using SetRegisterFuture = typename FUTURES::TWriteRegisterFuture<REGISTER, T>;
+			using SetRegisterFuture = TWriteRegisterFuture<REGISTER, T>;
 			return this->template sync_write<SetRegisterFuture>(value);
 		}
 
 		bool set_address(uint8_t device_address)
 		{
-			using SetAddressFuture = typename FUTURES::TWriteRegisterFuture<Register::I2C_SLAVE_DEVICE_ADDRESS>;
+			using SetAddressFuture = TWriteRegisterFuture<Register::I2C_SLAVE_DEVICE_ADDRESS>;
 			device_address &= 0x7F;
 			if (!this->template sync_write<SetAddressFuture>(device_address)) return false;
 			this->set_device(device_address << 1);
@@ -204,17 +274,17 @@ namespace devices::vl53l0x
 
 		bool get_model(uint8_t& model)
 		{
-			using GetModelFuture = typename FUTURES::TReadRegisterFuture<Register::IDENTIFICATION_MODEL_ID>;
+			using GetModelFuture = TReadRegisterFuture<Register::IDENTIFICATION_MODEL_ID>;
 			return this->template sync_read<GetModelFuture>(model);
 		}
 		bool get_revision(uint8_t& revision)
 		{
-			using GetRevisionFuture = typename FUTURES::TReadRegisterFuture<Register::IDENTIFICATION_REVISION_ID>;
+			using GetRevisionFuture = TReadRegisterFuture<Register::IDENTIFICATION_REVISION_ID>;
 			return this->template sync_read<GetRevisionFuture>(revision);
 		}
 		bool get_power_mode(PowerMode& power_mode)
 		{
-			using GetPowerModeFuture = typename FUTURES::TReadRegisterFuture<Register::POWER_MANAGEMENT, PowerMode>;
+			using GetPowerModeFuture = TReadRegisterFuture<Register::POWER_MANAGEMENT, PowerMode>;
 			return this->template sync_read<GetPowerModeFuture>(power_mode);
 		}
 		bool get_range_status(DeviceStatus& range_status)
@@ -223,21 +293,19 @@ namespace devices::vl53l0x
 		}
 		bool get_sequence_steps(SequenceSteps& sequence_steps)
 		{
-			using GetSequenceStepsFuture = 
-				typename FUTURES::TReadRegisterFuture<Register::SYSTEM_SEQUENCE_CONFIG, SequenceSteps>;
+			using GetSequenceStepsFuture = TReadRegisterFuture<Register::SYSTEM_SEQUENCE_CONFIG, SequenceSteps>;
 			return this->template sync_read<GetSequenceStepsFuture>(sequence_steps);
 		}
 		bool set_sequence_steps(SequenceSteps sequence_steps)
 		{
-			using SetSequenceStepsFuture = 
-				typename FUTURES::TWriteRegisterFuture<Register::SYSTEM_SEQUENCE_CONFIG, SequenceSteps>;
+			using SetSequenceStepsFuture = TWriteRegisterFuture<Register::SYSTEM_SEQUENCE_CONFIG, SequenceSteps>;
 			return this->template sync_write<SetSequenceStepsFuture>(sequence_steps);
 		}
 
 		template<VcselPeriodType TYPE>
 		bool get_vcsel_pulse_period(uint8_t& period)
 		{
-			using GetVcselPulsePeriodFuture = typename FUTURES::TReadRegisterFuture<Register((uint8_t) TYPE)>;
+			using GetVcselPulsePeriodFuture = TReadRegisterFuture<Register((uint8_t) TYPE)>;
 			if (!this->template sync_read<GetVcselPulsePeriodFuture>(period)) return false;
 			period = decode_vcsel_period(period);
 			return true;
@@ -276,7 +344,7 @@ namespace devices::vl53l0x
 			// 4. Set measurement timing budget as before
 			if (!set_measurement_timing_budget(timing_budget)) return false;
 			// 5. Perform phase calibration
-			using WRITE_STEPS = typename FUTURES::TWriteRegisterFuture<Register::SYSTEM_SEQUENCE_CONFIG>;
+			using WRITE_STEPS = TWriteRegisterFuture<Register::SYSTEM_SEQUENCE_CONFIG>;
 			if (!this->template sync_write<WRITE_STEPS>(uint8_t(0x02))) return false;
 			perform_single_ref_calibration(SingleRefCalibrationTarget::PHASE_CALIBRATION);
 			if (!set_sequence_steps(steps)) return false;
@@ -286,7 +354,7 @@ namespace devices::vl53l0x
 		bool get_signal_rate_limit(float& signal_rate)
 		{
 			using GetSignalRateLimitFuture = 
-				typename FUTURES::TReadRegisterFuture<Register::FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, uint16_t>;
+				TReadRegisterFuture<Register::FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, uint16_t>;
 			uint16_t temp = 0;
 			if (!this->template sync_read<GetSignalRateLimitFuture>(temp)) return false;
 			signal_rate = FixPoint9_7::convert(temp);
@@ -296,21 +364,21 @@ namespace devices::vl53l0x
 		bool set_signal_rate_limit(float signal_rate)
 		{
 			using SetSignalRateLimitFuture = 
-				typename FUTURES::TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, uint16_t>;
+				TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, uint16_t>;
 			return this->template sync_write<SetSignalRateLimitFuture>(FixPoint9_7::convert(signal_rate));
 		}
 
 		bool get_reference_SPADs(SPADReference& spad_ref)
 		{
 			using GetReferenceSPADsFuture = 
-				typename FUTURES::TReadRegisterFuture<Register::GLOBAL_CONFIG_SPAD_ENABLES_REF_0, SPADReference>;
+				TReadRegisterFuture<Register::GLOBAL_CONFIG_SPAD_ENABLES_REF_0, SPADReference>;
 			return this->template sync_read<GetReferenceSPADsFuture, SPADReference>(spad_ref);
 		}
 
 		bool set_reference_SPADs(const SPADReference& spad_ref)
 		{
 			using SetReferenceSPADsFuture = 
-				typename FUTURES::TWriteRegisterFuture<Register::GLOBAL_CONFIG_SPAD_ENABLES_REF_0, SPADReference>;
+				TWriteRegisterFuture<Register::GLOBAL_CONFIG_SPAD_ENABLES_REF_0, SPADReference>;
 			if (!await_same_future_group(
 				internals::set_reference_spads::BUFFER, internals::set_reference_spads::BUFFER_SIZE))
 				return false;
@@ -319,9 +387,9 @@ namespace devices::vl53l0x
 
 		bool get_SPAD_info(SPADInfo& info)
 		{
-			using READ_SPAD = typename FUTURES::TReadRegisterFuture<Register::SPAD_INFO, SPADInfo>;
-			using READ_STROBE = typename FUTURES::TReadRegisterFuture<Register::DEVICE_STROBE>;
-			using WRITE_STROBE = typename FUTURES::TWriteRegisterFuture<Register::DEVICE_STROBE>;
+			using READ_SPAD = TReadRegisterFuture<Register::SPAD_INFO, SPADInfo>;
+			using READ_STROBE = TReadRegisterFuture<Register::DEVICE_STROBE>;
+			using WRITE_STROBE = TWriteRegisterFuture<Register::DEVICE_STROBE>;
 			// 1. Write initial registers
 			if (!await_same_future_group(internals::spad_info::BUFFER1, internals::spad_info::BUFFER1_SIZE))
 				return false;
@@ -351,11 +419,10 @@ namespace devices::vl53l0x
 
 		bool get_sequence_steps_timeout(SequenceStepsTimeout& timeouts)
 		{
-			using READ_MSRC_TIMEOUT = typename FUTURES::TReadRegisterFuture<Register::MSRC_CONFIG_TIMEOUT_MACROP>;
-			using READ_PRERANGE_TIMEOUT =
-				typename FUTURES::TReadRegisterFuture<Register::PRE_RANGE_CONFIG_TIMEOUT_MACROP_HI, uint16_t>;
-			using READ_FINALRANGE_TIMEOUT =
-				typename FUTURES::TReadRegisterFuture<Register::FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI, uint16_t>;
+			using READ_MSRC_TIMEOUT = TReadRegisterFuture<Register::MSRC_CONFIG_TIMEOUT_MACROP>;
+			using READ_PRERANGE_TIMEOUT = TReadRegisterFuture<Register::PRE_RANGE_CONFIG_TIMEOUT_MACROP_HI, uint16_t>;
+			using READ_FINALRANGE_TIMEOUT = 
+				TReadRegisterFuture<Register::FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI, uint16_t>;
 			
 			uint8_t pre_range_vcsel_period_pclks = 0;
 			if (!get_vcsel_pulse_period<VcselPeriodType::PRE_RANGE>(pre_range_vcsel_period_pclks)) return false;
@@ -388,8 +455,7 @@ namespace devices::vl53l0x
 
 		bool set_measurement_timing_budget(uint32_t budget_us)
 		{
-			using WRITE_BUDGET = typename
-				FUTURES::TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI, uint16_t>;
+			using WRITE_BUDGET = TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI, uint16_t>;
 			SequenceSteps steps;
 			if (!get_sequence_steps(steps)) return false;
 			SequenceStepsTimeout timeouts;
@@ -454,9 +520,9 @@ namespace devices::vl53l0x
 
 		bool start_continuous_ranging(uint16_t period_ms = 0)
 		{
-			using READ_OSC_CAL = typename FUTURES::TReadRegisterFuture<Register::OSC_CALIBRATE_VAL, uint16_t>;
-			using WRITE_PERIOD = typename FUTURES::TWriteRegisterFuture<Register::SYSTEM_INTERMEASUREMENT_PERIOD, uint32_t>;
-			using WRITE_SYSRANGE = typename FUTURES::TWriteRegisterFuture<Register::SYSRANGE_START>;
+			using READ_OSC_CAL = TReadRegisterFuture<Register::OSC_CALIBRATE_VAL, uint16_t>;
+			using WRITE_PERIOD = TWriteRegisterFuture<Register::SYSTEM_INTERMEASUREMENT_PERIOD, uint32_t>;
+			using WRITE_SYSRANGE = TWriteRegisterFuture<Register::SYSRANGE_START>;
 			if (!use_stop_variable()) return false;
 			uint8_t sys_range_start = 0x02;
 			if (period_ms)
@@ -502,8 +568,8 @@ namespace devices::vl53l0x
 		bool await_single_range(timer::RTT<TIMER>& rtt, uint16_t& range_mm, uint16_t timeout_ms = DEFAULT_TIMEOUT_MS)
 		{
 			time::RTTTime end = rtt.time() + time::RTTTime{timeout_ms, 0};
-			using READ_SYSRANGE = typename FUTURES::TReadRegisterFuture<Register::SYSRANGE_START>;
-			using WRITE_SYSRANGE = typename FUTURES::TWriteRegisterFuture<Register::SYSRANGE_START>;
+			using READ_SYSRANGE = TReadRegisterFuture<Register::SYSRANGE_START>;
+			using WRITE_SYSRANGE = TWriteRegisterFuture<Register::SYSRANGE_START>;
 			if (!use_stop_variable()) return false;
 			if (!this->template sync_write<WRITE_SYSRANGE>(uint8_t(0x01))) return false;
 			// Read SYSRANGE until != 0x01
@@ -519,8 +585,8 @@ namespace devices::vl53l0x
 
 		bool await_single_range(uint16_t& range_mm, uint16_t loops = MAX_LOOP)
 		{
-			using READ_SYSRANGE = typename FUTURES::TReadRegisterFuture<Register::SYSRANGE_START>;
-			using WRITE_SYSRANGE = typename FUTURES::TWriteRegisterFuture<Register::SYSRANGE_START>;
+			using READ_SYSRANGE = TReadRegisterFuture<Register::SYSRANGE_START>;
+			using WRITE_SYSRANGE = TWriteRegisterFuture<Register::SYSRANGE_START>;
 			if (!use_stop_variable()) return false;
 			if (!this->template sync_write<WRITE_SYSRANGE>(uint8_t(0x01))) return false;
 			// Read SYSRANGE until != 0x01
@@ -576,7 +642,7 @@ namespace devices::vl53l0x
 
 		bool perform_ref_calibration()
 		{
-			using WRITE_STEPS = typename FUTURES::TWriteRegisterFuture<Register::SYSTEM_SEQUENCE_CONFIG>;
+			using WRITE_STEPS = TWriteRegisterFuture<Register::SYSTEM_SEQUENCE_CONFIG>;
 			// 1. Read current sequence steps
 			SequenceSteps steps;
 			if (!get_sequence_steps(steps)) return false;
@@ -594,7 +660,7 @@ namespace devices::vl53l0x
 
 		bool reset_device()
 		{
-			using WRITE_RESET = typename FUTURES::TWriteRegisterFuture<Register::SOFT_RESET_GO2_SOFT_RESET_N>;
+			using WRITE_RESET = TWriteRegisterFuture<Register::SOFT_RESET_GO2_SOFT_RESET_N>;
 			// Set reset bit
 			if (!this->template sync_write<WRITE_RESET>(uint8_t(0x00))) return false;
 			// Wait for some time
@@ -622,8 +688,8 @@ namespace devices::vl53l0x
 	private:
 		bool force_io_2_8V()
 		{
-			using READ_VHV_CONFIG = typename FUTURES::TReadRegisterFuture<Register::VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV>;
-			using WRITE_VHV_CONFIG = typename FUTURES::TWriteRegisterFuture<Register::VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV>;
+			using READ_VHV_CONFIG = TReadRegisterFuture<Register::VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV>;
+			using WRITE_VHV_CONFIG = TWriteRegisterFuture<Register::VHV_CONFIG_PAD_SCL_SDA_EXTSUP_HV>;
 			uint8_t config = 0;
 			if (!this->template sync_read<READ_VHV_CONFIG>(config)) return false;
 			config |= 0x01;
@@ -632,7 +698,7 @@ namespace devices::vl53l0x
 
 		bool set_I2C_mode()
 		{
-			using WRITE_I2C_MODE = typename FUTURES::TWriteRegisterFuture<Register::SYSTEM_CONFIG_I2C_MODE>;
+			using WRITE_I2C_MODE = TWriteRegisterFuture<Register::SYSTEM_CONFIG_I2C_MODE>;
 			return this->template sync_write<WRITE_I2C_MODE>(uint8_t(0x00));
 		}
 
@@ -644,7 +710,7 @@ namespace devices::vl53l0x
 				return false;
 
 			// Read stop variable
-			using READ_STOP_VAR = typename FUTURES::TReadRegisterFuture<Register::SYSTEM_STOP_VARIABLE>;
+			using READ_STOP_VAR = TReadRegisterFuture<Register::SYSTEM_STOP_VARIABLE>;
 			if (!this->template sync_read<READ_STOP_VAR>(stop_variable_)) return false;
 
 			// Write suffix
@@ -660,7 +726,7 @@ namespace devices::vl53l0x
 				return false;
 
 			// Read stop variable
-			using WRITE_STOP_VAR = typename FUTURES::TWriteRegisterFuture<Register::SYSTEM_STOP_VARIABLE>;
+			using WRITE_STOP_VAR = TWriteRegisterFuture<Register::SYSTEM_STOP_VARIABLE>;
 			if (!this->template sync_write<WRITE_STOP_VAR>(stop_variable_)) return false;
 
 			// Write suffix
@@ -670,8 +736,8 @@ namespace devices::vl53l0x
 
 		bool disable_signal_rate_limit_checks()
 		{
-			using READ_MSRC_CONFIG = typename FUTURES::TReadRegisterFuture<Register::MSRC_CONFIG_CONTROL>;
-			using WRITE_MSRC_CONFIG = typename FUTURES::TWriteRegisterFuture<Register::MSRC_CONFIG_CONTROL>;
+			using READ_MSRC_CONFIG = TReadRegisterFuture<Register::MSRC_CONFIG_CONTROL>;
+			using WRITE_MSRC_CONFIG = TWriteRegisterFuture<Register::MSRC_CONFIG_CONTROL>;
 			uint8_t config = 0;
 			if (!this->template sync_read<READ_MSRC_CONFIG>(config)) return false;
 			config |= 0x12;
@@ -688,7 +754,7 @@ namespace devices::vl53l0x
 
 		bool perform_single_ref_calibration(SingleRefCalibrationTarget target)
 		{
-			using WRITE_SYS_RANGE = typename FUTURES::TWriteRegisterFuture<Register::SYSRANGE_START>;
+			using WRITE_SYS_RANGE = TWriteRegisterFuture<Register::SYSRANGE_START>;
 			// 1. Write to register SYS RANGE
 			if (!this->template sync_write<WRITE_SYS_RANGE>(uint8_t(target))) return false;
 			// 2. Read interrupt status until interrupt occurs
@@ -711,15 +777,15 @@ namespace devices::vl53l0x
 		//TODO Move this API to AbstractDevice?
 		bool await_same_future_group(const uint8_t* buffer, uint8_t size)
 		{
-			typename FUTURES::I2CSameFutureGroup future{uint16_t(buffer), size};
+			I2CSameFutureGroup future{uint16_t(buffer), size};
 			if (!future.start(*this)) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
 		bool await_device_strobe()
 		{
-			using READ_STROBE = typename FUTURES::TReadRegisterFuture<Register::DEVICE_STROBE>;
-			using WRITE_STROBE = typename FUTURES::TWriteRegisterFuture<Register::DEVICE_STROBE>;
+			using READ_STROBE = TReadRegisterFuture<Register::DEVICE_STROBE>;
+			using WRITE_STROBE = TWriteRegisterFuture<Register::DEVICE_STROBE>;
 			// 1. Clear strobe
 			if (!this->template sync_write<WRITE_STROBE>(uint8_t(0x00))) return false;
 			// 2. Read strobe until !=0
@@ -739,16 +805,11 @@ namespace devices::vl53l0x
 			uint8_t period, uint8_t vcsel_period, const SequenceStepsTimeout& timeouts)
 		{
 			// 3.1. [PRE_RANGE]
-			using WRITE_PHASE_HIGH = 
-				typename FUTURES::TWriteRegisterFuture<Register::PRE_RANGE_CONFIG_VALID_PHASE_HIGH>;
-			using WRITE_PHASE_LOW = 
-				typename FUTURES::TWriteRegisterFuture<Register::PRE_RANGE_CONFIG_VALID_PHASE_LOW>;
-			using WRITE_VCSEL = 
-				typename FUTURES::TWriteRegisterFuture<Register::PRE_RANGE_CONFIG_VCSEL_PERIOD>;
-			using WRITE_RANGE_TIMEOUT = 
-				typename FUTURES::TWriteRegisterFuture<Register::PRE_RANGE_CONFIG_TIMEOUT_MACROP_HI, uint16_t>;
-			using WRITE_MSRC_TIMEOUT = 
-				typename FUTURES::TWriteRegisterFuture<Register::MSRC_CONFIG_TIMEOUT_MACROP>;
+			using WRITE_PHASE_HIGH = TWriteRegisterFuture<Register::PRE_RANGE_CONFIG_VALID_PHASE_HIGH>;
+			using WRITE_PHASE_LOW = TWriteRegisterFuture<Register::PRE_RANGE_CONFIG_VALID_PHASE_LOW>;
+			using WRITE_VCSEL = TWriteRegisterFuture<Register::PRE_RANGE_CONFIG_VCSEL_PERIOD>;
+			using WRITE_RANGE_TIMEOUT = TWriteRegisterFuture<Register::PRE_RANGE_CONFIG_TIMEOUT_MACROP_HI, uint16_t>;
+			using WRITE_MSRC_TIMEOUT = TWriteRegisterFuture<Register::MSRC_CONFIG_TIMEOUT_MACROP>;
 
 			// 3.1.1. Write PRE_RANGE_CONFIG_VALID_PHASE_HIGH
 			uint8_t phase_high = 0;
@@ -795,20 +856,13 @@ namespace devices::vl53l0x
 			uint8_t period, uint8_t vcsel_period, bool has_pre_range, const SequenceStepsTimeout& timeouts)
 		{
 			// 3.2. [FINAL_RANGE]
-			using WRITE_PHASE_HIGH = 
-				typename FUTURES::TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_VALID_PHASE_HIGH>;
-			using WRITE_PHASE_LOW = 
-				typename FUTURES::TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_VALID_PHASE_LOW>;
-			using WRITE_VCSEL_WIDTH = 
-				typename FUTURES::TWriteRegisterFuture<Register::GLOBAL_CONFIG_VCSEL_WIDTH>;
-			using WRITE_PHASECAL_TIMEOUT = 
-				typename FUTURES::TWriteRegisterFuture<Register::ALGO_PHASECAL_CONFIG_TIMEOUT>;
-			using WRITE_PHASECAL_LIMIT = 
-				typename FUTURES::TWriteRegisterFuture<Register::ALGO_PHASECAL_LIM>;
-			using WRITE_RANGE_TIMEOUT = 
-				typename FUTURES::TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI, uint16_t>;
-			using WRITE_VCSEL = 
-				typename FUTURES::TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_VCSEL_PERIOD>;
+			using WRITE_PHASE_HIGH = TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_VALID_PHASE_HIGH>;
+			using WRITE_PHASE_LOW = TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_VALID_PHASE_LOW>;
+			using WRITE_VCSEL_WIDTH = TWriteRegisterFuture<Register::GLOBAL_CONFIG_VCSEL_WIDTH>;
+			using WRITE_PHASECAL_TIMEOUT = TWriteRegisterFuture<Register::ALGO_PHASECAL_CONFIG_TIMEOUT>;
+			using WRITE_PHASECAL_LIMIT = TWriteRegisterFuture<Register::ALGO_PHASECAL_LIM>;
+			using WRITE_RANGE_TIMEOUT = TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI, uint16_t>;
+			using WRITE_VCSEL = TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_VCSEL_PERIOD>;
 			// Determine values to write based on provided period
 			uint8_t phase_high = 0;
 			uint8_t vcsel_width = 0;
@@ -1007,8 +1061,6 @@ namespace devices::vl53l0x
 
 		// Stop variable used across device invocations
 		uint8_t stop_variable_ = 0;
-
-		friend vl53l0x_futures::Futures<MANAGER>;
 	};
 }
 
