@@ -198,7 +198,7 @@ int main()
 
 	for (uint8_t i = 0; i < 60; ++i)
 	{
-		time::delay_ms(100U);
+		time::delay_ms(990U);
 		// Read continuous ranges now
 		uint16_t range = 0;
 		ok = tof.await_continuous_range(range);
@@ -210,7 +210,7 @@ int main()
 	}
 
 	{
-		// Start continuous ranging
+		// Stop continuous ranging
 		ok = tof.stop_continuous_ranging();
 		display_memory(out);
 		out << F("tof.stop_continuous_ranging() = ") << ok << endl;
