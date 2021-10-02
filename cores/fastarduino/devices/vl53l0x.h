@@ -149,6 +149,8 @@ namespace devices::vl53l0x
 			{
 				PARENT::init(futures_);
 			}
+			GetGPIOSettingsFuture(GetGPIOSettingsFuture&&) = default;
+			GetGPIOSettingsFuture& operator=(GetGPIOSettingsFuture&&) = default;
 
 			bool get(vl53l0x::GPIOSettings& settings)
 			{
@@ -205,6 +207,8 @@ namespace devices::vl53l0x
 			{
 				PARENT::init(futures_);
 			}
+			SetGPIOSettingsFuture(SetGPIOSettingsFuture&&) = default;
+			SetGPIOSettingsFuture& operator=(SetGPIOSettingsFuture&&) = default;
 
 		private:
 			TWriteRegisterFuture<Register::SYSTEM_INTERRUPT_CONFIG_GPIO, vl53l0x::GPIOFunction> write_config_;
@@ -774,12 +778,9 @@ namespace devices::vl53l0x
 			return false;
 		}
 
-		//TODO Move this API to AbstractDevice?
 		bool await_same_future_group(const uint8_t* buffer, uint8_t size)
 		{
-			I2CSameFutureGroup future{uint16_t(buffer), size};
-			if (!future.start(*this)) return false;
-			return (future.await() == future::FutureStatus::READY);
+			return i2c::await_same_future_group<MANAGER>(*this, buffer, size);
 		}
 
 		bool await_device_strobe()

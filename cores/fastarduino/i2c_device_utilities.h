@@ -54,15 +54,18 @@ namespace i2c
 		using PARENT = typename MANAGER::template FUTURE<T, uint8_t>;
 
 	protected:
+		/// @cond notdocumented
 		using ABSTRACT_FUTURE = typename MANAGER::ABSTRACT_FUTURE;
 		using FUTURE_STATUS_LISTENER = future::FutureStatusListener<ABSTRACT_FUTURE>;
 		using FUTURE_OUTPUT_LISTENER = future::FutureOutputListener<ABSTRACT_FUTURE>;
+		/// @endcond
 
 	public:
 		explicit ReadRegisterFuture(uint8_t reg,
 			FUTURE_STATUS_LISTENER* status_listener = nullptr,
 			FUTURE_OUTPUT_LISTENER* output_listener = nullptr)
 			:	PARENT{reg, status_listener, output_listener} {}
+		/// @cond notdocumented
 		ReadRegisterFuture(ReadRegisterFuture&&) = default;
 		ReadRegisterFuture& operator=(ReadRegisterFuture&&) = default;
 
@@ -73,6 +76,7 @@ namespace i2c
 				result = utils::change_endianness(result);
 			return true;
 		}
+		/// @endcond
 	};
 
 	//TODO DOCS
@@ -85,6 +89,7 @@ namespace i2c
 			typename PARENT::FUTURE_STATUS_LISTENER* status_listener = nullptr,
 			typename PARENT::FUTURE_OUTPUT_LISTENER* output_listener = nullptr)
 			:	PARENT{REGISTER, status_listener, output_listener} {}
+		/// @cond notdocumented
 		TReadRegisterFuture(TReadRegisterFuture&&) = default;
 		TReadRegisterFuture& operator=(TReadRegisterFuture&&) = default;
 
@@ -92,6 +97,7 @@ namespace i2c
 		{
 			PARENT::reset_(REGISTER);
 		}
+		/// @endcond
 	};
 
 	//TODO DOCS
@@ -102,16 +108,20 @@ namespace i2c
 		using CONTENT = WriteContent<T, BIG_ENDIAN>;
 
 	protected:
+		/// @cond notdocumented
 		using ABSTRACT_FUTURE = typename MANAGER::ABSTRACT_FUTURE;
 		using FUTURE_STATUS_LISTENER = future::FutureStatusListener<ABSTRACT_FUTURE>;
+		/// @endcond
 
 	public:
 		explicit WriteRegisterFuture(
 			uint8_t reg, const T& value, 
 			FUTURE_STATUS_LISTENER* status_listener = nullptr)
 			:	PARENT{CONTENT{reg, value}, status_listener} {}
+		/// @cond notdocumented
 		WriteRegisterFuture(WriteRegisterFuture&&) = default;
 		WriteRegisterFuture& operator=(WriteRegisterFuture&&) = default;
+		/// @endcond
 	};
 
 	//TODO DOCS
@@ -123,6 +133,7 @@ namespace i2c
 		explicit TWriteRegisterFuture(const T& value,
 			typename PARENT::FUTURE_STATUS_LISTENER* status_listener = nullptr)
 			:	PARENT{REGISTER, value, status_listener} {}
+		/// @cond notdocumented
 		TWriteRegisterFuture(TWriteRegisterFuture&&) = default;
 		TWriteRegisterFuture& operator=(TWriteRegisterFuture&&) = default;
 
@@ -130,11 +141,13 @@ namespace i2c
 		{
 			PARENT::reset_(WriteContent{REGISTER, input});
 		}
+		/// @endcond
 	};
 
 	/// @cond notdocumented
 	// Forward declaration of I2CDevice
 	template<typename MANAGER> class I2CDevice;
+	template<typename MANAGER> bool await_same_future_group(I2CDevice<MANAGER>&,const uint8_t*, uint8_t);
 	/// @endcond
 
 	template<typename MANAGER> class I2CFutureHelper
@@ -331,8 +344,7 @@ namespace i2c
 			PARENT::init({&future_}, size / FUTURE_SIZE);
 		}
 
-	//TODO set protected (or private?) and set friend DEVICE
-	// protected:
+	protected:
 		bool start(typename PARENT::DEVICE& device)
 		{
 			PARENT::set_device(device);
@@ -391,7 +403,17 @@ namespace i2c
 		uint8_t size_;
 		// The future reused for all writes
 		F future_{0, 0};
+
+		friend bool await_same_future_group<MANAGER>(I2CDevice<MANAGER>&, const uint8_t*, uint8_t);
 	};
+
+	template<typename MANAGER>
+	bool await_same_future_group(I2CDevice<MANAGER>& device,const uint8_t* buffer, uint8_t size)
+	{
+		I2CSameFutureGroup<MANAGER> future{uint16_t(buffer), size};
+		if (!future.start(device)) return false;
+		return (future.await() == future::FutureStatus::READY);
+	}
 
 #ifdef EXPERIMENTAL_API
 	/**
