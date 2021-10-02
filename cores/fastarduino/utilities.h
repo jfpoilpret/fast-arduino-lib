@@ -478,7 +478,6 @@ namespace utils
 	//TODO DOCS
 	template<typename T> T inline change_endianness(const T& value)
 	{
-		static_assert(sizeof(T) == 1, "T must be 1 byte length.");
 		return value;
 	}
 	/// @cond notdocumented
