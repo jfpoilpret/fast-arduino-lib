@@ -103,7 +103,7 @@ static void loop_gpio(
 {
 	out << F("await GPIO") << endl;
 	// Limit loop to 1'
-	for (uint8_t i = 0; i < 60; ++i)
+	for (uint8_t i = 0; i < 30; ++i)
 	{
 		uint16_t range = 0;
 		rtt.millis(0);
