@@ -334,7 +334,8 @@ namespace i2c
 			PARENT::init({&future_}, size / FUTURE_SIZE);
 		}
 
-	protected:
+	//TODO set protected (or private?) and set friend DEVICE
+	// protected:
 		bool start(typename PARENT::DEVICE& device)
 		{
 			PARENT::set_device(device);
