@@ -34,7 +34,18 @@ namespace flash
 	class FlashStorage;
 	/// @endcond
 
-	//TODO DOC
+	/**
+	 * Read flash memory content at given @p address into @p buffer.
+	 * Note that type @p T should not have constructors as they will not be
+	 * properly called by this method.
+	 * 
+	 * @tparam T type of items contained in @p buffer
+	 * @param address the address to read from flash storage
+	 * @param buffer the array (already allocated by caller) to be copied by 
+	 * flash storage content
+	 * @param size the number of items (of type @p T) to read from flash storage
+	 * @return a pointer to @p buffer
+	 */
 	template<typename T = uint8_t>
 	T* read_flash(uint16_t address, T* buffer, uint8_t size)
 	{

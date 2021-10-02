@@ -753,8 +753,14 @@ namespace future
 		Future& operator=(const Future&) = delete;
 		/// @endcond
 
-		//TODO DOC
-		// This method completely resets this future (for reuse from scratch)
+		/**
+		 * This method completely resets this future (for reuse from scratch), 
+		 * as if it was just constructed. This allows reuse of a single future
+		 * several times.
+		 * 
+		 * @param input a value to be copied to this Future input storage value;
+		 * this argument does not exist when @p IN is `void`.
+		 */
 		void reset_(const IN& input = IN{})
 		{
 			AbstractFuture::reset_(output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN));
@@ -1113,7 +1119,6 @@ namespace future
 		{
 			// Update Future value chunk
 			*output_current_++ = chunk;
-			//TODO Check if this affects current usage!
 			--output_size_;
 			callback_output();
 			return true;
@@ -1439,7 +1444,7 @@ namespace future
 	 * This allows to `await()` for all futures, or query the overall `status()`
 	 * of the group.
 	 * 
-	 * The following snippet shows how this must be sued to create an actual group 
+	 * The following snippet shows how this must be used to create an actual group 
 	 * of futures:
 	 * @code
 	 * class MyGroup : public AbstractFuturesGroup<AbstractFuture>
@@ -1464,7 +1469,6 @@ namespace future
 	 * 
 	 * @tparam F the type of Future to aggregate int this group; this shall be
 	 * either `AbstractFuture` or `AbstractFakeFuture`.
-	 * @tparam SIZE the number of futures in this group
 	 */
 	template<typename F> class AbstractFuturesGroup : public F, public FutureStatusListener<F>
 	{
@@ -1479,15 +1483,44 @@ namespace future
 		using STATUS_LISTENER = FutureStatusListener<F>;
 
 	protected:
-		//TODO DOCS
+		/**
+		 * Specific size value indicating this group has an unlimited (and unknown 
+		 * at construction time) number of futures to handle.
+		 * @sa init()
+		 */
 		static constexpr const uint16_t NO_LIMIT = 0xFFFF;
 		
-		//TODO DOCS
+		/** 
+		 * Construct a new AbstractFuturesGroup.
+		 * The created Group is in `FutureStatus::NOT_READY` status.
+		 * The Future holds buffers to store both the input storage value and the 
+		 * output value.
+		 * The subclass constructor **must** call `init()` with the list of futures
+		 * in this group.
+		 * 
+		 * @param status_listener an optional listener to status changes on this 
+		 * future group
+		 * 
+		 * @sa init()
+		 * @sa FutureStatus
+		 */
 		explicit AbstractFuturesGroup(STATUS_LISTENER* status_listener = nullptr)
 			:	F{nullptr, 0, nullptr, 0, status_listener} {}
 
-		// This must be called from subclass constructor
-		//TODO DOCS
+		/**
+		 * Called from constructors of subclasses, this method allows this group
+		 * to listen for the status of all its futures.
+		 * @param futures list of pointers to futures in this group
+		 * @param actual_size real number of futures; if `0` (default), this will
+		 * match the size of @p futures; it may be bigger than the actual number of
+		 * futures if e.g. a future is reused several times in this group; if
+		 * `NO_LIMIT`, then the subclass does not know in advance how many times
+		 * its futures shall be used, in this case, the subclass must itself
+		 * indicate when this group of future is `FutureStatus::READY`.
+		 * 
+		 * @sa FutureStatus
+		 * @sa Future::set_future_finish()
+		 */
 		void init(utils::range<F*> futures, uint16_t actual_size = 0)
 		{
 			num_ready_ = (actual_size != 0 ? actual_size : futures.size());
@@ -1499,7 +1532,6 @@ namespace future
 		AbstractFuturesGroup& operator=(AbstractFuturesGroup&&) = delete;
 		AbstractFuturesGroup(const AbstractFuturesGroup&) = delete;
 		AbstractFuturesGroup& operator=(const AbstractFuturesGroup&) = delete;
-		/// @endcond
 
 		void on_status_change(const F& future, FutureStatus status) override
 		{
@@ -1522,6 +1554,7 @@ namespace future
 				break;
 			}
 		}
+		/// @endcond
 
 	private:
 		uint16_t num_ready_ = 0;

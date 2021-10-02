@@ -475,11 +475,19 @@ namespace utils
 			return num_bits(mask >> 1, num);
 	}
 
-	//TODO DOCS
+	/**
+	 * Change endianness of any integral type (from big to small or small to big).
+	 * @tparam T the type fo @p value; if not an integral type, the function will 
+	 * do nothing; only 16 bits and 32 bits integral types are currently supported.
+	 * @param value the value which endianness shall be reverted
+	 * @return value with reverted endianness if an integer; otherwise, value is 
+	 * returned unchanged.
+	 */
 	template<typename T> T inline change_endianness(const T& value)
 	{
 		return value;
 	}
+	
 	/// @cond notdocumented
 	template<> uint16_t inline change_endianness(const uint16_t& value)
 	{
