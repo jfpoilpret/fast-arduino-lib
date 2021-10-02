@@ -31,7 +31,7 @@
 #include <fastarduino/devices/vl53l0x.h>
 #include <fastarduino/memory.h>
 
-#define DEBUG_I2C
+// #define DEBUG_I2C
 // #define FORCE_SYNC
 
 static constexpr const i2c::I2CMode MODE = i2c::I2CMode::FAST;
