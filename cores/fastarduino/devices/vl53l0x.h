@@ -55,6 +55,7 @@ namespace devices
 // OPEN POINTS:
 // - calibration mode or only hard-coded calibration?
 
+//TODO DOCS
 namespace devices::vl53l0x
 {
 	/// @cond notdocumented
@@ -64,6 +65,26 @@ namespace devices::vl53l0x
 	/**
 	 * I2C device driver for the VL53L0X ToF ranging chip.
 	 * This chip supports both standard and fast I2C modes.
+	 * 
+	 * Several levels of API are provided:
+	 * - low-level API : reserved to developers who know how the VL53L0X device works
+	 * and know what they do
+	 * - mid-level API : for common use where developers need fine level of detail
+	 * on how the VL53L0X device shall work
+	 * - high-level API : for simplest use of the VL53L0X device
+	 * 
+	 * Most API comes in synchronous mode only, although it can of course work with
+	 * an asynchronous I2C Manager. This is due to the highly complex protocol of
+	 * VL53L0X device where I2C transactions can be long and would have required
+	 * highly complex Future classes to be defined with little added value.
+	 * Only API that were deemed useful in non-blocking mode were also made
+	 * asynchronous.
+	 * 
+	 * @note The VL53L0X device is extremely complex and not well documented; its 
+	 * only complete reference is the bloated C code provided by STM which was not
+	 * possible to directly use in FastArduino library. Hence it took a lot of
+	 * experiments to make this device work. Not all original STM API is provided
+	 * here.
 	 * 
 	 * @tparam MANAGER one of FastArduino available I2C Manager
 	 */
@@ -755,6 +776,12 @@ namespace devices::vl53l0x
 		}
 
 		static constexpr const uint16_t MAX_LOOP = 2000;
+
+		enum class SingleRefCalibrationTarget : uint8_t
+		{
+			PHASE_CALIBRATION = 0x01,
+			VHV_CALIBRATION = 0x41
+		};
 
 		bool perform_single_ref_calibration(SingleRefCalibrationTarget target)
 		{

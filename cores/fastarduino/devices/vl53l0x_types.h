@@ -23,6 +23,9 @@
  * does not describe the internals (registers) of the chip, the only way to
  * understand how it works was thus to analyze the API source code.
  * 
+ * Most types defined here have an associated `operator<<` to display them
+ * clearly to an output stream.
+ * 
  * @sa https://www.st.com/content/st_com/en/products/embedded-software/proximity-sensors-software/stsw-img005.html
  */
 
@@ -34,23 +37,48 @@
 #include "../utilities.h"
 #include "vl53l0x_registers.h"
 
-//TODO DOCS for each type
 namespace devices::vl53l0x
 {
-	// static utilities to support fixed point 9/7 bits used by VL53L0X chip
+	/**
+	 * Helper class to handle VL53L0X special fix-point 9.7 values.
+	 * It provides 3 utility methods for conversion and validity checks.
+	 * This class is used internally by `vl53l0x::VL53L0X` class and is
+	 * normally not useful to application developers.
+	 * Representation of 9.7 fix-point values is done as an `uint16_t`.
+	 */
 	class FixPoint9_7
 	{
 	public:
+		/**
+		 * Check that a `float` value is valid for conversion to 9.7 fix-point.
+		 * @param value the value to check (as float)
+		 * @retval true if @p value is convertible to 9.7 fix-point.
+		 * @retval false if @p value is not convertible to 9.7 fix-point (negative 
+		 * or too big).
+		 */
 		static constexpr bool is_valid(float value)
 		{
 			return ((value >= 0.0) && (value < float(1 << INTEGRAL_BITS)));
 		}
 
+		/**
+		 * Convert a float value into an 9.7 fix-point.
+		 * @param value the value to covnert (as float)
+		 * @retval 0 if @p value is not covnertible to 9.7 fix-point
+		 * @return uint16_t 9.7 fix-point conversion of @p value if valid
+		 * 
+		 * @sa is_valid()
+		 */
 		static constexpr uint16_t convert(float value)
 		{
 			return is_valid(value) ? uint16_t(value * (1 << DECIMAL_BITS)) : 0U;
 		}
 
+		/**
+		 * Convert an 9.7 fix-point value into a float.
+		 * @param value uint16_t 9.7 fix-point value to convert to float
+		 * @return float representation of @p value
+		 */
 		static constexpr float convert(uint16_t value)
 		{
 			return value / float(1 << DECIMAL_BITS);
@@ -108,8 +136,15 @@ namespace devices::vl53l0x
 	};
 	/// @endcond
 
+	/**
+	 * Possible error codes returned by VL53L0X device.
+	 * 
+	 * @sa DeviceStatus
+	 * @sa VL53L0X::get_range_status()
+	 */
 	enum class DeviceError : uint8_t
 	{
+		/** No error */
 		NONE                           = 0,
 		VCSEL_CONTINUITY_TEST_FAILURE  = 1,
 		VCSEL_WATCHDOG_TEST_FAILURE    = 2,
@@ -121,22 +156,42 @@ namespace devices::vl53l0x
 		TCC                            = 8,
 		PHASE_CONSISTENCY              = 9,
 		MIN_CLIP                       = 10,
+		/** Range completed, range value is available for reading. */
 		RANGE_COMPLETE                 = 11,
 		ALGO_UNDERFLOW                 = 12,
 		ALGO_OVERFLOW                  = 13,
 		RANGE_IGNORE_THRESHOLD         = 14,
+		/** Unknown error. */
 		UNKNOWN                        = 15
 	};
+	/// @cond notdocumented
 	streams::ostream& operator<<(streams::ostream&, DeviceError);
+	/// @endcond
 
+	/**
+	 * Status of device as retrieved by `VL53L0X::get_range_status()`.
+	 * 
+	 * @sa VL53L0X::get_range_status()
+	 */
 	class DeviceStatus
 	{
 	public:
+		/// @cond notdocumented
 		DeviceStatus() = default;
+		/// @endcond
+
+		/**
+		 * Device error.
+		 */
 		DeviceError error() const
 		{
 			return DeviceError((status_ >> 3) & 0x0F);
 		}
+
+		/**
+		 * Indicate if data (range) is ready for reading.
+		 * @retval true if data can be read from the device
+		 */
 		bool data_ready() const
 		{
 			return status_ & 0x01;
@@ -145,64 +200,139 @@ namespace devices::vl53l0x
 	private:
 		uint8_t status_ = 0;
 	};
+	/// @cond notdocumented
 	streams::ostream& operator<<(streams::ostream&, DeviceStatus);
+	/// @endcond
 
+	/**
+	 * Possible power modes of VL53L0X device as returned by `VL53L0X::get_power_mode()`.
+	 * @sa VL53L0X::get_power_mode()
+	 */
 	enum class PowerMode : uint8_t
 	{
 		STANDBY = 0,
 		IDLE = 1
 	};
+	/// @cond notdocumented
 	streams::ostream& operator<<(streams::ostream&, PowerMode);
+	/// @endcond
 
+	/**
+	 * Possible triggers for VL53L0X GPIO pin.
+	 * @sa GPIOSettings
+	 * @sa VL53L0X::get_GPIO_settings()
+	 * @sa VL53L0X::set_GPIO_settings()
+	 */
 	enum class GPIOFunction : uint8_t
 	{
+		/** No interrupt triggered on GPIO pin. */
 		DISABLED = 0x00,
+		/** Interrupt triggered when range is under a low threshold. */
 		LEVEL_LOW = 0x01,
+		/** Interrupt triggered when range is above a high threshold. */
 		LEVEL_HIGH = 0x02,
+		/** Interrupt triggered when range is outside a window between low and high thresholds. */
 		OUT_OF_WINDOW = 0x03,
+		/** Interrupt triggered when a range is ready to read. */
 		SAMPLE_READY = 0x04
 	};
+	/// @cond notdocumented
 	streams::ostream& operator<<(streams::ostream&, GPIOFunction);
+	/// @endcond
 
+	/**
+	 * Settings for behavior of VL53L0X GPIO pin.
+	 * @sa GPIOFunction
+	 * @sa VL53L0X::get_GPIO_settings()
+	 * @sa VL53L0X::set_GPIO_settings()
+	 */
 	class GPIOSettings
 	{
 	public:
+		/// @cond notdocumented
 		constexpr GPIOSettings() = default;
 		constexpr GPIOSettings(GPIOFunction function, bool high_polarity, 
 			uint16_t low_threshold = 0, uint16_t high_threshold = 0)
 			:	function_{function}, high_polarity_{high_polarity}, 
 				low_threshold_{low_threshold}, high_threshold_{high_threshold} {}
+		/// @endcond
 
+		/**
+		 * Create GPIOSettings for interrupt triggered when range sample is ready.
+		 * @param high_polarity force GPIO interrupt polarity to HIGH; this is not
+		 * advised as most breakouts include a pullup resistor.
+		 */
 		static constexpr GPIOSettings sample_ready(bool high_polarity = false)
 		{
 			return GPIOSettings{GPIOFunction::SAMPLE_READY, high_polarity};
 		}
+
+		/**
+		 * Create GPIOSettings for interrupt triggered when range is under 
+		 * @p threshold.
+		 * @param threshold the low threshold (in mm) under which an interrupt 
+		 * shall be triggered
+		 * @param high_polarity force GPIO interrupt polarity to HIGH; this is not
+		 * advised as most breakouts include a pullup resistor.
+		 */
 		static constexpr GPIOSettings low_threshold(uint16_t threshold, bool high_polarity = false)
 		{
 			return GPIOSettings{GPIOFunction::LEVEL_LOW, high_polarity, threshold};
 		}
+
+		/**
+		 * Create GPIOSettings for interrupt triggered when range is above
+		 * @p threshold.
+		 * @param threshold the high threshold (in mm) above which an interrupt 
+		 * shall be triggered
+		 * @param high_polarity force GPIO interrupt polarity to HIGH; this is not
+		 * advised as most breakouts include a pullup resistor.
+		 */
 		static constexpr GPIOSettings high_threshold(uint16_t threshold, bool high_polarity = false)
 		{
 			return GPIOSettings{GPIOFunction::LEVEL_HIGH, high_polarity, 0, threshold};
 		}
+
+		/**
+		 * Create GPIOSettings for interrupt triggered when range is outside a 
+		 * window between @p low_threshold and @p high_threshold.
+		 * @param low_threshold the low threshold (in mm) under which an interrupt 
+		 * shall be triggered
+		 * @param high_threshold the high threshold (in mm) above which an interrupt 
+		 * shall be triggered
+		 * @param high_polarity force GPIO interrupt polarity to HIGH; this is not
+		 * advised as most breakouts include a pullup resistor.
+		 */
 		static constexpr GPIOSettings out_of_window(
 			uint16_t low_threshold, uint16_t high_threshold, bool high_polarity = false)
 		{
 			return GPIOSettings{GPIOFunction::OUT_OF_WINDOW, high_polarity, low_threshold, high_threshold};
 		}
 
+		/**
+		 * Return the current GPIO interrupt trigger source.
+		 */
 		GPIOFunction function() const
 		{
 			return function_;
 		}
+		/**
+		 * Return the current polarity level of GPIO interrupts.
+		 */
 		bool high_polarity() const
 		{
 			return high_polarity_;
 		}
+		/**
+		 * Return the current low threshold, in mm.
+		 */
 		uint16_t low_threshold() const
 		{
 			return low_threshold_;
 		}
+		/**
+		 * Return the current high threshold, in mm.
+		 */
 		uint16_t high_threshold() const
 		{
 			return high_threshold_;
@@ -214,8 +344,11 @@ namespace devices::vl53l0x
 		uint16_t low_threshold_ = 0;
 		uint16_t high_threshold_ = 0;
 	};
+	/// @cond notdocumented
 	streams::ostream& operator<<(streams::ostream&, const GPIOSettings&);
+	/// @endcond
 
+	//TODO DOCS
 	class InterruptStatus
 	{
 	public:
@@ -229,6 +362,7 @@ namespace devices::vl53l0x
 		uint8_t status_ = 0;
 	};
 
+	//TODO DOCS
 	class SPADReference
 	{
 	public:
@@ -250,12 +384,7 @@ namespace devices::vl53l0x
 		uint8_t spad_refs_[6];
 	};
 
-	enum class SingleRefCalibrationTarget : uint8_t
-	{
-		PHASE_CALIBRATION = 0x01,
-		VHV_CALIBRATION = 0x41
-	};
-
+	//TODO DOCS
 	enum class VcselPeriodType : uint8_t
 	{
 		PRE_RANGE = uint8_t(vl53l0x::Register::PRE_RANGE_CONFIG_VCSEL_PERIOD),
@@ -364,9 +493,11 @@ namespace devices::vl53l0x
 
 		template<typename MANAGER> friend class VL53L0X;
 	};
-
+	/// @cond notdocumented
 	streams::ostream& operator<<(streams::ostream&, SequenceSteps);
+	/// @endcond
 
+	//TODO DOCS
 	class SequenceStepsTimeout
 	{
 	public:
@@ -429,9 +560,11 @@ namespace devices::vl53l0x
 
 		template<typename MANAGER> friend class VL53L0X;
 	};
-
+	/// @cond notdocumented
 	streams::ostream& operator<<(streams::ostream&, const SequenceStepsTimeout&);
+	/// @endcond
 
+	//TODO DOCS
 	class SPADInfo
 	{
 	private:
@@ -455,16 +588,28 @@ namespace devices::vl53l0x
 	private:
 		uint8_t info_ = 0;
 	};
-
+	/// @cond notdocumented
 	streams::ostream& operator<<(streams::ostream&, SPADInfo);
+	/// @endcond
 
+	/**
+	 * Possible profiles of ranging for VL53L0X top-level API `VL53L0X::begin()`.
+	 * Each profile defines specific VL53L0X settings.
+	 * @sa VL53L0X::begin()
+	 */
 	enum class Profile : uint8_t
 	{
+		/** Standard profile: 33ms ranging time, common accuracy, 1.2m range. */
 		STANDARD = 0x00,
+		/** Long range profile: 33ms ranging time, common accuracy, 2.0m range. */
 		LONG_RANGE = 0x01,
+		/** Accurate standard profile: 200ms ranging time, high accuracy, 1.2m range. */
 		STANDARD_ACCURATE = 0x02,
+		/** Accurate long range profile: 200ms ranging time, high accuracy, 2.0m range. */
 		LONG_RANGE_ACCURATE = 0x03,
+		/** Standard fast profile: 20ms ranging time, low accuracy, 1.2m range. */
 		STANDARD_FAST = 0x04,
+		/** Standard long range profile: 20ms ranging time, low accuracy, 2.0m range. */
 		LONG_RANGE_FAST = 0x05,
 	};
 }
