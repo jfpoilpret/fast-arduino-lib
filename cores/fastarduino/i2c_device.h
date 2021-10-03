@@ -117,11 +117,6 @@ namespace i2c
 		 */
 		template<typename OUT, typename IN> using FUTURE = typename MANAGER::template FUTURE<OUT, IN>;
 
-		//TODO DOCS
-		using FUTURE_OUTPUT_LISTENER = future::FutureOutputListener<ABSTRACT_FUTURE>;
-		//TODO DOCS
-		using FUTURE_STATUS_LISTENER = future::FutureStatusListener<ABSTRACT_FUTURE>;
-
 		/**
 		 * Create a new I2C device. This constructor must be called by a subclass
 		 * implementing an actua I2C device.
@@ -306,25 +301,95 @@ namespace i2c
 			}
 		}
 
-		//TODO DOCS
-		// Utility functions used every time a register gets read or written
+		/**
+		 * Helper method that asynchronously launches I2C commands for a simple
+		 * Future performing one write followed by one read (typically for device
+		 * register reading).
+		 * @warning Asynchronous API!
+		 * 
+		 * @tparam F the type of @p future automatically deduced from @p future
+		 * @param future a proxy to the Future to be updated by the launched I2C 
+		 * commands
+		 * @param stop force a STOP condition on the I2C bus at the end of the
+		 * read command
+		 * @return the same result codes as `launch_commands()`
+		 * 
+		 * @sa launch_commands()
+		 * @sa write()
+		 * @sa read()
+		 * @sa sync_read()
+		 */
 		template<typename F> int async_read(PROXY<F> future, bool stop = true)
 		{
 			return launch_commands(future, {write(), read(0, false, stop)});
 		}
-		//TODO DOCS
+
+		/**
+		 * Helper method that launches I2C commands for a simple Future performing
+		 * one write followed by one read (typically for device register reading);
+		 * the method blocks until the end of the I2C transaction.
+		 * @warning Blocking API!
+		 * 
+		 * @tparam F the type of Future to be used for the I2C transaction; this
+		 * template argument must be provided as it cannot be deduced from other
+		 * arguments.
+		 * @tparam T the type of expected @p result automatically deduced from 
+		 * @p result
+		 * @param result the result read from the I2C transaction
+		 * @retval true if the action was performed successfully, i.e. @p result
+		 * contains a correct value
+		 * 
+		 * @sa launch_commands()
+		 * @sa write()
+		 * @sa read()
+		 * @sa async_read()
+		 */
 		template<typename F, typename T = uint8_t> bool sync_read(T& result)
 		{
 			F future{};
 			if (async_read<F>(future) != 0) return false;
 			return future.get(result);
 		}
-		//TODO DOCS
+
+		/**
+		 * Helper method that asynchronously launches I2C commands for a simple
+		 * Future performing only one write (typically for device register writing).
+		 * @warning Asynchronous API!
+		 * 
+		 * @tparam F the type of @p future automatically deduced from @p future
+		 * @param future a proxy to the Future to be updated by the launched I2C 
+		 * commands
+		 * @param stop force a STOP condition on the I2C bus at the end of the
+		 * write command
+		 * @return the same result codes as `launch_commands()`
+		 * 
+		 * @sa launch_commands()
+		 * @sa write()
+		 * @sa sync_write()
+		 */
 		template<typename F> int async_write(PROXY<F> future, bool stop = true)
 		{
 			return launch_commands(future, {write(0, false, stop)});
 		}
-		//TODO DOCS
+
+		/**
+		 * Helper method that launches I2C commands for a simple Future performing
+		 * only one write (typically for device register writing); the method blocks
+		 * until the end of the I2C transaction.
+		 * @warning Blocking API!
+		 * 
+		 * @tparam F the type of Future to be used for the I2C transaction; this
+		 * template argument must be provided as it cannot be deduced from other
+		 * arguments.
+		 * @tparam T the type of @p value automatically deduced from @p value
+		 * @param value the value to write in the I2C transaction
+		 * @retval true if the action was performed successfully, i.e. @p value
+		 * was correctly transmitted to the device
+		 * 
+		 * @sa launch_commands()
+		 * @sa write()
+		 * @sa async_write()
+		 */
 		template<typename F, typename T = uint8_t> bool sync_write(const T& value)
 		{
 			F future{value};
