@@ -46,8 +46,29 @@ namespace i2c
 	};
 	/// @endcond
 
-	// Future to read a register
-	//TODO DOCS
+	/**
+	 * General Future that can be used to read an I2C device register.
+	 * Most I2C devices have registers, accessible by a byte address;
+	 * register values may be one or more bytes long; these may be integral types
+	 * or not.
+	 * ReadRegisterFuture can be used in any I2C device supporting class (subclass
+	 * of `i2c::I2CDevice`) in almost all situations where you need to read a register,
+	 * whatever its type.
+	 * ReadRegisterFuture supports automatic big-endian (I2C device) to little-endian
+	 * (ATmel MCU) conversion of integral types if needed.
+	 * 
+	 * @tparam MANAGER the type of I2C Manager used to handle I2C communication
+	 * @tparam T the type of the register to read from
+	 * @tparam BIG_ENDIAN if `true` (default) the register integral value is in
+	 * big endian and shall be converted to little endian for use by the MCU. This
+	 * applies only to 16 bits or 32 bits integral types (`int16_t`, `uint16_t`, 
+	 * `int32_t` or `uint32_t`).
+	 * 
+	 * @sa TReadRegisterFuture
+	 * @sa WriteRegisterFuture
+	 * @sa i2c::I2CSyncManager
+	 * @sa i2c::I2CAsyncManager
+	 */
 	template<typename MANAGER, typename T, bool BIG_ENDIAN = true>
 	class ReadRegisterFuture: public MANAGER::template FUTURE<T, uint8_t>
 	{
@@ -61,6 +82,15 @@ namespace i2c
 		/// @endcond
 
 	public:
+		/**
+		 * Create a ReadRegisterFuture future for a given device register @p reg.
+		 * This future can then be used to read the register value.
+		 * @param reg the address of the register to read from the I2C device
+		 * @param status_listener an optional listener to status changes on this 
+		 * future
+		 * @param output_listener an optional listener to output buffer changes on 
+		 * this future
+		 */
 		explicit ReadRegisterFuture(uint8_t reg,
 			FUTURE_STATUS_LISTENER* status_listener = nullptr,
 			FUTURE_OUTPUT_LISTENER* output_listener = nullptr)
@@ -79,12 +109,51 @@ namespace i2c
 		/// @endcond
 	};
 
-	//TODO DOCS
+	/**
+	 * Generic Future that can be used to read an I2C device register.
+	 * Most I2C devices have registers, accessible by a byte address;
+	 * register values may be one or more bytes long; these may be integral types
+	 * or not.
+	 * TReadRegisterFuture can be used in any I2C device supporting class (subclass
+	 * of `i2c::I2CDevice`) in almost all situations where you need to read a register,
+	 * whatever its type.
+	 * TReadRegisterFuture supports automatic big-endian (I2C device) to little-endian
+	 * (ATmel MCU) conversion of integral types if needed.
+	 * Typical usage is through `using` statement as in the following snippet:
+	 * @code
+	 * // Excerpt from VL53L0X device
+	 * using GetDirectRangeFuture = TReadRegisterFuture<Register::RESULT_RANGE_MILLIMETER, uint16_t>;
+	 * int get_direct_range(PROXY<GetDirectRangeFuture> future) {
+	 * ...
+	 * }
+	 * @endcode
+	 * 
+	 * @tparam MANAGER the type of I2C Manager used to handle I2C communication
+	 * @tparam REGISTER the address of the register to read from the I2C device
+	 * @tparam T the type of the register to read from
+	 * @tparam BIG_ENDIAN if `true` (default) the register integral value is in
+	 * big endian and shall be converted to little endian for use by the MCU. This
+	 * applies only to 16 bits or 32 bits integral types (`int16_t`, `uint16_t`, 
+	 * `int32_t` or `uint32_t`).
+	 * 
+	 * @sa ReadRegisterFuture
+	 * @sa TWriteRegisterFuture
+	 * @sa i2c::I2CSyncManager
+	 * @sa i2c::I2CAsyncManager
+	 */
 	template<typename MANAGER, uint8_t REGISTER, typename T, bool BIG_ENDIAN = true>
 	class TReadRegisterFuture: public ReadRegisterFuture<MANAGER, T, BIG_ENDIAN>
 	{
 		using PARENT = ReadRegisterFuture<MANAGER, T, BIG_ENDIAN>;
 	public:
+		/**
+		 * Create a TReadRegisterFuture future.
+		 * This future can then be used to read the register value.
+		 * @param status_listener an optional listener to status changes on this 
+		 * future
+		 * @param output_listener an optional listener to output buffer changes on 
+		 * this future
+		 */
 		explicit TReadRegisterFuture(
 			typename PARENT::FUTURE_STATUS_LISTENER* status_listener = nullptr,
 			typename PARENT::FUTURE_OUTPUT_LISTENER* output_listener = nullptr)
@@ -100,7 +169,29 @@ namespace i2c
 		/// @endcond
 	};
 
-	//TODO DOCS
+	/**
+	 * General Future that can be used to write to an I2C device register.
+	 * Most I2C devices have registers, accessible by a byte address;
+	 * register values may be one or more bytes long; these may be integral types
+	 * or not.
+	 * WriteRegisterFuture can be used in any I2C device supporting class (subclass
+	 * of `i2c::I2CDevice`) in almost all situations where you need to write to a
+	 * register, whatever its type.
+	 * WriteRegisterFuture supports automatic little-endian (ATmel MCU) to
+	 * big-endian (I2C device) conversion of integral types if needed.
+	 * 
+	 * @tparam MANAGER the type of I2C Manager used to handle I2C communication
+	 * @tparam T the type of the register to write to
+	 * @tparam BIG_ENDIAN if `true` (default) the register integral value is expected
+	 * in big endian and thus shall be converted from  little endian since it comes
+	 * from the MCU. This applies only to 16 bits or 32 bits integral types
+	 * (`int16_t`, `uint16_t`, `int32_t` or `uint32_t`).
+	 * 
+	 * @sa TWriteRegisterFuture
+	 * @sa ReadRegisterFuture
+	 * @sa i2c::I2CSyncManager
+	 * @sa i2c::I2CAsyncManager
+	 */
 	template<typename MANAGER, typename T, bool BIG_ENDIAN = true>
 	class WriteRegisterFuture: public MANAGER::template FUTURE<void, WriteContent<T, BIG_ENDIAN>>
 	{
@@ -114,6 +205,16 @@ namespace i2c
 		/// @endcond
 
 	public:
+		/**
+		 * Create a WriteRegisterFuture future for a given device register @p reg.
+		 * This future can then be used to write a value to the register.
+		 * @param reg the address of the register to write to in the I2C device
+		 * @param value the value to write to the register in the I2C device
+		 * @param status_listener an optional listener to status changes on this 
+		 * future
+		 * @param output_listener an optional listener to output buffer changes on 
+		 * this future
+		 */
 		explicit WriteRegisterFuture(
 			uint8_t reg, const T& value, 
 			FUTURE_STATUS_LISTENER* status_listener = nullptr)
@@ -124,12 +225,52 @@ namespace i2c
 		/// @endcond
 	};
 
-	//TODO DOCS
+	/**
+	 * Generic Future that can be used to write to an I2C device register.
+	 * Most I2C devices have registers, accessible by a byte address;
+	 * register values may be one or more bytes long; these may be integral types
+	 * or not.
+	 * TWriteRegisterFuture can be used in any I2C device supporting class (subclass
+	 * of `i2c::I2CDevice`) in almost all situations where you need to write to a
+	 * register, whatever its type.
+	 * TWriteRegisterFuture supports automatic little-endian (ATmel MCU) to
+	 * big-endian (I2C device) conversion of integral types if needed.
+	 * Typical usage is through `using` statement as in the following snippet:
+	 * @code
+	 * // Excerpt from VL53L0X device
+	 * using ClearInterruptFuture = TWriteRegisterFuture<Register::SYSTEM_INTERRUPT_CLEAR>;
+	 * int clear_interrupt(PROXY<ClearInterruptFuture> future) {
+	 * ...
+	 * }
+	 * @endcode
+	 * 
+	 * @tparam MANAGER the type of I2C Manager used to handle I2C communication
+	 * @tparam REGISTER the address of the register to write in the I2C device
+	 * @tparam T the type of the register to write to
+	 * @tparam BIG_ENDIAN if `true` (default) the register integral value is expected
+	 * in big endian and thus shall be converted from  little endian since it comes
+	 * from the MCU. This applies only to 16 bits or 32 bits integral types
+	 * (`int16_t`, `uint16_t`, `int32_t` or `uint32_t`).
+	 * 
+	 * @sa TReadRegisterFuture
+	 * @sa WriteRegisterFuture
+	 * @sa i2c::I2CSyncManager
+	 * @sa i2c::I2CAsyncManager
+	 */
 	template<typename MANAGER, uint8_t REGISTER, typename T, bool BIG_ENDIAN = true>
 	class TWriteRegisterFuture: public WriteRegisterFuture<MANAGER, T, BIG_ENDIAN>
 	{
 		using PARENT = WriteRegisterFuture<MANAGER, T, BIG_ENDIAN>;
 	public:
+		/**
+		 * Create a TWriteRegisterFuture future.
+		 * This future can then be used to write a value to the register.
+		 * @param value the value to write to the register in the I2C device
+		 * @param status_listener an optional listener to status changes on this 
+		 * future
+		 * @param output_listener an optional listener to output buffer changes on 
+		 * this future
+		 */
 		explicit TWriteRegisterFuture(const T& value,
 			typename PARENT::FUTURE_STATUS_LISTENER* status_listener = nullptr)
 			:	PARENT{REGISTER, value, status_listener} {}
@@ -211,7 +352,7 @@ namespace i2c
 		friend DEVICE;
 	};
 
-	//TODO DOCS
+	/// @cond notdocumented
 	template<typename MANAGER> class AbstractI2CFuturesGroup : 
 		public future::AbstractFuturesGroup<typename MANAGER::ABSTRACT_FUTURE>,
 		public I2CFutureHelper<MANAGER>
@@ -236,11 +377,56 @@ namespace i2c
 			return HELPER::check_status(source, status, *this);
 		}
 	};
+	/// @endcond
 
-	//TODO DOCS
-	// This future groups several futures and executes them (on attached I2C device) all in sequence
-	// status() and error() are automatically updated
-	// Subclass should add get() method and return whatever is useful to caller (obtained from other futures)
+	/**
+	 * Abstract class to allow aggregation of several futures in relation to I2C
+	 * transactions.
+	 * This allows to `await()` for all futures, or query the overall `status()`
+	 * of the group.
+	 * This enables I2C device support developers to handle complex I2C transactions
+	 * where several distinct Futures must be used.
+	 * Suclasses shall define all needed individual Futures as members, pass them
+	 * to I2CFuturesGroup constructor and call `future::AbstractFuturesGroup::init()`.
+	 * In addition, subclasses may define a method `get()` that will handle aggregation
+	 * of results of its individual futures.
+	 * 
+	 * The following is en excerpt of VL53L0X showing `GetGPIOSettingsFuture` future
+	 * definition and its usage in `get_GPIO_settings()` method:
+	 * @code
+	 * class GetGPIOSettingsFuture : public I2CFuturesGroup
+	 * {
+	 *     public:
+	 *     GetGPIOSettingsFuture() : I2CFuturesGroup{futures_, NUM_FUTURES} {
+	 *         I2CFuturesGroup::init(futures_);
+	 *     }
+	 *     bool get(vl53l0x::GPIOSettings& settings) {
+	 *         if (this->await() != future::FutureStatus::READY) return false;
+	 *         vl53l0x::GPIOFunction function;
+	 *         read_config_.get(function);
+	 *         uint8_t active_high;
+	 *         read_GPIO_active_high_.get(active_high);
+	 *         ...
+	 *         settings = vl53l0x::GPIOSettings{function, bool(active_high & 0x10), ...};
+	 *         return true;
+	 *     }
+	 * 
+	 * private:
+	 *     TReadRegisterFuture<Register::SYSTEM_INTERRUPT_CONFIG_GPIO, vl53l0x::GPIOFunction> read_config_{};
+	 *     TReadRegisterFuture<Register::GPIO_HV_MUX_ACTIVE_HIGH> read_GPIO_active_high_{};
+	 *     ...
+	 *     static constexpr uint8_t NUM_FUTURES = 4;
+	 *     ABSTRACT_FUTURE* futures_[NUM_FUTURES] = {&read_config_, &read_GPIO_active_high_,...};
+	 *     friend VL53L0X<MANAGER>;
+	 * };
+	 * 
+	 * int get_GPIO_settings(GetGPIOSettingsFuture& future) {
+	 *     return (future.start(*this) ? 0 : future.error());
+	 * }
+	 * @endcode
+	 * 
+	 * @tparam MANAGER the type of I2C Manager used to handle I2C communication
+	 */
 	template<typename MANAGER> class I2CFuturesGroup : 
 		public AbstractI2CFuturesGroup<MANAGER>
 	{
@@ -250,10 +436,32 @@ namespace i2c
 		using ABSTRACT_FUTURE = typename PARENT::ABSTRACT_FUTURE;
 
 	protected:
+		/**
+		 * Called by subclass constructor, this constructs a new I2CFuturesGroup
+		 * instance with the provided list of @p futures.
+		 * @param futures the array of futures to be handled by this group of futures
+		 * @param size the number of futures in @p futures
+		 * @param status_listener an optional listener to status changes on this 
+		 * future
+		 */
 		I2CFuturesGroup(
 			ABSTRACT_FUTURE** futures, uint8_t size, STATUS_LISTENER* status_listener = nullptr)
 			: PARENT{status_listener}, futures_{futures}, size_{size} {}
 
+		/**
+		 * Start the I2C transactions needed by this group of futures.
+		 * This is either called by the subclass or directly by the I2C device
+		 * support class (if declared friend of the subclass).
+		 * 
+		 * @warning Asynchronous API! If the currently active I2C Manager is 
+		 * asynchronous, then this method is too!
+		 * @warning Blocking API! If the currently active I2C Manager is 
+		 * synchronous, then this method is blocking!
+		 * 
+		 * @param device the `i2c::I2CDevice` subclass instance that shall handle
+		 * I2C commands to the I2C device
+		 * @retval true if the first I2C command could be launched successfully
+		 */
 		bool start(typename PARENT::DEVICE& device)
 		{
 			PARENT::set_device(device);
@@ -272,6 +480,7 @@ namespace i2c
 			}
 		}
 
+		/// @cond notdocumented
 		void on_status_change(const ABSTRACT_FUTURE& future, future::FutureStatus status) final
 		{
 			PARENT::on_status_change(future, status);
@@ -283,6 +492,7 @@ namespace i2c
 					next_future();
 			}
 		}
+		/// @endcond
 
 	private:
 		bool next_future()
@@ -324,9 +534,20 @@ namespace i2c
 		uint8_t index_ = 0;
 	};
 
-	//TODO DOCS
-	// This future executes several times the same future but with distinct input (I2C write) everytime
-	// template<typename F> 
+	/**
+	 * Class to allow dynamic creation of futures from values stored in flash memory,
+	 * leading to launch of I2C transactions.
+	 * Generated Futures are of type `WriteRegisterFuture`, in order to write one
+	 * byte to one register (or a sequence of 2 bytes) of the I2C device.
+	 * This allows to `await()` for all futures, or query the overall `status()`
+	 * of the group.
+	 * This is particularly useful with complex I2C devices that require heavy
+	 * setup procedures, such as VL53L0X.
+	 * 
+	 * @tparam MANAGER the type of I2C Manager used to handle I2C communication
+	 * 
+	 * @sa await_same_future_group()
+	 */
 	template<typename MANAGER> class I2CSameFutureGroup : public AbstractI2CFuturesGroup<MANAGER>
 	{
 		using PARENT = AbstractI2CFuturesGroup<MANAGER>;
@@ -338,13 +559,34 @@ namespace i2c
 		static constexpr uint8_t FUTURE_SIZE = F::IN_SIZE;
 
 	public:
+		/**
+		 * Construct a new I2CSameFutureGroup from an array of bytes stored in 
+		 * flash memory.
+		 * @param address address in flash space of the first byte to write to
+		 * the I2C device
+		 * @param size size in bytes of the array at @p address
+		 * @param status_listener an optional listener to status changes on this 
+		 */
 		I2CSameFutureGroup(uint16_t address, uint8_t size, STATUS_LISTENER* status_listener = nullptr)
 			: PARENT{status_listener}, address_{address}, size_{size}
 		{
 			PARENT::init({&future_}, size / FUTURE_SIZE);
 		}
 
-	protected:
+		/**
+		 * Start the I2C transactions needed by this group of futures.
+		 * This is either called by the I2C device support class or by the helper
+		 * function `await_same_future_group()`.
+		 * 
+		 * @warning Asynchronous API! If the currently active I2C Manager is 
+		 * asynchronous, then this method is too!
+		 * @warning Blocking API! If the currently active I2C Manager is 
+		 * synchronous, then this method is blocking!
+		 * 
+		 * @param device the `i2c::I2CDevice` subclass instance that shall handle
+		 * I2C commands to the I2C device
+		 * @retval true if the first I2C command could be launched successfully
+		 */
 		bool start(typename PARENT::DEVICE& device)
 		{
 			PARENT::set_device(device);
@@ -407,6 +649,23 @@ namespace i2c
 		friend bool await_same_future_group<MANAGER>(I2CDevice<MANAGER>&, const uint8_t*, uint8_t);
 	};
 
+	/**
+	 * Helper function that creates a `I2CSameFutureGroup` instance for the provided
+	 * flash array, launches its I2C transactions on the provided I2C device, and
+	 * waits for the transaction to finish.
+	 * @warning Blocking API!
+	 * 
+	 * @tparam MANAGER the type of I2C Manager used to handle I2C communication
+	 * @param device the `i2c::I2CDevice` subclass instance that shall handle
+	 * I2C commands to the I2C device
+	 * @param buffer pointer, in flash storage space, to the first byte to write to
+	 * the I2C device
+	 * @param size size in bytes of the @p buffer array
+	 * @retval true if the whole I2C transactions could be completely performed
+	 * successfully
+	 * 
+	 * @sa I2CSameFutureGroup
+	 */
 	template<typename MANAGER>
 	bool await_same_future_group(I2CDevice<MANAGER>& device,const uint8_t* buffer, uint8_t size)
 	{
