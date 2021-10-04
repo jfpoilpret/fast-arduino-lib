@@ -348,11 +348,12 @@ namespace devices::vl53l0x
 	streams::ostream& operator<<(streams::ostream&, const GPIOSettings&);
 	/// @endcond
 
-	//TODO DOCS
+	/// @cond notdocumented
 	class InterruptStatus
 	{
 	public:
 		InterruptStatus() = default;
+		//TODO maybe return more useful info (is each bit mapped to GPIOFunction?)
 		operator uint8_t() const
 		{
 			return status_ & 0x07;
@@ -361,20 +362,41 @@ namespace devices::vl53l0x
 	private:
 		uint8_t status_ = 0;
 	};
+	/// @endcond
 
-	//TODO DOCS
+	/**
+	 * Hold reference SPADs (Single Photon Avalanche Diode).
+	 * VL53L0X device has 48 SPADs, only a part being enabled.
+	 * SPAD enable status is stored as a bit in an array of 6 bytes.
+	 * 
+	 * @sa VL53L0X::get_reference_SPADs()
+	 * @sa VL53L0X::set_reference_SPADs()
+	 * @sa SPADInfo
+	 */
 	class SPADReference
 	{
 	public:
+		/// @cond notdocumented
 		SPADReference() = default;
 		SPADReference(const uint8_t spad_refs[6])
 		{
 			memcpy(spad_refs_, spad_refs, 6);
 		}
+		/// @endcond
+
+		/**
+		 * Get a pointer to the 6-byte array stored in this SPADReference instance.
+		 * The returned array cannot be modified.
+		 */
 		const uint8_t* spad_refs() const
 		{
 			return spad_refs_;
 		}
+
+		/**
+		 * Get a pointer to the 6-byte array stored in this SPADReference instance.
+		 * The returned array can be modified.
+		 */
 		uint8_t* spad_refs()
 		{
 			return spad_refs_;
@@ -384,14 +406,39 @@ namespace devices::vl53l0x
 		uint8_t spad_refs_[6];
 	};
 
-	//TODO DOCS
+	/**
+	 * Type of pulse period configured for VL53L0X device VCSEL (Vertical Cavity
+	 * Surface Emitting Laser).
+	 * VCSEL pulse period can be configured for PRE-RANGE and FINAL-RANGE steps
+	 * in ranging steps sequence.
+	 * Changing pulse periods has an impact on range distance.
+	 * Pulse period is expressed in PCLK, whatever that really means.
+	 * @sa VL53L0X::get_vcsel_pulse_period()
+	 * @sa VL53L0X::set_vcsel_pulse_period()
+	 */
 	enum class VcselPeriodType : uint8_t
 	{
 		PRE_RANGE = uint8_t(vl53l0x::Register::PRE_RANGE_CONFIG_VCSEL_PERIOD),
 		FINAL_RANGE = uint8_t(vl53l0x::Register::FINAL_RANGE_CONFIG_VCSEL_PERIOD)
 	};
 
-	//TODO Document each step: what it does, its impact on measurements and timing
+	/**
+	 * Hold VL53L0X sequence steps to use for ranging.
+	 * This class is implemented using the "builder" pattern, demonstrated in 
+	 * following snippet:
+	 * @code
+	 * // steps1 contains only pre-range and final-range steps
+	 * SequenceSteps steps1 = SequenceSteps::create().pre_range().final_range();
+	 * // steps2 contains all steps except TCC
+	 * SequenceSteps steps2 = SequenceSteps::all().no_tcc();
+	 * @endcode
+	 * All builder methods are `constexpr` hence are typically evaluated at 
+	 * compile-time.
+	 * Each step has an impact on minimal measurement time for ranging.
+	 * 
+	 * @sa VL53L0X::get_sequence_steps()
+	 * @sa VL53L0X::set_sequence_steps()
+	 */
 	class SequenceSteps
 	{
 	private:
@@ -408,79 +455,154 @@ namespace devices::vl53l0x
 		static constexpr uint8_t FINAL_RANGE = bits::BV8(7);
 
 	public:
+		/**
+		 * Create an empty step sequence for further adding individual steps.
+		 */
 		static constexpr SequenceSteps create()
 		{
 			return SequenceSteps{};
 		}
+		/**
+		 * Create a full step sequence with all steps, with the possibility to 
+		 * remove steps you do not want:
+		 * - TCC
+		 * - DSS
+		 * - MSRC
+		 * - PRE-RANGE
+		 * - FINAL-RANGE
+		 */
 		static constexpr SequenceSteps all()
 		{
 			return SequenceSteps{TCC | DSS | MSRC | PRE_RANGE | FINAL_RANGE};
 		}
 
+		/// @cond notdocumented
 		constexpr SequenceSteps() = default;
+		/// @endcond
 
+		/**
+		 * Create a new SequenceSteps by adding TCC to steps of this instance.
+		 */
 		constexpr SequenceSteps tcc() const
 		{
 			return SequenceSteps{uint8_t(steps_ | TCC)};
 		}
+
+		/**
+		 * Create a new SequenceSteps by adding DSS to steps of this instance.
+		 */
 		constexpr SequenceSteps dss() const
 		{
 			return SequenceSteps{uint8_t(steps_ | DSS)};
 		}
+
+		/**
+		 * Create a new SequenceSteps by adding MSRC to steps of this instance.
+		 */
 		constexpr SequenceSteps msrc() const
 		{
 			return SequenceSteps{uint8_t(steps_ | MSRC)};
 		}
+
+		/**
+		 * Create a new SequenceSteps by adding PRE-RANGE to steps of this instance.
+		 */
 		constexpr SequenceSteps pre_range() const
 		{
 			return SequenceSteps{uint8_t(steps_ | PRE_RANGE)};
 		}
+
+		/**
+		 * Create a new SequenceSteps by adding FINAL-RANGE to steps of this instance.
+		 */
 		constexpr SequenceSteps final_range() const
 		{
 			return SequenceSteps{uint8_t(steps_ | FINAL_RANGE)};
 		}
 
+		/**
+		 * Create a new SequenceSteps by removing TCC from steps of this instance.
+		 */
 		constexpr SequenceSteps no_tcc() const
 		{
 			return SequenceSteps{uint8_t(steps_ & ~TCC)};
 		}
+
+		/**
+		 * Create a new SequenceSteps by removing DSS from steps of this instance.
+		 */
 		constexpr SequenceSteps no_dss() const
 		{
 			return SequenceSteps{uint8_t(steps_ & ~DSS)};
 		}
+
+		/**
+		 * Create a new SequenceSteps by removing MSRC from steps of this instance.
+		 */
 		constexpr SequenceSteps no_msrc() const
 		{
 			return SequenceSteps{uint8_t(steps_ & ~MSRC)};
 		}
+
+		/**
+		 * Create a new SequenceSteps by removing PRE-RANGE from steps of this instance.
+		 */
 		constexpr SequenceSteps no_pre_range() const
 		{
 			return SequenceSteps{uint8_t(steps_ & ~PRE_RANGE)};
 		}
+
+		/**
+		 * Create a new SequenceSteps by removing FINAL-RANGE from steps of this instance.
+		 */
 		constexpr SequenceSteps no_final_range() const
 		{
 			return SequenceSteps{uint8_t(steps_ & ~FINAL_RANGE)};
 		}
 
+		/**
+		 * Get steps of this instance as a byte.
+		 */
 		uint8_t value() const
 		{
 			return steps_;
 		}
+
+		/**
+		 * Indicate if this instance has TCC (Target Center Check) step.
+		 */
 		bool is_tcc() const
 		{
 			return steps_ & TCC;
 		}
+
+		/**
+		 * Indicate if this instance has DSS (Dynamic SPAD Selection) step.
+		 */
 		bool is_dss() const
 		{
 			return steps_ & DSS;
 		}
+
+		/**
+		 * Indicate if this instance has MSRC (Minimum Signal Rate Check) step.
+		 */
 		bool is_msrc() const
 		{
 			return steps_ & MSRC;
 		}
+
+		/**
+		 * Indicate if this instance has PRE-RANGE step.
+		 */
 		bool is_pre_range() const
 		{
 			return steps_ & PRE_RANGE;
 		}
+
+		/**
+		 * Indicate if this instance has FINAL-RANGE step.
+		 */
 		bool is_final_range() const
 		{
 			return steps_ & FINAL_RANGE;
