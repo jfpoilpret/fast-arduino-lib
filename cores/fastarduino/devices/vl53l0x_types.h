@@ -619,28 +619,57 @@ namespace devices::vl53l0x
 	streams::ostream& operator<<(streams::ostream&, SequenceSteps);
 	/// @endcond
 
-	//TODO DOCS
+	/**
+	 * Hold VL53L0X sequence steps timeouts and other related settings used for 
+	 * ranging.
+	 * 
+	 * @sa VL53L0X::get_sequence_steps_timeout()
+	 */
 	class SequenceStepsTimeout
 	{
 	public:
+		/// @cond notdocumented
 		SequenceStepsTimeout() = default;
+		/// @endcond
 
+		/**
+		 * VCSEL PCLK value for pre-range step.
+		 */
 		uint8_t pre_range_vcsel_period_pclks() const
 		{
 			return pre_range_vcsel_period_pclks_;
 		}
+
+		/**
+		 * VCSEL PCLK value for final-range step.
+		 */
 		uint8_t final_range_vcsel_period_pclks() const
 		{
 			return final_range_vcsel_period_pclks_;
 		}
+
+		/**
+		 * MCLK for any of MSRC, DSS or TCC steps.
+		 */
 		uint16_t msrc_dss_tcc_mclks() const
 		{
 			return msrc_dss_tcc_mclks_ + 1;
 		}
+
+		/**
+		 * MCLK for PRE-RANGE step.
+		 */
 		uint16_t pre_range_mclks() const
 		{
 			return TimeoutUtilities::decode_timeout(pre_range_mclks_);
 		}
+
+		/**
+		 * MCLK for FINAL-RANGE step.
+		 * @param is_pre_range indicate if calculation is performed on a sequence 
+		 * including PRE-RANGE step; this impacts calculation.
+		 * @sa SequenceSteps
+		 */
 		uint16_t final_range_mclks(bool is_pre_range) const
 		{
 			uint16_t temp_final_range_mclks = TimeoutUtilities::decode_timeout(final_range_mclks_);
@@ -648,16 +677,29 @@ namespace devices::vl53l0x
 		}
 
 		// Following values are calculated from others
+
+		/**
+		 * Calculate the timing in us of any of MSRC, DSS or TCC steps.
+		 */
 		uint32_t msrc_dss_tcc_us() const
 		{
 			return TimeoutUtilities::calculate_timeout_us(msrc_dss_tcc_mclks(), pre_range_vcsel_period_pclks());
 		}
 
+		/**
+		 * Calculate the timing in us of PRE-RANGE step.
+		 */
 		uint32_t pre_range_us() const
 		{
 			return TimeoutUtilities::calculate_timeout_us(pre_range_mclks(), pre_range_vcsel_period_pclks());
 		}
 
+		/**
+		 * Calculate the timing in us of FINAL-RANGE step.
+		 * @param is_pre_range indicate if calculation is performed on a sequence 
+		 * including PRE-RANGE step; this impacts calculation.
+		 * @sa SequenceSteps
+		 */
 		uint32_t final_range_us(bool is_pre_range) const
 		{
 			return TimeoutUtilities::calculate_timeout_us(
@@ -686,7 +728,14 @@ namespace devices::vl53l0x
 	streams::ostream& operator<<(streams::ostream&, const SequenceStepsTimeout&);
 	/// @endcond
 
-	//TODO DOCS
+	/**
+	 * Hold SPAD information from VL53L0X device.
+	 * This information is used to calculate refrence SPADs.
+	 * @warning you should never need to access instances of this class.
+	 * @sa VL53L0X::get_SPAD_info()
+	 * @sa VL53L0X::get_reference_SPADs()
+	 * @sa VL53L0X::set_reference_SPADs()
+	 */
 	class SPADInfo
 	{
 	private:
@@ -694,14 +743,23 @@ namespace devices::vl53l0x
 		static constexpr uint8_t COUNT = bits::CBV8(7);
 
 	public:
+		/// @cond notdocumented
 		SPADInfo() = default;
 		SPADInfo(uint8_t info) : info_{info} {}
+		/// @endcond
 
+		/**
+		 * Indicate which is the first SPAD to enable, if `false` this is SPAD `0`,
+		 * else it is SPAD `12`.
+		 */
 		bool is_aperture() const
 		{
 			return info_ & APERTURE;
 		}
 
+		/**
+		 * Indicate the number of SPADs to enable.
+		 */
 		uint8_t count() const
 		{
 			return info_ & COUNT;
