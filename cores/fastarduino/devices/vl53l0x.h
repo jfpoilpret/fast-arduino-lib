@@ -52,10 +52,15 @@ namespace devices
 	}
 }
 
+//TODO Review all API to include arguments check whenever needed!
+//TODO sort methods according to
+// 1. API level High, Mid, Low
+// 2. Async, Sync
+// 3. Usage frequency in apps / Sequencial order of call
+
 // OPEN POINTS:
 // - calibration mode or only hard-coded calibration?
 
-//TODO DOCS
 namespace devices::vl53l0x
 {
 	/// @cond notdocumented
@@ -79,6 +84,10 @@ namespace devices::vl53l0x
 	 * highly complex Future classes to be defined with little added value.
 	 * Only API that were deemed useful in non-blocking mode were also made
 	 * asynchronous.
+	 * Synchronous API are blocking until completion and should never be called
+	 * from an ISR!
+	 * Asynchronous API can be called from anywhere, but you must await their
+	 * completion through a Future.
 	 * 
 	 * @note The VL53L0X device is extremely complex and not well documented; its 
 	 * only complete reference is the bloated C code provided by STM which was not
@@ -112,7 +121,26 @@ namespace devices::vl53l0x
 		 */
 		explicit VL53L0X(MANAGER& manager) : PARENT{manager, DEFAULT_DEVICE_ADDRESS, i2c::I2C_FAST, false} {}
 
-		// High-level API
+		/**
+		 * Fully initialize this VL53L0X device and configures it with provided @p profile.
+		 * Once this method has been called successfully, you can start perform ranging
+		 * (continuous or not).
+		 * You may also want to set some GPIO interrupts before ranging.
+		 * @warning Blocking API!
+		 * @note High-level API
+		 * If you need more custom settings to initalize the device you should turn to
+		 * mid-level API.
+		 * 
+		 * @param profile the pre-defined Profile to use on this sensor
+		 * 
+		 * @sa start_continuous_ranging()
+		 * @sa await_single_range()
+		 * 
+		 * @sa set_GPIO_settings()
+		 * 
+		 * @sa init_data_first()
+		 * @sa init_static_second()
+		 */
 		bool begin(Profile profile)
 		{
 			if (!init_data_first()) return false;
@@ -139,17 +167,53 @@ namespace devices::vl53l0x
 			}
 			return true;
 		}
-		
-		//TODO Review all API to include arguments check whenever needed!
 
-		// Asynchronous API
-		//==================
-		// Low-level API: use only if you know what you are doing!
+		/**
+		 * Directly get value of a VL53L0X register.
+		 * @note Low-level API! Generally you shall not use this API unless you
+		 * know what you are doing.
+		 * @warning Asynchronous API!
+		 * 
+		 * @tparam REGISTER the register to read from VL53l)X device
+		 * @tparam T the type of value stored in @p REGISTER
+		 * 
+		 * @param future a Future passed by the caller, that will be updated
+		 * once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
+		 * target device will trigger an error here. the list of possible errors
+		 * 
+		 * @sa set_register()
+		 * @sa get_register(T& value)
+		 */
 		template<Register REGISTER, typename T = uint8_t>
 		int get_register(PROXY<TReadRegisterFuture<REGISTER, T>> future)
 		{
 			return this->async_read(future);
 		}
+
+		/**
+		 * Directly set value of a VL53L0X register.
+		 * @note Low-level API! Generally you shall not use this API unless you
+		 * know what you are doing.
+		 * @warning Asynchronous API!
+		 * 
+		 * @tparam REGISTER the register to write to VL53l)X device
+		 * @tparam T the type of value stored in @p REGISTER
+		 * 
+		 * @param future a Future passed by the caller, that will be updated
+		 * once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
+		 * target device will trigger an error here. the list of possible errors
+		 * 
+		 * @sa get_register()
+		 * @sa set_register(const T& value)
+		 */
 		template<Register REGISTER, typename T = uint8_t>
 		int set_register(PROXY<TWriteRegisterFuture<REGISTER, T>> future)
 		{
@@ -157,6 +221,22 @@ namespace devices::vl53l0x
 		}
 
 		using GetRangeStatusFuture = TReadRegisterFuture<Register::RESULT_RANGE_STATUS, DeviceStatus>;
+
+		/**
+		 * Get current `DeviceStatus` from this device.
+		 * @warning Asynchronous API!
+		 * @note Mid-level API
+		 * 
+		 * @param future a GetRangeStatusFuture passed by the caller, that will be updated
+		 * once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
+		 * target device will trigger an error here. the list of possible errors
+		 * 
+		 * @sa get_range_status(DeviceStatus&)
+		 */
 		int get_range_status(PROXY<GetRangeStatusFuture> future)
 		{
 			return this->async_read(future);
@@ -206,6 +286,23 @@ namespace devices::vl53l0x
 
 			friend VL53L0X<MANAGER>;
 		};
+
+		/**
+		 * Get current `GPIOSettings` from this device.
+		 * @warning Asynchronous API!
+		 * @note Mid-level API
+		 * 
+		 * @param future a GetGPIOSettingsFuture passed by the caller, that will be updated
+		 * once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
+		 * target device will trigger an error here. the list of possible errors
+		 * 
+		 * @sa set_GPIO_settings()
+		 * @sa get_GPIO_settings(GPIOSettings&)
+		 */
 		int get_GPIO_settings(GetGPIOSettingsFuture& future)
 		{
 			return (future.start(*this) ? 0 : future.error());
@@ -248,12 +345,31 @@ namespace devices::vl53l0x
 
 			friend VL53L0X<MANAGER>;
 		};
+
+		/**
+		 * Set new `GPIOSettings` for this device.
+		 * @warning Asynchronous API!
+		 * @note Mid-level API
+		 * 
+		 * @param future a SetGPIOSettingsFuture passed by the caller, that will be updated
+		 * once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
+		 * target device will trigger an error here. the list of possible errors
+		 * 
+		 * @sa get_GPIO_settings()
+		 * @sa set_GPIO_settings(const GPIOSettings&)
+		 */
 		int set_GPIO_settings(SetGPIOSettingsFuture& future)
 		{
 			return (future.start(*this) ? 0 : future.error());
 		}
 
 		using GetInterruptStatusFuture = TReadRegisterFuture<Register::RESULT_INTERRUPT_STATUS, InterruptStatus>;
+
+		//TODO DOCS
 		int get_interrupt_status(PROXY<GetInterruptStatusFuture> future)
 		{
 			return this->async_read(future);
