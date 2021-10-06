@@ -826,7 +826,21 @@ namespace devices::vl53l0x
 			return true;
 		}
 
-		//TODO DOCS
+		/**
+		 * Get current "measurement timing budget" for this device.
+		 * This is the amount of time (in us) that is used to perform a range.
+		 * This amount is calculated based on other settings of the device.
+		 * 
+		 * @warning Blocking API!
+		 * @note Mid-level API
+		 * 
+		 * @param budget_us a reference to a variable that will receive the
+		 * current measurement timing budget for this device
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa set_measurement_timing_budget()
+		 */
 		bool get_measurement_timing_budget(uint32_t& budget_us)
 		{
 			// Get steps and timeouts
@@ -839,7 +853,22 @@ namespace devices::vl53l0x
 			return true;
 		}
 
-		//TODO DOCS
+		/**
+		 * Set new "measurement timing budget" for this device.
+		 * This is the amount of time (in us) that is used to perform a range.
+		 * 
+		 * @warning Blocking API!
+		 * @note Mid-level API
+		 * 
+		 * @param budget_us the new measurement timing budget to use for ranging;
+		 * it must be bigger than 20000us; the actual minimum value also depends
+		 * on other device settings, in particular the `SequenceSteps` used for 
+		 * ranging. The bigger the budget, the higher the accuracy of measurements.
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa get_measurement_timing_budget()
+		 */
 		bool set_measurement_timing_budget(uint32_t budget_us)
 		{
 			using WRITE_BUDGET = TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI, uint16_t>;
@@ -959,7 +988,34 @@ namespace devices::vl53l0x
 			return this->template sync_write<ClearInterruptFuture>(clear_mask);
 		}
 
-		//TODO DOCS
+		/**
+		 * Start continuous ranging on this VL53L0X device.
+		 * This method shall not be called before the device has been properly 
+		 * initialized, either with high-level API `begin()` or mid-level API
+		 * methods `init_data_first()`, `init_static_second()` and 
+		 * `perform_ref_calibration()`.
+		 * Once this method has been called, continuous ranging starts on the device,
+		 * at the given period.
+		 * You can check when a sample is ready to read by examining interrupt 
+		 * status or reange status, then you can read the range and clear the 
+		 * interrupt.
+		 * Or you may prefer just await for new range which is easier to code
+		 * but will block your program.
+		 * @warning Blocking API!
+		 * @note Mid-level API!
+		 * 
+		 * @param period_ms the period, in ms, between 2 consecutive ranging 
+		 * measures; if `0` (the default), then consecutive measures will follow
+		 * each other with no delay ("back-to-back" mode).
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa stop_continuous_range()
+		 * @sa await_continuous_range()
+		 * @sa get_interrupt_status()
+		 * @sa get_range_status()
+		 * @sa get_direct_range()
+		 */
 		bool start_continuous_ranging(uint16_t period_ms = 0)
 		{
 			using READ_OSC_CAL = TReadRegisterFuture<Register::OSC_CALIBRATE_VAL, uint16_t>;
@@ -996,14 +1052,40 @@ namespace devices::vl53l0x
 			return clear_interrupt();
 		}
 
-		//TODO DOCS
-		// This API shall be used only after InterruptStatus != 0, Interrupt Status should be clear immediately after it
+		/**
+		 * Get range measured by this device.
+		 * This method does not wait for anything, it just gets the current value
+		 * in the range register. This is useful only when you know a range is ready
+		 * to read.
+		 * You would probably prefer to use methods that first await for range
+		 * measure to be ready before returning its value.
+		 * @warning Blocking API!
+		 * @note Mid-level API
+		 * 
+		 * @param range_mm a reference to a variable that will receive the current 
+		 * range (in mm) stored in the device
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa await_single_range()
+		 * @sa await_continuous_range()
+		 * @sa get_direct_range()
+		 */
 		bool get_direct_range(uint16_t& range_mm)
 		{
 			return this->template sync_read<GetDirectRangeFuture>(range_mm);
 		}
 
-		//TODO DOCS
+		/**
+		 * Stop continuous ranging on this VL53L0X device.
+		 * @warning Blocking API!
+		 * @note Mid-level API!
+		 * 
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa start_continuous_range()
+		 */
 		bool stop_continuous_ranging()
 		{
 			return await_same_future_group(
