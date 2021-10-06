@@ -132,6 +132,8 @@ namespace devices::vl53l0x
 		 * mid-level API.
 		 * 
 		 * @param profile the pre-defined Profile to use on this sensor
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
 		 * 
 		 * @sa start_continuous_ranging()
 		 * @sa await_single_range()
@@ -212,7 +214,7 @@ namespace devices::vl53l0x
 		 * target device will trigger an error here. the list of possible errors
 		 * 
 		 * @sa get_register()
-		 * @sa set_register(const T& value)
+		 * @sa set_register(T value)
 		 */
 		template<Register REGISTER, typename T = uint8_t>
 		int set_register(PROXY<TWriteRegisterFuture<REGISTER, T>> future)
@@ -369,13 +371,45 @@ namespace devices::vl53l0x
 
 		using GetInterruptStatusFuture = TReadRegisterFuture<Register::RESULT_INTERRUPT_STATUS, InterruptStatus>;
 
-		//TODO DOCS
+		/**
+		 * Get current `InterruptStatus` from this device.
+		 * @warning Asynchronous API!
+		 * @note Mid-level API
+		 * 
+		 * @param future a GetInterruptStatusFuture passed by the caller, that will be updated
+		 * once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
+		 * target device will trigger an error here. the list of possible errors
+		 * 
+		 * @sa clear_interrupt()
+		 * @sa get_interrupt_status(InterruptStatus&)
+		 */
 		int get_interrupt_status(PROXY<GetInterruptStatusFuture> future)
 		{
 			return this->async_read(future);
 		}
 
 		using ClearInterruptFuture = TWriteRegisterFuture<Register::SYSTEM_INTERRUPT_CLEAR>;
+
+		/**
+		 * Clear interrupt status from this device.
+		 * @warning Asynchronous API!
+		 * @note Mid-level API
+		 * 
+		 * @param future a ClearInterruptFuture passed by the caller, that will be updated
+		 * once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
+		 * target device will trigger an error here. the list of possible errors
+		 * 
+		 * @sa clear_interrupt(uint8_t)
+		 * @sa get_interrupt_status()
+		 */
 		int clear_interrupt(PROXY<ClearInterruptFuture> future)
 		{
 			return this->async_write(future);
@@ -383,20 +417,74 @@ namespace devices::vl53l0x
 
 		// This API shall be used only after InterruptStatus != 0, Interrupt Status should be clear immediately after it
 		using GetDirectRangeFuture = TReadRegisterFuture<Register::RESULT_RANGE_MILLIMETER, uint16_t>;
+
+		/**
+		 * Get range measured by this device.
+		 * This method does not wait for anything, it just gets the current value
+		 * in the range register. This is useful only when you know a range is ready
+		 * to read.
+		 * You would probably prefer to use methods that first await for range
+		 * measure to be ready before returning its value.
+		 * @warning Asynchronous API!
+		 * @note Mid-level API
+		 * 
+		 * @param future a GetDirectRangeFuture passed by the caller, that will be updated
+		 * once the current I2C action is finished.
+		 * @retval 0 if no problem occurred during the preparation of I2C transaction
+		 * @return an error code if something bad happened; for an asynchronous
+		 * I2C Manager, this typically happens when its queue of I2CCommand is full;
+		 * for a synchronous I2C Manager, any error on the I2C bus or on the 
+		 * target device will trigger an error here. the list of possible errors
+		 * 
+		 * @sa await_single_range()
+		 * @sa await_continuous_range()
+		 * @sa get_direct_range(uint16_t&)
+		 */
 		int get_direct_range(PROXY<GetDirectRangeFuture> future)
 		{
 			return this->async_read(future);
 		}
 
-		// Synchronous API
-		//=================
-		// Low-level API: use only if you know what you are doing!
+		/**
+		 * Directly get value of a VL53L0X register.
+		 * @note Low-level API! Generally you shall not use this API unless you
+		 * know what you are doing.
+		 * @warning Blocking API!
+		 * 
+		 * @tparam REGISTER the register to read from VL53l)X device
+		 * @tparam T the type of value stored in @p REGISTER
+		 * 
+		 * @param value a reference to a variable of type @p T, that will receive 
+		 * the value in register @p REGISTER
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa set_register(T)
+		 * @sa get_register()
+		 */
 		template<Register REGISTER, typename T = uint8_t>
 		bool get_register(T& value)
 		{
 			using GetRegisterFuture = TReadRegisterFuture<REGISTER, T>;
 			return this->template sync_read<GetRegisterFuture>(value);
 		}
+
+		/**
+		 * Directly set value of a VL53L0X register.
+		 * @note Low-level API! Generally you shall not use this API unless you
+		 * know what you are doing.
+		 * @warning Blocking API!
+		 * 
+		 * @tparam REGISTER the register to write to VL53l)X device
+		 * @tparam T the type of value stored in @p REGISTER
+		 * 
+		 * @param value a value of type @p T that will be written to register @p REGISTER
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa get_register(T& value)
+		 * @sa set_register()
+		 */
 		template<Register REGISTER, typename T = uint8_t>
 		bool set_register(T value)
 		{
@@ -404,6 +492,18 @@ namespace devices::vl53l0x
 			return this->template sync_write<SetRegisterFuture>(value);
 		}
 
+		/**
+		 * Change the I2C address of this VL53L0X device.
+		 * For this to work, other I2C devices with the same address shall be
+		 * shut down during this method call.
+		 * @note High-level API!
+		 * @warning Blocking API!
+		 * 
+		 * @param device_address the new I2C address for this device; only 7 LSB
+		 * are relevant.
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 */
 		bool set_address(uint8_t device_address)
 		{
 			using SetAddressFuture = TWriteRegisterFuture<Register::I2C_SLAVE_DEVICE_ADDRESS>;
@@ -413,36 +513,126 @@ namespace devices::vl53l0x
 			return true;
 		}
 
+		/**
+		 * Get model of this VL53L0X register. This is normally a constant (`0xEE`).
+		 * @note Mid-level API!
+		 * @warning Blocking API!
+		 * 
+		 * @param model a reference to a variable that will receive the model
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa get_revision()
+		 */
 		bool get_model(uint8_t& model)
 		{
 			using GetModelFuture = TReadRegisterFuture<Register::IDENTIFICATION_MODEL_ID>;
 			return this->template sync_read<GetModelFuture>(model);
 		}
+
+		/**
+		 * Get revision of this VL53L0X register. This is normally a constant (`0x10`).
+		 * @note Mid-level API!
+		 * @warning Blocking API!
+		 * 
+		 * @param revision a reference to a variable that will receive the revision
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa get_model()
+		 */
 		bool get_revision(uint8_t& revision)
 		{
 			using GetRevisionFuture = TReadRegisterFuture<Register::IDENTIFICATION_REVISION_ID>;
 			return this->template sync_read<GetRevisionFuture>(revision);
 		}
+
+		/**
+		 * Get current power mode of this VL53L0X register.
+		 * @note Mid-level API!
+		 * @warning Blocking API!
+		 * 
+		 * @param power_mode a reference to a variable that will receive the revision
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 */
 		bool get_power_mode(PowerMode& power_mode)
 		{
 			using GetPowerModeFuture = TReadRegisterFuture<Register::POWER_MANAGEMENT, PowerMode>;
 			return this->template sync_read<GetPowerModeFuture>(power_mode);
 		}
+
+		/**
+		 * Get current `DeviceStatus` from this device.
+		 * @warning Blocking API!
+		 * @note Mid-level API
+		 * 
+		 * @param range_status a reference to a variable that will receive the 
+		 * device status
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa get_range_status()
+		 */
 		bool get_range_status(DeviceStatus& range_status)
 		{
 			return this->template sync_read<GetRangeStatusFuture>(range_status);
 		}
+
+		/**
+		 * Get current measurement steps executed in sequence by the device 
+		 * during ranging.
+		 * @warning Blocking API!
+		 * @note Mid-level API
+		 * 
+		 * @param sequence_steps a reference to a variable that will receive the 
+		 * sequence steps
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa set_sequence_steps()
+		 * @sa SequenceSteps
+		 */
 		bool get_sequence_steps(SequenceSteps& sequence_steps)
 		{
 			using GetSequenceStepsFuture = TReadRegisterFuture<Register::SYSTEM_SEQUENCE_CONFIG, SequenceSteps>;
 			return this->template sync_read<GetSequenceStepsFuture>(sequence_steps);
 		}
+
+		/**
+		 * Set measurement steps to be executed in sequence by the device 
+		 * during ranging.
+		 * @warning Blocking API!
+		 * @note Mid-level API
+		 * 
+		 * @param sequence_steps the sequence steps to use for ranging
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa get_sequence_steps()
+		 * @sa SequenceSteps
+		 */
 		bool set_sequence_steps(SequenceSteps sequence_steps)
 		{
 			using SetSequenceStepsFuture = TWriteRegisterFuture<Register::SYSTEM_SEQUENCE_CONFIG, SequenceSteps>;
 			return this->template sync_write<SetSequenceStepsFuture>(sequence_steps);
 		}
 
+		/**
+		 * Get current pulse period of the VCSEL for pre-range or final-range step.
+		 * Pulse period is expressed in PCLK, whatever that really means.
+		 * @warning Blocking API!
+		 * @note Mid-level API
+		 * 
+		 * @tparam TYPE the type of pulse period we want to read
+		 * @param period a reference to a variable that will receive the 
+		 * pulse period
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa set_vcsel_pulse_period()
+		 * @sa VcselPeriodType
+		 */
 		template<VcselPeriodType TYPE>
 		bool get_vcsel_pulse_period(uint8_t& period)
 		{
@@ -452,12 +642,31 @@ namespace devices::vl53l0x
 			return true;
 		}
 
+		/**
+		 * Set new pulse period of the VCSEL for pre-range or final-range step.
+		 * Pulse period is expressed in PCLK, whatever that really means.
+		 * Changing pulse periods has an impact on range distance.
+		 * @warning Blocking API!
+		 * @note Mid-level API
+		 * 
+		 * @tparam TYPE the type of pulse period we want to set (pre-range 
+		 * or final-range)
+		 * @param period the new pulse period to use for @p TYPE step; for pre-range,
+		 * possible values are 12, 14, 16, 18; for final-range these are 8, 10, 
+		 * 12, 14.
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa get_vcsel_pulse_period()
+		 * @sa VcselPeriodType
+		 */
 		template<VcselPeriodType TYPE>
 		bool set_vcsel_pulse_period(uint8_t period)
 		{
 			return set_vcsel_pulse_period(TYPE, period);
 		}
 
+		//TODO put to private section?
 		bool set_vcsel_pulse_period(VcselPeriodType type, uint8_t period)
 		{
 			// 0. Check period
@@ -492,6 +701,22 @@ namespace devices::vl53l0x
 			return true;
 		}
 
+		/**
+		 * Get current signal rate limit for ranging.
+		 * This is a ratio between 0.0 and 1.0; lower values will allow
+		 * ranging in long distance or in a noisy environment; default is normally
+		 * 0.25.
+		 * @warning Blocking API!
+		 * @note Mid-level API
+		 * 
+		 * @param signal_rate a reference to a variable that will receive the 
+		 * current signal rate limit
+		 * 
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa set_signal_rate_limit()
+		 */
 		bool get_signal_rate_limit(float& signal_rate)
 		{
 			using GetSignalRateLimitFuture = 
@@ -502,6 +727,21 @@ namespace devices::vl53l0x
 			return true;
 		}
 
+		/**
+		 * Set new signal rate limit for ranging.
+		 * This is a ratio between 0.0 and 1.0; lower values will allow
+		 * ranging in long distance or in a noisy environment; default is normally
+		 * 0.25.
+		 * @warning Blocking API!
+		 * @note Mid-level API
+		 * 
+		 * @param signal_rate the new signal rate limit to use for ranging;
+		 * must be between 0.0 and 1.0.
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa get_signal_rate_limit()
+		 */
 		bool set_signal_rate_limit(float signal_rate)
 		{
 			using SetSignalRateLimitFuture = 
@@ -509,6 +749,7 @@ namespace devices::vl53l0x
 			return this->template sync_write<SetSignalRateLimitFuture>(FixPoint9_7::convert(signal_rate));
 		}
 
+		//TODO DOCS
 		bool get_reference_SPADs(SPADReference& spad_ref)
 		{
 			using GetReferenceSPADsFuture = 
@@ -516,6 +757,7 @@ namespace devices::vl53l0x
 			return this->template sync_read<GetReferenceSPADsFuture, SPADReference>(spad_ref);
 		}
 
+		//TODO DOCS
 		bool set_reference_SPADs(const SPADReference& spad_ref)
 		{
 			using SetReferenceSPADsFuture = 
@@ -526,6 +768,7 @@ namespace devices::vl53l0x
 			return this->template sync_write<SetReferenceSPADsFuture, SPADReference>(spad_ref);
 		}
 
+		//TODO DOCS
 		bool get_SPAD_info(SPADInfo& info)
 		{
 			using READ_SPAD = TReadRegisterFuture<Register::SPAD_INFO, SPADInfo>;
@@ -558,6 +801,7 @@ namespace devices::vl53l0x
 			return await_same_future_group(internals::spad_info::BUFFER4, internals::spad_info::BUFFER4_SIZE);
 		}
 
+		//TODO DOCS
 		bool get_sequence_steps_timeout(SequenceStepsTimeout& timeouts)
 		{
 			using READ_MSRC_TIMEOUT = TReadRegisterFuture<Register::MSRC_CONFIG_TIMEOUT_MACROP>;
@@ -582,6 +826,7 @@ namespace devices::vl53l0x
 			return true;
 		}
 
+		//TODO DOCS
 		bool get_measurement_timing_budget(uint32_t& budget_us)
 		{
 			// Get steps and timeouts
@@ -594,6 +839,7 @@ namespace devices::vl53l0x
 			return true;
 		}
 
+		//TODO DOCS
 		bool set_measurement_timing_budget(uint32_t budget_us)
 		{
 			using WRITE_BUDGET = TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_TIMEOUT_MACROP_HI, uint16_t>;
@@ -607,6 +853,19 @@ namespace devices::vl53l0x
 			return this->template sync_write<WRITE_BUDGET>(budget);
 		}
 
+		/**
+		 * Get current `GPIOSettings` from this device.
+		 * @warning Blocking API!
+		 * @note Mid-level API
+		 * 
+		 * @param settings a reference to a variable that will receive the
+		 * current GPIO settings for this device
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa set_GPIO_settings(const GPIOSettings&)
+		 * @sa get_GPIO_settings()
+		 */
 		bool get_GPIO_settings(GPIOSettings& settings)
 		{
 			GetGPIOSettingsFuture future{};
@@ -614,6 +873,18 @@ namespace devices::vl53l0x
 			return future.get(settings);
 		}
 
+		/**
+		 * Set new `GPIOSettings` for this device.
+		 * @warning Blocking API!
+		 * @note Mid-level API
+		 * 
+		 * @param settings new GPIO settings to write to this device
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa set_GPIO_settings()
+		 * @sa get_GPIO_settings(GPIOSettings&)
+		 */
 		bool set_GPIO_settings(const GPIOSettings& settings)
 		{
 			SetGPIOSettingsFuture future{settings};
@@ -621,7 +892,10 @@ namespace devices::vl53l0x
 			return (future.await() == future::FutureStatus::READY);
 		}
 
+		//TODO Can we make it private? Would be better!
 		static constexpr uint16_t DEFAULT_TIMEOUT_MS = 100;
+		
+		//TODO DOCS
 		template<board::Timer TIMER>
 		bool await_interrupt(timer::RTT<TIMER>& rtt, uint16_t timeout_ms = DEFAULT_TIMEOUT_MS)
 		{
@@ -636,6 +910,7 @@ namespace devices::vl53l0x
 			return false;
 		}
 
+		//TODO DOCS
 		bool await_interrupt(uint16_t loops = MAX_LOOP)
 		{
 			// Read interrupt until !=0
@@ -649,16 +924,42 @@ namespace devices::vl53l0x
 			return false;
 		}
 
+		/**
+		 * Get current `InterruptStatus` from this device.
+		 * @warning Blocking API!
+		 * @note Mid-level API
+		 * 
+		 * @param status a reference to a variable that will receive the current
+		 * interrupt status of this device
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa clear_interrupt(uint8_t)
+		 * @sa get_interrupt_status()
+		 */
 		bool get_interrupt_status(InterruptStatus& status)
 		{
 			return this->template sync_read<GetInterruptStatusFuture>(status);
 		}
 
+		/**
+		 * Clear interrupt status from this device.
+		 * @warning Blocking API!
+		 * @note Mid-level API
+		 * 
+		 * @param clear_mask the mask of the interrupts to be cleared
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa get_interrupt_status()
+		 * @sa clear_interrupt()
+		 */
 		bool clear_interrupt(uint8_t clear_mask = 0x01)
 		{
 			return this->template sync_write<ClearInterruptFuture>(clear_mask);
 		}
 
+		//TODO DOCS
 		bool start_continuous_ranging(uint16_t period_ms = 0)
 		{
 			using READ_OSC_CAL = TReadRegisterFuture<Register::OSC_CALIBRATE_VAL, uint16_t>;
@@ -678,6 +979,7 @@ namespace devices::vl53l0x
 			return this->template sync_write<WRITE_SYSRANGE>(sys_range_start);
 		}
 
+		//TODO DOCS
 		template<board::Timer TIMER> bool await_continuous_range(
 			timer::RTT<TIMER>& rtt, uint16_t& range_mm, uint16_t timeout_ms = DEFAULT_TIMEOUT_MS)
 		{
@@ -686,6 +988,7 @@ namespace devices::vl53l0x
 			return clear_interrupt();
 		}
 
+		//TODO DOCS
 		bool await_continuous_range(uint16_t& range_mm, uint16_t loops = MAX_LOOP)
 		{
 			if (!await_interrupt(loops)) return false;
@@ -693,18 +996,21 @@ namespace devices::vl53l0x
 			return clear_interrupt();
 		}
 
+		//TODO DOCS
 		// This API shall be used only after InterruptStatus != 0, Interrupt Status should be clear immediately after it
 		bool get_direct_range(uint16_t& range_mm)
 		{
 			return this->template sync_read<GetDirectRangeFuture>(range_mm);
 		}
 
+		//TODO DOCS
 		bool stop_continuous_ranging()
 		{
 			return await_same_future_group(
 				internals::stop_continuous_ranging::BUFFER, internals::stop_continuous_ranging::BUFFER_SIZE);
 		}
 
+		//TODO DOCS
 		template<board::Timer TIMER>
 		bool await_single_range(timer::RTT<TIMER>& rtt, uint16_t& range_mm, uint16_t timeout_ms = DEFAULT_TIMEOUT_MS)
 		{
@@ -724,6 +1030,7 @@ namespace devices::vl53l0x
 			return false;
 		}
 
+		//TODO DOCS
 		bool await_single_range(uint16_t& range_mm, uint16_t loops = MAX_LOOP)
 		{
 			using READ_SYSRANGE = TReadRegisterFuture<Register::SYSRANGE_START>;
@@ -741,6 +1048,7 @@ namespace devices::vl53l0x
 			return false;
 		}
 
+		//TODO DOCS
 		bool init_data_first()
 		{
 			// 1. Force 2.8V for I/O (instead of default 1.8V)
@@ -757,6 +1065,7 @@ namespace devices::vl53l0x
 			return set_sequence_steps((SequenceSteps) 0xFF);
 		}
 
+		//TODO DOCS
 		bool init_static_second(const GPIOSettings& settings, SequenceSteps steps)
 		{
 			// 1. Get SPAD info
@@ -781,6 +1090,7 @@ namespace devices::vl53l0x
 			return set_measurement_timing_budget(budget_us);
 		}
 
+		//TODO DOCS
 		bool perform_ref_calibration()
 		{
 			using WRITE_STEPS = TWriteRegisterFuture<Register::SYSTEM_SEQUENCE_CONFIG>;
@@ -799,6 +1109,7 @@ namespace devices::vl53l0x
 			return set_sequence_steps(steps);
 		}
 
+		//TODO DOCS
 		bool reset_device()
 		{
 			using WRITE_RESET = TWriteRegisterFuture<Register::SOFT_RESET_GO2_SOFT_RESET_N>;
