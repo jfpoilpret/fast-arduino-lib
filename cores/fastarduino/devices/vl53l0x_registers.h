@@ -21,6 +21,9 @@
 
 namespace devices::vl53l0x
 {
+	// Some registers in this list are "extended", which means that accessing them
+	// requires special I2C commands: access must be surrounded with 0xFF-0x01/0xFF-0x00
+	// Such registers are commented herebelow.
 	enum class Register : uint8_t
 	{
 		SYSRANGE_START                              = 0x00,
@@ -40,7 +43,7 @@ namespace devices::vl53l0x
 		CROSSTALK_COMPENSATION_PEAK_RATE_MCPS       = 0x20,
 		PRE_RANGE_CONFIG_MIN_SNR                    = 0x27,
 		ALGO_PART_TO_PART_RANGE_OFFSET_MM           = 0x28,
-		ALGO_PHASECAL_LIM                           = 0x30, // Extended register index (surround access with 0xFF-0x01/0xFF-0x00)
+		ALGO_PHASECAL_LIM                           = 0x30, // Extended register index
 		ALGO_PHASECAL_CONFIG_TIMEOUT                = 0x30,
 		GLOBAL_CONFIG_VCSEL_WIDTH                   = 0x32,
 		HISTOGRAM_CONFIG_INITIAL_PHASE_SELECT       = 0x33,
@@ -48,8 +51,8 @@ namespace devices::vl53l0x
 		MSRC_CONFIG_TIMEOUT_MACROP                  = 0x46,
 		FINAL_RANGE_CONFIG_VALID_PHASE_LOW          = 0x47,
 		FINAL_RANGE_CONFIG_VALID_PHASE_HIGH         = 0x48,
-		DYNAMIC_SPAD_NUM_REQUESTED_REF_SPAD         = 0x4E, // Extended register index (surround access with 0xFF-0x01/0xFF-0x00)
-		DYNAMIC_SPAD_REF_EN_START_OFFSET            = 0x4F, // Extended register index (surround access with 0xFF-0x01/0xFF-0x00)
+		DYNAMIC_SPAD_NUM_REQUESTED_REF_SPAD         = 0x4E, // Extended register index
+		DYNAMIC_SPAD_REF_EN_START_OFFSET            = 0x4F, // Extended register index
 		PRE_RANGE_CONFIG_VCSEL_PERIOD               = 0x50,
 		PRE_RANGE_CONFIG_TIMEOUT_MACROP_HI          = 0x51,
 		PRE_RANGE_CONFIG_TIMEOUT_MACROP_LO          = 0x52,
@@ -80,10 +83,10 @@ namespace devices::vl53l0x
 		GLOBAL_CONFIG_SPAD_ENABLES_REF_4            = 0xB4,
 		GLOBAL_CONFIG_SPAD_ENABLES_REF_5            = 0xB5,
 		GLOBAL_CONFIG_REF_EN_START_SELECT           = 0xB6,
-		RESULT_PEAK_SIGNAL_RATE_REF                 = 0xB6, // Extended register index (surround access with 0xFF-0x01/0xFF-0x00)
+		RESULT_PEAK_SIGNAL_RATE_REF                 = 0xB6, // Extended register index
 		RESULT_CORE_AMBIENT_WINDOW_EVENTS_RTN       = 0xBC,
 		SOFT_RESET_GO2_SOFT_RESET_N                 = 0xBF,
-		RESULT_CORE_RANGING_TOTAL_EVENTS_RTN        = 0xC0,	// Unused in original STM API (conflicts with next, maybe extended register index)
+		RESULT_CORE_RANGING_TOTAL_EVENTS_RTN        = 0xC0,	// Unused in original STM API (maybe extended register)
 		IDENTIFICATION_MODEL_ID                     = 0xC0,
 		IDENTIFICATION_REVISION_ID                  = 0xC2,
 		RESULT_CORE_AMBIENT_WINDOW_EVENTS_REF       = 0xD0,
