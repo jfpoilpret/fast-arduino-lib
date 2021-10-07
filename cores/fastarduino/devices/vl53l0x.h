@@ -698,41 +698,6 @@ namespace devices::vl53l0x
 			return set_vcsel_pulse_period(TYPE, period);
 		}
 
-		//TODO put to private section?
-		bool set_vcsel_pulse_period(VcselPeriodType type, uint8_t period)
-		{
-			// 0. Check period
-			if (!check_vcsel_period(type, period)) return false;
-			// 0'. Encode period
-			uint8_t vcsel_period = encode_vcsel_period(period);
-			// 0". Read current measurement timing budget
-			uint32_t timing_budget = 0UL;
-			if (!get_measurement_timing_budget(timing_budget)) return false;
-			// 1. Read sequence steps enables
-			SequenceSteps steps;
-			if (!get_sequence_steps(steps)) return false;
-			// 2. Read sequence steps timeouts
-			SequenceStepsTimeout timeouts;
-			if (!get_sequence_steps_timeout(timeouts)) return false;
-			if (type == VcselPeriodType::PRE_RANGE)
-			{
-				if (!set_core_vcsel_pulse_period_pre_range(period, vcsel_period, timeouts)) return false;
-			}
-			else
-			{
-				if (!set_core_vcsel_pulse_period_final_range(period, vcsel_period, steps.is_pre_range(), timeouts))
-					return false;
-			}
-			// 4. Set measurement timing budget as before
-			if (!set_measurement_timing_budget(timing_budget)) return false;
-			// 5. Perform phase calibration
-			using WRITE_STEPS = TWriteRegisterFuture<Register::SYSTEM_SEQUENCE_CONFIG>;
-			if (!this->template sync_write<WRITE_STEPS>(uint8_t(0x02))) return false;
-			perform_single_ref_calibration(SingleRefCalibrationTarget::PHASE_CALIBRATION);
-			if (!set_sequence_steps(steps)) return false;
-			return true;
-		}
-
 		/**
 		 * Get current signal rate limit for ranging.
 		 * This is a ratio between 0.0 and 1.0; lower values will allow
@@ -996,9 +961,6 @@ namespace devices::vl53l0x
 			return (future.await() == future::FutureStatus::READY);
 		}
 
-		//TODO Can we make it private? Would be better!
-		static constexpr uint16_t DEFAULT_TIMEOUT_MS = 100;
-		
 		/**
 		 * Wait for an interrupt condition on VL53L0X device.
 		 * @warning Blocking API!
@@ -1274,8 +1236,12 @@ namespace devices::vl53l0x
 				uint8_t sys_range = 0;
 				if (!this->template sync_read<READ_SYSRANGE>(sys_range)) return false;
 				if (!(sys_range & 0x01))
-					//FIXME replace timeout_ms with remaining time only!
+				{
+					// Replace timeout_ms with remaining time only
+					time::RTTTime now = rtt.time();
+					timeout_ms = (end > now ? end - now : 1U);
 					return await_continuous_range(rtt, range_mm, timeout_ms);
+				}
 			}
 			return false;
 		}
@@ -1546,6 +1512,7 @@ namespace devices::vl53l0x
 		}
 
 		static constexpr const uint16_t MAX_LOOP = 2000;
+		static constexpr uint16_t DEFAULT_TIMEOUT_MS = 100;
 
 		enum class SingleRefCalibrationTarget : uint8_t
 		{
@@ -1597,6 +1564,40 @@ namespace devices::vl53l0x
 					return this->template sync_write<WRITE_STROBE>(uint8_t(0x01));
 			}
 			return false;
+		}
+
+		bool set_vcsel_pulse_period(VcselPeriodType type, uint8_t period)
+		{
+			// 0. Check period
+			if (!check_vcsel_period(type, period)) return false;
+			// 0'. Encode period
+			uint8_t vcsel_period = encode_vcsel_period(period);
+			// 0". Read current measurement timing budget
+			uint32_t timing_budget = 0UL;
+			if (!get_measurement_timing_budget(timing_budget)) return false;
+			// 1. Read sequence steps enables
+			SequenceSteps steps;
+			if (!get_sequence_steps(steps)) return false;
+			// 2. Read sequence steps timeouts
+			SequenceStepsTimeout timeouts;
+			if (!get_sequence_steps_timeout(timeouts)) return false;
+			if (type == VcselPeriodType::PRE_RANGE)
+			{
+				if (!set_core_vcsel_pulse_period_pre_range(period, vcsel_period, timeouts)) return false;
+			}
+			else
+			{
+				if (!set_core_vcsel_pulse_period_final_range(period, vcsel_period, steps.is_pre_range(), timeouts))
+					return false;
+			}
+			// 4. Set measurement timing budget as before
+			if (!set_measurement_timing_budget(timing_budget)) return false;
+			// 5. Perform phase calibration
+			using WRITE_STEPS = TWriteRegisterFuture<Register::SYSTEM_SEQUENCE_CONFIG>;
+			if (!this->template sync_write<WRITE_STEPS>(uint8_t(0x02))) return false;
+			perform_single_ref_calibration(SingleRefCalibrationTarget::PHASE_CALIBRATION);
+			if (!set_sequence_steps(steps)) return false;
+			return true;
 		}
 
 		bool set_core_vcsel_pulse_period_pre_range(
