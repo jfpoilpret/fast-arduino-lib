@@ -21,8 +21,11 @@
  * STMicroelectronics C-library API; this was necessary as the device datasheet
  * does not describe the internals (registers) of the chip, the only way to
  * understand how it works was thus to analyze the API source code.
+ * Also, the pololu library for this chip (simpler rewrite of STM lib) was a
+ * good inspiration to understanding how this chip works.
  * 
  * @sa https://www.st.com/content/st_com/en/products/embedded-software/proximity-sensors-software/stsw-img005.html
+ * @sa https://github.com/pololu/vl53l0x-arduino
  */
 
 #ifndef VL53L0X_H
@@ -222,6 +225,10 @@ namespace devices::vl53l0x
 			return this->async_write(future);
 		}
 
+		/**
+		 * Future to get device range status.
+		 * @sa get_range_status()
+		 */
 		using GetRangeStatusFuture = TReadRegisterFuture<Register::RESULT_RANGE_STATUS, DeviceStatus>;
 
 		/**
@@ -244,10 +251,15 @@ namespace devices::vl53l0x
 			return this->async_read(future);
 		}
 
+		/**
+		 * Future to get device current GPIO settings.
+		 * @sa get_GPIO_settings()
+		 */
 		class GetGPIOSettingsFuture : public I2CFuturesGroup
 		{
 			using PARENT = I2CFuturesGroup;
 		public:
+			/// @cond notdocumented
 			GetGPIOSettingsFuture() : PARENT{futures_, NUM_FUTURES}
 			{
 				PARENT::init(futures_);
@@ -270,6 +282,7 @@ namespace devices::vl53l0x
 				settings = vl53l0x::GPIOSettings{function, bool(active_high & 0x10), low_threshold, high_threshold};
 				return true;
 			}
+			/// @endcond
 
 		private:
 			TReadRegisterFuture<Register::SYSTEM_INTERRUPT_CONFIG_GPIO, vl53l0x::GPIOFunction> read_config_{};
@@ -310,10 +323,15 @@ namespace devices::vl53l0x
 			return (future.start(*this) ? 0 : future.error());
 		}
 
+		/**
+		 * Future to set device GPIO settings.
+		 * @sa set_GPIO_settings()
+		 */
 		class SetGPIOSettingsFuture : public I2CFuturesGroup
 		{
 			using PARENT = I2CFuturesGroup;
 		public:
+			/// @cond notdocumented
 			//TODO shall we always clear interrupt (0) at the end of GPIO settings?
 			SetGPIOSettingsFuture(const vl53l0x::GPIOSettings& settings)
 				:	PARENT{futures_, NUM_FUTURES},
@@ -329,6 +347,7 @@ namespace devices::vl53l0x
 			}
 			SetGPIOSettingsFuture(SetGPIOSettingsFuture&&) = default;
 			SetGPIOSettingsFuture& operator=(SetGPIOSettingsFuture&&) = default;
+			/// @endcond
 
 		private:
 			TWriteRegisterFuture<Register::SYSTEM_INTERRUPT_CONFIG_GPIO, vl53l0x::GPIOFunction> write_config_;
@@ -369,6 +388,10 @@ namespace devices::vl53l0x
 			return (future.start(*this) ? 0 : future.error());
 		}
 
+		/**
+		 * Future to get device current interrupt status.
+		 * @sa get_interrupt_status()
+		 */
 		using GetInterruptStatusFuture = TReadRegisterFuture<Register::RESULT_INTERRUPT_STATUS, InterruptStatus>;
 
 		/**
@@ -392,6 +415,10 @@ namespace devices::vl53l0x
 			return this->async_read(future);
 		}
 
+		/**
+		 * Future to clear device interrupt status.
+		 * @sa clear_interrupt()
+		 */
 		using ClearInterruptFuture = TWriteRegisterFuture<Register::SYSTEM_INTERRUPT_CLEAR>;
 
 		/**
@@ -415,7 +442,10 @@ namespace devices::vl53l0x
 			return this->async_write(future);
 		}
 
-		// This API shall be used only after InterruptStatus != 0, Interrupt Status should be clear immediately after it
+		/**
+		 * Future to get device current range measure.
+		 * @sa get_direct_range()
+		 */
 		using GetDirectRangeFuture = TReadRegisterFuture<Register::RESULT_RANGE_MILLIMETER, uint16_t>;
 
 		/**
@@ -423,6 +453,8 @@ namespace devices::vl53l0x
 		 * This method does not wait for anything, it just gets the current value
 		 * in the range register. This is useful only when you know a range is ready
 		 * to read.
+		 * In general, this method shall be used only after device interrupt
+		 * status != 0, then interrupt status should be cleared immediately after.
 		 * You would probably prefer to use methods that first await for range
 		 * measure to be ready before returning its value.
 		 * @warning Asynchronous API!
@@ -749,7 +781,19 @@ namespace devices::vl53l0x
 			return this->template sync_write<SetSignalRateLimitFuture>(FixPoint9_7::convert(signal_rate));
 		}
 
-		//TODO DOCS
+		/**
+		 * Get the reference SPADs status (enabled or not).
+		 * @note Low-level API! Generally you shall not use this API unless you
+		 * know what you are doing.
+		 * @warning Blocking API!
+		 * 
+		 * @param spad_ref a reference to a variable that will receive the 
+		 * current reference SPADs status
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa set_reference_SPADs()
+		 */
 		bool get_reference_SPADs(SPADReference& spad_ref)
 		{
 			using GetReferenceSPADsFuture = 
@@ -757,7 +801,18 @@ namespace devices::vl53l0x
 			return this->template sync_read<GetReferenceSPADsFuture, SPADReference>(spad_ref);
 		}
 
-		//TODO DOCS
+		/**
+		 * Set the reference SPADs status (enabled or not).
+		 * @note Low-level API! Generally you shall not use this API unless you
+		 * know what you are doing.
+		 * @warning Blocking API!
+		 * 
+		 * @param spad_ref the new reference SPADs status to set
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa set_reference_SPADs()
+		 */
 		bool set_reference_SPADs(const SPADReference& spad_ref)
 		{
 			using SetReferenceSPADsFuture = 
@@ -768,7 +823,17 @@ namespace devices::vl53l0x
 			return this->template sync_write<SetReferenceSPADsFuture, SPADReference>(spad_ref);
 		}
 
-		//TODO DOCS
+		/**
+		 * Get current SPAD information (number of SPAD aperture or not).
+		 * @note Low-level API! Generally you shall not use this API unless you
+		 * know what you are doing.
+		 * @warning Blocking API!
+		 * 
+		 * @param info a reference to a variable that will receive the 
+		 * current reference SPAD information
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 */
 		bool get_SPAD_info(SPADInfo& info)
 		{
 			using READ_SPAD = TReadRegisterFuture<Register::SPAD_INFO, SPADInfo>;
@@ -801,7 +866,17 @@ namespace devices::vl53l0x
 			return await_same_future_group(internals::spad_info::BUFFER4, internals::spad_info::BUFFER4_SIZE);
 		}
 
-		//TODO DOCS
+		/**
+		 * Get current timeouts associated to each ranging step.
+		 * @note Low-level API! Generally you shall not use this API unless you
+		 * know what you are doing.
+		 * @warning Blocking API!
+		 * 
+		 * @param timeouts a reference to a variable that will receive the 
+		 * current timeouts associated to ranging steps
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 */
 		bool get_sequence_steps_timeout(SequenceStepsTimeout& timeouts)
 		{
 			using READ_MSRC_TIMEOUT = TReadRegisterFuture<Register::MSRC_CONFIG_TIMEOUT_MACROP>;
@@ -924,7 +999,22 @@ namespace devices::vl53l0x
 		//TODO Can we make it private? Would be better!
 		static constexpr uint16_t DEFAULT_TIMEOUT_MS = 100;
 		
-		//TODO DOCS
+		/**
+		 * Wait for an interrupt condition on VL53L0X device.
+		 * @warning Blocking API!
+		 * @note Mid-level API
+		 * 
+		 * @tparam TIMER the Timer used for @p rtt; this template argument
+		 * will be automatically deduced from @p rtt.
+		 * @param rtt the real-time timer to use to count elapsed time
+		 * @param timeout_ms the maximum amount of time to wait for a result;
+		 * default is 100ms, but it should be higher than the measurement timing 
+		 * budget.
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed or timed out
+		 * 
+		 * @sa await_continuous_range()
+		 */
 		template<board::Timer TIMER>
 		bool await_interrupt(timer::RTT<TIMER>& rtt, uint16_t timeout_ms = DEFAULT_TIMEOUT_MS)
 		{
@@ -939,7 +1029,21 @@ namespace devices::vl53l0x
 			return false;
 		}
 
-		//TODO DOCS
+		/**
+		 * Wait for an interrupt condition on VL53L0X device.
+		 * Wait is performed based on a maximum number of loops, not on actual
+		 * time. 
+		 * This is more difficult to use than `await_interrupt(timer::RTT<TIMER>&, uint16_t)`
+		 * @warning Blocking API!
+		 * @note Mid-level API
+		 * 
+		 * @param loops the maximum number of waiting loops before timeout;
+		 * default is 2000, but it may not be suitable in every situation.
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed or timed out
+		 * 
+		 * @sa await_interrupt(timer::RTT<TIMER>&, uint16_t)
+		 */
 		bool await_interrupt(uint16_t loops = MAX_LOOP)
 		{
 			// Read interrupt until !=0
@@ -1035,7 +1139,29 @@ namespace devices::vl53l0x
 			return this->template sync_write<WRITE_SYSRANGE>(sys_range_start);
 		}
 
-		//TODO DOCS
+		/**
+		 * Wait for the next continuous ranging measure on VL53L0X device to be
+		 * ready and return the result.
+		 * This shall be used only when continuous ranging is in effect.
+		 * @warning Blocking API!
+		 * @note High-level API
+		 * @note Mid-level API
+		 * 
+		 * @tparam TIMER the Timer used for @p rtt; this template argument
+		 * will be automatically deduced from @p rtt.
+		 * @param rtt the real-time timer to use to count elapsed time
+		 * @param range_mm a reference to a variable that will receive the 
+		 * measurement result (in mm)
+		 * @param timeout_ms the maximum amount of time to wait for a result;
+		 * default is 100ms, but it should be higher than the measurement timing 
+		 * budget.
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed or timed out
+		 * 
+		 * @sa start_continuous_ranging()
+		 * @sa set_measurement_timing_budget()
+		 * @sa await_continuous_range(uint16_t&, uint16_t)
+		 */
 		template<board::Timer TIMER> bool await_continuous_range(
 			timer::RTT<TIMER>& rtt, uint16_t& range_mm, uint16_t timeout_ms = DEFAULT_TIMEOUT_MS)
 		{
@@ -1044,7 +1170,27 @@ namespace devices::vl53l0x
 			return clear_interrupt();
 		}
 
-		//TODO DOCS
+		/**
+		 * Wait for the next continuous ranging measure on VL53L0X device to be
+		 * ready and return the result.
+		 * This shall be used only when continuous ranging is in effect.
+		 * Wait is performed based on a maximum number of loops, not on actual
+		 * time. 
+		 * This is more difficult to use than `await_continuous_range(timer::RTT<TIMER>&, uint16_t&, uint16_t)`
+		 * @warning Blocking API!
+		 * @note Mid-level API
+		 * 
+		 * @param range_mm a reference to a variable that will receive the 
+		 * measurement result (in mm)
+		 * @param loops the maximum number of waiting loops before timeout;
+		 * default is 2000, but it may not be suitable in every situation.
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed or timed out
+		 * 
+		 * @sa start_continuous_ranging()
+		 * @sa set_measurement_timing_budget()
+		 * @sa await_continuous_range(timer::RTT<TIMER>&, uint16_t&, uint16_t)
+		 */
 		bool await_continuous_range(uint16_t& range_mm, uint16_t loops = MAX_LOOP)
 		{
 			if (!await_interrupt(loops)) return false;
@@ -1092,7 +1238,28 @@ namespace devices::vl53l0x
 				internals::stop_continuous_ranging::BUFFER, internals::stop_continuous_ranging::BUFFER_SIZE);
 		}
 
-		//TODO DOCS
+		/**
+		 * Perform a single range action on VL53L0X device, and wait for the 
+		 * measurement result.
+		 * This shall be used when no continuous ranging is in effect.
+		 * @warning Blocking API!
+		 * @note High-level API
+		 * @note Mid-level API
+		 * 
+		 * @tparam TIMER the Timer used for @p rtt; this template argument
+		 * will be automatically deduced from @p rtt.
+		 * @param rtt the real-time timer to use to count elapsed time
+		 * @param range_mm a reference to a variable that will receive the 
+		 * measurement result (in mm)
+		 * @param timeout_ms the maximum amount of time to wait for a result;
+		 * default is 100ms, but it should be higher than the measurement timing 
+		 * budget.
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed or timed out
+		 * 
+		 * @sa set_measurement_timing_budget()
+		 * @sa await_single_range(uint16_t&, uint16_t)
+		 */
 		template<board::Timer TIMER>
 		bool await_single_range(timer::RTT<TIMER>& rtt, uint16_t& range_mm, uint16_t timeout_ms = DEFAULT_TIMEOUT_MS)
 		{
@@ -1107,12 +1274,31 @@ namespace devices::vl53l0x
 				uint8_t sys_range = 0;
 				if (!this->template sync_read<READ_SYSRANGE>(sys_range)) return false;
 				if (!(sys_range & 0x01))
+					//FIXME replace timeout_ms with remaining time only!
 					return await_continuous_range(rtt, range_mm, timeout_ms);
 			}
 			return false;
 		}
 
-		//TODO DOCS
+		/**
+		 * Perform a single range action on VL53L0X device, and wait for the 
+		 * measurement result.
+		 * This shall be used when no continuous ranging is in effect.
+		 * Wait is performed based on a maximum number of loops, not on actual
+		 * time. 
+		 * This is more difficult to use than `await_single_range(timer::RTT<TIMER>&, uint16_t&, uint16_t)`
+		 * @warning Blocking API!
+		 * @note Mid-level API
+		 * 
+		 * @param range_mm a reference to a variable that will receive the 
+		 * measurement result (in mm)
+		 * @param loops the maximum number of waiting loops before timeout;
+		 * default is 2000, but it may not be suitable in every situation.
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed or timed out
+		 * 
+		 * @sa await_single_range(timer::RTT<TIMER>&, uint16_t&, uint16_t)
+		 */
 		bool await_single_range(uint16_t& range_mm, uint16_t loops = MAX_LOOP)
 		{
 			using READ_SYSRANGE = TReadRegisterFuture<Register::SYSRANGE_START>;
@@ -1130,7 +1316,30 @@ namespace devices::vl53l0x
 			return false;
 		}
 
-		//TODO DOCS
+		/**
+		 * Perform 1st stage initialization of this VL53L0X device.
+		 * VL53L0X initialization is made of 3 steps before it can perform any 
+		 * ranging:
+		 * - data init: must be performed once only after device power-up
+		 * - static init: must be performed at least once, after data init, but can
+		 * be called several times to changes ranging steps sequence
+		 * - reference calibration: must be performed once
+		 * One method exists for each stage.
+		 * 
+		 * After initalization, you may call methods changing all kinds of settings.
+		 * Finally, you may then perform ranging, continuously or not.
+		 * 
+		 * @warning Blocking API!
+		 * @note Mid-level API
+		 * If you want simpler initialization of the device, you should turn to high-level API.
+		 * 
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa init_static_second()
+		 * @sa perform_ref_calibration()
+		 * @sa begin()
+		 */
 		bool init_data_first()
 		{
 			// 1. Force 2.8V for I/O (instead of default 1.8V)
@@ -1147,8 +1356,30 @@ namespace devices::vl53l0x
 			return set_sequence_steps((SequenceSteps) 0xFF);
 		}
 
-		//TODO DOCS
-		bool init_static_second(const GPIOSettings& settings, SequenceSteps steps)
+		/**
+		 * Perform 2nd stage initialization of this VL53L0X device.
+		 * This must be called once, or more, after `init_data_first()` has been 
+		 * called.
+		 * It allows you to select which ranging steps shall be used afterwards.
+		 * 
+		 * @warning Blocking API!
+		 * @note Mid-level API
+		 * If you want simpler initialization of the device, you should turn to high-level API.
+		 * 
+		 * @param settings intial GPIO settings to set on the device; these settings
+		 * can be changed anytime later.
+		 * @param steps the ranging steps sequence
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa set_GPIO_settings()
+		 * @sa set_sequence_steps()
+		 * @sa init_data_first()
+		 * @sa perform_ref_calibration()
+		 * @sa begin()
+		 */
+		bool init_static_second(
+			const GPIOSettings& settings, SequenceSteps steps = SequenceSteps::create().pre_range().final_range())
 		{
 			// 1. Get SPAD info
 			SPADInfo info;
@@ -1172,7 +1403,22 @@ namespace devices::vl53l0x
 			return set_measurement_timing_budget(budget_us);
 		}
 
-		//TODO DOCS
+		/**
+		 * Perform VL53L0X VHV and Phase calibration.
+		 * This must be called once before any measurement, but after data and 
+		 * static initalization.
+		 * 
+		 * @warning Blocking API!
+		 * @note Mid-level API
+		 * If you want simpler initialization of the device, you should turn to high-level API.
+		 * 
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa init_data_first()
+		 * @sa init_static_second()
+		 * @sa begin()
+		 */
 		bool perform_ref_calibration()
 		{
 			using WRITE_STEPS = TWriteRegisterFuture<Register::SYSTEM_SEQUENCE_CONFIG>;
@@ -1191,7 +1437,22 @@ namespace devices::vl53l0x
 			return set_sequence_steps(steps);
 		}
 
-		//TODO DOCS
+		/**
+		 * Reset VL53L0X device. After this method is called, the device is in
+		 * the same state as after power-up, hence device must be reinitialized 
+		 * from scratch.
+		 * @warning Blocking API!
+		 * @note High-level API
+		 * @note Mid-level API
+		 * 
+		 * @retval true if the operation succeeded
+		 * @retval false if the operation failed
+		 * 
+		 * @sa begin()
+		 * @sa init_data_first()
+		 * @sa init_static_second()
+		 * @sa perform_ref_calibration()
+		 */
 		bool reset_device()
 		{
 			using WRITE_RESET = TWriteRegisterFuture<Register::SOFT_RESET_GO2_SOFT_RESET_N>;
