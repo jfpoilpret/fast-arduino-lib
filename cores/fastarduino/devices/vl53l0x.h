@@ -49,15 +49,16 @@ namespace devices
 {
 	/**
 	 * Defines API for VL53L0X Time-of-Flight ranging sensor chip usage.
+	 * @note the API is partial, some functions of the original STM library have 
+	 * not been ported at all, partly because their documentation did not allow
+	 * understanding what their purpose could be. This concerns calculations
+	 * performed by the API itself (not the device), or special calibration
+	 * procedures. Additional API may be added in the future if needed.
 	 */
 	namespace vl53l0x
 	{
 	}
 }
-
-//TODO Review all API to include arguments check whenever needed!
-// OPEN POINTS:
-// - calibration mode or only hard-coded calibration?
 
 namespace devices::vl53l0x
 {
@@ -1054,6 +1055,7 @@ namespace devices::vl53l0x
 		 */
 		bool set_signal_rate_limit(float signal_rate)
 		{
+			if (signal_rate <= 0.0 || signal_rate > 1.0) return false;
 			using SetSignalRateLimitFuture = 
 				TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, uint16_t>;
 			return this->template sync_write<SetSignalRateLimitFuture>(FixPoint9_7::convert(signal_rate));
