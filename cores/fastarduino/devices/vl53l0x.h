@@ -641,7 +641,6 @@ namespace devices::vl53l0x
 			using PARENT = I2CFuturesGroup;
 		public:
 			/// @cond notdocumented
-			//TODO shall we always clear interrupt (0) at the end of GPIO settings?
 			SetGPIOSettingsFuture(const vl53l0x::GPIOSettings& settings)
 				:	PARENT{futures_, NUM_FUTURES},
 					write_config_{settings.function()},
@@ -663,14 +662,16 @@ namespace devices::vl53l0x
 			TWriteRegisterFuture<Register::GPIO_HV_MUX_ACTIVE_HIGH> write_GPIO_active_high_;
 			TWriteRegisterFuture<Register::SYSTEM_THRESH_LOW, uint16_t> write_low_threshold_;
 			TWriteRegisterFuture<Register::SYSTEM_THRESH_HIGH, uint16_t> write_high_threshold_;
+			TWriteRegisterFuture<Register::SYSTEM_INTERRUPT_CLEAR> clear_interrupt_{0};
 
-			static constexpr uint8_t NUM_FUTURES = 4;
+			static constexpr uint8_t NUM_FUTURES = 5;
 			ABSTRACT_FUTURE* futures_[NUM_FUTURES] =
 			{
 				&write_config_,
 				&write_GPIO_active_high_,
 				&write_low_threshold_,
-				&write_high_threshold_
+				&write_high_threshold_,
+				&clear_interrupt_
 			};
 
 			friend VL53L0X<MANAGER>;
