@@ -1,0 +1,4 @@
+<map id="future::FutureStatusListener&lt; F &gt;" name="future::FutureStatusListener&lt; F &gt;">
+<area shape="rect" id="node1" title="Listener is the interface allowing to listen to changes of a Future status." alt="" coords="9,5,225,32"/>
+<area shape="rect" id="node2" href="$classfuture_1_1_abstract_futures_group.html" title="Abstract class to allow aggregation of several futures." alt="" coords="5,80,228,107"/>
+</map>

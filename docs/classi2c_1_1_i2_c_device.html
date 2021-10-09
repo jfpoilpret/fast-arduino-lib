@@ -88,6 +88,7 @@ $(document).ready(function(){initNavTree('classi2c_1_1_i2_c_device.html',''); in
 <a href="#pro-types">Protected Types</a> &#124;
 <a href="#pro-methods">Protected Member Functions</a> &#124;
 <a href="#pro-static-methods">Static Protected Member Functions</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="classi2c_1_1_i2_c_device-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">i2c::I2CDevice&lt; MANAGER_ &gt; Class Template Reference</div>  </div>
@@ -135,9 +136,25 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a1325f82f4aaf8290a2d4cc4c70dfe83b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#a1325f82f4aaf8290a2d4cc4c70dfe83b">set_device</a> (uint8_t device)</td></tr>
 <tr class="memdesc:a1325f82f4aaf8290a2d4cc4c70dfe83b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change the I2C address of this device.  <a href="classi2c_1_1_i2_c_device.html#a1325f82f4aaf8290a2d4cc4c70dfe83b">More...</a><br /></td></tr>
 <tr class="separator:a1325f82f4aaf8290a2d4cc4c70dfe83b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba6c54c377d4b82035e7389df1ff3b92"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#aba6c54c377d4b82035e7389df1ff3b92">launch_commands</a> (<a class="el" href="classi2c_1_1_i2_c_device.html#aaa72ad76688bfbf7057b4fdfa426a95c">PROXY</a>&lt; <a class="el" href="classi2c_1_1_i2_c_device.html#ac2e7c57ed9de99169a280c189724af0a">ABSTRACT_FUTURE</a> &gt; proxy, <a class="el" href="classstd_1_1initializer__list.html">std::initializer_list</a>&lt; <a class="el" href="classi2c_1_1_i2_c_light_command.html">I2CLightCommand</a> &gt; commands)</td></tr>
-<tr class="memdesc:aba6c54c377d4b82035e7389df1ff3b92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Launch execution (asynchronously or synchronously, depending on MANAGER) of a chain of <a class="el" href="classi2c_1_1_i2_c_light_command.html" title="Light atomic I2C command as prepared by an I2C device.">I2CLightCommand</a> items (constructed with <code><a class="el" href="classi2c_1_1_i2_c_device.html#a75fe1fe6a563488eb06f86266e15c923" title="Build a read I2CLightCommand that can be later pushed to the I2C Manager for proper handling.">read()</a></code> and <code><a class="el" href="classi2c_1_1_i2_c_device.html#a161423972dd35fbd4b32cd1e8048b5ad" title="Build a write I2CLightCommand that can be later pushed to the I2C Manager for proper handling.">write()</a></code> methods).  <a href="classi2c_1_1_i2_c_device.html#aba6c54c377d4b82035e7389df1ff3b92">More...</a><br /></td></tr>
-<tr class="separator:aba6c54c377d4b82035e7389df1ff3b92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af937a51b38ea97dee521319c1fc09f46"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#af937a51b38ea97dee521319c1fc09f46">launch_commands</a> (<a class="el" href="classi2c_1_1_i2_c_device.html#aaa72ad76688bfbf7057b4fdfa426a95c">PROXY</a>&lt; <a class="el" href="classi2c_1_1_i2_c_device.html#ac2e7c57ed9de99169a280c189724af0a">ABSTRACT_FUTURE</a> &gt; proxy, <a class="el" href="classutils_1_1range.html">utils::range</a>&lt; <a class="el" href="classi2c_1_1_i2_c_light_command.html">I2CLightCommand</a> &gt; commands)</td></tr>
+<tr class="memdesc:af937a51b38ea97dee521319c1fc09f46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Launch execution (asynchronously or synchronously, depending on MANAGER) of a chain of <a class="el" href="classi2c_1_1_i2_c_light_command.html" title="Light atomic I2C command as prepared by an I2C device.">I2CLightCommand</a> items (constructed with <code><a class="el" href="classi2c_1_1_i2_c_device.html#a75fe1fe6a563488eb06f86266e15c923" title="Build a read I2CLightCommand that can be later pushed to the I2C Manager for proper handling.">read()</a></code> and <code><a class="el" href="classi2c_1_1_i2_c_device.html#a161423972dd35fbd4b32cd1e8048b5ad" title="Build a write I2CLightCommand that can be later pushed to the I2C Manager for proper handling.">write()</a></code> methods).  <a href="classi2c_1_1_i2_c_device.html#af937a51b38ea97dee521319c1fc09f46">More...</a><br /></td></tr>
+<tr class="separator:af937a51b38ea97dee521319c1fc09f46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac433c1975b0be78ce89071ac7ca7a538"><td class="memTemplParams" colspan="2">template&lt;typename F &gt; </td></tr>
+<tr class="memitem:ac433c1975b0be78ce89071ac7ca7a538"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#ac433c1975b0be78ce89071ac7ca7a538">async_read</a> (<a class="el" href="classi2c_1_1_i2_c_device.html#aaa72ad76688bfbf7057b4fdfa426a95c">PROXY</a>&lt; <a class="el" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a> &gt; future, bool stop=true)</td></tr>
+<tr class="memdesc:ac433c1975b0be78ce89071ac7ca7a538"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method that asynchronously launches I2C commands for a simple Future performing one write followed by one read (typically for device register reading).  <a href="classi2c_1_1_i2_c_device.html#ac433c1975b0be78ce89071ac7ca7a538">More...</a><br /></td></tr>
+<tr class="separator:ac433c1975b0be78ce89071ac7ca7a538"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0dfdb3fb784b939e8140a1c900a8e64e"><td class="memTemplParams" colspan="2">template&lt;typename F , typename T  = uint8_t&gt; </td></tr>
+<tr class="memitem:a0dfdb3fb784b939e8140a1c900a8e64e"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#a0dfdb3fb784b939e8140a1c900a8e64e">sync_read</a> (T &amp;result)</td></tr>
+<tr class="memdesc:a0dfdb3fb784b939e8140a1c900a8e64e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method that launches I2C commands for a simple Future performing one write followed by one read (typically for device register reading); the method blocks until the end of the I2C transaction.  <a href="classi2c_1_1_i2_c_device.html#a0dfdb3fb784b939e8140a1c900a8e64e">More...</a><br /></td></tr>
+<tr class="separator:a0dfdb3fb784b939e8140a1c900a8e64e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a877f1d20e75ed28de13314fc7d5a73f0"><td class="memTemplParams" colspan="2">template&lt;typename F &gt; </td></tr>
+<tr class="memitem:a877f1d20e75ed28de13314fc7d5a73f0"><td class="memTemplItemLeft" align="right" valign="top">int&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#a877f1d20e75ed28de13314fc7d5a73f0">async_write</a> (<a class="el" href="classi2c_1_1_i2_c_device.html#aaa72ad76688bfbf7057b4fdfa426a95c">PROXY</a>&lt; <a class="el" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a> &gt; future, bool stop=true)</td></tr>
+<tr class="memdesc:a877f1d20e75ed28de13314fc7d5a73f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method that asynchronously launches I2C commands for a simple Future performing only one write (typically for device register writing).  <a href="classi2c_1_1_i2_c_device.html#a877f1d20e75ed28de13314fc7d5a73f0">More...</a><br /></td></tr>
+<tr class="separator:a877f1d20e75ed28de13314fc7d5a73f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5733ebd749415b43fbfab76cf6cfc234"><td class="memTemplParams" colspan="2">template&lt;typename F , typename T  = uint8_t&gt; </td></tr>
+<tr class="memitem:a5733ebd749415b43fbfab76cf6cfc234"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#a5733ebd749415b43fbfab76cf6cfc234">sync_write</a> (const T &amp;value)</td></tr>
+<tr class="memdesc:a5733ebd749415b43fbfab76cf6cfc234"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method that launches I2C commands for a simple Future performing only one write (typically for device register writing); the method blocks until the end of the I2C transaction.  <a href="classi2c_1_1_i2_c_device.html#a5733ebd749415b43fbfab76cf6cfc234">More...</a><br /></td></tr>
+<tr class="separator:a5733ebd749415b43fbfab76cf6cfc234"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaf6df66445e2f4c39501b5621191f51e"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:aaf6df66445e2f4c39501b5621191f51e"><td class="memTemplItemLeft" align="right" valign="top">T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#aaf6df66445e2f4c39501b5621191f51e">resolve</a> (<a class="el" href="classi2c_1_1_i2_c_device.html#aaa72ad76688bfbf7057b4fdfa426a95c">PROXY</a>&lt; T &gt; proxy) const</td></tr>
 <tr class="memdesc:aaf6df66445e2f4c39501b5621191f51e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resolve <code>proxy</code> to an actual <code>T</code> (typically a <code>Future</code>).  <a href="classi2c_1_1_i2_c_device.html#aaf6df66445e2f4c39501b5621191f51e">More...</a><br /></td></tr>
@@ -155,6 +172,12 @@ Static Protected Member Functions</h2></td></tr>
 <tr class="memitem:a358f5bdfc2a7f4cfbcca0e253f42d676"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="classi2c_1_1_i2_c_device.html#aaa72ad76688bfbf7057b4fdfa426a95c">PROXY</a>&lt; T &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#a358f5bdfc2a7f4cfbcca0e253f42d676">make_proxy</a> (const T &amp;target)</td></tr>
 <tr class="memdesc:a358f5bdfc2a7f4cfbcca0e253f42d676"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a PROXY from <code>target</code>.  <a href="classi2c_1_1_i2_c_device.html#a358f5bdfc2a7f4cfbcca0e253f42d676">More...</a><br /></td></tr>
 <tr class="separator:a358f5bdfc2a7f4cfbcca0e253f42d676"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a6c0a6305a70d35be0c04ba98a616b91f"><td class="memItemLeft" align="right" valign="top"><a id="a6c0a6305a70d35be0c04ba98a616b91f"></a>
+class&#160;</td><td class="memItemRight" valign="bottom"><b>I2CFutureHelper&lt; MANAGER &gt;</b></td></tr>
+<tr class="separator:a6c0a6305a70d35be0c04ba98a616b91f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename MANAGER_&gt;<br />
@@ -171,7 +194,7 @@ class i2c::I2CDevice&lt; MANAGER_ &gt;</h3>
 <dd>
 <a class="el" href="classi2c_1_1_i2_c_async_manager.html" title="Asynchronous I2C Manager for ATmega architecture.">i2c::I2CAsyncManager</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00077">77</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00085">85</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="aaa72ad76688bfbf7057b4fdfa426a95c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaa72ad76688bfbf7057b4fdfa426a95c">&#9670;&nbsp;</a></span>PROXY</h2>
@@ -200,7 +223,7 @@ template&lt;typename T &gt; </div>
 <p>The actual type used for all proxies; may be <code><a class="el" href="classlifecycle_1_1_light_proxy.html" title="A light proxy class that encapsulates access to a fixed T instance, or to a dynamic LifeCycle&lt;T&gt; inst...">lifecycle::LightProxy</a></code> or <code><a class="el" href="classlifecycle_1_1_direct_proxy.html" title="A kind of proxy class that encapsulates access to a fixed T instance.">lifecycle::DirectProxy</a></code>. </p>
 <p>This is defined by MANAGER type, whether it uses a <a class="el" href="classlifecycle_1_1_abstract_life_cycle_manager.html" title="The abstract base class of all LifeCycleManager.">lifecycle::AbstractLifeCycleManager</a> or not. </p>
 
-<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00095">95</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00104">104</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
 
 </div>
 </div>
@@ -229,7 +252,7 @@ template&lt;typename MANAGER_ &gt; </div>
 <p>The abstract base class of all futures to be defined for a device. </p>
 <p>This may be <code><a class="el" href="classfuture_1_1_abstract_future.html" title="Base class for all Futures.">future::AbstractFuture</a></code> or <code><a class="el" href="classfuture_1_1_abstract_fake_future.html" title="Base class for all FakeFutures.">future::AbstractFakeFuture</a></code>; this is defined by MANAGER type, whether it is asynchronous or synchronous. </p>
 
-<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00102">102</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00111">111</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
 
 </div>
 </div>
@@ -260,7 +283,7 @@ template&lt;typename OUT , typename IN &gt; </div>
 <p>The template base class of all futures to be defined for a device. </p>
 <p>This may be <code><a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">future::Future</a></code> or <code><a class="el" href="classfuture_1_1_fake_future.html" title="Actual FakeFuture, it has the exact same API as Future and can be used in lieu of Future.">future::FakeFuture</a></code>; this is defined by MANAGER type, whether it is asynchronous or synchronous. </p>
 
-<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00109">109</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00118">118</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
 
 </div>
 </div>
@@ -322,13 +345,13 @@ template&lt;I2CMode MODE&gt; </div>
     <tr><td class="paramname">manager</td><td>the I2C Manager that is in charge of I2C bus </td></tr>
     <tr><td class="paramname">device</td><td>the 8-bits device address on the I2C bus; it is constructed from the actual 7-bits address, after left-shifting 1 bit. This can be changed dynamically later for devices that support address changes. </td></tr>
     <tr><td class="paramname">mode</td><td>the best I2C mode for this device; this determines the I2C Manager types that can manage this device. </td></tr>
-    <tr><td class="paramname">auto_stop</td><td>if <code>true</code>, then any chain of commands (started with <code><a class="el" href="classi2c_1_1_i2_c_device.html#aba6c54c377d4b82035e7389df1ff3b92" title="Launch execution (asynchronously or synchronously, depending on MANAGER) of a chain of I2CLightComman...">launch_commands()</a></code>) will end with a STOP condition generated on the I2C bus; if <code>false</code>, then STOP condition will generated only when requested in <code><a class="el" href="classi2c_1_1_i2_c_device.html#a75fe1fe6a563488eb06f86266e15c923" title="Build a read I2CLightCommand that can be later pushed to the I2C Manager for proper handling.">read()</a></code> or <code><a class="el" href="classi2c_1_1_i2_c_device.html#a161423972dd35fbd4b32cd1e8048b5ad" title="Build a write I2CLightCommand that can be later pushed to the I2C Manager for proper handling.">write()</a></code> calls)</td></tr>
+    <tr><td class="paramname">auto_stop</td><td>if <code>true</code>, then any chain of commands (started with <code><a class="el" href="classi2c_1_1_i2_c_device.html#af937a51b38ea97dee521319c1fc09f46" title="Launch execution (asynchronously or synchronously, depending on MANAGER) of a chain of I2CLightComman...">launch_commands()</a></code>) will end with a STOP condition generated on the I2C bus; if <code>false</code>, then STOP condition will generated only when requested in <code><a class="el" href="classi2c_1_1_i2_c_device.html#a75fe1fe6a563488eb06f86266e15c923" title="Build a read I2CLightCommand that can be later pushed to the I2C Manager for proper handling.">read()</a></code> or <code><a class="el" href="classi2c_1_1_i2_c_device.html#a161423972dd35fbd4b32cd1e8048b5ad" title="Build a write I2CLightCommand that can be later pushed to the I2C Manager for proper handling.">write()</a></code> calls)</td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1_i2_c_device.html#a1325f82f4aaf8290a2d4cc4c70dfe83b" title="Change the I2C address of this device.">set_device()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00129">129</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00138">138</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
 
 </div>
 </div>
@@ -367,7 +390,7 @@ template&lt;typename MANAGER_ &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00147">147</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00156">156</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
 
 </div>
 </div>
@@ -414,7 +437,7 @@ template&lt;typename MANAGER_ &gt; </div>
 </div><div class="memdoc">
 
 <p>Build a read <a class="el" href="classi2c_1_1_i2_c_light_command.html" title="Light atomic I2C command as prepared by an I2C device.">I2CLightCommand</a> that can be later pushed to the I2C Manager for proper handling. </p>
-<p>Calling this method has no effect on the bus until the returned command is actually pushed to the I2C Manager through a <code><a class="el" href="classi2c_1_1_i2_c_device.html#aba6c54c377d4b82035e7389df1ff3b92" title="Launch execution (asynchronously or synchronously, depending on MANAGER) of a chain of I2CLightComman...">launch_commands()</a></code> call.</p>
+<p>Calling this method has no effect on the bus until the returned command is actually pushed to the I2C Manager through a <code><a class="el" href="classi2c_1_1_i2_c_device.html#af937a51b38ea97dee521319c1fc09f46" title="Launch execution (asynchronously or synchronously, depending on MANAGER) of a chain of I2CLightComman...">launch_commands()</a></code> call.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">read_count</td><td>the number of bytes to read from the device to fill the output value in the Future associated with the I2C transaction; if <code>0</code>, the whole output value should be filled by this command. </td></tr>
@@ -423,11 +446,11 @@ template&lt;typename MANAGER_ &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1_i2_c_device.html#aba6c54c377d4b82035e7389df1ff3b92" title="Launch execution (asynchronously or synchronously, depending on MANAGER) of a chain of I2CLightComman...">launch_commands()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1_i2_c_device.html#af937a51b38ea97dee521319c1fc09f46" title="Launch execution (asynchronously or synchronously, depending on MANAGER) of a chain of I2CLightComman...">launch_commands()</a> </dd>
 <dd>
 <a class="el" href="classi2c_1_1_i2_c_device.html#a161423972dd35fbd4b32cd1e8048b5ad" title="Build a write I2CLightCommand that can be later pushed to the I2C Manager for proper handling.">write()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00174">174</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00183">183</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
 
 </div>
 </div>
@@ -474,7 +497,7 @@ template&lt;typename MANAGER_ &gt; </div>
 </div><div class="memdoc">
 
 <p>Build a write <a class="el" href="classi2c_1_1_i2_c_light_command.html" title="Light atomic I2C command as prepared by an I2C device.">I2CLightCommand</a> that can be later pushed to the I2C Manager for proper handling. </p>
-<p>Calling this method has no effect on the bus until the returned command is actually pushed to the I2C Manager through a <code><a class="el" href="classi2c_1_1_i2_c_device.html#aba6c54c377d4b82035e7389df1ff3b92" title="Launch execution (asynchronously or synchronously, depending on MANAGER) of a chain of I2CLightComman...">launch_commands()</a></code> call.</p>
+<p>Calling this method has no effect on the bus until the returned command is actually pushed to the I2C Manager through a <code><a class="el" href="classi2c_1_1_i2_c_device.html#af937a51b38ea97dee521319c1fc09f46" title="Launch execution (asynchronously or synchronously, depending on MANAGER) of a chain of I2CLightComman...">launch_commands()</a></code> call.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">write_count</td><td>the number of bytes to get from the storage value in the Future associated with the I2C transaction, in order to write them to the device; if <code>0</code>, the whole storage value should be used by this command. </td></tr>
@@ -483,16 +506,16 @@ template&lt;typename MANAGER_ &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1_i2_c_device.html#aba6c54c377d4b82035e7389df1ff3b92" title="Launch execution (asynchronously or synchronously, depending on MANAGER) of a chain of I2CLightComman...">launch_commands()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1_i2_c_device.html#af937a51b38ea97dee521319c1fc09f46" title="Launch execution (asynchronously or synchronously, depending on MANAGER) of a chain of I2CLightComman...">launch_commands()</a> </dd>
 <dd>
 <a class="el" href="classi2c_1_1_i2_c_device.html#a75fe1fe6a563488eb06f86266e15c923" title="Build a read I2CLightCommand that can be later pushed to the I2C Manager for proper handling.">read()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00203">203</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00212">212</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
 
 </div>
 </div>
-<a id="aba6c54c377d4b82035e7389df1ff3b92"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aba6c54c377d4b82035e7389df1ff3b92">&#9670;&nbsp;</a></span>launch_commands()</h2>
+<a id="af937a51b38ea97dee521319c1fc09f46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af937a51b38ea97dee521319c1fc09f46">&#9670;&nbsp;</a></span>launch_commands()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -511,7 +534,7 @@ template&lt;typename MANAGER_ &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classstd_1_1initializer__list.html">std::initializer_list</a>&lt; <a class="el" href="classi2c_1_1_i2_c_light_command.html">I2CLightCommand</a> &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="classutils_1_1range.html">utils::range</a>&lt; <a class="el" href="classi2c_1_1_i2_c_light_command.html">I2CLightCommand</a> &gt;&#160;</td>
           <td class="paramname"><em>commands</em>&#160;</td>
         </tr>
         <tr>
@@ -556,7 +579,257 @@ template&lt;typename MANAGER_ &gt; </div>
 <dd>
 <a class="el" href="namespaceerrors.html" title="This namespace defines common errors that can be returned by some FastArduino API methods,...">errors</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00246">246</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00255">255</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+
+</div>
+</div>
+<a id="ac433c1975b0be78ce89071ac7ca7a538"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac433c1975b0be78ce89071ac7ca7a538">&#9670;&nbsp;</a></span>async_read()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename MANAGER_ &gt; </div>
+<div class="memtemplate">
+template&lt;typename F &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classi2c_1_1_i2_c_device.html">i2c::I2CDevice</a>&lt; MANAGER_ &gt;::async_read </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classi2c_1_1_i2_c_device.html#aaa72ad76688bfbf7057b4fdfa426a95c">PROXY</a>&lt; <a class="el" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a> &gt;&#160;</td>
+          <td class="paramname"><em>future</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>stop</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Helper method that asynchronously launches I2C commands for a simple Future performing one write followed by one read (typically for device register reading). </p>
+<dl class="section warning"><dt>Warning</dt><dd>Asynchronous API!</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">F</td><td>the type of <code>future</code> automatically deduced from <code>future</code> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">future</td><td>a proxy to the Future to be updated by the launched I2C commands </td></tr>
+    <tr><td class="paramname">stop</td><td>force a STOP condition on the I2C bus at the end of the read command </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the same result codes as <code><a class="el" href="classi2c_1_1_i2_c_device.html#af937a51b38ea97dee521319c1fc09f46" title="Launch execution (asynchronously or synchronously, depending on MANAGER) of a chain of I2CLightComman...">launch_commands()</a></code></dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1_i2_c_device.html#af937a51b38ea97dee521319c1fc09f46" title="Launch execution (asynchronously or synchronously, depending on MANAGER) of a chain of I2CLightComman...">launch_commands()</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_device.html#a161423972dd35fbd4b32cd1e8048b5ad" title="Build a write I2CLightCommand that can be later pushed to the I2C Manager for proper handling.">write()</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_device.html#a75fe1fe6a563488eb06f86266e15c923" title="Build a read I2CLightCommand that can be later pushed to the I2C Manager for proper handling.">read()</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_device.html#a0dfdb3fb784b939e8140a1c900a8e64e" title="Helper method that launches I2C commands for a simple Future performing one write followed by one rea...">sync_read()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00322">322</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+
+</div>
+</div>
+<a id="a0dfdb3fb784b939e8140a1c900a8e64e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0dfdb3fb784b939e8140a1c900a8e64e">&#9670;&nbsp;</a></span>sync_read()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename MANAGER_ &gt; </div>
+<div class="memtemplate">
+template&lt;typename F , typename T  = uint8_t&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classi2c_1_1_i2_c_device.html">i2c::I2CDevice</a>&lt; MANAGER_ &gt;::sync_read </td>
+          <td>(</td>
+          <td class="paramtype">T &amp;&#160;</td>
+          <td class="paramname"><em>result</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Helper method that launches I2C commands for a simple Future performing one write followed by one read (typically for device register reading); the method blocks until the end of the I2C transaction. </p>
+<dl class="section warning"><dt>Warning</dt><dd>Blocking API!</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">F</td><td>the type of Future to be used for the I2C transaction; this template argument must be provided as it cannot be deduced from other arguments. </td></tr>
+    <tr><td class="paramname">T</td><td>the type of expected <code>result</code> automatically deduced from <code>result</code> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">result</td><td>the result read from the I2C transaction </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>if the action was performed successfully, i.e. <code>result</code> contains a correct value</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1_i2_c_device.html#af937a51b38ea97dee521319c1fc09f46" title="Launch execution (asynchronously or synchronously, depending on MANAGER) of a chain of I2CLightComman...">launch_commands()</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_device.html#a161423972dd35fbd4b32cd1e8048b5ad" title="Build a write I2CLightCommand that can be later pushed to the I2C Manager for proper handling.">write()</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_device.html#a75fe1fe6a563488eb06f86266e15c923" title="Build a read I2CLightCommand that can be later pushed to the I2C Manager for proper handling.">read()</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_device.html#ac433c1975b0be78ce89071ac7ca7a538" title="Helper method that asynchronously launches I2C commands for a simple Future performing one write foll...">async_read()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00347">347</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+
+</div>
+</div>
+<a id="a877f1d20e75ed28de13314fc7d5a73f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a877f1d20e75ed28de13314fc7d5a73f0">&#9670;&nbsp;</a></span>async_write()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename MANAGER_ &gt; </div>
+<div class="memtemplate">
+template&lt;typename F &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int <a class="el" href="classi2c_1_1_i2_c_device.html">i2c::I2CDevice</a>&lt; MANAGER_ &gt;::async_write </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classi2c_1_1_i2_c_device.html#aaa72ad76688bfbf7057b4fdfa426a95c">PROXY</a>&lt; <a class="el" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a> &gt;&#160;</td>
+          <td class="paramname"><em>future</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>stop</em> = <code>true</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Helper method that asynchronously launches I2C commands for a simple Future performing only one write (typically for device register writing). </p>
+<dl class="section warning"><dt>Warning</dt><dd>Asynchronous API!</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">F</td><td>the type of <code>future</code> automatically deduced from <code>future</code> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">future</td><td>a proxy to the Future to be updated by the launched I2C commands </td></tr>
+    <tr><td class="paramname">stop</td><td>force a STOP condition on the I2C bus at the end of the write command </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the same result codes as <code><a class="el" href="classi2c_1_1_i2_c_device.html#af937a51b38ea97dee521319c1fc09f46" title="Launch execution (asynchronously or synchronously, depending on MANAGER) of a chain of I2CLightComman...">launch_commands()</a></code></dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1_i2_c_device.html#af937a51b38ea97dee521319c1fc09f46" title="Launch execution (asynchronously or synchronously, depending on MANAGER) of a chain of I2CLightComman...">launch_commands()</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_device.html#a161423972dd35fbd4b32cd1e8048b5ad" title="Build a write I2CLightCommand that can be later pushed to the I2C Manager for proper handling.">write()</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_device.html#a5733ebd749415b43fbfab76cf6cfc234" title="Helper method that launches I2C commands for a simple Future performing only one write (typically for...">sync_write()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00370">370</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+
+</div>
+</div>
+<a id="a5733ebd749415b43fbfab76cf6cfc234"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5733ebd749415b43fbfab76cf6cfc234">&#9670;&nbsp;</a></span>sync_write()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename MANAGER_ &gt; </div>
+<div class="memtemplate">
+template&lt;typename F , typename T  = uint8_t&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="classi2c_1_1_i2_c_device.html">i2c::I2CDevice</a>&lt; MANAGER_ &gt;::sync_write </td>
+          <td>(</td>
+          <td class="paramtype">const T &amp;&#160;</td>
+          <td class="paramname"><em>value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Helper method that launches I2C commands for a simple Future performing only one write (typically for device register writing); the method blocks until the end of the I2C transaction. </p>
+<dl class="section warning"><dt>Warning</dt><dd>Blocking API!</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">F</td><td>the type of Future to be used for the I2C transaction; this template argument must be provided as it cannot be deduced from other arguments. </td></tr>
+    <tr><td class="paramname">T</td><td>the type of <code>value</code> automatically deduced from <code>value</code> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>the value to write in the I2C transaction </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>if the action was performed successfully, i.e. <code>value</code> was correctly transmitted to the device</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1_i2_c_device.html#af937a51b38ea97dee521319c1fc09f46" title="Launch execution (asynchronously or synchronously, depending on MANAGER) of a chain of I2CLightComman...">launch_commands()</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_device.html#a161423972dd35fbd4b32cd1e8048b5ad" title="Build a write I2CLightCommand that can be later pushed to the I2C Manager for proper handling.">write()</a> </dd>
+<dd>
+<a class="el" href="classi2c_1_1_i2_c_device.html#a877f1d20e75ed28de13314fc7d5a73f0" title="Helper method that asynchronously launches I2C commands for a simple Future performing only one write...">async_write()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00393">393</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
 
 </div>
 </div>
@@ -603,7 +876,7 @@ template&lt;typename T &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a reference to the proxied Future </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00302">302</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00407">407</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
 
 </div>
 </div>
@@ -638,7 +911,7 @@ template&lt;typename T &gt; </div>
 <p>Create a PROXY from <code>target</code>. </p>
 <p>Depending on actual PROXY type, that may lead to a <a class="el" href="classlifecycle_1_1_light_proxy.html" title="A light proxy class that encapsulates access to a fixed T instance, or to a dynamic LifeCycle&lt;T&gt; inst...">lifecycle::LightProxy</a> or a <a class="el" href="classlifecycle_1_1_direct_proxy.html" title="A kind of proxy class that encapsulates access to a fixed T instance.">lifecycle::DirectProxy</a>. This can be used by device methods working in blocking mode. </p>
 
-<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00313">313</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__device_8h_source.html#l00418">418</a> of file <a class="el" href="i2c__device_8h_source.html">i2c_device.h</a>.</p>
 
 </div>
 </div>

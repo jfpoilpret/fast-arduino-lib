@@ -16,7 +16,10 @@ var namespacei2c =
     [ "I2CAsyncStatusManager", "classi2c_1_1_i2_c_async_status_manager.html", "classi2c_1_1_i2_c_async_status_manager" ],
     [ "I2CCommand", "classi2c_1_1_i2_c_command.html", null ],
     [ "I2CDevice", "classi2c_1_1_i2_c_device.html", "classi2c_1_1_i2_c_device" ],
+    [ "I2CFutureHelper", "classi2c_1_1_i2_c_future_helper.html", "classi2c_1_1_i2_c_future_helper" ],
+    [ "I2CFuturesGroup", "classi2c_1_1_i2_c_futures_group.html", "classi2c_1_1_i2_c_futures_group" ],
     [ "I2CLightCommand", "classi2c_1_1_i2_c_light_command.html", null ],
+    [ "I2CSameFutureGroup", "classi2c_1_1_i2_c_same_future_group.html", "classi2c_1_1_i2_c_same_future_group" ],
     [ "I2CSyncDebugManager", "classi2c_1_1_i2_c_sync_debug_manager.html", "classi2c_1_1_i2_c_sync_debug_manager" ],
     [ "I2CSyncLCDebugManager", "classi2c_1_1_i2_c_sync_l_c_debug_manager.html", "classi2c_1_1_i2_c_sync_l_c_debug_manager" ],
     [ "I2CSyncLCManager", "classi2c_1_1_i2_c_sync_l_c_manager.html", "classi2c_1_1_i2_c_sync_l_c_manager" ],
@@ -24,5 +27,9 @@ var namespacei2c =
     [ "I2CSyncLCStatusManager", "classi2c_1_1_i2_c_sync_l_c_status_manager.html", "classi2c_1_1_i2_c_sync_l_c_status_manager" ],
     [ "I2CSyncManager", "classi2c_1_1_i2_c_sync_manager.html", "classi2c_1_1_i2_c_sync_manager" ],
     [ "I2CSyncStatusDebugManager", "classi2c_1_1_i2_c_sync_status_debug_manager.html", "classi2c_1_1_i2_c_sync_status_debug_manager" ],
-    [ "I2CSyncStatusManager", "classi2c_1_1_i2_c_sync_status_manager.html", "classi2c_1_1_i2_c_sync_status_manager" ]
+    [ "I2CSyncStatusManager", "classi2c_1_1_i2_c_sync_status_manager.html", "classi2c_1_1_i2_c_sync_status_manager" ],
+    [ "ReadRegisterFuture", "classi2c_1_1_read_register_future.html", "classi2c_1_1_read_register_future" ],
+    [ "TReadRegisterFuture", "classi2c_1_1_t_read_register_future.html", "classi2c_1_1_t_read_register_future" ],
+    [ "TWriteRegisterFuture", "classi2c_1_1_t_write_register_future.html", "classi2c_1_1_t_write_register_future" ],
+    [ "WriteRegisterFuture", "classi2c_1_1_write_register_future.html", "classi2c_1_1_write_register_future" ]
 ];

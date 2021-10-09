@@ -88,6 +88,7 @@ $(document).ready(function(){initNavTree('namespacei2c.html',''); initResizable(
 <a href="#nested-classes">Classes</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
 <a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a> &#124;
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">i2c Namespace Reference</div>  </div>
@@ -150,8 +151,16 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html">I2CDevice</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base class for all I2C devices.  <a href="classi2c_1_1_i2_c_device.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_future_helper.html">I2CFutureHelper</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_futures_group.html">I2CFuturesGroup</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract class to allow aggregation of several futures in relation to I2C transactions.  <a href="classi2c_1_1_i2_c_futures_group.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_light_command.html">I2CLightCommand</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Light atomic I2C command as prepared by an I2C device.  <a href="classi2c_1_1_i2_c_light_command.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_same_future_group.html">I2CSameFutureGroup</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class to allow dynamic creation of futures from values stored in flash memory, leading to launch of I2C transactions.  <a href="classi2c_1_1_i2_c_same_future_group.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_sync_debug_manager.html">I2CSyncDebugManager</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Synchronous I2C Manager for ATmega architecture with debug facility.  <a href="classi2c_1_1_i2_c_sync_debug_manager.html#details">More...</a><br /></td></tr>
@@ -176,6 +185,18 @@ Classes</h2></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_sync_status_manager.html">I2CSyncStatusManager</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Synchronous I2C Manager for ATmega architecture wit status notification facility.  <a href="classi2c_1_1_i2_c_sync_status_manager.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_read_register_future.html">ReadRegisterFuture</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">General Future that can be used to read an I2C device register.  <a href="classi2c_1_1_read_register_future.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_t_read_register_future.html">TReadRegisterFuture</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic Future that can be used to read an I2C device register.  <a href="classi2c_1_1_t_read_register_future.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_t_write_register_future.html">TWriteRegisterFuture</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generic Future that can be used to write to an I2C device register.  <a href="classi2c_1_1_t_write_register_future.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_write_register_future.html">WriteRegisterFuture</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">General Future that can be used to write to an I2C device register.  <a href="classi2c_1_1_write_register_future.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
@@ -275,6 +296,13 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a2572e0fde7ef325c8f5c1c974c2de720"><td class="mdescLeft">&#160;</td><td class="mdescRight">List of debug states that are reported by the I2C Manager in debug mode.  <a href="namespacei2c.html#a2572e0fde7ef325c8f5c1c974c2de720">More...</a><br /></td></tr>
 <tr class="separator:a2572e0fde7ef325c8f5c1c974c2de720"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a5794e860eddf1016c5eb16ae1c9629bd"><td class="memTemplParams" colspan="2">template&lt;typename MANAGER &gt; </td></tr>
+<tr class="memitem:a5794e860eddf1016c5eb16ae1c9629bd"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespacei2c.html#a5794e860eddf1016c5eb16ae1c9629bd">await_same_future_group</a> (<a class="el" href="classi2c_1_1_i2_c_device.html">I2CDevice</a>&lt; MANAGER &gt; &amp;device, const uint8_t *buffer, uint8_t size)</td></tr>
+<tr class="memdesc:a5794e860eddf1016c5eb16ae1c9629bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function that creates a <code><a class="el" href="classi2c_1_1_i2_c_same_future_group.html" title="Class to allow dynamic creation of futures from values stored in flash memory, leading to launch of I...">I2CSameFutureGroup</a></code> instance for the provided flash array, launches its I2C transactions on the provided I2C device, and waits for the transaction to finish.  <a href="namespacei2c.html#a5794e860eddf1016c5eb16ae1c9629bd">More...</a><br /></td></tr>
+<tr class="separator:a5794e860eddf1016c5eb16ae1c9629bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -662,16 +690,79 @@ static constexpr Mode&#160;</td><td class="memItemRight" valign="bottom"><a clas
 
 </div>
 </div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="a5794e860eddf1016c5eb16ae1c9629bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5794e860eddf1016c5eb16ae1c9629bd">&#9670;&nbsp;</a></span>await_same_future_group()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename MANAGER &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">bool i2c::await_same_future_group </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classi2c_1_1_i2_c_device.html">I2CDevice</a>&lt; MANAGER &gt; &amp;&#160;</td>
+          <td class="paramname"><em>device</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const uint8_t *&#160;</td>
+          <td class="paramname"><em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Helper function that creates a <code><a class="el" href="classi2c_1_1_i2_c_same_future_group.html" title="Class to allow dynamic creation of futures from values stored in flash memory, leading to launch of I...">I2CSameFutureGroup</a></code> instance for the provided flash array, launches its I2C transactions on the provided I2C device, and waits for the transaction to finish. </p>
+<dl class="section warning"><dt>Warning</dt><dd>Blocking API!</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">MANAGER</td><td>the type of I2C Manager used to handle I2C communication </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">device</td><td>the <code><a class="el" href="classi2c_1_1_i2_c_device.html" title="Base class for all I2C devices.">i2c::I2CDevice</a></code> subclass instance that shall handle I2C commands to the I2C device </td></tr>
+    <tr><td class="paramname">buffer</td><td>pointer, in flash storage space, to the first byte to write to the I2C device </td></tr>
+    <tr><td class="paramname">size</td><td>size in bytes of the <code>buffer</code> array </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">true</td><td>if the whole I2C transactions could be completely performed successfully</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1_i2_c_same_future_group.html" title="Class to allow dynamic creation of futures from values stored in flash memory, leading to launch of I...">I2CSameFutureGroup</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="i2c__device__utilities_8h_source.html#l00670">670</a> of file <a class="el" href="i2c__device__utilities_8h_source.html">i2c_device_utilities.h</a>.</p>
+
+</div>
+</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <div class="ttc" id="anamespacefuture_html"><div class="ttname"><a href="namespacefuture.html">future</a></div><div class="ttdoc">Contains the API around Future implementation.</div><div class="ttdef"><b>Definition:</b> <a href="future_8cpp_source.html#l00017">future.cpp:18</a></div></div>
 <div class="ttc" id="astructdevices_1_1rtc_1_1tm_html"><div class="ttname"><a href="structdevices_1_1rtc_1_1tm.html">devices::rtc::tm</a></div><div class="ttdoc">The datetime structure used by the RTC API.</div><div class="ttdef"><b>Definition:</b> <a href="ds1307_8h_source.html#l00077">ds1307.h:78</a></div></div>
 <div class="ttc" id="aclassdevices_1_1rtc_1_1_d_s1307_html"><div class="ttname"><a href="classdevices_1_1rtc_1_1_d_s1307.html">devices::rtc::DS1307</a></div><div class="ttdoc">I2C device driver for the DS1307 RTC chip.</div><div class="ttdef"><b>Definition:</b> <a href="ds1307_8h_source.html#l00114">ds1307.h:115</a></div></div>
-<div class="ttc" id="aclassi2c_1_1_i2_c_sync_manager_html"><div class="ttname"><a href="classi2c_1_1_i2_c_sync_manager.html">i2c::I2CSyncManager</a></div><div class="ttdoc">Synchronous I2C Manager for ATmega architecture.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__atmega_8h_source.html#l01179">i2c_handler_atmega.h:1181</a></div></div>
-<div class="ttc" id="aclassi2c_1_1_abstract_i2_c_sync_manager_html_a89d6aa837d6c10f2de51725dd76abd2e"><div class="ttname"><a href="classi2c_1_1_abstract_i2_c_sync_manager.html#a89d6aa837d6c10f2de51725dd76abd2e">i2c::AbstractI2CSyncManager&lt; ATmegaI2CSyncHandler&lt; MODE_, HAS_STATUS_, I2C_STATUS_HOOK &gt;, MODE_, HAS_LC_, I2C_STATUS_HOOK, HAS_DEBUG_, I2C_DEBUG_HOOK &gt;::end</a></div><div class="ttdeci">void end()</div><div class="ttdoc">Disable MCU I2C transmission.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__common_8h_source.html#l00444">i2c_handler_common.h:444</a></div></div>
-<div class="ttc" id="aclassi2c_1_1_i2_c_async_manager_html"><div class="ttname"><a href="classi2c_1_1_i2_c_async_manager.html">i2c::I2CAsyncManager</a></div><div class="ttdoc">Asynchronous I2C Manager for ATmega architecture.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__atmega_8h_source.html#l00816">i2c_handler_atmega.h:818</a></div></div>
+<div class="ttc" id="aclassi2c_1_1_i2_c_sync_manager_html"><div class="ttname"><a href="classi2c_1_1_i2_c_sync_manager.html">i2c::I2CSyncManager</a></div><div class="ttdoc">Synchronous I2C Manager for ATmega architecture.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__atmega_8h_source.html#l01182">i2c_handler_atmega.h:1184</a></div></div>
+<div class="ttc" id="aclassi2c_1_1_abstract_i2_c_sync_manager_html_a89d6aa837d6c10f2de51725dd76abd2e"><div class="ttname"><a href="classi2c_1_1_abstract_i2_c_sync_manager.html#a89d6aa837d6c10f2de51725dd76abd2e">i2c::AbstractI2CSyncManager&lt; ATmegaI2CSyncHandler&lt; MODE_, HAS_STATUS_, I2C_STATUS_HOOK &gt;, MODE_, HAS_LC_, I2C_STATUS_HOOK, HAS_DEBUG_, I2C_DEBUG_HOOK &gt;::end</a></div><div class="ttdeci">void end()</div><div class="ttdoc">Disable MCU I2C transmission.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__common_8h_source.html#l00445">i2c_handler_common.h:445</a></div></div>
+<div class="ttc" id="aclassi2c_1_1_i2_c_async_manager_html"><div class="ttname"><a href="classi2c_1_1_i2_c_async_manager.html">i2c::I2CAsyncManager</a></div><div class="ttdoc">Asynchronous I2C Manager for ATmega architecture.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__atmega_8h_source.html#l00819">i2c_handler_atmega.h:821</a></div></div>
 <div class="ttc" id="ai2c__handler__atmega_8h_html_a66b761ad07c3eb470ddf58fd6b58594e"><div class="ttname"><a href="i2c__handler__atmega_8h.html#a66b761ad07c3eb470ddf58fd6b58594e">REGISTER_I2C_ISR</a></div><div class="ttdeci">#define REGISTER_I2C_ISR(MANAGER)</div><div class="ttdoc">Register the necessary ISR (Interrupt Service Routine) for an asynchronous I2C Manager to work proper...</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__atmega_8h_source.html#l00057">i2c_handler_atmega.h:57</a></div></div>
-<div class="ttc" id="aclassi2c_1_1_abstract_i2_c_sync_manager_html_a66b6a7902f2d3e2354f344c154f4a841"><div class="ttname"><a href="classi2c_1_1_abstract_i2_c_sync_manager.html#a66b6a7902f2d3e2354f344c154f4a841">i2c::AbstractI2CSyncManager&lt; ATmegaI2CSyncHandler&lt; MODE_, HAS_STATUS_, I2C_STATUS_HOOK &gt;, MODE_, HAS_LC_, I2C_STATUS_HOOK, HAS_DEBUG_, I2C_DEBUG_HOOK &gt;::begin</a></div><div class="ttdeci">void begin()</div><div class="ttdoc">Prepare and enable the MCU for I2C transmission.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__common_8h_source.html#l00433">i2c_handler_common.h:433</a></div></div>
+<div class="ttc" id="aclassi2c_1_1_abstract_i2_c_sync_manager_html_a66b6a7902f2d3e2354f344c154f4a841"><div class="ttname"><a href="classi2c_1_1_abstract_i2_c_sync_manager.html#a66b6a7902f2d3e2354f344c154f4a841">i2c::AbstractI2CSyncManager&lt; ATmegaI2CSyncHandler&lt; MODE_, HAS_STATUS_, I2C_STATUS_HOOK &gt;, MODE_, HAS_LC_, I2C_STATUS_HOOK, HAS_DEBUG_, I2C_DEBUG_HOOK &gt;::begin</a></div><div class="ttdeci">void begin()</div><div class="ttdoc">Prepare and enable the MCU for I2C transmission.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__common_8h_source.html#l00434">i2c_handler_common.h:434</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

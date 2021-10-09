@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['weekday_2211',['WeekDay',['../namespacedevices_1_1rtc.html#a765e5fb8599fbfc007de3b47a81593b3',1,'devices::rtc']]]
+  ['vcselperiodtype_2486',['VcselPeriodType',['../namespacedevices_1_1vl53l0x.html#a07eefbde97029a7493093997fd81c57a',1,'devices::vl53l0x']]]
 ];

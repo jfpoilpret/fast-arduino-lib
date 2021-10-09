@@ -89,6 +89,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <li>sample()
 : <a class="el" href="classanalog_1_1_analog_input.html#a56e3701a8e1594347b99b3e0d300e598">analog::AnalogInput&lt; APIN_, SAMPLE_TYPE_, AREF_, MAXFREQ_ &gt;</a>
 </li>
+<li>sample_ready()
+: <a class="el" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#ae3e420e30284c9d73fd05043296a947e">devices::vl53l0x::GPIOSettings</a>
+</li>
 <li>sbumpc()
 : <a class="el" href="classstreams_1_1istreambuf.html#a8d026dce29fbb1c111db3170ed814b7f">streams::istreambuf</a>
 </li>
@@ -111,6 +114,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 </li>
 <li>set_address()
 : <a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#a4eddb8838d933ac57e820942b8b622f5">devices::rf::NRF24L01&lt; CSN, CE &gt;</a>
+, <a class="el" href="classdevices_1_1vl53l0x_1_1_v_l53_l0_x.html#a7a6410f0460104502ce83eb7ef540a9b">devices::vl53l0x::VL53L0X&lt; MANAGER &gt;</a>
 </li>
 <li>set_capture_noise_canceller()
 : <a class="el" href="classtimer_1_1_timer.html#a15790fea7038d487ac57cb91782e6225">timer::Timer&lt; NTIMER_ &gt;</a>
@@ -122,7 +126,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="classdevices_1_1servo_1_1_servo.html#a44942d6c0f800757ec3c4e8fad8419ed">devices::servo::Servo&lt; TIMER_, PWMPIN_ &gt;</a>
 </li>
 <li>set_datetime()
-: <a class="el" href="classdevices_1_1rtc_1_1_d_s1307.html#a8ca4bfb365bf6df2e94f6c65400b28a3">devices::rtc::DS1307&lt; MANAGER &gt;</a>
+: <a class="el" href="classdevices_1_1rtc_1_1_d_s1307.html#ac05b6f022a4255433cd116e1a7d53e31">devices::rtc::DS1307&lt; MANAGER &gt;</a>
 </li>
 <li>set_DDR()
 : <a class="el" href="classgpio_1_1_fast_masked_port.html#adc5de0c34f5dfbf056d51308438fae83">gpio::FastMaskedPort&lt; PORT_, MASK_ &gt;</a>
@@ -152,6 +156,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <li>set_future_value_()
 : <a class="el" href="classfuture_1_1_abstract_future.html#a09e8e39f9083490acc5e433da2c880af">future::AbstractFuture</a>
 </li>
+<li>set_GPIO_settings()
+: <a class="el" href="classdevices_1_1vl53l0x_1_1_v_l53_l0_x.html#ade2b985682bbaf683ef14d03a0f601f0">devices::vl53l0x::VL53L0X&lt; MANAGER &gt;</a>
+</li>
 <li>set_input_capture()
 : <a class="el" href="classtimer_1_1_timer.html#aaf3b504cc37e25a8f3b5e45d8654d56f">timer::Timer&lt; NTIMER_ &gt;</a>
 </li>
@@ -161,15 +168,15 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <li>set_max()
 : <a class="el" href="classtimer_1_1_timer.html#a1e064d32c8b73ccf433e2eb01707db22">timer::Timer&lt; NTIMER_ &gt;</a>
 </li>
+<li>set_measurement_timing_budget()
+: <a class="el" href="classdevices_1_1vl53l0x_1_1_v_l53_l0_x.html#a82e29546fa72e9d961c02cae43227004">devices::vl53l0x::VL53L0X&lt; MANAGER &gt;</a>
+</li>
 <li>set_min_duration()
 : <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#a2a03c6699c7a65f7d51dfe73d73bafd7">devices::audio::AbstractTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a>
 </li>
 <li>set_mode()
 : <a class="el" href="classgpio_1_1_fast_pin.html#a3845165b5c3e1a9e1502780015998157">gpio::FastPin&lt; PORT_, BIT_ &gt;</a>
 , <a class="el" href="classgpio_1_1_fast_pin_type.html#aec745f596e959cb883f9ba66a526b1b6">gpio::FastPinType&lt; DPIN_ &gt;</a>
-</li>
-<li>set_output_listener()
-: <a class="el" href="classfuture_1_1_abstract_futures_group.html#a5951c3b1af4df57dea45a1ce1c1b405d">future::AbstractFuturesGroup&lt; F &gt;</a>
 </li>
 <li>set_output_mode()
 : <a class="el" href="classanalog_1_1_p_w_m_output.html#aea6a8cf721d0fcd61266f0f4e783ad82">analog::PWMOutput&lt; PWMPIN_, PULSED_ &gt;</a>
@@ -198,11 +205,20 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <li>set_ready()
 : <a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#adaa8097e1fb62f58f28c4d0cc105ae22">devices::sonar::MultiHCSR04&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ &gt;</a>
 </li>
+<li>set_reference_SPADs()
+: <a class="el" href="classdevices_1_1vl53l0x_1_1_v_l53_l0_x.html#ad67dcabc700a4e74d9104ec4b23f8ae2">devices::vl53l0x::VL53L0X&lt; MANAGER &gt;</a>
+</li>
+<li>set_register()
+: <a class="el" href="classdevices_1_1vl53l0x_1_1_v_l53_l0_x.html#ad4e60db7f7cb22bf3ef80f2de40d4df4">devices::vl53l0x::VL53L0X&lt; MANAGER &gt;</a>
+</li>
+<li>set_sequence_steps()
+: <a class="el" href="classdevices_1_1vl53l0x_1_1_v_l53_l0_x.html#a9a7233dd506e05a69fc0f1a1d5aeca9f">devices::vl53l0x::VL53L0X&lt; MANAGER &gt;</a>
+</li>
+<li>set_signal_rate_limit()
+: <a class="el" href="classdevices_1_1vl53l0x_1_1_v_l53_l0_x.html#a97febebb693ab16c48bd8d4b23b22fa5">devices::vl53l0x::VL53L0X&lt; MANAGER &gt;</a>
+</li>
 <li>set_status()
 : <a class="el" href="classdevices_1_1_win_bond.html#a0b36056bc755fa0b2d189b386d553521">devices::WinBond&lt; CS &gt;</a>
-</li>
-<li>set_status_listener()
-: <a class="el" href="classfuture_1_1_abstract_futures_group.html#ab76fff643d0b39de06d0bc1fea15443c">future::AbstractFuturesGroup&lt; F &gt;</a>
 </li>
 <li>set_timer_mode()
 : <a class="el" href="classtimer_1_1_timer.html#adc0a234beadd50acf07c9f6d4b7b51a2">timer::Timer&lt; NTIMER_ &gt;</a>
@@ -212,6 +228,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 </li>
 <li>set_trigger_()
 : <a class="el" href="classinterrupt_1_1_i_n_t_signal.html#ae5aad533dd73d7962be2aac57ed96618">interrupt::INTSignal&lt; EXTPIN_ &gt;</a>
+</li>
+<li>set_vcsel_pulse_period()
+: <a class="el" href="classdevices_1_1vl53l0x_1_1_v_l53_l0_x.html#a64f421db9b31125b290be251bec59213">devices::vl53l0x::VL53L0X&lt; MANAGER &gt;</a>
 </li>
 <li>setf()
 : <a class="el" href="classstreams_1_1ios__base.html#a47fa7608c0e74a39d8c95b52fbccf2cd">streams::ios_base</a>
@@ -237,6 +256,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 <li>SonarEvent()
 : <a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#ad8775814aef11f07d6785511407bb245">devices::sonar::SonarEvent&lt; NTIMER_ &gt;</a>
 </li>
+<li>spad_refs()
+: <a class="el" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_reference.html#a3289b954acf99d49f3870b1da0c65b01">devices::vl53l0x::SPADReference</a>
+</li>
 <li>SPIDevice()
 : <a class="el" href="classspi_1_1_s_p_i_device.html#a6c81272a3a5a6ab5d2af880bb2a32edd">spi::SPIDevice&lt; CS, CS_MODE, RATE, MODE, ORDER &gt;</a>
 </li>
@@ -244,13 +266,20 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="classstreams_1_1ostreambuf.html#ad1fe405fcecf6e1d1bd97d7f14792438">streams::ostreambuf</a>
 </li>
 <li>sputn()
-: <a class="el" href="classstreams_1_1ostreambuf.html#a5ae9b4a7aeef87bcec0ca2bf5c3c3204">streams::ostreambuf</a>
+: <a class="el" href="classstreams_1_1ostreambuf.html#aec033507c6f9c2fe741ea03a7fb6cda3">streams::ostreambuf</a>
 </li>
 <li>SquareWave()
 : <a class="el" href="classtimer_1_1_square_wave.html#ad6ea4ef6bc5df31f3259eb9f040c2c5f">timer::SquareWave&lt; NTIMER_, OUTPUT_ &gt;</a>
 </li>
 <li>standby()
 : <a class="el" href="classdevices_1_1rf_1_1_n_r_f24_l01.html#ac6ab7ec353225fec36d49130cb9d6786">devices::rf::NRF24L01&lt; CSN, CE &gt;</a>
+</li>
+<li>start()
+: <a class="el" href="classi2c_1_1_i2_c_futures_group.html#a3e826619debb355293c07c47dcb6792c">i2c::I2CFuturesGroup&lt; MANAGER &gt;</a>
+, <a class="el" href="classi2c_1_1_i2_c_same_future_group.html#acfcf8a6befabf4a63d3bbc0bd99c9a65">i2c::I2CSameFutureGroup&lt; MANAGER &gt;</a>
+</li>
+<li>start_continuous_ranging()
+: <a class="el" href="classdevices_1_1vl53l0x_1_1_v_l53_l0_x.html#ab2f73ffeafc9aea3196af584ed39d49f">devices::vl53l0x::VL53L0X&lt; MANAGER &gt;</a>
 </li>
 <li>start_frequency()
 : <a class="el" href="classtimer_1_1_square_wave.html#a5af097fb81eb221897b2311907459198">timer::SquareWave&lt; NTIMER_, OUTPUT_ &gt;</a>
@@ -268,10 +297,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="structdevices_1_1sonar_1_1_sonar_event.html#a45487c0872a470eb3a6e641963b384d2">devices::sonar::SonarEvent&lt; NTIMER_ &gt;</a>
 </li>
 <li>status()
-: <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a27e8fc9be962a57c415fa9b9afd9434f">devices::magneto::HMC5883L&lt; MANAGER &gt;</a>
+: <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a35a2cb0f3926ab9241dbb12a41d33e9b">devices::magneto::HMC5883L&lt; MANAGER &gt;</a>
 , <a class="el" href="classdevices_1_1_win_bond.html#a2c6302795b108cf7a54e0a927b748e63">devices::WinBond&lt; CS &gt;</a>
 , <a class="el" href="classfuture_1_1_abstract_future.html#aab09c6c0c87be63329e1198c0e686069">future::AbstractFuture</a>
-, <a class="el" href="classfuture_1_1_abstract_futures_group.html#a96cec9510b2e0ae76f0b42dee544b34e">future::AbstractFuturesGroup&lt; F &gt;</a>
 </li>
 <li>status_t()
 : <a class="el" href="uniondevices_1_1rf_1_1_n_r_f24_l01_1_1status__t.html#a1b1df9c01cf13da3e71011631b3d4efa">devices::rf::NRF24L01&lt; CSN, CE &gt;::status_t</a>
@@ -280,6 +308,9 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 : <a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#a874ec951bd1695aefbe127ee1744c52d">devices::audio::AsyncTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a>
 , <a class="el" href="classdevices_1_1audio_1_1_tone_player.html#a0db8d1577bdaa0bfe8b7dbb660e54b7c">devices::audio::TonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a>
 , <a class="el" href="classtimer_1_1_square_wave.html#adf44dbb0e6275dcd9f04e83f0a004072">timer::SquareWave&lt; NTIMER_, OUTPUT_ &gt;</a>
+</li>
+<li>stop_continuous_ranging()
+: <a class="el" href="classdevices_1_1vl53l0x_1_1_v_l53_l0_x.html#a97a6d9833c513779ebc0c8e7ab98ed43">devices::vl53l0x::VL53L0X&lt; MANAGER &gt;</a>
 </li>
 <li>stop_current_note()
 : <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#a84ad6433837b9afca43c5811128b755b">devices::audio::AbstractTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a>
@@ -298,6 +329,12 @@ $(document).ready(function(){initNavTree('functions_func_s.html',''); initResiza
 </li>
 <li>suspend_timer_()
 : <a class="el" href="classtimer_1_1_timer.html#a6adb0c332078d0d4a03c05e7f03bea1d">timer::Timer&lt; NTIMER_ &gt;</a>
+</li>
+<li>sync_read()
+: <a class="el" href="classi2c_1_1_i2_c_device.html#a0dfdb3fb784b939e8140a1c900a8e64e">i2c::I2CDevice&lt; MANAGER_ &gt;</a>
+</li>
+<li>sync_write()
+: <a class="el" href="classi2c_1_1_i2_c_device.html#a5733ebd749415b43fbfab76cf6cfc234">i2c::I2CDevice&lt; MANAGER_ &gt;</a>
 </li>
 </ul>
 </div><!-- contents -->

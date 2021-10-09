@@ -95,6 +95,10 @@ $(document).ready(function(){initNavTree('namespaceflash.html',''); initResizabl
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:afbcbab2afc140f933977403620337c7c"><td class="memTemplParams" colspan="2">template&lt;typename T  = uint8_t&gt; </td></tr>
+<tr class="memitem:afbcbab2afc140f933977403620337c7c"><td class="memTemplItemLeft" align="right" valign="top">T *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceflash.html#afbcbab2afc140f933977403620337c7c">read_flash</a> (uint16_t address, T *buffer, uint8_t size)</td></tr>
+<tr class="memdesc:afbcbab2afc140f933977403620337c7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read flash memory content at given <code>address</code> into <code>buffer</code>.  <a href="namespaceflash.html#afbcbab2afc140f933977403620337c7c">More...</a><br /></td></tr>
+<tr class="separator:afbcbab2afc140f933977403620337c7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3308e6ce737b046264e113ced6ba610f"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a3308e6ce737b046264e113ced6ba610f"><td class="memTemplItemLeft" align="right" valign="top">T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceflash.html#a3308e6ce737b046264e113ced6ba610f">read_flash</a> (uint16_t address, T &amp;item)</td></tr>
 <tr class="memdesc:a3308e6ce737b046264e113ced6ba610f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read flash memory content at given <code>address</code> into <code>item</code>.  <a href="namespaceflash.html#a3308e6ce737b046264e113ced6ba610f">More...</a><br /></td></tr>
@@ -107,8 +111,64 @@ Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Defines API to handle flash memory storage. </p>
 </div><h2 class="groupheader">Function Documentation</h2>
+<a id="afbcbab2afc140f933977403620337c7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbcbab2afc140f933977403620337c7c">&#9670;&nbsp;</a></span>read_flash() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T  = uint8_t&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">T* flash::read_flash </td>
+          <td>(</td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>address</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T *&#160;</td>
+          <td class="paramname"><em>buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>size</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Read flash memory content at given <code>address</code> into <code>buffer</code>. </p>
+<p>Note that type <code>T</code> should not have constructors as they will not be properly called by this method.</p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">T</td><td>type of items contained in <code>buffer</code> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">address</td><td>the address to read from flash storage </td></tr>
+    <tr><td class="paramname">buffer</td><td>the array (already allocated by caller) to be copied by flash storage content </td></tr>
+    <tr><td class="paramname">size</td><td>the number of items (of type <code>T</code>) to read from flash storage </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to <code>buffer</code> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="flash_8h_source.html#l00050">50</a> of file <a class="el" href="flash_8h_source.html">flash.h</a>.</p>
+
+</div>
+</div>
 <a id="a3308e6ce737b046264e113ced6ba610f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3308e6ce737b046264e113ced6ba610f">&#9670;&nbsp;</a></span>read_flash() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3308e6ce737b046264e113ced6ba610f">&#9670;&nbsp;</a></span>read_flash() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -146,18 +206,18 @@ template&lt;typename T &gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">address</td><td>the address to read from flash storage </td></tr>
-    <tr><td class="paramname">item</td><td>the item to read from flah storage </td></tr>
+    <tr><td class="paramname">item</td><td>the item to read from flash storage </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a reference to read <code>item</code> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="flash_8h_source.html#l00047">47</a> of file <a class="el" href="flash_8h_source.html">flash.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="flash_8h_source.html#l00067">67</a> of file <a class="el" href="flash_8h_source.html">flash.h</a>.</p>
 
 </div>
 </div>
 <a id="aad20c401fce8e390b25dfcc30b85224d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aad20c401fce8e390b25dfcc30b85224d">&#9670;&nbsp;</a></span>read_flash() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aad20c401fce8e390b25dfcc30b85224d">&#9670;&nbsp;</a></span>read_flash() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -185,7 +245,7 @@ template&lt;typename T &gt; </div>
 </div><div class="memdoc">
 
 <p>Read flash memory content at given <code>address</code> into <code>item</code>. </p>
-<p>Note that type <code>T</code> should not have constructors as they will not be properly called by this method. The item shgould properly be defined in flash storage, as in: </p><div class="fragment"><div class="line"><span class="keyword">struct </span>Dummy</div>
+<p>Note that type <code>T</code> should not have constructors as they will not be properly called by this method. The item should properly be defined in flash storage, as in: </p><div class="fragment"><div class="line"><span class="keyword">struct </span>Dummy</div>
 <div class="line">{</div>
 <div class="line">    uint16_t a;</div>
 <div class="line">    uint8_t b;</div>
@@ -193,7 +253,7 @@ template&lt;typename T &gt; </div>
 <div class="line">};</div>
 <div class="line"><span class="keyword">const</span> Dummy sample1 PROGMEM = {54321, 123, <span class="keyword">true</span>};</div>
 </div><!-- fragment --><p>The address of the item in flash storage can then be directly obtained: </p><div class="fragment"><div class="line">Dummy value;</div>
-<div class="line"><a class="code" href="namespaceflash.html#a3308e6ce737b046264e113ced6ba610f">flash::read_flash</a>(&amp;sample1, value);</div>
+<div class="line"><a class="code" href="namespaceflash.html#afbcbab2afc140f933977403620337c7c">flash::read_flash</a>(&amp;sample1, value);</div>
 </div><!-- fragment --><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">T</td><td>type of <code>item</code> </td></tr>
@@ -203,19 +263,19 @@ template&lt;typename T &gt; </div>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">address</td><td>the address to read from flash storage </td></tr>
-    <tr><td class="paramname">item</td><td>the item to read from flah storage </td></tr>
+    <tr><td class="paramname">item</td><td>the item to read from flash storage </td></tr>
   </table>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>a reference to read <code>item</code> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="flash_8h_source.html#l00080">80</a> of file <a class="el" href="flash_8h_source.html">flash.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="flash_8h_source.html#l00100">100</a> of file <a class="el" href="flash_8h_source.html">flash.h</a>.</p>
 
 </div>
 </div>
 </div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="anamespaceflash_html_a3308e6ce737b046264e113ced6ba610f"><div class="ttname"><a href="namespaceflash.html#a3308e6ce737b046264e113ced6ba610f">flash::read_flash</a></div><div class="ttdeci">T &amp; read_flash(uint16_t address, T &amp;item)</div><div class="ttdoc">Read flash memory content at given address into item.</div><div class="ttdef"><b>Definition:</b> <a href="flash_8h_source.html#l00047">flash.h:47</a></div></div>
+<div class="ttc" id="anamespaceflash_html_afbcbab2afc140f933977403620337c7c"><div class="ttname"><a href="namespaceflash.html#afbcbab2afc140f933977403620337c7c">flash::read_flash</a></div><div class="ttdeci">T * read_flash(uint16_t address, T *buffer, uint8_t size)</div><div class="ttdoc">Read flash memory content at given address into buffer.</div><div class="ttdef"><b>Definition:</b> <a href="flash_8h_source.html#l00050">flash.h:50</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

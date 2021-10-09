@@ -118,6 +118,10 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <li>MEGA: Arduino MEGA</li>
 <li>ATmega328-8Mhz: bare ATmega328P MCU at 8 MHz</li>
 <li>ATmega328-16MHz: bare ATmega328P MCU at 16 MHz</li>
+<li>ATmega644-8MHz: bare ATmega644P MCU at 8 MHz</li>
+<li>ATmega644-16MHz: bare ATmega644P MCU at 16 MHz</li>
+<li>ATmega1284-8MHz: bare ATmega1284P MCU at 8 MHz</li>
+<li>ATmega1284-16MHz: bare ATmega1284P MCU at 16 MHz</li>
 <li>ATtinyX4-8MHz: bare ATtinyX4 MCU at 8 MHz</li>
 <li>ATtinyX5-8MHz: bare ATtinyX5 MCU at 8 MHz</li>
 </ul>
@@ -141,23 +145,30 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <p>Most of the library's source code is inside <code>.h</code> header files, only a small part of it is in <code>.cpp</code> files. This is due to heavy C++ template usage which requires most source code to be present on header files.</p>
 <p>All FastArduino source code is defined inside namespaces, in order to avoid names conflicts across programs. Namespaces can include sub-namespaces in some occasions. Namespaces are organized as follows:</p><ul>
 <li><a href="namespaceanalog.html">analog</a>: contains the API to handle analog input and "pseudo-analog" output (PWM).</li>
+<li><a href="namespacebits.html">bits</a>: provides a few utilities for bits manipulation.</li>
 <li><a href="namespacecontainers.html">containers</a>: utility API to handle useful containers such as linked lists and queues; those are internally used by some FastArduino API but you can use them in your own programs as well.</li>
 <li><a href="namespacedevices.html">devices</a>: this namespace is used for all devices external to the MCU itself; most devices API comes in a sub namespace:<ul>
 <li><a href="namespacedevices_1_1audio.html">audio</a>: API for tone generation to buzzers or small audio amplifiers</li>
 <li><a href="namespacedevices_1_1magneto.html">magneto</a>: API for magnetometers, gyroscopes, accelerometers</li>
+<li><a href="namespacedevices_1_1mcp230xx.html">mcp230xx</a>: API for Microchip I/O expanders MCP23008 and MCP23017</li>
+<li><a href="namespacedevices_1_1mcp3x0x.html">mcp3x0x</a>: API for Microchip ADC chips family</li>
 <li><a href="namespacedevices_1_1rf.html">rf</a>: API for radio-frequency chips</li>
 <li><a href="namespacedevices_1_1rtc.html">rtc</a>: API for real time clock chips</li>
 <li><a href="namespacedevices_1_1servo.html">servo</a>: API to handle servomotors</li>
 <li><a href="namespacedevices_1_1sonar.html">sonar</a>: API to handle sonar range sensors</li>
+<li><a href="namespacedevices_1_1vl53l0x.html">vl53l0x</a>: API to handle VL53L0X Time of Flight distance sensor</li>
 </ul>
 </li>
 <li><a href="namespaceeeprom.html">eeprom</a>: contains the API to handle read and write to and from the internal MCU EEPROM.</li>
 <li><a href="namespaceerrors.html">errors</a>: all errors that can be returned by FastArduino API are defined here as constants.</li>
 <li><a href="namespaceevents.html">events</a>: this namespace defines general event handling that can be used in your programs. Most FastArduino are able to generate events on specific conditions. This namespace also contain the scheduler API which permits scheduling of jobs at specific times or periods.</li>
 <li><a href="namespaceflash.html">flash</a>: contains the API to handle read of data from the internal MCU flash memory; this is particular useful in order to reduce SRAM storage when dealing with constant strings.</li>
+<li><a href="namespacefuture.html">future</a>: that namespace brings the concept of futures to FastArduino, which is heavily used in FastArduino I2C asynchronous API.</li>
 <li><a href="namespacegpio.html">gpio</a>: that namespace deals with all API to manage digital input and outputs.</li>
 <li><a href="namespacei2c.html">i2c</a>: that namespace contains all API to deal with I2C (also known as <em>Two Wires Interface</em>), including a base class to help you define support for new devices based on I2C protocol.</li>
 <li><a href="namespaceinterrupt.html">interrupt</a>: this namespace implements the concepts of managing all interrupts within FastArduino; it also contains the API dedicated to handling AVR interrupt pins, either Pin Change Interrupt pins or External Interrupt pins.</li>
+<li><a href="namespacelifecycle.html">lifecycle</a>: this namespace provides mix-in classes to allow lifecycle management of instances; this is an orthogonal concept that may be used wherever needed.</li>
+<li><a href="namespacememory.html">memory</a>: provides a few utility to check available SRAM (useful for debugging).</li>
 <li><a href="namespacepower.html">power</a>: contains the API to handle AVR power modes.</li>
 <li><a href="namespaceserial.html">serial</a>: contains the API to handle serial communication; sub namespaces definespecific API for hardware or software based serial communication:<ul>
 <li><a href="namespaceserial_1_1hard.html">hard</a>: this namespace support AVR embedded UART (for ATmega MCU only, as ATtiny do not have this feature)</li>
@@ -165,11 +176,13 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 </ul>
 </li>
 <li><a href="namespacespi.html">spi</a>: that namespace deals with all API to deal with SPI interface, including a base class to help you define support for new devices based on SPI protocol.</li>
+<li><a href="namespacestd.html">std</a>: subset of C++ std namespace; it includes a few utilities necessary for some FastArduino features.</li>
 <li><a href="namespacestreams.html">streams</a>: this namespace provide a C++ streams like API for input and output (used by serial UART API).</li>
 <li><a href="namespacetime.html">time</a>: provides API to delay your program for some amount of time (through busy loops) and a few more API to deal with time data.</li>
 <li><a href="namespacetimer.html">timer</a>: defines a basic API to deal with MCU timers and their available operation modes, more specific API to use timers for generating pulses, generating square waves, and an API dedicated to track real time through MCU timers, with microsecond precision.</li>
+<li><a href="namespacetypes__traits.html">types_traits</a>: provides a few utility dealing with types.</li>
 <li><a href="namespaceutils.html">utils</a>: provides general utilities that did not pertain to any other namespace; many of these utilities allow easy conversion of values between two referentials or "encoding".</li>
-<li><a href="namespacewatchdog.html">watchdog</a>: this namespace defines an API to deal with MCU watchdog timer as a way</li>
+<li><a href="namespacewatchdog.html">watchdog</a>: this namespace defines an API to deal with MCU watchdog timer as a way.</li>
 </ul>
 <p>In addition to all namespaces above, there is one omnipresent namespace <code>board</code> that defines all configuration (list of digital &amp; analog pins, timers...) specific to an MCU target. The documentation for this namespace depends on the MCU target, as described <a href="supportedboards.html">here</a>.</p>
 <p>As you can see, all namespaces in FastArduino are 100% lowercase by convention.</p>

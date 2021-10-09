@@ -14,6 +14,7 @@ var namespaces_dup =
     [ "i2c", "namespacei2c.html", "namespacei2c" ],
     [ "interrupt", "namespaceinterrupt.html", null ],
     [ "lifecycle", "namespacelifecycle.html", null ],
+    [ "memory", "namespacememory.html", null ],
     [ "power", "namespacepower.html", null ],
     [ "serial", "namespaceserial.html", "namespaceserial" ],
     [ "spi", "namespacespi.html", null ],

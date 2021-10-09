@@ -8,6 +8,7 @@ var namespacedevices =
     [ "rtc", "namespacedevices_1_1rtc.html", "namespacedevices_1_1rtc" ],
     [ "servo", "namespacedevices_1_1servo.html", "namespacedevices_1_1servo" ],
     [ "sonar", "namespacedevices_1_1sonar.html", "namespacedevices_1_1sonar" ],
+    [ "vl53l0x", "namespacedevices_1_1vl53l0x.html", "namespacedevices_1_1vl53l0x" ],
     [ "SIPO", "classdevices_1_1_s_i_p_o.html", "classdevices_1_1_s_i_p_o" ],
     [ "WinBond", "classdevices_1_1_win_bond.html", "classdevices_1_1_win_bond" ]
 ];

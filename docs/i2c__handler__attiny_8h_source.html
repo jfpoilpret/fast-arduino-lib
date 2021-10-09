@@ -336,110 +336,112 @@ $(document).ready(function(){initNavTree('i2c__handler__attiny_8h_source.html','
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    <span class="keyword">private</span>:</div>
 <div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;        <span class="keyword">using</span> <a class="code" href="classi2c_1_1_abstract_i2_c_sync_manager.html">PARENT</a> = <a class="code" href="classi2c_1_1_abstract_i2_c_sync_manager.html">AbstractI2CSyncManager&lt;ATtinyI2CSyncHandler&lt;MODE_, HAS_STATUS_, STATUS_HOOK_&gt;</a>, </div>
 <div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;            MODE_, HAS_LC_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_&gt;;</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;        <span class="keyword">using</span> ABSTRACT_FUTURE = <span class="keyword">typename</span> <a class="code" href="classfuture_1_1_abstract_fake_future.html">PARENT::ABSTRACT_FUTURE</a>;</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="keyword">using</span> PROXY = <span class="keyword">typename</span> PARENT::template PROXY&lt;T&gt;;</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> OUT, <span class="keyword">typename</span> IN&gt; <span class="keyword">using</span> FUTURE = <span class="keyword">typename</span> PARENT::template FUTURE&lt;OUT, IN&gt;;</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160; </div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html">AbstractI2CSyncATtinyManager</a>(</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;            <a class="code" href="classlifecycle_1_1_abstract_life_cycle_manager.html">lifecycle::AbstractLifeCycleManager</a>* lifecycle_manager = <span class="keyword">nullptr</span>, </div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;                STATUS_HOOK_ status_hook = <span class="keyword">nullptr</span>, DEBUG_HOOK_ debug_hook = <span class="keyword">nullptr</span>)</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;            :   <a class="code" href="classi2c_1_1_abstract_i2_c_sync_manager.html">PARENT</a>{lifecycle_manager, status_hook, debug_hook} {}</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160; </div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>&gt; <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classi2c_1_1_i2_c_device.html">I2CDevice</a>;</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;    };</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160; </div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;    <span class="keyword">template</span>&lt;I2CMode MODE_&gt;</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;    <span class="keyword">class </span><a class="code" href="classi2c_1_1_i2_c_sync_manager.html">I2CSyncManager</a> : </div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        <span class="keyword">public</span> <a class="code" href="classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html">AbstractI2CSyncATtinyManager</a>&lt;MODE_, false, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK&gt;</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;    {</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        <span class="keyword">using</span> PARENT = <a class="code" href="classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html">AbstractI2CSyncATtinyManager&lt;MODE_, false, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK&gt;</a>;</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;        <a class="code" href="classi2c_1_1_i2_c_sync_manager.html">I2CSyncManager</a>() : PARENT{} {}</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    };</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160; </div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;    <span class="keyword">template</span>&lt;I2CMode MODE_, <span class="keyword">typename</span> STATUS_HOOK_ = I2C_STATUS_HOOK&gt;</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;    <span class="keyword">class </span>I2CSyncStatusManager : </div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;        <span class="keyword">public</span> AbstractI2CSyncATtinyManager&lt;MODE_, false, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK&gt;</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;    {</div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        <span class="keyword">using</span> PARENT = AbstractI2CSyncATtinyManager&lt;MODE_, false, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK&gt;;</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;        <span class="keyword">explicit</span> I2CSyncStatusManager(STATUS_HOOK_ status_hook) : PARENT{<span class="keyword">nullptr</span>, status_hook} {}</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    };</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160; </div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    <span class="keyword">template</span>&lt;I2CMode MODE_, <span class="keyword">typename</span> DEBUG_HOOK_ = I2C_DEBUG_HOOK&gt;</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    <span class="keyword">class </span>I2CSyncDebugManager : </div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;        <span class="keyword">public</span> AbstractI2CSyncATtinyManager&lt;MODE_, false, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_&gt;</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;    {</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        <span class="keyword">using</span> PARENT = AbstractI2CSyncATtinyManager&lt;MODE_, false, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_&gt;;</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;        <span class="keyword">explicit</span> I2CSyncDebugManager(DEBUG_HOOK_ debug_hook) : PARENT{<span class="keyword">nullptr</span>, <span class="keyword">nullptr</span>, debug_hook} {}</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;    };</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160; </div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;    <span class="keyword">template</span>&lt;I2CMode MODE_, <span class="keyword">typename</span> STATUS_HOOK_ = I2C_STATUS_HOOK, <span class="keyword">typename</span> DEBUG_HOOK_ = I2C_DEBUG_HOOK&gt;</div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;    <span class="keyword">class </span>I2CSyncStatusDebugManager : </div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;        <span class="keyword">public</span> AbstractI2CSyncATtinyManager&lt;MODE_, false, true, STATUS_HOOK_, true, DEBUG_HOOK_&gt;</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;    {</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;        <span class="keyword">using</span> PARENT = AbstractI2CSyncATtinyManager&lt;MODE_, false, true, STATUS_HOOK_, true, DEBUG_HOOK_&gt;;</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;        <span class="keyword">explicit</span> I2CSyncStatusDebugManager(STATUS_HOOK_ status_hook, DEBUG_HOOK_ debug_hook) </div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;        : PARENT{<span class="keyword">nullptr</span>, status_hook, debug_hook} {}</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;    };</div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160; </div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;    <span class="keyword">template</span>&lt;I2CMode MODE_&gt;</div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;    <span class="keyword">class </span>I2CSyncLCManager : </div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;        <span class="keyword">public</span> AbstractI2CSyncATtinyManager&lt;MODE_, true, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK&gt;</div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;    {</div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;        <span class="keyword">using</span> PARENT = AbstractI2CSyncATtinyManager&lt;MODE_, true, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK&gt;;</div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;        <span class="keyword">explicit</span> I2CSyncLCManager(<a class="code" href="classlifecycle_1_1_abstract_life_cycle_manager.html">lifecycle::AbstractLifeCycleManager</a>&amp; lifecycle_manager)</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;            :   PARENT{&amp;lifecycle_manager} {}</div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;    };</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160; </div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;    <span class="keyword">template</span>&lt;I2CMode MODE_, <span class="keyword">typename</span> STATUS_HOOK_&gt;</div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;    <span class="keyword">class </span>I2CSyncLCStatusManager : </div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;        <span class="keyword">public</span> AbstractI2CSyncATtinyManager&lt;MODE_, true, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK&gt;</div>
-<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;    {</div>
-<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;        <span class="keyword">using</span> PARENT = AbstractI2CSyncATtinyManager&lt;MODE_, true, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK&gt;;</div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;        <span class="keyword">explicit</span> I2CSyncLCStatusManager(</div>
-<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;            <a class="code" href="classlifecycle_1_1_abstract_life_cycle_manager.html">lifecycle::AbstractLifeCycleManager</a>&amp; lifecycle_manager, STATUS_HOOK_ status_hook)</div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;            :   PARENT{&amp;lifecycle_manager, status_hook} {}</div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;    };</div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160; </div>
-<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;    <span class="keyword">template</span>&lt;I2CMode MODE_, <span class="keyword">typename</span> DEBUG_HOOK_ = I2C_DEBUG_HOOK&gt;</div>
-<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;    <span class="keyword">class </span>I2CSyncLCDebugManager : </div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;        <span class="keyword">public</span> AbstractI2CSyncATtinyManager&lt;MODE_, true, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_&gt;</div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;    {</div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;        <span class="keyword">using</span> PARENT = AbstractI2CSyncATtinyManager&lt;MODE_, true, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_&gt;;</div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;        <span class="keyword">explicit</span> I2CSyncLCDebugManager(</div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;            <a class="code" href="classlifecycle_1_1_abstract_life_cycle_manager.html">lifecycle::AbstractLifeCycleManager</a>&amp; lifecycle_manager, DEBUG_HOOK_ debug_hook)</div>
-<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;            :   PARENT{&amp;lifecycle_manager, <span class="keyword">nullptr</span>, debug_hook} {}</div>
-<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;    };</div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160; </div>
-<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;    <span class="keyword">template</span>&lt;I2CMode MODE_, <span class="keyword">typename</span> STATUS_HOOK_ = I2C_STATUS_HOOK, <span class="keyword">typename</span> DEBUG_HOOK_ = I2C_DEBUG_HOOK&gt;</div>
-<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;    <span class="keyword">class </span>I2CSyncLCStatusDebugManager : </div>
-<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;        <span class="keyword">public</span> AbstractI2CSyncATtinyManager&lt;MODE_, true, true, STATUS_HOOK_, true, DEBUG_HOOK_&gt;</div>
-<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;    {</div>
-<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;        <span class="keyword">using</span> PARENT = AbstractI2CSyncATtinyManager&lt;MODE_, true, true, STATUS_HOOK_, true, DEBUG_HOOK_&gt;;</div>
-<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;        <span class="keyword">explicit</span> I2CSyncLCStatusDebugManager(</div>
-<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;            <a class="code" href="classlifecycle_1_1_abstract_life_cycle_manager.html">lifecycle::AbstractLifeCycleManager</a>&amp; lifecycle_manager, STATUS_HOOK_ status_hook, DEBUG_HOOK_ debug_hook)</div>
-<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;            :   PARENT{&amp;lifecycle_manager, status_hook, debug_hook} {}</div>
-<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;    };</div>
-<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;}</div>
-<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160; </div>
-<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* I2C_HANDLER_ATTINY_HH */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;    </div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;        <span class="keyword">using</span> ABSTRACT_FUTURE = <span class="keyword">typename</span> <a class="code" href="classfuture_1_1_abstract_fake_future.html">PARENT::ABSTRACT_FUTURE</a>;</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="keyword">using</span> PROXY = <span class="keyword">typename</span> PARENT::template PROXY&lt;T&gt;;</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> OUT, <span class="keyword">typename</span> IN&gt; <span class="keyword">using</span> FUTURE = <span class="keyword">typename</span> PARENT::template FUTURE&lt;OUT, IN&gt;;</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160; </div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html">AbstractI2CSyncATtinyManager</a>(</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;            <a class="code" href="classlifecycle_1_1_abstract_life_cycle_manager.html">lifecycle::AbstractLifeCycleManager</a>* lifecycle_manager = <span class="keyword">nullptr</span>, </div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;                STATUS_HOOK_ status_hook = <span class="keyword">nullptr</span>, DEBUG_HOOK_ debug_hook = <span class="keyword">nullptr</span>)</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;            :   <a class="code" href="classi2c_1_1_abstract_i2_c_sync_manager.html">PARENT</a>{lifecycle_manager, status_hook, debug_hook} {}</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160; </div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span>&gt; <span class="keyword">friend</span> <span class="keyword">class </span><a class="code" href="classi2c_1_1_i2_c_device.html">I2CDevice</a>;</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    };</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160; </div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;    <span class="keyword">template</span>&lt;I2CMode MODE_&gt;</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;    <span class="keyword">class </span><a class="code" href="classi2c_1_1_i2_c_sync_manager.html">I2CSyncManager</a> : </div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        <span class="keyword">public</span> <a class="code" href="classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html">AbstractI2CSyncATtinyManager</a>&lt;MODE_, false, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK&gt;</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;    {</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;        <span class="keyword">using</span> PARENT = <a class="code" href="classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html">AbstractI2CSyncATtinyManager&lt;MODE_, false, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK&gt;</a>;</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        <a class="code" href="classi2c_1_1_i2_c_sync_manager.html">I2CSyncManager</a>() : PARENT{} {}</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;    };</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160; </div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;    <span class="keyword">template</span>&lt;I2CMode MODE_, <span class="keyword">typename</span> STATUS_HOOK_ = I2C_STATUS_HOOK&gt;</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;    <span class="keyword">class </span>I2CSyncStatusManager : </div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        <span class="keyword">public</span> AbstractI2CSyncATtinyManager&lt;MODE_, false, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK&gt;</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;    {</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;        <span class="keyword">using</span> PARENT = AbstractI2CSyncATtinyManager&lt;MODE_, false, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK&gt;;</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;        <span class="keyword">explicit</span> I2CSyncStatusManager(STATUS_HOOK_ status_hook) : PARENT{<span class="keyword">nullptr</span>, status_hook} {}</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    };</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160; </div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    <span class="keyword">template</span>&lt;I2CMode MODE_, <span class="keyword">typename</span> DEBUG_HOOK_ = I2C_DEBUG_HOOK&gt;</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;    <span class="keyword">class </span>I2CSyncDebugManager : </div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        <span class="keyword">public</span> AbstractI2CSyncATtinyManager&lt;MODE_, false, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_&gt;</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;    {</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;        <span class="keyword">using</span> PARENT = AbstractI2CSyncATtinyManager&lt;MODE_, false, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_&gt;;</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;        <span class="keyword">explicit</span> I2CSyncDebugManager(DEBUG_HOOK_ debug_hook) : PARENT{<span class="keyword">nullptr</span>, <span class="keyword">nullptr</span>, debug_hook} {}</div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;    };</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160; </div>
+<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;    <span class="keyword">template</span>&lt;I2CMode MODE_, <span class="keyword">typename</span> STATUS_HOOK_ = I2C_STATUS_HOOK, <span class="keyword">typename</span> DEBUG_HOOK_ = I2C_DEBUG_HOOK&gt;</div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;    <span class="keyword">class </span>I2CSyncStatusDebugManager : </div>
+<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;        <span class="keyword">public</span> AbstractI2CSyncATtinyManager&lt;MODE_, false, true, STATUS_HOOK_, true, DEBUG_HOOK_&gt;</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;    {</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;        <span class="keyword">using</span> PARENT = AbstractI2CSyncATtinyManager&lt;MODE_, false, true, STATUS_HOOK_, true, DEBUG_HOOK_&gt;;</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;        <span class="keyword">explicit</span> I2CSyncStatusDebugManager(STATUS_HOOK_ status_hook, DEBUG_HOOK_ debug_hook) </div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;        : PARENT{<span class="keyword">nullptr</span>, status_hook, debug_hook} {}</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;    };</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160; </div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;    <span class="keyword">template</span>&lt;I2CMode MODE_&gt;</div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;    <span class="keyword">class </span>I2CSyncLCManager : </div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;        <span class="keyword">public</span> AbstractI2CSyncATtinyManager&lt;MODE_, true, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK&gt;</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;    {</div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;        <span class="keyword">using</span> PARENT = AbstractI2CSyncATtinyManager&lt;MODE_, true, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK&gt;;</div>
+<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;        <span class="keyword">explicit</span> I2CSyncLCManager(<a class="code" href="classlifecycle_1_1_abstract_life_cycle_manager.html">lifecycle::AbstractLifeCycleManager</a>&amp; lifecycle_manager)</div>
+<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;            :   PARENT{&amp;lifecycle_manager} {}</div>
+<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160;    };</div>
+<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160; </div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;    <span class="keyword">template</span>&lt;I2CMode MODE_, <span class="keyword">typename</span> STATUS_HOOK_&gt;</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;    <span class="keyword">class </span>I2CSyncLCStatusManager : </div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;        <span class="keyword">public</span> AbstractI2CSyncATtinyManager&lt;MODE_, true, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK&gt;</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;    {</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;        <span class="keyword">using</span> PARENT = AbstractI2CSyncATtinyManager&lt;MODE_, true, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK&gt;;</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;        <span class="keyword">explicit</span> I2CSyncLCStatusManager(</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;            <a class="code" href="classlifecycle_1_1_abstract_life_cycle_manager.html">lifecycle::AbstractLifeCycleManager</a>&amp; lifecycle_manager, STATUS_HOOK_ status_hook)</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;            :   PARENT{&amp;lifecycle_manager, status_hook} {}</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;    };</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160; </div>
+<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;    <span class="keyword">template</span>&lt;I2CMode MODE_, <span class="keyword">typename</span> DEBUG_HOOK_ = I2C_DEBUG_HOOK&gt;</div>
+<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;    <span class="keyword">class </span>I2CSyncLCDebugManager : </div>
+<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;        <span class="keyword">public</span> AbstractI2CSyncATtinyManager&lt;MODE_, true, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_&gt;</div>
+<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;    {</div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;        <span class="keyword">using</span> PARENT = AbstractI2CSyncATtinyManager&lt;MODE_, true, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_&gt;;</div>
+<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;        <span class="keyword">explicit</span> I2CSyncLCDebugManager(</div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;            <a class="code" href="classlifecycle_1_1_abstract_life_cycle_manager.html">lifecycle::AbstractLifeCycleManager</a>&amp; lifecycle_manager, DEBUG_HOOK_ debug_hook)</div>
+<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;            :   PARENT{&amp;lifecycle_manager, <span class="keyword">nullptr</span>, debug_hook} {}</div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;    };</div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160; </div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;    <span class="keyword">template</span>&lt;I2CMode MODE_, <span class="keyword">typename</span> STATUS_HOOK_ = I2C_STATUS_HOOK, <span class="keyword">typename</span> DEBUG_HOOK_ = I2C_DEBUG_HOOK&gt;</div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;    <span class="keyword">class </span>I2CSyncLCStatusDebugManager : </div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;        <span class="keyword">public</span> AbstractI2CSyncATtinyManager&lt;MODE_, true, true, STATUS_HOOK_, true, DEBUG_HOOK_&gt;</div>
+<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;    {</div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;        <span class="keyword">using</span> PARENT = AbstractI2CSyncATtinyManager&lt;MODE_, true, true, STATUS_HOOK_, true, DEBUG_HOOK_&gt;;</div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;        <span class="keyword">explicit</span> I2CSyncLCStatusDebugManager(</div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;            <a class="code" href="classlifecycle_1_1_abstract_life_cycle_manager.html">lifecycle::AbstractLifeCycleManager</a>&amp; lifecycle_manager, STATUS_HOOK_ status_hook, DEBUG_HOOK_ debug_hook)</div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;            :   PARENT{&amp;lifecycle_manager, status_hook, debug_hook} {}</div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;    };</div>
+<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;}</div>
 <div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160; </div>
+<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* I2C_HANDLER_ATTINY_HH */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160; </div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aclassi2c_1_1_i2_c_device_html"><div class="ttname"><a href="classi2c_1_1_i2_c_device.html">i2c::I2CDevice</a></div><div class="ttdoc">Base class for all I2C devices.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__device_8h_source.html#l00077">i2c_device.h:78</a></div></div>
+<div class="ttc" id="aclassi2c_1_1_i2_c_device_html"><div class="ttname"><a href="classi2c_1_1_i2_c_device.html">i2c::I2CDevice</a></div><div class="ttdoc">Base class for all I2C devices.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__device_8h_source.html#l00085">i2c_device.h:86</a></div></div>
 <div class="ttc" id="afuture_8h_html"><div class="ttname"><a href="future_8h.html">future.h</a></div><div class="ttdoc">Utility API to handle the concept of futures.</div></div>
 <div class="ttc" id="anamespacei2c_html_ac2780f0139dbc26f4d83a426dad67e36"><div class="ttname"><a href="namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36">i2c::I2CMode</a></div><div class="ttdeci">I2CMode</div><div class="ttdoc">I2C available transmission modes.</div><div class="ttdef"><b>Definition:</b> <a href="i2c_8h_source.html#l00107">i2c.h:108</a></div></div>
 <div class="ttc" id="ai2c__handler__common_8h_html"><div class="ttname"><a href="i2c__handler__common_8h.html">i2c_handler_common.h</a></div><div class="ttdoc">Common I2C Manager API.</div></div>
 <div class="ttc" id="aclassi2c_1_1_abstract_i2_c_sync_manager_html"><div class="ttname"><a href="classi2c_1_1_abstract_i2_c_sync_manager.html">i2c::AbstractI2CSyncManager</a></div><div class="ttdoc">Abstract synchronous I2C Manager for all MCU architectures.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__common_8h_source.html#l00412">i2c_handler_common.h:413</a></div></div>
-<div class="ttc" id="aclassi2c_1_1_i2_c_sync_manager_html"><div class="ttname"><a href="classi2c_1_1_i2_c_sync_manager.html">i2c::I2CSyncManager</a></div><div class="ttdoc">Synchronous I2C Manager for ATmega architecture.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__atmega_8h_source.html#l01179">i2c_handler_atmega.h:1181</a></div></div>
+<div class="ttc" id="aclassi2c_1_1_i2_c_sync_manager_html"><div class="ttname"><a href="classi2c_1_1_i2_c_sync_manager.html">i2c::I2CSyncManager</a></div><div class="ttdoc">Synchronous I2C Manager for ATmega architecture.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__atmega_8h_source.html#l01182">i2c_handler_atmega.h:1184</a></div></div>
 <div class="ttc" id="anamespacebits_html_a61b82475468b428f5a65a21da09f1938"><div class="ttname"><a href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a></div><div class="ttdeci">static constexpr uint8_t BV8(uint8_t bit)</div><div class="ttdoc">Create a uint8_t bitmask for the given bit number.</div><div class="ttdef"><b>Definition:</b> <a href="bits_8h_source.html#l00041">bits.h:41</a></div></div>
 <div class="ttc" id="abits_8h_html"><div class="ttname"><a href="bits_8h.html">bits.h</a></div><div class="ttdoc">Useful bits manipulation utilities.</div></div>
 <div class="ttc" id="anamespacei2c_html_adb5bfde92afd6cbc048d1ee7472bf394ae0aa021e21dddbd6d8cecec71e9cf564"><div class="ttname"><a href="namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394ae0aa021e21dddbd6d8cecec71e9cf564">i2c::Status::OK</a></div><div class="ttdeci">@ OK</div><div class="ttdoc">Code indicating the last called method executed as expected without any issue.</div></div>
@@ -448,7 +450,7 @@ $(document).ready(function(){initNavTree('i2c__handler__attiny_8h_source.html','
 <div class="ttc" id="aclassi2c_1_1_abstract_i2_c_sync_a_ttiny_manager_html"><div class="ttname"><a href="classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html">i2c::AbstractI2CSyncATtinyManager</a></div><div class="ttdoc">Abstract synchronous I2C Manager for ATtiny architecture.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__attiny_8h_source.html#l00282">i2c_handler_attiny.h:285</a></div></div>
 <div class="ttc" id="autilities_8h_html"><div class="ttname"><a href="utilities_8h.html">utilities.h</a></div><div class="ttdoc">General utilities API that have broad application in programs.</div></div>
 <div class="ttc" id="anamespacebits_html_a299b783445b74ee74546da2f1b2e7990"><div class="ttname"><a href="namespacebits.html#a299b783445b74ee74546da2f1b2e7990">bits::CBV8</a></div><div class="ttdeci">static constexpr uint8_t CBV8(uint8_t bit)</div><div class="ttdoc">Create a uint8_t inverted bitmask for the given bit number.</div><div class="ttdef"><b>Definition:</b> <a href="bits_8h_source.html#l00137">bits.h:137</a></div></div>
-<div class="ttc" id="aclassfuture_1_1_abstract_fake_future_html"><div class="ttname"><a href="classfuture_1_1_abstract_fake_future.html">future::AbstractFakeFuture</a></div><div class="ttdoc">Base class for all FakeFutures.</div><div class="ttdef"><b>Definition:</b> <a href="future_8h_source.html#l01017">future.h:1018</a></div></div>
+<div class="ttc" id="aclassfuture_1_1_abstract_fake_future_html"><div class="ttname"><a href="classfuture_1_1_abstract_fake_future.html">future::AbstractFakeFuture</a></div><div class="ttdoc">Base class for all FakeFutures.</div><div class="ttdef"><b>Definition:</b> <a href="future_8h_source.html#l01061">future.h:1062</a></div></div>
 <div class="ttc" id="anamespacei2c_html"><div class="ttname"><a href="namespacei2c.html">i2c</a></div><div class="ttdoc">Define API to define and manage I2C devices.</div><div class="ttdef"><b>Definition:</b> <a href="i2c_8cpp_source.html#l00017">i2c.cpp:18</a></div></div>
 <div class="ttc" id="anamespacei2c_1_1status_html_a8e07f8d34f9f155ed73d199716ec173f"><div class="ttname"><a href="namespacei2c_1_1status.html#a8e07f8d34f9f155ed73d199716ec173f">i2c::status::STATUS</a></div><div class="ttdeci">STATUS</div><div class="ttdoc">Indicate when status should be traced.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__status_8h_source.html#l00046">i2c_status.h:47</a></div></div>
 <div class="ttc" id="ai2c_8h_html"><div class="ttname"><a href="i2c_8h.html">i2c.h</a></div><div class="ttdoc">I2C API common definitions.</div></div>

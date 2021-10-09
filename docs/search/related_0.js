@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ws_2417',['ws',['../classstreams_1_1istream.html#abcd10e23bf8053f45ed65438d7b2a800',1,'streams::istream']]]
+  ['await_5fsame_5ffuture_5fgroup_2705',['await_same_future_group',['../classi2c_1_1_i2_c_same_future_group.html#a330610d565a96a146deea9bdf490bbd5',1,'i2c::I2CSameFutureGroup']]]
 ];

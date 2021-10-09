@@ -1,0 +1,5 @@
+<map id="devices::vl53l0x::VL53L0X&lt; MANAGER &gt;::SetGPIOSettingsFuture" name="devices::vl53l0x::VL53L0X&lt; MANAGER &gt;::SetGPIOSettingsFuture">
+<area shape="rect" id="node1" title="Future to set device GPIO settings." alt="" coords="5,169,235,225"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_i2_c_futures_group.html" title="Abstract class to allow aggregation of several futures in relation to I2C transactions." alt="" coords="59,95,181,121"/>
+<area shape="rect" id="node3" title=" " alt="" coords="35,5,205,47"/>
+</map>

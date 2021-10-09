@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classstreams_1_1null__ostream.html" title="Implements an empty formatted output that does nothing." alt="" coords="5,5,156,32"/>
+<area shape="rect" id="node1" href="$classlifecycle_1_1_abstract_life_cycle.html" title="The abstract base class of all LifeCycle&lt;T&gt;." alt="" coords="5,5,185,32"/>
+<area shape="rect" id="node2" href="$classlifecycle_1_1_life_cycle.html" title="A mixin class allowing lifecycle management of any object of any type T." alt="" coords="233,31,396,57"/>
+<area shape="rect" id="node3" title=" " alt="" coords="76,56,115,83"/>
 </map>

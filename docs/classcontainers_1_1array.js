@@ -22,5 +22,6 @@ var classcontainers_1_1array =
     [ "begin", "classcontainers_1_1array.html#a860ffd848ebe116de9d90f7300757687", null ],
     [ "end", "classcontainers_1_1array.html#a825b77e1c12974d949eeb2e738f52b45", null ],
     [ "set", "classcontainers_1_1array.html#acf8c9d765d16357e6b7d3e6642e6370b", null ],
+    [ "set", "classcontainers_1_1array.html#a3526d23d0d36b0459b976fa5c6c01474", null ],
     [ "N", "classcontainers_1_1array.html#ac66174a07afa30bcc573aada4a759e68", null ]
 ];

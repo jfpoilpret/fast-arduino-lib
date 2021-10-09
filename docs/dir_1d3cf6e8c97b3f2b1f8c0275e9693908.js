@@ -27,6 +27,7 @@ var dir_1d3cf6e8c97b3f2b1f8c0275e9693908 =
     [ "i2c_debug.cpp", "i2c__debug_8cpp_source.html", null ],
     [ "i2c_debug.h", "i2c__debug_8h.html", "i2c__debug_8h" ],
     [ "i2c_device.h", "i2c__device_8h.html", "i2c__device_8h" ],
+    [ "i2c_device_utilities.h", "i2c__device__utilities_8h.html", "i2c__device__utilities_8h" ],
     [ "i2c_handler.h", "i2c__handler_8h.html", null ],
     [ "i2c_handler_atmega.h", "i2c__handler__atmega_8h.html", "i2c__handler__atmega_8h" ],
     [ "i2c_handler_attiny.h", "i2c__handler__attiny_8h.html", "i2c__handler__attiny_8h" ],
@@ -38,6 +39,9 @@ var dir_1d3cf6e8c97b3f2b1f8c0275e9693908 =
     [ "interrupts.h", "interrupts_8h.html", "interrupts_8h" ],
     [ "iomanip.h", "iomanip_8h.html", "iomanip_8h" ],
     [ "ios.h", "ios_8h.html", "ios_8h" ],
+    [ "iterator.h", "iterator_8h.html", [
+      [ "range", "classutils_1_1range.html", null ]
+    ] ],
     [ "lifecycle.cpp", "lifecycle_8cpp_source.html", null ],
     [ "lifecycle.h", "lifecycle_8h.html", "lifecycle_8h" ],
     [ "linked_list.cpp", "linked__list_8cpp_source.html", null ],
@@ -47,6 +51,7 @@ var dir_1d3cf6e8c97b3f2b1f8c0275e9693908 =
       [ "LinkWrapper", "classcontainers_1_1_link_wrapper.html", "classcontainers_1_1_link_wrapper" ]
     ] ],
     [ "main.cpp", "main_8cpp_source.html", null ],
+    [ "memory.h", "memory_8h.html", "memory_8h" ],
     [ "move.h", "move_8h_source.html", null ],
     [ "pci.h", "pci_8h.html", "pci_8h" ],
     [ "power.cpp", "power_8cpp_source.html", null ],

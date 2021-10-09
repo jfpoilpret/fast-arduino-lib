@@ -140,6 +140,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5f5afbf61ba1b465aee0a9a81ac5d346"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuture_1_1_future.html#a5f5afbf61ba1b465aee0a9a81ac5d346">Future</a> (const <a class="el" href="classfuture_1_1_future.html#a137fd082483740594714b3a551ba64eb">IN</a> &amp;input=<a class="el" href="classfuture_1_1_future.html#a137fd082483740594714b3a551ba64eb">IN</a>{}, <a class="el" href="classfuture_1_1_abstract_future.html#a9a3608ffef01603fb24c061a00a7946b">STATUS_LISTENER</a> *status_listener=nullptr, <a class="el" href="classfuture_1_1_abstract_future.html#a2d6b899764bc3cb28b6388ba3d741c4d">OUTPUT_LISTENER</a> *output_listener=nullptr)</td></tr>
 <tr class="memdesc:a5f5afbf61ba1b465aee0a9a81ac5d346"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a>.  <a href="classfuture_1_1_future.html#a5f5afbf61ba1b465aee0a9a81ac5d346">More...</a><br /></td></tr>
 <tr class="separator:a5f5afbf61ba1b465aee0a9a81ac5d346"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8993ab76018cb71ad98cb87c2e69c07f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuture_1_1_future.html#a8993ab76018cb71ad98cb87c2e69c07f">reset_</a> (const <a class="el" href="classfuture_1_1_future.html#a137fd082483740594714b3a551ba64eb">IN</a> &amp;input=<a class="el" href="classfuture_1_1_future.html#a137fd082483740594714b3a551ba64eb">IN</a>{})</td></tr>
+<tr class="memdesc:a8993ab76018cb71ad98cb87c2e69c07f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method completely resets this future (for reuse from scratch), as if it was just constructed.  <a href="classfuture_1_1_future.html#a8993ab76018cb71ad98cb87c2e69c07f">More...</a><br /></td></tr>
+<tr class="separator:a8993ab76018cb71ad98cb87c2e69c07f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d63a2bd2a1f9284c7d1b2c19897bf62"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuture_1_1_future.html#a2d63a2bd2a1f9284c7d1b2c19897bf62">reset_input_</a> (const <a class="el" href="classfuture_1_1_future.html#a137fd082483740594714b3a551ba64eb">IN</a> &amp;input)</td></tr>
 <tr class="memdesc:a2d63a2bd2a1f9284c7d1b2c19897bf62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset the input storage value held by this <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a> with a new value.  <a href="classfuture_1_1_future.html#a2d63a2bd2a1f9284c7d1b2c19897bf62">More...</a><br /></td></tr>
 <tr class="separator:a2d63a2bd2a1f9284c7d1b2c19897bf62"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -224,7 +227,7 @@ class future::Future&lt; OUT_, IN_ &gt;</h3>
 <dd>
 <a class="el" href="namespacefuture.html#a9f72173fcd5be9bfef028415665efbe4" title="Status of a Future.">FutureStatus</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l00690">690</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l00701">701</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a5f5afbf61ba1b465aee0a9a81ac5d346"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5f5afbf61ba1b465aee0a9a81ac5d346">&#9670;&nbsp;</a></span>Future()</h2>
@@ -284,11 +287,50 @@ template&lt;typename OUT_  = void, typename IN_  = void&gt; </div>
 <dd>
 <a class="el" href="namespacefuture.html#a9f72173fcd5be9bfef028415665efbe4" title="Status of a Future.">FutureStatus</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l00723">723</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l00734">734</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a8993ab76018cb71ad98cb87c2e69c07f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8993ab76018cb71ad98cb87c2e69c07f">&#9670;&nbsp;</a></span>reset_()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename OUT_  = void, typename IN_  = void&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classfuture_1_1_future.html">future::Future</a>&lt; OUT_, IN_ &gt;::reset_ </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classfuture_1_1_future.html#a137fd082483740594714b3a551ba64eb">IN</a> &amp;&#160;</td>
+          <td class="paramname"><em>input</em> = <code><a class="el" href="classfuture_1_1_future.html#a137fd082483740594714b3a551ba64eb">IN</a>{}</code></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>This method completely resets this future (for reuse from scratch), as if it was just constructed. </p>
+<p>This allows reuse of a single future several times.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">input</td><td>a value to be copied to this <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a> input storage value; this argument does not exist when <code>IN</code> is <code>void</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l00764">764</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
+
+</div>
+</div>
 <a id="a2d63a2bd2a1f9284c7d1b2c19897bf62"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2d63a2bd2a1f9284c7d1b2c19897bf62">&#9670;&nbsp;</a></span>reset_input_()</h2>
 
@@ -332,7 +374,7 @@ template&lt;typename OUT_  = void, typename IN_  = void&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l00759">759</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l00784">784</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
 
 </div>
 </div>
@@ -385,7 +427,7 @@ template&lt;typename OUT_  = void, typename IN_  = void&gt; </div>
 <dd>
 FutureStatus::ERROR </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l00786">786</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l00811">811</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
 
 </div>
 </div>
@@ -417,7 +459,7 @@ template&lt;typename OUT_  = void, typename IN_  = void&gt; </div>
 <p>Return the input storage value as it was initially set (or reset through <code><a class="el" href="classfuture_1_1_future.html#a2d63a2bd2a1f9284c7d1b2c19897bf62" title="Reset the input storage value held by this Future with a new value.">reset_input_()</a></code>), whatever the current state of this <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a>. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classfuture_1_1_future.html#a2d63a2bd2a1f9284c7d1b2c19897bf62" title="Reset the input storage value held by this Future with a new value.">reset_input_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l00800">800</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l00825">825</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
 
 </div>
 </div>
@@ -449,7 +491,7 @@ template&lt;typename OUT_  = void, typename IN_  = void&gt; </div>
 <p>Return the input storage value as it was initially set (or reset through <code><a class="el" href="classfuture_1_1_future.html#a2d63a2bd2a1f9284c7d1b2c19897bf62" title="Reset the input storage value held by this Future with a new value.">reset_input_()</a></code>), whatever the current state of this <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a>. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classfuture_1_1_future.html#a2d63a2bd2a1f9284c7d1b2c19897bf62" title="Reset the input storage value held by this Future with a new value.">reset_input_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l00810">810</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l00835">835</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
 
 </div>
 </div>

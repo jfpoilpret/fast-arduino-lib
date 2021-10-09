@@ -1,0 +1,6 @@
+<map id="i2c::I2CFuturesGroup&lt; MANAGER &gt;" name="i2c::I2CFuturesGroup&lt; MANAGER &gt;">
+<area shape="rect" id="node1" title="Abstract class to allow aggregation of several futures in relation to I2C transactions." alt="" coords="224,53,371,94"/>
+<area shape="rect" id="node3" href="$classdevices_1_1vl53l0x_1_1_v_l53_l0_x_1_1_get_g_p_i_o_settings_future.html" title="Future to get device current GPIO settings." alt="" coords="419,5,649,61"/>
+<area shape="rect" id="node4" href="$classdevices_1_1vl53l0x_1_1_v_l53_l0_x_1_1_set_g_p_i_o_settings_future.html" title="Future to set device GPIO settings." alt="" coords="419,85,649,141"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,53,176,94"/>
+</map>

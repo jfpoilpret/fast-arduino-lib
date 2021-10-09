@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector." alt="" coords="5,5,141,47"/>
+<area shape="rect" id="node1" href="$classi2c_1_1_i2_c_light_command.html" title="Light atomic I2C command as prepared by an I2C device." alt="" coords="5,35,161,61"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_i2_c_command.html" title="Atomic I2C command as used internally by an asynchronous I2C Manager." alt="" coords="226,5,385,32"/>
+<area shape="rect" id="node3" href="$classi2c_1_1_i2_c_command.html" title=" " alt="" coords="209,57,401,98"/>
 </map>

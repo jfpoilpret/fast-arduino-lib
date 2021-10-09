@@ -100,6 +100,17 @@ $(document).ready(function(){initNavTree('classi2c_1_1_abstract_i2_c_async_manag
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
+<tr class="memitem:a49b545a15764e49cc119b1fd9cd3ae7c"><td class="memItemLeft" align="right" valign="top"><a id="a49b545a15764e49cc119b1fd9cd3ae7c"></a>
+using&#160;</td><td class="memItemRight" valign="bottom"><b>ABSTRACT_FUTURE</b> = <a class="el" href="classfuture_1_1_abstract_future.html">future::AbstractFuture</a></td></tr>
+<tr class="separator:a49b545a15764e49cc119b1fd9cd3ae7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef97afa165c4c642c72cecfdb28a9e53"><td class="memTemplParams" colspan="2"><a id="aef97afa165c4c642c72cecfdb28a9e53"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:aef97afa165c4c642c72cecfdb28a9e53"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>PROXY</b> = typename LC::template PROXY&lt; T &gt;</td></tr>
+<tr class="separator:aef97afa165c4c642c72cecfdb28a9e53"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae48dffb4e236ffa156f05544d41a809c"><td class="memTemplParams" colspan="2"><a id="ae48dffb4e236ffa156f05544d41a809c"></a>
+template&lt;typename OUT , typename IN &gt; </td></tr>
+<tr class="memitem:ae48dffb4e236ffa156f05544d41a809c"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>FUTURE</b> = <a class="el" href="classfuture_1_1_future.html">future::Future</a>&lt; OUT, IN &gt;</td></tr>
+<tr class="separator:ae48dffb4e236ffa156f05544d41a809c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff4ed912cfd5a358b03eb79ea1b8eabf"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_abstract_i2_c_async_manager.html#aff4ed912cfd5a358b03eb79ea1b8eabf">FUTURE_PROXY</a> = PROXY&lt; <a class="el" href="classfuture_1_1_abstract_future.html">ABSTRACT_FUTURE</a> &gt;</td></tr>
 <tr class="memdesc:aff4ed912cfd5a358b03eb79ea1b8eabf"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type passed to callback functions registered alongside ISR.  <a href="classi2c_1_1_abstract_i2_c_async_manager.html#aff4ed912cfd5a358b03eb79ea1b8eabf">More...</a><br /></td></tr>
 <tr class="separator:aff4ed912cfd5a358b03eb79ea1b8eabf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -161,7 +172,7 @@ class i2c::AbstractI2CAsyncManager&lt; MODE_, POLICY_, HAS_LC_, HAS_STATUS_, STA
 <dd>
 <a class="el" href="namespacei2c_1_1status.html" title="Defines API to ease I2C manager status tracing and debugging.">i2c::status</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__handler__atmega_8h_source.html#l00392">392</a> of file <a class="el" href="i2c__handler__atmega_8h_source.html">i2c_handler_atmega.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__handler__atmega_8h_source.html#l00394">394</a> of file <a class="el" href="i2c__handler__atmega_8h_source.html">i2c_handler_atmega.h</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="aff4ed912cfd5a358b03eb79ea1b8eabf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aff4ed912cfd5a358b03eb79ea1b8eabf">&#9670;&nbsp;</a></span>FUTURE_PROXY</h2>
@@ -183,7 +194,7 @@ template&lt;I2CMode MODE_, I2CErrorPolicy POLICY_, bool HAS_LC_, bool HAS_STATUS
 <dd>
 <a class="el" href="i2c__handler__atmega_8h.html#aa88696f074970839a05894dfe0b7527e" title="Register the necessary ISR (Interrupt Service Routine) for an asynchronous I2C Manager to work proper...">REGISTER_I2C_ISR_METHOD</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__handler__atmega_8h_source.html#l00415">415</a> of file <a class="el" href="i2c__handler__atmega_8h_source.html">i2c_handler_atmega.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__handler__atmega_8h_source.html#l00418">418</a> of file <a class="el" href="i2c__handler__atmega_8h_source.html">i2c_handler_atmega.h</a>.</p>
 
 </div>
 </div>
@@ -218,7 +229,7 @@ template&lt;I2CMode MODE_, I2CErrorPolicy POLICY_, bool HAS_LC_, bool HAS_STATUS
 <dd>
 <a class="el" href="classi2c_1_1_abstract_i2_c_async_manager.html#ae913377bc9b45fb5308f4c53cb1205b9" title="Prepare and enable the MCU for I2C transmission.">begin_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__handler__atmega_8h_source.html#l00430">430</a> of file <a class="el" href="i2c__handler__atmega_8h_source.html">i2c_handler_atmega.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__handler__atmega_8h_source.html#l00433">433</a> of file <a class="el" href="i2c__handler__atmega_8h_source.html">i2c_handler_atmega.h</a>.</p>
 
 </div>
 </div>
@@ -252,7 +263,7 @@ template&lt;I2CMode MODE_, I2CErrorPolicy POLICY_, bool HAS_LC_, bool HAS_STATUS
 <dd>
 <a class="el" href="classi2c_1_1_abstract_i2_c_async_manager.html#a40c2e6d724162ee54d88d12223ffb6a5" title="Disable MCU I2C transmission.">end_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__handler__atmega_8h_source.html#l00441">441</a> of file <a class="el" href="i2c__handler__atmega_8h_source.html">i2c_handler_atmega.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__handler__atmega_8h_source.html#l00444">444</a> of file <a class="el" href="i2c__handler__atmega_8h_source.html">i2c_handler_atmega.h</a>.</p>
 
 </div>
 </div>
@@ -286,7 +297,7 @@ template&lt;I2CMode MODE_, I2CErrorPolicy POLICY_, bool HAS_LC_, bool HAS_STATUS
 <dd>
 <a class="el" href="classi2c_1_1_abstract_i2_c_async_manager.html#a65d3c55435c8e6dea1638b011b683b67" title="Prepare and enable the MCU for I2C transmission.">begin()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__handler__atmega_8h_source.html#l00453">453</a> of file <a class="el" href="i2c__handler__atmega_8h_source.html">i2c_handler_atmega.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__handler__atmega_8h_source.html#l00456">456</a> of file <a class="el" href="i2c__handler__atmega_8h_source.html">i2c_handler_atmega.h</a>.</p>
 
 </div>
 </div>
@@ -320,7 +331,7 @@ template&lt;I2CMode MODE_, I2CErrorPolicy POLICY_, bool HAS_LC_, bool HAS_STATUS
 <dd>
 <a class="el" href="classi2c_1_1_abstract_i2_c_async_manager.html#a954f64639ee1f02f660f78a4cf88a9e5" title="Disable MCU I2C transmission.">end()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__handler__atmega_8h_source.html#l00470">470</a> of file <a class="el" href="i2c__handler__atmega_8h_source.html">i2c_handler_atmega.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__handler__atmega_8h_source.html#l00473">473</a> of file <a class="el" href="i2c__handler__atmega_8h_source.html">i2c_handler_atmega.h</a>.</p>
 
 </div>
 </div>

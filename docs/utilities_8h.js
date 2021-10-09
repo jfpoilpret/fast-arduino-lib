@@ -29,8 +29,11 @@ var utilities_8h =
     [ "binary_to_bcd", "utilities_8h.html#a76076365828136f5178f279fb3c129de", null ],
     [ "swap_bytes", "utilities_8h.html#a53f4a46843c0030ed1388d10c0ad6179", null ],
     [ "swap_bytes", "utilities_8h.html#aa520b3da671862f180de0fa3499ae293", null ],
+    [ "swap_bytes", "utilities_8h.html#a25cf0b4e16f41600e112ba90f41c2e1f", null ],
+    [ "swap_bytes", "utilities_8h.html#aa14a9a9958ae56f2a8d63ec2a0591cf9", null ],
     [ "as_uint8_t", "utilities_8h.html#a8122a1acb9aff2f2cd1d4ae7e1e99ac9", null ],
     [ "as_array", "utilities_8h.html#a56da5697e356f76ec2e4061279ca0254", null ],
     [ "calculate_delay1_count", "utilities_8h.html#a6ed4721feb889faa1f72fc2629d71271", null ],
-    [ "num_bits", "utilities_8h.html#aadb785961c9199701ce9025177b243c6", null ]
+    [ "num_bits", "utilities_8h.html#aadb785961c9199701ce9025177b243c6", null ],
+    [ "change_endianness", "utilities_8h.html#a233bddd8743dd54547e9b36c1e58ef2f", null ]
 ];

@@ -50,6 +50,15 @@ var dir_cda03c6db942645b63370975f85ebe42 =
     [ "sonar.h", "sonar_8h.html", "sonar_8h" ],
     [ "tone_player.h", "tone__player_8h.html", "tone__player_8h" ],
     [ "tones.h", "tones_8h.html", "tones_8h" ],
+    [ "vl53l0x.h", "vl53l0x_8h.html", [
+      [ "VL53L0X", "classdevices_1_1vl53l0x_1_1_v_l53_l0_x.html", "classdevices_1_1vl53l0x_1_1_v_l53_l0_x" ],
+      [ "GetGPIOSettingsFuture", "classdevices_1_1vl53l0x_1_1_v_l53_l0_x_1_1_get_g_p_i_o_settings_future.html", null ],
+      [ "SetGPIOSettingsFuture", "classdevices_1_1vl53l0x_1_1_v_l53_l0_x_1_1_set_g_p_i_o_settings_future.html", null ]
+    ] ],
+    [ "vl53l0x_internals.h", "vl53l0x__internals_8h_source.html", null ],
+    [ "vl53l0x_registers.h", "vl53l0x__registers_8h_source.html", null ],
+    [ "vl53l0x_types.cpp", "vl53l0x__types_8cpp_source.html", null ],
+    [ "vl53l0x_types.h", "vl53l0x__types_8h.html", "vl53l0x__types_8h" ],
     [ "winbond.h", "winbond_8h.html", [
       [ "WinBond", "classdevices_1_1_win_bond.html", "classdevices_1_1_win_bond" ],
       [ "Status", "structdevices_1_1_win_bond_1_1_status.html", "structdevices_1_1_win_bond_1_1_status" ],

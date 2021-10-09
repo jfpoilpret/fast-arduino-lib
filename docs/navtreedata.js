@@ -66,15 +66,16 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "abi_8cpp_source.html",
-"classdevices_1_1audio_1_1_tone_generator.html#aee0c351832dfafbd7b29a90f7dbc70b1",
-"classdevices_1_1servo_1_1_servo.html",
-"classi2c_1_1_abstract_i2_c_sync_manager.html#aef118a71cc12e3e0c5740b7f499929cf",
-"classstd_1_1initializer__list.html",
-"classwatchdog_1_1_watchdog_signal.html#a080a9c4a33228be0eb5584fb64eb47ab",
-"future_8h_source.html",
-"mcp3201_8h.html#ae8ee69161dc4ece7ec34e94fdacbf3e6",
-"realtime__timer_8h.html#a2fa7e6297d6f853dea35cc5a9f213c46",
-"tones_8h.html#ad5cef39b1f81f50bd23e0a4f4cf555aaa1a2ddc2db4693cfd16d534cde5572cc1"
+"classdevices_1_1audio_1_1_tone_generator.html#ae1b285ecb998f46504de143cc4ce1a67",
+"classdevices_1_1rtc_1_1_d_s1307_1_1_set_ram_future.html",
+"classfuture_1_1_fake_future.html#ad4c3488bb767e543d098acb697f4bc3c",
+"classinterrupt_1_1_p_c_i_signal.html#ad29f240c090974ee06b02fe7838fb538",
+"classstreams_1_1ostreambuf.html#a4dfb627256754b1bc7e15d2e0bc97c54",
+"empty_8h.html#a6ed32fa64dbf9169ccc11a040e11d313ad88c146dfafdea37a837778a92415bc2",
+"i2c__handler__common_8cpp_source.html",
+"mpu6050_8h.html#a1916ec6c1610d358c9e3adc205b5b86aab1d84f356a88261f55fa4d149c9153c6",
+"structdevices_1_1_win_bond_1_1_status.html",
+"uart_8h.html#a4fed67375824a0fc63e21ecdb7ce0db0"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

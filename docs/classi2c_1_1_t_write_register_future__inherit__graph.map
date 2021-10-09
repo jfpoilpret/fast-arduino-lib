@@ -1,0 +1,5 @@
+<map id="i2c::TWriteRegisterFuture&lt; MANAGER, REGISTER, T, BIG_ENDIAN &gt;" name="i2c::TWriteRegisterFuture&lt; MANAGER, REGISTER, T, BIG_ENDIAN &gt;">
+<area shape="rect" id="node1" title="Generic Future that can be used to write to an I2C device register." alt="" coords="9,199,204,255"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="25,109,188,151"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,208,61"/>
+</map>

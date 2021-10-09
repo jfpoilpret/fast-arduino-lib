@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classlifecycle_1_1_light_proxy.html" title="A light proxy class that encapsulates access to a fixed T instance, or to a dynamic LifeCycle&lt;T&gt; inst..." alt="" coords="5,5,176,32"/>
+<area shape="rect" id="node1" href="$classi2c_1_1debug_1_1_i2_c_debug_recorder.html" title=" " alt="" coords="6,5,206,47"/>
+<area shape="rect" id="node2" href="$classi2c_1_1debug_1_1_i2_c_debug_status_recorder.html" title="Class recording I2C debug and status notifications for later output." alt="" coords="255,31,441,87"/>
+<area shape="rect" id="node3" href="$classi2c_1_1status_1_1_i2_c_status_recorder.html" title=" " alt="" coords="5,71,207,112"/>
 </map>

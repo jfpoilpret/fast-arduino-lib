@@ -1,0 +1,21 @@
+<map id="fastarduino/iterator.h" name="fastarduino/iterator.h">
+<area shape="rect" id="node1" title="Utilities to convert arrays into an iterable (usable if for x: list construct)." alt="" coords="729,5,870,32"/>
+<area shape="rect" id="node2" href="$future_8h.html" title="Utility API to handle the concept of futures." alt="" coords="732,80,867,107"/>
+<area shape="rect" id="node6" href="$i2c__device_8h.html" title="I2C Device API." alt="" coords="211,408,374,435"/>
+<area shape="rect" id="node11" href="$i2c__device__utilities_8h.html" title="Various utilities to use for I2C Device support developers." alt="" coords="878,483,1030,524"/>
+<area shape="rect" id="node3" href="$ds1307_8h.html" title="API to handle Real&#45;Time Clock DS1307 I2C chip." alt="" coords="719,483,853,524"/>
+<area shape="rect" id="node4" href="$vl53l0x_8h.html" title="API to handle Time&#45;of&#45;Flight ranging sensor VL53L0X I2C chip." alt="" coords="749,572,884,613"/>
+<area shape="rect" id="node5" href="$future_8cpp_source.html" title=" " alt="" coords="669,162,817,189"/>
+<area shape="rect" id="node12" href="$i2c__handler__atmega_8h.html" title="ATmega I2C Manager API." alt="" coords="72,244,228,285"/>
+<area shape="rect" id="node14" href="$i2c__handler__attiny_8h.html" title="ATtiny I2C Manager API." alt="" coords="721,244,877,285"/>
+<area shape="rect" id="node15" href="$i2c__handler__common_8h.html" title="Common I2C Manager API." alt="" coords="489,155,645,196"/>
+<area shape="rect" id="node7" href="$hmc5883l_8h.html" title="API to handle HMC5883L 3&#45;axis digital compass I2C chip." alt="" coords="191,483,325,524"/>
+<area shape="rect" id="node8" href="$mcp23008_8h.html" title="API to handle the MCP23008 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="349,483,484,524"/>
+<area shape="rect" id="node9" href="$mcp23017_8h.html" title="API to handle the MCP23017 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="508,483,643,524"/>
+<area shape="rect" id="node10" href="$mpu6050_8h.html" title="API to handle MPU6050 3&#45;axis gyroscope/accelerometer I2C chip." alt="" coords="32,483,167,524"/>
+<area shape="rect" id="node13" href="$i2c__handler_8h.html" title="Common I2C Manager API." alt="" coords="67,333,233,360"/>
+<area shape="rect" id="node16" href="$i2c__debug_8h.html" title="I2C debugging utilities (useful when implementing support for new devices)." alt="" coords="582,333,742,360"/>
+<area shape="rect" id="node18" href="$i2c__handler__common_8cpp_source.html" title=" " alt="" coords="489,244,645,285"/>
+<area shape="rect" id="node19" href="$i2c__status_8h.html" title="I2C status hook utilities." alt="" coords="304,251,465,278"/>
+<area shape="rect" id="node17" href="$i2c__debug_8cpp_source.html" title=" " alt="" coords="575,408,749,435"/>
+</map>
