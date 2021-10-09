@@ -434,7 +434,10 @@ namespace devices::vl53l0x
 	 * @endcode
 	 * All builder methods are `constexpr` hence are typically evaluated at 
 	 * compile-time.
-	 * Each step has an impact on minimal measurement time for ranging.
+	 * Each step has an impact on minimal measurement time for ranging and on 
+	 * accuracy.
+	 * @note Advised sequence to get good results shall include PRE-RANGE,
+	 * FINAL-RANGE and DSS.
 	 * 
 	 * @sa VL53L0X::get_sequence_steps()
 	 * @sa VL53L0X::set_sequence_steps()
