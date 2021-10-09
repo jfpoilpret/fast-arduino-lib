@@ -26,6 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
+   &#160;<span id="projectnumber">v1.7</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -101,11 +102,23 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuture_1_1_abstract_future.html">AbstractFuture</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base class for all <code><a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a></code>s.  <a href="classfuture_1_1_abstract_future.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuture_1_1_abstract_futures_group.html">AbstractFuturesGroup</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract base class for <a class="el" href="classfuture_1_1_futures_group.html" title="Abstract class to allow aggregation of several futures.">FuturesGroup</a>.  <a href="classfuture_1_1_abstract_futures_group.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuture_1_1_fake_future.html">FakeFuture</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Actual <a class="el" href="classfuture_1_1_fake_future.html" title="Actual FakeFuture, it has the exact same API as Future and can be used in lieu of Future.">FakeFuture</a>, it has the exact same API as <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a> and can be used in lieu of <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a>.  <a href="classfuture_1_1_fake_future.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuture_1_1_future.html">Future</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Represent a value to be obtained, in some asynchronous way, in the future.  <a href="classfuture_1_1_future.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuture_1_1_future_output_listener.html">FutureOutputListener</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Listener is the interface allowing to listen to changes of a <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a> output buffer (while being fed by a producer).  <a href="classfuture_1_1_future_output_listener.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuture_1_1_futures_group.html">FuturesGroup</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Abstract class to allow aggregation of several futures.  <a href="classfuture_1_1_futures_group.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuture_1_1_future_status_listener.html">FutureStatusListener</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Listener is the interface allowing to listen to changes of a <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a> status.  <a href="classfuture_1_1_future_status_listener.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
@@ -233,13 +246,13 @@ Future.set_future_finish() </dd>
 <tr><td class="fieldname"><a id="a9f72173fcd5be9bfef028415665efbe4abb1ca97ec761fc37101737ba0aa2e7c5"></a>ERROR&#160;</td><td class="fielddoc"><p>The status of a <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a> once a value provider has reported an error to it. </p>
 <dl class="section see"><dt>See also</dt><dd>Future.set_future_error() </dd>
 <dd>
-<a class="el" href="classfuture_1_1_abstract_future.html#a470ca559cde03e22bdf28ed2594fa6b7" title="Wait until this Future becomes &quot;ready&quot;, that is when it holds either an output value or an error,...">Future.error()</a> </dd></dl>
+<a class="el" href="classfuture_1_1_abstract_future.html#ac94c7bfb4759e737ff20afd848873964" title="Wait until this Future becomes &quot;ready&quot;, that is when it holds either an output value or an error,...">Future.error()</a> </dd></dl>
 </td></tr>
 <tr><td class="fieldname"><a id="a9f72173fcd5be9bfef028415665efbe4accc0377a8afbf50e7094f5c23a8af223"></a>INVALID&#160;</td><td class="fielddoc"><p>The status of a <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a> that has been moved, if it was <code>NOT_READY</code> before moving. </p>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l00117">117</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l00118">118</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
 
 </div>
 </div>
@@ -247,7 +260,7 @@ Future.set_future_finish() </dd>
 </div><!-- doc-content -->
 <div class="ttc" id="aclassgpio_1_1_fast_port_html"><div class="ttname"><a href="classgpio_1_1_fast_port.html">gpio::FastPort</a></div><div class="ttdoc">API that manipulates a whole digital IO port.</div><div class="ttdef"><b>Definition:</b> <a href="gpio_8h_source.html#l00201">gpio.h:202</a></div></div>
 <div class="ttc" id="anamespacestd_html_a50d34a9238459a60c64dc2639dc01901"><div class="ttname"><a href="namespacestd.html#a50d34a9238459a60c64dc2639dc01901">std::move</a></div><div class="ttdeci">constexpr types_traits::remove_reference&lt; T &gt;::type &amp;&amp; move(T &amp;&amp;t)</div><div class="ttdoc">Obtain an &quot;rvalue&quot; reference.</div><div class="ttdef"><b>Definition:</b> <a href="move_8h_source.html#l00040">move.h:40</a></div></div>
-<div class="ttc" id="anamespaceboard_html_a2529f85498783a75dc75c281e0b754d3"><div class="ttname"><a href="namespaceboard.html#a2529f85498783a75dc75c281e0b754d3">board::init</a></div><div class="ttdeci">static void init()</div><div class="ttdoc">Performs special initialization for the target MCU.</div><div class="ttdef"><b>Definition:</b> <a href="empty_8h_source.html#l00043">empty.h:43</a></div></div>
+<div class="ttc" id="anamespaceboard_html_a2529f85498783a75dc75c281e0b754d3"><div class="ttname"><a href="namespaceboard.html#a2529f85498783a75dc75c281e0b754d3">board::init</a></div><div class="ttdeci">static void init()</div><div class="ttdoc">Performs special initialization for ATmega644, actually nothing at all.</div><div class="ttdef"><b>Definition:</b> <a href="atmega__xx4_8h_source.html#l00049">atmega_xx4.h:49</a></div></div>
 <div class="ttc" id="aclassinterrupt_1_1_p_c_i_signal_html"><div class="ttname"><a href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a></div><div class="ttdoc">Handler of a Pin Change Interrupt vector.</div><div class="ttdef"><b>Definition:</b> <a href="pci_8h_source.html#l00175">pci.h:176</a></div></div>
 <div class="ttc" id="anamespaceinterrupt_html_abfd5857208f49006bde8c472497273de"><div class="ttname"><a href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de">interrupt::register_handler</a></div><div class="ttdeci">void register_handler(Handler &amp;handler)</div><div class="ttdoc">Register a class instance containing methods that shall be called back by an ISR.</div><div class="ttdef"><b>Definition:</b> <a href="interrupts_8h_source.html#l00157">interrupts.h:157</a></div></div>
 <div class="ttc" id="apci_8h_html_a64be10f04dd31643ee243b564a0d910c"><div class="ttname"><a href="pci_8h.html#a64be10f04dd31643ee243b564a0d910c">REGISTER_PCI_ISR_METHOD</a></div><div class="ttdeci">#define REGISTER_PCI_ISR_METHOD(PCI_NUM, HANDLER, CALLBACK, PIN,...)</div><div class="ttdoc">Register the necessary ISR (Interrupt Service Routine) for a Pin Change Interrupt vector.</div><div class="ttdef"><b>Definition:</b> <a href="pci_8h_source.html#l00044">pci.h:44</a></div></div>

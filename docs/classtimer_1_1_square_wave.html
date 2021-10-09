@@ -26,6 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
+   &#160;<span id="projectnumber">v1.7</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -109,7 +110,7 @@ using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cla
 <tr class="separator:ab99d321b342f811a8389d9983e95df31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a660428b574371c6be4d97f13aace52c1"><td class="memItemLeft" align="right" valign="top"><a id="a660428b574371c6be4d97f13aace52c1"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_square_wave.html#a660428b574371c6be4d97f13aace52c1">PWMPIN</a> = <a class="el" href="classanalog_1_1_p_w_m_output.html">analog::PWMOutput</a>&lt; <a class="el" href="classtimer_1_1_square_wave.html#a7c00e91969d0c1773bfa444ed4207188">OUTPUT</a> &gt;</td></tr>
-<tr class="memdesc:a660428b574371c6be4d97f13aace52c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classanalog_1_1_p_w_m_output.html" title="Construct a new handler for a PWM output pin.">analog::PWMOutput</a> type for the <code>OUTPUT</code> <a class="el" href="namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3f" title="Defines all digital output pins of target MCU, capable of PWM output.">board::PWMPin</a>. <br /></td></tr>
+<tr class="memdesc:a660428b574371c6be4d97f13aace52c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="classanalog_1_1_p_w_m_output.html" title="Construct a new handler for a PWM output pin.">analog::PWMOutput</a> type for the <code>OUTPUT</code> <a class="el" href="namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3f" title="Defines all digital output pins of ATmega644, capable of PWM output.">board::PWMPin</a>. <br /></td></tr>
 <tr class="separator:a660428b574371c6be4d97f13aace52c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
@@ -150,7 +151,7 @@ static constexpr const <a class="el" href="namespaceboard.html#aa6b4a447b2fccb95
 <tr class="separator:a422ed6d2a96b86a09f25fbcb9a0999a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c00e91969d0c1773bfa444ed4207188"><td class="memItemLeft" align="right" valign="top"><a id="a7c00e91969d0c1773bfa444ed4207188"></a>
 static constexpr const <a class="el" href="namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3f">board::PWMPin</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_square_wave.html#a7c00e91969d0c1773bfa444ed4207188">OUTPUT</a> = OUTPUT_</td></tr>
-<tr class="memdesc:a7c00e91969d0c1773bfa444ed4207188"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3f" title="Defines all digital output pins of target MCU, capable of PWM output.">board::PWMPin</a> connected to this <a class="el" href="classtimer_1_1_square_wave.html" title="Simple API to generate a square wave to an output pin.">SquareWave</a> generator. <br /></td></tr>
+<tr class="memdesc:a7c00e91969d0c1773bfa444ed4207188"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3f" title="Defines all digital output pins of ATmega644, capable of PWM output.">board::PWMPin</a> connected to this <a class="el" href="classtimer_1_1_square_wave.html" title="Simple API to generate a square wave to an output pin.">SquareWave</a> generator. <br /></td></tr>
 <tr class="separator:a7c00e91969d0c1773bfa444ed4207188"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5ffcf5a70f1b2e49f4c4b4422a8a5800"><td class="memItemLeft" align="right" valign="top"><a id="a5ffcf5a70f1b2e49f4c4b4422a8a5800"></a>
 static constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtimer_1_1_square_wave.html#a5ffcf5a70f1b2e49f4c4b4422a8a5800">PIN</a> = board_traits::PWMPin_trait&lt;<a class="el" href="classtimer_1_1_square_wave.html#a7c00e91969d0c1773bfa444ed4207188">OUTPUT</a>&gt;::ACTUAL_PIN</td></tr>
@@ -167,7 +168,7 @@ class timer::SquareWave&lt; NTIMER_, OUTPUT_ &gt;</h3>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">NTIMER_</td><td>the AVR timer to use for the underlying <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer.">Timer</a> </td></tr>
-    <tr><td class="paramname">OUTPUT_</td><td>the <code><a class="el" href="namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3f" title="Defines all digital output pins of target MCU, capable of PWM output.">board::PWMPin</a></code> connected to this <a class="el" href="classtimer_1_1_square_wave.html" title="Simple API to generate a square wave to an output pin.">SquareWave</a> generator; this must be the pin OCnA, where n is the AVR <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer.">Timer</a> number</td></tr>
+    <tr><td class="paramname">OUTPUT_</td><td>the <code><a class="el" href="namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3f" title="Defines all digital output pins of ATmega644, capable of PWM output.">board::PWMPin</a></code> connected to this <a class="el" href="classtimer_1_1_square_wave.html" title="Simple API to generate a square wave to an output pin.">SquareWave</a> generator; this must be the pin OCnA, where n is the AVR <a class="el" href="classtimer_1_1_timer.html" title="General API to handle an AVR timer.">Timer</a> number</td></tr>
   </table>
   </dd>
 </dl>

@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classi2c_1_1_abstract_i2_c_async_manager.html" title="Abstract asynchronous I2C Manager." alt="" coords="5,5,253,76"/>
+<area shape="rect" id="node1" href="$classi2c_1_1_abstract_i2_c_async_manager.html" title=" " alt="" coords="5,5,232,91"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_i2_c_async_l_c_manager.html" title="Asynchronous I2C Manager for ATmega architecture with support for dynamic proxies." alt="" coords="280,27,451,69"/>
 </map>

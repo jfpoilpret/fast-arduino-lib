@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classgpio_1_1_fast_masked_port.html" title=" " alt="" coords="5,5,227,47"/>
+<area shape="rect" id="node1" href="$classfuture_1_1_abstract_future.html" title="Base class for all Futures." alt="" coords="5,13,155,39"/>
+<area shape="rect" id="node2" href="$classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future." alt="" coords="203,5,341,47"/>
 </map>

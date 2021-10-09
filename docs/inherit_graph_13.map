@@ -1,5 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classdevices_1_1audio_1_1_abstract_tone_player.html" title=" " alt="" coords="5,43,257,99"/>
-<area shape="rect" id="node2" href="$classdevices_1_1audio_1_1_async_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations." alt="" coords="329,5,524,61"/>
-<area shape="rect" id="node3" href="$classdevices_1_1audio_1_1_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations." alt="" coords="305,86,548,127"/>
+<area shape="rect" id="node1" href="$classcontainers_1_1_queue.html" title=" " alt="" coords="5,5,143,47"/>
 </map>

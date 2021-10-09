@@ -6,6 +6,9 @@ var hierarchy =
     [ "future::AbstractFuture", "classfuture_1_1_abstract_future.html", [
       [ "future::Future< OUT_, IN_ >", "classfuture_1_1_future.html", null ]
     ] ],
+    [ "future::AbstractFuturesGroup< F >", "classfuture_1_1_abstract_futures_group.html", [
+      [ "future::FuturesGroup< F, SIZE >", "classfuture_1_1_futures_group.html", null ]
+    ] ],
     [ "i2c::AbstractI2CAsyncManager< MODE_, POLICY_, HAS_LC_, HAS_STATUS_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_async_manager.html", null ],
     [ "i2c::AbstractI2CAsyncManager< MODE_, I2CErrorPolicy::CLEAR_ALL_COMMANDS, false, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_async_manager.html", [
       [ "i2c::I2CAsyncManager< MODE_, POLICY_ >", "classi2c_1_1_i2_c_async_manager.html", null ]
@@ -118,6 +121,7 @@ var hierarchy =
       [ "analog::PowerVoltage< BANDGAP_ >", "classanalog_1_1_power_voltage.html", null ]
     ] ],
     [ "containers::array< T_, N_ >", "classcontainers_1_1array.html", null ],
+    [ "containers::array< F *, SIZE >", "classcontainers_1_1array.html", null ],
     [ "time::auto_delay", "classtime_1_1auto__delay.html", null ],
     [ "time::auto_millis", "classtime_1_1auto__millis.html", null ],
     [ "devices::mcp230xx::MCP23017< MANAGER >::BeginFuture", "classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_begin_future.html", null ],
@@ -166,6 +170,8 @@ var hierarchy =
       [ "devices::rtc::DS1307< MANAGER >::SetRam1Future", "classdevices_1_1rtc_1_1_d_s1307_1_1_set_ram1_future.html", null ],
       [ "devices::rtc::DS1307< MANAGER >::SetRamFuture< SIZE_ >", "classdevices_1_1rtc_1_1_d_s1307_1_1_set_ram_future.html", null ]
     ] ],
+    [ "future::FutureOutputListener< F >", "classfuture_1_1_future_output_listener.html", null ],
+    [ "future::FutureStatusListener< F >", "classfuture_1_1_future_status_listener.html", null ],
     [ "devices::mcp230xx::MCP23008< MANAGER >::GetValuesFuture", "classdevices_1_1mcp230xx_1_1_m_c_p23008_1_1_get_values_future.html", null ],
     [ "devices::mcp230xx::MCP23017< MANAGER >::GetValuesFuture< P_ >", "classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_get_values_future.html", null ],
     [ "devices::magneto::MPU6050< MANAGER >::GyroFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_gyro_future.html", null ],
