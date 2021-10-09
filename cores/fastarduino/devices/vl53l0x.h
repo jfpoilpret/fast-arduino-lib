@@ -137,7 +137,7 @@ namespace devices::vl53l0x
 			using SetAddressFuture = TWriteRegisterFuture<Register::I2C_SLAVE_DEVICE_ADDRESS>;
 			device_address &= 0x7F;
 			if (!this->template sync_write<SetAddressFuture>(device_address)) return false;
-			this->set_device(device_address << 1);
+			this->set_device(uint8_t(device_address << 1));
 			return true;
 		}
 
@@ -226,12 +226,12 @@ namespace devices::vl53l0x
 			{
 				uint8_t sys_range = 0;
 				if (!this->template sync_read<READ_SYSRANGE>(sys_range)) return false;
-				if (!(sys_range & 0x01))
+				if ((sys_range & 0x01) == 0)
 				{
 					// Replace timeout_ms with remaining time only
 					time::RTTTime now = rtt.time();
 					timeout_ms = (end > now) ? (end - now).millis() : 0;
-					if (!timeout_ms) timeout_ms = 1U;
+					if (timeout_ms == 0) timeout_ms = 1U;
 					return await_continuous_range(rtt, range_mm, timeout_ms);
 				}
 			}
@@ -1227,7 +1227,7 @@ namespace devices::vl53l0x
 			{
 				uint8_t sys_range = 0;
 				if (!this->template sync_read<READ_SYSRANGE>(sys_range)) return false;
-				if (!(sys_range & 0x01))
+				if ((sys_range & 0x01) == 0)
 					return await_continuous_range(range_mm, loops);
 			}
 			return false;

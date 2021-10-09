@@ -676,7 +676,7 @@ namespace devices::vl53l0x
 		uint16_t final_range_mclks(bool is_pre_range) const
 		{
 			uint16_t temp_final_range_mclks = TimeoutUtilities::decode_timeout(final_range_mclks_);
-			return (is_pre_range ? temp_final_range_mclks - pre_range_mclks() : temp_final_range_mclks);
+			return (is_pre_range ? (temp_final_range_mclks - pre_range_mclks()) : temp_final_range_mclks);
 		}
 
 		// Following values are calculated from others

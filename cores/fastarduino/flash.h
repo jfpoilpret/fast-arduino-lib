@@ -50,7 +50,7 @@ namespace flash
 	T* read_flash(uint16_t address, T* buffer, uint8_t size)
 	{
 		uint8_t* ptr = (uint8_t*) buffer;
-		for (size_t i = 0; i < size * sizeof(T); ++i) *ptr++ = pgm_read_byte(address++);
+		for (size_t i = 0; i < (size * sizeof(T)); ++i) *ptr++ = pgm_read_byte(address++);
 		return buffer;
 	}
 
