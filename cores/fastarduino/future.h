@@ -24,7 +24,7 @@
 #define FUTURE_HH
 
 #include <string.h>
-#include "array.h"
+#include "iterator.h"
 #include "errors.h"
 #include "move.h"
 #include "streams.h"
@@ -595,6 +595,17 @@ namespace future
 
 		~AbstractFuture() = default;
 
+		// This method is called by subclasses to completely reset this future (for reuse from scratch)
+		void reset_(uint8_t* output_data, uint8_t output_size, uint8_t* input_data, uint8_t input_size)
+		{
+			status_ = FutureStatus::NOT_READY;
+			error_ = 0;
+			output_data_ = output_current_ = output_data;
+			output_size_ = output_size;
+			input_data_ = input_current_ = input_data;
+			input_size_ = input_size;
+		}
+
 		// This method is called by subclass to check if input is replaceable,
 		// i.e. it has not been read yet
 		bool can_replace_input_() const
@@ -743,6 +754,20 @@ namespace future
 		/// @endcond
 
 		/**
+		 * This method completely resets this future (for reuse from scratch), 
+		 * as if it was just constructed. This allows reuse of a single future
+		 * several times.
+		 * 
+		 * @param input a value to be copied to this Future input storage value;
+		 * this argument does not exist when @p IN is `void`.
+		 */
+		void reset_(const IN& input = IN{})
+		{
+			AbstractFuture::reset_(output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN));
+			input_ = input;
+		}
+
+		/**
 		 * Reset the input storage value held by this Future with a new value.
 		 * This is possible only if no consumer has started reading the current 
 		 * input storage value yet.
@@ -868,6 +893,12 @@ namespace future
 		Future(const Future&) = delete;
 		Future& operator=(const Future&) = delete;
 
+		// This method completely resets this future (for reuse from scratch)
+		void reset_()
+		{
+			AbstractFuture::reset_(output_buffer_, sizeof(OUT), nullptr, 0);
+		}
+
 		// The following method is blocking until this Future is ready
 		bool get(OUT& result)
 		{
@@ -925,6 +956,13 @@ namespace future
 
 		Future(const Future&) = delete;
 		Future& operator=(const Future&) = delete;
+
+		// This method completely resets this future (for reuse from scratch)
+		void reset_(const IN& input = IN{})
+		{
+			AbstractFuture::reset_(nullptr, 0, input_buffer_, sizeof(IN));
+			input_ = input;
+		}
 
 		bool reset_input_(const IN& input)
 		{
@@ -995,6 +1033,12 @@ namespace future
 
 		Future(const Future&) = delete;
 		Future& operator=(const Future&) = delete;
+
+		// This method completely resets this future (for reuse from scratch)
+		void reset_()
+		{
+			AbstractFuture::reset_(nullptr, 0, nullptr, 0);
+		}
 
 		// The following method is blocking until this Future is ready
 		bool get()
@@ -1075,7 +1119,6 @@ namespace future
 		{
 			// Update Future value chunk
 			*output_current_++ = chunk;
-			//TODO Check if this affects current usage!
 			--output_size_;
 			callback_output();
 			return true;
@@ -1122,6 +1165,16 @@ namespace future
 		AbstractFakeFuture& operator=(AbstractFakeFuture&&) = delete;
 
 		~AbstractFakeFuture() = default;
+
+		// This method is called by subclasses to completely reset this future (for reuse from scratch)
+		void reset_(uint8_t* output_data, uint8_t output_size, uint8_t* input_data, uint8_t input_size)
+		{
+			error_ = 0;
+			output_current_ = output_data;
+			output_size_ = output_size;
+			input_current_ = input_data;
+			input_size_ = input_size;
+		}
 
 		// This method is called by subclass to check if input is replaceable,
 		// i.e. it has not been read yet
@@ -1186,6 +1239,13 @@ namespace future
 
 		~FakeFuture() = default;
 
+		// This method completely resets this future (for reuse from scratch)
+		void reset_(const IN& input = IN{})
+		{
+			AbstractFakeFuture::reset_(output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN));
+			input_ = input;
+		}
+
 		bool reset_input_(const IN& input)
 		{
 			input_ = input;
@@ -1235,11 +1295,17 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = sizeof(OUT);
 		static constexpr uint8_t IN_SIZE = 0;
 
-		FakeFuture(STATUS_LISTENER* status_listener = nullptr, OUTPUT_LISTENER* output_listener = nullptr)
+		explicit FakeFuture(STATUS_LISTENER* status_listener = nullptr, OUTPUT_LISTENER* output_listener = nullptr)
 			:	AbstractFakeFuture{output_buffer_, sizeof(OUT), nullptr, 0,
 				status_listener, output_listener} {}
 
 		~FakeFuture() = default;
+
+		// This method completely resets this future (for reuse from scratch)
+		void reset_()
+		{
+			AbstractFakeFuture::reset_(output_buffer_, sizeof(OUT), nullptr, 0);
+		}
 
 		bool get(OUT& result)
 		{
@@ -1273,6 +1339,13 @@ namespace future
 			: AbstractFakeFuture{nullptr, 0, input_buffer_, sizeof(IN), status_listener}, input_{input} {}
 
 		~FakeFuture() = default;
+
+		// This method completely resets this future (for reuse from scratch)
+		void reset_(const IN& input = IN{})
+		{
+			AbstractFakeFuture::reset_(nullptr, 0, input_buffer_, sizeof(IN));
+			input_ = input;
+		}
 
 		bool reset_input_(const IN& input)
 		{
@@ -1320,6 +1393,11 @@ namespace future
 
 		~FakeFuture() = default;
 
+		void reset_()
+		{
+			AbstractFakeFuture::reset_(nullptr, 0, nullptr, 0);
+		}
+
 		bool get()
 		{
 			return true;
@@ -1362,184 +1440,17 @@ namespace future
 	/// @endcond
 
 	/**
-	 * Abstract base class for FuturesGroup. You should never directly subclass this.
-	 * 
-	 * @sa FuturesGroup
-	 */
-	template<typename F> class AbstractFuturesGroup
-	{
-		static_assert(Future_trait<F>::IS_FUTURE, "F must be a Future");
-		static_assert(Future_trait<F>::IS_ABSTRACT, "F must be an abstract Future");
-
-	public:
-		/**
-		 * The type to use for status listeners for this type of Future.
-		 * @sa FutureStatusListener
-		 */
-		using STATUS_LISTENER = FutureStatusListener<F>;
-
-		/**
-		 * The type to use for output listeners for this type of Future.
-		 * @sa FutureOutputListener
-		 */
-		using OUTPUT_LISTENER = FutureOutputListener<F>;
-
-		/**
-		 * Compute a global status for this `FuturesGroup`, based on the status of each 
-		 * of its futures.
-		 * This will return:
-		 * - FutureStatus::READY if ALL its futures are ready
-		 * - FutureStatus::ERROR if ANY of its futures is in error
-		 * - FutureStatus::INVALID if ANY of its futures is invalid
-		 * - FutureStatus::NOT_READY if other cases, typically when no future is 
-		 * in error or invalid, and maybe some future are ready but not all, i.e.
-		 * at least one future is not ready.
-		 */
-		FutureStatus status() const
-		{
-			if (status_ != FutureStatus::NOT_READY)
-				return status_;
-
-			uint8_t count_ready = 0;
-			F** futures = futures_;
-			for (uint8_t i = 0; i < size_; ++i)
-			{
-				F* future = *futures++;
-				FutureStatus status = future->status();
-				switch (status)
-				{
-					case FutureStatus::ERROR:
-					error_ = future->error();
-					// intentional fallthrough
-
-					case FutureStatus::INVALID:
-					status_ = status;
-					return status;
-
-					case FutureStatus::READY:
-					++count_ready;
-					break;
-
-					case FutureStatus::NOT_READY:
-					break;
-				}
-			}
-			if (count_ready == size_)
-			{
-				status_ = FutureStatus::READY;
-				return FutureStatus::READY;
-			}
-			return FutureStatus::NOT_READY;
-		}
-
-		/**
-		 * Await for all futures in this `FuturesGroup`.
-		 * Will return only when:
-		 * - either all futures are ready
-		 * - or at least one future is in error or invalid
-		 */
-		FutureStatus await() const
-		{
-			while (true)
-			{
-				FutureStatus status = this->status();
-				if (status != FutureStatus::NOT_READY)
-					return status;
-				time::yield();
-			}
-		}
-
-		/**
-		 * Wait until this FuturesGroup becomes ready or in error, then return the
-		 * error reported.
-		 * 
-		 * @retval 0 if all futures in this `FuturesGroup` are READY
-		 * @retval errors::EINVAL if any future in this `FuturesGroup` is INVALID
-		 * @return the actual error of the *first* future of this `FuturesGroup` 
-		 * which is in error
-		 * 
-		 * @sa await()
-		 * @sa errors::EINVAL
-		 */
-		int error() const
-		{
-			FutureStatus status = await();
-			switch (status)
-			{
-				case FutureStatus::READY:
-				return 0;
-
-				case FutureStatus::ERROR:
-				return error_;
-
-				default:
-				// This should never happen
-				return errors::EINVAL;
-			}
-		}
-
-		/**
-		 * Add a status listener to all futures embedded in this FuturesGroup.
-		 * @warning The new @p status_listener will override any status listener
-		 * already registered with individual futures.
-		 * 
-		 * @sa FutureStatusListener
-		 */
-		void set_status_listener(STATUS_LISTENER* status_listener)
-		{
-			F** futures = futures_;
-			for (uint8_t i = 0; i < size_; ++i)
-			{
-				F* future = *futures++;
-				future->status_listener_ = status_listener;
-			}
-		}
-
-		/**
-		 * Add an output listener to all futures embedded in this FuturesGroup.
-		 * @warning The new @p output_listener will override any output listener
-		 * already registered with individual futures.
-		 * 
-		 * @sa FutureOutputListener
-		 */
-		void set_output_listener(OUTPUT_LISTENER* output_listener)
-		{
-			F** futures = futures_;
-			for (uint8_t i = 0; i < size_; ++i)
-			{
-				F* future = *futures++;
-				future->output_listener_ = output_listener;
-			}
-		}
-
-	protected:
-		/// @cond notdocumented
-		AbstractFuturesGroup(F** futures, uint8_t size) : futures_{futures}, size_{size} {}
-		AbstractFuturesGroup(AbstractFuturesGroup&&) = default;
-		AbstractFuturesGroup& operator=(AbstractFuturesGroup&&) = default;
-		AbstractFuturesGroup(const AbstractFuturesGroup&) = delete;
-		AbstractFuturesGroup& operator=(const AbstractFuturesGroup&) = delete;
-		/// @endcond
-
-	private:
-		F** futures_;
-		uint8_t size_;
-		mutable FutureStatus status_ = FutureStatus::NOT_READY;
-		mutable int error_ = 0;
-	};
-
-	/**
 	 * Abstract class to allow aggregation of several futures.
 	 * This allows to `await()` for all futures, or query the overall `status()`
 	 * of the group.
 	 * 
-	 * The following snippet shows how this must be sued to create an actual group 
+	 * The following snippet shows how this must be used to create an actual group 
 	 * of futures:
 	 * @code
-	 * class MyGroup : public FuturesGroup<AbstractFuture, 3>
+	 * class MyGroup : public AbstractFuturesGroup<AbstractFuture>
 	 * {
 	 * public:
-	 *     MyGroup() : FuturesGroup<AbstractFuture, 3>{{&f1_, &f2_, &f3_}}, f1_{}, f2_{}, f3_{} {}
+	 *     MyGroup() : AbstractFuturesGroup<AbstractFuture>{{&f1_, &f2_, &f3_}}, f1_{}, f2_{}, f3_{} {}
 	 * 
 	 *     F1& get_f1() { return f1_; }
 	 *     F2& get_f2() { return f2_; }
@@ -1558,26 +1469,95 @@ namespace future
 	 * 
 	 * @tparam F the type of Future to aggregate int this group; this shall be
 	 * either `AbstractFuture` or `AbstractFakeFuture`.
-	 * @tparam SIZE the number of futures in this group
 	 */
-	template<typename F, uint8_t SIZE> class FuturesGroup : public AbstractFuturesGroup<F>
+	template<typename F> class AbstractFuturesGroup : public F, public FutureStatusListener<F>
 	{
-		static_assert(SIZE > 1, "SIZE must be at least 2");
+		static_assert(Future_trait<F>::IS_FUTURE, "F must be a Future");
+		static_assert(Future_trait<F>::IS_ABSTRACT, "F must be an abstract Future");
+
+	public:
+		/**
+		 * The type to use for status listeners for this type of Future.
+		 * @sa FutureStatusListener
+		 */
+		using STATUS_LISTENER = FutureStatusListener<F>;
 
 	protected:
 		/**
-		 * Create a new FuturesGroup for the list of provided @p futures pointers
-		 * array.
+		 * Specific size value indicating this group has an unlimited (and unknown 
+		 * at construction time) number of futures to handle.
+		 * @sa init()
 		 */
-		explicit FuturesGroup(containers::array<F*, SIZE> futures)
-			: AbstractFuturesGroup<F>{futures_.data(), SIZE}, futures_{futures} {}
+		static constexpr const uint16_t NO_LIMIT = 0xFFFF;
+		
+		/** 
+		 * Construct a new AbstractFuturesGroup.
+		 * The created Group is in `FutureStatus::NOT_READY` status.
+		 * The Future holds buffers to store both the input storage value and the 
+		 * output value.
+		 * The subclass constructor **must** call `init()` with the list of futures
+		 * in this group.
+		 * 
+		 * @param status_listener an optional listener to status changes on this 
+		 * future group
+		 * 
+		 * @sa init()
+		 * @sa FutureStatus
+		 */
+		explicit AbstractFuturesGroup(STATUS_LISTENER* status_listener = nullptr)
+			:	F{nullptr, 0, nullptr, 0, status_listener} {}
+
+		/**
+		 * Called from constructors of subclasses, this method allows this group
+		 * to listen for the status of all its futures.
+		 * @param futures list of pointers to futures in this group
+		 * @param actual_size real number of futures; if `0` (default), this will
+		 * match the size of @p futures; it may be bigger than the actual number of
+		 * futures if e.g. a future is reused several times in this group; if
+		 * `NO_LIMIT`, then the subclass does not know in advance how many times
+		 * its futures shall be used, in this case, the subclass must itself
+		 * indicate when this group of future is `FutureStatus::READY`.
+		 * 
+		 * @sa FutureStatus
+		 * @sa Future::set_future_finish()
+		 */
+		void init(utils::range<F*> futures, uint16_t actual_size = 0)
+		{
+			num_ready_ = (actual_size != 0 ? actual_size : futures.size());
+			for (F* future: futures)
+				future->status_listener_ = this;
+		}
 		/// @cond notdocumented
-		FuturesGroup(FuturesGroup&&) = default;
-		FuturesGroup& operator=(FuturesGroup&&) = default;
+		AbstractFuturesGroup(AbstractFuturesGroup&&) = delete;
+		AbstractFuturesGroup& operator=(AbstractFuturesGroup&&) = delete;
+		AbstractFuturesGroup(const AbstractFuturesGroup&) = delete;
+		AbstractFuturesGroup& operator=(const AbstractFuturesGroup&) = delete;
+
+		void on_status_change(const F& future, FutureStatus status) override
+		{
+			switch (status)
+			{
+				case FutureStatus::ERROR:
+				this->set_future_error_(future.error());
+				break;
+
+				case FutureStatus::INVALID:
+				this->set_future_error_(errors::EINVAL);
+				break;
+
+				case FutureStatus::READY:
+				if (--num_ready_ == 0)
+					this->set_future_finish_();
+				break;
+
+				default:
+				break;
+			}
+		}
 		/// @endcond
 
 	private:
-		containers::array<F*, SIZE> futures_;
+		uint16_t num_ready_ = 0;
 	};
 }
 

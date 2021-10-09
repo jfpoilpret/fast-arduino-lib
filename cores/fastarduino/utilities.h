@@ -385,6 +385,27 @@ namespace utils
 		swap_bytes((uint16_t&) value);
 	}
 
+	/**
+	 * Reverse 4 bytes of a 4-bytes integer. Useful to convert from big-endian to 
+	 * small-endian (AVR).
+	 * @param value value to convert in place (reference)
+	 */
+	inline void swap_bytes(uint32_t& value)
+	{
+		value =	(value >> 24) | ((value & 0x00FF0000UL) >> 8) |
+				((value & 0x0000FF00UL) << 8) | ((value & 0x000000FFUL) << 24);
+	}
+
+	/**
+	 * Reverse 4 bytes of a 4-bytes integer. Useful to convert from big-endian to 
+	 * small-endian (AVR).
+	 * @param value value to convert in place (reference)
+	 */
+	inline void swap_bytes(int32_t& value)
+	{
+		swap_bytes((uint32_t&) value);
+	}
+
 	/// @cond notdocumented
 	template<typename T> union ToUint8
 	{
@@ -453,6 +474,46 @@ namespace utils
 		else
 			return num_bits(mask >> 1, num);
 	}
+
+	/**
+	 * Change endianness of any integral type (from big to small or small to big).
+	 * @tparam T the type fo @p value; if not an integral type, the function will 
+	 * do nothing; only 16 bits and 32 bits integral types are currently supported.
+	 * @param value the value which endianness shall be reverted
+	 * @return value with reverted endianness if an integer; otherwise, value is 
+	 * returned unchanged.
+	 */
+	template<typename T> T inline change_endianness(const T& value)
+	{
+		return value;
+	}
+	
+	/// @cond notdocumented
+	template<> uint16_t inline change_endianness(const uint16_t& value)
+	{
+		uint16_t temp = value;
+		utils::swap_bytes(temp);
+		return temp;
+	}
+	template<> int16_t inline change_endianness(const int16_t& value)
+	{
+		int16_t temp = value;
+		utils::swap_bytes(temp);
+		return temp;
+	}
+	template<> uint32_t inline change_endianness(const uint32_t& value)
+	{
+		uint32_t temp = value;
+		utils::swap_bytes(temp);
+		return temp;
+	}
+	template<> int32_t inline change_endianness(const int32_t& value)
+	{
+		int32_t temp = value;
+		utils::swap_bytes(temp);
+		return temp;
+	}
+	/// @endcond
 }
 
 #endif /* UTILITIES_HH */

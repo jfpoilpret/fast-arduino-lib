@@ -87,6 +87,13 @@ MultiIO4	LED chaser with config buttons (callback method) and LEDs on MCP23017 2
 MultiIO5	LED chaser with config buttons (callback method) and LEDs on MCP23008 (i2c)
 MultiIO6	Multiple LED -switch mapper on MCP23008 (i2c)
 MultiIO7	Simple LED chaser on MCP23008 (i2c)
+ToF1	VL53L0X example using only getters (i2c)
+ToF2	VL53L0X example using continuous ranging (i2c)
+ToF3	VL53L0X example using continuous ranging after settings input (i2c)
+ToF4	VL53L0X example using single ranging (i2c)
+ToF5	VL53L0X example using continuous ranging based on profile selection (i2c)
+ToF6	VL53L0X example using continuous ranging with GPIOs (i2c)
+ToF7	Double-VL53L0X example using continuous ranging (i2c)
 Servo1	Servo controlled by a pot through 8bits pulse timer
 Servo2	Servo controlled by a pot through 16bits pulse timer
 RF24App1	NRF24L01P ping-pong (UATX except ATtiny), no IRQ (spi)

@@ -267,7 +267,25 @@ namespace i2c::debug
 				break;
 			}
 			if (display)
-				out_ << status << streams::hex << data << ' ' << streams::flush;
+			{
+				// Show data only if relevant
+				switch (status)
+				{
+					case i2c::DebugStatus::START:
+					case i2c::DebugStatus::REPEAT_START:
+					case i2c::DebugStatus::STOP:
+					case i2c::DebugStatus::RECV_ERROR:
+					case i2c::DebugStatus::RECV:
+					case i2c::DebugStatus::RECV_LAST:
+					case i2c::DebugStatus::SEND_ERROR:
+					case i2c::DebugStatus::SEND_OK:
+					out_ << status << streams::flush;
+					break;
+
+					default:
+					out_ << status << streams::hex << data << ' ' << streams::flush;
+				}
+			}
 		}
 		/// @endcond
 
@@ -348,6 +366,9 @@ namespace i2c::debug
 	class I2CDebugStatusLiveLogger : public i2c::status::I2CStatusLiveLogger, public I2CDebugLiveLogger
 	{
 	public:
+		using I2CDebugLiveLogger::operator();
+		using i2c::status::I2CStatusLiveLogger::operator();
+
 		/**
 		 * Create an I2CDebugLiveLogger that can trace live I2C notifications determined
 		 * by @p debug and @p trace list. I2C notifications are output to @p out.

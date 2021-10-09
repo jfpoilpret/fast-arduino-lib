@@ -222,6 +222,21 @@ namespace containers
 				*dst++ = *src++;
 		}
 
+		/**
+		 * Replace @p NN elements of this array, starting at @p index element, with
+		 * elements from @p buffer.
+		 */
+		template<uint8_t NN>
+		void set(uint8_t index, const array<T, NN>& buffer)
+		{
+			if (index >= N) return;
+			const uint8_t nn = ((N - index) < NN) ? (N - index) : NN;
+			T* dst = &buffer_[index];
+			const T* src = buffer.data();
+			for (uint8_t i = 0; i < nn; ++i)
+				*dst++ = *src++;
+		}
+
 	private:
 		T buffer_[N] = {};
 	};
