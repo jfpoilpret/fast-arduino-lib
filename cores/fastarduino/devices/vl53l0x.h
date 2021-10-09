@@ -167,7 +167,8 @@ namespace devices::vl53l0x
 		{
 			if (!init_data_first()) return false;
 			uint8_t prof = uint8_t(profile);
-			if (!init_static_second(GPIOSettings::sample_ready(), SequenceSteps::create().pre_range().final_range()))
+			if (!init_static_second(GPIOSettings::sample_ready(), 
+				SequenceSteps::create().pre_range().final_range().dss()))
 				return false;
 			if (!perform_ref_calibration()) return false;
 			if (prof & 0x01)
@@ -438,8 +439,8 @@ namespace devices::vl53l0x
 		 * @sa perform_ref_calibration()
 		 * @sa begin()
 		 */
-		bool init_static_second(
-			const GPIOSettings& settings, SequenceSteps steps = SequenceSteps::create().pre_range().final_range())
+		bool init_static_second(const GPIOSettings& settings, 
+			SequenceSteps steps = SequenceSteps::create().pre_range().final_range().dss())
 		{
 			// 1. Get SPAD info
 			SPADInfo info;
