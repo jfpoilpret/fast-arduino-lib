@@ -103,7 +103,7 @@ namespace devices::vl53l0x
 			if (timeout_macro_clks == 0UL) return 0U;
 			uint32_t lsb = timeout_macro_clks - 1UL;
 			uint16_t msb = 0;
-			while (lsb & 0xFFFFFF00UL)
+			while (lsb & 0xFF'FF'FF'00UL)
 			{
 				lsb >>= 1;
 				++msb;
@@ -165,7 +165,7 @@ namespace devices::vl53l0x
 		UNKNOWN                        = 15
 	};
 	/// @cond notdocumented
-	streams::ostream& operator<<(streams::ostream&, DeviceError);
+	streams::ostream& operator<<(streams::ostream& out, DeviceError error);
 	/// @endcond
 
 	/**
@@ -201,7 +201,7 @@ namespace devices::vl53l0x
 		uint8_t status_ = 0;
 	};
 	/// @cond notdocumented
-	streams::ostream& operator<<(streams::ostream&, DeviceStatus);
+	streams::ostream& operator<<(streams::ostream& out, DeviceStatus status);
 	/// @endcond
 
 	/**
@@ -214,7 +214,7 @@ namespace devices::vl53l0x
 		IDLE = 1
 	};
 	/// @cond notdocumented
-	streams::ostream& operator<<(streams::ostream&, PowerMode);
+	streams::ostream& operator<<(streams::ostream& out, PowerMode mode);
 	/// @endcond
 
 	/**
@@ -237,7 +237,7 @@ namespace devices::vl53l0x
 		SAMPLE_READY = 0x04
 	};
 	/// @cond notdocumented
-	streams::ostream& operator<<(streams::ostream&, GPIOFunction);
+	streams::ostream& operator<<(streams::ostream& out, GPIOFunction function);
 	/// @endcond
 
 	/**
@@ -345,7 +345,7 @@ namespace devices::vl53l0x
 		uint16_t high_threshold_ = 0;
 	};
 	/// @cond notdocumented
-	streams::ostream& operator<<(streams::ostream&, const GPIOSettings&);
+	streams::ostream& operator<<(streams::ostream& out, const GPIOSettings& settings);
 	/// @endcond
 
 	/// @cond notdocumented
@@ -354,7 +354,7 @@ namespace devices::vl53l0x
 	public:
 		InterruptStatus() = default;
 		//TODO maybe return more useful info (is each bit mapped to GPIOFunction?)
-		operator uint8_t() const
+		explicit operator uint8_t() const
 		{
 			return status_ & 0x07;
 		}
@@ -378,7 +378,7 @@ namespace devices::vl53l0x
 	public:
 		/// @cond notdocumented
 		SPADReference() = default;
-		SPADReference(const uint8_t spad_refs[6])
+		explicit SPADReference(const uint8_t spad_refs[6])
 		{
 			memcpy(spad_refs_, spad_refs, 6);
 		}
@@ -528,7 +528,7 @@ namespace devices::vl53l0x
 		 */
 		constexpr SequenceSteps no_tcc() const
 		{
-			return SequenceSteps{uint8_t(steps_ & ~TCC)};
+			return SequenceSteps{uint8_t(steps_ & bits::COMPL(TCC))};
 		}
 
 		/**
@@ -536,7 +536,7 @@ namespace devices::vl53l0x
 		 */
 		constexpr SequenceSteps no_dss() const
 		{
-			return SequenceSteps{uint8_t(steps_ & ~DSS)};
+			return SequenceSteps{uint8_t(steps_ & bits::COMPL(DSS))};
 		}
 
 		/**
@@ -544,7 +544,7 @@ namespace devices::vl53l0x
 		 */
 		constexpr SequenceSteps no_msrc() const
 		{
-			return SequenceSteps{uint8_t(steps_ & ~MSRC)};
+			return SequenceSteps{uint8_t(steps_ & bits::COMPL(MSRC))};
 		}
 
 		/**
@@ -552,7 +552,7 @@ namespace devices::vl53l0x
 		 */
 		constexpr SequenceSteps no_pre_range() const
 		{
-			return SequenceSteps{uint8_t(steps_ & ~PRE_RANGE)};
+			return SequenceSteps{uint8_t(steps_ & bits::COMPL(PRE_RANGE))};
 		}
 
 		/**
@@ -560,7 +560,7 @@ namespace devices::vl53l0x
 		 */
 		constexpr SequenceSteps no_final_range() const
 		{
-			return SequenceSteps{uint8_t(steps_ & ~FINAL_RANGE)};
+			return SequenceSteps{uint8_t(steps_ & bits::COMPL(FINAL_RANGE))};
 		}
 
 		/**
@@ -612,14 +612,14 @@ namespace devices::vl53l0x
 		}
 
 	private:
-		constexpr SequenceSteps(uint8_t steps) : steps_{uint8_t(steps | FORCED_BITS)} {}
+		explicit constexpr SequenceSteps(uint8_t steps) : steps_{uint8_t(steps | FORCED_BITS)} {}
 
 		uint8_t steps_ = FORCED_BITS;
 
 		template<typename MANAGER> friend class VL53L0X;
 	};
 	/// @cond notdocumented
-	streams::ostream& operator<<(streams::ostream&, SequenceSteps);
+	streams::ostream& operator<<(streams::ostream& out, SequenceSteps steps);
 	/// @endcond
 
 	/**
@@ -728,7 +728,7 @@ namespace devices::vl53l0x
 		template<typename MANAGER> friend class VL53L0X;
 	};
 	/// @cond notdocumented
-	streams::ostream& operator<<(streams::ostream&, const SequenceStepsTimeout&);
+	streams::ostream& operator<<(streams::ostream& out, const SequenceStepsTimeout& timeouts);
 	/// @endcond
 
 	/**
@@ -748,7 +748,7 @@ namespace devices::vl53l0x
 	public:
 		/// @cond notdocumented
 		SPADInfo() = default;
-		SPADInfo(uint8_t info) : info_{info} {}
+		explicit SPADInfo(uint8_t info) : info_{info} {}
 		/// @endcond
 
 		/**
@@ -772,7 +772,7 @@ namespace devices::vl53l0x
 		uint8_t info_ = 0;
 	};
 	/// @cond notdocumented
-	streams::ostream& operator<<(streams::ostream&, SPADInfo);
+	streams::ostream& operator<<(streams::ostream& out, SPADInfo spad);
 	/// @endcond
 
 	/**

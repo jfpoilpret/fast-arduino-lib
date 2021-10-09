@@ -1488,7 +1488,7 @@ namespace future
 		 * at construction time) number of futures to handle.
 		 * @sa init()
 		 */
-		static constexpr const uint16_t NO_LIMIT = 0xFFFF;
+		static constexpr const uint16_t NO_LIMIT = 0xFFFFU;
 		
 		/** 
 		 * Construct a new AbstractFuturesGroup.

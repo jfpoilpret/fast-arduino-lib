@@ -181,12 +181,12 @@ namespace devices::vl53l0x
 			if (prof & 0x02)
 			{
 				// accurate
-				if (!set_measurement_timing_budget(200000)) return false;
+				if (!set_measurement_timing_budget(200'000)) return false;
 			}
 			else if (prof & 0x04)
 			{
 				// fast
-				if (!set_measurement_timing_budget(20000)) return false;
+				if (!set_measurement_timing_budget(20'000)) return false;
 			}
 			return true;
 		}
@@ -642,7 +642,7 @@ namespace devices::vl53l0x
 			using PARENT = I2CFuturesGroup;
 		public:
 			/// @cond notdocumented
-			SetGPIOSettingsFuture(const vl53l0x::GPIOSettings& settings)
+			explicit SetGPIOSettingsFuture(const vl53l0x::GPIOSettings& settings)
 				:	PARENT{futures_, NUM_FUTURES},
 					write_config_{settings.function()},
 					// The following hard-coded values look OK but this is not how it should be done!
@@ -1057,7 +1057,7 @@ namespace devices::vl53l0x
 		 */
 		bool set_signal_rate_limit(float signal_rate)
 		{
-			if (signal_rate <= 0.0 || signal_rate > 1.0) return false;
+			if ((signal_rate <= 0.0) || (signal_rate > 1.0)) return false;
 			using SetSignalRateLimitFuture = 
 				TWriteRegisterFuture<Register::FINAL_RANGE_CONFIG_MIN_COUNT_RATE_RTN_LIMIT, uint16_t>;
 			return this->template sync_write<SetSignalRateLimitFuture>(FixPoint9_7::convert(signal_rate));
@@ -1297,7 +1297,7 @@ namespace devices::vl53l0x
 			// 2. Force strobe (read/write)
 			uint8_t strobe = 0;
 			if (!this->template sync_read<READ_STROBE>(strobe)) return false;
-			strobe |= 0x04;
+			strobe |= 0x04U;
 			if (!this->template sync_write<WRITE_STROBE>(strobe)) return false;
 			// 3. Write 2nd pass registers
 			if (!await_same_future_group(internals::spad_info::BUFFER2, internals::spad_info::BUFFER2_SIZE))
@@ -1312,7 +1312,7 @@ namespace devices::vl53l0x
 			// 7. Force strobe
 			strobe = 0;
 			if (!this->template sync_read<READ_STROBE>(strobe)) return false;
-			strobe &= ~0x04;
+			strobe &= ~0x04U;
 			if (!this->template sync_write<WRITE_STROBE>(strobe)) return false;
 			// 8. Write last pass registers
 			return await_same_future_group(internals::spad_info::BUFFER4, internals::spad_info::BUFFER4_SIZE);
@@ -1766,11 +1766,11 @@ namespace devices::vl53l0x
 
 		static constexpr uint8_t encode_vcsel_period(uint8_t period)
 		{
-			return (period >> 1) - 1;
+			return (period >> 1U) - 1U;
 		}
 		static constexpr uint8_t decode_vcsel_period(uint8_t value)
 		{
-			return (value + 1) << 1;
+			return (value + 1U) << 1U;
 		}
 
 		static constexpr const uint8_t NUM_REF_SPADS = 48;
@@ -1800,7 +1800,7 @@ namespace devices::vl53l0x
 			}
 		}
 
-		static constexpr const uint32_t MIN_TIMING_BUDGET    = 20000UL;
+		static constexpr const uint32_t MIN_TIMING_BUDGET    = 20'000UL;
 		static constexpr const uint16_t START_OVERHEAD_SET   = 1320U;
 		static constexpr const uint16_t START_OVERHEAD_GET   = 1910U;
 		static constexpr const uint16_t END_OVERHEAD         = 960U;

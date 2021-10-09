@@ -40,7 +40,7 @@ namespace memory
 	int free_mem()
 	{
 		int v;
-		return (int) &v - (__brkval == 0 ? (int) &__heap_start : (int) __brkval);
+		return (int) &v - (__brkval == nullptr ? (int) &__heap_start : (int) __brkval);
 	}
 
 	/**

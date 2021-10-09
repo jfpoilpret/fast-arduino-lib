@@ -392,8 +392,8 @@ namespace utils
 	 */
 	inline void swap_bytes(uint32_t& value)
 	{
-		value =	(value >> 24) | ((value & 0x00FF0000UL) >> 8) |
-				((value & 0x0000FF00UL) << 8) | ((value & 0x000000FFUL) << 24);
+		value =	(value >> 24) | ((value & 0x00'FF'00'00UL) >> 8) |
+				((value & 0x00'00'FF'00UL) << 8) | ((value & 0x00'00'00'FFUL) << 24);
 	}
 
 	/**

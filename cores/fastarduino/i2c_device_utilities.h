@@ -288,7 +288,8 @@ namespace i2c
 	/// @cond notdocumented
 	// Forward declaration of I2CDevice
 	template<typename MANAGER> class I2CDevice;
-	template<typename MANAGER> bool await_same_future_group(I2CDevice<MANAGER>&,const uint8_t*, uint8_t);
+	template<typename MANAGER> bool await_same_future_group(
+		I2CDevice<MANAGER>& device,const uint8_t* buffer, uint8_t size);
 	/// @endcond
 
 	template<typename MANAGER> class I2CFutureHelper
@@ -364,7 +365,7 @@ namespace i2c
 		using ABSTRACT_FUTURE = typename MANAGER::ABSTRACT_FUTURE;
 		using STATUS_LISTENER = typename GROUP::STATUS_LISTENER;
 
-		AbstractI2CFuturesGroup(STATUS_LISTENER* status_listener = nullptr) : GROUP{status_listener} {}
+		explicit AbstractI2CFuturesGroup(STATUS_LISTENER* status_listener = nullptr) : GROUP{status_listener} {}
 
 		// Check launch_commands() return and update own status if needed
 		bool check_error(int error)
