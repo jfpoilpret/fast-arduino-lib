@@ -377,10 +377,11 @@ namespace devices::vl53l0x
 	{
 	public:
 		/// @cond notdocumented
+		static constexpr uint8_t NUM_PADS_BYTES = 6;
 		SPADReference() = default;
-		explicit SPADReference(const uint8_t spad_refs[6])
+		explicit SPADReference(const uint8_t spad_refs[NUM_PADS_BYTES])
 		{
-			memcpy(spad_refs_, spad_refs, 6);
+			memcpy(spad_refs_, spad_refs, NUM_PADS_BYTES);
 		}
 		/// @endcond
 
@@ -403,7 +404,7 @@ namespace devices::vl53l0x
 		}
 
 	private:
-		uint8_t spad_refs_[6];
+		uint8_t spad_refs_[NUM_PADS_BYTES];
 	};
 
 	/**
