@@ -165,28 +165,34 @@ namespace devices::vl53l0x
 		 */
 		bool begin(Profile profile)
 		{
+			static constexpr uint8_t LONG_RANGE_MASK = 0x01;
+			static constexpr uint8_t ACCURATE_MASK = 0x02;
+			static constexpr uint8_t FAST_MASK = 0x04;
+			static constexpr uint32_t ACCURATE_TIMING_BUDGET = 200'000UL;
+			static constexpr uint32_t FAST_TIMING_BUDGET = 20'000UL;
+			
 			if (!init_data_first()) return false;
 			uint8_t prof = uint8_t(profile);
 			if (!init_static_second(GPIOSettings::sample_ready(), 
 				SequenceSteps::create().pre_range().final_range().dss()))
 				return false;
 			if (!perform_ref_calibration()) return false;
-			if (prof & 0x01)
+			if (prof & LONG_RANGE_MASK)
 			{
 				// long range
 				if (!set_vcsel_pulse_period<VcselPeriodType::PRE_RANGE>(18)) return false;
 				if (!set_vcsel_pulse_period<VcselPeriodType::FINAL_RANGE>(14)) return false;
 				if (!set_signal_rate_limit(0.1)) return false;
 			}
-			if (prof & 0x02)
+			if (prof & ACCURATE_MASK)
 			{
 				// accurate
-				if (!set_measurement_timing_budget(200'000)) return false;
+				if (!set_measurement_timing_budget(ACCURATE_TIMING_BUDGET)) return false;
 			}
-			else if (prof & 0x04)
+			else if (prof & FAST_MASK)
 			{
 				// fast
-				if (!set_measurement_timing_budget(20'000)) return false;
+				if (!set_measurement_timing_budget(FAST_TIMING_BUDGET)) return false;
 			}
 			return true;
 		}
@@ -352,6 +358,7 @@ namespace devices::vl53l0x
 		 */
 		bool reset_device()
 		{
+			static constexpr uint16_t RESET_DELAY_US = 100U;
 			using WRITE_RESET = TWriteRegisterFuture<Register::SOFT_RESET_GO2_SOFT_RESET_N>;
 			// Set reset bit
 			if (!this->template sync_write<WRITE_RESET>(uint8_t(0x00))) return false;
@@ -362,7 +369,7 @@ namespace devices::vl53l0x
 				get_model(model);
 			}
 			while (model != 0);
-			time::delay_us(100);
+			time::delay_us(RESET_DELAY_US);
 
 			// Release reset
 			if (!this->template sync_write<WRITE_RESET>(uint8_t(0x01))) return false;
@@ -373,7 +380,7 @@ namespace devices::vl53l0x
 				get_model(model);
 			}
 			while (model == 0);
-			time::delay_us(100);
+			time::delay_us(RESET_DELAY_US);
 			return true;
 		}
 
@@ -410,7 +417,7 @@ namespace devices::vl53l0x
 			// 3. Read stop variable here
 			if (!read_stop_variable()) return false;
 			// 4. Disable SIGNAL_RATE_MSRC and SIGNAL_RATE_PRE_RANGE limit checks
-			if (!disable_signal_rate_limit_checks()) return false;
+			if (!disable_signal_rate_limit_check()) return false;
 			// 5. Set signal rate limit to 0.25 MCPS (million counts per second) in FP9.7 format
 			if (!set_signal_rate_limit(0.25)) return false;
 			// 6. Enable all sequence steps by default
@@ -482,16 +489,18 @@ namespace devices::vl53l0x
 		 */
 		bool perform_ref_calibration()
 		{
+			static constexpr uint8_t CODE_VHV_CALIBRATION = 0x01;
+			static constexpr uint8_t CODE_PHASE_CALIBRATION = 0x02;
 			using WRITE_STEPS = TWriteRegisterFuture<Register::SYSTEM_SEQUENCE_CONFIG>;
 			// 1. Read current sequence steps
 			SequenceSteps steps;
 			if (!get_sequence_steps(steps)) return false;
 			// 2. Set steps for VHV calibration
-			if (!this->template sync_write<WRITE_STEPS>(uint8_t(0x01))) return false;
+			if (!this->template sync_write<WRITE_STEPS>(CODE_VHV_CALIBRATION)) return false;
 			// 3. Perform single VHV calibration
 			if (!perform_single_ref_calibration(SingleRefCalibrationTarget::VHV_CALIBRATION)) return false;
 			// 4. Set steps for Phase calibration
-			if (!this->template sync_write<WRITE_STEPS>(uint8_t(0x02))) return false;
+			if (!this->template sync_write<WRITE_STEPS>(CODE_PHASE_CALIBRATION)) return false;
 			// 5. Perform single Phase calibration
 			if (!perform_single_ref_calibration(SingleRefCalibrationTarget::PHASE_CALIBRATION)) return false;
 			// 6. Restore sequence steps (NOTE: 0x00 is used as marker by the future to actually restore saved sequence)
@@ -921,7 +930,7 @@ namespace devices::vl53l0x
 			SequenceStepsTimeout timeouts;
 			if (!get_sequence_steps_timeout(timeouts)) return false;
 			// Calculate budget
-			uint16_t budget = calculate_final_range_timeout_mclks(steps, timeouts, budget_us);
+			uint16_t budget = calculate_final_range_timeout(steps, timeouts, budget_us);
 			if (budget == 0) return false;
 			return this->template sync_write<WRITE_BUDGET>(budget);
 		}
@@ -949,7 +958,7 @@ namespace devices::vl53l0x
 			SequenceStepsTimeout timeouts{};
 			if (!get_sequence_steps_timeout(timeouts)) return false;
 			// Calculate timing budget
-			budget_us = calculate_measurement_timing_budget_us(true, steps, timeouts);
+			budget_us = calculate_measurement_budget_us(true, steps, timeouts);
 			return true;
 		}
 
@@ -1501,7 +1510,7 @@ namespace devices::vl53l0x
 				internals::stop_variable::POST_BUFFER, internals::stop_variable::POST_BUFFER_SIZE);
 		}
 
-		bool disable_signal_rate_limit_checks()
+		bool disable_signal_rate_limit_check()
 		{
 			using READ_MSRC_CONFIG = TReadRegisterFuture<Register::MSRC_CONFIG_CONTROL>;
 			using WRITE_MSRC_CONFIG = TWriteRegisterFuture<Register::MSRC_CONFIG_CONTROL>;
@@ -1589,11 +1598,11 @@ namespace devices::vl53l0x
 			if (!get_sequence_steps_timeout(timeouts)) return false;
 			if (type == VcselPeriodType::PRE_RANGE)
 			{
-				if (!set_core_vcsel_pulse_period_pre_range(period, vcsel_period, timeouts)) return false;
+				if (!set_vcsel_period_pre_range(period, vcsel_period, timeouts)) return false;
 			}
 			else
 			{
-				if (!set_core_vcsel_pulse_period_final_range(period, vcsel_period, steps.is_pre_range(), timeouts))
+				if (!set_vcsel_period_final_range(period, vcsel_period, steps.is_pre_range(), timeouts))
 					return false;
 			}
 			// 4. Set measurement timing budget as before
@@ -1606,7 +1615,7 @@ namespace devices::vl53l0x
 			return true;
 		}
 
-		bool set_core_vcsel_pulse_period_pre_range(
+		bool set_vcsel_period_pre_range(
 			uint8_t period, uint8_t vcsel_period, const SequenceStepsTimeout& timeouts)
 		{
 			// 3.1. [PRE_RANGE]
@@ -1657,7 +1666,7 @@ namespace devices::vl53l0x
 			return this->template sync_write<WRITE_MSRC_TIMEOUT>(uint8_t(msrc_mclks));
 		}
 
-		bool set_core_vcsel_pulse_period_final_range(
+		bool set_vcsel_period_final_range(
 			uint8_t period, uint8_t vcsel_period, bool has_pre_range, const SequenceStepsTimeout& timeouts)
 		{
 			// 3.2. [FINAL_RANGE]
@@ -1810,7 +1819,7 @@ namespace devices::vl53l0x
 		static constexpr const uint16_t PRE_RANGE_OVERHEAD   = 660U;
 		static constexpr const uint16_t FINAL_RANGE_OVERHEAD = 550U;
 
-		static uint32_t calculate_measurement_timing_budget_us(
+		static uint32_t calculate_measurement_budget_us(
 			bool get, const vl53l0x::SequenceSteps steps, const vl53l0x::SequenceStepsTimeout& timeouts)
 		{
 			// start and end overhead times always present
@@ -1833,7 +1842,7 @@ namespace devices::vl53l0x
 			return budget_us;
 		}
 
-		static uint16_t calculate_final_range_timeout_mclks(
+		static uint16_t calculate_final_range_timeout(
 			const vl53l0x::SequenceSteps steps, const vl53l0x::SequenceStepsTimeout& timeouts, uint32_t budget_us)
 		{
 			// Requested budget must be be above minimum allowed
@@ -1843,7 +1852,7 @@ namespace devices::vl53l0x
 
 			// Calculate current used budget without final range
 			uint32_t used_budget_us = 
-				calculate_measurement_timing_budget_us(false, steps.no_final_range(), timeouts);
+				calculate_measurement_budget_us(false, steps.no_final_range(), timeouts);
 
 			// Now include final range and calculate difference
 			used_budget_us += FINAL_RANGE_OVERHEAD;
