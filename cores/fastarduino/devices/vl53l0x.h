@@ -134,8 +134,9 @@ namespace devices::vl53l0x
 		 */
 		bool set_address(uint8_t device_address)
 		{
+			static constexpr uint8_t ADDRESS_MASK = 0x7F;
 			using SetAddressFuture = TWriteRegisterFuture<Register::I2C_SLAVE_DEVICE_ADDRESS>;
-			device_address &= 0x7F;
+			device_address &= ADDRESS_MASK;
 			if (!this->template sync_write<SetAddressFuture>(device_address)) return false;
 			this->set_device(uint8_t(device_address << 1));
 			return true;
@@ -170,6 +171,8 @@ namespace devices::vl53l0x
 			static constexpr uint8_t FAST_MASK = 0x04;
 			static constexpr uint32_t ACCURATE_TIMING_BUDGET = 200'000UL;
 			static constexpr uint32_t FAST_TIMING_BUDGET = 20'000UL;
+			static constexpr uint8_t LONG_RANGE_VCSEL_PERIOD_PRE = 18;
+			static constexpr uint8_t LONG_RANGE_VCSEL_PERIOD_FINAL = 14;
 			
 			if (!init_data_first()) return false;
 			uint8_t prof = uint8_t(profile);
@@ -180,8 +183,8 @@ namespace devices::vl53l0x
 			if (prof & LONG_RANGE_MASK)
 			{
 				// long range
-				if (!set_vcsel_pulse_period<VcselPeriodType::PRE_RANGE>(18)) return false;
-				if (!set_vcsel_pulse_period<VcselPeriodType::FINAL_RANGE>(14)) return false;
+				if (!set_vcsel_pulse_period<VcselPeriodType::PRE_RANGE>(LONG_RANGE_VCSEL_PERIOD_PRE)) return false;
+				if (!set_vcsel_pulse_period<VcselPeriodType::FINAL_RANGE>(LONG_RANGE_VCSEL_PERIOD_FINAL)) return false;
 				if (!set_signal_rate_limit(0.1)) return false;
 			}
 			if (prof & ACCURATE_MASK)
@@ -568,6 +571,7 @@ namespace devices::vl53l0x
 
 			bool get(vl53l0x::GPIOSettings& settings)
 			{
+				static constexpr uint8_t GPIO_ACTIVE_LEVEL_MASK = 0x10;
 				if (this->await() != future::FutureStatus::READY)
 					return false;
 				vl53l0x::GPIOFunction function = vl53l0x::GPIOFunction::DISABLED;
@@ -578,7 +582,8 @@ namespace devices::vl53l0x
 				read_low_threshold_.get(low_threshold);
 				uint16_t high_threshold = 0;
 				read_high_threshold_.get(high_threshold);
-				settings = vl53l0x::GPIOSettings{function, bool(active_high & 0x10), low_threshold, high_threshold};
+				settings = vl53l0x::GPIOSettings{
+					function, bool(active_high & GPIO_ACTIVE_LEVEL_MASK), low_threshold, high_threshold};
 				return true;
 			}
 			/// @endcond
@@ -656,7 +661,7 @@ namespace devices::vl53l0x
 					write_config_{settings.function()},
 					// The following hard-coded values look OK but this is not how it should be done!
 					//TODO GPIO_HV_MUX_ACTIVE_HIGH should first be read and then bit 4 clear or set
-					write_GPIO_active_high_{uint8_t(settings.high_polarity() ? 0x11 : 0x01)},
+					write_GPIO_active_high_{uint8_t(settings.high_polarity() ? GPIO_LEVEL_HIGH : GPIO_LEVEL_LOW)},
 					// Threshold values must be divided by 2, but nobody knows why
 					write_low_threshold_{settings.low_threshold() / 2},
 					write_high_threshold_{settings.high_threshold() / 2}
@@ -668,6 +673,8 @@ namespace devices::vl53l0x
 			/// @endcond
 
 		private:
+			static constexpr uint8_t GPIO_LEVEL_HIGH = 0x11;
+			static constexpr uint8_t GPIO_LEVEL_LOW = 0x01;
 			TWriteRegisterFuture<Register::SYSTEM_INTERRUPT_CONFIG_GPIO, vl53l0x::GPIOFunction> write_config_;
 			TWriteRegisterFuture<Register::GPIO_HV_MUX_ACTIVE_HIGH> write_GPIO_active_high_;
 			TWriteRegisterFuture<Register::SYSTEM_THRESH_LOW, uint16_t> write_low_threshold_;
@@ -1662,7 +1669,7 @@ namespace devices::vl53l0x
 			// Calculate new MSRC timeout
 			uint16_t msrc_mclks = vl53l0x::TimeoutUtilities::calculate_timeout_mclks(
 				timeouts.msrc_dss_tcc_us(), period);
-			msrc_mclks = (msrc_mclks > 256) ? 255 : (msrc_mclks - 1);
+			msrc_mclks = (msrc_mclks > (UINT8_MAX + 1)) ? UINT8_MAX : (msrc_mclks - 1);
 			return this->template sync_write<WRITE_MSRC_TIMEOUT>(uint8_t(msrc_mclks));
 		}
 

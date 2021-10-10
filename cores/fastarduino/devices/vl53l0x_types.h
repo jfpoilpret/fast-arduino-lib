@@ -100,15 +100,18 @@ namespace devices::vl53l0x
 		// timeout in macro periods must be encoded on 16 bits, as (LSB.2^MSB)+1
 		static constexpr uint16_t encode_timeout(uint32_t timeout_macro_clks)
 		{
+			constexpr uint32_t MSB24_MASK = 0xFF'FF'FF'00UL;
+			constexpr uint32_t LSB8_MASK = 0xFFUL;
+			
 			if (timeout_macro_clks == 0UL) return 0U;
 			uint32_t lsb = timeout_macro_clks - 1UL;
 			uint16_t msb = 0;
-			while (lsb & 0xFF'FF'FF'00UL)
+			while (lsb & MSB24_MASK)
 			{
 				lsb >>= 1;
 				++msb;
 			}
-			return utils::as_uint16_t(uint8_t(msb), uint8_t(lsb & 0xFFUL));
+			return utils::as_uint16_t(uint8_t(msb), uint8_t(lsb & LSB8_MASK));
 		}
 
 		// timeout in macro periods is encoded on 16 bits, as (LSB.2^MSB)+1
@@ -121,17 +124,23 @@ namespace devices::vl53l0x
 
 		static constexpr uint32_t calculate_macro_period_ps(uint8_t vcsel_period_pclks)
 		{
-			return ((PLL_PERIOD_PS * MACRO_PERIOD_VCLKS * vcsel_period_pclks) + 500UL) / 1000UL;
+			constexpr uint32_t PS_TO_NS_DIVIDER = 1000UL;
+			constexpr uint32_t PS_TO_NS_ROUNDING_ADDITION = 500UL;
+			return ((PLL_PERIOD_PS * MACRO_PERIOD_VCLKS * vcsel_period_pclks) + PS_TO_NS_ROUNDING_ADDITION)
+				/ PS_TO_NS_DIVIDER;
 		}
 		static constexpr uint32_t calculate_timeout_us(uint16_t timeout_period_mclks, uint8_t vcsel_period_pclks)
 		{
+			constexpr uint32_t NS_TO_US_DIVIDER = 1000UL;
+			constexpr uint32_t NS_TO_US_ROUNDING_ADDITION = 500UL;
 			const uint32_t macro_period_ns = calculate_macro_period_ps(vcsel_period_pclks);
-			return ((timeout_period_mclks * macro_period_ns) + 500UL) / 1000UL;
+			return ((timeout_period_mclks * macro_period_ns) + NS_TO_US_ROUNDING_ADDITION) / NS_TO_US_DIVIDER;
 		}
 		static constexpr uint32_t calculate_timeout_mclks(uint16_t timeout_period_us, uint8_t vcsel_period_pclks)
 		{
+			constexpr uint32_t US_TO_NS_MULTIPLIER = 1000UL;
 			const uint32_t macro_period_ns = calculate_macro_period_ps(vcsel_period_pclks);
-			return ((timeout_period_us * 1000UL) + (macro_period_ns / 2)) / macro_period_ns;
+			return ((timeout_period_us * US_TO_NS_MULTIPLIER) + (macro_period_ns / 2)) / macro_period_ns;
 		}
 	};
 	/// @endcond
@@ -185,7 +194,7 @@ namespace devices::vl53l0x
 		 */
 		DeviceError error() const
 		{
-			return DeviceError((status_ >> 3) & 0x0F);
+			return DeviceError((status_ >> ERROR_SHIFT) & ERROR_MASK);
 		}
 
 		/**
@@ -194,11 +203,14 @@ namespace devices::vl53l0x
 		 */
 		bool data_ready() const
 		{
-			return status_ & 0x01;
+			return status_ & DATA_READY_MASK;
 		}
 
 	private:
 		uint8_t status_ = 0;
+		static constexpr uint8_t DATA_READY_MASK = 0x01;
+		static constexpr uint8_t ERROR_SHIFT = 3;
+		static constexpr uint8_t ERROR_MASK = 0x0F;
 	};
 	/// @cond notdocumented
 	streams::ostream& operator<<(streams::ostream& out, DeviceStatus status);
@@ -356,11 +368,12 @@ namespace devices::vl53l0x
 		//TODO maybe return more useful info (is each bit mapped to GPIOFunction?)
 		explicit operator uint8_t() const
 		{
-			return status_ & 0x07;
+			return status_ & STATUS_MASK;
 		}
 
 	private:
 		uint8_t status_ = 0;
+		static constexpr uint8_t STATUS_MASK = 0x07;
 	};
 	/// @endcond
 
