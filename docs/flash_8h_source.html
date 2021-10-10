@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.7</span>
+   &#160;<span id="projectnumber">v1.8</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -117,7 +117,7 @@ $(document).ready(function(){initNavTree('flash_8h_source.html',''); initResizab
 <div class="line"><a name="l00050"></a><span class="lineno"><a class="line" href="namespaceflash.html#afbcbab2afc140f933977403620337c7c">   50</a></span>&#160;    T* <a class="code" href="namespaceflash.html#afbcbab2afc140f933977403620337c7c">read_flash</a>(uint16_t address, T* buffer, uint8_t size)</div>
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    {</div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        uint8_t* ptr = (uint8_t*) buffer;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; size * <span class="keyword">sizeof</span>(T); ++i) *ptr++ = pgm_read_byte(address++);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; (size * <span class="keyword">sizeof</span>(T)); ++i) *ptr++ = pgm_read_byte(address++);</div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keywordflow">return</span> buffer;</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    }</div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>

@@ -1,9 +1,9 @@
 Latest News
 ===========
 
-FastArduino v1.7 has been released on 19th September 2021.
-The implemented enhancements are listed [here](https://github.com/jfpoilpret/fast-arduino-lib/milestone/9?closed=1).
-Please note that this version breaks compatibility on I2C API, as described in further detail in the [release notes](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.7).
+FastArduino v1.8 has been released on 10th October 2021.
+The implemented enhancements are listed [here](https://github.com/jfpoilpret/fast-arduino-lib/milestone/10?closed=1).
+Please note that this version breaks compatibility on I2C API, as described in further detail in the [release notes](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.8).
 
 FastArduino
 ===========
@@ -44,7 +44,7 @@ One easy way to start a new project using FastArduino is to checkout [this proje
 Status
 ======
 
-Latest FastArduino release [**v1.7**](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.7) has been published on 19.09.2021.
+Latest FastArduino release [**v1.8**](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.8) has been published on 10.10.2021.
 
 In the current version, the project covers almost all features; a few missing, less important, features will be released in future versions (see roadmap below); the API of current features is deemed stable and should not change in the future.
 
@@ -89,6 +89,7 @@ In addition, FastArduino brings support for the following devices:
 - MCP23017 16-Bit I/O Expander (I2C-based)
 - MCP3008 8-channel Analog-Digital Converter (SPI-based) and other chips from the same family
 - HC-SR04 sonar device support in synchronous and asynchronous modes
+- VL53L0X laser distance sensor device (I2C-based)
 
 As of now, the following platforms are supported (and tested):
 
@@ -142,7 +143,7 @@ The roadmap of next activities and new supported features is the following:
 - [Milestone v1.5](https://github.com/jfpoilpret/fast-arduino-lib/milestone/7?closed=1) (released on 18.01.2020)
 - [Milestone v1.6](https://github.com/jfpoilpret/fast-arduino-lib/milestone/8?closed=1) (released on 22.11.2020)
 - [Milestone v1.7](https://github.com/jfpoilpret/fast-arduino-lib/milestone/9?closed=1) (released on 19.09.2021)
-- [Milestone v1.8](https://github.com/jfpoilpret/fast-arduino-lib/milestone/10) (31.12.2021)
+- [Milestone v1.8](https://github.com/jfpoilpret/fast-arduino-lib/milestone/10?closed=1) (release on 10.10.2021)
 - [Milestone v2.0](https://github.com/jfpoilpret/fast-arduino-lib/milestone/3) (undefined date)
 - [Later](https://github.com/jfpoilpret/fast-arduino-lib/issues?q=is%3Aopen+is%3Aissue+no%3Amilestone)
 

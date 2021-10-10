@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.7</span>
+   &#160;<span id="projectnumber">v1.8</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -87,7 +87,7 @@ $(document).ready(function(){initNavTree('memory_8h_source.html',''); initResiza
 <div class="title">memory.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="memory_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//   Copyright 2016-2020 Jean-Francois Poilpret</span></div>
+<a href="memory_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//   Copyright 2016-2021 Jean-Francois Poilpret</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//   you may not use this file except in compliance with the License.</span></div>
@@ -116,7 +116,7 @@ $(document).ready(function(){initNavTree('memory_8h_source.html',''); initResiza
 <div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="namespacememory.html#a57314fc1095a7d8029772179e56d94aa">   40</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="namespacememory.html#a57314fc1095a7d8029772179e56d94aa">free_mem</a>()</div>
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    {</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <span class="keywordtype">int</span> v;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keywordflow">return</span> (<span class="keywordtype">int</span>) &amp;v - (__brkval == 0 ? (int) &amp;__heap_start : (<span class="keywordtype">int</span>) __brkval);</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        <span class="keywordflow">return</span> (<span class="keywordtype">int</span>) &amp;v - (__brkval == <span class="keyword">nullptr</span> ? (int) &amp;__heap_start : (<span class="keywordtype">int</span>) __brkval);</div>
 <div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    }</div>
 <div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
 <div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="namespacememory.html#a3e19f39edddd754661788f67669c2485">   54</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="namespacememory.html#a3e19f39edddd754661788f67669c2485">check_mem</a>(<span class="keywordtype">int</span> minimum)</div>

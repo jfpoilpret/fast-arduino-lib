@@ -69,26 +69,33 @@ FutureCheck2	Unit Tests of future API used with Lifecycle API	8930	146
 QueueCheck	Unit Tests of queue container	4406	592												
 LinkedListCheck	Unit Tests of linked list container	5914	463												
 UtilsCheck	Unit Tests of conversion utilities	3242	230												
-I2CFakeDevice	Example to check a fake I2C device does not get wrongly detected	3942	240					3388	76						
-AccelGyro0	Check of MPU6050 FIFO push/pop (i2c)	4394	273	4478	273	4564	273	3706	84			4414	273	4456	273
-AccelGyro1	Display (UATX) measures (gyro, accel) from MPU6050 (i2c)	3940	103	4024	103	4098	103	3840	76			3960	103	3994	103
-AccelGyro2	Display (UATX) continuous measures (gyro, accel) from MPU6050 FIFO (i2c)	4264	113	4348	113	4422	113	4176	118			4284	113	4318	113
-DS1307RTC1	Change RTC and display (UATX) date/time (i2c)	5082	322	5166	322	5238	322	4416	158	4412	158	5102	322	5144	322
-DS1307RTC2	Change RTC, display (UATX) date/time, use RAM and clock generation (i2c)	4952	102	5036	102	5092	102	4952	68	4948	68	4972	102	5000	102
-DS1307RTC3	Change RTC and display (UATX) date/time (i2c, asynchronous)	5192	272	5276	272	5352	272					5212	272	5254	272
-DS1307RTC4	Change RTC and display (UATX) date/time (i2c, asynchronous, with callback)	5100	274	5184	274	5260	274					5120	274	5162	274
-Magneto1	Display (UATX) measures (compass) from HMC5883L (i2c)	8424	246	8508	246	8700	246	3870	82			8444	246	8604	246
-Magneto2	Display (UATX) measures (compass) from HMC5883L (i2c, with DRDY interrupt)	3342	107	3426	107	3508	107	3356	112			3362	107	3404	107
+I2CFakeDevice	Example to check a fake I2C device does not get wrongly detected	3950	240					3384	76						
+AccelGyro0	Check of MPU6050 FIFO push/pop (i2c)	4392	273	4476	273	4562	273	3664	84			4412	273	4454	273
+AccelGyro1	Display (UATX) measures (gyro, accel) from MPU6050 (i2c)	4008	103	4092	103	4166	103	3914	76			4028	103	4062	103
+AccelGyro2	Display (UATX) continuous measures (gyro, accel) from MPU6050 FIFO (i2c)	4230	113	4314	113	4388	113	4148	118			4250	113	4284	113
+DS1307RTC1	Change RTC and display (UATX) date/time (i2c)	4982	322	5066	322	5138	322	4326	158	4322	158	5002	322	5044	322
+DS1307RTC2	Change RTC, display (UATX) date/time, use RAM and clock generation (i2c)	4938	102	5022	102	5078	102	4930	68	4926	68	4958	102	4986	102
+DS1307RTC3	Change RTC and display (UATX) date/time (i2c, asynchronous)	5168	272	5252	272	5328	272					5188	272	5230	272
+DS1307RTC4	Change RTC and display (UATX) date/time (i2c, asynchronous, with callback)	5076	274	5160	274	5236	274					5096	274	5138	274
+Magneto1	Display (UATX) measures (compass) from HMC5883L (i2c)	8452	246	8536	246	8728	246	3826	82			8472	246	8632	246
+Magneto2	Display (UATX) measures (compass) from HMC5883L (i2c, with DRDY interrupt)	3340	107	3424	107	3506	107	3354	112			3360	107	3402	107
 MultiADC00	Check MCP3x0x constexpr (compile only, does nothing)	132	0	200	0	260	0	62	0	58	0	152	0	168	0
 MultiADC01	MCP3008 pots reading and trace (UATX) (spi)	2018	74	2102	74	2192	74	1918	72	1914	72	2038	74	2066	74
 MultiADC02	MCP3X0X chips support compilation check (spi)	4502	74	4586	74	4754	74	4396	72	4392	72	4522	74	4550	74
-MultiIO1	LED chaser with config buttons and LEDs on MCP23017 2 ports (i2c)	1594	12	1678	12	1726	12	1548	12	1544	12	1614	12	1634	12
-MultiIO2	LED chaser with config buttons and LEDs on MCP23017 1 port (i2c)	1546	12	1630	12	1678	12	1500	12	1496	12	1566	12	1586	12
-MultiIO3	LED chaser with config buttons (callback function) and LEDs on MCP23017 2 ports (i2c)	1638	16												
-MultiIO4	LED chaser with config buttons (callback method) and LEDs on MCP23017 2 ports (i2c)	1650	14												
-MultiIO5	LED chaser with config buttons (callback method) and LEDs on MCP23008 (i2c)	1606	14					1558	14						
-MultiIO6	Multiple LED -switch mapper on MCP23008 (i2c)	5096	104												
-MultiIO7	Simple LED chaser on MCP23008 (i2c)	1186	0												
+MultiIO1	LED chaser with config buttons and LEDs on MCP23017 2 ports (i2c)	1598	12	1682	12	1730	12	1554	12	1550	12	1618	12	1638	12
+MultiIO2	LED chaser with config buttons and LEDs on MCP23017 1 port (i2c)	1554	12	1638	12	1686	12	1510	12	1506	12	1574	12	1594	12
+MultiIO3	LED chaser with config buttons (callback function) and LEDs on MCP23017 2 ports (i2c)	1634	16												
+MultiIO4	LED chaser with config buttons (callback method) and LEDs on MCP23017 2 ports (i2c)	1654	14												
+MultiIO5	LED chaser with config buttons (callback method) and LEDs on MCP23008 (i2c)	1606	14					1562	14						
+MultiIO6	Multiple LED -switch mapper on MCP23008 (i2c)	4980	104												
+MultiIO7	Simple LED chaser on MCP23008 (i2c)	1196	0												
+ToF1	VL53L0X example using only getters (i2c)	16780	358												
+ToF2	VL53L0X example using continuous ranging (i2c)	12212	350												
+ToF3	VL53L0X example using continuous ranging after settings input (i2c)	24624	398												
+ToF4	VL53L0X example using single ranging (i2c)	13194	356												
+ToF5	VL53L0X example using continuous ranging based on profile selection (i2c)	21440	386												
+ToF6	VL53L0X example using continuous ranging with GPIOs (i2c)	13440	344												
+ToF7	Double-VL53L0X example using continuous ranging (i2c)	12056	332												
 Servo1	Servo controlled by a pot through 8bits pulse timer	610	2	694	2	746	2	584	2			630	2	654	2
 Servo2	Servo controlled by a pot through 16bits pulse timer	562	0	646	0	690	0	508	0			582	0	598	0
 RF24App1	NRF24L01P ping-pong (UATX except ATtiny), no IRQ (spi)	4132	224	4228	224	4420	224	1680	8	1250	6	4150	224	4186	224
@@ -113,5 +120,5 @@ tones5	Tone player from SRAM, playing asynchronously from ISR (QTonePlay)	1430	2
 tones6	Tone player from Flash, playing 2 channels asynchronously from RTT events (QTonePlay)	2226	42												
 tones7	Tone player from Flash, playing asynchronously from RTT events (QTonePlay)	1592	42												
 PCIFuture	Example of Future concept usage with PCI ISR	2096	76	2180	76	2196	76	2034	74	2032	74	2114	76	2150	76
-improved_futures	Example of FuturesGroup	5976	166									5996	166	6024	166
+improved_futures	Example of FuturesGroup	5928	172									5948	172	5976	172
 Conway	Game of Life (8x8 LED) 1KB Hackaday	2962	275	1202	10			1022	10						

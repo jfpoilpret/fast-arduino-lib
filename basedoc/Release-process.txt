@@ -13,6 +13,40 @@ Release procedure
 9. Official release in github
 10. Close milestone in github
 
+FastArduino 1.8 release
+
+I am happy to announce the 9th major release of FastArduino platform.
+
+Since release 1.7 (September 2020), the main changes are listed [there](https://github.com/jfpoilpret/fast-arduino-lib/milestone/10?closed=1).
+
+This release brings the following improvements:
+- Support for VL53L0X Laser Time of Flight distance sensor
+- Improvements to the I2C API: 
+	- new utility methods in I2CDevice
+	- new set of common utilities in relation to Futures
+- Improvements to the Futures API: 
+	- new reset_() method allowing multiple reuses of a single Future instance
+	- changes to AbstractFurutesGroup API
+- Improvements to the utilities API: 
+	- template method to change endianness of intergal values (useful with I2C devices)
+- Small improvements to the flash API
+- Small improvements to the array API
+- New "memory" API bringing few functions useful for memory issues debugging
+- New "iterator" API, used internally by FastArduino
+
+Known bugs and requests for enhancements: https://github.com/jfpoilpret/fast-arduino-lib/issues
+
+The platform is well documented:
+
+- a [tutorial](http://jfpoilpret.github.io/fast-arduino-lib/tutorial.html) allows developers to discover and learn the platform step by step
+- FastArduino core API is documented through doxygen and documentation is published [here](http://jfpoilpret.github.io/fast-arduino-lib/)
+- FastArduino comes with many examples covering all supported features and devices
+
+I hope you'll enjoy playing with FastArduino platform; please submit enhancements you would like 
+to see in future versions or report issues you may discover.
+
+  
+
 FastArduino 1.7 release
 
 I am happy to announce the 8th major release of FastArduino platform.

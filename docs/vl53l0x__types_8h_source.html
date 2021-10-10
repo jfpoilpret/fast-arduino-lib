@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.7</span>
+   &#160;<span id="projectnumber">v1.8</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -87,7 +87,7 @@ $(document).ready(function(){initNavTree('vl53l0x__types_8h_source.html',''); in
 <div class="title">vl53l0x_types.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="vl53l0x__types_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//   Copyright 2016-2020 Jean-Francois Poilpret</span></div>
+<a href="vl53l0x__types_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//   Copyright 2016-2021 Jean-Francois Poilpret</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">//</span></div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="comment">//   you may not use this file except in compliance with the License.</span></div>
@@ -145,487 +145,440 @@ $(document).ready(function(){initNavTree('vl53l0x__types_8h_source.html',''); in
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="comment">// timeout in macro periods must be encoded on 16 bits, as (LSB.2^MSB)+1</span></div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <span class="keyword">static</span> constexpr uint16_t encode_timeout(uint32_t timeout_macro_clks)</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        {</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            <span class="keywordflow">if</span> (timeout_macro_clks == 0UL) <span class="keywordflow">return</span> 0U;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            uint32_t lsb = timeout_macro_clks - 1UL;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            uint16_t msb = 0;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;            <span class="keywordflow">while</span> (lsb &amp; 0xFFFFFF00UL)</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            {</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                lsb &gt;&gt;= 1;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;                ++msb;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;            }</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="namespaceutils.html#a9d48a47fd601d3b960ce55b26a4d5194">utils::as_uint16_t</a>(uint8_t(msb), uint8_t(lsb &amp; 0xFFUL));</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        }</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        <span class="comment">// timeout in macro periods is encoded on 16 bits, as (LSB.2^MSB)+1</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        <span class="keyword">static</span> constexpr uint32_t decode_timeout(uint16_t encoded_timeout)</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;        {</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;            <span class="keyword">const</span> uint32_t lsb = <a class="code" href="namespaceutils.html#ad5f19301125b8e9dc9e89ea50da962fa">utils::low_byte</a>(encoded_timeout);</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;            <span class="keyword">const</span> uint32_t msb = <a class="code" href="namespaceutils.html#a84e5a79013cf3cf3c46a09b2c4861d37">utils::high_byte</a>(encoded_timeout);</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;            <span class="keywordflow">return</span> (lsb &lt;&lt; msb) + 1UL;</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        }</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        <span class="keyword">static</span> constexpr uint32_t calculate_macro_period_ps(uint8_t vcsel_period_pclks)</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        {</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;            <span class="keywordflow">return</span> ((PLL_PERIOD_PS * MACRO_PERIOD_VCLKS * vcsel_period_pclks) + 500UL) / 1000UL;</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        }</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        <span class="keyword">static</span> constexpr uint32_t calculate_timeout_us(uint16_t timeout_period_mclks, uint8_t vcsel_period_pclks)</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        {</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;            <span class="keyword">const</span> uint32_t macro_period_ns = calculate_macro_period_ps(vcsel_period_pclks);</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;            <span class="keywordflow">return</span> ((timeout_period_mclks * macro_period_ns) + 500UL) / 1000UL;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        }</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        <span class="keyword">static</span> constexpr uint32_t calculate_timeout_mclks(uint16_t timeout_period_us, uint8_t vcsel_period_pclks)</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        {</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;            <span class="keyword">const</span> uint32_t macro_period_ns = calculate_macro_period_ps(vcsel_period_pclks);</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;            <span class="keywordflow">return</span> ((timeout_period_us * 1000UL) + (macro_period_ns / 2)) / macro_period_ns;</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        }</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    };</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160; </div>
-<div class="line"><a name="l00145"></a><span class="lineno"><a class="line" href="namespacedevices_1_1vl53l0x.html#a9dd5b65f54eecca7c3cef80254c553d8">  145</a></span>&#160;    <span class="keyword">enum class</span> <a class="code" href="namespacedevices_1_1vl53l0x.html#a9dd5b65f54eecca7c3cef80254c553d8">DeviceError</a> : uint8_t</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    {</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <a class="code" href="namespacedevices_1_1vl53l0x.html#a9dd5b65f54eecca7c3cef80254c553d8ab50339a10e1de285ac99d4c3990b8693">NONE</a>                           = 0,</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        VCSEL_CONTINUITY_TEST_FAILURE  = 1,</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        VCSEL_WATCHDOG_TEST_FAILURE    = 2,</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        NO_VHV_VALUE_FOUND             = 3,</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        MSRC_NO_TARGET                 = 4,</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        SNR_CHECK                      = 5,</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        RANGE_PHASE_CHECK              = 6,</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        SIGMA_THRESHOLD_CHECK          = 7,</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        TCC                            = 8,</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        PHASE_CONSISTENCY              = 9,</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        MIN_CLIP                       = 10,</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        RANGE_COMPLETE                 = 11,</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        ALGO_UNDERFLOW                 = 12,</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        ALGO_OVERFLOW                  = 13,</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;        RANGE_IGNORE_THRESHOLD         = 14,</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        <a class="code" href="namespacedevices_1_1vl53l0x.html#a9dd5b65f54eecca7c3cef80254c553d8a696b031073e74bf2cb98e5ef201d4aa3">UNKNOWN</a>                        = 15</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    };</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;    <a class="code" href="classstreams_1_1ostream.html">streams::ostream</a>&amp; operator&lt;&lt;(<a class="code" href="classstreams_1_1ostream.html">streams::ostream</a>&amp;, <a class="code" href="namespacedevices_1_1vl53l0x.html#a9dd5b65f54eecca7c3cef80254c553d8">DeviceError</a>);</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160; </div>
-<div class="line"><a name="l00176"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_device_status.html">  176</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classdevices_1_1vl53l0x_1_1_device_status.html">DeviceStatus</a></div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    {</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <a class="code" href="classdevices_1_1vl53l0x_1_1_device_status.html">DeviceStatus</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160; </div>
-<div class="line"><a name="l00186"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_device_status.html#af523ee60387073e9a154356126492c80">  186</a></span>&#160;        <a class="code" href="namespacedevices_1_1vl53l0x.html#a9dd5b65f54eecca7c3cef80254c553d8">DeviceError</a> <a class="code" href="classdevices_1_1vl53l0x_1_1_device_status.html#af523ee60387073e9a154356126492c80">error</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="namespacedevices_1_1vl53l0x.html#a9dd5b65f54eecca7c3cef80254c553d8">DeviceError</a>((status_ &gt;&gt; 3) &amp; 0x0F);</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        }</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
-<div class="line"><a name="l00195"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_device_status.html#a3959868417ecb5c0335eebcc5f2d524f">  195</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_device_status.html#a3959868417ecb5c0335eebcc5f2d524f">data_ready</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;            <span class="keywordflow">return</span> status_ &amp; 0x01;</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;        }</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160; </div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;        uint8_t status_ = 0;</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;    };</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    <a class="code" href="classstreams_1_1ostream.html">streams::ostream</a>&amp; operator&lt;&lt;(<a class="code" href="classstreams_1_1ostream.html">streams::ostream</a>&amp;, DeviceStatus);</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160; </div>
-<div class="line"><a name="l00211"></a><span class="lineno"><a class="line" href="namespacedevices_1_1vl53l0x.html#a58601e220af84e79fca7689a91748e42">  211</a></span>&#160;    <span class="keyword">enum class</span> <a class="code" href="namespacedevices_1_1vl53l0x.html#a58601e220af84e79fca7689a91748e42">PowerMode</a> : uint8_t</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    {</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;        STANDBY = 0,</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;        IDLE = 1</div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;    };</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;    <a class="code" href="classstreams_1_1ostream.html">streams::ostream</a>&amp; operator&lt;&lt;(<a class="code" href="classstreams_1_1ostream.html">streams::ostream</a>&amp;, <a class="code" href="namespacedevices_1_1vl53l0x.html#a58601e220af84e79fca7689a91748e42">PowerMode</a>);</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
-<div class="line"><a name="l00226"></a><span class="lineno"><a class="line" href="namespacedevices_1_1vl53l0x.html#a6779d407b6c38c353138058714af81cb">  226</a></span>&#160;    <span class="keyword">enum class</span> <a class="code" href="namespacedevices_1_1vl53l0x.html#a6779d407b6c38c353138058714af81cb">GPIOFunction</a> : uint8_t</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    {</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;        DISABLED = 0x00,</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        LEVEL_LOW = 0x01,</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        LEVEL_HIGH = 0x02,</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        OUT_OF_WINDOW = 0x03,</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;        <a class="code" href="namespacedevices_1_1vl53l0x.html#a6779d407b6c38c353138058714af81cba055c1a591abb0e8cd86dc969727bcc0b">SAMPLE_READY</a> = 0x04</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    };</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;    <a class="code" href="classstreams_1_1ostream.html">streams::ostream</a>&amp; operator&lt;&lt;(<a class="code" href="classstreams_1_1ostream.html">streams::ostream</a>&amp;, <a class="code" href="namespacedevices_1_1vl53l0x.html#a6779d407b6c38c353138058714af81cb">GPIOFunction</a>);</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160; </div>
-<div class="line"><a name="l00249"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html">  249</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html">GPIOSettings</a></div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;    {</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        constexpr <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html">GPIOSettings</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        constexpr <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html">GPIOSettings</a>(<a class="code" href="namespacedevices_1_1vl53l0x.html#a6779d407b6c38c353138058714af81cb">GPIOFunction</a> <span class="keyword">function</span>, <span class="keywordtype">bool</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7a9559cdb4ff3ac4c3b8e15a26983091">high_polarity</a>, </div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;            uint16_t <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7466877a047139383b1664a7c834eaf9">low_threshold</a> = 0, uint16_t <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a9f832e6f9e1e7fff73cd8a6fa81f3ca6">high_threshold</a> = 0)</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;            :   function_{<span class="keyword">function</span>}, high_polarity_{<a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7a9559cdb4ff3ac4c3b8e15a26983091">high_polarity</a>}, </div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;                low_threshold_{<a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7466877a047139383b1664a7c834eaf9">low_threshold</a>}, high_threshold_{<a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a9f832e6f9e1e7fff73cd8a6fa81f3ca6">high_threshold</a>} {}</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160; </div>
-<div class="line"><a name="l00265"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#ae3e420e30284c9d73fd05043296a947e">  265</a></span>&#160;        <span class="keyword">static</span> constexpr <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html">GPIOSettings</a> <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#ae3e420e30284c9d73fd05043296a947e">sample_ready</a>(<span class="keywordtype">bool</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7a9559cdb4ff3ac4c3b8e15a26983091">high_polarity</a> = <span class="keyword">false</span>)</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        {</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html">GPIOSettings</a>{<a class="code" href="namespacedevices_1_1vl53l0x.html#a6779d407b6c38c353138058714af81cba055c1a591abb0e8cd86dc969727bcc0b">GPIOFunction::SAMPLE_READY</a>, <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7a9559cdb4ff3ac4c3b8e15a26983091">high_polarity</a>};</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;        }</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160; </div>
-<div class="line"><a name="l00278"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#ae81149b5b8cbb599fdcb8218fdad5afb">  278</a></span>&#160;        <span class="keyword">static</span> constexpr <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html">GPIOSettings</a> <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#ae81149b5b8cbb599fdcb8218fdad5afb">low_threshold</a>(uint16_t threshold, <span class="keywordtype">bool</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7a9559cdb4ff3ac4c3b8e15a26983091">high_polarity</a> = <span class="keyword">false</span>)</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        {</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html">GPIOSettings</a>{GPIOFunction::LEVEL_LOW, <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7a9559cdb4ff3ac4c3b8e15a26983091">high_polarity</a>, threshold};</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        }</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160; </div>
-<div class="line"><a name="l00291"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#af413631057b7592b03bf9d32cc156d21">  291</a></span>&#160;        <span class="keyword">static</span> constexpr <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html">GPIOSettings</a> <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#af413631057b7592b03bf9d32cc156d21">high_threshold</a>(uint16_t threshold, <span class="keywordtype">bool</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7a9559cdb4ff3ac4c3b8e15a26983091">high_polarity</a> = <span class="keyword">false</span>)</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        {</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html">GPIOSettings</a>{GPIOFunction::LEVEL_HIGH, <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7a9559cdb4ff3ac4c3b8e15a26983091">high_polarity</a>, 0, threshold};</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        }</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160; </div>
-<div class="line"><a name="l00306"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a4941c147bef09c7b4e016eac56536b0c">  306</a></span>&#160;        <span class="keyword">static</span> constexpr <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html">GPIOSettings</a> <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a4941c147bef09c7b4e016eac56536b0c">out_of_window</a>(</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;            uint16_t <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7466877a047139383b1664a7c834eaf9">low_threshold</a>, uint16_t <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a9f832e6f9e1e7fff73cd8a6fa81f3ca6">high_threshold</a>, <span class="keywordtype">bool</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7a9559cdb4ff3ac4c3b8e15a26983091">high_polarity</a> = <span class="keyword">false</span>)</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        {</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html">GPIOSettings</a>{GPIOFunction::OUT_OF_WINDOW, <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7a9559cdb4ff3ac4c3b8e15a26983091">high_polarity</a>, <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7466877a047139383b1664a7c834eaf9">low_threshold</a>, <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a9f832e6f9e1e7fff73cd8a6fa81f3ca6">high_threshold</a>};</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;        }</div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160; </div>
-<div class="line"><a name="l00315"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#af787e2f90d47221599a6332b4cc7060f">  315</a></span>&#160;        <a class="code" href="namespacedevices_1_1vl53l0x.html#a6779d407b6c38c353138058714af81cb">GPIOFunction</a> <span class="keyword">function</span>() <span class="keyword">const</span></div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        {</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;            <span class="keywordflow">return</span> function_;</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;        }</div>
-<div class="line"><a name="l00322"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7a9559cdb4ff3ac4c3b8e15a26983091">  322</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7a9559cdb4ff3ac4c3b8e15a26983091">high_polarity</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;            <span class="keywordflow">return</span> high_polarity_;</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        }</div>
-<div class="line"><a name="l00329"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7466877a047139383b1664a7c834eaf9">  329</a></span>&#160;        uint16_t <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7466877a047139383b1664a7c834eaf9">low_threshold</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;            <span class="keywordflow">return</span> low_threshold_;</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        }</div>
-<div class="line"><a name="l00336"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a9f832e6f9e1e7fff73cd8a6fa81f3ca6">  336</a></span>&#160;        uint16_t <a class="code" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a9f832e6f9e1e7fff73cd8a6fa81f3ca6">high_threshold</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;            <span class="keywordflow">return</span> high_threshold_;</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;        }</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160; </div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;        <a class="code" href="namespacedevices_1_1vl53l0x.html#a6779d407b6c38c353138058714af81cb">GPIOFunction</a> function_ = GPIOFunction::DISABLED;</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;        <span class="keywordtype">bool</span> high_polarity_ = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        uint16_t low_threshold_ = 0;</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;        uint16_t high_threshold_ = 0;</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;    };</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    <a class="code" href="classstreams_1_1ostream.html">streams::ostream</a>&amp; operator&lt;&lt;(<a class="code" href="classstreams_1_1ostream.html">streams::ostream</a>&amp;, <span class="keyword">const</span> GPIOSettings&amp;);</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160; </div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    <span class="keyword">class </span>InterruptStatus</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;    {</div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;        InterruptStatus() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        <span class="comment">//TODO maybe return more useful info (is each bit mapped to GPIOFunction?)</span></div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;        <span class="keyword">operator</span> uint8_t()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;            <span class="keywordflow">return</span> status_ &amp; 0x07;</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;        }</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160; </div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;        uint8_t status_ = 0;</div>
-<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;    };</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160; </div>
-<div class="line"><a name="l00376"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_reference.html">  376</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_reference.html">SPADReference</a></div>
-<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;    {</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;        <a class="code" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_reference.html">SPADReference</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;        <a class="code" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_reference.html">SPADReference</a>(<span class="keyword">const</span> uint8_t <a class="code" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_reference.html#abc34303925538e64effd760061ffea9a">spad_refs</a>[6])</div>
-<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;        {</div>
-<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;            memcpy(spad_refs_, <a class="code" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_reference.html#abc34303925538e64effd760061ffea9a">spad_refs</a>, 6);</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;        }</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160; </div>
-<div class="line"><a name="l00391"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_reference.html#abc34303925538e64effd760061ffea9a">  391</a></span>&#160;        <span class="keyword">const</span> uint8_t* <a class="code" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_reference.html#abc34303925538e64effd760061ffea9a">spad_refs</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00392"></a><span class="lineno">  392</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;            <span class="keywordflow">return</span> spad_refs_;</div>
-<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;        }</div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160; </div>
-<div class="line"><a name="l00400"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_reference.html#a3289b954acf99d49f3870b1da0c65b01">  400</a></span>&#160;        uint8_t* <a class="code" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_reference.html#a3289b954acf99d49f3870b1da0c65b01">spad_refs</a>()</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;        {</div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;            <span class="keywordflow">return</span> spad_refs_;</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160;        }</div>
-<div class="line"><a name="l00404"></a><span class="lineno">  404</span>&#160; </div>
-<div class="line"><a name="l00405"></a><span class="lineno">  405</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;        uint8_t spad_refs_[6];</div>
-<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;    };</div>
-<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160; </div>
-<div class="line"><a name="l00419"></a><span class="lineno"><a class="line" href="namespacedevices_1_1vl53l0x.html#a07eefbde97029a7493093997fd81c57a">  419</a></span>&#160;    <span class="keyword">enum class</span> <a class="code" href="namespacedevices_1_1vl53l0x.html#a07eefbde97029a7493093997fd81c57a">VcselPeriodType</a> : uint8_t</div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;    {</div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;        PRE_RANGE = uint8_t(vl53l0x::Register::PRE_RANGE_CONFIG_VCSEL_PERIOD),</div>
-<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;        FINAL_RANGE = uint8_t(vl53l0x::Register::FINAL_RANGE_CONFIG_VCSEL_PERIOD)</div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;    };</div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160; </div>
-<div class="line"><a name="l00445"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">  445</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a></div>
-<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;    {</div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;        <span class="keyword">static</span> constexpr uint8_t FORCED_BITS = <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(5);</div>
-<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;        <span class="comment">// TCC Target Center Check</span></div>
-<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;        <span class="keyword">static</span> constexpr uint8_t TCC = <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(4);</div>
-<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;        <span class="comment">// DSS Dynamic Spad Selection</span></div>
-<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;        <span class="keyword">static</span> constexpr uint8_t DSS = <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(3);</div>
-<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;        <span class="comment">// MSRC Minimum Signal Rate Check</span></div>
-<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;        <span class="keyword">static</span> constexpr uint8_t MSRC = <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(2);</div>
-<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;        <span class="comment">// PRE_RANGE Pre-Range Check</span></div>
-<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;        <span class="keyword">static</span> constexpr uint8_t PRE_RANGE = <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(6);</div>
-<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;        <span class="comment">// FINAL_RANGE Final-Range Check</span></div>
-<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;        <span class="keyword">static</span> constexpr uint8_t FINAL_RANGE = <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(7);</div>
-<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160; </div>
-<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00464"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#abc9fef218832edf1808741c45c3053b6">  464</a></span>&#160;        <span class="keyword">static</span> constexpr <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#abc9fef218832edf1808741c45c3053b6">create</a>()</div>
-<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;        {</div>
-<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a>{};</div>
-<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;        }</div>
-<div class="line"><a name="l00477"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#aa68c2f2ef21ad07f6f386e43aacac3a2">  477</a></span>&#160;        <span class="keyword">static</span> constexpr <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#aa68c2f2ef21ad07f6f386e43aacac3a2">all</a>()</div>
-<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;        {</div>
-<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a>{TCC | DSS | MSRC | PRE_RANGE | FINAL_RANGE};</div>
-<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;        }</div>
-<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160; </div>
-<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;        constexpr <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160; </div>
-<div class="line"><a name="l00489"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a4566376dd7d5708520f74167b2009e65">  489</a></span>&#160;        constexpr <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a4566376dd7d5708520f74167b2009e65">tcc</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a>{uint8_t(steps_ | TCC)};</div>
-<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;        }</div>
-<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160; </div>
-<div class="line"><a name="l00497"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a3a117e1305677682e46dad472bce5fe4">  497</a></span>&#160;        constexpr <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a3a117e1305677682e46dad472bce5fe4">dss</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a>{uint8_t(steps_ | DSS)};</div>
-<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;        }</div>
-<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160; </div>
-<div class="line"><a name="l00505"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#abd1ec3b0c96bee3b230f5d37b5fbf60f">  505</a></span>&#160;        constexpr <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#abd1ec3b0c96bee3b230f5d37b5fbf60f">msrc</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a>{uint8_t(steps_ | MSRC)};</div>
-<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;        }</div>
-<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160; </div>
-<div class="line"><a name="l00513"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a7e30138dce3c4490afc3cc6834f3a283">  513</a></span>&#160;        constexpr <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a7e30138dce3c4490afc3cc6834f3a283">pre_range</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a>{uint8_t(steps_ | PRE_RANGE)};</div>
-<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;        }</div>
-<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160; </div>
-<div class="line"><a name="l00521"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#aafe04eb6fb3a550538fb332f4f1030e3">  521</a></span>&#160;        constexpr <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#aafe04eb6fb3a550538fb332f4f1030e3">final_range</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a>{uint8_t(steps_ | FINAL_RANGE)};</div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;        }</div>
-<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160; </div>
-<div class="line"><a name="l00529"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a91d0f033f2c874e5e9bc625e83e7c34f">  529</a></span>&#160;        constexpr <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a91d0f033f2c874e5e9bc625e83e7c34f">no_tcc</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a>{uint8_t(steps_ &amp; ~TCC)};</div>
-<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;        }</div>
-<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160; </div>
-<div class="line"><a name="l00537"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a91c96d64c7f96f52bda1069e716e14a2">  537</a></span>&#160;        constexpr <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a91c96d64c7f96f52bda1069e716e14a2">no_dss</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a>{uint8_t(steps_ &amp; ~DSS)};</div>
-<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;        }</div>
-<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160; </div>
-<div class="line"><a name="l00545"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a11d72d3fc02fb5ede7e61e598df47b65">  545</a></span>&#160;        constexpr <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a11d72d3fc02fb5ede7e61e598df47b65">no_msrc</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a>{uint8_t(steps_ &amp; ~MSRC)};</div>
-<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160;        }</div>
-<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160; </div>
-<div class="line"><a name="l00553"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#af21d05fa36525a087e34a678a036ab96">  553</a></span>&#160;        constexpr <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#af21d05fa36525a087e34a678a036ab96">no_pre_range</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a>{uint8_t(steps_ &amp; ~PRE_RANGE)};</div>
-<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;        }</div>
-<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160; </div>
-<div class="line"><a name="l00561"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a1b687ce3643b13c54bdf36823d0c99cd">  561</a></span>&#160;        constexpr <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a1b687ce3643b13c54bdf36823d0c99cd">no_final_range</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;            <span class="keywordflow">return</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a>{uint8_t(steps_ &amp; ~FINAL_RANGE)};</div>
-<div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160;        }</div>
-<div class="line"><a name="l00565"></a><span class="lineno">  565</span>&#160; </div>
-<div class="line"><a name="l00569"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a7f1320ced4e636e158815aa10f273e8f">  569</a></span>&#160;        uint8_t <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a7f1320ced4e636e158815aa10f273e8f">value</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;            <span class="keywordflow">return</span> steps_;</div>
-<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160;        }</div>
-<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160; </div>
-<div class="line"><a name="l00577"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#af82ed2601f966c58c8449ef77941c1d9">  577</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#af82ed2601f966c58c8449ef77941c1d9">is_tcc</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;            <span class="keywordflow">return</span> steps_ &amp; TCC;</div>
-<div class="line"><a name="l00580"></a><span class="lineno">  580</span>&#160;        }</div>
-<div class="line"><a name="l00581"></a><span class="lineno">  581</span>&#160; </div>
-<div class="line"><a name="l00585"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#af411fa73a8590ecdb1cb06724f6d12e0">  585</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#af411fa73a8590ecdb1cb06724f6d12e0">is_dss</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;            <span class="keywordflow">return</span> steps_ &amp; DSS;</div>
-<div class="line"><a name="l00588"></a><span class="lineno">  588</span>&#160;        }</div>
-<div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160; </div>
-<div class="line"><a name="l00593"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a1247c7623f7c60f303afd6fa01ba3b41">  593</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a1247c7623f7c60f303afd6fa01ba3b41">is_msrc</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;            <span class="keywordflow">return</span> steps_ &amp; MSRC;</div>
-<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;        }</div>
-<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160; </div>
-<div class="line"><a name="l00601"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a7edccc422bafabf0229eaf0a47a7441d">  601</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a7edccc422bafabf0229eaf0a47a7441d">is_pre_range</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;            <span class="keywordflow">return</span> steps_ &amp; PRE_RANGE;</div>
-<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;        }</div>
-<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160; </div>
-<div class="line"><a name="l00609"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a290189327186c83c8865c706e188343f">  609</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a290189327186c83c8865c706e188343f">is_final_range</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160;            <span class="keywordflow">return</span> steps_ &amp; FINAL_RANGE;</div>
-<div class="line"><a name="l00612"></a><span class="lineno">  612</span>&#160;        }</div>
-<div class="line"><a name="l00613"></a><span class="lineno">  613</span>&#160; </div>
-<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;        constexpr <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">SequenceSteps</a>(uint8_t steps) : steps_{uint8_t(steps | FORCED_BITS)} {}</div>
-<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160; </div>
-<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160;        uint8_t steps_ = FORCED_BITS;</div>
-<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160; </div>
-<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> MANAGER&gt; <span class="keyword">friend</span> <span class="keyword">class </span>VL53L0X;</div>
-<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;    };</div>
-<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160;    <a class="code" href="classstreams_1_1ostream.html">streams::ostream</a>&amp; operator&lt;&lt;(<a class="code" href="classstreams_1_1ostream.html">streams::ostream</a>&amp;, SequenceSteps);</div>
-<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160; </div>
-<div class="line"><a name="l00631"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html">  631</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html">SequenceStepsTimeout</a></div>
-<div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;    {</div>
-<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160;        <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html">SequenceStepsTimeout</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160; </div>
-<div class="line"><a name="l00641"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#aaff8ee634655a2c44a3de8d7e403d752">  641</a></span>&#160;        uint8_t <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#aaff8ee634655a2c44a3de8d7e403d752">pre_range_vcsel_period_pclks</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;            <span class="keywordflow">return</span> pre_range_vcsel_period_pclks_;</div>
-<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;        }</div>
-<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160; </div>
-<div class="line"><a name="l00649"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a220a5416fcc4e5cd7337afa47ae257a2">  649</a></span>&#160;        uint8_t <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a220a5416fcc4e5cd7337afa47ae257a2">final_range_vcsel_period_pclks</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;            <span class="keywordflow">return</span> final_range_vcsel_period_pclks_;</div>
-<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;        }</div>
-<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160; </div>
-<div class="line"><a name="l00657"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a9008ce91200e42b579640e3f7be62603">  657</a></span>&#160;        uint16_t <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a9008ce91200e42b579640e3f7be62603">msrc_dss_tcc_mclks</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160;            <span class="keywordflow">return</span> msrc_dss_tcc_mclks_ + 1;</div>
-<div class="line"><a name="l00660"></a><span class="lineno">  660</span>&#160;        }</div>
-<div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160; </div>
-<div class="line"><a name="l00665"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#aea9c078711e2f3a96d5330cd0074fdf0">  665</a></span>&#160;        uint16_t <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#aea9c078711e2f3a96d5330cd0074fdf0">pre_range_mclks</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160;            <span class="keywordflow">return</span> TimeoutUtilities::decode_timeout(pre_range_mclks_);</div>
-<div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160;        }</div>
-<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160; </div>
-<div class="line"><a name="l00676"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a4aa83c6bd3c44e38563db96a62a467df">  676</a></span>&#160;        uint16_t <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a4aa83c6bd3c44e38563db96a62a467df">final_range_mclks</a>(<span class="keywordtype">bool</span> is_pre_range)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;            uint16_t temp_final_range_mclks = TimeoutUtilities::decode_timeout(final_range_mclks_);</div>
-<div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160;            <span class="keywordflow">return</span> (is_pre_range ? temp_final_range_mclks - <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#aea9c078711e2f3a96d5330cd0074fdf0">pre_range_mclks</a>() : temp_final_range_mclks);</div>
-<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;        }</div>
-<div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160; </div>
-<div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160;        <span class="comment">// Following values are calculated from others</span></div>
-<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160; </div>
-<div class="line"><a name="l00687"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a5cb56283ce7d3d1dc6ea532a36dcd583">  687</a></span>&#160;        uint32_t <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a5cb56283ce7d3d1dc6ea532a36dcd583">msrc_dss_tcc_us</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;            <span class="keywordflow">return</span> TimeoutUtilities::calculate_timeout_us(<a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a9008ce91200e42b579640e3f7be62603">msrc_dss_tcc_mclks</a>(), <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#aaff8ee634655a2c44a3de8d7e403d752">pre_range_vcsel_period_pclks</a>());</div>
-<div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;        }</div>
-<div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160; </div>
-<div class="line"><a name="l00695"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a7c921771e50e001ab46e27004ec667ae">  695</a></span>&#160;        uint32_t <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a7c921771e50e001ab46e27004ec667ae">pre_range_us</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;            <span class="keywordflow">return</span> TimeoutUtilities::calculate_timeout_us(<a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#aea9c078711e2f3a96d5330cd0074fdf0">pre_range_mclks</a>(), <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#aaff8ee634655a2c44a3de8d7e403d752">pre_range_vcsel_period_pclks</a>());</div>
-<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;        }</div>
-<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160; </div>
-<div class="line"><a name="l00706"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a44e56b5a53797d5c9c4bf4bf56b11f7d">  706</a></span>&#160;        uint32_t <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a44e56b5a53797d5c9c4bf4bf56b11f7d">final_range_us</a>(<span class="keywordtype">bool</span> is_pre_range)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;            <span class="keywordflow">return</span> TimeoutUtilities::calculate_timeout_us(</div>
-<div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;                <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a4aa83c6bd3c44e38563db96a62a467df">final_range_mclks</a>(is_pre_range), <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a220a5416fcc4e5cd7337afa47ae257a2">final_range_vcsel_period_pclks</a>());</div>
-<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;        }</div>
-<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160; </div>
-<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;        <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html">SequenceStepsTimeout</a>(uint8_t <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#aaff8ee634655a2c44a3de8d7e403d752">pre_range_vcsel_period_pclks</a>, uint8_t <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a220a5416fcc4e5cd7337afa47ae257a2">final_range_vcsel_period_pclks</a>,</div>
-<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160;            uint8_t <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a9008ce91200e42b579640e3f7be62603">msrc_dss_tcc_mclks</a>, uint16_t <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#aea9c078711e2f3a96d5330cd0074fdf0">pre_range_mclks</a>, uint16_t <a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a4aa83c6bd3c44e38563db96a62a467df">final_range_mclks</a>)</div>
-<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;            :   pre_range_vcsel_period_pclks_{<a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#aaff8ee634655a2c44a3de8d7e403d752">pre_range_vcsel_period_pclks</a>},</div>
-<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;                final_range_vcsel_period_pclks_{<a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a220a5416fcc4e5cd7337afa47ae257a2">final_range_vcsel_period_pclks</a>},</div>
-<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;                msrc_dss_tcc_mclks_{<a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a9008ce91200e42b579640e3f7be62603">msrc_dss_tcc_mclks</a>},</div>
-<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;                pre_range_mclks_{<a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#aea9c078711e2f3a96d5330cd0074fdf0">pre_range_mclks</a>},</div>
-<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;                final_range_mclks_{<a class="code" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a4aa83c6bd3c44e38563db96a62a467df">final_range_mclks</a>} {}</div>
-<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160; </div>
-<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;        uint8_t pre_range_vcsel_period_pclks_ = 0;</div>
-<div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160;        uint8_t final_range_vcsel_period_pclks_ = 0;</div>
-<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160; </div>
-<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;        uint8_t msrc_dss_tcc_mclks_ = 0;</div>
-<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;        uint16_t pre_range_mclks_ = 0;</div>
-<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;        uint16_t final_range_mclks_ = 0;</div>
-<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160; </div>
-<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> MANAGER&gt; <span class="keyword">friend</span> <span class="keyword">class </span>VL53L0X;</div>
-<div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160;    };</div>
-<div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;    <a class="code" href="classstreams_1_1ostream.html">streams::ostream</a>&amp; operator&lt;&lt;(<a class="code" href="classstreams_1_1ostream.html">streams::ostream</a>&amp;, <span class="keyword">const</span> SequenceStepsTimeout&amp;);</div>
-<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160; </div>
-<div class="line"><a name="l00742"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_info.html">  742</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_info.html">SPADInfo</a></div>
-<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;    {</div>
-<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;        <span class="keyword">static</span> constexpr uint8_t APERTURE = <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(7);</div>
-<div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160;        <span class="keyword">static</span> constexpr uint8_t COUNT = <a class="code" href="namespacebits.html#a299b783445b74ee74546da2f1b2e7990">bits::CBV8</a>(7);</div>
-<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160; </div>
-<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;        <a class="code" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_info.html">SPADInfo</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;        <a class="code" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_info.html">SPADInfo</a>(uint8_t info) : info_{info} {}</div>
-<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160; </div>
-<div class="line"><a name="l00758"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_info.html#a379e22e071c9dad2c4421a7bb1f897e6">  758</a></span>&#160;        <span class="keywordtype">bool</span> <a class="code" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_info.html#a379e22e071c9dad2c4421a7bb1f897e6">is_aperture</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;            <span class="keywordflow">return</span> info_ &amp; APERTURE;</div>
-<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;        }</div>
-<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160; </div>
-<div class="line"><a name="l00766"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_info.html#afbfd175637b8e6b98ab8d8105955a0cc">  766</a></span>&#160;        uint8_t <a class="code" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_info.html#afbfd175637b8e6b98ab8d8105955a0cc">count</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;            <span class="keywordflow">return</span> info_ &amp; COUNT;</div>
-<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160;        }</div>
-<div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160; </div>
-<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160;        uint8_t info_ = 0;</div>
-<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;    };</div>
-<div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;    <a class="code" href="classstreams_1_1ostream.html">streams::ostream</a>&amp; operator&lt;&lt;(<a class="code" href="classstreams_1_1ostream.html">streams::ostream</a>&amp;, SPADInfo);</div>
-<div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160; </div>
-<div class="line"><a name="l00783"></a><span class="lineno"><a class="line" href="namespacedevices_1_1vl53l0x.html#af48a92ac24c4f93d2513d4969b4d5a67">  783</a></span>&#160;    <span class="keyword">enum class</span> <a class="code" href="namespacedevices_1_1vl53l0x.html#af48a92ac24c4f93d2513d4969b4d5a67">Profile</a> : uint8_t</div>
-<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;    {</div>
-<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;        STANDARD = 0x00,</div>
-<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160;        LONG_RANGE = 0x01,</div>
-<div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160;        STANDARD_ACCURATE = 0x02,</div>
-<div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160;        LONG_RANGE_ACCURATE = 0x03,</div>
-<div class="line"><a name="l00794"></a><span class="lineno">  794</span>&#160;        STANDARD_FAST = 0x04,</div>
-<div class="line"><a name="l00796"></a><span class="lineno">  796</span>&#160;        <a class="code" href="namespacedevices_1_1vl53l0x.html#af48a92ac24c4f93d2513d4969b4d5a67a94e94133f4bdc1794c6b647b8ea134d0">LONG_RANGE_FAST</a> = 0x05,</div>
-<div class="line"><a name="l00797"></a><span class="lineno">  797</span>&#160;    };</div>
-<div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160;}</div>
-<div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160; </div>
-<div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* VL53L0X_TYPES_H */</span><span class="preprocessor"></span></div>
-<div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160; </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            constexpr uint32_t MSB24_MASK = 0xFF<span class="stringliteral">&#39;FF&#39;</span>FF<span class="stringliteral">&#39;00UL;</span></div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="stringliteral">            constexpr uint32_t LSB8_MASK = 0xFFUL;</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="stringliteral">            </span></div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="stringliteral">            if (timeout_macro_clks == 0UL) return 0U;</span></div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;<span class="stringliteral">            uint32_t lsb = timeout_macro_clks - 1UL;</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="stringliteral">            uint16_t msb = 0;</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;<span class="stringliteral">            while (lsb &amp; MSB24_MASK)</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;<span class="stringliteral">            {</span></div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="stringliteral">                lsb &gt;&gt;= 1;</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="stringliteral">                ++msb;</span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="stringliteral">            }</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="stringliteral">            return utils::as_uint16_t(uint8_t(msb), uint8_t(lsb &amp; LSB8_MASK));</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="stringliteral">        // timeout in macro periods is encoded on 16 bits, as (LSB.2^MSB)+1</span></div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="stringliteral">        static constexpr uint32_t decode_timeout(uint16_t encoded_timeout)</span></div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="stringliteral">            const uint32_t lsb = utils::low_byte(encoded_timeout);</span></div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="stringliteral">            const uint32_t msb = utils::high_byte(encoded_timeout);</span></div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="stringliteral">            return (lsb &lt;&lt; msb) + 1UL;</span></div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;<span class="stringliteral">        static constexpr uint32_t calculate_macro_period_ps(uint8_t vcsel_period_pclks)</span></div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="stringliteral">            constexpr uint32_t PS_TO_NS_DIVIDER = 1000UL;</span></div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;<span class="stringliteral">            constexpr uint32_t PS_TO_NS_ROUNDING_ADDITION = 500UL;</span></div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;<span class="stringliteral">            return ((PLL_PERIOD_PS * MACRO_PERIOD_VCLKS * vcsel_period_pclks) + PS_TO_NS_ROUNDING_ADDITION)</span></div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;<span class="stringliteral">                / PS_TO_NS_DIVIDER;</span></div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;<span class="stringliteral">        static constexpr uint32_t calculate_timeout_us(uint16_t timeout_period_mclks, uint8_t vcsel_period_pclks)</span></div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="stringliteral">            constexpr uint32_t NS_TO_US_DIVIDER = 1000UL;</span></div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;<span class="stringliteral">            constexpr uint32_t NS_TO_US_ROUNDING_ADDITION = 500UL;</span></div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="stringliteral">            const uint32_t macro_period_ns = calculate_macro_period_ps(vcsel_period_pclks);</span></div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="stringliteral">            return ((timeout_period_mclks * macro_period_ns) + NS_TO_US_ROUNDING_ADDITION) / NS_TO_US_DIVIDER;</span></div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="stringliteral">        static constexpr uint32_t calculate_timeout_mclks(uint16_t timeout_period_us, uint8_t vcsel_period_pclks)</span></div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;<span class="stringliteral">            constexpr uint32_t US_TO_NS_MULTIPLIER = 1000UL;</span></div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;<span class="stringliteral">            const uint32_t macro_period_ns = calculate_macro_period_ps(vcsel_period_pclks);</span></div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;<span class="stringliteral">            return ((timeout_period_us * US_TO_NS_MULTIPLIER) + (macro_period_ns / 2)) / macro_period_ns;</span></div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;<span class="stringliteral">    };</span></div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00154"></a><span class="lineno"><a class="line" href="namespacedevices_1_1vl53l0x.html#a9dd5b65f54eecca7c3cef80254c553d8">  154</a></span>&#160;<span class="stringliteral">    enum class DeviceError : uint8_t</span></div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;<span class="stringliteral">    {</span></div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="stringliteral">        NONE                           = 0,</span></div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;<span class="stringliteral">        VCSEL_CONTINUITY_TEST_FAILURE  = 1,</span></div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;<span class="stringliteral">        VCSEL_WATCHDOG_TEST_FAILURE    = 2,</span></div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;<span class="stringliteral">        NO_VHV_VALUE_FOUND             = 3,</span></div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="stringliteral">        MSRC_NO_TARGET                 = 4,</span></div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="stringliteral">        SNR_CHECK                      = 5,</span></div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="stringliteral">        RANGE_PHASE_CHECK              = 6,</span></div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;<span class="stringliteral">        SIGMA_THRESHOLD_CHECK          = 7,</span></div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="stringliteral">        TCC                            = 8,</span></div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;<span class="stringliteral">        PHASE_CONSISTENCY              = 9,</span></div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;<span class="stringliteral">        MIN_CLIP                       = 10,</span></div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;<span class="stringliteral">        RANGE_COMPLETE                 = 11,</span></div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;<span class="stringliteral">        ALGO_UNDERFLOW                 = 12,</span></div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;<span class="stringliteral">        ALGO_OVERFLOW                  = 13,</span></div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;<span class="stringliteral">        RANGE_IGNORE_THRESHOLD         = 14,</span></div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;<span class="stringliteral">        UNKNOWN                        = 15</span></div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="stringliteral">    };</span></div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;<span class="stringliteral">    streams::ostream&amp; operator&lt;&lt;(streams::ostream&amp; out, DeviceError error);</span></div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00185"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_device_status.html">  185</a></span>&#160;<span class="stringliteral">    class DeviceStatus</span></div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;<span class="stringliteral">    {</span></div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;<span class="stringliteral">    public:</span></div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;<span class="stringliteral">        DeviceStatus() = default;</span></div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00195"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_device_status.html#af523ee60387073e9a154356126492c80">  195</a></span>&#160;<span class="stringliteral">        DeviceError error() const</span></div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;<span class="stringliteral">            return DeviceError((status_ &gt;&gt; ERROR_SHIFT) &amp; ERROR_MASK);</span></div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00204"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_device_status.html#a3959868417ecb5c0335eebcc5f2d524f">  204</a></span>&#160;<span class="stringliteral">        bool data_ready() const</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;<span class="stringliteral">            return status_ &amp; DATA_READY_MASK;</span></div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;<span class="stringliteral">    private:</span></div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;<span class="stringliteral">        uint8_t status_ = 0;</span></div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;<span class="stringliteral">        static constexpr uint8_t DATA_READY_MASK = 0x01;</span></div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;<span class="stringliteral">        static constexpr uint8_t ERROR_SHIFT = 3;</span></div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;<span class="stringliteral">        static constexpr uint8_t ERROR_MASK = 0x0F;</span></div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;<span class="stringliteral">    };</span></div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;<span class="stringliteral">    streams::ostream&amp; operator&lt;&lt;(streams::ostream&amp; out, DeviceStatus status);</span></div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00223"></a><span class="lineno"><a class="line" href="namespacedevices_1_1vl53l0x.html#a58601e220af84e79fca7689a91748e42">  223</a></span>&#160;<span class="stringliteral">    enum class PowerMode : uint8_t</span></div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;<span class="stringliteral">    {</span></div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;<span class="stringliteral">        STANDBY = 0,</span></div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;<span class="stringliteral">        IDLE = 1</span></div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;<span class="stringliteral">    };</span></div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;<span class="stringliteral">    streams::ostream&amp; operator&lt;&lt;(streams::ostream&amp; out, PowerMode mode);</span></div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00238"></a><span class="lineno"><a class="line" href="namespacedevices_1_1vl53l0x.html#a6779d407b6c38c353138058714af81cb">  238</a></span>&#160;<span class="stringliteral">    enum class GPIOFunction : uint8_t</span></div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;<span class="stringliteral">    {</span></div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;<span class="stringliteral">        DISABLED = 0x00,</span></div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;<span class="stringliteral">        LEVEL_LOW = 0x01,</span></div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;<span class="stringliteral">        LEVEL_HIGH = 0x02,</span></div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;<span class="stringliteral">        OUT_OF_WINDOW = 0x03,</span></div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;<span class="stringliteral">        SAMPLE_READY = 0x04</span></div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;<span class="stringliteral">    };</span></div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;<span class="stringliteral">    streams::ostream&amp; operator&lt;&lt;(streams::ostream&amp; out, GPIOFunction function);</span></div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00261"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html">  261</a></span>&#160;<span class="stringliteral">    class GPIOSettings</span></div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;<span class="stringliteral">    {</span></div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;<span class="stringliteral">    public:</span></div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="stringliteral">        constexpr GPIOSettings() = default;</span></div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="stringliteral">        constexpr GPIOSettings(GPIOFunction function, bool high_polarity, </span></div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;<span class="stringliteral">            uint16_t low_threshold = 0, uint16_t high_threshold = 0)</span></div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;<span class="stringliteral">            :   function_{function}, high_polarity_{high_polarity}, </span></div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;<span class="stringliteral">                low_threshold_{low_threshold}, high_threshold_{high_threshold} {}</span></div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00277"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#ae3e420e30284c9d73fd05043296a947e">  277</a></span>&#160;<span class="stringliteral">        static constexpr GPIOSettings sample_ready(bool high_polarity = false)</span></div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;<span class="stringliteral">            return GPIOSettings{GPIOFunction::SAMPLE_READY, high_polarity};</span></div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00290"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#ae81149b5b8cbb599fdcb8218fdad5afb">  290</a></span>&#160;<span class="stringliteral">        static constexpr GPIOSettings low_threshold(uint16_t threshold, bool high_polarity = false)</span></div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;<span class="stringliteral">            return GPIOSettings{GPIOFunction::LEVEL_LOW, high_polarity, threshold};</span></div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00303"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#af413631057b7592b03bf9d32cc156d21">  303</a></span>&#160;<span class="stringliteral">        static constexpr GPIOSettings high_threshold(uint16_t threshold, bool high_polarity = false)</span></div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;<span class="stringliteral">            return GPIOSettings{GPIOFunction::LEVEL_HIGH, high_polarity, 0, threshold};</span></div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00318"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a4941c147bef09c7b4e016eac56536b0c">  318</a></span>&#160;<span class="stringliteral">        static constexpr GPIOSettings out_of_window(</span></div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;<span class="stringliteral">            uint16_t low_threshold, uint16_t high_threshold, bool high_polarity = false)</span></div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;<span class="stringliteral">            return GPIOSettings{GPIOFunction::OUT_OF_WINDOW, high_polarity, low_threshold, high_threshold};</span></div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00327"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#af787e2f90d47221599a6332b4cc7060f">  327</a></span>&#160;<span class="stringliteral">        GPIOFunction function() const</span></div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;<span class="stringliteral">            return function_;</span></div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00334"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7a9559cdb4ff3ac4c3b8e15a26983091">  334</a></span>&#160;<span class="stringliteral">        bool high_polarity() const</span></div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;<span class="stringliteral">            return high_polarity_;</span></div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00341"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7466877a047139383b1664a7c834eaf9">  341</a></span>&#160;<span class="stringliteral">        uint16_t low_threshold() const</span></div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;<span class="stringliteral">            return low_threshold_;</span></div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00348"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a9f832e6f9e1e7fff73cd8a6fa81f3ca6">  348</a></span>&#160;<span class="stringliteral">        uint16_t high_threshold() const</span></div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;<span class="stringliteral">            return high_threshold_;</span></div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;<span class="stringliteral">    private:</span></div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;<span class="stringliteral">        GPIOFunction function_ = GPIOFunction::DISABLED;</span></div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;<span class="stringliteral">        bool high_polarity_ = false;</span></div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;<span class="stringliteral">        uint16_t low_threshold_ = 0;</span></div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;<span class="stringliteral">        uint16_t high_threshold_ = 0;</span></div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;<span class="stringliteral">    };</span></div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;<span class="stringliteral">    streams::ostream&amp; operator&lt;&lt;(streams::ostream&amp; out, const GPIOSettings&amp; settings);</span></div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;<span class="stringliteral">    class InterruptStatus</span></div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;<span class="stringliteral">    {</span></div>
+<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;<span class="stringliteral">    public:</span></div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;<span class="stringliteral">        InterruptStatus() = default;</span></div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160;<span class="stringliteral">        //TODO maybe return more useful info (is each bit mapped to GPIOFunction?)</span></div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;<span class="stringliteral">        explicit operator uint8_t() const</span></div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;<span class="stringliteral">            return status_ &amp; STATUS_MASK;</span></div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160;<span class="stringliteral">    private:</span></div>
+<div class="line"><a name="l00375"></a><span class="lineno">  375</span>&#160;<span class="stringliteral">        uint8_t status_ = 0;</span></div>
+<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;<span class="stringliteral">        static constexpr uint8_t STATUS_MASK = 0x07;</span></div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160;<span class="stringliteral">    };</span></div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00389"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_reference.html">  389</a></span>&#160;<span class="stringliteral">    class SPADReference</span></div>
+<div class="line"><a name="l00390"></a><span class="lineno">  390</span>&#160;<span class="stringliteral">    {</span></div>
+<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;<span class="stringliteral">    public:</span></div>
+<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;<span class="stringliteral">        static constexpr uint8_t NUM_PADS_BYTES = 6;</span></div>
+<div class="line"><a name="l00394"></a><span class="lineno">  394</span>&#160;<span class="stringliteral">        SPADReference() = default;</span></div>
+<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;<span class="stringliteral">        explicit SPADReference(const uint8_t spad_refs[NUM_PADS_BYTES])</span></div>
+<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;<span class="stringliteral">            memcpy(spad_refs_, spad_refs, NUM_PADS_BYTES);</span></div>
+<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00405"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_reference.html#abc34303925538e64effd760061ffea9a">  405</a></span>&#160;<span class="stringliteral">        const uint8_t* spad_refs() const</span></div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00407"></a><span class="lineno">  407</span>&#160;<span class="stringliteral">            return spad_refs_;</span></div>
+<div class="line"><a name="l00408"></a><span class="lineno">  408</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00414"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_reference.html#a3289b954acf99d49f3870b1da0c65b01">  414</a></span>&#160;<span class="stringliteral">        uint8_t* spad_refs()</span></div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;<span class="stringliteral">            return spad_refs_;</span></div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;<span class="stringliteral">    private:</span></div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;<span class="stringliteral">        uint8_t spad_refs_[NUM_PADS_BYTES];</span></div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;<span class="stringliteral">    };</span></div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00433"></a><span class="lineno"><a class="line" href="namespacedevices_1_1vl53l0x.html#a07eefbde97029a7493093997fd81c57a">  433</a></span>&#160;<span class="stringliteral">    enum class VcselPeriodType : uint8_t</span></div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;<span class="stringliteral">    {</span></div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;<span class="stringliteral">        PRE_RANGE = uint8_t(vl53l0x::Register::PRE_RANGE_CONFIG_VCSEL_PERIOD),</span></div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;<span class="stringliteral">        FINAL_RANGE = uint8_t(vl53l0x::Register::FINAL_RANGE_CONFIG_VCSEL_PERIOD)</span></div>
+<div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;<span class="stringliteral">    };</span></div>
+<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00459"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">  459</a></span>&#160;<span class="stringliteral">    class SequenceSteps</span></div>
+<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;<span class="stringliteral">    {</span></div>
+<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160;<span class="stringliteral">    private:</span></div>
+<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;<span class="stringliteral">        static constexpr uint8_t FORCED_BITS = bits::BV8(5);</span></div>
+<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;<span class="stringliteral">        // TCC Target Center Check</span></div>
+<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;<span class="stringliteral">        static constexpr uint8_t TCC = bits::BV8(4);</span></div>
+<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;<span class="stringliteral">        // DSS Dynamic Spad Selection</span></div>
+<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;<span class="stringliteral">        static constexpr uint8_t DSS = bits::BV8(3);</span></div>
+<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;<span class="stringliteral">        // MSRC Minimum Signal Rate Check</span></div>
+<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;<span class="stringliteral">        static constexpr uint8_t MSRC = bits::BV8(2);</span></div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;<span class="stringliteral">        // PRE_RANGE Pre-Range Check</span></div>
+<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;<span class="stringliteral">        static constexpr uint8_t PRE_RANGE = bits::BV8(6);</span></div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;<span class="stringliteral">        // FINAL_RANGE Final-Range Check</span></div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;<span class="stringliteral">        static constexpr uint8_t FINAL_RANGE = bits::BV8(7);</span></div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;<span class="stringliteral">    public:</span></div>
+<div class="line"><a name="l00478"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#abc9fef218832edf1808741c45c3053b6">  478</a></span>&#160;<span class="stringliteral">        static constexpr SequenceSteps create()</span></div>
+<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;<span class="stringliteral">            return SequenceSteps{};</span></div>
+<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00491"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#aa68c2f2ef21ad07f6f386e43aacac3a2">  491</a></span>&#160;<span class="stringliteral">        static constexpr SequenceSteps all()</span></div>
+<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;<span class="stringliteral">            return SequenceSteps{TCC | DSS | MSRC | PRE_RANGE | FINAL_RANGE};</span></div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;<span class="stringliteral">        constexpr SequenceSteps() = default;</span></div>
+<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00503"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a4566376dd7d5708520f74167b2009e65">  503</a></span>&#160;<span class="stringliteral">        constexpr SequenceSteps tcc() const</span></div>
+<div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;<span class="stringliteral">            return SequenceSteps{uint8_t(steps_ | TCC)};</span></div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00511"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a3a117e1305677682e46dad472bce5fe4">  511</a></span>&#160;<span class="stringliteral">        constexpr SequenceSteps dss() const</span></div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;<span class="stringliteral">            return SequenceSteps{uint8_t(steps_ | DSS)};</span></div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00519"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#abd1ec3b0c96bee3b230f5d37b5fbf60f">  519</a></span>&#160;<span class="stringliteral">        constexpr SequenceSteps msrc() const</span></div>
+<div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;<span class="stringliteral">            return SequenceSteps{uint8_t(steps_ | MSRC)};</span></div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00527"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a7e30138dce3c4490afc3cc6834f3a283">  527</a></span>&#160;<span class="stringliteral">        constexpr SequenceSteps pre_range() const</span></div>
+<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160;<span class="stringliteral">            return SequenceSteps{uint8_t(steps_ | PRE_RANGE)};</span></div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00535"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#aafe04eb6fb3a550538fb332f4f1030e3">  535</a></span>&#160;<span class="stringliteral">        constexpr SequenceSteps final_range() const</span></div>
+<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;<span class="stringliteral">            return SequenceSteps{uint8_t(steps_ | FINAL_RANGE)};</span></div>
+<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00543"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a91d0f033f2c874e5e9bc625e83e7c34f">  543</a></span>&#160;<span class="stringliteral">        constexpr SequenceSteps no_tcc() const</span></div>
+<div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;<span class="stringliteral">            return SequenceSteps{uint8_t(steps_ &amp; bits::COMPL(TCC))};</span></div>
+<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00551"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a91c96d64c7f96f52bda1069e716e14a2">  551</a></span>&#160;<span class="stringliteral">        constexpr SequenceSteps no_dss() const</span></div>
+<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160;<span class="stringliteral">            return SequenceSteps{uint8_t(steps_ &amp; bits::COMPL(DSS))};</span></div>
+<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00559"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a11d72d3fc02fb5ede7e61e598df47b65">  559</a></span>&#160;<span class="stringliteral">        constexpr SequenceSteps no_msrc() const</span></div>
+<div class="line"><a name="l00560"></a><span class="lineno">  560</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160;<span class="stringliteral">            return SequenceSteps{uint8_t(steps_ &amp; bits::COMPL(MSRC))};</span></div>
+<div class="line"><a name="l00562"></a><span class="lineno">  562</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00567"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#af21d05fa36525a087e34a678a036ab96">  567</a></span>&#160;<span class="stringliteral">        constexpr SequenceSteps no_pre_range() const</span></div>
+<div class="line"><a name="l00568"></a><span class="lineno">  568</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00569"></a><span class="lineno">  569</span>&#160;<span class="stringliteral">            return SequenceSteps{uint8_t(steps_ &amp; bits::COMPL(PRE_RANGE))};</span></div>
+<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00575"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a1b687ce3643b13c54bdf36823d0c99cd">  575</a></span>&#160;<span class="stringliteral">        constexpr SequenceSteps no_final_range() const</span></div>
+<div class="line"><a name="l00576"></a><span class="lineno">  576</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;<span class="stringliteral">            return SequenceSteps{uint8_t(steps_ &amp; bits::COMPL(FINAL_RANGE))};</span></div>
+<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00583"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a7f1320ced4e636e158815aa10f273e8f">  583</a></span>&#160;<span class="stringliteral">        uint8_t value() const</span></div>
+<div class="line"><a name="l00584"></a><span class="lineno">  584</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160;<span class="stringliteral">            return steps_;</span></div>
+<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00587"></a><span class="lineno">  587</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00591"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#af82ed2601f966c58c8449ef77941c1d9">  591</a></span>&#160;<span class="stringliteral">        bool is_tcc() const</span></div>
+<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;<span class="stringliteral">            return steps_ &amp; TCC;</span></div>
+<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00599"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#af411fa73a8590ecdb1cb06724f6d12e0">  599</a></span>&#160;<span class="stringliteral">        bool is_dss() const</span></div>
+<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160;<span class="stringliteral">            return steps_ &amp; DSS;</span></div>
+<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00607"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a1247c7623f7c60f303afd6fa01ba3b41">  607</a></span>&#160;<span class="stringliteral">        bool is_msrc() const</span></div>
+<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160;<span class="stringliteral">            return steps_ &amp; MSRC;</span></div>
+<div class="line"><a name="l00610"></a><span class="lineno">  610</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00611"></a><span class="lineno">  611</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00615"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a7edccc422bafabf0229eaf0a47a7441d">  615</a></span>&#160;<span class="stringliteral">        bool is_pre_range() const</span></div>
+<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160;<span class="stringliteral">            return steps_ &amp; PRE_RANGE;</span></div>
+<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00623"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a290189327186c83c8865c706e188343f">  623</a></span>&#160;<span class="stringliteral">        bool is_final_range() const</span></div>
+<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&#160;<span class="stringliteral">            return steps_ &amp; FINAL_RANGE;</span></div>
+<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;<span class="stringliteral">    private:</span></div>
+<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;<span class="stringliteral">        explicit constexpr SequenceSteps(uint8_t steps) : steps_{uint8_t(steps | FORCED_BITS)} {}</span></div>
+<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;<span class="stringliteral">        uint8_t steps_ = FORCED_BITS;</span></div>
+<div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160;<span class="stringliteral">        template&lt;typename MANAGER&gt; friend class VL53L0X;</span></div>
+<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;<span class="stringliteral">    };</span></div>
+<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160;<span class="stringliteral">    streams::ostream&amp; operator&lt;&lt;(streams::ostream&amp; out, SequenceSteps steps);</span></div>
+<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00645"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html">  645</a></span>&#160;<span class="stringliteral">    class SequenceStepsTimeout</span></div>
+<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;<span class="stringliteral">    {</span></div>
+<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;<span class="stringliteral">    public:</span></div>
+<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;<span class="stringliteral">        SequenceStepsTimeout() = default;</span></div>
+<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00655"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#aaff8ee634655a2c44a3de8d7e403d752">  655</a></span>&#160;<span class="stringliteral">        uint8_t pre_range_vcsel_period_pclks() const</span></div>
+<div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160;<span class="stringliteral">            return pre_range_vcsel_period_pclks_;</span></div>
+<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00663"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a220a5416fcc4e5cd7337afa47ae257a2">  663</a></span>&#160;<span class="stringliteral">        uint8_t final_range_vcsel_period_pclks() const</span></div>
+<div class="line"><a name="l00664"></a><span class="lineno">  664</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00665"></a><span class="lineno">  665</span>&#160;<span class="stringliteral">            return final_range_vcsel_period_pclks_;</span></div>
+<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00671"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a9008ce91200e42b579640e3f7be62603">  671</a></span>&#160;<span class="stringliteral">        uint16_t msrc_dss_tcc_mclks() const</span></div>
+<div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160;<span class="stringliteral">            return msrc_dss_tcc_mclks_ + 1;</span></div>
+<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00679"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#aea9c078711e2f3a96d5330cd0074fdf0">  679</a></span>&#160;<span class="stringliteral">        uint16_t pre_range_mclks() const</span></div>
+<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160;<span class="stringliteral">            return TimeoutUtilities::decode_timeout(pre_range_mclks_);</span></div>
+<div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00690"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a4aa83c6bd3c44e38563db96a62a467df">  690</a></span>&#160;<span class="stringliteral">        uint16_t final_range_mclks(bool is_pre_range) const</span></div>
+<div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;<span class="stringliteral">            uint16_t temp_final_range_mclks = TimeoutUtilities::decode_timeout(final_range_mclks_);</span></div>
+<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160;<span class="stringliteral">            return (is_pre_range ? (temp_final_range_mclks - pre_range_mclks()) : temp_final_range_mclks);</span></div>
+<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;<span class="stringliteral">        // Following values are calculated from others</span></div>
+<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00701"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a5cb56283ce7d3d1dc6ea532a36dcd583">  701</a></span>&#160;<span class="stringliteral">        uint32_t msrc_dss_tcc_us() const</span></div>
+<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;<span class="stringliteral">            return TimeoutUtilities::calculate_timeout_us(msrc_dss_tcc_mclks(), pre_range_vcsel_period_pclks());</span></div>
+<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00709"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a7c921771e50e001ab46e27004ec667ae">  709</a></span>&#160;<span class="stringliteral">        uint32_t pre_range_us() const</span></div>
+<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;<span class="stringliteral">            return TimeoutUtilities::calculate_timeout_us(pre_range_mclks(), pre_range_vcsel_period_pclks());</span></div>
+<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00720"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a44e56b5a53797d5c9c4bf4bf56b11f7d">  720</a></span>&#160;<span class="stringliteral">        uint32_t final_range_us(bool is_pre_range) const</span></div>
+<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160;<span class="stringliteral">            return TimeoutUtilities::calculate_timeout_us(</span></div>
+<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;<span class="stringliteral">                final_range_mclks(is_pre_range), final_range_vcsel_period_pclks());</span></div>
+<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;<span class="stringliteral">    private:</span></div>
+<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160;<span class="stringliteral">        SequenceStepsTimeout(uint8_t pre_range_vcsel_period_pclks, uint8_t final_range_vcsel_period_pclks,</span></div>
+<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;<span class="stringliteral">            uint8_t msrc_dss_tcc_mclks, uint16_t pre_range_mclks, uint16_t final_range_mclks)</span></div>
+<div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160;<span class="stringliteral">            :   pre_range_vcsel_period_pclks_{pre_range_vcsel_period_pclks},</span></div>
+<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;<span class="stringliteral">                final_range_vcsel_period_pclks_{final_range_vcsel_period_pclks},</span></div>
+<div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;<span class="stringliteral">                msrc_dss_tcc_mclks_{msrc_dss_tcc_mclks},</span></div>
+<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160;<span class="stringliteral">                pre_range_mclks_{pre_range_mclks},</span></div>
+<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;<span class="stringliteral">                final_range_mclks_{final_range_mclks} {}</span></div>
+<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;<span class="stringliteral">        uint8_t pre_range_vcsel_period_pclks_ = 0;</span></div>
+<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;<span class="stringliteral">        uint8_t final_range_vcsel_period_pclks_ = 0;</span></div>
+<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160;<span class="stringliteral">        uint8_t msrc_dss_tcc_mclks_ = 0;</span></div>
+<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;<span class="stringliteral">        uint16_t pre_range_mclks_ = 0;</span></div>
+<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;<span class="stringliteral">        uint16_t final_range_mclks_ = 0;</span></div>
+<div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160;<span class="stringliteral">        template&lt;typename MANAGER&gt; friend class VL53L0X;</span></div>
+<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;<span class="stringliteral">    };</span></div>
+<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;<span class="stringliteral">    streams::ostream&amp; operator&lt;&lt;(streams::ostream&amp; out, const SequenceStepsTimeout&amp; timeouts);</span></div>
+<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00756"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_info.html">  756</a></span>&#160;<span class="stringliteral">    class SPADInfo</span></div>
+<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;<span class="stringliteral">    {</span></div>
+<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;<span class="stringliteral">    private:</span></div>
+<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;<span class="stringliteral">        static constexpr uint8_t APERTURE = bits::BV8(7);</span></div>
+<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;<span class="stringliteral">        static constexpr uint8_t COUNT = bits::CBV8(7);</span></div>
+<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;<span class="stringliteral">    public:</span></div>
+<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;<span class="stringliteral">        SPADInfo() = default;</span></div>
+<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;<span class="stringliteral">        explicit SPADInfo(uint8_t info) : info_{info} {}</span></div>
+<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00772"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_info.html#a379e22e071c9dad2c4421a7bb1f897e6">  772</a></span>&#160;<span class="stringliteral">        bool is_aperture() const</span></div>
+<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;<span class="stringliteral">            return info_ &amp; APERTURE;</span></div>
+<div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00780"></a><span class="lineno"><a class="line" href="classdevices_1_1vl53l0x_1_1_s_p_a_d_info.html#afbfd175637b8e6b98ab8d8105955a0cc">  780</a></span>&#160;<span class="stringliteral">        uint8_t count() const</span></div>
+<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;<span class="stringliteral">        {</span></div>
+<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;<span class="stringliteral">            return info_ &amp; COUNT;</span></div>
+<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;<span class="stringliteral">        }</span></div>
+<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;<span class="stringliteral">    private:</span></div>
+<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;<span class="stringliteral">        uint8_t info_ = 0;</span></div>
+<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;<span class="stringliteral">    };</span></div>
+<div class="line"><a name="l00789"></a><span class="lineno">  789</span>&#160;<span class="stringliteral">    streams::ostream&amp; operator&lt;&lt;(streams::ostream&amp; out, SPADInfo spad);</span></div>
+<div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00797"></a><span class="lineno"><a class="line" href="namespacedevices_1_1vl53l0x.html#af48a92ac24c4f93d2513d4969b4d5a67">  797</a></span>&#160;<span class="stringliteral">    enum class Profile : uint8_t</span></div>
+<div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160;<span class="stringliteral">    {</span></div>
+<div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160;<span class="stringliteral">        STANDARD = 0x00,</span></div>
+<div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160;<span class="stringliteral">        LONG_RANGE = 0x01,</span></div>
+<div class="line"><a name="l00804"></a><span class="lineno">  804</span>&#160;<span class="stringliteral">        STANDARD_ACCURATE = 0x02,</span></div>
+<div class="line"><a name="l00806"></a><span class="lineno">  806</span>&#160;<span class="stringliteral">        LONG_RANGE_ACCURATE = 0x03,</span></div>
+<div class="line"><a name="l00808"></a><span class="lineno">  808</span>&#160;<span class="stringliteral">        STANDARD_FAST = 0x04,</span></div>
+<div class="line"><a name="l00810"></a><span class="lineno">  810</span>&#160;<span class="stringliteral">        LONG_RANGE_FAST = 0x05,</span></div>
+<div class="line"><a name="l00811"></a><span class="lineno">  811</span>&#160;<span class="stringliteral">    };</span></div>
+<div class="line"><a name="l00812"></a><span class="lineno">  812</span>&#160;<span class="stringliteral">}</span></div>
+<div class="line"><a name="l00813"></a><span class="lineno">  813</span>&#160;<span class="stringliteral"></span> </div>
+<div class="line"><a name="l00814"></a><span class="lineno">  814</span>&#160;<span class="stringliteral">#endif /* VL53L0X_TYPES_H */</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_timeout_html_a220a5416fcc4e5cd7337afa47ae257a2"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a220a5416fcc4e5cd7337afa47ae257a2">devices::vl53l0x::SequenceStepsTimeout::final_range_vcsel_period_pclks</a></div><div class="ttdeci">uint8_t final_range_vcsel_period_pclks() const</div><div class="ttdoc">VCSEL PCLK value for final-range step.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00649">vl53l0x_types.h:649</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_html_af21d05fa36525a087e34a678a036ab96"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#af21d05fa36525a087e34a678a036ab96">devices::vl53l0x::SequenceSteps::no_pre_range</a></div><div class="ttdeci">constexpr SequenceSteps no_pre_range() const</div><div class="ttdoc">Create a new SequenceSteps by removing PRE-RANGE from steps of this instance.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00553">vl53l0x_types.h:553</a></div></div>
-<div class="ttc" id="anamespacedevices_1_1vl53l0x_html_af48a92ac24c4f93d2513d4969b4d5a67"><div class="ttname"><a href="namespacedevices_1_1vl53l0x.html#af48a92ac24c4f93d2513d4969b4d5a67">devices::vl53l0x::Profile</a></div><div class="ttdeci">Profile</div><div class="ttdoc">Possible profiles of ranging for VL53L0X top-level API VL53L0X::begin().</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00783">vl53l0x_types.h:784</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_html_a91c96d64c7f96f52bda1069e716e14a2"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a91c96d64c7f96f52bda1069e716e14a2">devices::vl53l0x::SequenceSteps::no_dss</a></div><div class="ttdeci">constexpr SequenceSteps no_dss() const</div><div class="ttdoc">Create a new SequenceSteps by removing DSS from steps of this instance.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00537">vl53l0x_types.h:537</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_timeout_html_a7c921771e50e001ab46e27004ec667ae"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a7c921771e50e001ab46e27004ec667ae">devices::vl53l0x::SequenceStepsTimeout::pre_range_us</a></div><div class="ttdeci">uint32_t pre_range_us() const</div><div class="ttdoc">Calculate the timing in us of PRE-RANGE step.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00695">vl53l0x_types.h:695</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_html_a290189327186c83c8865c706e188343f"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a290189327186c83c8865c706e188343f">devices::vl53l0x::SequenceSteps::is_final_range</a></div><div class="ttdeci">bool is_final_range() const</div><div class="ttdoc">Indicate if this instance has FINAL-RANGE step.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00609">vl53l0x_types.h:609</a></div></div>
-<div class="ttc" id="aclassstreams_1_1ostream_html"><div class="ttname"><a href="classstreams_1_1ostream.html">streams::ostream</a></div><div class="ttdoc">Output stream wrapper to provide formatted output API, a la C++.</div><div class="ttdef"><b>Definition:</b> <a href="streams_8h_source.html#l00060">streams.h:61</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_html_aafe04eb6fb3a550538fb332f4f1030e3"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#aafe04eb6fb3a550538fb332f4f1030e3">devices::vl53l0x::SequenceSteps::final_range</a></div><div class="ttdeci">constexpr SequenceSteps final_range() const</div><div class="ttdoc">Create a new SequenceSteps by adding FINAL-RANGE to steps of this instance.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00521">vl53l0x_types.h:521</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_g_p_i_o_settings_html_af413631057b7592b03bf9d32cc156d21"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#af413631057b7592b03bf9d32cc156d21">devices::vl53l0x::GPIOSettings::high_threshold</a></div><div class="ttdeci">static constexpr GPIOSettings high_threshold(uint16_t threshold, bool high_polarity=false)</div><div class="ttdoc">Create GPIOSettings for interrupt triggered when range is above threshold.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00291">vl53l0x_types.h:291</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_timeout_html_a5cb56283ce7d3d1dc6ea532a36dcd583"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a5cb56283ce7d3d1dc6ea532a36dcd583">devices::vl53l0x::SequenceStepsTimeout::msrc_dss_tcc_us</a></div><div class="ttdeci">uint32_t msrc_dss_tcc_us() const</div><div class="ttdoc">Calculate the timing in us of any of MSRC, DSS or TCC steps.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00687">vl53l0x_types.h:687</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_html_a91d0f033f2c874e5e9bc625e83e7c34f"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a91d0f033f2c874e5e9bc625e83e7c34f">devices::vl53l0x::SequenceSteps::no_tcc</a></div><div class="ttdeci">constexpr SequenceSteps no_tcc() const</div><div class="ttdoc">Create a new SequenceSteps by removing TCC from steps of this instance.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00529">vl53l0x_types.h:529</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_s_p_a_d_reference_html_abc34303925538e64effd760061ffea9a"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_s_p_a_d_reference.html#abc34303925538e64effd760061ffea9a">devices::vl53l0x::SPADReference::spad_refs</a></div><div class="ttdeci">const uint8_t * spad_refs() const</div><div class="ttdoc">Get a pointer to the 6-byte array stored in this SPADReference instance.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00391">vl53l0x_types.h:391</a></div></div>
-<div class="ttc" id="anamespacedevices_1_1vl53l0x_html_a6779d407b6c38c353138058714af81cba055c1a591abb0e8cd86dc969727bcc0b"><div class="ttname"><a href="namespacedevices_1_1vl53l0x.html#a6779d407b6c38c353138058714af81cba055c1a591abb0e8cd86dc969727bcc0b">devices::vl53l0x::GPIOFunction::DISABLED</a></div><div class="ttdeci">@ DISABLED</div><div class="ttdoc">No interrupt triggered on GPIO pin.</div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_g_p_i_o_settings_html_a7466877a047139383b1664a7c834eaf9"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7466877a047139383b1664a7c834eaf9">devices::vl53l0x::GPIOSettings::low_threshold</a></div><div class="ttdeci">uint16_t low_threshold() const</div><div class="ttdoc">Return the current low threshold, in mm.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00329">vl53l0x_types.h:329</a></div></div>
-<div class="ttc" id="anamespaceutils_html_a84e5a79013cf3cf3c46a09b2c4861d37"><div class="ttname"><a href="namespaceutils.html#a84e5a79013cf3cf3c46a09b2c4861d37">utils::high_byte</a></div><div class="ttdeci">constexpr uint8_t high_byte(uint16_t word)</div><div class="ttdoc">Extract the high order byte of a 16-bits word.</div><div class="ttdef"><b>Definition:</b> <a href="utilities_8h_source.html#l00284">utilities.h:284</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_device_status_html"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_device_status.html">devices::vl53l0x::DeviceStatus</a></div><div class="ttdoc">Status of device as retrieved by VL53L0X::get_range_status().</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00176">vl53l0x_types.h:177</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_timeout_html_aea9c078711e2f3a96d5330cd0074fdf0"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#aea9c078711e2f3a96d5330cd0074fdf0">devices::vl53l0x::SequenceStepsTimeout::pre_range_mclks</a></div><div class="ttdeci">uint16_t pre_range_mclks() const</div><div class="ttdoc">MCLK for PRE-RANGE step.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00665">vl53l0x_types.h:665</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_html_a1247c7623f7c60f303afd6fa01ba3b41"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a1247c7623f7c60f303afd6fa01ba3b41">devices::vl53l0x::SequenceSteps::is_msrc</a></div><div class="ttdeci">bool is_msrc() const</div><div class="ttdoc">Indicate if this instance has MSRC (Minimum Signal Rate Check) step.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00593">vl53l0x_types.h:593</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_g_p_i_o_settings_html_a7a9559cdb4ff3ac4c3b8e15a26983091"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7a9559cdb4ff3ac4c3b8e15a26983091">devices::vl53l0x::GPIOSettings::high_polarity</a></div><div class="ttdeci">bool high_polarity() const</div><div class="ttdoc">Return the current polarity level of GPIO interrupts.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00322">vl53l0x_types.h:322</a></div></div>
-<div class="ttc" id="anamespacebits_html_a61b82475468b428f5a65a21da09f1938"><div class="ttname"><a href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a></div><div class="ttdeci">static constexpr uint8_t BV8(uint8_t bit)</div><div class="ttdoc">Create a uint8_t bitmask for the given bit number.</div><div class="ttdef"><b>Definition:</b> <a href="bits_8h_source.html#l00041">bits.h:41</a></div></div>
-<div class="ttc" id="anamespacedevices_1_1vl53l0x_html_a58601e220af84e79fca7689a91748e42"><div class="ttname"><a href="namespacedevices_1_1vl53l0x.html#a58601e220af84e79fca7689a91748e42">devices::vl53l0x::PowerMode</a></div><div class="ttdeci">PowerMode</div><div class="ttdoc">Possible power modes of VL53L0X device as returned by VL53L0X::get_power_mode().</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00211">vl53l0x_types.h:212</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_s_p_a_d_reference_html"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_s_p_a_d_reference.html">devices::vl53l0x::SPADReference</a></div><div class="ttdoc">Hold reference SPADs (Single Photon Avalanche Diode).</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00376">vl53l0x_types.h:377</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_s_p_a_d_reference_html_a3289b954acf99d49f3870b1da0c65b01"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_s_p_a_d_reference.html#a3289b954acf99d49f3870b1da0c65b01">devices::vl53l0x::SPADReference::spad_refs</a></div><div class="ttdeci">uint8_t * spad_refs()</div><div class="ttdoc">Get a pointer to the 6-byte array stored in this SPADReference instance.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00400">vl53l0x_types.h:400</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_device_status_html_a3959868417ecb5c0335eebcc5f2d524f"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_device_status.html#a3959868417ecb5c0335eebcc5f2d524f">devices::vl53l0x::DeviceStatus::data_ready</a></div><div class="ttdeci">bool data_ready() const</div><div class="ttdoc">Indicate if data (range) is ready for reading.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00195">vl53l0x_types.h:195</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_g_p_i_o_settings_html_ae81149b5b8cbb599fdcb8218fdad5afb"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#ae81149b5b8cbb599fdcb8218fdad5afb">devices::vl53l0x::GPIOSettings::low_threshold</a></div><div class="ttdeci">static constexpr GPIOSettings low_threshold(uint16_t threshold, bool high_polarity=false)</div><div class="ttdoc">Create GPIOSettings for interrupt triggered when range is under threshold.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00278">vl53l0x_types.h:278</a></div></div>
-<div class="ttc" id="anamespacedevices_1_1vl53l0x_html_a07eefbde97029a7493093997fd81c57a"><div class="ttname"><a href="namespacedevices_1_1vl53l0x.html#a07eefbde97029a7493093997fd81c57a">devices::vl53l0x::VcselPeriodType</a></div><div class="ttdeci">VcselPeriodType</div><div class="ttdoc">Type of pulse period configured for VL53L0X device VCSEL (Vertical Cavity Surface Emitting Laser).</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00419">vl53l0x_types.h:420</a></div></div>
-<div class="ttc" id="anamespaceutils_html_a9d48a47fd601d3b960ce55b26a4d5194"><div class="ttname"><a href="namespaceutils.html#a9d48a47fd601d3b960ce55b26a4d5194">utils::as_uint16_t</a></div><div class="ttdeci">constexpr uint16_t as_uint16_t(uint8_t high, uint8_t low)</div><div class="ttdoc">Convert 2 bytes into an unsigned int.</div><div class="ttdef"><b>Definition:</b> <a href="utilities_8h_source.html#l00295">utilities.h:295</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_g_p_i_o_settings_html_ae3e420e30284c9d73fd05043296a947e"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#ae3e420e30284c9d73fd05043296a947e">devices::vl53l0x::GPIOSettings::sample_ready</a></div><div class="ttdeci">static constexpr GPIOSettings sample_ready(bool high_polarity=false)</div><div class="ttdoc">Create GPIOSettings for interrupt triggered when range sample is ready.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00265">vl53l0x_types.h:265</a></div></div>
 <div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_fix_point9__7_html_aa6c787fe53ef61c90fc4393303f7f1a2"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_fix_point9__7.html#aa6c787fe53ef61c90fc4393303f7f1a2">devices::vl53l0x::FixPoint9_7::is_valid</a></div><div class="ttdeci">static constexpr bool is_valid(float value)</div><div class="ttdoc">Check that a float value is valid for conversion to 9.7 fix-point.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00059">vl53l0x_types.h:59</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_device_status_html_af523ee60387073e9a154356126492c80"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_device_status.html#af523ee60387073e9a154356126492c80">devices::vl53l0x::DeviceStatus::error</a></div><div class="ttdeci">DeviceError error() const</div><div class="ttdoc">Device error.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00186">vl53l0x_types.h:186</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_html_abc9fef218832edf1808741c45c3053b6"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#abc9fef218832edf1808741c45c3053b6">devices::vl53l0x::SequenceSteps::create</a></div><div class="ttdeci">static constexpr SequenceSteps create()</div><div class="ttdoc">Create an empty step sequence for further adding individual steps.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00464">vl53l0x_types.h:464</a></div></div>
 <div class="ttc" id="anamespacedevices_1_1vl53l0x_html"><div class="ttname"><a href="namespacedevices_1_1vl53l0x.html">devices::vl53l0x</a></div><div class="ttdoc">Defines API for VL53L0X Time-of-Flight ranging sensor chip usage.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x_8h_source.html#l00058">vl53l0x.h:59</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_timeout_html_a44e56b5a53797d5c9c4bf4bf56b11f7d"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a44e56b5a53797d5c9c4bf4bf56b11f7d">devices::vl53l0x::SequenceStepsTimeout::final_range_us</a></div><div class="ttdeci">uint32_t final_range_us(bool is_pre_range) const</div><div class="ttdoc">Calculate the timing in us of FINAL-RANGE step.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00706">vl53l0x_types.h:706</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_s_p_a_d_info_html_a379e22e071c9dad2c4421a7bb1f897e6"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_s_p_a_d_info.html#a379e22e071c9dad2c4421a7bb1f897e6">devices::vl53l0x::SPADInfo::is_aperture</a></div><div class="ttdeci">bool is_aperture() const</div><div class="ttdoc">Indicate which is the first SPAD to enable, if false this is SPAD 0, else it is SPAD 12.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00758">vl53l0x_types.h:758</a></div></div>
 <div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_fix_point9__7_html"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_fix_point9__7.html">devices::vl53l0x::FixPoint9_7</a></div><div class="ttdoc">Helper class to handle VL53L0X special fix-point 9.7 values.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00049">vl53l0x_types.h:50</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_html_a7edccc422bafabf0229eaf0a47a7441d"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a7edccc422bafabf0229eaf0a47a7441d">devices::vl53l0x::SequenceSteps::is_pre_range</a></div><div class="ttdeci">bool is_pre_range() const</div><div class="ttdoc">Indicate if this instance has PRE-RANGE step.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00601">vl53l0x_types.h:601</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_html_aa68c2f2ef21ad07f6f386e43aacac3a2"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#aa68c2f2ef21ad07f6f386e43aacac3a2">devices::vl53l0x::SequenceSteps::all</a></div><div class="ttdeci">static constexpr SequenceSteps all()</div><div class="ttdoc">Create a full step sequence with all steps, with the possibility to remove steps you do not want:</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00477">vl53l0x_types.h:477</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_html_a7f1320ced4e636e158815aa10f273e8f"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a7f1320ced4e636e158815aa10f273e8f">devices::vl53l0x::SequenceSteps::value</a></div><div class="ttdeci">uint8_t value() const</div><div class="ttdoc">Get steps of this instance as a byte.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00569">vl53l0x_types.h:569</a></div></div>
-<div class="ttc" id="anamespaceutils_html_ad5f19301125b8e9dc9e89ea50da962fa"><div class="ttname"><a href="namespaceutils.html#ad5f19301125b8e9dc9e89ea50da962fa">utils::low_byte</a></div><div class="ttdeci">constexpr uint8_t low_byte(uint16_t word)</div><div class="ttdoc">Extract the low order byte of a 16-bits word.</div><div class="ttdef"><b>Definition:</b> <a href="utilities_8h_source.html#l00276">utilities.h:276</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_html_a1b687ce3643b13c54bdf36823d0c99cd"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a1b687ce3643b13c54bdf36823d0c99cd">devices::vl53l0x::SequenceSteps::no_final_range</a></div><div class="ttdeci">constexpr SequenceSteps no_final_range() const</div><div class="ttdoc">Create a new SequenceSteps by removing FINAL-RANGE from steps of this instance.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00561">vl53l0x_types.h:561</a></div></div>
-<div class="ttc" id="anamespacedevices_1_1vl53l0x_html_a9dd5b65f54eecca7c3cef80254c553d8"><div class="ttname"><a href="namespacedevices_1_1vl53l0x.html#a9dd5b65f54eecca7c3cef80254c553d8">devices::vl53l0x::DeviceError</a></div><div class="ttdeci">DeviceError</div><div class="ttdoc">Possible error codes returned by VL53L0X device.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00145">vl53l0x_types.h:146</a></div></div>
 <div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_fix_point9__7_html_af8f703d6a7a60bb5cbfeaefeae2a4290"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_fix_point9__7.html#af8f703d6a7a60bb5cbfeaefeae2a4290">devices::vl53l0x::FixPoint9_7::convert</a></div><div class="ttdeci">static constexpr float convert(uint16_t value)</div><div class="ttdoc">Convert an 9.7 fix-point value into a float.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00082">vl53l0x_types.h:82</a></div></div>
-<div class="ttc" id="anamespacebits_html_a299b783445b74ee74546da2f1b2e7990"><div class="ttname"><a href="namespacebits.html#a299b783445b74ee74546da2f1b2e7990">bits::CBV8</a></div><div class="ttdeci">static constexpr uint8_t CBV8(uint8_t bit)</div><div class="ttdoc">Create a uint8_t inverted bitmask for the given bit number.</div><div class="ttdef"><b>Definition:</b> <a href="bits_8h_source.html#l00137">bits.h:137</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_html_a11d72d3fc02fb5ede7e61e598df47b65"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a11d72d3fc02fb5ede7e61e598df47b65">devices::vl53l0x::SequenceSteps::no_msrc</a></div><div class="ttdeci">constexpr SequenceSteps no_msrc() const</div><div class="ttdoc">Create a new SequenceSteps by removing MSRC from steps of this instance.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00545">vl53l0x_types.h:545</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_g_p_i_o_settings_html"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html">devices::vl53l0x::GPIOSettings</a></div><div class="ttdoc">Settings for behavior of VL53L0X GPIO pin.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00249">vl53l0x_types.h:250</a></div></div>
 <div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_fix_point9__7_html_ad0d9c4be9e40a633b2b49ae77574720d"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_fix_point9__7.html#ad0d9c4be9e40a633b2b49ae77574720d">devices::vl53l0x::FixPoint9_7::convert</a></div><div class="ttdeci">static constexpr uint16_t convert(float value)</div><div class="ttdoc">Convert a float value into an 9.7 fix-point.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00072">vl53l0x_types.h:72</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_html_a3a117e1305677682e46dad472bce5fe4"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a3a117e1305677682e46dad472bce5fe4">devices::vl53l0x::SequenceSteps::dss</a></div><div class="ttdeci">constexpr SequenceSteps dss() const</div><div class="ttdoc">Create a new SequenceSteps by adding DSS to steps of this instance.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00497">vl53l0x_types.h:497</a></div></div>
-<div class="ttc" id="anamespacedevices_1_1vl53l0x_html_a9dd5b65f54eecca7c3cef80254c553d8ab50339a10e1de285ac99d4c3990b8693"><div class="ttname"><a href="namespacedevices_1_1vl53l0x.html#a9dd5b65f54eecca7c3cef80254c553d8ab50339a10e1de285ac99d4c3990b8693">devices::vl53l0x::DeviceError::NONE</a></div><div class="ttdeci">@ NONE</div><div class="ttdoc">No error.</div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_timeout_html_a9008ce91200e42b579640e3f7be62603"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a9008ce91200e42b579640e3f7be62603">devices::vl53l0x::SequenceStepsTimeout::msrc_dss_tcc_mclks</a></div><div class="ttdeci">uint16_t msrc_dss_tcc_mclks() const</div><div class="ttdoc">MCLK for any of MSRC, DSS or TCC steps.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00657">vl53l0x_types.h:657</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_s_p_a_d_info_html"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_s_p_a_d_info.html">devices::vl53l0x::SPADInfo</a></div><div class="ttdoc">Hold SPAD information from VL53L0X device.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00742">vl53l0x_types.h:743</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_html"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps.html">devices::vl53l0x::SequenceSteps</a></div><div class="ttdoc">Hold VL53L0X sequence steps to use for ranging.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00445">vl53l0x_types.h:446</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_s_p_a_d_info_html_afbfd175637b8e6b98ab8d8105955a0cc"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_s_p_a_d_info.html#afbfd175637b8e6b98ab8d8105955a0cc">devices::vl53l0x::SPADInfo::count</a></div><div class="ttdeci">uint8_t count() const</div><div class="ttdoc">Indicate the number of SPADs to enable.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00766">vl53l0x_types.h:766</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_html_af411fa73a8590ecdb1cb06724f6d12e0"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#af411fa73a8590ecdb1cb06724f6d12e0">devices::vl53l0x::SequenceSteps::is_dss</a></div><div class="ttdeci">bool is_dss() const</div><div class="ttdoc">Indicate if this instance has DSS (Dynamic SPAD Selection) step.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00585">vl53l0x_types.h:585</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_html_abd1ec3b0c96bee3b230f5d37b5fbf60f"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#abd1ec3b0c96bee3b230f5d37b5fbf60f">devices::vl53l0x::SequenceSteps::msrc</a></div><div class="ttdeci">constexpr SequenceSteps msrc() const</div><div class="ttdoc">Create a new SequenceSteps by adding MSRC to steps of this instance.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00505">vl53l0x_types.h:505</a></div></div>
-<div class="ttc" id="anamespacedevices_1_1vl53l0x_html_af48a92ac24c4f93d2513d4969b4d5a67a94e94133f4bdc1794c6b647b8ea134d0"><div class="ttname"><a href="namespacedevices_1_1vl53l0x.html#af48a92ac24c4f93d2513d4969b4d5a67a94e94133f4bdc1794c6b647b8ea134d0">devices::vl53l0x::Profile::STANDARD</a></div><div class="ttdeci">@ STANDARD</div><div class="ttdoc">Standard profile: 33ms ranging time, common accuracy, 1.2m range.</div></div>
-<div class="ttc" id="anamespacedevices_1_1vl53l0x_html_a6779d407b6c38c353138058714af81cb"><div class="ttname"><a href="namespacedevices_1_1vl53l0x.html#a6779d407b6c38c353138058714af81cb">devices::vl53l0x::GPIOFunction</a></div><div class="ttdeci">GPIOFunction</div><div class="ttdoc">Possible triggers for VL53L0X GPIO pin.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00226">vl53l0x_types.h:227</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_timeout_html_a4aa83c6bd3c44e38563db96a62a467df"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a4aa83c6bd3c44e38563db96a62a467df">devices::vl53l0x::SequenceStepsTimeout::final_range_mclks</a></div><div class="ttdeci">uint16_t final_range_mclks(bool is_pre_range) const</div><div class="ttdoc">MCLK for FINAL-RANGE step.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00676">vl53l0x_types.h:676</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_html_a7e30138dce3c4490afc3cc6834f3a283"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a7e30138dce3c4490afc3cc6834f3a283">devices::vl53l0x::SequenceSteps::pre_range</a></div><div class="ttdeci">constexpr SequenceSteps pre_range() const</div><div class="ttdoc">Create a new SequenceSteps by adding PRE-RANGE to steps of this instance.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00513">vl53l0x_types.h:513</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_timeout_html"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html">devices::vl53l0x::SequenceStepsTimeout</a></div><div class="ttdoc">Hold VL53L0X sequence steps timeouts and other related settings used for ranging.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00631">vl53l0x_types.h:632</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_html_a4566376dd7d5708520f74167b2009e65"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#a4566376dd7d5708520f74167b2009e65">devices::vl53l0x::SequenceSteps::tcc</a></div><div class="ttdeci">constexpr SequenceSteps tcc() const</div><div class="ttdoc">Create a new SequenceSteps by adding TCC to steps of this instance.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00489">vl53l0x_types.h:489</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_g_p_i_o_settings_html_a4941c147bef09c7b4e016eac56536b0c"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a4941c147bef09c7b4e016eac56536b0c">devices::vl53l0x::GPIOSettings::out_of_window</a></div><div class="ttdeci">static constexpr GPIOSettings out_of_window(uint16_t low_threshold, uint16_t high_threshold, bool high_polarity=false)</div><div class="ttdoc">Create GPIOSettings for interrupt triggered when range is outside a window between low_threshold and ...</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00306">vl53l0x_types.h:306</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_timeout_html_aaff8ee634655a2c44a3de8d7e403d752"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#aaff8ee634655a2c44a3de8d7e403d752">devices::vl53l0x::SequenceStepsTimeout::pre_range_vcsel_period_pclks</a></div><div class="ttdeci">uint8_t pre_range_vcsel_period_pclks() const</div><div class="ttdoc">VCSEL PCLK value for pre-range step.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00641">vl53l0x_types.h:641</a></div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_sequence_steps_html_af82ed2601f966c58c8449ef77941c1d9"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#af82ed2601f966c58c8449ef77941c1d9">devices::vl53l0x::SequenceSteps::is_tcc</a></div><div class="ttdeci">bool is_tcc() const</div><div class="ttdoc">Indicate if this instance has TCC (Target Center Check) step.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00577">vl53l0x_types.h:577</a></div></div>
-<div class="ttc" id="anamespacedevices_1_1vl53l0x_html_a9dd5b65f54eecca7c3cef80254c553d8a696b031073e74bf2cb98e5ef201d4aa3"><div class="ttname"><a href="namespacedevices_1_1vl53l0x.html#a9dd5b65f54eecca7c3cef80254c553d8a696b031073e74bf2cb98e5ef201d4aa3">devices::vl53l0x::DeviceError::UNKNOWN</a></div><div class="ttdeci">@ UNKNOWN</div><div class="ttdoc">Unknown error.</div></div>
-<div class="ttc" id="aclassdevices_1_1vl53l0x_1_1_g_p_i_o_settings_html_a9f832e6f9e1e7fff73cd8a6fa81f3ca6"><div class="ttname"><a href="classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a9f832e6f9e1e7fff73cd8a6fa81f3ca6">devices::vl53l0x::GPIOSettings::high_threshold</a></div><div class="ttdeci">uint16_t high_threshold() const</div><div class="ttdoc">Return the current high threshold, in mm.</div><div class="ttdef"><b>Definition:</b> <a href="vl53l0x__types_8h_source.html#l00336">vl53l0x_types.h:336</a></div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
