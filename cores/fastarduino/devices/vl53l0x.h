@@ -831,7 +831,7 @@ namespace devices::vl53l0x
 			{
 				InterruptStatus status;
 				if (!this->template sync_read<GetInterruptStatusFuture>(status)) return false;
-				if (status != 0)
+				if (uint8_t(status) != 0)
 					return true;
 			}
 			return false;
@@ -1161,7 +1161,7 @@ namespace devices::vl53l0x
 			{
 				InterruptStatus status;
 				if (!this->template sync_read<GetInterruptStatusFuture>(status)) return false;
-				if (status != 0)
+				if (uint8_t(status) != 0)
 					return true;
 			}
 			return false;
@@ -1537,7 +1537,7 @@ namespace devices::vl53l0x
 			{
 				InterruptStatus status;
 				if (!get_interrupt_status(status)) return false;
-				if (status != 0)
+				if (uint8_t(status) != 0)
 				{
 					// 3. Clear interrupt
 					if (!clear_interrupt(0x01)) return false;
