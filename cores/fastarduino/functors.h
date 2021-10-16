@@ -194,6 +194,16 @@ namespace functor
 	template<> class ChangeEndianness<uint64_t, uint64_t> : 
 		public functor_impl::ChangeEndiannessOneImpl<uint64_t>{};
 	/// @endcond
+
+	template<typename FUNCTOR> struct Functor
+	{
+		using ARG_TYPE = typename FUNCTOR::ARG_TYPE;
+		using RES_TYPE = typename FUNCTOR::RES_TYPE;
+		static inline RES_TYPE call(const ARG_TYPE& value)
+		{
+			return FUNCTOR{}(value);
+		}
+	};
 }
 
 #endif /* FUNCTORS_HH */
