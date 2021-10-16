@@ -29,6 +29,7 @@
 #include "utilities.h"
 #include "i2c_device.h"
 
+//TODO add functors wherever needed (replace endianness)
 namespace i2c
 {
 	/// @cond notdocumented
@@ -39,6 +40,11 @@ namespace i2c
 		WriteContent() = default;
 		WriteContent(uint8_t reg, const T& value)
 			:	register_{reg}, value_{BIG_ENDIAN ? utils::change_endianness(value) : value} {}
+
+		uint8_t reg() const
+		{
+			return register_;
+		}
 
 	private:
 		uint8_t register_{};
@@ -79,6 +85,11 @@ namespace i2c
 		using ABSTRACT_FUTURE = typename MANAGER::ABSTRACT_FUTURE;
 		using FUTURE_STATUS_LISTENER = future::FutureStatusListener<ABSTRACT_FUTURE>;
 		using FUTURE_OUTPUT_LISTENER = future::FutureOutputListener<ABSTRACT_FUTURE>;
+
+		uint8_t reg() const
+		{
+			return this->get_input();
+		}
 		/// @endcond
 
 	public:
@@ -202,6 +213,11 @@ namespace i2c
 		/// @cond notdocumented
 		using ABSTRACT_FUTURE = typename MANAGER::ABSTRACT_FUTURE;
 		using FUTURE_STATUS_LISTENER = future::FutureStatusListener<ABSTRACT_FUTURE>;
+
+		uint8_t reg() const
+		{
+			return this->get_input().reg();
+		}
 		/// @endcond
 
 	public:
