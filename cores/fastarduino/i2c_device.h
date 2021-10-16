@@ -380,7 +380,7 @@ namespace i2c
 		 * 
 		 * @tparam F the type of Future to be used for the I2C transaction; this
 		 * template argument must be provided as it cannot be deduced from other
-		 * arguments.
+		 * arguments. This must have a constructor with one argument of type @p T.
 		 * @tparam T the type of @p value automatically deduced from @p value
 		 * @param value the value to write in the I2C transaction
 		 * @retval true if the action was performed successfully, i.e. @p value
@@ -393,6 +393,29 @@ namespace i2c
 		template<typename F, typename T = uint8_t> bool sync_write(const T& value)
 		{
 			F future{value};
+			if (async_write<F>(future) != 0) return false;
+			return (future.await() == future::FutureStatus::READY);
+		}
+
+		/**
+		 * Helper method that launches I2C commands for a simple Future performing
+		 * only one write (typically for device register writing); the method blocks
+		 * until the end of the I2C transaction.
+		 * @warning Blocking API!
+		 * 
+		 * @tparam F the type of Future to be used for the I2C transaction; this
+		 * template argument must be provided as it cannot be deduced from other
+		 * arguments. This must have a default constructor.
+		 * @retval true if the action was performed successfully, i.e. @p value
+		 * was correctly transmitted to the device
+		 * 
+		 * @sa launch_commands()
+		 * @sa write()
+		 * @sa async_write()
+		 */
+		template<typename F> bool sync_write()
+		{
+			F future{};
 			if (async_write<F>(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
