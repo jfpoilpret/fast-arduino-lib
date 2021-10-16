@@ -406,6 +406,8 @@ namespace utils
 		swap_bytes((uint32_t&) value);
 	}
 
+	//FIXME need swap for 64 bits values also!!!
+
 	/// @cond notdocumented
 	template<typename T> union ToUint8
 	{
