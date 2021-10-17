@@ -293,7 +293,7 @@ namespace i2c
 		 * @param output_listener an optional listener to output buffer changes on 
 		 * this future
 		 */
-		explicit TWriteRegisterFuture(const ARG_TYPE& value,
+		explicit TWriteRegisterFuture(const ARG_TYPE& value = ARG_TYPE{},
 			typename PARENT::FUTURE_STATUS_LISTENER* status_listener = nullptr)
 			:	PARENT{REGISTER, value, status_listener} {}
 		/// @cond notdocumented
@@ -307,11 +307,11 @@ namespace i2c
 		/// @endcond
 	};
 
-	//TODO Multi write future (single T)
 	template<typename T, uint8_t NUM_REGS>
 	class WriteMultiContent
 	{
 	public:
+		//TODO improve arguments (e.g. C-array or initializer list)
 		WriteMultiContent(
 			const containers::array<uint8_t, NUM_REGS>& registers, const containers::array<T, NUM_REGS>& values)
 		{
@@ -360,6 +360,7 @@ namespace i2c
 		containers::array<Pair, NUM_REGS> content_{};
 	};
 
+	//TODO DOC
 	template<typename MANAGER, typename T, uint8_t NUM_REGS>
 	class WriteMultiRegisterFuture: public MANAGER::template FUTURE<void, WriteMultiContent<T, NUM_REGS>>
 	{
