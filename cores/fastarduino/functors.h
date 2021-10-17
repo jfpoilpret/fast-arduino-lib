@@ -84,6 +84,7 @@ namespace functor
 	
 	/**
 	 * Identity functor: always returns its argument, unchanged.
+	 * Useful as a default argument to templates requiring a functor.
 	 * @tparam T any type
 	 */
 	template<typename T> class Identity
@@ -108,7 +109,7 @@ namespace functor
 	public:
 		using ARG_TYPE = T;
 		using RES_TYPE = T;
-		RES_TYPE operator()(const ARG_TYPE& value) const
+		RES_TYPE operator()(UNUSED const ARG_TYPE& value) const
 		{
 			return VAL;
 		}
@@ -196,6 +197,14 @@ namespace functor
 		public functor_impl::ChangeEndiannessOneImpl<uint64_t>{};
 	/// @endcond
 
+	/**
+	 * Utility to instantiate and execute a functor from its type.
+	 * @code
+	 * using namespace functor;
+	 * using Converter = Cast<char, uint8_t>;
+	 * uint8_t x = Functor<Converter>::call('a');
+	 * @endcode
+	 */
 	template<typename FUNCTOR> struct Functor
 	{
 		using ARG_TYPE = typename FUNCTOR::ARG_TYPE;
