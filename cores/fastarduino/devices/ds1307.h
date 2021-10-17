@@ -25,6 +25,7 @@
 #include "../array.h"
 #include "../bits.h"
 #include "../i2c.h"
+#include "../functors.h"
 #include "../future.h"
 #include "../utilities.h"
 #include "../i2c_device.h"
@@ -119,10 +120,10 @@ namespace devices::rtc
 		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
 		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
-		template<uint8_t REGISTER, typename T = uint8_t>
-		using TReadRegisterFuture = i2c::TReadRegisterFuture<MANAGER, REGISTER, T, false>;
-		template<uint8_t REGISTER, typename T = uint8_t>
-		using TWriteRegisterFuture = i2c::TWriteRegisterFuture<MANAGER, REGISTER, T, false>;
+		template<uint8_t REGISTER, typename T = uint8_t, typename FUNCTOR = functor::Identity<T>>
+		using TReadRegisterFuture = i2c::TReadRegisterFuture<MANAGER, REGISTER, T, FUNCTOR>;
+		template<uint8_t REGISTER, typename T = uint8_t, typename FUNCTOR = functor::Identity<T>>
+		using TWriteRegisterFuture = i2c::TWriteRegisterFuture<MANAGER, REGISTER, T, FUNCTOR>;
 
 		static constexpr const uint8_t DEVICE_ADDRESS = 0x68 << 1;
 		static constexpr const uint8_t RAM_START = 0x08;
@@ -152,6 +153,44 @@ namespace devices::rtc
 			static constexpr uint8_t OUT_MASK = bits::BV8(7);
 
 			uint8_t data_ = 0;
+		};
+
+		// Conversion functors for datetime (BCD Vs binary)
+		class DatetimeConverterToDevice
+		{
+		public:
+			using ARG_TYPE = tm;
+			using RES_TYPE = tm;
+			RES_TYPE operator()(const ARG_TYPE& datetime) const
+			{
+				tm dt;
+				dt.tm_sec = utils::binary_to_bcd(datetime.tm_sec);
+				dt.tm_min = utils::binary_to_bcd(datetime.tm_min);
+				dt.tm_hour = utils::binary_to_bcd(datetime.tm_hour);
+				dt.tm_mday = utils::binary_to_bcd(datetime.tm_mday);
+				dt.tm_mon = utils::binary_to_bcd(datetime.tm_mon);
+				dt.tm_year = utils::binary_to_bcd(datetime.tm_year);
+				return dt;
+			}
+		};
+
+		class DatetimeConverterFromDevice
+		{
+		public:
+			using ARG_TYPE = tm;
+			using RES_TYPE = tm;
+			RES_TYPE operator()(const ARG_TYPE& datetime) const
+			{
+				tm dt;
+				// convert DS1307 output (BCD) to integer type
+				dt.tm_sec = utils::bcd_to_binary(datetime.tm_sec);
+				dt.tm_min = utils::bcd_to_binary(datetime.tm_min);
+				dt.tm_hour = utils::bcd_to_binary(datetime.tm_hour);
+				dt.tm_mday = utils::bcd_to_binary(datetime.tm_mday);
+				dt.tm_mon = utils::bcd_to_binary(datetime.tm_mon);
+				dt.tm_year = utils::bcd_to_binary(datetime.tm_year);
+				return dt;
+			}
 		};
 
 	public:
@@ -184,30 +223,7 @@ namespace devices::rtc
 		 * 
 		 * @sa set_datetime(SetDatetimeFuture&)
 		 */
-		class SetDatetimeFuture : public TWriteRegisterFuture<TIME_ADDRESS, tm>
-		{
-			using PARENT = TWriteRegisterFuture<TIME_ADDRESS, tm>;
-
-		public:
-			/// @cond notdocumented
-			explicit SetDatetimeFuture(const tm& datetime) : PARENT{prepare_datetime(datetime)} {}
-			// SetDatetimeFuture(SetDatetimeFuture&&) = default;
-			// SetDatetimeFuture& operator=(SetDatetimeFuture&&) = default;
-			/// @endcond
-
-		private:
-			static tm prepare_datetime(const tm& datetime)
-			{
-				tm dt;
-				dt.tm_sec = utils::binary_to_bcd(datetime.tm_sec);
-				dt.tm_min = utils::binary_to_bcd(datetime.tm_min);
-				dt.tm_hour = utils::binary_to_bcd(datetime.tm_hour);
-				dt.tm_mday = utils::binary_to_bcd(datetime.tm_mday);
-				dt.tm_mon = utils::binary_to_bcd(datetime.tm_mon);
-				dt.tm_year = utils::binary_to_bcd(datetime.tm_year);
-				return dt;
-			}
-		};
+		using SetDatetimeFuture = TWriteRegisterFuture<TIME_ADDRESS, tm, DatetimeConverterToDevice>;
 
 		/**
 		 * Change date and time of the RTC chip connected to this driver.
@@ -238,29 +254,7 @@ namespace devices::rtc
 		 * 
 		 * @sa get_datetime(GetDatetimeFuture&)
 		 */
-		class GetDatetimeFuture : public TReadRegisterFuture<TIME_ADDRESS, tm>
-		{
-			using PARENT = TReadRegisterFuture<TIME_ADDRESS, tm>;
-		public:
-			/// @cond notdocumented
-			GetDatetimeFuture() : PARENT{} {}
-			// GetDatetimeFuture(GetDatetimeFuture&&) = default;
-			// GetDatetimeFuture& operator=(GetDatetimeFuture&&) = default;
-
-			bool get(tm& datetime)
-			{
-				if (!PARENT::get(datetime)) return false;
-				// convert DS1307 output (BCD) to integer type
-				datetime.tm_sec = utils::bcd_to_binary(datetime.tm_sec);
-				datetime.tm_min = utils::bcd_to_binary(datetime.tm_min);
-				datetime.tm_hour = utils::bcd_to_binary(datetime.tm_hour);
-				datetime.tm_mday = utils::bcd_to_binary(datetime.tm_mday);
-				datetime.tm_mon = utils::bcd_to_binary(datetime.tm_mon);
-				datetime.tm_year = utils::bcd_to_binary(datetime.tm_year);
-				return true;
-			}
-			/// @endcond
-		};
+		using GetDatetimeFuture = TReadRegisterFuture<TIME_ADDRESS, tm, DatetimeConverterFromDevice>;
 
 		/**
 		 * Get the current date and time from the RTC chip.
