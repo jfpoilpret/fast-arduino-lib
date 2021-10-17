@@ -228,7 +228,7 @@ namespace devices::magneto
 		public:
 			using ARG_TYPE = Sensor3D;
 			using RES_TYPE = Sensor3D;
-			Sensor3D operator()(const Sensor3D& value)
+			Sensor3D operator()(const Sensor3D& value) const
 			{
 				Sensor3D result = value;
 				// HMC5883L registers are in order X,Z,Y while Sensor3D is X,Y,Z

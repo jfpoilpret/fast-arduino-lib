@@ -90,7 +90,7 @@ namespace devices::mcp230xx
 		public:
 			using ARG_TYPE = InterruptPolarity;
 			using RES_TYPE = uint8_t;
-			uint8_t operator()(InterruptPolarity int_polarity)
+			uint8_t operator()(InterruptPolarity int_polarity) const
 			{
 				return (int_polarity == InterruptPolarity::ACTIVE_HIGH) ? IOCON_INTPOL : 0;
 			}
