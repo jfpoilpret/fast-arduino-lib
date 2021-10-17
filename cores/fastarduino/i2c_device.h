@@ -21,7 +21,6 @@
 #ifndef I2C_DEVICE_HH
 #define I2C_DEVICE_HH
 
-#include "array.h"
 #include "initializer_list.h"
 #include "iterator.h"
 #include "errors.h"
@@ -372,6 +371,16 @@ namespace i2c
 			return launch_commands(future, {write(0, false, stop)});
 		}
 
+		//TODO DOC
+		template<typename F> int async_multi_write(PROXY<F> future, bool stop = true)
+		{
+			constexpr uint8_t NUM_WRITES = F::NUM_WRITES;
+			constexpr uint8_t WRITE_SIZE = F::WRITE_SIZE;
+			I2CLightCommand writes[NUM_WRITES];
+			prepare_multi_write_commands(writes, NUM_WRITES, WRITE_SIZE, stop);
+			return launch_commands(future, utils::range(writes, NUM_WRITES));
+		}
+
 		/**
 		 * Helper method that launches I2C commands for a simple Future performing
 		 * only one write (typically for device register writing); the method blocks
@@ -461,6 +470,13 @@ namespace i2c
 			// check sum of read commands byte_count matches future output size
 			// check sum of write commands byte_count matches future input size
 			return (total_write == max_write) && (total_read == max_read);
+		}
+
+		void prepare_multi_write_commands(I2CLightCommand* commands, uint8_t count, uint8_t write_size, bool stop)
+		{
+			I2CLightCommand command = write(write_size, false, stop);
+			for (uint8_t i = 0; i < count; ++i)
+				*commands++ = command;
 		}
 
 		uint8_t device_ = 0;
