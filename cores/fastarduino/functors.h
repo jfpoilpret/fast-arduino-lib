@@ -72,7 +72,7 @@ namespace functor
 				TT* ptr = reinterpret_cast<TT*>(&result);
 				TT* last = ptr + COUNT;
 				while (ptr < last)
-					swap_bytes(*ptr++);
+					utils::swap_bytes(*ptr++);
 				return result;
 			}
 		};
@@ -138,6 +138,7 @@ namespace functor
 	 */
 	template<typename F1, typename F2> class Compose
 	{
+	public:
 		using ARG_TYPE = typename F2::ARG_TYPE;
 		using RES_TYPE = typename F1::RES_TYPE;
 		RES_TYPE operator()(const ARG_TYPE& value) const
