@@ -27,10 +27,13 @@
 #include <stdint.h>
 #include "common_magneto.h"
 #include "../array.h"
+#include "../functors.h"
 #include "../i2c_device.h"
+#include "../i2c_device_utilities.h"
 #include "../utilities.h"
 
 //TODO rename namespace: "magneto" is not relevant here, eg "motion" or "motion_sensor"
+//TODO rework bitfields to use bitmasks instead (more portable, and possibly more efficient)
 namespace devices::magneto
 {
 	/**
@@ -103,7 +106,7 @@ namespace devices::magneto
 	/**
 	 * The Digital Low Pass Filter bandwidth to select for the chip
 	 * (register map §4.3).
-	 * This can be expressed either from the gyroscope viewpoint ot from the
+	 * This can be expressed either from the gyroscope viewpoint or from the
 	 * accelerometer viewpoint, but any setting is common to both features, i.e.
 	 * selecting a DLPF setting for the accelerometer will force the matching
 	 * setting for the gyroscope.
@@ -281,9 +284,42 @@ namespace devices::magneto
 		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
 		// Forward declarations needed by compiler
-		class Sensor3DFuture;
+		template<uint8_t REGISTER, typename T = uint8_t, typename FUNCTOR = functor::ChangeEndianness<T>>
+		using TReadRegisterFuture = i2c::TReadRegisterFuture<MANAGER, REGISTER, T, FUNCTOR>;
+		template<uint8_t REGISTER, typename T = uint8_t, typename FUNCTOR = functor::ChangeEndianness<T>>
+		using TWriteRegisterFuture = i2c::TWriteRegisterFuture<MANAGER, REGISTER, T, FUNCTOR>;
+
+		template<uint8_t REGISTER>
+		using Sensor3DFuture = TReadRegisterFuture<REGISTER, Sensor3D>;
+
+		static constexpr const uint8_t SMPRT_DIV = 0x19;
+		static constexpr const uint8_t CONFIG = 0x1A;
+		static constexpr const uint8_t GYRO_CONFIG = 0x1B;
+		static constexpr const uint8_t ACCEL_CONFIG = 0x1C;
+
+		static constexpr const uint8_t FIFO_EN = 0x23;
+		static constexpr const uint8_t INT_PIN_CFG = 0x37;
+		static constexpr const uint8_t INT_ENABLE = 0x38;
+		static constexpr const uint8_t INT_STATUS = 0x3A;
+
+		static constexpr const uint8_t ACCEL_XOUT = 0x3B;
+		static constexpr const uint8_t TEMP_OUT = 0x41;
+		static constexpr const uint8_t GYRO_XOUT = 0x43;
+
+		static constexpr const uint8_t USER_CTRL = 0x6A;
+		static constexpr const uint8_t FIFO_RESET = 0x04;
+		static constexpr const uint8_t FIFO_ENABLE = 0x40;
+
+		static constexpr const uint8_t PWR_MGMT_1 = 0x6B;
+		static constexpr const uint8_t PWR_MGMT_2 = 0x6C;
+
+		static constexpr const uint8_t FIFO_COUNT = 0x72;
+		static constexpr const uint8_t FIFO_R_W = 0x74;
+
+		static constexpr const uint8_t WHO_AM_I = 0x75;
+
 		class PowerManagement;
-		class PowerManagementFuture;
+		using PowerManagementFuture = TWriteRegisterFuture<PWR_MGMT_1, PowerManagement>;
 
 	public:
 		/**
@@ -481,7 +517,7 @@ namespace devices::magneto
 		int end(PROXY<EndFuture> future) INLINE
 		{
 			// Put to sleep mode
-			return write_power(future);
+			return this->async_write(future);
 		}
 
 		/**
@@ -520,7 +556,7 @@ namespace devices::magneto
 		 */
 		int reset(PROXY<ResetFuture> future) INLINE
 		{
-			return write_power(future);
+			return this->async_write(future);
 		}
 
 		/**
@@ -531,15 +567,7 @@ namespace devices::magneto
 		 * 
 		 * @sa gyro_measures(GyroFuture&)
 		 */
-		class GyroFuture : public Sensor3DFuture
-		{
-		public:
-			/// @cond notdocumented
-			GyroFuture() : Sensor3DFuture{GYRO_XOUT} {}
-			GyroFuture(GyroFuture&&) = default;
-			GyroFuture& operator=(GyroFuture&&) = default;
-			/// @endcond
-		};
+		using GyroFuture = Sensor3DFuture<GYRO_XOUT>;
 
 		/**
 		 * Get latest gyroscope measurements from the device (register map §4.19).
@@ -559,7 +587,7 @@ namespace devices::magneto
 		 */
 		int gyro_measures(PROXY<GyroFuture> future)
 		{
-			return this->launch_commands(future, this->write(), this->read());
+			return this->async_read(future);
 		}
 
 		/**
@@ -573,23 +601,7 @@ namespace devices::magneto
 		 * 
 		 * @sa temperature(TemperatureFuture&)
 		 */
-		class TemperatureFuture : public FUTURE<int16_t, uint8_t>
-		{
-			using PARENT = FUTURE<int16_t, uint8_t>;
-		public:
-			/// @cond notdocumented
-			TemperatureFuture() : PARENT{TEMP_OUT} {}
-			TemperatureFuture(TemperatureFuture&&) = default;
-			TemperatureFuture& operator=(TemperatureFuture&&) = default;
-
-			bool get(int16_t& result)
-			{
-				if (!PARENT::get(result)) return false;
-				utils::swap_bytes(result);
-				return true;
-			}
-			/// @endcond
-		};
+		using TemperatureFuture = TReadRegisterFuture<TEMP_OUT, int16_t>;
 
 		/**
 		 * Get latest chip temperature measurement (register map §4.18).
@@ -611,7 +623,7 @@ namespace devices::magneto
 		 */
 		int temperature(PROXY<TemperatureFuture> future)
 		{
-			return this->launch_commands(future, {this->write(), this->read()});
+			return this->async_read(future);
 		}
 
 		/**
@@ -632,15 +644,7 @@ namespace devices::magneto
 		 * 
 		 * @sa accel_measures(AccelFuture&)
 		 */
-		class AccelFuture : public Sensor3DFuture
-		{
-		public:
-			/// @cond notdocumented
-			AccelFuture() : Sensor3DFuture{ACCEL_XOUT} {}
-			AccelFuture(AccelFuture&&) = default;
-			AccelFuture& operator=(AccelFuture&&) = default;
-			/// @endcond
-		};
+		using AccelFuture = Sensor3DFuture<ACCEL_XOUT>;
 
 		/**
 		 * Get latest accelerometer measurements from the device (register map §4.17).
@@ -660,7 +664,7 @@ namespace devices::magneto
 		 */
 		int accel_measures(PROXY<AccelFuture> future)
 		{
-			return this->launch_commands(future, this->write(), this->read());
+			return this->async_read(future);
 		}
 
 		/**
@@ -671,25 +675,8 @@ namespace devices::magneto
 		 * 
 		 * @sa all_measures(AllMeasuresFuture&)
 		 */
-		class AllMeasuresFuture : public FUTURE<AllSensors, uint8_t>
-		{
-			using PARENT = FUTURE<AllSensors, uint8_t>;
-		public:
-			/// @cond notdocumented
-			AllMeasuresFuture() : PARENT{ACCEL_XOUT} {}
-			AllMeasuresFuture(AllMeasuresFuture&&) = default;
-			AllMeasuresFuture& operator=(AllMeasuresFuture&&) = default;
-
-			bool get(AllSensors& result)
-			{
-				if (!PARENT::get(result)) return false;
-				format_sensors(result.accel);
-				format_sensors(result.gyro);
-				utils::swap_bytes(result.temperature);
-				return true;
-			}
-			/// @endcond
-		};
+		using AllMeasuresFuture = 
+			TReadRegisterFuture<ACCEL_XOUT, AllSensors, functor::ChangeEndianness<AllSensors, int16_t>>;
 
 		/**
 		 * Get latest measurements of all device sensors (gyroscope, accelerometer,
@@ -710,7 +697,7 @@ namespace devices::magneto
 		 */
 		int all_measures(PROXY<AllMeasuresFuture> future)
 		{
-			return this->launch_commands(future, {this->write(), this->read()});
+			return this->async_read(future);
 		}
 
 		/**
@@ -721,16 +708,7 @@ namespace devices::magneto
 		 * 
 		 * @sa interrupt_status(InterruptStatusFuture&)
 		 */
-		class InterruptStatusFuture : public FUTURE<INTStatus, uint8_t>
-		{
-			using PARENT = FUTURE<INTStatus, uint8_t>;
-		public:
-			/// @cond notdocumented
-			InterruptStatusFuture() : PARENT{INT_STATUS} {}
-			InterruptStatusFuture(InterruptStatusFuture&&) = default;
-			InterruptStatusFuture& operator=(InterruptStatusFuture&&) = default;
-			/// @endcond
-		};
+		using InterruptStatusFuture = TReadRegisterFuture<INT_STATUS, INTStatus>;
 
 		/**
 		 * Get the interrupt status (register map §4.16) after an interrupt has 
@@ -752,7 +730,7 @@ namespace devices::magneto
 		 */
 		int interrupt_status(PROXY<InterruptStatusFuture> future)
 		{
-			return this->launch_commands(future, {this->write(), this->read()});
+			return this->async_read(future);
 		}
 
 		/**
@@ -763,16 +741,8 @@ namespace devices::magneto
 		 * 
 		 * @sa reset_fifo(ResetFifoFuture&)
 		 */
-		class ResetFifoFuture : public FUTURE<void, containers::array<uint8_t, 2>>
-		{
-			using PARENT = FUTURE<void, containers::array<uint8_t, 2>>;
-		public:
-			/// @cond notdocumented
-			ResetFifoFuture() : PARENT{{USER_CTRL, FIFO_ENABLE | FIFO_RESET}} {}
-			ResetFifoFuture(ResetFifoFuture&&) = default;
-			ResetFifoFuture& operator=(ResetFifoFuture&&) = default;
-			/// @endcond
-		};
+		using ResetFifoFuture = 
+			TWriteRegisterFuture<USER_CTRL, uint8_t, functor::Constant<uint8_t, FIFO_ENABLE | FIFO_RESET>>;
 
 		/**
 		 * Reset the FIFO buffer (parameter map §4.27).
@@ -792,7 +762,7 @@ namespace devices::magneto
 		 */
 		int reset_fifo(PROXY<ResetFifoFuture> future)
 		{
-			return this->launch_commands(future, {this->write()});
+			return this->async_write(future);
 		}
 
 		/**
@@ -803,23 +773,7 @@ namespace devices::magneto
 		 * 
 		 * @sa fifo_count(FifoCountFuture&)
 		 */
-		class FifoCountFuture : public FUTURE<uint16_t, uint8_t>
-		{
-			using PARENT = FUTURE<uint16_t, uint8_t>;
-		public:
-			/// @cond notdocumented
-			FifoCountFuture() : PARENT{FIFO_COUNT} {}
-			FifoCountFuture(FifoCountFuture&&) = default;
-			FifoCountFuture& operator=(FifoCountFuture&&) = default;
-
-			bool get(uint16_t& result)
-			{
-				if (!PARENT::get(result)) return false;
-				utils::swap_bytes(result);
-				return true;
-			}
-			/// @endcond
-		};
+		using FifoCountFuture = TReadRegisterFuture<FIFO_COUNT, uint16_t>;
 
 		/**
 		 * Get the number of bytes currently stored in the FIFO buffer (register 
@@ -843,7 +797,7 @@ namespace devices::magneto
 		 */
 		int fifo_count(PROXY<FifoCountFuture> future)
 		{
-			return this->launch_commands(future, {this->write(), this->read()});
+			return this->async_read(future);
 		}
 
 		/**
@@ -861,26 +815,7 @@ namespace devices::magneto
 		 * @sa AllSensors
 		 */
 		template<typename T>
-		class FifoPopFuture : public FUTURE<T, uint8_t>
-		{
-			using PARENT = FUTURE<T, uint8_t>;
-		public:
-			/// @cond notdocumented
-			FifoPopFuture() : PARENT{FIFO_R_W} {}
-			FifoPopFuture(FifoPopFuture&&) = default;
-			FifoPopFuture& operator=(FifoPopFuture&&) = default;
-
-			bool get(T& result)
-			{
-				if (!PARENT::get(result)) return false;
-				// We need to swap bytes of all words (big-endian to little-endian)
-				uint16_t* temp = reinterpret_cast<uint16_t*>(&result);
-				uint8_t size = sizeof(T) / 2;
-				while (size--) utils::swap_bytes(*temp++);
-				return true;
-			}
-			/// @endcond
-		};
+		using FifoPopFuture = TReadRegisterFuture<FIFO_R_W, T, functor::ChangeEndianness<T, int16_t>>;
 
 		/**
 		 * Get one sample out of the FIFO buffer (register map §4.31).
@@ -908,7 +843,7 @@ namespace devices::magneto
 		 */
 		template<typename T> int fifo_pop(PROXY<FifoPopFuture<T>> future)
 		{
-			return this->launch_commands(future, {this->write(), this->read()});
+			return this->async_read(future);
 		}
 
 		/**
@@ -921,16 +856,7 @@ namespace devices::magneto
 		 * 
 		 * @sa fifo_push(FifoPushFuture&)
 		 */
-		class FifoPushFuture : public FUTURE<void, containers::array<uint8_t, 2>>
-		{
-			using PARENT = FUTURE<void, containers::array<uint8_t, 2>>;
-		public:
-			/// @cond notdocumented
-			explicit FifoPushFuture(uint8_t data) : PARENT{{FIFO_R_W, data}} {}
-			FifoPushFuture(FifoPushFuture&&) = default;
-			FifoPushFuture& operator=(FifoPushFuture&&) = default;
-			/// @endcond
-		};
+		using FifoPushFuture = TWriteRegisterFuture<FIFO_R_W>;
 
 		/**
 		 * Push one byte to the FIFO buffer (register map §4.31).
@@ -954,7 +880,7 @@ namespace devices::magneto
 		 */
 		int fifo_push(PROXY<FifoPushFuture> future)
 		{
-			return this->launch_commands(future, {this->write()});
+			return this->async_write(future);
 		}
 
 		// Synchronous API
@@ -1040,9 +966,7 @@ namespace devices::magneto
 		 */
 		bool end() INLINE
 		{
-			EndFuture future;
-			if (write_power(PARENT::make_proxy(future)) != 0) return false;
-			return (future.await() == future::FutureStatus::READY);
+			return this->template sync_write<EndFuture>();
 		}
 
 		/**
@@ -1056,9 +980,7 @@ namespace devices::magneto
 		 */
 		bool reset() INLINE
 		{
-			ResetFuture future;
-			if (write_power(PARENT::make_proxy(future)) != 0) return false;
-			return (future.await() == future::FutureStatus::READY);
+			return this->template sync_write<ResetFuture>();
 		}
 
 		/**
@@ -1074,9 +996,7 @@ namespace devices::magneto
 		 */
 		bool gyro_measures(Sensor3D& gyro)
 		{
-			GyroFuture future;
-			if (gyro_measures(PARENT::make_proxy(future)) != 0) return false;
-			return future.get(gyro);
+			return this->template sync_read<GyroFuture>(gyro);
 		}
 
 		/**
@@ -1093,13 +1013,9 @@ namespace devices::magneto
 		 */
 		int16_t temperature()
 		{
-			TemperatureFuture future;
-			if (temperature(PARENT::make_proxy(future)) != 0) return INT16_MIN;
-			int16_t temp;
-			if (future.get(temp))
-				return temp;
-			else
-				return INT16_MIN;
+			int16_t temp = INT16_MIN;
+			this->template sync_read<TemperatureFuture>(temp);
+			return temp;
 		}
 
 		/**
@@ -1115,9 +1031,7 @@ namespace devices::magneto
 		 */
 		bool accel_measures(Sensor3D& accel)
 		{
-			AccelFuture future;
-			if (accel_measures(PARENT::make_proxy(future)) != 0) return false;
-			return future.get(accel);
+			return this->template sync_read<AccelFuture>(accel);
 		}
 
 		/**
@@ -1134,9 +1048,7 @@ namespace devices::magneto
 		 */
 		bool all_measures(AllSensors& sensors)
 		{
-			AllMeasuresFuture future;
-			if (all_measures(PARENT::make_proxy(future)) != 0) return false;
-			return future.get(sensors);
+			return this->template sync_read<AllMeasuresFuture>(sensors);
 		}
 
 		/**
@@ -1153,10 +1065,8 @@ namespace devices::magneto
 		 */
 		INTStatus interrupt_status()
 		{
-			InterruptStatusFuture future;
-			if (interrupt_status(PARENT::make_proxy(future)) != 0) return false;
 			INTStatus status;
-			future.get(status);
+			this->template sync_read<InterruptStatusFuture>(status);
 			return status;
 		}
 
@@ -1171,9 +1081,7 @@ namespace devices::magneto
 		 */
 		bool reset_fifo()
 		{
-			ResetFifoFuture future;
-			if (reset_fifo(PARENT::make_proxy(future)) != 0) return false;
-			return (future.await() == future::FutureStatus::READY);
+			return this->template sync_write<ResetFifoFuture>();
 		}
 
 		/**
@@ -1192,10 +1100,8 @@ namespace devices::magneto
 		 */
 		uint16_t fifo_count()
 		{
-			FifoCountFuture future;
-			if (fifo_count(PARENT::make_proxy(future)) != 0) return 0;
 			uint16_t count = 0;
-			if (!future.get(count)) return 0;
+			this->template sync_read<FifoCountFuture>(count);
 			return count;
 		}
 
@@ -1220,9 +1126,7 @@ namespace devices::magneto
 		 */
 		template<typename T> bool fifo_pop(T& output)
 		{
-			FifoPopFuture<T> future;
-			if (fifo_pop(PARENT::make_proxy(future)) != 0) return false;
-			return future.get(output);
+			return this->template sync_read<FifoPopFuture<T>>(output);
 		}
 
 		/**
@@ -1237,28 +1141,10 @@ namespace devices::magneto
 		 */
 		bool fifo_push(uint8_t data)
 		{
-			FifoPushFuture future{data};
-			if (fifo_push(PARENT::make_proxy(future)) != 0) return false;
-			return (future.await() == future::FutureStatus::READY);
+			return this->template sync_write<FifoPushFuture>(data);
 		}
 
 	private:
-		class Sensor3DFuture : public FUTURE<Sensor3D, uint8_t>
-		{
-			using PARENT = FUTURE<Sensor3D, uint8_t>;
-		protected:
-			explicit Sensor3DFuture(uint8_t address) : PARENT{address} {}
-			Sensor3DFuture(Sensor3DFuture&&) = default;
-			Sensor3DFuture& operator=(Sensor3DFuture&&) = default;
-		public:
-			bool get(Sensor3D& result)
-			{
-				if (!PARENT::get(result)) return false;
-				format_sensors(result);
-				return true;
-			}
-		};
-
 		class PowerManagement
 		{
 		public:
@@ -1307,56 +1193,9 @@ namespace devices::magneto
 			bool device_reset_ : 1;
 		};
 
-		class PowerManagementFuture : public FUTURE<void, containers::array<uint8_t, 2>>
-		{
-			using PARENT = FUTURE<void, containers::array<uint8_t, 2>>;
-		protected:
-			explicit PowerManagementFuture(PowerManagement power) : PARENT{{PWR_MGMT_1, uint8_t(power)}} {}
-			PowerManagementFuture(PowerManagementFuture&&) = default;
-			PowerManagementFuture& operator=(PowerManagementFuture&&) = default;
-		};
-
 		static constexpr uint8_t DEVICE_ADDRESS(AD0 ad0)
 		{
 			return uint8_t(uint8_t(0x68 | uint8_t(ad0)) << 1);
-		}
-
-		static constexpr const uint8_t SMPRT_DIV = 0x19;
-		static constexpr const uint8_t CONFIG = 0x1A;
-		static constexpr const uint8_t GYRO_CONFIG = 0x1B;
-		static constexpr const uint8_t ACCEL_CONFIG = 0x1C;
-
-		static constexpr const uint8_t FIFO_EN = 0x23;
-		static constexpr const uint8_t INT_PIN_CFG = 0x37;
-		static constexpr const uint8_t INT_ENABLE = 0x38;
-		static constexpr const uint8_t INT_STATUS = 0x3A;
-
-		static constexpr const uint8_t ACCEL_XOUT = 0x3B;
-		static constexpr const uint8_t TEMP_OUT = 0x41;
-		static constexpr const uint8_t GYRO_XOUT = 0x43;
-
-		static constexpr const uint8_t USER_CTRL = 0x6A;
-		static constexpr const uint8_t FIFO_RESET = 0x04;
-		static constexpr const uint8_t FIFO_ENABLE = 0x40;
-
-		static constexpr const uint8_t PWR_MGMT_1 = 0x6B;
-		static constexpr const uint8_t PWR_MGMT_2 = 0x6C;
-
-		static constexpr const uint8_t FIFO_COUNT = 0x72;
-		static constexpr const uint8_t FIFO_R_W = 0x74;
-
-		static constexpr const uint8_t WHO_AM_I = 0x75;
-
-		int write_power(PowerManagementFuture& future)
-		{
-			return this->launch_commands(future, {this->write()});
-		}
-
-		static void format_sensors(Sensor3D& sensors)
-		{
-			utils::swap_bytes(sensors.x);
-			utils::swap_bytes(sensors.y);
-			utils::swap_bytes(sensors.z);
 		}
 	};
 }
