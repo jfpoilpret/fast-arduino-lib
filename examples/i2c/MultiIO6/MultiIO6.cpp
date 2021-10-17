@@ -42,8 +42,8 @@
 #include <fastarduino/i2c_status.h>
 #include <fastarduino/devices/mcp23008.h>
 
-// #define DEBUG_I2C
-// #define FORCE_SYNC
+#define DEBUG_I2C
+#define FORCE_SYNC
 
 static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
