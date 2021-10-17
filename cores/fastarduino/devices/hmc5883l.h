@@ -24,9 +24,9 @@
 
 #include <math.h>
 #include "common_magneto.h"
+#include "../functors.h"
 #include "../i2c_device.h"
 #include "../i2c_device_utilities.h"
-#include "../array.h"
 #include "../utilities.h"
 
 namespace devices::magneto
@@ -204,10 +204,12 @@ namespace devices::magneto
 		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
 		// Forward declarations needed by compiler
-		template<uint8_t REGISTER, typename T = uint8_t>
-		using TReadRegisterFuture = i2c::TReadRegisterFuture<MANAGER, REGISTER, T, false>;
-		template<uint8_t REGISTER, typename T = uint8_t>
-		using TWriteRegisterFuture = i2c::TWriteRegisterFuture<MANAGER, REGISTER, T, false>;
+		template<uint8_t REGISTER, typename T = uint8_t, typename FUNCTOR = functor::Identity<T>>
+		using TReadRegisterFuture = i2c::TReadRegisterFuture<MANAGER, REGISTER, T, FUNCTOR>;
+		template<uint8_t REGISTER, typename T = uint8_t, typename FUNCTOR = functor::Identity<T>>
+		using TWriteRegisterFuture = i2c::TWriteRegisterFuture<MANAGER, REGISTER, T, FUNCTOR>;
+		template<typename T, uint8_t NUM_REGS>
+		using WriteMultiRegisterFuture = i2c::WriteMultiRegisterFuture<MANAGER, T, NUM_REGS>;
 
 		static constexpr const uint8_t DEVICE_ADDRESS = 0x1E << 1;
 
@@ -219,6 +221,26 @@ namespace devices::magneto
 		static constexpr const uint8_t IDENT_REG_A = 10;
 		static constexpr const uint8_t IDENT_REG_B = 11;
 		static constexpr const uint8_t IDENT_REG_C = 12;
+
+		// Transformer functor for Sensor3D inverted fields
+		class Sensor3DSwitcher
+		{
+		public:
+			using ARG_TYPE = Sensor3D;
+			using RES_TYPE = Sensor3D;
+			Sensor3D operator()(const Sensor3D& value)
+			{
+				Sensor3D result = value;
+				// HMC5883L registers are in order X,Z,Y while Sensor3D is X,Y,Z
+				int16_t temp = result.y;
+				result.y = result.z;
+				result.z = temp;
+				return result;
+			}
+		};
+
+		using Sensor3DTransformer = 
+			functor::Compose<Sensor3DSwitcher, functor::ChangeEndianness<Sensor3D, int16_t>>;
 
 	public:
 		/**
@@ -245,9 +267,9 @@ namespace devices::magneto
 		 * 
 		 * @sa begin(BeginFuture&)
 		 */
-		class BeginFuture : public FUTURE<void, containers::array<uint8_t, 6>>
+		class BeginFuture : public WriteMultiRegisterFuture<uint8_t, 3>
 		{
-			using PARENT = FUTURE<void, containers::array<uint8_t, 6>>;
+			using PARENT = WriteMultiRegisterFuture<uint8_t, 3>;
 		public:
 			/// @cond notdocumented
 			explicit BeginFuture(	OperatingMode mode = OperatingMode::SINGLE,
@@ -255,15 +277,15 @@ namespace devices::magneto
 									DataOutput rate = DataOutput::RATE_15HZ, 
 									SamplesAveraged samples = SamplesAveraged::ONE_SAMPLE,
 									MeasurementMode measurement = MeasurementMode::NORMAL)
-				:	PARENT{{	CONFIG_REG_A, uint8_t(uint8_t(measurement) | uint8_t(rate) | uint8_t(samples)),
-								CONFIG_REG_B, uint8_t(gain),
-								MODE_REG, uint8_t(mode)}} {}
+				:	PARENT{	{	CONFIG_REG_A, CONFIG_REG_B, MODE_REG},
+							{	uint8_t(uint8_t(measurement) | uint8_t(rate) | uint8_t(samples)),
+								uint8_t(gain), uint8_t(mode)}} {}
 			BeginFuture(BeginFuture&&) = default;
 			BeginFuture& operator=(BeginFuture&&) = default;
 
 			Gain gain() const
 			{
-				return static_cast<Gain>(this->get_input()[3]);
+				return static_cast<Gain>(this->get_input().value(1));
 			}
 			/// @endcond
 		};
@@ -290,8 +312,7 @@ namespace devices::magneto
 		int begin(PROXY<BeginFuture> future)
 		{
 			gain_ = GAIN(this->resolve(future).gain());
-			// We split the transaction in 3 write commands (1 byte at CONFIG_REG_A, CONFIG_REG_B and MODE_REG)
-			return this->launch_commands(future, {this->write(2), this->write(2), this->write(2)});
+			return this->async_multi_write(future);
 		}
 
 		/**
@@ -302,15 +323,8 @@ namespace devices::magneto
 		 * 
 		 * @sa end(EndFuture&)
 		 */
-		class EndFuture : public TWriteRegisterFuture<MODE_REG>
-		{
-		public:
-			/// @cond notdocumented
-			EndFuture() : TWriteRegisterFuture<MODE_REG>{uint8_t(OperatingMode::IDLE)} {}
-			EndFuture(EndFuture&&) = default;
-			EndFuture& operator=(EndFuture&&) = default;
-			/// @endcond
-		};
+		using EndFuture = 
+			TWriteRegisterFuture<MODE_REG, uint8_t, functor::Constant<uint8_t, uint8_t(OperatingMode::IDLE)>>;
 
 		/**
 		 * Stop operation of this compass chip. You should not call `magnetic_fields()`
@@ -350,7 +364,7 @@ namespace devices::magneto
 		 * Get the curent chip status.
 		 * @warning Asynchronous API!
 		 * 
-		 * @param future a `TemperatureFuture` passed by the caller, that will be 
+		 * @param future a `StatusFuture` passed by the caller, that will be 
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous
@@ -377,29 +391,8 @@ namespace devices::magneto
 		 * @sa magnetic_fields(MagneticFieldsFuture&)
 		 * @sa convert_fields_to_mGA()
 		 */
-		class MagneticFieldsFuture : public TReadRegisterFuture<OUTPUT_REG_1, Sensor3D>
-		{
-			using PARENT = TReadRegisterFuture<OUTPUT_REG_1, Sensor3D>;
-		public:
-			/// @cond notdocumented
-			MagneticFieldsFuture() : PARENT{} {}
-			MagneticFieldsFuture(MagneticFieldsFuture&&) = default;
-			MagneticFieldsFuture& operator=(MagneticFieldsFuture&&) = default;
-
-			bool get(Sensor3D& fields)
-			{
-				if (!PARENT::get(fields)) return false;
-				utils::swap_bytes(fields.x);
-				utils::swap_bytes(fields.y);
-				utils::swap_bytes(fields.z);
-				// HMC5883L registers are in order X,Z,Y while Sensor3D is X,Y,Z
-				int16_t temp = fields.y;
-				fields.y = fields.z;
-				fields.z = temp;
-				return true;
-			}
-			/// @endcond
-		};
+		using MagneticFieldsFuture = 
+			TReadRegisterFuture<OUTPUT_REG_1, Sensor3D, Sensor3DTransformer>;
 
 		/**
 		 * Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).
@@ -407,7 +400,7 @@ namespace devices::magneto
 		 * call `convert_fields_to_mGA()`.
 		 * @warning Asynchronous API!
 		 * 
-		 * @param future an `AccelFuture` passed by the caller, that will be 
+		 * @param future a `MagneticFieldsFuture` passed by the caller, that will be 
 		 * updated once the current I2C action is finished.
 		 * @retval 0 if no problem occurred during the preparation of I2C transaction
 		 * @return an error code if something bad happened; for an asynchronous

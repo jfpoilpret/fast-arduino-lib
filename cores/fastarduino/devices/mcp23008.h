@@ -22,6 +22,7 @@
 #define MCP23008_H
 
 #include "mcp230xx.h"
+#include "../functors.h"
 #include "../i2c_device.h"
 #include "../i2c_device_utilities.h"
 
@@ -43,10 +44,10 @@ namespace devices::mcp230xx
 		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
 		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
-		template<uint8_t REGISTER, typename T = uint8_t>
-		using TReadRegisterFuture = i2c::TReadRegisterFuture<MANAGER, REGISTER, T, false>;
-		template<uint8_t REGISTER, typename T = uint8_t>
-		using TWriteRegisterFuture = i2c::TWriteRegisterFuture<MANAGER, REGISTER, T, false>;
+		template<uint8_t REGISTER, typename T = uint8_t, typename FUNCTOR = functor::Identity<T>>
+		using TReadRegisterFuture = i2c::TReadRegisterFuture<MANAGER, REGISTER, T, FUNCTOR>;
+		template<uint8_t REGISTER, typename T = uint8_t, typename FUNCTOR = functor::Identity<T>>
+		using TWriteRegisterFuture = i2c::TWriteRegisterFuture<MANAGER, REGISTER, T, FUNCTOR>;
 
 		// Forward declarations needed by compiler
 		struct Write3Registers;
@@ -84,6 +85,17 @@ namespace devices::mcp230xx
 		static constexpr const uint8_t IOCON_ODR = bits::BV8(2);
 		static constexpr const uint8_t IOCON_INTPOL = bits::BV8(1);
 
+		class IOCONConverter
+		{
+		public:
+			using ARG_TYPE = InterruptPolarity;
+			using RES_TYPE = uint8_t;
+			uint8_t operator()(InterruptPolarity int_polarity)
+			{
+				return (int_polarity == InterruptPolarity::ACTIVE_HIGH) ? IOCON_INTPOL : 0;
+			}
+		};
+
 	public:
 		/**
 		 * Create a new device driver for an MCP23008 chip. The @p address must match
@@ -108,16 +120,7 @@ namespace devices::mcp230xx
 		 * 
 		 * @sa begin(BeginFuture&)
 		 */
-		class BeginFuture : public TWriteRegisterFuture<IOCON>
-		{
-		public:
-			/// @cond notdocumented
-			explicit BeginFuture(InterruptPolarity interrupt_polarity = InterruptPolarity::ACTIVE_HIGH)
-				: TWriteRegisterFuture<IOCON>{build_IOCON(interrupt_polarity == InterruptPolarity::ACTIVE_HIGH)} {}
-			BeginFuture(BeginFuture&&) = default;
-			BeginFuture& operator=(BeginFuture&&) = default;
-			/// @endcond
-		};
+		using BeginFuture = TWriteRegisterFuture<IOCON, uint8_t, IOCONConverter>;
 
 		/**
 		 * Initialize the chip before operation.
@@ -396,7 +399,7 @@ namespace devices::mcp230xx
 		 */
 		bool begin(InterruptPolarity interrupt_polarity = InterruptPolarity::ACTIVE_HIGH)
 		{
-			return this->template sync_write<BeginFuture>(interrupt_polarity);
+			return this->template sync_write<BeginFuture, InterruptPolarity>(interrupt_polarity);
 		}
 
 		/**
@@ -538,11 +541,6 @@ namespace devices::mcp230xx
 			uint8_t address3_;
 			uint8_t value3_;
 		};
-
-		static constexpr uint8_t build_IOCON(bool int_polarity)
-		{
-			return (int_polarity ? IOCON_INTPOL : 0);
-		}
 	};
 }
 

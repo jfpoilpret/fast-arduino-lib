@@ -22,6 +22,7 @@
 #define MCP23017_H
 
 #include "mcp230xx.h"
+#include "../functors.h"
 #include "../i2c_device.h"
 #include "../i2c_device_utilities.h"
 
@@ -96,14 +97,12 @@ namespace devices::mcp230xx
 		template<MCP23017Port P> using T = typename TRAIT<P>::TYPE;
 
 		template<MCP23017Port P, uint8_t REGISTER>
-		using TReadRegisterFuture = i2c::TReadRegisterFuture<MANAGER, REGISTER + TRAIT<P>::REG_SHIFT, T<P>, false>;
+		using TReadRegisterFuture = i2c::TReadRegisterFuture<MANAGER, REGISTER + TRAIT<P>::REG_SHIFT, T<P>>;
 		template<MCP23017Port P, uint8_t REGISTER>
-		using TWriteRegisterFuture = i2c::TWriteRegisterFuture<MANAGER, REGISTER + TRAIT<P>::REG_SHIFT, T<P>, false>;
+		using TWriteRegisterFuture = i2c::TWriteRegisterFuture<MANAGER, REGISTER + TRAIT<P>::REG_SHIFT, T<P>>;
 
 		// Forward declarations needed by compiler
-		template<MCP23017Port P> class WriteRegisterFuture;
 		template<MCP23017Port P> struct Write3Registers;
-		template<MCP23017Port P> class ReadRegisterFuture;
 
 		// Base address of the device (actual address can be in 0x20-0x27)
 		static constexpr const uint8_t BASE_ADDRESS = 0x20;

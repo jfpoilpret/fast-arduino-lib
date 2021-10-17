@@ -23,6 +23,7 @@
 
 #include "array.h"
 #include "flash.h"
+#include "functors.h"
 #include "future.h"
 #include "iterator.h"
 #include "time.h"
@@ -34,12 +35,13 @@ namespace i2c
 {
 	/// @cond notdocumented
 	// Internal type used by WriteRegisterFuture
-	template<typename T, bool BIG_ENDIAN = true> class WriteContent
+	template<typename T, typename FUNCTOR = functor::Identity<T>> class WriteContent
 	{
+		using ARG_TYPE = typename FUNCTOR::ARG_TYPE;
 	public:
 		WriteContent() = default;
-		WriteContent(uint8_t reg, const T& value)
-			:	register_{reg}, value_{BIG_ENDIAN ? utils::change_endianness(value) : value} {}
+		WriteContent(uint8_t reg, const ARG_TYPE& value)
+			:	register_{reg}, value_{functor::Functor<FUNCTOR>::call(value)} {}
 
 		uint8_t reg() const
 		{
@@ -75,9 +77,10 @@ namespace i2c
 	 * @sa i2c::I2CSyncManager
 	 * @sa i2c::I2CAsyncManager
 	 */
-	template<typename MANAGER, typename T, bool BIG_ENDIAN = true>
+	template<typename MANAGER, typename T, typename FUNCTOR = functor::Identity<T>>
 	class ReadRegisterFuture: public MANAGER::template FUTURE<T, uint8_t>
 	{
+		using ARG_TYPE = typename FUNCTOR::ARG_TYPE;
 		using PARENT = typename MANAGER::template FUTURE<T, uint8_t>;
 
 	protected:
@@ -112,9 +115,9 @@ namespace i2c
 
 		bool get(T& result)
 		{
-			if (!PARENT::get(result)) return false;
-			if (BIG_ENDIAN)
-				result = utils::change_endianness(result);
+			ARG_TYPE temp;
+			if (!PARENT::get(temp)) return false;
+			result = functor::Functor<FUNCTOR>::call(temp);
 			return true;
 		}
 		/// @endcond
@@ -152,10 +155,10 @@ namespace i2c
 	 * @sa i2c::I2CSyncManager
 	 * @sa i2c::I2CAsyncManager
 	 */
-	template<typename MANAGER, uint8_t REGISTER, typename T, bool BIG_ENDIAN = true>
-	class TReadRegisterFuture: public ReadRegisterFuture<MANAGER, T, BIG_ENDIAN>
+	template<typename MANAGER, uint8_t REGISTER, typename T, typename FUNCTOR = functor::Identity<T>>
+	class TReadRegisterFuture: public ReadRegisterFuture<MANAGER, T, FUNCTOR>
 	{
-		using PARENT = ReadRegisterFuture<MANAGER, T, BIG_ENDIAN>;
+		using PARENT = ReadRegisterFuture<MANAGER, T, FUNCTOR>;
 	public:
 		/**
 		 * Create a TReadRegisterFuture future.
@@ -203,11 +206,12 @@ namespace i2c
 	 * @sa i2c::I2CSyncManager
 	 * @sa i2c::I2CAsyncManager
 	 */
-	template<typename MANAGER, typename T, bool BIG_ENDIAN = true>
-	class WriteRegisterFuture: public MANAGER::template FUTURE<void, WriteContent<T, BIG_ENDIAN>>
+	template<typename MANAGER, typename T, typename FUNCTOR = functor::Identity<T>>
+	class WriteRegisterFuture: public MANAGER::template FUTURE<void, WriteContent<T, FUNCTOR>>
 	{
-		using PARENT = typename MANAGER::template FUTURE<void, WriteContent<T, BIG_ENDIAN>>;
-		using CONTENT = WriteContent<T, BIG_ENDIAN>;
+		using CONTENT = WriteContent<T, FUNCTOR>;
+		using ARG_TYPE = typename FUNCTOR::ARG_TYPE;
+		using PARENT = typename MANAGER::template FUTURE<void, CONTENT>;
 
 	protected:
 		/// @cond notdocumented
@@ -232,7 +236,7 @@ namespace i2c
 		 * this future
 		 */
 		explicit WriteRegisterFuture(
-			uint8_t reg, const T& value, 
+			uint8_t reg, const ARG_TYPE& value, 
 			FUTURE_STATUS_LISTENER* status_listener = nullptr)
 			:	PARENT{CONTENT{reg, value}, status_listener} {}
 		/// @cond notdocumented
@@ -273,10 +277,12 @@ namespace i2c
 	 * @sa i2c::I2CSyncManager
 	 * @sa i2c::I2CAsyncManager
 	 */
-	template<typename MANAGER, uint8_t REGISTER, typename T, bool BIG_ENDIAN = true>
-	class TWriteRegisterFuture: public WriteRegisterFuture<MANAGER, T, BIG_ENDIAN>
+	template<typename MANAGER, uint8_t REGISTER, typename T, typename FUNCTOR = functor::Identity<T>>
+	class TWriteRegisterFuture: public WriteRegisterFuture<MANAGER, T, FUNCTOR>
 	{
-		using PARENT = WriteRegisterFuture<MANAGER, T, BIG_ENDIAN>;
+		using ARG_TYPE = typename FUNCTOR::ARG_TYPE;
+		using CONTENT = WriteContent<T, FUNCTOR>;
+		using PARENT = WriteRegisterFuture<MANAGER, T, FUNCTOR>;
 	public:
 		/**
 		 * Create a TWriteRegisterFuture future.
@@ -287,7 +293,7 @@ namespace i2c
 		 * @param output_listener an optional listener to output buffer changes on 
 		 * this future
 		 */
-		explicit TWriteRegisterFuture(const T& value,
+		explicit TWriteRegisterFuture(const ARG_TYPE& value,
 			typename PARENT::FUTURE_STATUS_LISTENER* status_listener = nullptr)
 			:	PARENT{REGISTER, value, status_listener} {}
 		/// @cond notdocumented
@@ -296,7 +302,92 @@ namespace i2c
 
 		void reset_(const T& input = T{})
 		{
-			PARENT::reset_(WriteContent{REGISTER, input});
+			PARENT::reset_(CONTENT{REGISTER, input});
+		}
+		/// @endcond
+	};
+
+	//TODO Multi write future (single T)
+	template<typename T, uint8_t NUM_REGS>
+	class WriteMultiContent
+	{
+	public:
+		WriteMultiContent(
+			const containers::array<uint8_t, NUM_REGS>& registers, const containers::array<T, NUM_REGS>& values)
+		{
+			const uint8_t* reg_ptr = registers.begin();
+			const T* val_ptr = values.begin();
+			Pair* content_ptr = content_.begin();
+			for (uint8_t i = 0; i < NUM_REGS; ++i)
+				*content_ptr++ = Pair{*reg_ptr++, *val_ptr++};
+		}
+
+		containers::array<uint8_t, NUM_REGS> registers() const
+		{
+			containers::array<uint8_t, NUM_REGS> regs;
+			const uint8_t* reg_ptr = regs.begin();
+			for (const Pair& pair: content_)
+			{
+				*reg_ptr++ = pair.reg_;
+			}
+			return regs;
+		}
+
+		containers::array<T, NUM_REGS> values() const
+		{
+			containers::array<T, NUM_REGS> vals;
+			const uint8_t* val_ptr = vals.begin();
+			for (const Pair& pair: content_)
+			{
+				*val_ptr++ = pair.value_;
+			}
+			return vals;
+		}
+		T value(uint8_t index) const
+		{
+			if (index >= NUM_REGS) return T{};
+			return content_[index].value_;
+		}
+
+	private:
+		struct Pair
+		{
+			Pair() = default;
+			Pair(uint8_t reg, T value) : reg_{reg}, value_{value} {}
+			uint8_t reg_ = 0;
+			T value_{};
+		};
+		containers::array<Pair, NUM_REGS> content_{};
+	};
+
+	template<typename MANAGER, typename T, uint8_t NUM_REGS>
+	class WriteMultiRegisterFuture: public MANAGER::template FUTURE<void, WriteMultiContent<T, NUM_REGS>>
+	{
+		using CONTENT = WriteMultiContent<T, NUM_REGS>;
+		using PARENT = typename MANAGER::template FUTURE<void, CONTENT>;
+
+	protected:
+		/// @cond notdocumented
+		using ABSTRACT_FUTURE = typename MANAGER::ABSTRACT_FUTURE;
+		using FUTURE_STATUS_LISTENER = future::FutureStatusListener<ABSTRACT_FUTURE>;
+		/// @endcond
+
+	public:
+		static constexpr uint8_t NUM_WRITES = NUM_REGS;
+		static constexpr uint8_t WRITE_SIZE = sizeof(T) + 1;
+		
+		explicit WriteMultiRegisterFuture(
+			const containers::array<uint8_t, NUM_REGS>& registers, 
+			const containers::array<T, NUM_REGS>& values, 
+			FUTURE_STATUS_LISTENER* status_listener = nullptr)
+			:	PARENT{CONTENT{registers, values}, status_listener} {}
+		/// @cond notdocumented
+		WriteMultiRegisterFuture(WriteMultiRegisterFuture&&) = default;
+		WriteMultiRegisterFuture& operator=(WriteMultiRegisterFuture&&) = default;
+
+		void reset_(const containers::array<T, NUM_REGS>& input)
+		{
+			PARENT::reset_(CONTENT{this->get_input().registers(), input});
 		}
 		/// @endcond
 	};
@@ -571,8 +662,8 @@ namespace i2c
 		using MANAGER_TRAIT = I2CManager_trait<MANAGER>;
 		using STATUS_LISTENER = typename PARENT::STATUS_LISTENER;
 		using ABSTRACT_FUTURE = typename PARENT::ABSTRACT_FUTURE;
-		using F = WriteRegisterFuture<MANAGER, uint8_t, true>;
-		using CONTENT = WriteContent<uint8_t, true>;
+		using F = WriteRegisterFuture<MANAGER, uint8_t>;
+		using CONTENT = WriteContent<uint8_t>;
 		static constexpr uint8_t FUTURE_SIZE = F::IN_SIZE;
 
 	public:
