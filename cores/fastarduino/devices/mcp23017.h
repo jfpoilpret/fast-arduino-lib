@@ -56,25 +56,37 @@ namespace devices::mcp230xx
 		template<MCP23017Port PORT_> struct Port_trait
 		{
 			using TYPE = uint8_t;
-			static constexpr const uint8_t REG_SHIFT = 0;
+			static constexpr uint8_t shift(uint8_t reg)
+			{
+				return reg;
+			}
 		};
 
 		template<> struct Port_trait<MCP23017Port::PORT_A>
 		{
 			using TYPE = uint8_t;
-			static constexpr const uint8_t REG_SHIFT = 0;
+			static constexpr uint8_t shift(uint8_t reg)
+			{
+				return reg;
+			}
 		};
 
 		template<> struct Port_trait<MCP23017Port::PORT_B>
 		{
 			using TYPE = uint8_t;
-			static constexpr const uint8_t REG_SHIFT = 1;
+			static constexpr uint8_t shift(uint8_t reg)
+			{
+				return reg + 1;
+			}
 		};
 
 		template<> struct Port_trait<MCP23017Port::PORT_AB>
 		{
 			using TYPE = uint16_t;
-			static constexpr const uint8_t REG_SHIFT = 0;
+			static constexpr uint8_t shift(uint8_t reg)
+			{
+				return reg;
+			}
 		};
 	}
 	/// @endcond
@@ -96,13 +108,13 @@ namespace devices::mcp230xx
 		template<MCP23017Port P> using TRAIT = mcp23017_traits::Port_trait<P>;
 		template<MCP23017Port P> using T = typename TRAIT<P>::TYPE;
 
-		template<MCP23017Port P, uint8_t REGISTER>
-		using TReadRegisterFuture = i2c::TReadRegisterFuture<MANAGER, REGISTER + TRAIT<P>::REG_SHIFT, T<P>>;
-		template<MCP23017Port P, uint8_t REGISTER>
-		using TWriteRegisterFuture = i2c::TWriteRegisterFuture<MANAGER, REGISTER + TRAIT<P>::REG_SHIFT, T<P>>;
-
 		// Forward declarations needed by compiler
-		template<MCP23017Port P> struct Write3Registers;
+		template<MCP23017Port P, uint8_t REGISTER>
+		using TReadRegisterFuture = i2c::TReadRegisterFuture<MANAGER, TRAIT<P>::shift(REGISTER), T<P>>;
+		template<MCP23017Port P, uint8_t REGISTER>
+		using TWriteRegisterFuture = i2c::TWriteRegisterFuture<MANAGER, TRAIT<P>::shift(REGISTER), T<P>>;
+		template<MCP23017Port P, uint8_t... REGISTERS>
+		using TWriteMultiRegisterFuture = i2c::TWriteMultiRegisterFuture<MANAGER, T<P>, TRAIT<P>::shift(REGISTERS)...>;
 
 		// Base address of the device (actual address can be in 0x20-0x27)
 		static constexpr const uint8_t BASE_ADDRESS = 0x20;
@@ -235,13 +247,13 @@ namespace devices::mcp230xx
 		 * @sa configure_gpio(ConfigureGPIOFuture<P>&)
 		 */
 		template<MCP23017Port P_>
-		class ConfigureGPIOFuture : public FUTURE<void, Write3Registers<P_>>
+		class ConfigureGPIOFuture : public TWriteMultiRegisterFuture<P_, IODIR_A, IPOL_A, GPPU_A>
 		{
-			using PARENT = FUTURE<void, Write3Registers<P_>>;
+			using PARENT = TWriteMultiRegisterFuture<P_, IODIR_A, IPOL_A, GPPU_A>;
 		public:
 			/// @cond notdocumented
 			ConfigureGPIOFuture(T<P_> direction, T<P_> pullup = T<P_>{}, T<P_> polarity = T<P_>{})
-				:	PARENT{Write3Registers<P_>{IODIR_A, direction, IPOL_A, polarity, GPPU_A, pullup}} {}
+				:	PARENT{direction, polarity, pullup} {}
 			ConfigureGPIOFuture(ConfigureGPIOFuture<P_>&&) = default;
 			ConfigureGPIOFuture<P_>& operator=(ConfigureGPIOFuture<P_>&&) = default;
 			/// @endcond
@@ -270,8 +282,7 @@ namespace devices::mcp230xx
 		 */
 		template<MCP23017Port P_> int configure_gpio(PROXY<ConfigureGPIOFuture<P_>> future)
 		{
-			constexpr uint8_t SIZE = sizeof(T<P_>) + 1;
-			return this->launch_commands(future, {write_stop(SIZE), write_stop(SIZE), write_stop(SIZE)});
+			return this->async_multi_write(future);
 		}
 
 		/**
@@ -296,13 +307,13 @@ namespace devices::mcp230xx
 		 * @sa configure_interrupts(ConfigureInterruptsFuture<P_>&)
 		 */
 		template<MCP23017Port P_>
-		class ConfigureInterruptsFuture : public FUTURE<void, Write3Registers<P_>>
+		class ConfigureInterruptsFuture : public TWriteMultiRegisterFuture<P_, GPINTEN_A, DEFVAL_A, INTCON_A>
 		{
-			using PARENT = FUTURE<void, Write3Registers<P_>>;
+			using PARENT = TWriteMultiRegisterFuture<P_, GPINTEN_A, DEFVAL_A, INTCON_A>;
 		public:
 			/// @cond notdocumented
 			ConfigureInterruptsFuture(T<P_> int_pins, T<P_> ref = T<P_>{}, T<P_> compare_ref = T<P_>{})
-				:	PARENT{Write3Registers<P_>{GPINTEN_A, int_pins, DEFVAL_A, ref, INTCON_A, compare_ref}} {}
+				:	PARENT{int_pins, ref, compare_ref} {}
 			ConfigureInterruptsFuture(ConfigureInterruptsFuture<P_>&&) = default;
 			ConfigureInterruptsFuture<P_>& operator=(ConfigureInterruptsFuture<P_>&&) = default;
 			/// @endcond
@@ -332,8 +343,7 @@ namespace devices::mcp230xx
 		template<MCP23017Port P_>
 		int configure_interrupts(PROXY<ConfigureInterruptsFuture<P_>> future)
 		{
-			constexpr uint8_t SIZE = sizeof(T<P_>) + 1;
-			return this->launch_commands(future, {write_stop(SIZE), write_stop(SIZE), write_stop(SIZE)});
+			return this->async_multi_write(future);
 		}
 
 		/**
@@ -675,24 +685,6 @@ namespace devices::mcp230xx
 		{
 			return this->write(byte_count, false, true);
 		}
-
-		template<MCP23017Port P> struct Write3Registers
-		{
-			using TT = T<P>;
-			static constexpr uint8_t SHIFT = TRAIT<P>::REG_SHIFT;
-
-			Write3Registers(uint8_t address1, TT value1, uint8_t address2, TT value2, uint8_t address3, TT value3)
-				:	address1_{uint8_t(address1 + SHIFT)}, value1_{value1},
-					address2_{uint8_t(address2 + SHIFT)}, value2_{value2},
-					address3_{uint8_t(address3 + SHIFT)}, value3_{value3} {}
-
-			uint8_t address1_;
-			TT value1_;
-			uint8_t address2_;
-			TT value2_;
-			uint8_t address3_;
-			TT value3_;
-		};
 
 		static constexpr uint8_t build_IOCON(bool mirror, bool int_polarity)
 		{

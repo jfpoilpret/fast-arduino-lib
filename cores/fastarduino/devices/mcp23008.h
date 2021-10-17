@@ -42,15 +42,14 @@ namespace devices::mcp230xx
 	private:
 		using PARENT = i2c::I2CDevice<MANAGER>;
 		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
-		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
+		// Forward declarations needed by compiler
 		template<uint8_t REGISTER, typename T = uint8_t, typename FUNCTOR = functor::Identity<T>>
 		using TReadRegisterFuture = i2c::TReadRegisterFuture<MANAGER, REGISTER, T, FUNCTOR>;
 		template<uint8_t REGISTER, typename T = uint8_t, typename FUNCTOR = functor::Identity<T>>
 		using TWriteRegisterFuture = i2c::TWriteRegisterFuture<MANAGER, REGISTER, T, FUNCTOR>;
-
-		// Forward declarations needed by compiler
-		struct Write3Registers;
+		template<typename T, uint8_t... REGISTERS>
+		using TWriteMultiRegisterFuture = i2c::TWriteMultiRegisterFuture<MANAGER, T, REGISTERS...>;
 
 		static constexpr uint8_t compute_address(uint8_t address)
 		{
@@ -161,13 +160,13 @@ namespace devices::mcp230xx
 		 * 
 		 * @sa configure_gpio(ConfigureGPIOFuture&)
 		 */
-		class ConfigureGPIOFuture : public FUTURE<void, Write3Registers>
+		class ConfigureGPIOFuture : public TWriteMultiRegisterFuture<uint8_t, IODIR, IPOL, GPPU>
 		{
-			using PARENT = FUTURE<void, Write3Registers>;
+			using PARENT = TWriteMultiRegisterFuture<uint8_t, IODIR, IPOL, GPPU>;
 		public:
 			/// @cond notdocumented
 			ConfigureGPIOFuture(uint8_t direction, uint8_t pullup = 0, uint8_t polarity = 0)
-				:	PARENT{Write3Registers{IODIR, direction, IPOL, polarity, GPPU, pullup}} {}
+				:	PARENT{direction, polarity, pullup} {}
 			ConfigureGPIOFuture(ConfigureGPIOFuture&&) = default;
 			ConfigureGPIOFuture& operator=(ConfigureGPIOFuture&&) = default;
 			/// @endcond
@@ -192,7 +191,7 @@ namespace devices::mcp230xx
 		 */
 		int configure_gpio(PROXY<ConfigureGPIOFuture> future)
 		{
-			return this->launch_commands(future, {write_stop(2), write_stop(2), write_stop(2)});
+			return this->async_multi_write(future);
 		}
 
 		/**
@@ -213,13 +212,13 @@ namespace devices::mcp230xx
 		 * 
 		 * @sa configure_interrupts(ConfigureInterruptsFuture&)
 		 */
-		class ConfigureInterruptsFuture : public FUTURE<void, Write3Registers>
+		class ConfigureInterruptsFuture : public TWriteMultiRegisterFuture<uint8_t, GPINTEN, DEFVAL, INTCON>
 		{
-			using PARENT = FUTURE<void, Write3Registers>;
+			using PARENT = TWriteMultiRegisterFuture<uint8_t, GPINTEN, DEFVAL, INTCON>;
 		public:
 			/// @cond notdocumented
 			ConfigureInterruptsFuture(uint8_t int_pins, uint8_t ref = 0, uint8_t compare_ref = 0)
-				:	PARENT{Write3Registers{GPINTEN, int_pins, DEFVAL, ref, INTCON, compare_ref}} {}
+				:	PARENT{int_pins, ref, compare_ref} {}
 			ConfigureInterruptsFuture(ConfigureInterruptsFuture&&) = default;
 			ConfigureInterruptsFuture& operator=(ConfigureInterruptsFuture&&) = default;
 			/// @endcond
@@ -244,7 +243,7 @@ namespace devices::mcp230xx
 		 */
 		int configure_interrupts(PROXY<ConfigureInterruptsFuture> future)
 		{
-			return this->launch_commands(future, {write_stop(2), write_stop(2), write_stop(2)});
+			return this->async_multi_write(future);
 		}
 
 		/**
@@ -524,23 +523,6 @@ namespace devices::mcp230xx
 		{
 			return this->write(byte_count, false, true);
 		}
-
-		struct Write3Registers
-		{
-			Write3Registers(uint8_t address1, uint8_t value1, 
-							uint8_t address2, uint8_t value2, 
-							uint8_t address3, uint8_t value3)
-				:	address1_{address1}, value1_{value1},
-					address2_{address2}, value2_{value2},
-					address3_{address3}, value3_{value3} {}
-
-			uint8_t address1_;
-			uint8_t value1_;
-			uint8_t address2_;
-			uint8_t value2_;
-			uint8_t address3_;
-			uint8_t value3_;
-		};
 	};
 }
 
