@@ -21,10 +21,10 @@
 #ifndef I2C_DEVICE_UTILITIES_H
 #define I2C_DEVICE_UTILITIES_H
 
-#include "array.h"
 #include "flash.h"
 #include "functors.h"
 #include "future.h"
+#include "initializer_list.h"
 #include "iterator.h"
 #include "time.h"
 #include "utilities.h"
@@ -307,29 +307,12 @@ namespace i2c
 	};
 
 	/// @cond notdocumented
-	template<typename T, uint8_t... REGISTERS>
-	class WriteMultiContent
+	template<typename T>
+	class WriteMultiContentBase
 	{
-	public:
-		constexpr WriteMultiContent(std::initializer_list<T> values) : content_{ REGISTERS... }
-		{
-			//TODO factor out of template to avoid code bloat
-			const T* val_ptr = values.begin();
-			Pair* content_ptr = content_;
-			while (val_ptr != values.end())
-			{
-				(*content_ptr).value_ = *val_ptr++;
-				++content_ptr;
-			}
-		}
+	protected:
+		WriteMultiContentBase() = default;
 
-		T value(uint8_t index) const
-		{
-			if (index >= sizeof...(REGISTERS)) return T{};
-			return content_[index].value_;
-		}
-
-	private:
 		struct Pair
 		{
 			Pair() = default;
@@ -337,7 +320,35 @@ namespace i2c
 			uint8_t reg_ = 0;
 			T value_{};
 		};
-		Pair content_[sizeof...(REGISTERS)];
+
+		static void init(Pair* content, std::initializer_list<T> values)
+		{
+			const T* val_ptr = values.begin();
+			while (val_ptr != values.end())
+			{
+				(*content).value_ = *val_ptr++;
+				++content;
+			}
+		}
+	};
+
+	template<typename T, uint8_t... REGISTERS>
+	class WriteMultiContent : public WriteMultiContentBase<T>
+	{
+		using PARENT = WriteMultiContentBase<T>;
+	public:
+		constexpr WriteMultiContent(std::initializer_list<T> values) : content_{ REGISTERS... }
+		{
+			PARENT::init(content_, values);
+		}
+
+		T value(uint8_t index) const
+		{
+			return content_[index].value_;
+		}
+
+	private:
+		typename PARENT::Pair content_[sizeof...(REGISTERS)];
 	};
 	/// @endcond
 
