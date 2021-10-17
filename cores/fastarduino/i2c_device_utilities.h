@@ -30,7 +30,6 @@
 #include "utilities.h"
 #include "i2c_device.h"
 
-//TODO add functors wherever needed (replace endianness)
 namespace i2c
 {
 	/// @cond notdocumented
@@ -307,45 +306,26 @@ namespace i2c
 		/// @endcond
 	};
 
-	template<typename T, uint8_t NUM_REGS>
+	/// @cond notdocumented
+	template<typename T, uint8_t... REGISTERS>
 	class WriteMultiContent
 	{
 	public:
-		//TODO improve arguments (e.g. C-array or initializer list)
-		WriteMultiContent(
-			const containers::array<uint8_t, NUM_REGS>& registers, const containers::array<T, NUM_REGS>& values)
+		constexpr WriteMultiContent(std::initializer_list<T> values) : content_{ REGISTERS... }
 		{
-			const uint8_t* reg_ptr = registers.begin();
+			//TODO factor out of template to avoid code bloat
 			const T* val_ptr = values.begin();
-			Pair* content_ptr = content_.begin();
-			for (uint8_t i = 0; i < NUM_REGS; ++i)
-				*content_ptr++ = Pair{*reg_ptr++, *val_ptr++};
+			Pair* content_ptr = content_;
+			while (val_ptr != values.end())
+			{
+				(*content_ptr).value_ = *val_ptr++;
+				++content_ptr;
+			}
 		}
 
-		containers::array<uint8_t, NUM_REGS> registers() const
-		{
-			containers::array<uint8_t, NUM_REGS> regs;
-			const uint8_t* reg_ptr = regs.begin();
-			for (const Pair& pair: content_)
-			{
-				*reg_ptr++ = pair.reg_;
-			}
-			return regs;
-		}
-
-		containers::array<T, NUM_REGS> values() const
-		{
-			containers::array<T, NUM_REGS> vals;
-			const uint8_t* val_ptr = vals.begin();
-			for (const Pair& pair: content_)
-			{
-				*val_ptr++ = pair.value_;
-			}
-			return vals;
-		}
 		T value(uint8_t index) const
 		{
-			if (index >= NUM_REGS) return T{};
+			if (index >= sizeof...(REGISTERS)) return T{};
 			return content_[index].value_;
 		}
 
@@ -353,18 +333,19 @@ namespace i2c
 		struct Pair
 		{
 			Pair() = default;
-			Pair(uint8_t reg, T value) : reg_{reg}, value_{value} {}
+			Pair(uint8_t reg, T value = T{}) : reg_{reg}, value_{value} {}
 			uint8_t reg_ = 0;
 			T value_{};
 		};
-		containers::array<Pair, NUM_REGS> content_{};
+		Pair content_[sizeof...(REGISTERS)];
 	};
+	/// @endcond
 
 	//TODO DOC
-	template<typename MANAGER, typename T, uint8_t NUM_REGS>
-	class WriteMultiRegisterFuture: public MANAGER::template FUTURE<void, WriteMultiContent<T, NUM_REGS>>
+	template<typename MANAGER, typename T, uint8_t... REGISTERS>
+	class TWriteMultiRegisterFuture: public MANAGER::template FUTURE<void, WriteMultiContent<T, REGISTERS...>>
 	{
-		using CONTENT = WriteMultiContent<T, NUM_REGS>;
+		using CONTENT = WriteMultiContent<T, REGISTERS...>;
 		using PARENT = typename MANAGER::template FUTURE<void, CONTENT>;
 
 	protected:
@@ -374,21 +355,20 @@ namespace i2c
 		/// @endcond
 
 	public:
-		static constexpr uint8_t NUM_WRITES = NUM_REGS;
+		static constexpr uint8_t NUM_WRITES = sizeof...(REGISTERS);
 		static constexpr uint8_t WRITE_SIZE = sizeof(T) + 1;
 		
-		explicit WriteMultiRegisterFuture(
-			const containers::array<uint8_t, NUM_REGS>& registers, 
-			const containers::array<T, NUM_REGS>& values, 
+		explicit TWriteMultiRegisterFuture(
+			std::initializer_list<T> values, 
 			FUTURE_STATUS_LISTENER* status_listener = nullptr)
-			:	PARENT{CONTENT{registers, values}, status_listener} {}
+			:	PARENT{CONTENT{values}, status_listener} {}
 		/// @cond notdocumented
-		WriteMultiRegisterFuture(WriteMultiRegisterFuture&&) = default;
-		WriteMultiRegisterFuture& operator=(WriteMultiRegisterFuture&&) = default;
+		TWriteMultiRegisterFuture(TWriteMultiRegisterFuture&&) = default;
+		TWriteMultiRegisterFuture& operator=(TWriteMultiRegisterFuture&&) = default;
 
-		void reset_(const containers::array<T, NUM_REGS>& input)
+		void reset_(std::initializer_list<T> values)
 		{
-			PARENT::reset_(CONTENT{this->get_input().registers(), input});
+			PARENT::reset_(CONTENT{values});
 		}
 		/// @endcond
 	};

@@ -208,8 +208,8 @@ namespace devices::magneto
 		using TReadRegisterFuture = i2c::TReadRegisterFuture<MANAGER, REGISTER, T, FUNCTOR>;
 		template<uint8_t REGISTER, typename T = uint8_t, typename FUNCTOR = functor::Identity<T>>
 		using TWriteRegisterFuture = i2c::TWriteRegisterFuture<MANAGER, REGISTER, T, FUNCTOR>;
-		template<typename T, uint8_t NUM_REGS>
-		using WriteMultiRegisterFuture = i2c::WriteMultiRegisterFuture<MANAGER, T, NUM_REGS>;
+		template<typename T, uint8_t... REGISTERS>
+		using TWriteMultiRegisterFuture = i2c::TWriteMultiRegisterFuture<MANAGER, T, REGISTERS...>;
 
 		static constexpr const uint8_t DEVICE_ADDRESS = 0x1E << 1;
 
@@ -267,9 +267,9 @@ namespace devices::magneto
 		 * 
 		 * @sa begin(BeginFuture&)
 		 */
-		class BeginFuture : public WriteMultiRegisterFuture<uint8_t, 3>
+		class BeginFuture : public TWriteMultiRegisterFuture<uint8_t, CONFIG_REG_A, CONFIG_REG_B, MODE_REG>
 		{
-			using PARENT = WriteMultiRegisterFuture<uint8_t, 3>;
+			using PARENT = TWriteMultiRegisterFuture<uint8_t, CONFIG_REG_A, CONFIG_REG_B, MODE_REG>;
 		public:
 			/// @cond notdocumented
 			explicit BeginFuture(	OperatingMode mode = OperatingMode::SINGLE,
@@ -277,9 +277,8 @@ namespace devices::magneto
 									DataOutput rate = DataOutput::RATE_15HZ, 
 									SamplesAveraged samples = SamplesAveraged::ONE_SAMPLE,
 									MeasurementMode measurement = MeasurementMode::NORMAL)
-				:	PARENT{	{	CONFIG_REG_A, CONFIG_REG_B, MODE_REG},
-							{	uint8_t(uint8_t(measurement) | uint8_t(rate) | uint8_t(samples)),
-								uint8_t(gain), uint8_t(mode)}} {}
+				:	PARENT{	uint8_t(uint8_t(measurement) | uint8_t(rate) | uint8_t(samples)),
+							uint8_t(gain), uint8_t(mode)} {}
 			BeginFuture(BeginFuture&&) = default;
 			BeginFuture& operator=(BeginFuture&&) = default;
 
