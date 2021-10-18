@@ -1148,49 +1148,52 @@ namespace devices::magneto
 		class PowerManagement
 		{
 		public:
-			constexpr PowerManagement()
-				:	clock_select_{}, temp_disable_{}, reserved_{}, cycle_{}, sleep_{}, device_reset_{} {}
+			constexpr PowerManagement() : value_{} {}
 			explicit constexpr PowerManagement(ClockSelect clock_select, bool temp_disable = false,
 							bool cycle = false, bool sleep = false, bool device_reset = false) 
-				:	clock_select_{uint8_t(clock_select)},
-					temp_disable_{temp_disable}, reserved_{}, 
-					cycle_{cycle}, sleep_{sleep}, device_reset_{device_reset} {}
+				:	value_{	uint8_t(clock_select) | 
+							(temp_disable ? TEMP_DIS_MASK : 0) |
+							(cycle ? CYCLE_MASK : 0) |
+							(sleep ? SLEEP_MASK : 0) |
+							(device_reset ? RESET_MASK : 0)} {}
 			constexpr PowerManagement(bool temp_disable, bool cycle, bool sleep, bool device_reset) 
-				:	clock_select_{}, temp_disable_{temp_disable}, reserved_{}, 
-					cycle_{cycle}, sleep_{sleep}, device_reset_{device_reset} {}
+				:	value_{	(temp_disable ? TEMP_DIS_MASK : 0) |
+							(cycle ? CYCLE_MASK : 0) |
+							(sleep ? SLEEP_MASK : 0) |
+							(device_reset ? RESET_MASK : 0)} {}
 
 			ClockSelect clock_select() const
 			{
-				return static_cast<ClockSelect>(clock_select_);
+				return static_cast<ClockSelect>(value_ & CLOCK_SEL_MASK);
 			}
 
 			bool temp_disable() const
 			{
-				return temp_disable_;
+				return value_ & TEMP_DIS_MASK;
 			}
 
 			bool cycle() const
 			{
-				return cycle_;
+				return value_ & CYCLE_MASK;
 			}
 
 			bool sleep() const
 			{
-				return sleep_;
+				return value_ & SLEEP_MASK;
 			}
 
 			bool device_reset() const
 			{
-				return device_reset_;
+				return value_ & RESET_MASK;
 			}
 
 		private:
-			uint8_t clock_select_ : 3;
-			bool temp_disable_ : 1;
-			uint8_t reserved_ : 1;
-			bool cycle_ : 1;
-			bool sleep_ : 1;
-			bool device_reset_ : 1;
+			static constexpr uint8_t CLOCK_SEL_MASK = bits::BV8(0, 1, 2);
+			static constexpr uint8_t TEMP_DIS_MASK = bits::BV8(3);
+			static constexpr uint8_t CYCLE_MASK = bits::BV8(5);
+			static constexpr uint8_t SLEEP_MASK = bits::BV8(6);
+			static constexpr uint8_t RESET_MASK = bits::BV8(7);
+			uint8_t value_;
 		};
 
 		static constexpr uint8_t DEVICE_ADDRESS(AD0 ad0)
