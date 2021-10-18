@@ -380,7 +380,6 @@ namespace i2c
 	template<typename MANAGER, typename T, uint8_t... REGISTERS>
 	class TWriteMultiRegisterFuture: public MANAGER::template FUTURE<void, WriteMultiContent<T, REGISTERS...>>
 	{
-		//TODO how could we add functors here? Define a MultiFunctor concept?
 		using CONTENT = WriteMultiContent<T, REGISTERS...>;
 		using PARENT = typename MANAGER::template FUTURE<void, CONTENT>;
 
