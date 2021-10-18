@@ -61,20 +61,22 @@ namespace i2c
 	 * ReadRegisterFuture can be used in any I2C device supporting class (subclass
 	 * of `i2c::I2CDevice`) in almost all situations where you need to read a register,
 	 * whatever its type.
-	 * ReadRegisterFuture supports automatic big-endian (I2C device) to little-endian
-	 * (ATmel MCU) conversion of integral types if needed.
+	 * ReadRegisterFuture supports conversion of register value to a transformed
+	 * result, thanks to its use of functors.
+	 * Standard functors are provided for e.g. endianness conversion, if the I2C 
+	 * device uses big endian (while ATmel MCU are little-endian).
 	 * 
 	 * @tparam MANAGER the type of I2C Manager used to handle I2C communication
 	 * @tparam T the type of the register to read from
-	 * @tparam BIG_ENDIAN if `true` (default) the register integral value is in
-	 * big endian and shall be converted to little endian for use by the MCU. This
-	 * applies only to 16 bits or 32 bits integral types (`int16_t`, `uint16_t`, 
-	 * `int32_t` or `uint32_t`).
+	 * @tparam FUNCTOR the type of an adequate functor to transform the register 
+	 * value to a more suitable result; defaults to `functor::Identity<T>` which 
+	 * does nothing.
 	 * 
 	 * @sa TReadRegisterFuture
 	 * @sa WriteRegisterFuture
 	 * @sa i2c::I2CSyncManager
 	 * @sa i2c::I2CAsyncManager
+	 * @sa functor
 	 */
 	template<typename MANAGER, typename T, typename FUNCTOR = functor::Identity<T>>
 	class ReadRegisterFuture: public MANAGER::template FUTURE<T, uint8_t>
@@ -130,8 +132,10 @@ namespace i2c
 	 * TReadRegisterFuture can be used in any I2C device supporting class (subclass
 	 * of `i2c::I2CDevice`) in almost all situations where you need to read a register,
 	 * whatever its type.
-	 * TReadRegisterFuture supports automatic big-endian (I2C device) to little-endian
-	 * (ATmel MCU) conversion of integral types if needed.
+	 * TReadRegisterFuture supports conversion of register value to a transformed
+	 * result, thanks to its use of functors.
+	 * Standard functors are provided for e.g. endianness conversion, if the I2C 
+	 * device uses big endian (while ATmel MCU are little-endian).
 	 * Typical usage is through `using` statement as in the following snippet:
 	 * @code
 	 * // Excerpt from VL53L0X device
@@ -144,15 +148,15 @@ namespace i2c
 	 * @tparam MANAGER the type of I2C Manager used to handle I2C communication
 	 * @tparam REGISTER the address of the register to read from the I2C device
 	 * @tparam T the type of the register to read from
-	 * @tparam BIG_ENDIAN if `true` (default) the register integral value is in
-	 * big endian and shall be converted to little endian for use by the MCU. This
-	 * applies only to 16 bits or 32 bits integral types (`int16_t`, `uint16_t`, 
-	 * `int32_t` or `uint32_t`).
+	 * @tparam FUNCTOR the type of an adequate functor to transform the register 
+	 * value to a more suitable result; defaults to `functor::Identity<T>` which 
+	 * does nothing.
 	 * 
 	 * @sa ReadRegisterFuture
 	 * @sa TWriteRegisterFuture
 	 * @sa i2c::I2CSyncManager
 	 * @sa i2c::I2CAsyncManager
+	 * @sa functor
 	 */
 	template<typename MANAGER, uint8_t REGISTER, typename T, typename FUNCTOR = functor::Identity<T>>
 	class TReadRegisterFuture: public ReadRegisterFuture<MANAGER, T, FUNCTOR>
@@ -190,20 +194,23 @@ namespace i2c
 	 * WriteRegisterFuture can be used in any I2C device supporting class (subclass
 	 * of `i2c::I2CDevice`) in almost all situations where you need to write to a
 	 * register, whatever its type.
-	 * WriteRegisterFuture supports automatic little-endian (ATmel MCU) to
-	 * big-endian (I2C device) conversion of integral types if needed.
+	 * WriteRegisterFuture supports conversion of argument passed to constructor
+	 * to a transformed value that fits the device register, thanks to its use of 
+	 * functors.
+	 * Standard functors are provided for e.g. endianness conversion, if the I2C 
+	 * device uses big endian (while ATmel MCU are little-endian).
 	 * 
 	 * @tparam MANAGER the type of I2C Manager used to handle I2C communication
 	 * @tparam T the type of the register to write to
-	 * @tparam BIG_ENDIAN if `true` (default) the register integral value is expected
-	 * in big endian and thus shall be converted from  little endian since it comes
-	 * from the MCU. This applies only to 16 bits or 32 bits integral types
-	 * (`int16_t`, `uint16_t`, `int32_t` or `uint32_t`).
+	 * @tparam FUNCTOR the type of an adequate functor to transform the value passed
+	 * to this future constructor to a more suitable value for the device register;
+	 * defaults to `functor::Identity<T>` which does nothing.
 	 * 
 	 * @sa TWriteRegisterFuture
 	 * @sa ReadRegisterFuture
 	 * @sa i2c::I2CSyncManager
 	 * @sa i2c::I2CAsyncManager
+	 * @sa functor
 	 */
 	template<typename MANAGER, typename T, typename FUNCTOR = functor::Identity<T>>
 	class WriteRegisterFuture: public MANAGER::template FUTURE<void, WriteContent<T, FUNCTOR>>
@@ -231,8 +238,6 @@ namespace i2c
 		 * @param value the value to write to the register in the I2C device
 		 * @param status_listener an optional listener to status changes on this 
 		 * future
-		 * @param output_listener an optional listener to output buffer changes on 
-		 * this future
 		 */
 		explicit WriteRegisterFuture(
 			uint8_t reg, const ARG_TYPE& value, 
@@ -252,8 +257,11 @@ namespace i2c
 	 * TWriteRegisterFuture can be used in any I2C device supporting class (subclass
 	 * of `i2c::I2CDevice`) in almost all situations where you need to write to a
 	 * register, whatever its type.
-	 * TWriteRegisterFuture supports automatic little-endian (ATmel MCU) to
-	 * big-endian (I2C device) conversion of integral types if needed.
+	 * TWriteRegisterFuture supports conversion of argument passed to constructor
+	 * to a transformed value that fits the device register, thanks to its use of 
+	 * functors.
+	 * Standard functors are provided for e.g. endianness conversion, if the I2C 
+	 * device uses big endian (while ATmel MCU are little-endian).
 	 * Typical usage is through `using` statement as in the following snippet:
 	 * @code
 	 * // Excerpt from VL53L0X device
@@ -266,15 +274,15 @@ namespace i2c
 	 * @tparam MANAGER the type of I2C Manager used to handle I2C communication
 	 * @tparam REGISTER the address of the register to write in the I2C device
 	 * @tparam T the type of the register to write to
-	 * @tparam BIG_ENDIAN if `true` (default) the register integral value is expected
-	 * in big endian and thus shall be converted from  little endian since it comes
-	 * from the MCU. This applies only to 16 bits or 32 bits integral types
-	 * (`int16_t`, `uint16_t`, `int32_t` or `uint32_t`).
+	 * @tparam FUNCTOR the type of an adequate functor to transform the value passed
+	 * to this future constructor to a more suitable value for the device register;
+	 * defaults to `functor::Identity<T>` which does nothing.
 	 * 
 	 * @sa TReadRegisterFuture
 	 * @sa WriteRegisterFuture
 	 * @sa i2c::I2CSyncManager
 	 * @sa i2c::I2CAsyncManager
+	 * @sa functor
 	 */
 	template<typename MANAGER, uint8_t REGISTER, typename T, typename FUNCTOR = functor::Identity<T>>
 	class TWriteRegisterFuture: public WriteRegisterFuture<MANAGER, T, FUNCTOR>
@@ -289,8 +297,6 @@ namespace i2c
 		 * @param value the value to write to the register in the I2C device
 		 * @param status_listener an optional listener to status changes on this 
 		 * future
-		 * @param output_listener an optional listener to output buffer changes on 
-		 * this future
 		 */
 		explicit TWriteRegisterFuture(const ARG_TYPE& value = ARG_TYPE{},
 			typename PARENT::FUTURE_STATUS_LISTENER* status_listener = nullptr)
@@ -352,10 +358,29 @@ namespace i2c
 	};
 	/// @endcond
 
-	//TODO DOC
+	/**
+	 * Generic Future that can be used to write to several I2C device registers.
+	 * Most I2C devices have registers, accessible by a byte address;
+	 * register values may be one or more bytes long; these may be integral types
+	 * or not.
+	 * TWriteMultiRegisterFuture can be used in any I2C device supporting class 
+	 * (subclass of `i2c::I2CDevice`) in almost all situations where you need to 
+	 * write to several registers, whatever their address on the device.
+	 * 
+	 * @tparam MANAGER the type of I2C Manager used to handle I2C communication
+	 * @tparam T the type of all registers to write to (all registers must be 
+	 * the same type)
+	 * @tparam REGISTERS the address of all registers to write in the I2C device
+	 * 
+	 * @sa TReadRegisterFuture
+	 * @sa WriteRegisterFuture
+	 * @sa i2c::I2CSyncManager
+	 * @sa i2c::I2CAsyncManager
+	 */
 	template<typename MANAGER, typename T, uint8_t... REGISTERS>
 	class TWriteMultiRegisterFuture: public MANAGER::template FUTURE<void, WriteMultiContent<T, REGISTERS...>>
 	{
+		//TODO how could we add functors here? Define a MultiFunctor concept?
 		using CONTENT = WriteMultiContent<T, REGISTERS...>;
 		using PARENT = typename MANAGER::template FUTURE<void, CONTENT>;
 
@@ -366,9 +391,28 @@ namespace i2c
 		/// @endcond
 
 	public:
+		/** 
+		 * Number of write commands to use inside the complete I2C transaction in
+		 * order to perform this multiple registers write. 
+		 */
 		static constexpr uint8_t NUM_WRITES = sizeof...(REGISTERS);
+
+		/**
+		 * The number of bytes to write for each register command in the I2C
+		 * transaction.
+		 */
 		static constexpr uint8_t WRITE_SIZE = sizeof(T) + 1;
 		
+		/**
+		 * Create a TWriteMultiRegisterFuture future.
+		 * This future can then be used to write values to all registers for
+		 * this instance.
+		 * @param values the values to write to the registers in the I2C device;
+		 * all values must be the same type @p T and the list must contains the
+		 * same number of values as there are registers for this instance.
+		 * @param status_listener an optional listener to status changes on this 
+		 * future
+		 */
 		explicit TWriteMultiRegisterFuture(
 			std::initializer_list<T> values, 
 			FUTURE_STATUS_LISTENER* status_listener = nullptr)

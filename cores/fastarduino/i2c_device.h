@@ -371,7 +371,23 @@ namespace i2c
 			return launch_commands(future, {write(0, false, stop)});
 		}
 
-		//TODO DOC
+		/**
+		 * Helper method that asynchronously launches I2C commands for a simple
+		 * Future performing several register writes.
+		 * @warning Asynchronous API!
+		 * 
+		 * @tparam F the type of @p future automatically deduced from @p future;
+		 * this must be a `TWriteMultiRegisterFuture` specialization or a subclass.
+		 * @param future a proxy to the Future to be updated by the launched I2C 
+		 * commands
+		 * @param stop force a STOP condition on the I2C bus at the end of each
+		 * write command
+		 * @return the same result codes as `launch_commands()`
+		 * 
+		 * @sa launch_commands()
+		 * @sa write()
+		 * @sa TWriteMultiRegisterFuture()
+		 */
 		template<typename F> int async_multi_write(PROXY<F> future, bool stop = true)
 		{
 			constexpr uint8_t NUM_WRITES = F::NUM_WRITES;
