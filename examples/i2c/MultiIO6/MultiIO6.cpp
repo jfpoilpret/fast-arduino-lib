@@ -91,7 +91,6 @@ using streams::endl;
 #define INT_NUM 0
 static constexpr const board::ExternalInterruptPin INT_PIN = board::ExternalInterruptPin::D2_PD2_EXT0;
 
-
 class SwitchHandler
 {
 public:
@@ -123,13 +122,13 @@ public:
 			power::Power::sleep();
 			if (changed_)
 			{
+				changed_ = false;
 				uint8_t switches = mcp_.values() & 0x0F;
 				out_ << F("switches = 0x") << hex << switches << endl;
 				DEBUG(out_);
 				bool ok = mcp_.values(switches << 4);
 				out_ << dec << F("values() ") << ok << endl;
 				DEBUG(out_);
-				changed_ = false;
 			}
 		}
 	}
@@ -160,9 +159,8 @@ private:
 #	endif
 #endif
 	MCP mcp_;
-	gpio::FAST_EXT_PIN<INT_PIN> int_pin_{gpio::PinMode::INPUT_PULLUP};
 	interrupt::INTSignal<INT_PIN> signal_;
-	bool changed_ = true;
+	volatile bool changed_ = true;
 
 	DECL_INT_ISR_HANDLERS_FRIEND
 };
