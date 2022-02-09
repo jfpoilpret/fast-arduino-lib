@@ -1151,11 +1151,11 @@ namespace devices::magneto
 			constexpr PowerManagement() : value_{} {}
 			explicit constexpr PowerManagement(ClockSelect clock_select, bool temp_disable = false,
 							bool cycle = false, bool sleep = false, bool device_reset = false) 
-				:	value_{	uint8_t(clock_select) | 
+				:	value_{	uint8_t(uint8_t(clock_select) | 
 							(temp_disable ? TEMP_DIS_MASK : 0) |
 							(cycle ? CYCLE_MASK : 0) |
 							(sleep ? SLEEP_MASK : 0) |
-							(device_reset ? RESET_MASK : 0)} {}
+							(device_reset ? RESET_MASK : 0))} {}
 			constexpr PowerManagement(bool temp_disable, bool cycle, bool sleep, bool device_reset) 
 				:	value_{	(temp_disable ? TEMP_DIS_MASK : 0) |
 							(cycle ? CYCLE_MASK : 0) |
