@@ -18,12 +18,13 @@ make clean-all >/dev/null 2>&1
 make clean-examples-all >/dev/null 2>&1
 
 echo "Build all examples for all targets"
-export TARGETS="UNO ATtiny84"
+#export TARGETS="UNO ATtiny84"
+export TARGETS="UNO"
 for TARGET in $TARGETS
 do
 	echo "Target: $TARGET"
 	make CONF=$TARGET examples 2>errors | $MAKEDIR/stats.py >newsizes-$TARGET
-	grep "Error" errors
+	grep "Error" errors | grep -v "I2CErrorPolicy"
 	# check if error found, then abort
 	if [ $? -ne 1 ]; then
 		echo "Error occurred, aborting."
