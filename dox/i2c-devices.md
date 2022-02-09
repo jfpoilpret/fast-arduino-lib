@@ -62,7 +62,7 @@ Creating a new driver for an I2C device must follow these steps:
 3. Add a `public` constructor with one argument: `MyI2CDevice::MyI2CDevice(MANAGER& manager)` where `MANAGER` is a class 
 template argument of both `MyI2CDevice` and `i2c::I2CDevice`; this constructor must call the inherited constructor
 and pass it 3 arguments: `manager`, the default I2C address for your device, and finally, one of `i2c::I2C_STANDARD` 
-or `i2c::I2C_FAST` constants, to indicate the best mode (highest I2C frequency) that you device can support.
+or `i2c::I2C_FAST` constants, to indicate the best mode (highest I2C frequency) that your device can support.
 4. List the API you need to provide to the end user of your device (based on the device datasheet)
 5. For each `public` API you need to provide, define a specific *Future* to hold
 values written to the device, as well as values later read from the device. Each defined Future shall derive from 
@@ -165,6 +165,24 @@ is directly `READY` (or in `ERROR`) when the method returns
 - with an asynchronous I2C Manager, it enqueues all commands for asynchronous execution and returns immediately; the
 assigned Future will be later updated (it status will become either `READY` or `ERROR`) once all commands are complete.
 
+
+### I2C device registers common operations ###
+
+Most I2C devices API consists in reading and writing device registers at a specific address (referenced by a byte);
+registers may be one byte long or more dependign on what each register represents.
+
+In order to simplify support of new I2C devices, FastArduino comes with a few extra utilities that can greatly speed
+up device support implementation.
+
+These utilities are in header `i2c_device_utilities.h` in the same `i2c` namespace as `I2CDevice` abstract base class.
+
+The following template classes are defined in there:
+- TODO list + quick explanation
+
+TODO show quick usage examples
+TODO explain role and advantage of functors
+TODO mention additional template methods in I2CDevice
+TODO mention additional utilities for more complex cases
 
 ### I2C Bus handling ###
 
