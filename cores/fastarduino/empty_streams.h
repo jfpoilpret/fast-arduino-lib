@@ -138,28 +138,28 @@ namespace streams
 	};
 
 	/// @cond notdocumented
-	void bin(null_ostream& stream UNUSED) {}
-	void oct(null_ostream& stream UNUSED) {}
-	void dec(null_ostream& stream UNUSED) {}
-	void hex(null_ostream& stream UNUSED) {}
-	void flush(null_ostream& stream UNUSED) {}
-	void endl(null_ostream& stream UNUSED) {}
-	void skipws(null_ostream& stream UNUSED) {}
-	void noskipws(null_ostream& stream UNUSED) {}
-	void boolalpha(null_ostream& stream UNUSED) {}
-	void noboolalpha(null_ostream& stream UNUSED) {}
-	void showbase(null_ostream& stream UNUSED) {}
-	void noshowbase(null_ostream& stream UNUSED) {}
-	void showpos(null_ostream& stream UNUSED) {}
-	void noshowpos(null_ostream& stream UNUSED) {}
-	void uppercase(null_ostream& stream UNUSED) {}
-	void nouppercase(null_ostream& stream UNUSED) {}
-	void unitbuf(null_ostream& stream UNUSED) {}
-	void nounitbuf(null_ostream& stream UNUSED) {}
-	void left(null_ostream& stream UNUSED) {}
-	void right(null_ostream& stream UNUSED) {}
-	void fixed(null_ostream& stream UNUSED) {}
-	void scientific(null_ostream& stream UNUSED) {}
+	inline void bin(null_ostream& stream UNUSED) {}
+	inline void oct(null_ostream& stream UNUSED) {}
+	inline void dec(null_ostream& stream UNUSED) {}
+	inline void hex(null_ostream& stream UNUSED) {}
+	inline void flush(null_ostream& stream UNUSED) {}
+	inline void endl(null_ostream& stream UNUSED) {}
+	inline void skipws(null_ostream& stream UNUSED) {}
+	inline void noskipws(null_ostream& stream UNUSED) {}
+	inline void boolalpha(null_ostream& stream UNUSED) {}
+	inline void noboolalpha(null_ostream& stream UNUSED) {}
+	inline void showbase(null_ostream& stream UNUSED) {}
+	inline void noshowbase(null_ostream& stream UNUSED) {}
+	inline void showpos(null_ostream& stream UNUSED) {}
+	inline void noshowpos(null_ostream& stream UNUSED) {}
+	inline void uppercase(null_ostream& stream UNUSED) {}
+	inline void nouppercase(null_ostream& stream UNUSED) {}
+	inline void unitbuf(null_ostream& stream UNUSED) {}
+	inline void nounitbuf(null_ostream& stream UNUSED) {}
+	inline void left(null_ostream& stream UNUSED) {}
+	inline void right(null_ostream& stream UNUSED) {}
+	inline void fixed(null_ostream& stream UNUSED) {}
+	inline void scientific(null_ostream& stream UNUSED) {}
 	/// @endcond
 }
 
