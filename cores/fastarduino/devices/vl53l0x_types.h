@@ -33,6 +33,8 @@
 #define VL53L0X_TYPES_H
 
 #include "../bits.h"
+//FIXME NEVER IMPORT streams.h IN ANY FASTARDUINO library source code file!
+// That will prevent using empty_streams.h in any program using VL53L0X!
 #include "../streams.h"
 #include "../utilities.h"
 #include "vl53l0x_registers.h"
