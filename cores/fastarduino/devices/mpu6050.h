@@ -152,48 +152,53 @@ namespace devices::magneto
 		 */
 		constexpr FIFOEnable(
 			bool accel = false, bool gyro_x = false, bool gyro_y = false, bool gyro_z = false, bool temperature = false)
-			:	reserved_{}, 
-				accel_{accel}, gyro_z_{gyro_z}, gyro_y_{gyro_y}, gyro_x_{gyro_x}, 
-				temperature_{temperature} {}
+			:	data_{
+					enable(accel, ACCEL_FIFO_EN) | enable(temperature, TEMP_FIFO_EN) |
+					enable(gyro_x, XG_FIFO_EN) | enable(gyro_y, YG_FIFO_EN) | enable(gyro_z, ZG_FIFO_EN)} {}
 
 		/** If `true`, accelerometer measures on 3 axes will be loaded to FIFO buffer. */
 		bool accel() const
 		{
-			return accel_;
+			return data_ & ACCEL_FIFO_EN;
 		}
 
 		/** If `true`, gyroscope measures on X axis will be loaded to FIFO buffer. */
 		bool gyro_x() const
 		{
-			return gyro_x_;
+			return data_ & XG_FIFO_EN;
 		}
 
 		/** If `true`, gyroscope measures on Y axis will be loaded to FIFO buffer. */
 		bool gyro_y() const
 		{
-			return gyro_y_;
+			return data_ & YG_FIFO_EN;
 		}
 
 		/** If `true`, gyroscope measures on Z axis will be loaded to FIFO buffer. */
 		bool gyro_z() const
 		{
-			return gyro_z_;
+			return data_ & ZG_FIFO_EN;
 		}
 
 		/** If `true`, chip temperature will be loaded to FIFO buffer. */
 		bool temperature() const
 		{
-			return temperature_;			
+			return data_ & TEMP_FIFO_EN;
 		}
 
 	private:
-		//TODO rework bitfields to use bitmasks instead (more portable, and possibly more efficient)
-		uint8_t reserved_ : 3;
-		bool accel_ : 1;
-		bool gyro_z_ : 1;
-		bool gyro_y_ : 1;
-		bool gyro_x_ : 1;
-		bool temperature_ : 1;
+		static constexpr uint8_t TEMP_FIFO_EN = bits::BV8(7);
+		static constexpr uint8_t XG_FIFO_EN = bits::BV8(6);
+		static constexpr uint8_t YG_FIFO_EN = bits::BV8(5);
+		static constexpr uint8_t ZG_FIFO_EN = bits::BV8(4);
+		static constexpr uint8_t ACCEL_FIFO_EN = bits::BV8(3);
+
+		static constexpr uint8_t enable(bool flag, uint8_t mask)
+		{
+			return (flag ? mask : 0);
+		}
+		
+		uint8_t data_;
 	};
 
 	/** 
@@ -213,26 +218,30 @@ namespace devices::magneto
 		 * @param overflow `true` to enable FIFO buffer overflow interrupt
 		 */
 		constexpr INTStatus(bool data_ready = false, bool overflow = false)
-			: data_ready_{data_ready}, reserved1_{}, overflow_{overflow}, reserved2_{} {}
+			: data_{enable(data_ready, DATA_RDY_INT) | enable(overflow, FIFO_OFLOW_INT)} {}
 
 		/** If `true`, the Data Ready interrupt is enabled. */
 		bool data_ready() const
 		{
-			return data_ready_;
+			return data_ & DATA_RDY_INT;
 		}
 
 		/** If `true`, a FIFO buffer overflow will generate an interrupt. */
 		bool overflow() const
 		{
-			return overflow_;
+			return data_ & FIFO_OFLOW_INT;
 		}
 
 	private:
-		//TODO rework bitfields to use bitmasks instead (more portable, and possibly more efficient)
-		bool data_ready_ : 1;
-		uint8_t reserved1_ : 3;
-		bool overflow_ : 1;
-		uint8_t reserved2_ : 3;
+		static constexpr uint8_t FIFO_OFLOW_INT = bits::BV8(4);
+		static constexpr uint8_t DATA_RDY_INT = bits::BV8(0);
+
+		static constexpr uint8_t enable(bool flag, uint8_t mask)
+		{
+			return (flag ? mask : 0);
+		}
+
+		uint8_t data_;
 	};
 
 	/**
