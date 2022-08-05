@@ -151,5 +151,6 @@ int main()
 
 	GENERATOR generator;
 	PLAYER player{generator};
-	player.play_sram(music, BPM);
+	constexpr devices::audio::Beat BEAT{BPM};
+	player.play_sram(music, BEAT);
 }

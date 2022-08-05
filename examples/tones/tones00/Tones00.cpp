@@ -56,6 +56,7 @@ static constexpr const board::PWMPin OUTPUT = board::PWMPin::D11_PB3_OC0A;
 #error "Current target is not yet supported!"
 #endif
 
+using devices::audio::Beat;
 using devices::audio::Tone;
 using devices::audio::TonePlay;
 using namespace devices::audio::SpecialTone;
@@ -671,44 +672,46 @@ int main()
 	PLAYER player{generator};
 
 	// Check scales
-	player.play_flash(C_major_scale, BPM);
+	constexpr Beat BEAT60{BPM};
+	player.play_flash(C_major_scale, BEAT60);
 	time::delay_ms(1000);
-	player.play_flash(D_major_scale, BPM);
+	player.play_flash(D_major_scale, BEAT60);
 	time::delay_ms(1000);
-	player.play_flash(E_major_scale, BPM);
+	player.play_flash(E_major_scale, BEAT60);
 	time::delay_ms(1000);
-	player.play_flash(F_major_scale, BPM);
+	player.play_flash(F_major_scale, BEAT60);
 	time::delay_ms(1000);
-	player.play_flash(G_major_scale, BPM);
+	player.play_flash(G_major_scale, BEAT60);
 	time::delay_ms(1000);
-	player.play_flash(A_major_scale, BPM);
+	player.play_flash(A_major_scale, BEAT60);
 	time::delay_ms(1000);
-	player.play_flash(B_major_scale, BPM);
+	player.play_flash(B_major_scale, BEAT60);
 	time::delay_ms(1000);
 
 	// Check durations, dots, triplets, including rests
-	player.play_flash(durations, BPM * 2);
+	constexpr Beat BEAT120{BPM * 2};
+	player.play_flash(durations, BEAT120);
 	time::delay_ms(1000);
-	player.play_flash(durations_dots, BPM * 2);
+	player.play_flash(durations_dots, BEAT120);
 	time::delay_ms(1000);
-	player.play_flash(durations_triplets, BPM * 2);
+	player.play_flash(durations_triplets, BEAT120);
 	time::delay_ms(1000);
 
 	// Check single and multiple repeats
-	player.play_flash(repeat_zero, BPM * 2);
+	player.play_flash(repeat_zero, BEAT120);
 	time::delay_ms(1000);
-	player.play_flash(repeat_once, BPM * 2);
+	player.play_flash(repeat_once, BEAT120);
 	time::delay_ms(1000);
-	player.play_flash(repeat_twice, BPM * 2);
+	player.play_flash(repeat_twice, BEAT120);
 	time::delay_ms(1000);
-	player.play_flash(two_repeats, BPM * 2);
+	player.play_flash(two_repeats, BEAT120);
 	time::delay_ms(1000);
-	player.play_flash(bad_repeats, BPM * 2);
+	player.play_flash(bad_repeats, BEAT120);
 	time::delay_ms(1000);
 
 	// Check slurs and ties when implemented
-	player.play_flash(ties, BPM * 2);
+	player.play_flash(ties, BEAT120);
 	time::delay_ms(1000);
-	player.play_flash(slurs, BPM * 2);
+	player.play_flash(slurs, BEAT120);
 	time::delay_ms(1000);
 }

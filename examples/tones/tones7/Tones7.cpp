@@ -215,7 +215,8 @@ int main()
 	TONEPLAYER player{generator};
 
 	time::delay_ms(1000);
-	player.play_flash(music, BPM);
+	constexpr devices::audio::Beat BEAT{BPM};
+	player.play_flash(music, BEAT);
 
 	timer.begin();
 	while (true)

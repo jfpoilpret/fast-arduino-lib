@@ -245,8 +245,9 @@ int main()
 	TONEPLAYER2 player2{generator2};
 
 	time::delay_ms(1000);
-	player1.play_flash(music1, BPM);
-	player2.play_flash(music2, BPM);
+	constexpr devices::audio::Beat BEAT{BPM};
+	player1.play_flash(music1, BEAT);
+	player2.play_flash(music2, BEAT);
 
 	timer.begin();
 	while (true)

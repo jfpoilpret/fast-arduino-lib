@@ -149,5 +149,6 @@ int main()
 
 	GENERATOR generator;
 	PLAYER player{generator};
-	player.play_eeprom(music, BPM);
+	constexpr devices::audio::Beat BEAT{BPM};
+	player.play_eeprom(music, BEAT);
 }
