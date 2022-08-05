@@ -169,7 +169,7 @@ assigned Future will be later updated (it status will become either `READY` or `
 ### I2C device registers common operations ###
 
 Most I2C devices API consists in reading and writing device registers at a specific address (referenced by a byte);
-registers may be one byte long or more dependign on what each register represents.
+registers may be one byte long or more depending on what each register represents.
 
 In order to simplify support of new I2C devices, FastArduino comes with a few extra utilities that can greatly speed
 up device support implementation.
@@ -177,12 +177,61 @@ up device support implementation.
 These utilities are in header `i2c_device_utilities.h` in the same `i2c` namespace as `I2CDevice` abstract base class.
 
 The following template classes are defined in there:
-- TODO list + quick explanation
+- `ReadRegisterFuture` and `TReadRegisterFuture`: future classes to read one register of any type of value; type conversion is possible by providing a `FUNCTOR` class or function.
+- `WriteRegisterFuture` and `TWriteRegisterFuture`: future classes to write one register of any type; type conversion is possible by providing a `FUNCTOR` class or function.
+- `I2CFuturesGroup`: abstract future allowing its derived classes to aggregate several futures used in the same I2C transaction; this is useful when dealing with particularly complex I2C devices.
+- `I2CSameFutureGroup`: instances of this class will generate one-byte register writing I2C transactions from content (register id and register value) stored in Flash; this is useful when dealing with some I2C devices that need long initialization process from hard-coded values.
 
-TODO show quick usage examples
-TODO explain role and advantage of functors
-TODO mention additional template methods in I2CDevice
-TODO mention additional utilities for more complex cases
+The `DS1307` RTC device is a good example of `TReadRegisterFuture` and `TWriteRegisterFuture` simple usage, along with conversion functors:
+@code{.cpp}
+    using GetDatetimeFuture = TReadRegisterFuture<TIME_ADDRESS, tm, DatetimeConverterFromDevice>;
+	using SetDatetimeFuture = TWriteRegisterFuture<TIME_ADDRESS, tm, DatetimeConverterToDevice>;
+@endcode
+
+The `VL53L0X` Time-of-Flight laser device is much complex and makes heavy use of advanced utilities like `I2CFuturesGroup`:
+@code{.cpp}
+    class SetGPIOSettingsFuture : public I2CFuturesGroup
+    {
+    public:
+        explicit SetGPIOSettingsFuture(const vl53l0x::GPIOSettings& settings)
+            :	I2CFuturesGroup{futures_, NUM_FUTURES},
+                write_config_{settings.function()},
+                write_GPIO_active_high_{uint8_t(settings.high_polarity() ? GPIO_LEVEL_HIGH : GPIO_LEVEL_LOW)},
+                write_low_threshold_{settings.low_threshold() / 2},
+                write_high_threshold_{settings.high_threshold() / 2}
+        {
+            I2CFuturesGroup::init(futures_);
+        }
+
+    private:
+        static constexpr uint8_t GPIO_LEVEL_HIGH = 0x11;
+        static constexpr uint8_t GPIO_LEVEL_LOW = 0x01;
+        TWriteRegisterFuture<Register::SYSTEM_INTERRUPT_CONFIG_GPIO, vl53l0x::GPIOFunction> write_config_;
+        TWriteRegisterFuture<Register::GPIO_HV_MUX_ACTIVE_HIGH> write_GPIO_active_high_;
+        TWriteRegisterFuture<Register::SYSTEM_THRESH_LOW, uint16_t> write_low_threshold_;
+        TWriteRegisterFuture<Register::SYSTEM_THRESH_HIGH, uint16_t> write_high_threshold_;
+        TWriteRegisterFuture<Register::SYSTEM_INTERRUPT_CLEAR> clear_interrupt_{0};
+
+        static constexpr uint8_t NUM_FUTURES = 5;
+        ABSTRACT_FUTURE* futures_[NUM_FUTURES] =
+        {
+            &write_config_,
+            &write_GPIO_active_high_,
+            &write_low_threshold_,
+            &write_high_threshold_,
+            &clear_interrupt_
+        };
+    };
+
+    int set_GPIO_settings(SetGPIOSettingsFuture& future)
+    {
+        return (future.start(*this) ? 0 : future.error());
+    }
+@endcode
+
+We see in the above example the future `SetGPIOSettingsFuture` that aggregates 5 futures to write values to distinct registers.
+Device method `set_GPIO_settings()` shows the peculiar way to start I2C commands directly through the `future.start()` method.
+
 
 ### I2C Bus handling ###
 
