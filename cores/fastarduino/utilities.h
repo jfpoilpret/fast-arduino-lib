@@ -392,8 +392,11 @@ namespace utils
 	 */
 	inline void swap_bytes(uint32_t& value)
 	{
-		value =	(value >> 24) | ((value & 0x00'FF'00'00UL) >> 8) |
-				((value & 0x00'00'FF'00UL) << 8) | ((value & 0x00'00'00'FFUL) << 24);
+		uint16_t value1 = uint16_t(value >> 16);
+		uint16_t value2 = uint16_t(value & 0xFFFFU);
+		swap_bytes(value1);
+		swap_bytes(value2);
+		value = uint32_t(value1) | (uint32_t(value2) << 16);
 	}
 
 	/**
@@ -406,7 +409,29 @@ namespace utils
 		swap_bytes((uint32_t&) value);
 	}
 
-	//FIXME need swap for 64 bits values also!!!
+	/**
+	 * Reverse 8 bytes of a 8-bytes integer. Useful to convert from big-endian to 
+	 * small-endian (AVR).
+	 * @param value value to convert in place (reference)
+	 */
+	inline void swap_bytes(uint64_t& value)
+	{
+		uint32_t value1 = uint32_t(value >> 32);
+		uint32_t value2 = uint32_t(value & 0xFFFFFFFFUL);
+		swap_bytes(value1);
+		swap_bytes(value2);
+		value = uint64_t(value1) | (uint64_t(value2) << 32);
+	}
+
+	/**
+	 * Reverse 8 bytes of a 8-bytes integer. Useful to convert from big-endian to 
+	 * small-endian (AVR).
+	 * @param value value to convert in place (reference)
+	 */
+	inline void swap_bytes(int64_t& value)
+	{
+		swap_bytes((uint64_t&) value);
+	}
 
 	/// @cond notdocumented
 	template<typename T> union ToUint8
