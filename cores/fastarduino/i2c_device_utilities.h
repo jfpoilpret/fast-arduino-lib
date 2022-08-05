@@ -434,6 +434,7 @@ namespace i2c
 		I2CDevice<MANAGER>& device,const uint8_t* buffer, uint8_t size);
 	/// @endcond
 
+	/// @cond notdocumented
 	template<typename MANAGER> class I2CFutureHelper
 	{
 		static_assert(I2CManager_trait<MANAGER>::IS_I2CMANAGER, "MANAGER must be an I2C Manager");
@@ -494,6 +495,7 @@ namespace i2c
 		DEVICE* device_ = nullptr;
 		friend DEVICE;
 	};
+	/// @endcond
 
 	/// @cond notdocumented
 	template<typename MANAGER> class AbstractI2CFuturesGroup : 
@@ -664,7 +666,7 @@ namespace i2c
 			}
 			else
 			{
-				//FIXME we consider that any other future is an I2CFuturesgroup, which might not always be correct!
+				//FIXME we consider that any other future is an I2CFuturesGroup, which might not always be correct!
 				I2CFuturesGroup& group = static_cast<I2CFuturesGroup&>(future);
 				if (!group.start(PARENT::device()))
 					error = errors::EILSEQ;

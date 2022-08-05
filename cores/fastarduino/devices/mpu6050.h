@@ -33,7 +33,6 @@
 #include "../utilities.h"
 
 //TODO rename namespace: "magneto" is not relevant here, eg "motion" or "motion_sensor"
-//TODO rework bitfields to use bitmasks instead (more portable, and possibly more efficient)
 namespace devices::magneto
 {
 	/**
@@ -188,6 +187,7 @@ namespace devices::magneto
 		}
 
 	private:
+		//TODO rework bitfields to use bitmasks instead (more portable, and possibly more efficient)
 		uint8_t reserved_ : 3;
 		bool accel_ : 1;
 		bool gyro_z_ : 1;
@@ -228,6 +228,7 @@ namespace devices::magneto
 		}
 
 	private:
+		//TODO rework bitfields to use bitmasks instead (more portable, and possibly more efficient)
 		bool data_ready_ : 1;
 		uint8_t reserved1_ : 3;
 		bool overflow_ : 1;

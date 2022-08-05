@@ -299,7 +299,7 @@ namespace board
 		D10_PB6_OC1B,
 		D11_PB7_OC1C,
 		D5_PC6_OC3A,
-		//TODO High-speed timer (Timer4) related PWM pins are not listed here because Timer4 is not supported yer
+		//TODO High-speed timer (Timer4) related PWM pins are not listed here because Timer4 is not supported yet
 
 		D3 = D3_PD0_OC0B,
 		D9 = D9_PB5_OC1A,

@@ -456,6 +456,7 @@ namespace devices::audio
 		 */
 		static constexpr uint16_t calculate_min_duration(uint8_t bpm)
 		{
+			//FIXME it seems this method is not systematically used at compile-time (tones00): externalize it?
 			// bpm defines the duration of a quarter note (in 4/4 mode)
 			// We want the minimum duration allowed (for a 32nd note, since we allow dotted sixteenth)
 			return (60U * 1000U / 8U) / bpm;
