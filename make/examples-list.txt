@@ -94,6 +94,8 @@ ToF4	VL53L0X example using single ranging (i2c)
 ToF5	VL53L0X example using continuous ranging based on profile selection (i2c)
 ToF6	VL53L0X example using continuous ranging with GPIOs (i2c)
 ToF7	Double-VL53L0X example using continuous ranging (i2c)
+ToF8	VL53L0X example using continuous ranging based on profile selection and asynchronous I2C transactions (i2c)
+ToF9	VL53L0X example using continuous ranging with GPIOs and asynchronous I2C transactions (i2c)
 Servo1	Servo controlled by a pot through 8bits pulse timer
 Servo2	Servo controlled by a pot through 16bits pulse timer
 RF24App1	NRF24L01P ping-pong (UATX except ATtiny), no IRQ (spi)
