@@ -1092,6 +1092,7 @@ Serial Interface).
 FastArduino also brings specific support to some SPI devices:
 - NRF24L01P (radio-frequency device)
 - WinBond chips (flash memory devices)
+- MCP3001-2-4-8, MCP3201-2-4-8, MCP3301-2-4 (ADC chips)
 
 Basically, FastArduino core SPI API is limited to the following:
 - `spi::init()` function to call once before any use of SPI in your program
@@ -1158,6 +1159,7 @@ FastArduino also brings specific support to several I2C devices:
 - HMC5883L (compass)
 - MCP23008 (8-Bit I/O Expander)
 - MCP23017 (16-Bit I/O Expander)
+- VL53L0X (laser Time-of-Flight range sensor chip)
 
 FastArduino core I2C API is defined in several headers (namespace `i2c`) and made of a few types:
 - `i2c.h` contains a few constants and enumerations used everywhere else in the I2C API

@@ -1,4 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classi2c_1_1_abstract_i2_c_async_manager.html" title=" " alt="" coords="5,5,224,91"/>
-<area shape="rect" id="node2" href="$classi2c_1_1_i2_c_async_l_c_status_debug_manager.html" title="Asynchronous I2C Manager for ATmega architecture with debug and status notification facilities and su..." alt="" coords="272,20,532,76"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,93,189,120"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_i2_c_futures_group.html" title="Abstract class to allow aggregation of several futures in relation to I2C transactions." alt="" coords="252,53,409,94"/>
+<area shape="rect" id="node5" href="$classi2c_1_1_i2_c_same_future_group.html" title="Class to allow dynamic creation of futures from values stored in flash memory, leading to launch of I..." alt="" coords="237,118,424,159"/>
+<area shape="rect" id="node3" href="$classdevices_1_1vl53l0x_1_1_v_l53_l0_x_1_1_get_g_p_i_o_settings_future.html" title="Future to get device current GPIO settings." alt="" coords="472,5,716,61"/>
+<area shape="rect" id="node4" href="$classdevices_1_1vl53l0x_1_1_v_l53_l0_x_1_1_set_g_p_i_o_settings_future.html" title="Future to set device GPIO settings." alt="" coords="473,85,715,141"/>
 </map>

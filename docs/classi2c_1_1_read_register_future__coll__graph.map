@@ -1,4 +1,4 @@
-<map id="i2c::ReadRegisterFuture&lt; MANAGER, T, BIG_ENDIAN &gt;" name="i2c::ReadRegisterFuture&lt; MANAGER, T, BIG_ENDIAN &gt;">
-<area shape="rect" id="node1" title="General Future that can be used to read an I2C device register." alt="" coords="5,95,223,136"/>
-<area shape="rect" id="node2" title=" " alt="" coords="13,5,215,47"/>
+<map id="i2c::ReadRegisterFuture&lt; MANAGER, T, FUNCTOR &gt;" name="i2c::ReadRegisterFuture&lt; MANAGER, T, FUNCTOR &gt;">
+<area shape="rect" id="node1" title="General Future that can be used to read an I2C device register." alt="" coords="9,95,215,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,219,47"/>
 </map>

@@ -1,28 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" title=" " alt="" coords="5,494,135,521"/>
-<area shape="rect" id="node2" href="$classi2c_1_1_read_register_future.html" title="General Future that can be used to read an I2C device register." alt="" coords="187,5,404,47"/>
-<area shape="rect" id="node3" href="$classi2c_1_1_write_register_future.html" title="General Future that can be used to write to an I2C device register." alt="" coords="187,71,404,112"/>
-<area shape="rect" id="node4" href="$classi2c_1_1_read_register_future.html" title=" " alt="" coords="214,136,377,177"/>
-<area shape="rect" id="node6" href="$classi2c_1_1_read_register_future.html" title=" " alt="" coords="203,202,387,258"/>
-<area shape="rect" id="node8" href="$classi2c_1_1_read_register_future.html" title=" " alt="" coords="183,282,408,338"/>
-<area shape="rect" id="node10" href="$classi2c_1_1_read_register_future.html" title=" " alt="" coords="193,362,397,418"/>
-<area shape="rect" id="node12" href="$classi2c_1_1_read_register_future.html" title=" " alt="" coords="193,442,397,498"/>
-<area shape="rect" id="node14" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="214,523,377,564"/>
-<area shape="rect" id="node16" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="201,588,389,629"/>
-<area shape="rect" id="node17" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="203,654,387,710"/>
-<area shape="rect" id="node19" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="183,734,408,790"/>
-<area shape="rect" id="node21" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="183,814,408,870"/>
-<area shape="rect" id="node23" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="193,894,397,950"/>
-<area shape="rect" id="node25" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="193,974,397,1030"/>
-<area shape="rect" id="node5" href="$classi2c_1_1_t_read_register_future.html" title="Generic Future that can be used to read an I2C device register." alt="" coords="494,122,689,178"/>
-<area shape="rect" id="node7" href="$classi2c_1_1_t_read_register_future.html" title=" " alt="" coords="499,202,683,258"/>
-<area shape="rect" id="node9" href="$classi2c_1_1_t_read_register_future.html" title=" " alt="" coords="456,282,727,338"/>
-<area shape="rect" id="node11" href="$classi2c_1_1_t_read_register_future.html" title=" " alt="" coords="489,362,693,418"/>
-<area shape="rect" id="node13" href="$classi2c_1_1_t_read_register_future.html" title=" " alt="" coords="489,442,693,498"/>
-<area shape="rect" id="node15" href="$classi2c_1_1_t_write_register_future.html" title="Generic Future that can be used to write to an I2C device register." alt="" coords="494,522,689,578"/>
-<area shape="rect" id="node18" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="499,654,683,710"/>
-<area shape="rect" id="node20" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="479,734,704,790"/>
-<area shape="rect" id="node22" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="456,814,727,870"/>
-<area shape="rect" id="node24" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="489,894,693,950"/>
-<area shape="rect" id="node26" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="489,974,693,1030"/>
+<area shape="rect" id="node1" href="$classlifecycle_1_1_proxy.html" title="A proxy class that encapsulates access to a fixed T instance, or to a dynamic LifeCycle&lt;T&gt; instance." alt="" coords="5,5,165,32"/>
 </map>

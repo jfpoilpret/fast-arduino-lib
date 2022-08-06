@@ -7,13 +7,8 @@ var dir_cda03c6db942645b63370975f85ebe42 =
     [ "hmc5883l.h", "hmc5883l_8h.html", "hmc5883l_8h" ],
     [ "mcp23008.h", "mcp23008_8h.html", [
       [ "MCP23008", "classdevices_1_1mcp230xx_1_1_m_c_p23008.html", "classdevices_1_1mcp230xx_1_1_m_c_p23008" ],
-      [ "BeginFuture", "classdevices_1_1mcp230xx_1_1_m_c_p23008_1_1_begin_future.html", null ],
       [ "ConfigureGPIOFuture", "classdevices_1_1mcp230xx_1_1_m_c_p23008_1_1_configure_g_p_i_o_future.html", null ],
-      [ "ConfigureInterruptsFuture", "classdevices_1_1mcp230xx_1_1_m_c_p23008_1_1_configure_interrupts_future.html", null ],
-      [ "SetValuesFuture", "classdevices_1_1mcp230xx_1_1_m_c_p23008_1_1_set_values_future.html", null ],
-      [ "GetValuesFuture", "classdevices_1_1mcp230xx_1_1_m_c_p23008_1_1_get_values_future.html", null ],
-      [ "InterruptFlagsFuture", "classdevices_1_1mcp230xx_1_1_m_c_p23008_1_1_interrupt_flags_future.html", null ],
-      [ "CapturedValuesFuture", "classdevices_1_1mcp230xx_1_1_m_c_p23008_1_1_captured_values_future.html", null ]
+      [ "ConfigureInterruptsFuture", "classdevices_1_1mcp230xx_1_1_m_c_p23008_1_1_configure_interrupts_future.html", null ]
     ] ],
     [ "mcp23017.h", "mcp23017_8h.html", "mcp23017_8h" ],
     [ "mcp230xx.h", "mcp230xx_8h.html", "mcp230xx_8h" ],

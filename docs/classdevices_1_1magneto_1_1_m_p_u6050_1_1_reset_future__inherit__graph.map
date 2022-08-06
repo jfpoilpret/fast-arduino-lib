@@ -1,5 +1,6 @@
 <map id="devices::magneto::MPU6050&lt; MANAGER &gt;::ResetFuture" name="devices::magneto::MPU6050&lt; MANAGER &gt;::ResetFuture">
-<area shape="rect" id="node1" title="Create a future to be used by asynchronous method reset(ResetFuture&amp;)." alt="" coords="49,184,257,225"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,95,300,136"/>
-<area shape="rect" id="node3" title=" " alt="" coords="55,5,250,47"/>
+<area shape="rect" id="node1" title="Create a future to be used by asynchronous method reset(ResetFuture&amp;)." alt="" coords="8,288,216,329"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_t_write_register_future.html" title="Generic Future that can be used to write to an I2C device register." alt="" coords="17,213,207,240"/>
+<area shape="rect" id="node3" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="21,109,203,165"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,5,219,61"/>
 </map>

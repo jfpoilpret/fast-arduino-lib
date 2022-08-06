@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classdevices_1_1vl53l0x_1_1_fix_point9__7.html" title="Helper class to handle VL53L0X special fix&#45;point 9.7 values." alt="" coords="5,5,197,32"/>
+<area shape="rect" id="node1" href="$classfuture_1_1_abstract_fake_future.html" title="Base class for all FakeFutures." alt="" coords="5,13,200,39"/>
+<area shape="rect" id="node2" href="$classfuture_1_1_fake_future.html" title="Actual FakeFuture, it has the exact same API as Future and can be used in lieu of Future." alt="" coords="248,5,388,47"/>
 </map>

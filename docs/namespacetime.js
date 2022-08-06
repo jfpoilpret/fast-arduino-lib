@@ -1,6 +1,25 @@
 var namespacetime =
 [
+    [ "RTTTime", "classtime_1_1_r_t_t_time.html", "classtime_1_1_r_t_t_time" ],
     [ "auto_delay", "classtime_1_1auto__delay.html", "classtime_1_1auto__delay" ],
     [ "auto_millis", "classtime_1_1auto__millis.html", "classtime_1_1auto__millis" ],
-    [ "RTTTime", "classtime_1_1_r_t_t_time.html", "classtime_1_1_r_t_t_time" ]
+    [ "DELAY_PTR", "namespacetime.html#a0980f7cbb448c562b0081484031f325e", null ],
+    [ "MILLIS_PTR", "namespacetime.html#a6beadc7ea06995818634b29b52433b80", null ],
+    [ "operator-", "namespacetime.html#a897dc67d09f077584bc6339cc1e1ce59", null ],
+    [ "operator>", "namespacetime.html#a528710a605a0265b0d428c926beb6463", null ],
+    [ "operator>=", "namespacetime.html#ae8df0d63b0b81344df283ec6d6ece1f8", null ],
+    [ "operator<", "namespacetime.html#a9036c50b81dad0bab2b08d2cae674464", null ],
+    [ "operator<=", "namespacetime.html#a23f7e46fd27ff9503dbf3550988d9eb0", null ],
+    [ "operator==", "namespacetime.html#a8052ed5d3037bf63822f9e92867c54e9", null ],
+    [ "operator!=", "namespacetime.html#ad531c6bbf3175c03d57325bbc4553979", null ],
+    [ "operator+", "namespacetime.html#a90202a5bfab456d51610988a4d74e0a2", null ],
+    [ "yield", "namespacetime.html#a5396c009ace06e55985ccf6b7bff179a", null ],
+    [ "delta", "namespacetime.html#a62f1fe32506038b9c045c3506329531f", null ],
+    [ "since", "namespacetime.html#ad482508d5954e833f1d2e605b881b263", null ],
+    [ "delay_us", "namespacetime.html#a258d2da0bcb268278406d4c8cb0dda1c", null ],
+    [ "delay_ms", "namespacetime.html#af13fd17ddf6b751b8161691e608892b2", null ],
+    [ "default_delay", "namespacetime.html#a4b83c440a676e0c7063a65d7c8476c12", null ],
+    [ "set_clock", "namespacetime.html#a91174eeb5231a67f897360fede29a0f6", null ],
+    [ "delay", "namespacetime.html#af1e59bdf7c41bd8ff215d69a769a89bf", null ],
+    [ "millis", "namespacetime.html#a173df6ce2b6d3d6ed1418807e1b70a70", null ]
 ];

@@ -19,6 +19,14 @@ var dir_1d3cf6e8c97b3f2b1f8c0275e9693908 =
     [ "errors.h", "errors_8h.html", "errors_8h" ],
     [ "events.h", "events_8h.html", "events_8h" ],
     [ "flash.h", "flash_8h.html", "flash_8h" ],
+    [ "functors.h", "functors_8h.html", [
+      [ "Identity", "classfunctor_1_1_identity.html", "classfunctor_1_1_identity" ],
+      [ "Constant", "classfunctor_1_1_constant.html", "classfunctor_1_1_constant" ],
+      [ "Cast", "classfunctor_1_1_cast.html", "classfunctor_1_1_cast" ],
+      [ "Compose", "classfunctor_1_1_compose.html", "classfunctor_1_1_compose" ],
+      [ "ChangeEndianness", "classfunctor_1_1_change_endianness.html", "classfunctor_1_1_change_endianness" ],
+      [ "Functor", "structfunctor_1_1_functor.html", "structfunctor_1_1_functor" ]
+    ] ],
     [ "future.cpp", "future_8cpp_source.html", null ],
     [ "future.h", "future_8h.html", "future_8h" ],
     [ "gpio.h", "gpio_8h.html", "gpio_8h" ],

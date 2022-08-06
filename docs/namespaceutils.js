@@ -1,4 +1,41 @@
 var namespaceutils =
 [
-    [ "range", "classutils_1_1range.html", null ]
+    [ "range", "classutils_1_1range.html", null ],
+    [ "UnitPrefix", "namespaceutils.html#a6ba012c3dd675cf1eabcf14e55cea0e0", [
+      [ "GIGA", "namespaceutils.html#a6ba012c3dd675cf1eabcf14e55cea0e0ac236475a2d098d9e27c22aefc4a371ee", null ],
+      [ "MEGA", "namespaceutils.html#a6ba012c3dd675cf1eabcf14e55cea0e0af589eafcf087c11af27e475bafb047fa", null ],
+      [ "KILO", "namespaceutils.html#a6ba012c3dd675cf1eabcf14e55cea0e0a5d4e3412b9b63156d7aa43ad2002656d", null ],
+      [ "HECTO", "namespaceutils.html#a6ba012c3dd675cf1eabcf14e55cea0e0a190c1d95158fa444fbdecda03df6718f", null ],
+      [ "DECA", "namespaceutils.html#a6ba012c3dd675cf1eabcf14e55cea0e0a4c58909e3e346d760020821544e98065", null ],
+      [ "NONE", "namespaceutils.html#a6ba012c3dd675cf1eabcf14e55cea0e0ab50339a10e1de285ac99d4c3990b8693", null ],
+      [ "DECI", "namespaceutils.html#a6ba012c3dd675cf1eabcf14e55cea0e0a269f2327044f7e909294034f5fe0ffc7", null ],
+      [ "CENTI", "namespaceutils.html#a6ba012c3dd675cf1eabcf14e55cea0e0aaa5c9d297f93dedc4deb80d745006319", null ],
+      [ "MILLI", "namespaceutils.html#a6ba012c3dd675cf1eabcf14e55cea0e0a8f06f9f0a1efa42a2ad3ec880b0a1f70", null ],
+      [ "MICRO", "namespaceutils.html#a6ba012c3dd675cf1eabcf14e55cea0e0a14cb593ad5e4233d8e92219001350821", null ],
+      [ "NANO", "namespaceutils.html#a6ba012c3dd675cf1eabcf14e55cea0e0a10f8d0bbfdc321f233df0a2d98bdcd35", null ]
+    ] ],
+    [ "constrain", "namespaceutils.html#af1acb8c6f0e6493f88d42b2192e68ba3", null ],
+    [ "map", "namespaceutils.html#a608f8edf36fb4a7c58dd01232e07c0c8", null ],
+    [ "power_of_10", "namespaceutils.html#a1f09c3ac0739c934fa0b975fa827f993", null ],
+    [ "map_raw_to_physical", "namespaceutils.html#a610e02474f969fc747fa1725b79e252c", null ],
+    [ "map_physical_to_raw", "namespaceutils.html#a78e8ff3db7671b59028ba873086cfa32", null ],
+    [ "low_byte", "namespaceutils.html#ad5f19301125b8e9dc9e89ea50da962fa", null ],
+    [ "high_byte", "namespaceutils.html#a84e5a79013cf3cf3c46a09b2c4861d37", null ],
+    [ "as_uint16_t", "namespaceutils.html#a9d48a47fd601d3b960ce55b26a4d5194", null ],
+    [ "is_zero", "namespaceutils.html#a3525bf2bf63c9f906bc9b952f0d54355", null ],
+    [ "set_mask", "namespaceutils.html#a983d6f3839652d22e2353e7cfeff63af", null ],
+    [ "is_mask_equal", "namespaceutils.html#a719f3f44a5cf8093953fbb97486bbee9", null ],
+    [ "bcd_to_binary", "namespaceutils.html#af5b3426ba48caf5ee96ed71fa8b7bb5e", null ],
+    [ "binary_to_bcd", "namespaceutils.html#a76076365828136f5178f279fb3c129de", null ],
+    [ "swap_bytes", "namespaceutils.html#a53f4a46843c0030ed1388d10c0ad6179", null ],
+    [ "swap_bytes", "namespaceutils.html#aa520b3da671862f180de0fa3499ae293", null ],
+    [ "swap_bytes", "namespaceutils.html#a25cf0b4e16f41600e112ba90f41c2e1f", null ],
+    [ "swap_bytes", "namespaceutils.html#aa14a9a9958ae56f2a8d63ec2a0591cf9", null ],
+    [ "swap_bytes", "namespaceutils.html#ad646807311bd7bcd02d6af12e3b51934", null ],
+    [ "swap_bytes", "namespaceutils.html#aafea56db3de82001ff9c5e40f8357ab6", null ],
+    [ "as_uint8_t", "namespaceutils.html#a8122a1acb9aff2f2cd1d4ae7e1e99ac9", null ],
+    [ "as_array", "namespaceutils.html#a56da5697e356f76ec2e4061279ca0254", null ],
+    [ "calculate_delay1_count", "namespaceutils.html#a6ed4721feb889faa1f72fc2629d71271", null ],
+    [ "num_bits", "namespaceutils.html#aadb785961c9199701ce9025177b243c6", null ],
+    [ "change_endianness", "namespaceutils.html#a233bddd8743dd54547e9b36c1e58ef2f", null ]
 ];

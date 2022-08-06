@@ -1,4 +1,9 @@
 <map id="fastarduino/i2c_device_utilities.h" name="fastarduino/i2c_device_utilities.h">
-<area shape="rect" id="node1" title="Various utilities to use for I2C Device support developers." alt="" coords="5,5,157,47"/>
-<area shape="rect" id="node2" href="$vl53l0x_8h.html" title="API to handle Time&#45;of&#45;Flight ranging sensor VL53L0X I2C chip." alt="" coords="14,95,149,136"/>
+<area shape="rect" id="node1" title="Various utilities to use for I2C Device support developers." alt="" coords="432,5,601,47"/>
+<area shape="rect" id="node2" href="$ds1307_8h.html" title="API to handle Real&#45;Time Clock DS1307 I2C chip." alt="" coords="5,95,156,136"/>
+<area shape="rect" id="node3" href="$hmc5883l_8h.html" title="API to handle HMC5883L 3&#45;axis digital compass I2C chip." alt="" coords="180,95,331,136"/>
+<area shape="rect" id="node4" href="$mcp23008_8h.html" title="API to handle the MCP23008 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="355,95,505,136"/>
+<area shape="rect" id="node5" href="$mcp23017_8h.html" title="API to handle the MCP23017 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="529,95,680,136"/>
+<area shape="rect" id="node6" href="$mpu6050_8h.html" title="API to handle MPU6050 3&#45;axis gyroscope/accelerometer I2C chip." alt="" coords="704,95,855,136"/>
+<area shape="rect" id="node7" href="$vl53l0x_8h.html" title="API to handle Time&#45;of&#45;Flight ranging sensor VL53L0X I2C chip." alt="" coords="879,95,1029,136"/>
 </map>

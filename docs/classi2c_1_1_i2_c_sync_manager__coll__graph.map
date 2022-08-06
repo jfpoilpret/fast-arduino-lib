@@ -1,5 +1,6 @@
 <map id="i2c::I2CSyncManager&lt; MODE_ &gt;" name="i2c::I2CSyncManager&lt; MODE_ &gt;">
-<area shape="rect" id="node1" title="Synchronous I2C Manager for ATmega architecture." alt="" coords="541,35,700,76"/>
-<area shape="rect" id="node2" href="$classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="284,20,493,91"/>
-<area shape="rect" id="node3" href="$classi2c_1_1_abstract_i2_c_sync_manager.html" title=" " alt="" coords="5,5,236,105"/>
+<area shape="rect" id="node1" title="Synchronous I2C Manager for ATmega architecture." alt="" coords="540,68,699,109"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="283,5,492,76"/>
+<area shape="rect" id="node3" href="$classi2c_1_1_abstract_i2_c_sync_manager.html" title="Abstract synchronous I2C Manager for all MCU architectures." alt="" coords="5,53,235,124"/>
+<area shape="rect" id="node4" href="$classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="286,100,489,171"/>
 </map>

@@ -2,5 +2,19 @@ var namespaceserial =
 [
     [ "hard", "namespaceserial_1_1hard.html", "namespaceserial_1_1hard" ],
     [ "soft", "namespaceserial_1_1soft.html", "namespaceserial_1_1soft" ],
-    [ "UARTErrors", "classserial_1_1_u_a_r_t_errors.html", "classserial_1_1_u_a_r_t_errors" ]
+    [ "UARTErrors", "classserial_1_1_u_a_r_t_errors.html", "classserial_1_1_u_a_r_t_errors" ],
+    [ "Parity", "namespaceserial.html#a770c86bfde96ad529293b7b322422032", [
+      [ "NONE", "namespaceserial.html#a770c86bfde96ad529293b7b322422032ab50339a10e1de285ac99d4c3990b8693", null ],
+      [ "EVEN", "namespaceserial.html#a770c86bfde96ad529293b7b322422032a6634c67f28ba9a80efe941b9519aa106", null ],
+      [ "ODD", "namespaceserial.html#a770c86bfde96ad529293b7b322422032a57a1355d5527355458c7cc08ba70bf94", null ]
+    ] ],
+    [ "StopBits", "namespaceserial.html#a1cc0a59518594157f23ddf16842243b3", [
+      [ "ONE", "namespaceserial.html#a1cc0a59518594157f23ddf16842243b3abc21e6484530fc9d0313cb816b733396", null ],
+      [ "TWO", "namespaceserial.html#a1cc0a59518594157f23ddf16842243b3a0f82d86afa0f5dc965c5c15aca58dcfb", null ]
+    ] ],
+    [ "BufferHandling", "namespaceserial.html#a1abc2ad4df0b9d422f51f63c81d0a2d7", [
+      [ "KEEP", "namespaceserial.html#a1abc2ad4df0b9d422f51f63c81d0a2d7a60cba2874369bd3790e14ea5f8a7bc58", null ],
+      [ "CLEAR", "namespaceserial.html#a1abc2ad4df0b9d422f51f63c81d0a2d7a813461e0c58e7ad59a2fd83ca2237fec", null ],
+      [ "FLUSH", "namespaceserial.html#a1abc2ad4df0b9d422f51f63c81d0a2d7a26eed7f078fc015c5252f817059a6f9f", null ]
+    ] ]
 ];

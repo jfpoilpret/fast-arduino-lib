@@ -1,4 +1,6 @@
 <map id="devices::rtc::DS1307&lt; MANAGER &gt;::HaltClockFuture" name="devices::rtc::DS1307&lt; MANAGER &gt;::HaltClockFuture">
-<area shape="rect" id="node1" title="Create a future to be used by asynchronous method halt_clock(HaltClockFuture&amp;)." alt="" coords="5,95,236,136"/>
-<area shape="rect" id="node2" title=" " alt="" coords="23,5,218,47"/>
+<area shape="rect" id="node1" title="Create a future to be used by asynchronous method halt_clock(HaltClockFuture&amp;)." alt="" coords="5,303,236,344"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_t_write_register_future.html" title="Generic Future that can be used to write to an I2C device register." alt="" coords="41,213,201,255"/>
+<area shape="rect" id="node3" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="29,109,212,165"/>
+<area shape="rect" id="node4" title=" " alt="" coords="14,5,227,61"/>
 </map>

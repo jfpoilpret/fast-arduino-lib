@@ -2,8 +2,6 @@ var ds1307_8h =
 [
     [ "tm", "structdevices_1_1rtc_1_1tm.html", "structdevices_1_1rtc_1_1tm" ],
     [ "DS1307", "classdevices_1_1rtc_1_1_d_s1307.html", "classdevices_1_1rtc_1_1_d_s1307" ],
-    [ "SetDatetimeFuture", "classdevices_1_1rtc_1_1_d_s1307_1_1_set_datetime_future.html", null ],
-    [ "GetDatetimeFuture", "classdevices_1_1rtc_1_1_d_s1307_1_1_get_datetime_future.html", null ],
     [ "SetRamFuture", "classdevices_1_1rtc_1_1_d_s1307_1_1_set_ram_future.html", null ],
     [ "SetRam1Future", "classdevices_1_1rtc_1_1_d_s1307_1_1_set_ram1_future.html", null ],
     [ "GetRamFuture", "classdevices_1_1rtc_1_1_d_s1307_1_1_get_ram_future.html", null ],

@@ -1,4 +1,9 @@
-<map id="i2c::WriteRegisterFuture&lt; MANAGER, T, BIG_ENDIAN &gt;" name="i2c::WriteRegisterFuture&lt; MANAGER, T, BIG_ENDIAN &gt;">
-<area shape="rect" id="node1" title="General Future that can be used to write to an I2C device register." alt="" coords="5,109,223,151"/>
-<area shape="rect" id="node2" title=" " alt="" coords="13,5,215,61"/>
+<map id="i2c::WriteRegisterFuture&lt; MANAGER, T, FUNCTOR &gt;" name="i2c::WriteRegisterFuture&lt; MANAGER, T, FUNCTOR &gt;">
+<area shape="rect" id="node1" title="General Future that can be used to write to an I2C device register." alt="" coords="267,173,473,214"/>
+<area shape="rect" id="node3" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="567,5,761,61"/>
+<area shape="rect" id="node4" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="548,85,780,141"/>
+<area shape="rect" id="node5" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="559,165,769,221"/>
+<area shape="rect" id="node6" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="521,245,807,301"/>
+<area shape="rect" id="node7" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="559,325,769,381"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,165,219,221"/>
 </map>

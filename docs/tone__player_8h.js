@@ -2,6 +2,7 @@ var tone__player_8h =
 [
     [ "TonePlay", "classdevices_1_1audio_1_1_tone_play.html", "classdevices_1_1audio_1_1_tone_play" ],
     [ "QTonePlay", "classdevices_1_1audio_1_1_q_tone_play.html", "classdevices_1_1audio_1_1_q_tone_play" ],
+    [ "Beat", "classdevices_1_1audio_1_1_beat.html", null ],
     [ "AbstractTonePlayer", "classdevices_1_1audio_1_1_abstract_tone_player.html", "classdevices_1_1audio_1_1_abstract_tone_player" ],
     [ "TonePlayer", "classdevices_1_1audio_1_1_tone_player.html", "classdevices_1_1audio_1_1_tone_player" ],
     [ "AsyncTonePlayer", "classdevices_1_1audio_1_1_async_tone_player.html", "classdevices_1_1audio_1_1_async_tone_player" ],

@@ -1,4 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classfuture_1_1_abstract_fake_future.html" title="Base class for all FakeFutures." alt="" coords="5,13,183,39"/>
-<area shape="rect" id="node2" href="$classfuture_1_1_fake_future.html" title="Actual FakeFuture, it has the exact same API as Future and can be used in lieu of Future." alt="" coords="231,5,359,47"/>
+<area shape="rect" id="node1" href="$classi2c_1_1_abstract_i2_c_async_manager.html" title=" " alt="" coords="5,5,233,91"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_i2_c_async_debug_manager.html" title="Asynchronous I2C Manager for ATmega architecture with debug facility." alt="" coords="281,20,489,76"/>
 </map>

@@ -1,3 +1,11 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classi2c_1_1status_1_1_i2_c_status_recorder.html" title="Class recording I2C status notifications for later output." alt="" coords="5,5,207,47"/>
+<area shape="rect" id="node1" href="$classspi_1_1_abstract_s_p_i_device.html" title="Contain general payload transfer API for an SPI device." alt="" coords="5,141,173,167"/>
+<area shape="rect" id="node2" href="$classspi_1_1_s_p_i_device.html" title=" " alt="" coords="257,5,469,76"/>
+<area shape="rect" id="node4" href="$classspi_1_1_s_p_i_device.html" title=" " alt="" coords="277,101,448,127"/>
+<area shape="rect" id="node7" href="$classspi_1_1_s_p_i_device.html" title=" " alt="" coords="221,151,504,237"/>
+<area shape="rect" id="node9" href="$classspi_1_1_s_p_i_device.html" title="Base class for any SPI slave device." alt="" coords="271,261,454,317"/>
+<area shape="rect" id="node3" href="$classdevices_1_1_win_bond.html" title="SPI device driver for WinBond flash memory chips, like W25Q80BV (8 Mbit flash)." alt="" coords="578,27,763,54"/>
+<area shape="rect" id="node5" href="$classdevices_1_1rf_1_1_n_r_f24_l01.html" title="SPI device driver for Nordic Semiconductor nRF24L01+ support, without IRQ support." alt="" coords="589,93,752,135"/>
+<area shape="rect" id="node6" href="$classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01.html" title="SPI device driver for Nordic Semiconductor nRF24L01+ support, with IRQ." alt="" coords="837,93,1031,135"/>
+<area shape="rect" id="node8" href="$classdevices_1_1mcp3x0x_1_1_m_c_p3x0x.html" title="Generic class to support (almost) any chip of the SPI&#45;based MicroChip ADC chips family (MCP3001&#45;2&#45;4&#45;8..." alt="" coords="552,166,789,222"/>
 </map>

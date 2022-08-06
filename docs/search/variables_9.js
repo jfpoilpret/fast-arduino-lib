@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['latch_2280',['LATCH',['../classdevices_1_1_s_i_p_o.html#a2f698804766863c127d1fab0a0820dbb',1,'devices::SIPO']]],
-  ['left_2281',['left',['../classstreams_1_1ios__base.html#a2ddfd1afe6b5f293e84305249ce9aab7',1,'streams::ios_base']]]
+  ['latch_2343',['LATCH',['../classdevices_1_1_s_i_p_o.html#a2f698804766863c127d1fab0a0820dbb',1,'devices::SIPO']]],
+  ['left_2344',['left',['../classstreams_1_1ios__base.html#a2ddfd1afe6b5f293e84305249ce9aab7',1,'streams::ios_base']]]
 ];

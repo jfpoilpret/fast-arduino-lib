@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classi2c_1_1_i2_c_future_helper.html" title=" " alt="" coords="5,5,148,47"/>
+<area shape="rect" id="node1" href="$classlifecycle_1_1_abstract_life_cycle_manager.html" title="The abstract base class of all LifeCycleManager." alt="" coords="5,5,204,47"/>
+<area shape="rect" id="node2" href="$classlifecycle_1_1_life_cycle_manager.html" title="An actual LifeCycleManager implementation, based on AbstractLifeCycleManager, adding static storage f..." alt="" coords="252,5,455,47"/>
 </map>

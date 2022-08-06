@@ -14,7 +14,9 @@ var classi2c_1_1_i2_c_device =
     [ "async_read", "classi2c_1_1_i2_c_device.html#ac433c1975b0be78ce89071ac7ca7a538", null ],
     [ "sync_read", "classi2c_1_1_i2_c_device.html#a0dfdb3fb784b939e8140a1c900a8e64e", null ],
     [ "async_write", "classi2c_1_1_i2_c_device.html#a877f1d20e75ed28de13314fc7d5a73f0", null ],
+    [ "async_multi_write", "classi2c_1_1_i2_c_device.html#a35f45f8b0a60893e99fc8266f834da5d", null ],
     [ "sync_write", "classi2c_1_1_i2_c_device.html#a5733ebd749415b43fbfab76cf6cfc234", null ],
+    [ "sync_write", "classi2c_1_1_i2_c_device.html#aad570da8ac6c407c7046b1f539fa5a8e", null ],
     [ "resolve", "classi2c_1_1_i2_c_device.html#aaf6df66445e2f4c39501b5621191f51e", null ],
     [ "make_proxy", "classi2c_1_1_i2_c_device.html#a358f5bdfc2a7f4cfbcca0e253f42d676", null ],
     [ "I2CFutureHelper< MANAGER >", "classi2c_1_1_i2_c_device.html#a6c0a6305a70d35be0c04ba98a616b91f", null ]

@@ -1,0 +1,4 @@
+<map id="i2c::TWriteMultiRegisterFuture&lt; MANAGER, T, REGISTERS &gt;" name="i2c::TWriteMultiRegisterFuture&lt; MANAGER, T, REGISTERS &gt;">
+<area shape="rect" id="node1" title="Generic Future that can be used to write to several I2C device registers." alt="" coords="5,109,261,151"/>
+<area shape="rect" id="node2" title=" " alt="" coords="27,5,240,61"/>
+</map>

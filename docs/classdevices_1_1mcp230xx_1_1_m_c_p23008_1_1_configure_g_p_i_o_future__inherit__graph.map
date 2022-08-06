@@ -1,4 +1,5 @@
 <map id="devices::mcp230xx::MCP23008&lt; MANAGER &gt;::ConfigureGPIOFuture" name="devices::mcp230xx::MCP23008&lt; MANAGER &gt;::ConfigureGPIOFuture">
-<area shape="rect" id="node1" title="Create a future to be used by asynchronous method configure_gpio(ConfigureGPIOFuture&amp;)." alt="" coords="34,80,222,136"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,251,32"/>
+<area shape="rect" id="node1" title="Create a future to be used by asynchronous method configure_gpio(ConfigureGPIOFuture&amp;)." alt="" coords="18,213,206,269"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_t_write_multi_register_future.html" title="Generic Future that can be used to write to several I2C device registers." alt="" coords="15,109,209,165"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,219,61"/>
 </map>

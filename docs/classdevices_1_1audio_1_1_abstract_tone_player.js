@@ -5,7 +5,6 @@ var classdevices_1_1audio_1_1_abstract_tone_player =
     [ "AbstractTonePlayer", "classdevices_1_1audio_1_1_abstract_tone_player.html#aaf90909ee14abd8ff81e8b4b8251efe3", null ],
     [ "AbstractTonePlayer", "classdevices_1_1audio_1_1_abstract_tone_player.html#acc86fc481f1049eb4c6ba658ef62488a", null ],
     [ "operator=", "classdevices_1_1audio_1_1_abstract_tone_player.html#af741020b475f49af7f97acb3152593b9", null ],
-    [ "calculate_min_duration", "classdevices_1_1audio_1_1_abstract_tone_player.html#a6d82a75e01d37cd3868c44a49691f8c4", null ],
     [ "set_min_duration", "classdevices_1_1audio_1_1_abstract_tone_player.html#a2a03c6699c7a65f7d51dfe73d73bafd7", null ],
     [ "get_min_duration", "classdevices_1_1audio_1_1_abstract_tone_player.html#a272068f53c5b9115df118cafd45a3b4c", null ],
     [ "prepare_sram", "classdevices_1_1audio_1_1_abstract_tone_player.html#ab7d4b91ec792c18e090a89dc858870ee", null ],

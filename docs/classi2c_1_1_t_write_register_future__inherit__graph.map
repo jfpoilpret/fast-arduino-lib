@@ -1,5 +1,11 @@
-<map id="i2c::TWriteRegisterFuture&lt; MANAGER, REGISTER, T, BIG_ENDIAN &gt;" name="i2c::TWriteRegisterFuture&lt; MANAGER, REGISTER, T, BIG_ENDIAN &gt;">
-<area shape="rect" id="node1" title="Generic Future that can be used to write to an I2C device register." alt="" coords="9,199,204,255"/>
-<area shape="rect" id="node2" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="25,109,188,151"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,208,61"/>
+<map id="i2c::TWriteRegisterFuture&lt; MANAGER, REGISTER, T, FUNCTOR &gt;" name="i2c::TWriteRegisterFuture&lt; MANAGER, REGISTER, T, FUNCTOR &gt;">
+<area shape="rect" id="node1" title="Generic Future that can be used to write to an I2C device register." alt="" coords="497,174,693,230"/>
+<area shape="rect" id="node4" href="$classdevices_1_1magneto_1_1_m_p_u6050_1_1_end_future.html" title="Create a future to be used by asynchronous method end(EndFuture&amp;)." alt="" coords="768,5,976,47"/>
+<area shape="rect" id="node5" href="$classdevices_1_1magneto_1_1_m_p_u6050_1_1_reset_future.html" title="Create a future to be used by asynchronous method reset(ResetFuture&amp;)." alt="" coords="768,71,976,112"/>
+<area shape="rect" id="node6" href="$classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_begin_future.html" title="Create a future to be used by asynchronous method begin(BeginFuture&amp;)." alt="" coords="778,137,966,193"/>
+<area shape="rect" id="node7" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_disable_output_future.html" title="Create a future to be used by asynchronous method disable_output(DisableOutputFuture&amp;)." alt="" coords="741,217,1003,259"/>
+<area shape="rect" id="node8" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_enable_output_future.html" title="Create a future to be used by asynchronous method enable_output(EnableOutputFuture&amp;)." alt="" coords="744,283,1000,324"/>
+<area shape="rect" id="node9" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_halt_clock_future.html" title="Create a future to be used by asynchronous method halt_clock(HaltClockFuture&amp;)." alt="" coords="757,348,987,389"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="267,174,449,230"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,174,219,230"/>
 </map>

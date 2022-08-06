@@ -1,12 +1,12 @@
 var classdevices_1_1mcp230xx_1_1_m_c_p23017 =
 [
     [ "BeginFuture", "classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_begin_future.html", null ],
-    [ "CapturedValuesFuture", "classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_captured_values_future.html", null ],
     [ "ConfigureGPIOFuture", "classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_configure_g_p_i_o_future.html", null ],
     [ "ConfigureInterruptsFuture", "classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_configure_interrupts_future.html", null ],
-    [ "GetValuesFuture", "classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_get_values_future.html", null ],
-    [ "InterruptFlagsFuture", "classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_interrupt_flags_future.html", null ],
-    [ "SetValuesFuture", "classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_set_values_future.html", null ],
+    [ "SetValuesFuture", "classdevices_1_1mcp230xx_1_1_m_c_p23017.html#a153e8143f81b1fff76b0d75885b57cc1", null ],
+    [ "GetValuesFuture", "classdevices_1_1mcp230xx_1_1_m_c_p23017.html#ae0bd04c5c15ac33e2d9aad761938d605", null ],
+    [ "InterruptFlagsFuture", "classdevices_1_1mcp230xx_1_1_m_c_p23017.html#afdc4abc65bf34986cbb83228bcd9fcc6", null ],
+    [ "CapturedValuesFuture", "classdevices_1_1mcp230xx_1_1_m_c_p23017.html#a3bdca270347f215b76973bc64f65cc55", null ],
     [ "MCP23017", "classdevices_1_1mcp230xx_1_1_m_c_p23017.html#af3ba0776dbece3e61f6f2d707aa6d48e", null ],
     [ "begin", "classdevices_1_1mcp230xx_1_1_m_c_p23017.html#aeed24062e8a911803194af0bc0cf25c7", null ],
     [ "configure_gpio", "classdevices_1_1mcp230xx_1_1_m_c_p23017.html#a8078a746480935a602945522437f4bac", null ],

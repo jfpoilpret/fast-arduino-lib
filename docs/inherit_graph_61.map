@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classevents_1_1_event.html" title="A standard Event as managed by FastArduino event API." alt="" coords="5,5,139,32"/>
+<area shape="rect" id="node1" href="$classi2c_1_1_abstract_i2_c_async_manager.html" title=" " alt="" coords="5,5,240,91"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_i2_c_async_manager.html" title="Asynchronous I2C Manager for ATmega architecture." alt="" coords="288,27,455,69"/>
 </map>
