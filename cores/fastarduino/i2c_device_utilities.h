@@ -343,7 +343,7 @@ namespace i2c
 	{
 		using PARENT = WriteMultiContentBase<T>;
 	public:
-		constexpr WriteMultiContent(std::initializer_list<T> values) : content_{ REGISTERS... }
+		explicit constexpr WriteMultiContent(std::initializer_list<T> values) : content_{ REGISTERS... }
 		{
 			PARENT::init(content_, values);
 		}
