@@ -356,7 +356,7 @@ namespace devices::audio
 		static constexpr uint8_t REPEAT_END = 0x08;
 		static constexpr uint8_t TIE = 0x10;
 
-		uint8_t flags_;
+		uint8_t flags_ = END;
 		PRESCALER prescaler_;
 		COUNTER counter_;
 		union
