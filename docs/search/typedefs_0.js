@@ -1,8 +1,8 @@
 var searchData=
 [
-  ['abstract_5ffuture_2411',['ABSTRACT_FUTURE',['../classi2c_1_1_i2_c_device.html#ac2e7c57ed9de99169a280c189724af0a',1,'i2c::I2CDevice']]],
-  ['accelfuture_2412',['AccelFuture',['../classdevices_1_1magneto_1_1_m_p_u6050.html#ad2b271fae065e8fcbf61d5c0d33e6f2d',1,'devices::magneto::MPU6050']]],
-  ['allmeasuresfuture_2413',['AllMeasuresFuture',['../classdevices_1_1magneto_1_1_m_p_u6050.html#a3a10507e9e707cdb6eec247160736e29',1,'devices::magneto::MPU6050']]],
-  ['async_5fint_5fhcsr04_2414',['ASYNC_INT_HCSR04',['../namespacedevices_1_1sonar.html#a549182f59f1965da0341ffc4137f3a1e',1,'devices::sonar']]],
-  ['async_5fpcint_5fhcsr04_2415',['ASYNC_PCINT_HCSR04',['../namespacedevices_1_1sonar.html#a7bba9656cf69f00d94ab7b571be82457',1,'devices::sonar']]]
+  ['abstract_5ffuture_2416',['ABSTRACT_FUTURE',['../classi2c_1_1_i2_c_device.html#ac2e7c57ed9de99169a280c189724af0a',1,'i2c::I2CDevice']]],
+  ['accelfuture_2417',['AccelFuture',['../classdevices_1_1magneto_1_1_m_p_u6050.html#ad2b271fae065e8fcbf61d5c0d33e6f2d',1,'devices::magneto::MPU6050']]],
+  ['allmeasuresfuture_2418',['AllMeasuresFuture',['../classdevices_1_1magneto_1_1_m_p_u6050.html#a3a10507e9e707cdb6eec247160736e29',1,'devices::magneto::MPU6050']]],
+  ['async_5fint_5fhcsr04_2419',['ASYNC_INT_HCSR04',['../namespacedevices_1_1sonar.html#a549182f59f1965da0341ffc4137f3a1e',1,'devices::sonar']]],
+  ['async_5fpcint_5fhcsr04_2420',['ASYNC_PCINT_HCSR04',['../namespacedevices_1_1sonar.html#a7bba9656cf69f00d94ab7b571be82457',1,'devices::sonar']]]
 ];

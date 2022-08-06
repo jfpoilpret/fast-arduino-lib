@@ -1,5 +1,16 @@
 var NAVTREEINDEX1 =
 {
+"classdevices_1_1audio_1_1_async_tone_player.html#adfb30cb51c01a95f794c3f1bcc9b01a6":[6,0,2,0,5,6],
+"classdevices_1_1audio_1_1_beat.html":[6,0,2,0,3],
+"classdevices_1_1audio_1_1_q_tone_play.html":[6,0,2,0,2],
+"classdevices_1_1audio_1_1_q_tone_play.html#a12d6745a5020ab1571c0b822f8feac17":[6,0,2,0,2,4],
+"classdevices_1_1audio_1_1_q_tone_play.html#a17bfcc2c43ceafe338d5ed2f8a431be4":[6,0,2,0,2,3],
+"classdevices_1_1audio_1_1_q_tone_play.html#a51811b41c2c4a9d7e2fa310025d50e85":[6,0,2,0,2,2],
+"classdevices_1_1audio_1_1_q_tone_play.html#a5ad3ae1ee67e140d181293482b93b21e":[6,0,2,0,2,0],
+"classdevices_1_1audio_1_1_q_tone_play.html#a801dfc9f380c9486ec287c8493cfd19d":[6,0,2,0,2,5],
+"classdevices_1_1audio_1_1_q_tone_play.html#a842c1f961e435a0295756a94a05ab715":[6,0,2,0,2,6],
+"classdevices_1_1audio_1_1_q_tone_play.html#a9d1b852ce288ee22218017993b498c9c":[6,0,2,0,2,8],
+"classdevices_1_1audio_1_1_q_tone_play.html#aa6d258664103326801f379a2e2d52914":[6,0,2,0,2,7],
 "classdevices_1_1audio_1_1_q_tone_play.html#ae170c2aa17e5326e47c3932c46629c63":[6,0,2,0,2,1],
 "classdevices_1_1audio_1_1_tone_generator.html":[6,0,2,0,6],
 "classdevices_1_1audio_1_1_tone_generator.html#a1ef5aa8b8dbbb2846c44d13a7eda5f7a":[6,0,2,0,6,4],
@@ -238,16 +249,5 @@ var NAVTREEINDEX1 =
 "classdevices_1_1rtc_1_1_d_s1307.html#a56f0119567955090b6450b032bf58ecb":[6,0,2,5,1,12],
 "classdevices_1_1rtc_1_1_d_s1307.html#a5a1de6f75a1602b37e5685a0cee65976":[6,0,2,5,1,22],
 "classdevices_1_1rtc_1_1_d_s1307.html#a5aa6089f10c4dd7d6393217bfd004e57":[6,0,2,5,1,29],
-"classdevices_1_1rtc_1_1_d_s1307.html#a5b432f0439b60d9dddf9f289a28bde44":[6,0,2,5,1,24],
-"classdevices_1_1rtc_1_1_d_s1307.html#a6bed9dfa8c1dcd33b45730058b3eda56":[6,0,2,5,1,16],
-"classdevices_1_1rtc_1_1_d_s1307.html#a7ac9a4d4bd505b179f16ae9e3456ce39":[6,0,2,5,1,14],
-"classdevices_1_1rtc_1_1_d_s1307.html#a7fc01e8acbb05d529d275afb64f2505b":[6,0,2,5,1,9],
-"classdevices_1_1rtc_1_1_d_s1307.html#a86e45f4c612ae88eba3bcb7827a05f8b":[6,0,2,5,1,23],
-"classdevices_1_1rtc_1_1_d_s1307.html#a881515da8af99e66efa054fca8dc2449":[6,0,2,5,1,17],
-"classdevices_1_1rtc_1_1_d_s1307.html#a8ca4bfb365bf6df2e94f6c65400b28a3":[6,0,2,5,1,20],
-"classdevices_1_1rtc_1_1_d_s1307.html#a9f624b52230050a011cd0526b0d97fce":[6,0,2,5,1,8],
-"classdevices_1_1rtc_1_1_d_s1307.html#aa77501ab764c7641ed021dd3d9b373bb":[6,0,2,5,1,25],
-"classdevices_1_1rtc_1_1_d_s1307.html#ac05b6f022a4255433cd116e1a7d53e31":[6,0,2,5,1,11],
-"classdevices_1_1rtc_1_1_d_s1307.html#ad19da06208f2ae5bf4bfc2574c35830a":[6,0,2,5,1,15],
-"classdevices_1_1rtc_1_1_d_s1307.html#ae70cb2889c285d165145b58be4f37453":[6,0,2,5,1,28]
+"classdevices_1_1rtc_1_1_d_s1307.html#a5b432f0439b60d9dddf9f289a28bde44":[6,0,2,5,1,24]
 };

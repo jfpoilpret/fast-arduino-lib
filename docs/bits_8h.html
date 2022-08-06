@@ -108,24 +108,24 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="bits_8h__dep__incl.png" border="0" usemap="#afastarduino_2bits_8hdep" alt=""/></div>
 <map name="afastarduino_2bits_8hdep" id="afastarduino_2bits_8hdep">
-<area shape="rect" title="Useful bits manipulation utilities." alt="" coords="833,5,969,32"/>
+<area shape="rect" title="Useful bits manipulation utilities." alt="" coords="749,5,885,32"/>
 <area shape="rect" href="ds1307_8h.html" title="API to handle Real&#45;Time Clock DS1307 I2C chip." alt="" coords="5,497,156,539"/>
-<area shape="rect" href="vl53l0x__types_8h.html" title="API to handle Time&#45;of&#45;Flight ranging sensor VL53L0X I2C chip." alt="" coords="765,408,916,449"/>
-<area shape="rect" href="i2c__handler__atmega_8h.html" title="ATmega I2C Manager API." alt="" coords="813,169,988,211"/>
-<area shape="rect" href="i2c__handler__attiny_8h.html" title="ATtiny I2C Manager API." alt="" coords="1012,169,1187,211"/>
-<area shape="rect" href="i2c__handler__common_8h.html" title="Common I2C Manager API." alt="" coords="1080,80,1255,121"/>
+<area shape="rect" href="hmc5883l_8h.html" title="API to handle HMC5883L 3&#45;axis digital compass I2C chip." alt="" coords="180,497,331,539"/>
+<area shape="rect" href="mcp23017_8h.html" title="API to handle the MCP23017 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="355,497,505,539"/>
+<area shape="rect" href="mpu6050_8h.html" title="API to handle MPU6050 3&#45;axis gyroscope/accelerometer I2C chip." alt="" coords="704,497,855,539"/>
+<area shape="rect" href="vl53l0x__types_8h.html" title="API to handle Time&#45;of&#45;Flight ranging sensor VL53L0X I2C chip." alt="" coords="829,408,980,449"/>
+<area shape="rect" href="i2c__handler__atmega_8h.html" title="ATmega I2C Manager API." alt="" coords="880,169,1055,211"/>
+<area shape="rect" href="i2c__handler__attiny_8h.html" title="ATtiny I2C Manager API." alt="" coords="1079,169,1253,211"/>
+<area shape="rect" href="i2c__handler__common_8h.html" title="Common I2C Manager API." alt="" coords="1156,80,1331,121"/>
 <area shape="rect" href="vl53l0x_8h.html" title="API to handle Time&#45;of&#45;Flight ranging sensor VL53L0X I2C chip." alt="" coords="879,497,1029,539"/>
-<area shape="rect" href="i2c__handler_8h.html" title="Common I2C Manager API." alt="" coords="813,259,999,285"/>
-<area shape="rect" href="i2c__device_8h.html" title="I2C Device API." alt="" coords="461,333,642,360"/>
-<area shape="rect" href="hmc5883l_8h.html" title="API to handle HMC5883L 3&#45;axis digital compass I2C chip." alt="" coords="529,497,680,539"/>
-<area shape="rect" href="mcp23008_8h.html" title="API to handle the MCP23008 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="704,497,855,539"/>
-<area shape="rect" href="mcp23017_8h.html" title="API to handle the MCP23017 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="180,497,331,539"/>
-<area shape="rect" href="mpu6050_8h.html" title="API to handle MPU6050 3&#45;axis gyroscope/accelerometer I2C chip." alt="" coords="355,497,505,539"/>
-<area shape="rect" href="i2c__device__utilities_8h.html" title="Various utilities to use for I2C Device support developers." alt="" coords="419,408,588,449"/>
-<area shape="rect" href="i2c__debug_8h.html" title="I2C debugging utilities (useful when implementing support for new devices)." alt="" coords="1274,259,1453,285"/>
-<area shape="rect" href="i2c__handler__common_8cpp_source.html" title=" " alt="" coords="1465,169,1640,211"/>
-<area shape="rect" href="i2c__status_8h.html" title="I2C status hook utilities." alt="" coords="1211,177,1390,203"/>
-<area shape="rect" href="i2c__debug_8cpp_source.html" title=" " alt="" coords="1267,333,1460,360"/>
+<area shape="rect" href="i2c__handler_8h.html" title="Common I2C Manager API." alt="" coords="879,259,1066,285"/>
+<area shape="rect" href="i2c__device_8h.html" title="I2C Device API." alt="" coords="487,333,669,360"/>
+<area shape="rect" href="mcp23008_8h.html" title="API to handle the MCP23008 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="529,497,680,539"/>
+<area shape="rect" href="i2c__device__utilities_8h.html" title="Various utilities to use for I2C Device support developers." alt="" coords="432,408,601,449"/>
+<area shape="rect" href="i2c__debug_8h.html" title="I2C debugging utilities (useful when implementing support for new devices)." alt="" coords="1441,259,1619,285"/>
+<area shape="rect" href="i2c__handler__common_8cpp_source.html" title=" " alt="" coords="1481,169,1656,211"/>
+<area shape="rect" href="i2c__status_8h.html" title="I2C status hook utilities." alt="" coords="1278,177,1457,203"/>
+<area shape="rect" href="i2c__debug_8cpp_source.html" title=" " alt="" coords="1433,333,1627,360"/>
 </map>
 </div>
 </div>
@@ -192,6 +192,39 @@ static constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a c
 static constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacebits.html#a17afee8fb8f509dbda0a5944d7a1ba31">bits::HIGH_BYTE</a> (uint16_t value)</td></tr>
 <tr class="memdesc:a17afee8fb8f509dbda0a5944d7a1ba31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract the high byte (aka Most Significant Byte, MSB) of a <code>uint16_t</code> value. <br /></td></tr>
 <tr class="separator:a17afee8fb8f509dbda0a5944d7a1ba31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac126b7d42bcc9fb62a4feaa46ede9991"><td class="memItemLeft" align="right" valign="top">static constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacebits.html#ac126b7d42bcc9fb62a4feaa46ede9991">bits::OR8</a> (uint8_t val1, uint8_t val2)</td></tr>
+<tr class="memdesc:ac126b7d42bcc9fb62a4feaa46ede9991"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <code>uint8_t</code> bitwise OR boolean operation between <code>uint8_t</code> operands.  <a href="namespacebits.html#ac126b7d42bcc9fb62a4feaa46ede9991">More...</a><br /></td></tr>
+<tr class="separator:ac126b7d42bcc9fb62a4feaa46ede9991"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad62726669f9b693fc0a8f6afc17ec0bb"><td class="memItemLeft" align="right" valign="top">static constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacebits.html#ad62726669f9b693fc0a8f6afc17ec0bb">bits::OR8</a> (uint8_t val1, uint8_t val2, uint8_t val3)</td></tr>
+<tr class="memdesc:ad62726669f9b693fc0a8f6afc17ec0bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <code>uint8_t</code> bitwise OR boolean operation between <code>uint8_t</code> operands.  <a href="namespacebits.html#ad62726669f9b693fc0a8f6afc17ec0bb">More...</a><br /></td></tr>
+<tr class="separator:ad62726669f9b693fc0a8f6afc17ec0bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0289d59a6b7e3a4ead82c1e4fcaea496"><td class="memItemLeft" align="right" valign="top">static constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacebits.html#a0289d59a6b7e3a4ead82c1e4fcaea496">bits::OR8</a> (uint8_t val1, uint8_t val2, uint8_t val3, uint8_t val4)</td></tr>
+<tr class="memdesc:a0289d59a6b7e3a4ead82c1e4fcaea496"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <code>uint8_t</code> bitwise OR boolean operation between <code>uint8_t</code> operands.  <a href="namespacebits.html#a0289d59a6b7e3a4ead82c1e4fcaea496">More...</a><br /></td></tr>
+<tr class="separator:a0289d59a6b7e3a4ead82c1e4fcaea496"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1f64a6684c49244e5a806208a5f0b9a"><td class="memItemLeft" align="right" valign="top">static constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacebits.html#ae1f64a6684c49244e5a806208a5f0b9a">bits::OR8</a> (uint8_t val1, uint8_t val2, uint8_t val3, uint8_t val4, uint8_t val5)</td></tr>
+<tr class="memdesc:ae1f64a6684c49244e5a806208a5f0b9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <code>uint8_t</code> bitwise OR boolean operation between <code>uint8_t</code> operands.  <a href="namespacebits.html#ae1f64a6684c49244e5a806208a5f0b9a">More...</a><br /></td></tr>
+<tr class="separator:ae1f64a6684c49244e5a806208a5f0b9a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7f53847145aa808a5811ad96a5279f1"><td class="memItemLeft" align="right" valign="top">static constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacebits.html#ad7f53847145aa808a5811ad96a5279f1">bits::OR8</a> (uint8_t val1, uint8_t val2, uint8_t val3, uint8_t val4, uint8_t val5, uint8_t val6)</td></tr>
+<tr class="memdesc:ad7f53847145aa808a5811ad96a5279f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <code>uint8_t</code> bitwise OR boolean operation between <code>uint8_t</code> operands.  <a href="namespacebits.html#ad7f53847145aa808a5811ad96a5279f1">More...</a><br /></td></tr>
+<tr class="separator:ad7f53847145aa808a5811ad96a5279f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5bc63bfbfa5ecf06528ba33a087b1546"><td class="memItemLeft" align="right" valign="top">static constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacebits.html#a5bc63bfbfa5ecf06528ba33a087b1546">bits::IF8</a> (bool flag, uint8_t val)</td></tr>
+<tr class="memdesc:a5bc63bfbfa5ecf06528ba33a087b1546"><td class="mdescLeft">&#160;</td><td class="mdescRight">return <code>val</code> if <code>flag</code> is <code>true</code>, otherwise <code>0</code>, as an <code>uint8_t</code>.  <a href="namespacebits.html#a5bc63bfbfa5ecf06528ba33a087b1546">More...</a><br /></td></tr>
+<tr class="separator:a5bc63bfbfa5ecf06528ba33a087b1546"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaebe14528fe461bb63419651e3d2bcf9"><td class="memItemLeft" align="right" valign="top">static constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacebits.html#aaebe14528fe461bb63419651e3d2bcf9">bits::ORIF8</a> (bool flag1, uint8_t val1, bool flag2, uint8_t val2)</td></tr>
+<tr class="memdesc:aaebe14528fe461bb63419651e3d2bcf9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <code>uint8_t</code> bitwise OR boolean operation between <code>uint8_t</code> operands, conditioned by <code>bool</code> flags.  <a href="namespacebits.html#aaebe14528fe461bb63419651e3d2bcf9">More...</a><br /></td></tr>
+<tr class="separator:aaebe14528fe461bb63419651e3d2bcf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0edad907cbd964aedc5b33891d25f1d4"><td class="memItemLeft" align="right" valign="top">static constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacebits.html#a0edad907cbd964aedc5b33891d25f1d4">bits::ORIF8</a> (bool flag1, uint8_t val1, bool flag2, uint8_t val2, bool flag3, uint8_t val3)</td></tr>
+<tr class="memdesc:a0edad907cbd964aedc5b33891d25f1d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <code>uint8_t</code> bitwise OR boolean operation between <code>uint8_t</code> operands, conditioned by <code>bool</code> flags.  <a href="namespacebits.html#a0edad907cbd964aedc5b33891d25f1d4">More...</a><br /></td></tr>
+<tr class="separator:a0edad907cbd964aedc5b33891d25f1d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a32b061eeddbbeb8313a1faf288e54d82"><td class="memItemLeft" align="right" valign="top">static constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacebits.html#a32b061eeddbbeb8313a1faf288e54d82">bits::ORIF8</a> (bool flag1, uint8_t val1, bool flag2, uint8_t val2, bool flag3, uint8_t val3, bool flag4, uint8_t val4)</td></tr>
+<tr class="memdesc:a32b061eeddbbeb8313a1faf288e54d82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <code>uint8_t</code> bitwise OR boolean operation between <code>uint8_t</code> operands, conditioned by <code>bool</code> flags.  <a href="namespacebits.html#a32b061eeddbbeb8313a1faf288e54d82">More...</a><br /></td></tr>
+<tr class="separator:a32b061eeddbbeb8313a1faf288e54d82"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec623f6168f72b44912bb67b6aa0fb10"><td class="memItemLeft" align="right" valign="top">static constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacebits.html#aec623f6168f72b44912bb67b6aa0fb10">bits::ORIF8</a> (bool flag1, uint8_t val1, bool flag2, uint8_t val2, bool flag3, uint8_t val3, bool flag4, uint8_t val4, bool flag5, uint8_t val5)</td></tr>
+<tr class="memdesc:aec623f6168f72b44912bb67b6aa0fb10"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <code>uint8_t</code> bitwise OR boolean operation between <code>uint8_t</code> operands, conditioned by <code>bool</code> flags.  <a href="namespacebits.html#aec623f6168f72b44912bb67b6aa0fb10">More...</a><br /></td></tr>
+<tr class="separator:aec623f6168f72b44912bb67b6aa0fb10"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d96deb7fd895a9faf34d35e9bfb25ef"><td class="memItemLeft" align="right" valign="top">static constexpr uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacebits.html#a1d96deb7fd895a9faf34d35e9bfb25ef">bits::ORIF8</a> (bool flag1, uint8_t val1, bool flag2, uint8_t val2, bool flag3, uint8_t val3, bool flag4, uint8_t val4, bool flag5, uint8_t val5, bool flag6, uint8_t val6)</td></tr>
+<tr class="memdesc:a1d96deb7fd895a9faf34d35e9bfb25ef"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <code>uint8_t</code> bitwise OR boolean operation between <code>uint8_t</code> operands, conditioned by <code>bool</code> flags.  <a href="namespacebits.html#a1d96deb7fd895a9faf34d35e9bfb25ef">More...</a><br /></td></tr>
+<tr class="separator:a1d96deb7fd895a9faf34d35e9bfb25ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Useful bits manipulation utilities. </p>

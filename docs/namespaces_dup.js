@@ -28,7 +28,18 @@ var namespaces_dup =
       [ "CBV16", "namespacebits.html#af3e29db72a5d50fc0b1b684524e1c9a3", null ],
       [ "COMPL", "namespacebits.html#a0e79a970245c94e82bb33a44b43727ab", null ],
       [ "LOW_BYTE", "namespacebits.html#aa2e0d50727d964c50b3e444018cce593", null ],
-      [ "HIGH_BYTE", "namespacebits.html#a17afee8fb8f509dbda0a5944d7a1ba31", null ]
+      [ "HIGH_BYTE", "namespacebits.html#a17afee8fb8f509dbda0a5944d7a1ba31", null ],
+      [ "OR8", "namespacebits.html#ac126b7d42bcc9fb62a4feaa46ede9991", null ],
+      [ "OR8", "namespacebits.html#ad62726669f9b693fc0a8f6afc17ec0bb", null ],
+      [ "OR8", "namespacebits.html#a0289d59a6b7e3a4ead82c1e4fcaea496", null ],
+      [ "OR8", "namespacebits.html#ae1f64a6684c49244e5a806208a5f0b9a", null ],
+      [ "OR8", "namespacebits.html#ad7f53847145aa808a5811ad96a5279f1", null ],
+      [ "IF8", "namespacebits.html#a5bc63bfbfa5ecf06528ba33a087b1546", null ],
+      [ "ORIF8", "namespacebits.html#aaebe14528fe461bb63419651e3d2bcf9", null ],
+      [ "ORIF8", "namespacebits.html#a0edad907cbd964aedc5b33891d25f1d4", null ],
+      [ "ORIF8", "namespacebits.html#a32b061eeddbbeb8313a1faf288e54d82", null ],
+      [ "ORIF8", "namespacebits.html#aec623f6168f72b44912bb67b6aa0fb10", null ],
+      [ "ORIF8", "namespacebits.html#a1d96deb7fd895a9faf34d35e9bfb25ef", null ]
     ] ],
     [ "board", "namespaceboard.html", [
       [ "Port", "namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1", [

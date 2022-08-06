@@ -1,5 +1,16 @@
 var NAVTREEINDEX2 =
 {
+"classdevices_1_1rtc_1_1_d_s1307.html#a6bed9dfa8c1dcd33b45730058b3eda56":[6,0,2,5,1,16],
+"classdevices_1_1rtc_1_1_d_s1307.html#a7ac9a4d4bd505b179f16ae9e3456ce39":[6,0,2,5,1,14],
+"classdevices_1_1rtc_1_1_d_s1307.html#a7fc01e8acbb05d529d275afb64f2505b":[6,0,2,5,1,9],
+"classdevices_1_1rtc_1_1_d_s1307.html#a86e45f4c612ae88eba3bcb7827a05f8b":[6,0,2,5,1,23],
+"classdevices_1_1rtc_1_1_d_s1307.html#a881515da8af99e66efa054fca8dc2449":[6,0,2,5,1,17],
+"classdevices_1_1rtc_1_1_d_s1307.html#a8ca4bfb365bf6df2e94f6c65400b28a3":[6,0,2,5,1,20],
+"classdevices_1_1rtc_1_1_d_s1307.html#a9f624b52230050a011cd0526b0d97fce":[6,0,2,5,1,8],
+"classdevices_1_1rtc_1_1_d_s1307.html#aa77501ab764c7641ed021dd3d9b373bb":[6,0,2,5,1,25],
+"classdevices_1_1rtc_1_1_d_s1307.html#ac05b6f022a4255433cd116e1a7d53e31":[6,0,2,5,1,11],
+"classdevices_1_1rtc_1_1_d_s1307.html#ad19da06208f2ae5bf4bfc2574c35830a":[6,0,2,5,1,15],
+"classdevices_1_1rtc_1_1_d_s1307.html#ae70cb2889c285d165145b58be4f37453":[6,0,2,5,1,28],
 "classdevices_1_1rtc_1_1_d_s1307.html#aebcf7ba08e107597bd7f3382dd4f7120":[6,0,2,5,1,7],
 "classdevices_1_1rtc_1_1_d_s1307.html#aeef5b63d65ce3d6f2493b57078634eb1":[6,0,2,5,1,13],
 "classdevices_1_1rtc_1_1_d_s1307_1_1_disable_output_future.html":[6,0,2,5,1,0],
@@ -238,16 +249,5 @@ var NAVTREEINDEX2 =
 "classfunctor_1_1_change_endianness.html":[6,0,5,4],
 "classfunctor_1_1_change_endianness.html#a832236ceee0528eee81af9803ac009d9":[6,0,5,4,2],
 "classfunctor_1_1_change_endianness.html#a9b2400a2f2b9481a193adc5c48a88cf1":[6,0,5,4,0],
-"classfunctor_1_1_change_endianness.html#ad81a1ef93d2e6d25db5f50fc72f136e0":[6,0,5,4,1],
-"classfunctor_1_1_compose.html":[6,0,5,3],
-"classfunctor_1_1_compose.html#a1e2a0a63459c1716a45525df0c15f3f3":[6,0,5,3,0],
-"classfunctor_1_1_compose.html#a8ec292c6b67fa2be241e72110af2986f":[6,0,5,3,2],
-"classfunctor_1_1_compose.html#af9fa9a4f35f5789f0d81aab9e5b9d042":[6,0,5,3,1],
-"classfunctor_1_1_constant.html":[6,0,5,1],
-"classfunctor_1_1_constant.html#a311df3bc1ee0d67faec95b6cd39faf0b":[6,0,5,1,0],
-"classfunctor_1_1_constant.html#a842671ef507d7ade1cb01193671dff7a":[6,0,5,1,2],
-"classfunctor_1_1_constant.html#a8acf0b79ddc608776d8d667e974119c2":[6,0,5,1,1],
-"classfunctor_1_1_identity.html":[6,0,5,0],
-"classfunctor_1_1_identity.html#a9159271028fd3f68720c966db00f5e15":[6,0,5,0,0],
-"classfunctor_1_1_identity.html#a922d0008fd587e9ecbaf106bbe76f1fd":[6,0,5,0,2]
+"classfunctor_1_1_change_endianness.html#ad81a1ef93d2e6d25db5f50fc72f136e0":[6,0,5,4,1]
 };
