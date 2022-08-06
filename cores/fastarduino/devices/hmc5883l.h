@@ -110,20 +110,21 @@ namespace devices::magneto
 	class Status
 	{
 	public:
-		Status() : ready_{}, lock_{}, reserved_{} {}
+		Status() = default;
 		bool ready() const
 		{
-			return ready_;
+			return data_ & READY;;
 		}
 		bool lock() const
 		{
-			return lock_;
+			return data_ & LOCK;
 		}
 
 	private:
-		bool ready_ : 1;
-		bool lock_ : 1;
-		uint8_t reserved_ : 6;
+		static constexpr uint8_t READY = bits::BV8(0);
+		static constexpr uint8_t LOCK = bits::BV8(1);
+
+		uint8_t data_ = 0;
 	};
 
 	/**
