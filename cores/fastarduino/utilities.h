@@ -417,7 +417,7 @@ namespace utils
 	inline void swap_bytes(uint64_t& value)
 	{
 		uint32_t value1 = uint32_t(value >> 32);
-		uint32_t value2 = uint32_t(value & 0xFFFFFFFFUL);
+		uint32_t value2 = uint32_t(value & 0xFFFF'FFFFUL);
 		swap_bytes(value1);
 		swap_bytes(value2);
 		value = uint64_t(value1) | (uint64_t(value2) << 32);
