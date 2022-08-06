@@ -181,5 +181,6 @@ int main()
 	time::delay_ms(5000);
 
 	signal.enable();
-	player.play_sram(music, BPM);
+	constexpr devices::audio::Beat BEAT{BPM};
+	player.play_sram(music, BEAT);
 }

@@ -1,0 +1,26 @@
+VL53L0X support
+===============
+
+Profiles
+--------
+- standard:
+	- signal rate limit		0.25
+	- VCSEL pulse pre range	14
+	- VCSEL pulse final range	10
+
+- long range:
+	- signal rate limit		0.1
+	- VCSEL pulse pre range	18
+	- VCSEL pulse final range	14
+
+- normal speed/accuracy
+	- timing budget			33ms
+- high speed
+	- timing budget			20ms
+- high accuracy
+	- timing budget			200ms
+
+Accuracy measured in standard mode:
+	- good from 20mm (+/-3mm) to 750mm (+/-10mm)
+	- not checked withother modes
+

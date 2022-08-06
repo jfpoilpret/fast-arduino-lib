@@ -149,5 +149,6 @@ int main()
 
 	GENERATOR generator;
 	PLAYER player{generator};
-	player.play_flash(music, BPM);
+	constexpr devices::audio::Beat BEAT{BPM};
+	player.play_flash(music, BEAT);
 }

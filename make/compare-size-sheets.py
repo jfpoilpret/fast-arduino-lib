@@ -62,8 +62,9 @@ def create_diff_sheet(args):
             args.output.write("\t%s\t\t\t\t\t" % target)
         args.output.write("\n")
         # Write header #2
+        args.output.write("name")
         for target in ALL_TARGETS:
-            args.output.write("name\tcode\tdiff\tdiff%\tdata\tdiff\tdiff%")
+            args.output.write("\tcode\tdiff\tdiff%\tdata\tdiff\tdiff%")
         args.output.write("\n")
         # Write rows
         for example in ALL_EXAMPLES:

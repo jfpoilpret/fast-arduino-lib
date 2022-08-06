@@ -208,6 +208,8 @@ int main()
 		time::delay_ms(500);
 	}
 	
+	// compass.end();
+
 	// Stop TWI interface
 	//===================
 	manager.end();

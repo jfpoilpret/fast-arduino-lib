@@ -21,7 +21,6 @@
 #ifndef I2C_DEVICE_HH
 #define I2C_DEVICE_HH
 
-#include "array.h"
 #include "initializer_list.h"
 #include "iterator.h"
 #include "errors.h"
@@ -373,6 +372,32 @@ namespace i2c
 		}
 
 		/**
+		 * Helper method that asynchronously launches I2C commands for a simple
+		 * Future performing several register writes.
+		 * @warning Asynchronous API!
+		 * 
+		 * @tparam F the type of @p future automatically deduced from @p future;
+		 * this must be a `TWriteMultiRegisterFuture` specialization or a subclass.
+		 * @param future a proxy to the Future to be updated by the launched I2C 
+		 * commands
+		 * @param stop force a STOP condition on the I2C bus at the end of each
+		 * write command
+		 * @return the same result codes as `launch_commands()`
+		 * 
+		 * @sa launch_commands()
+		 * @sa write()
+		 * @sa TWriteMultiRegisterFuture()
+		 */
+		template<typename F> int async_multi_write(PROXY<F> future, bool stop = true)
+		{
+			constexpr uint8_t NUM_WRITES = F::NUM_WRITES;
+			constexpr uint8_t WRITE_SIZE = F::WRITE_SIZE;
+			I2CLightCommand writes[NUM_WRITES];
+			prepare_multi_write_commands(writes, NUM_WRITES, WRITE_SIZE, stop);
+			return launch_commands(future, utils::range(writes, NUM_WRITES));
+		}
+
+		/**
 		 * Helper method that launches I2C commands for a simple Future performing
 		 * only one write (typically for device register writing); the method blocks
 		 * until the end of the I2C transaction.
@@ -380,7 +405,7 @@ namespace i2c
 		 * 
 		 * @tparam F the type of Future to be used for the I2C transaction; this
 		 * template argument must be provided as it cannot be deduced from other
-		 * arguments.
+		 * arguments. This must have a constructor with one argument of type @p T.
 		 * @tparam T the type of @p value automatically deduced from @p value
 		 * @param value the value to write in the I2C transaction
 		 * @retval true if the action was performed successfully, i.e. @p value
@@ -393,6 +418,29 @@ namespace i2c
 		template<typename F, typename T = uint8_t> bool sync_write(const T& value)
 		{
 			F future{value};
+			if (async_write<F>(future) != 0) return false;
+			return (future.await() == future::FutureStatus::READY);
+		}
+
+		/**
+		 * Helper method that launches I2C commands for a simple Future performing
+		 * only one write (typically for device register writing); the method blocks
+		 * until the end of the I2C transaction.
+		 * @warning Blocking API!
+		 * 
+		 * @tparam F the type of Future to be used for the I2C transaction; this
+		 * template argument must be provided as it cannot be deduced from other
+		 * arguments. This must have a default constructor.
+		 * @retval true if the action was performed successfully, i.e. @p value
+		 * was correctly transmitted to the device
+		 * 
+		 * @sa launch_commands()
+		 * @sa write()
+		 * @sa async_write()
+		 */
+		template<typename F> bool sync_write()
+		{
+			F future{};
 			if (async_write<F>(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
@@ -438,6 +486,13 @@ namespace i2c
 			// check sum of read commands byte_count matches future output size
 			// check sum of write commands byte_count matches future input size
 			return (total_write == max_write) && (total_read == max_read);
+		}
+
+		void prepare_multi_write_commands(I2CLightCommand* commands, uint8_t count, uint8_t write_size, bool stop)
+		{
+			I2CLightCommand command = write(write_size, false, stop);
+			for (uint8_t i = 0; i < count; ++i)
+				*commands++ = command;
 		}
 
 		uint8_t device_ = 0;

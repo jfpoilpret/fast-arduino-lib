@@ -22,7 +22,9 @@
 #define MCP23008_H
 
 #include "mcp230xx.h"
+#include "../functors.h"
 #include "../i2c_device.h"
+#include "../i2c_device_utilities.h"
 
 namespace devices::mcp230xx
 {
@@ -40,17 +42,58 @@ namespace devices::mcp230xx
 	private:
 		using PARENT = i2c::I2CDevice<MANAGER>;
 		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
-		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
 		// Forward declarations needed by compiler
-		class WriteRegisterFuture;
-		struct Write3Registers;
-		class ReadRegisterFuture;
+		template<uint8_t REGISTER, typename T = uint8_t, typename FUNCTOR = functor::Identity<T>>
+		using TReadRegisterFuture = i2c::TReadRegisterFuture<MANAGER, REGISTER, T, FUNCTOR>;
+		template<uint8_t REGISTER, typename T = uint8_t, typename FUNCTOR = functor::Identity<T>>
+		using TWriteRegisterFuture = i2c::TWriteRegisterFuture<MANAGER, REGISTER, T, FUNCTOR>;
+		template<typename T, uint8_t... REGISTERS>
+		using TWriteMultiRegisterFuture = i2c::TWriteMultiRegisterFuture<MANAGER, T, REGISTERS...>;
 
 		static constexpr uint8_t compute_address(uint8_t address)
 		{
 			return uint8_t((uint8_t(BASE_ADDRESS) | uint8_t(address & 0x07U)) << 1);
 		}
+
+		// Base address of the device (actual address can be in 0x20-0x27)
+		static constexpr const uint8_t BASE_ADDRESS = 0x20;
+
+		// All registers addresses
+		static constexpr const uint8_t IODIR = 0x00;
+		static constexpr const uint8_t IPOL = 0x01;
+
+		static constexpr const uint8_t GPINTEN = 0x02;
+		static constexpr const uint8_t DEFVAL = 0x03;
+		static constexpr const uint8_t INTCON = 0x04;
+
+		static constexpr const uint8_t IOCON = 0x05;
+
+		static constexpr const uint8_t GPPU = 0x06;
+
+		static constexpr const uint8_t INTF = 0x07;
+		static constexpr const uint8_t INTCAP = 0x08;
+
+		static constexpr const uint8_t GPIO = 0x09;
+		static constexpr const uint8_t OLAT = 0x0A;
+
+		// IOCON bits (not all are used in this implementation)
+		static constexpr const uint8_t IOCON_SEQOP = bits::BV8(5);
+		static constexpr const uint8_t IOCON_DISSLW = bits::BV8(4);
+		static constexpr const uint8_t IOCON_HAEN = bits::BV8(3);
+		static constexpr const uint8_t IOCON_ODR = bits::BV8(2);
+		static constexpr const uint8_t IOCON_INTPOL = bits::BV8(1);
+
+		class IOCONConverter
+		{
+		public:
+			using ARG_TYPE = InterruptPolarity;
+			using RES_TYPE = uint8_t;
+			uint8_t operator()(InterruptPolarity int_polarity) const
+			{
+				return (int_polarity == InterruptPolarity::ACTIVE_HIGH) ? IOCON_INTPOL : 0;
+			}
+		};
 
 	public:
 		/**
@@ -76,16 +119,7 @@ namespace devices::mcp230xx
 		 * 
 		 * @sa begin(BeginFuture&)
 		 */
-		class BeginFuture : public WriteRegisterFuture
-		{
-		public:
-			/// @cond notdocumented
-			explicit BeginFuture(InterruptPolarity interrupt_polarity = InterruptPolarity::ACTIVE_HIGH)
-				: WriteRegisterFuture{IOCON, build_IOCON(interrupt_polarity == InterruptPolarity::ACTIVE_HIGH)} {}
-			BeginFuture(BeginFuture&&) = default;
-			BeginFuture& operator=(BeginFuture&&) = default;
-			/// @endcond
-		};
+		using BeginFuture = TWriteRegisterFuture<IOCON, uint8_t, IOCONConverter>;
 
 		/**
 		 * Initialize the chip before operation.
@@ -106,7 +140,7 @@ namespace devices::mcp230xx
 		 */
 		int begin(PROXY<BeginFuture> future)
 		{
-			return this->launch_commands(future, {write_stop()});
+			return this->async_write(future);
 		}
 
 		/**
@@ -126,13 +160,13 @@ namespace devices::mcp230xx
 		 * 
 		 * @sa configure_gpio(ConfigureGPIOFuture&)
 		 */
-		class ConfigureGPIOFuture : public FUTURE<void, Write3Registers>
+		class ConfigureGPIOFuture : public TWriteMultiRegisterFuture<uint8_t, IODIR, IPOL, GPPU>
 		{
-			using PARENT = FUTURE<void, Write3Registers>;
+			using PARENT = TWriteMultiRegisterFuture<uint8_t, IODIR, IPOL, GPPU>;
 		public:
 			/// @cond notdocumented
 			ConfigureGPIOFuture(uint8_t direction, uint8_t pullup = 0, uint8_t polarity = 0)
-				:	PARENT{Write3Registers{IODIR, direction, IPOL, polarity, GPPU, pullup}} {}
+				:	PARENT{direction, polarity, pullup} {}
 			ConfigureGPIOFuture(ConfigureGPIOFuture&&) = default;
 			ConfigureGPIOFuture& operator=(ConfigureGPIOFuture&&) = default;
 			/// @endcond
@@ -157,7 +191,7 @@ namespace devices::mcp230xx
 		 */
 		int configure_gpio(PROXY<ConfigureGPIOFuture> future)
 		{
-			return this->launch_commands(future, {write_stop(2), write_stop(2), write_stop(2)});
+			return this->async_multi_write(future);
 		}
 
 		/**
@@ -178,13 +212,13 @@ namespace devices::mcp230xx
 		 * 
 		 * @sa configure_interrupts(ConfigureInterruptsFuture&)
 		 */
-		class ConfigureInterruptsFuture : public FUTURE<void, Write3Registers>
+		class ConfigureInterruptsFuture : public TWriteMultiRegisterFuture<uint8_t, GPINTEN, DEFVAL, INTCON>
 		{
-			using PARENT = FUTURE<void, Write3Registers>;
+			using PARENT = TWriteMultiRegisterFuture<uint8_t, GPINTEN, DEFVAL, INTCON>;
 		public:
 			/// @cond notdocumented
 			ConfigureInterruptsFuture(uint8_t int_pins, uint8_t ref = 0, uint8_t compare_ref = 0)
-				:	PARENT{Write3Registers{GPINTEN, int_pins, DEFVAL, ref, INTCON, compare_ref}} {}
+				:	PARENT{int_pins, ref, compare_ref} {}
 			ConfigureInterruptsFuture(ConfigureInterruptsFuture&&) = default;
 			ConfigureInterruptsFuture& operator=(ConfigureInterruptsFuture&&) = default;
 			/// @endcond
@@ -209,7 +243,7 @@ namespace devices::mcp230xx
 		 */
 		int configure_interrupts(PROXY<ConfigureInterruptsFuture> future)
 		{
-			return this->launch_commands(future, {write_stop(2), write_stop(2), write_stop(2)});
+			return this->async_multi_write(future);
 		}
 
 		/**
@@ -223,15 +257,7 @@ namespace devices::mcp230xx
 		 * 
 		 * @sa values(SetValuesFuture&)
 		 */
-		class SetValuesFuture : public WriteRegisterFuture
-		{
-		public:
-			/// @cond notdocumented
-			explicit SetValuesFuture(uint8_t value) : WriteRegisterFuture{GPIO, value} {}
-			SetValuesFuture(SetValuesFuture&&) = default;
-			SetValuesFuture& operator=(SetValuesFuture&&) = default;
-			/// @endcond
-		};
+		using SetValuesFuture = TWriteRegisterFuture<GPIO>;
 
 		/**
 		 * Set output levels of output pins on the port of this MCP23008 chip.
@@ -252,7 +278,7 @@ namespace devices::mcp230xx
 		 */
 		int values(PROXY<SetValuesFuture> future)
 		{
-			return this->launch_commands(future, {write_stop()});
+			return this->async_write(future);
 		}
 
 		/**
@@ -263,15 +289,7 @@ namespace devices::mcp230xx
 		 * 
 		 * @sa values(GetValuesFuture&)
 		 */
-		class GetValuesFuture : public ReadRegisterFuture
-		{
-		public:
-			/// @cond notdocumented
-			GetValuesFuture() : ReadRegisterFuture{GPIO} {}
-			GetValuesFuture(GetValuesFuture&&) = default;
-			GetValuesFuture& operator=(GetValuesFuture&&) = default;
-			/// @endcond
-		};
+		using GetValuesFuture = TReadRegisterFuture<GPIO>;
 
 		/**
 		 * Get levels of pins on the port of this MCP23008 chip.
@@ -292,7 +310,7 @@ namespace devices::mcp230xx
 		 */
 		int values(PROXY<GetValuesFuture> future)
 		{
-			return this->launch_commands(future, {this->write(), this->read()});
+			return this->async_read(future);
 		}
 
 		/**
@@ -304,15 +322,7 @@ namespace devices::mcp230xx
 		 * 
 		 * @sa interrupt_flags(InterruptFlagsFuture&)
 		 */
-		class InterruptFlagsFuture : public ReadRegisterFuture
-		{
-		public:
-			/// @cond notdocumented
-			InterruptFlagsFuture() : ReadRegisterFuture{INTF} {}
-			InterruptFlagsFuture(InterruptFlagsFuture&) = default;
-			InterruptFlagsFuture& operator=(InterruptFlagsFuture&&) = default;
-			/// @endcond
-		};
+		using InterruptFlagsFuture = TReadRegisterFuture<INTF>;
 
 		/**
 		 * Get the pins that generated the latest interrupt on the port
@@ -334,7 +344,7 @@ namespace devices::mcp230xx
 		 */
 		int interrupt_flags(PROXY<InterruptFlagsFuture> future)
 		{
-			return this->launch_commands(future, {this->write(), this->read()});
+			return this->async_read(future);
 		}
 
 		/**
@@ -346,15 +356,7 @@ namespace devices::mcp230xx
 		 * 
 		 * @sa captured_values(CapturedValuesFuture&)
 		 */
-		class CapturedValuesFuture : public ReadRegisterFuture
-		{
-		public:
-			/// @cond notdocumented
-			CapturedValuesFuture() : ReadRegisterFuture{INTCAP} {}
-			CapturedValuesFuture(CapturedValuesFuture&&) = default;
-			CapturedValuesFuture& operator=(CapturedValuesFuture&&) = default;
-			/// @endcond
-		};
+		using CapturedValuesFuture = TReadRegisterFuture<INTCAP>;
 
 		/**
 		 * Get captured levels, at the time an interrupt was triggered, of pins
@@ -378,7 +380,7 @@ namespace devices::mcp230xx
 		 */
 		int captured_values(PROXY<CapturedValuesFuture> future)
 		{
-			return this->launch_commands(future, {this->write(), this->read()});
+			return this->async_read(future);
 		}
 
 		// Synchronous API
@@ -396,9 +398,7 @@ namespace devices::mcp230xx
 		 */
 		bool begin(InterruptPolarity interrupt_polarity = InterruptPolarity::ACTIVE_HIGH)
 		{
-			BeginFuture future{interrupt_polarity};
-			if (begin(PARENT::make_proxy(future)) != 0) return false;
-			return (future.await() == future::FutureStatus::READY);
+			return this->template sync_write<BeginFuture, InterruptPolarity>(interrupt_polarity);
 		}
 
 		/**
@@ -462,9 +462,7 @@ namespace devices::mcp230xx
 		 */
 		bool values(uint8_t value)
 		{
-			SetValuesFuture future{value};
-			if (values(PARENT::make_proxy(future)) != 0) return false;
-			return (future.await() == future::FutureStatus::READY);
+			return this->template sync_write<SetValuesFuture>(value);
 		}
 
 		/**
@@ -478,13 +476,7 @@ namespace devices::mcp230xx
 		 */
 		uint8_t values()
 		{
-			GetValuesFuture future;
-			if (values(PARENT::make_proxy(future)) != 0) return 0;
-			uint8_t value;
-			if (future.get(value))
-				return value;
-			else
-				return 0;
+			return get_value<GetValuesFuture>();
 		}
 
 		/**
@@ -499,13 +491,7 @@ namespace devices::mcp230xx
 		 */
 		uint8_t interrupt_flags()
 		{
-			InterruptFlagsFuture future;
-			if (interrupt_flags(PARENT::make_proxy(future)) != 0) return 0;
-			uint8_t value;
-			if (future.get(value))
-				return value;
-			else
-				return 0;
+			return get_value<InterruptFlagsFuture>();
 		}
 
 		/**
@@ -522,95 +508,20 @@ namespace devices::mcp230xx
 		 */
 		uint8_t captured_values()
 		{
-			CapturedValuesFuture future;
-			if (captured_values(PARENT::make_proxy(future)) != 0) return 0;
-			uint8_t value;
-			if (future.get(value))
-				return value;
-			else
-				return 0;
+			return get_value<CapturedValuesFuture>();
 		}
 
 	private:
-		// Base address of the device (actual address can be in 0x20-0x27)
-		static constexpr const uint8_t BASE_ADDRESS = 0x20;
-
-		// All registers addresses
-		static constexpr const uint8_t IODIR = 0x00;
-		static constexpr const uint8_t IPOL = 0x01;
-
-		static constexpr const uint8_t GPINTEN = 0x02;
-		static constexpr const uint8_t DEFVAL = 0x03;
-		static constexpr const uint8_t INTCON = 0x04;
-
-		static constexpr const uint8_t IOCON = 0x05;
-
-		static constexpr const uint8_t GPPU = 0x06;
-
-		static constexpr const uint8_t INTF = 0x07;
-		static constexpr const uint8_t INTCAP = 0x08;
-
-		static constexpr const uint8_t GPIO = 0x09;
-		static constexpr const uint8_t OLAT = 0x0A;
-
-		// IOCON bits (not all are used in this implementation)
-		static constexpr const uint8_t IOCON_SEQOP = bits::BV8(5);
-		static constexpr const uint8_t IOCON_DISSLW = bits::BV8(4);
-		static constexpr const uint8_t IOCON_HAEN = bits::BV8(3);
-		static constexpr const uint8_t IOCON_ODR = bits::BV8(2);
-		static constexpr const uint8_t IOCON_INTPOL = bits::BV8(1);
+		template<typename F> uint8_t get_value()
+		{
+			uint8_t value = 0;
+			this->template sync_read<F>(value);
+			return value;
+		}
 
 		i2c::I2CLightCommand write_stop(uint8_t byte_count = 0) const
 		{
 			return this->write(byte_count, false, true);
-		}
-
-		struct Write3Registers
-		{
-			Write3Registers(uint8_t address1, uint8_t value1, 
-							uint8_t address2, uint8_t value2, 
-							uint8_t address3, uint8_t value3)
-				:	address1_{address1}, value1_{value1},
-					address2_{address2}, value2_{value2},
-					address3_{address3}, value3_{value3} {}
-
-			uint8_t address1_;
-			uint8_t value1_;
-			uint8_t address2_;
-			uint8_t value2_;
-			uint8_t address3_;
-			uint8_t value3_;
-		};
-
-		struct WriteRegister
-		{
-			WriteRegister(uint8_t address, uint8_t value) : address_{address}, value_{value} {}
-
-			uint8_t address_;
-			uint8_t value_;
-		};
-
-		class WriteRegisterFuture : public FUTURE<void, WriteRegister>
-		{
-			using PARENT = FUTURE<void, WriteRegister>;
-		protected:
-			WriteRegisterFuture(uint8_t address, uint8_t value) : PARENT{WriteRegister{address, value}} {}
-			WriteRegisterFuture(WriteRegisterFuture&&) = default;
-			WriteRegisterFuture& operator=(WriteRegisterFuture&&) = default;
-		};
-
-		class ReadRegisterFuture : public FUTURE<uint8_t, uint8_t>
-		{
-			using PARENT = FUTURE<uint8_t, uint8_t>;
-		protected:
-			explicit ReadRegisterFuture(uint8_t address) : PARENT{address} {}
-			ReadRegisterFuture(ReadRegisterFuture&&) = default;
-			ReadRegisterFuture& operator=(ReadRegisterFuture&&) = default;
-		};
-
-		static constexpr uint8_t build_IOCON(bool int_polarity)
-		{
-			return (int_polarity ? IOCON_INTPOL : 0);
 		}
 	};
 }

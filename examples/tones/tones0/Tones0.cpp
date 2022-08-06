@@ -34,6 +34,7 @@
 static constexpr const board::Timer NTIMER = board::Timer::TIMER0;
 static constexpr const board::PWMPin OUTPUT = board::PWMPin::D6_PD6_OC0A;
 
+using devices::audio::Beat;
 using devices::audio::Tone;
 using devices::audio::TonePlay;
 using namespace devices::audio::SpecialTone;
@@ -152,5 +153,6 @@ int main()
 
 	GENERATOR generator;
 	PLAYER player{generator};
-	player.play_sram(music, BPM);
+	constexpr Beat BEAT{BPM};
+	player.play_sram(music, BEAT);
 }

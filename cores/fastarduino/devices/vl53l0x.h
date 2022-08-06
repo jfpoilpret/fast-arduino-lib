@@ -34,6 +34,7 @@
 #include "../array.h"
 #include "../flash.h"
 #include "../i2c.h"
+#include "../functors.h"
 #include "../future.h"
 #include "../realtime_timer.h"
 #include "../time.h"
@@ -105,9 +106,11 @@ namespace devices::vl53l0x
 		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
 
 		template<Register REGISTER, typename T = uint8_t>
-		using TReadRegisterFuture = i2c::TReadRegisterFuture<MANAGER, uint8_t(REGISTER), T, true>;
+		using TReadRegisterFuture = 
+			i2c::TReadRegisterFuture<MANAGER, uint8_t(REGISTER), T, functor::ChangeEndianness<T>>;
 		template<Register REGISTER, typename T = uint8_t>
-		using TWriteRegisterFuture = i2c::TWriteRegisterFuture<MANAGER, uint8_t(REGISTER), T, true>;
+		using TWriteRegisterFuture = 
+			i2c::TWriteRegisterFuture<MANAGER, uint8_t(REGISTER), T, functor::ChangeEndianness<T>>;
 
 		using I2CFuturesGroup = i2c::I2CFuturesGroup<MANAGER>;
 		using I2CSameFutureGroup = i2c::I2CSameFutureGroup<MANAGER>;

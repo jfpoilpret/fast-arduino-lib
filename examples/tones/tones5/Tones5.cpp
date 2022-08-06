@@ -55,7 +55,7 @@ public:
 	void start(const TONE_PLAY* melody, uint8_t bpm)
 	{
 		status_ = Status::NOT_STARTED;
-		set_min_duration(calculate_min_duration(bpm));
+		set_min_duration(devices::audio::Beat{bpm}.duration());
 		prepare_sram(melody);
 		next_time_ = 0;
 		status_ = Status::STARTED;

@@ -24,7 +24,8 @@ do
 	echo "Target: $TARGET"
 	make CONF=$TARGET clean clean-examples >/dev/null 2>&1
 	make CONF=$TARGET examples 2>errors | $MAKEDIR/stats.py >newsizes-$TARGET
-	grep "Error" errors
+	# NOTE One class is named I2CErrorPolicy and thus must be removed from the search
+	grep "Error" errors | grep -v I2CErrorPolicy
 	# check if error found, then abort
 	if [ $? -ne 1 ]; then
 		echo "Error occurred, aborting."

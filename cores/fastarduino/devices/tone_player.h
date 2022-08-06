@@ -392,6 +392,35 @@ namespace devices::audio
 	};
 
 	/**
+	 * This embeds minimum duration (duration of a 32nd note), in milliseconds,
+	 * for a given tempo (beats per minute).
+	 * If provided with a constant value for @p bpm, then the result will be 
+	 * evaluated at compile-time.
+	 */
+	class Beat
+	{
+	public:
+		/// @cond notdocumented
+		explicit constexpr Beat(uint8_t bpm) : duration_{calculate_min_duration(bpm)} {}
+
+		constexpr uint16_t duration() const
+		{
+			return duration_;
+		}
+		/// @endcond
+
+	private:
+		static constexpr uint16_t calculate_min_duration(uint8_t bpm)
+		{
+			// bpm defines the duration of a quarter note (in 4/4 mode)
+			// We want the minimum duration allowed (for a 32nd note, since we allow dotted sixteenth)
+			return (60U * 1000U / 8U) / bpm;
+		}
+
+		uint16_t duration_;
+	};
+
+	/**
 	 * This low-level API defines an abstract player of melodies (defined as a
 	 * sequence of tones and durations).
 	 * You should normally not need to use it directly in programs, but rather
@@ -448,23 +477,9 @@ namespace devices::audio
 		explicit AbstractTonePlayer(GENERATOR& tone_generator) : generator_{tone_generator} {}
 
 		/**
-		 * Calculate the minimum duration (duration of a 32nd note), in milliseconds,
-		 * for the given tempo (beats per minute).
-		 * If provided with a constant value for @p bpm, then the result will be 
-		 * evaluated at compile-time.
-		 * @sa set_min_duration()
-		 */
-		static constexpr uint16_t calculate_min_duration(uint8_t bpm)
-		{
-			// bpm defines the duration of a quarter note (in 4/4 mode)
-			// We want the minimum duration allowed (for a 32nd note, since we allow dotted sixteenth)
-			return (60U * 1000U / 8U) / bpm;
-		}
-
-		/**
 		 * Set the duration, in milliseconds, of a 32nd note.
 		 * This method must be called before any melody play.
-		 * @sa calculate_min_duration()
+		 * @sa Beat
 		 * @sa get_min_duration()
 		 */
 		void set_min_duration(uint16_t min_duration)
@@ -718,9 +733,9 @@ namespace devices::audio
 		 * @sa play_flash()
 		 * @sa stop()
 		 */
-		void play_sram(const TONE_PLAY* melody, uint8_t bpm)
+		void play_sram(const TONE_PLAY* melody, const Beat& beat)
 		{
-			this->set_min_duration(BASE::calculate_min_duration(bpm));
+			this->set_min_duration(beat.duration());
 			this->prepare_sram(melody);
 			play_();
 		}
@@ -737,9 +752,9 @@ namespace devices::audio
 		 * @sa play_flash()
 		 * @sa stop()
 		 */
-		void play_eeprom(const TONE_PLAY* melody, uint8_t bpm)
+		void play_eeprom(const TONE_PLAY* melody, const Beat& beat)
 		{
-			this->set_min_duration(BASE::calculate_min_duration(bpm));
+			this->set_min_duration(beat.duration());
 			this->prepare_eeprom(melody);
 			play_();
 		}
@@ -756,9 +771,9 @@ namespace devices::audio
 		 * @sa play_sram()
 		 * @sa stop()
 		 */
-		void play_flash(const TONE_PLAY* melody, uint8_t bpm)
+		void play_flash(const TONE_PLAY* melody, const Beat& beat)
 		{
-			this->set_min_duration(BASE::calculate_min_duration(bpm));
+			this->set_min_duration(beat.duration());
 			this->prepare_flash(melody);
 			play_();
 		}
@@ -880,10 +895,10 @@ namespace devices::audio
 		 * @sa stop()
 		 * @sa update()
 		 */
-		void play_sram(const TONE_PLAY* melody, uint8_t bpm)
+		void play_sram(const TONE_PLAY* melody, const Beat& beat)
 		{
 			status_ = Status::NOT_STARTED;
-			this->set_min_duration(BASE::calculate_min_duration(bpm));
+			this->set_min_duration(beat.duration());
 			this->prepare_sram(melody);
 			next_time_ = 0;
 			status_ = Status::STARTED;
@@ -903,10 +918,10 @@ namespace devices::audio
 		 * @sa stop()
 		 * @sa update()
 		 */
-		void play_eeprom(const TONE_PLAY* melody, uint8_t bpm)
+		void play_eeprom(const TONE_PLAY* melody, const Beat& beat)
 		{
 			status_ = Status::NOT_STARTED;
-			this->set_min_duration(BASE::calculate_min_duration(bpm));
+			this->set_min_duration(beat.duration());
 			this->prepare_eeprom(melody);
 			next_time_ = 0;
 			status_ = Status::STARTED;
@@ -926,10 +941,10 @@ namespace devices::audio
 		 * @sa stop()
 		 * @sa update()
 		 */
-		void play_flash(const TONE_PLAY* melody, uint8_t bpm)
+		void play_flash(const TONE_PLAY* melody, const Beat& beat)
 		{
 			status_ = Status::NOT_STARTED;
-			this->set_min_duration(BASE::calculate_min_duration(bpm));
+			this->set_min_duration(beat.duration());
 			this->prepare_flash(melody);
 			next_time_ = 0;
 			status_ = Status::STARTED;

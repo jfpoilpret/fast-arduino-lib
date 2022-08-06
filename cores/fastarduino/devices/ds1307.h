@@ -23,11 +23,13 @@
 #define DS1307_H
 
 #include "../array.h"
+#include "../bits.h"
 #include "../i2c.h"
+#include "../functors.h"
 #include "../future.h"
 #include "../utilities.h"
-#include "../i2c_handler.h"
 #include "../i2c_device.h"
+#include "../i2c_device_utilities.h"
 
 // Device driver guidelines:
 // - Template on MANAGER, subclass of I2CDevice
@@ -118,20 +120,77 @@ namespace devices::rtc
 		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
 		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
-		struct SetTMHolder
+		template<uint8_t REGISTER, typename T = uint8_t, typename FUNCTOR = functor::Identity<T>>
+		using TReadRegisterFuture = i2c::TReadRegisterFuture<MANAGER, REGISTER, T, FUNCTOR>;
+		template<uint8_t REGISTER, typename T = uint8_t, typename FUNCTOR = functor::Identity<T>>
+		using TWriteRegisterFuture = i2c::TWriteRegisterFuture<MANAGER, REGISTER, T, FUNCTOR>;
+
+		static constexpr const uint8_t DEVICE_ADDRESS = 0x68 << 1;
+		static constexpr const uint8_t RAM_START = 0x08;
+		static constexpr const uint8_t RAM_END = 0x40;
+		static constexpr const uint8_t RAM_SIZE = RAM_END - RAM_START;
+		static constexpr const uint8_t TIME_ADDRESS = 0x00;
+		static constexpr const uint8_t CLOCK_HALT = 0x80;
+		static constexpr const uint8_t CONTROL_ADDRESS = 0x07;
+
+		class ControlRegister
 		{
-			explicit SetTMHolder(const tm& datetime)
+		public:
+			static constexpr ControlRegister create_output_level(bool level)
 			{
-				tm_.tm_sec = utils::binary_to_bcd(datetime.tm_sec);
-				tm_.tm_min = utils::binary_to_bcd(datetime.tm_min);
-				tm_.tm_hour = utils::binary_to_bcd(datetime.tm_hour);
-				tm_.tm_mday = utils::binary_to_bcd(datetime.tm_mday);
-				tm_.tm_mon = utils::binary_to_bcd(datetime.tm_mon);
-				tm_.tm_year = utils::binary_to_bcd(datetime.tm_year);
+				return ControlRegister(level ? OUT_MASK : 0);
+			}
+			static constexpr ControlRegister create_square_wave_enable(SquareWaveFrequency frequency)
+			{
+				return ControlRegister(SQWE_MASK | uint8_t(frequency));
 			}
 
-			uint8_t address_ = TIME_ADDRESS;
-			tm tm_;
+		private:
+			explicit ControlRegister(uint8_t data = 0) : data_{data} {}
+
+			static constexpr uint8_t FREQUENCY_MASK = bits::BV8(0, 1);
+			static constexpr uint8_t SQWE_MASK = bits::BV8(4);
+			static constexpr uint8_t OUT_MASK = bits::BV8(7);
+
+			uint8_t data_ = 0;
+		};
+
+		// Conversion functors for datetime (BCD Vs binary)
+		class DatetimeConverterToDevice
+		{
+		public:
+			using ARG_TYPE = tm;
+			using RES_TYPE = tm;
+			RES_TYPE operator()(const ARG_TYPE& datetime) const
+			{
+				tm dt;
+				dt.tm_sec = utils::binary_to_bcd(datetime.tm_sec);
+				dt.tm_min = utils::binary_to_bcd(datetime.tm_min);
+				dt.tm_hour = utils::binary_to_bcd(datetime.tm_hour);
+				dt.tm_mday = utils::binary_to_bcd(datetime.tm_mday);
+				dt.tm_mon = utils::binary_to_bcd(datetime.tm_mon);
+				dt.tm_year = utils::binary_to_bcd(datetime.tm_year);
+				return dt;
+			}
+		};
+
+		class DatetimeConverterFromDevice
+		{
+		public:
+			using ARG_TYPE = tm;
+			using RES_TYPE = tm;
+			RES_TYPE operator()(const ARG_TYPE& datetime) const
+			{
+				tm dt;
+				// convert DS1307 output (BCD) to integer type
+				dt.tm_sec = utils::bcd_to_binary(datetime.tm_sec);
+				dt.tm_min = utils::bcd_to_binary(datetime.tm_min);
+				dt.tm_hour = utils::bcd_to_binary(datetime.tm_hour);
+				dt.tm_mday = utils::bcd_to_binary(datetime.tm_mday);
+				dt.tm_mon = utils::bcd_to_binary(datetime.tm_mon);
+				dt.tm_year = utils::bcd_to_binary(datetime.tm_year);
+				return dt;
+			}
 		};
 
 	public:
@@ -164,17 +223,7 @@ namespace devices::rtc
 		 * 
 		 * @sa set_datetime(SetDatetimeFuture&)
 		 */
-		class SetDatetimeFuture : public FUTURE<void, SetTMHolder>
-		{
-			using PARENT = FUTURE<void, SetTMHolder>;
-
-		public:
-			/// @cond notdocumented
-			explicit SetDatetimeFuture(const tm& datetime) : PARENT{SetTMHolder{datetime}} {}
-			SetDatetimeFuture(SetDatetimeFuture&&) = default;
-			SetDatetimeFuture& operator=(SetDatetimeFuture&&) = default;
-			/// @endcond
-		};
+		using SetDatetimeFuture = TWriteRegisterFuture<TIME_ADDRESS, tm, DatetimeConverterToDevice>;
 
 		/**
 		 * Change date and time of the RTC chip connected to this driver.
@@ -195,9 +244,7 @@ namespace devices::rtc
 		 */
 		int set_datetime(PROXY<SetDatetimeFuture> future)
 		{
-			// send register address to write to (0)
-			// send datetime at address 0
-			return this->launch_commands(future, {this->write()});
+			return this->async_write(future);
 		}
 
 		/**
@@ -207,28 +254,7 @@ namespace devices::rtc
 		 * 
 		 * @sa get_datetime(GetDatetimeFuture&)
 		 */
-		class GetDatetimeFuture : public FUTURE<tm, uint8_t>
-		{
-		public:
-			/// @cond notdocumented
-			GetDatetimeFuture() : FUTURE<tm, uint8_t>{TIME_ADDRESS} {}
-			GetDatetimeFuture(GetDatetimeFuture&&) = default;
-			GetDatetimeFuture& operator=(GetDatetimeFuture&&) = default;
-
-			bool get(tm& datetime)
-			{
-				if (!FUTURE<tm, uint8_t>::get(datetime)) return false;
-				// convert DS1307 output (BCD) to integer type
-				datetime.tm_sec = utils::bcd_to_binary(datetime.tm_sec);
-				datetime.tm_min = utils::bcd_to_binary(datetime.tm_min);
-				datetime.tm_hour = utils::bcd_to_binary(datetime.tm_hour);
-				datetime.tm_mday = utils::bcd_to_binary(datetime.tm_mday);
-				datetime.tm_mon = utils::bcd_to_binary(datetime.tm_mon);
-				datetime.tm_year = utils::bcd_to_binary(datetime.tm_year);
-				return true;
-			}
-			/// @endcond
-		};
+		using GetDatetimeFuture = TReadRegisterFuture<TIME_ADDRESS, tm, DatetimeConverterFromDevice>;
 
 		/**
 		 * Get the current date and time from the RTC chip.
@@ -249,7 +275,7 @@ namespace devices::rtc
 		 */
 		int get_datetime(PROXY<GetDatetimeFuture> future)
 		{
-			return this->launch_commands(future, {this->write(), this->read()});
+			return this->async_read(future);
 		}
 
 		/**
@@ -319,7 +345,7 @@ namespace devices::rtc
 		{
 			if (!this->resolve(future).is_input_valid())
 				return errors::EINVAL;
-			return this->launch_commands(future, {this->write()});
+			return this->async_write(future);
 		}
 
 		/**
@@ -371,7 +397,7 @@ namespace devices::rtc
 		{
 			if (!this->resolve(future).is_input_valid())
 				return errors::EINVAL;
-			return this->launch_commands(future, {this->write()});
+			return this->async_write(future);
 		}
 
 		/**
@@ -428,7 +454,7 @@ namespace devices::rtc
 		{
 			if (!this->resolve(future).is_input_valid())
 				return errors::EINVAL;
-			return this->launch_commands(future, {this->write(), this->read()});
+			return this->async_read(future);
 		}
 
 		/**
@@ -478,7 +504,7 @@ namespace devices::rtc
 		{
 			if (!this->resolve(future).is_input_valid())
 				return errors::EINVAL;
-			return this->launch_commands(future, {this->write(), this->read()});
+			return this->async_read(future);
 		}
 
 		/**
@@ -488,12 +514,12 @@ namespace devices::rtc
 		 * 
 		 * @sa halt_clock(HaltClockFuture&)
 		 */
-		class HaltClockFuture : public FUTURE<void, containers::array<uint8_t, 2>>
+		class HaltClockFuture : public TWriteRegisterFuture<TIME_ADDRESS>
 		{
 		public:
 			/// @cond notdocumented
 			// just write 0x80 at address 0
-			HaltClockFuture() : FUTURE<void, containers::array<uint8_t, 2>>{{TIME_ADDRESS, CLOCK_HALT}} {}
+			HaltClockFuture() : TWriteRegisterFuture<TIME_ADDRESS>{CLOCK_HALT} {}
 			HaltClockFuture(HaltClockFuture&&) = default;
 			HaltClockFuture& operator=(HaltClockFuture&&) = default;
 			/// @endcond
@@ -521,7 +547,7 @@ namespace devices::rtc
 		 */
 		int halt_clock(PROXY<HaltClockFuture> future)
 		{
-			return this->launch_commands(future, {this->write()});
+			return this->async_write(future);
 		}
 
 		/**
@@ -533,21 +559,14 @@ namespace devices::rtc
 		 * 
 		 * @sa enable_output(EnableOutputFuture&)
 		 */
-		class EnableOutputFuture : public FUTURE<void, containers::array<uint8_t, 2>>
+		class EnableOutputFuture : public TWriteRegisterFuture<CONTROL_ADDRESS, ControlRegister>
 		{
-			using PARENT = FUTURE<void, containers::array<uint8_t, 2>>;
+			using PARENT = TWriteRegisterFuture<CONTROL_ADDRESS, ControlRegister>;
+
 		public:
 			/// @cond notdocumented
-			explicit EnableOutputFuture(SquareWaveFrequency frequency)
-			{
-				ControlRegister control;
-				control.sqwe_ = true;
-				control.rs_ = uint8_t(frequency);
-				typename PARENT::IN input;
-				input[0] = CONTROL_ADDRESS;
-				input[1] = control.data_;
-				this->reset_input_(input);
-			}
+			explicit EnableOutputFuture(SquareWaveFrequency frequency) 
+				: PARENT{ControlRegister::create_square_wave_enable(frequency)} {}
 			EnableOutputFuture(EnableOutputFuture&&) = default;
 			EnableOutputFuture& operator=(EnableOutputFuture&&) = default;
 			/// @endcond
@@ -573,7 +592,7 @@ namespace devices::rtc
 		 */
 		int enable_output(PROXY<EnableOutputFuture> future)
 		{
-			return this->launch_commands(future, {this->write()});
+			return this->async_write(future);
 		}
 
 		/**
@@ -585,20 +604,14 @@ namespace devices::rtc
 		 * 
 		 * @sa disable_output(DisableOutputFuture&)
 		 */
-		class DisableOutputFuture : public FUTURE<void, containers::array<uint8_t, 2>>
+		class DisableOutputFuture : public TWriteRegisterFuture<CONTROL_ADDRESS, ControlRegister>
 		{
-			using PARENT = FUTURE<void, containers::array<uint8_t, 2>>;
+			using PARENT = TWriteRegisterFuture<CONTROL_ADDRESS, ControlRegister>;
+
 		public:
 			/// @cond notdocumented
-			explicit DisableOutputFuture(bool output_value)
-			{
-				ControlRegister control;
-				control.out_ = output_value;
-				typename PARENT::IN input;
-				input[0] = CONTROL_ADDRESS;
-				input[1] = control.data_;
-				this->reset_input_(input);
-			}
+			explicit DisableOutputFuture(bool output_value) 
+				: PARENT{ControlRegister::create_output_level(output_value)} {}
 			DisableOutputFuture(DisableOutputFuture&&) = default;
 			DisableOutputFuture& operator=(DisableOutputFuture&&) = default;
 			/// @endcond
@@ -624,7 +637,7 @@ namespace devices::rtc
 		 */
 		int disable_output(PROXY<DisableOutputFuture> future)
 		{
-			return this->launch_commands(future, {this->write()});
+			return this->async_write(future);
 		}
 
 		// Synchronous API
@@ -644,9 +657,7 @@ namespace devices::rtc
 		 */
 		bool set_datetime(const tm& datetime)
 		{
-			SetDatetimeFuture future{datetime};
-			if (set_datetime(PARENT::make_proxy(future)) != 0) return false;
-			return (future.await() == future::FutureStatus::READY);
+			return this->template sync_write<SetDatetimeFuture>(datetime);
 		}
 
 		/**
@@ -662,9 +673,7 @@ namespace devices::rtc
 		 */
 		bool get_datetime(tm& datetime)
 		{
-			GetDatetimeFuture future;
-			if (get_datetime(PARENT::make_proxy(future)) != 0) return false;
-			return future.get(datetime);
+			return this->template sync_read<GetDatetimeFuture>(datetime);
 		}
 
 		/**
@@ -681,9 +690,7 @@ namespace devices::rtc
 		 */
 		bool halt_clock()
 		{
-			HaltClockFuture future;
-			if (halt_clock(PARENT::make_proxy(future)) != 0) return false;
-			return (future.await() == future::FutureStatus::READY);
+			return this->template sync_write<HaltClockFuture>();
 		}
 
 		/**
@@ -700,9 +707,7 @@ namespace devices::rtc
 		 */
 		bool enable_output(SquareWaveFrequency frequency = SquareWaveFrequency::FREQ_1HZ)
 		{
-			EnableOutputFuture future{frequency};
-			if (enable_output(PARENT::make_proxy(future)) != 0) return false;
-			return (future.await() == future::FutureStatus::READY);
+			return this->template sync_write<EnableOutputFuture>(frequency);
 		}
 
 		/**
@@ -718,9 +723,7 @@ namespace devices::rtc
 		 */
 		bool disable_output(bool output_value = false)
 		{
-			DisableOutputFuture future{output_value};
-			if (disable_output(PARENT::make_proxy(future)) != 0) return false;
-			return (future.await() == future::FutureStatus::READY);
+			return this->template sync_write<DisableOutputFuture>(output_value);
 		}
 
 		/**
@@ -856,30 +859,6 @@ namespace devices::rtc
 			if (get_ram(PARENT::make_proxy(future)) != 0) return false;
 			return future.get(reinterpret_cast<uint8_t&>(data));
 		}
-
-	private:
-		static constexpr const uint8_t DEVICE_ADDRESS = 0x68 << 1;
-		static constexpr const uint8_t RAM_START = 0x08;
-		static constexpr const uint8_t RAM_END = 0x40;
-		static constexpr const uint8_t RAM_SIZE = RAM_END - RAM_START;
-		static constexpr const uint8_t TIME_ADDRESS = 0x00;
-		static constexpr const uint8_t CLOCK_HALT = 0x80;
-		static constexpr const uint8_t CONTROL_ADDRESS = 0x07;
-
-		union ControlRegister
-		{
-			explicit ControlRegister(uint8_t data = 0) : data_{data} {}
-
-			uint8_t data_;
-			struct
-			{
-				uint8_t rs_ : 2;
-				uint8_t res1_ : 2;
-				bool sqwe_ : 1;
-				uint8_t res2_ : 2;
-				bool out_ : 1;
-			};
-		};
 	};
 }
 

@@ -82,9 +82,18 @@ public:
 	{
 		while (true)
 		{
+			bool direction;
+			uint8_t pattern;
 			for (uint8_t i = 0; i < 4; ++i)
 			{
-				mcp_.values(shift_pattern(pattern_, i, direction_) << 4);
+				if (changed_)
+				{
+					changed_ = false;
+					uint8_t switches = mcp_.values() & 0x0F;
+					direction = (~switches) & 0x08;
+					pattern = calculate_pattern(switches);
+				}
+				mcp_.values(shift_pattern(pattern, i, direction) << 4);
 				time::delay_ms(250);
 			}
 		}
@@ -126,9 +135,7 @@ private:
 
 	void on_change()
 	{
-		uint8_t switches = mcp_.values() & 0x0F;
-		direction_ = (~switches) & 0x08;
-		pattern_ = calculate_pattern(switches);
+		changed_ = true;
 	}
 
 	using MCP = devices::mcp230xx::MCP23008<MANAGER>;
@@ -140,9 +147,7 @@ private:
 #endif
 	MCP mcp_;
 	interrupt::INTSignal<INT_PIN> signal_;
-
-	bool direction_;
-	uint8_t pattern_;
+	volatile bool changed_ = true;
 
 	DECL_INT_ISR_HANDLERS_FRIEND
 };
