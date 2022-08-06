@@ -209,7 +209,7 @@ namespace functor
 	{
 		using ARG_TYPE = typename FUNCTOR::ARG_TYPE;
 		using RES_TYPE = typename FUNCTOR::RES_TYPE;
-		static inline RES_TYPE call(const ARG_TYPE& value)
+		static RES_TYPE call(const ARG_TYPE& value)
 		{
 			return FUNCTOR{}(value);
 		}
