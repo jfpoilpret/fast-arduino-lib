@@ -4,7 +4,7 @@
 
 /*
  * Copyright (C) 2013-2015, Mikael Patel
- * Copyright (C) 2016-2020, Jean-Francois Poilpret
+ * Copyright (C) 2016-2022, Jean-Francois Poilpret
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
