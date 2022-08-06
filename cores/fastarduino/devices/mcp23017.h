@@ -22,6 +22,7 @@
 #define MCP23017_H
 
 #include "mcp230xx.h"
+#include "../bits.h"
 #include "../functors.h"
 #include "../i2c_device.h"
 #include "../i2c_device_utilities.h"
@@ -688,7 +689,7 @@ namespace devices::mcp230xx
 
 		static constexpr uint8_t build_IOCON(bool mirror, bool int_polarity)
 		{
-			return uint8_t(mirror ? IOCON_MIRROR : 0) | uint8_t(int_polarity ? IOCON_INTPOL : 0);
+			return bits::ORIF8(mirror, IOCON_MIRROR, int_polarity, IOCON_INTPOL);
 		}
 	};
 }

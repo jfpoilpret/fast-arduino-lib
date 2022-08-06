@@ -134,7 +134,7 @@ namespace i2c
 
 		static constexpr uint8_t flags(bool stop, bool finish, bool end)
 		{
-			return (stop ? STOP : 0U) | (finish ? FINISH : 0U) | (end ? END : 0U);
+			return bits::ORIF8(stop, STOP, finish, FINISH, end, END);
 		}
 
 	private:
@@ -147,7 +147,7 @@ namespace i2c
 
 		static constexpr uint8_t value(bool write, bool stop, bool finish, bool end)
 		{
-			return NOT_NONE | (write ? WRITE : 0U) | (stop ? STOP : 0U) | (finish ? FINISH : 0U) | (end ? END : 0U);
+			return bits::ORIF8(true, NOT_NONE, write, WRITE, stop, STOP, finish, FINISH, end, END);
 		}
 
 		uint8_t value_ = NONE;

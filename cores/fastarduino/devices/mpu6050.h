@@ -27,6 +27,7 @@
 #include <stdint.h>
 #include "common_magneto.h"
 #include "../array.h"
+#include "../bits.h"
 #include "../functors.h"
 #include "../i2c_device.h"
 #include "../i2c_device_utilities.h"
@@ -152,9 +153,8 @@ namespace devices::magneto
 		 */
 		constexpr FIFOEnable(
 			bool accel = false, bool gyro_x = false, bool gyro_y = false, bool gyro_z = false, bool temperature = false)
-			:	data_{
-					enable(accel, ACCEL_FIFO_EN) | enable(temperature, TEMP_FIFO_EN) |
-					enable(gyro_x, XG_FIFO_EN) | enable(gyro_y, YG_FIFO_EN) | enable(gyro_z, ZG_FIFO_EN)} {}
+			: data_{bits::ORIF8(accel, ACCEL_FIFO_EN, temperature, TEMP_FIFO_EN, 
+				gyro_x, XG_FIFO_EN, gyro_y, YG_FIFO_EN, gyro_z, ZG_FIFO_EN)} {}
 
 		/** If `true`, accelerometer measures on 3 axes will be loaded to FIFO buffer. */
 		bool accel() const
@@ -193,11 +193,6 @@ namespace devices::magneto
 		static constexpr uint8_t ZG_FIFO_EN = bits::BV8(4);
 		static constexpr uint8_t ACCEL_FIFO_EN = bits::BV8(3);
 
-		static constexpr uint8_t enable(bool flag, uint8_t mask)
-		{
-			return (flag ? mask : 0);
-		}
-		
 		uint8_t data_;
 	};
 
@@ -218,7 +213,7 @@ namespace devices::magneto
 		 * @param overflow `true` to enable FIFO buffer overflow interrupt
 		 */
 		constexpr INTStatus(bool data_ready = false, bool overflow = false)
-			: data_{enable(data_ready, DATA_RDY_INT) | enable(overflow, FIFO_OFLOW_INT)} {}
+			: data_{bits::ORIF8(data_ready, DATA_RDY_INT, overflow, FIFO_OFLOW_INT)} {}
 
 		/** If `true`, the Data Ready interrupt is enabled. */
 		bool data_ready() const
@@ -235,11 +230,6 @@ namespace devices::magneto
 	private:
 		static constexpr uint8_t FIFO_OFLOW_INT = bits::BV8(4);
 		static constexpr uint8_t DATA_RDY_INT = bits::BV8(0);
-
-		static constexpr uint8_t enable(bool flag, uint8_t mask)
-		{
-			return (flag ? mask : 0);
-		}
 
 		uint8_t data_;
 	};
@@ -1161,16 +1151,12 @@ namespace devices::magneto
 			constexpr PowerManagement() : value_{} {}
 			explicit constexpr PowerManagement(ClockSelect clock_select, bool temp_disable = false,
 							bool cycle = false, bool sleep = false, bool device_reset = false) 
-				:	value_{	uint8_t(uint8_t(clock_select) | 
-							(temp_disable ? TEMP_DIS_MASK : 0) |
-							(cycle ? CYCLE_MASK : 0) |
-							(sleep ? SLEEP_MASK : 0) |
-							(device_reset ? RESET_MASK : 0))} {}
+				:	value_{	bits::OR8(uint8_t(clock_select), bits::IF8(temp_disable, TEMP_DIS_MASK),
+							bits::IF8(cycle, CYCLE_MASK), bits::IF8(sleep, SLEEP_MASK), 
+							bits::IF8(device_reset, RESET_MASK))} {}
 			constexpr PowerManagement(bool temp_disable, bool cycle, bool sleep, bool device_reset) 
-				:	value_{	(temp_disable ? TEMP_DIS_MASK : 0) |
-							(cycle ? CYCLE_MASK : 0) |
-							(sleep ? SLEEP_MASK : 0) |
-							(device_reset ? RESET_MASK : 0)} {}
+				:	value_{	bits::ORIF8(temp_disable, TEMP_DIS_MASK, cycle, CYCLE_MASK,
+							sleep, SLEEP_MASK, device_reset, RESET_MASK)} {}
 
 			ClockSelect clock_select() const
 			{

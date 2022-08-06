@@ -270,6 +270,174 @@ namespace bits
 	{
 		return uint8_t(value >> 8);
 	}
+
+	/**
+	 * Create a `uint8_t` bitwise OR boolean operation between `uint8_t` operands.
+	 * This method exists to ensure proper result cast to `uint8_t`.
+	 * Concretely, this is simply the `val1 | val2` expression.
+	 * @param val1 the first byte to be ORed.
+	 * @param val2 the second byte to be ORed.
+	 */
+	static constexpr uint8_t OR8(uint8_t val1, uint8_t val2)
+	{
+		return uint8_t(val1 | val2);
+	}
+
+	/**
+	 * Create a `uint8_t` bitwise OR boolean operation between `uint8_t` operands.
+	 * This method exists to ensure proper result cast to `uint8_t`.
+	 * @param val1 the first byte to be ORed.
+	 * @param val2 the second byte to be ORed.
+	 * @param val3 the third byte to be ORed.
+	 */
+	static constexpr uint8_t OR8(uint8_t val1, uint8_t val2, uint8_t val3)
+	{
+		return uint8_t(val1 | OR8(val2, val3));
+	}
+
+	/**
+	 * Create a `uint8_t` bitwise OR boolean operation between `uint8_t` operands.
+	 * This method exists to ensure proper result cast to `uint8_t`.
+	 * @param val1 the first byte to be ORed.
+	 * @param val2 the second byte to be ORed.
+	 * @param val3 the third byte to be ORed.
+	 * @param val4 the third byte to be ORed.
+	 */
+	static constexpr uint8_t OR8(uint8_t val1, uint8_t val2, uint8_t val3, uint8_t val4)
+	{
+		return uint8_t(OR8(val1, val2) | OR8(val3, val4));
+	}
+
+	/**
+	 * Create a `uint8_t` bitwise OR boolean operation between `uint8_t` operands.
+	 * This method exists to ensure proper result cast to `uint8_t`.
+	 * @param val1 the first byte to be ORed.
+	 * @param val2 the second byte to be ORed.
+	 * @param val3 the third byte to be ORed.
+	 * @param val4 the third byte to be ORed.
+	 * @param val5 the third byte to be ORed.
+	 */
+	static constexpr uint8_t OR8(uint8_t val1, uint8_t val2, uint8_t val3, uint8_t val4, uint8_t val5)
+	{
+		return uint8_t(val1 | OR8(val2, val3, val4, val5));
+	}
+
+	/**
+	 * Create a `uint8_t` bitwise OR boolean operation between `uint8_t` operands.
+	 * This method exists to ensure proper result cast to `uint8_t`.
+	 * @param val1 the first byte to be ORed.
+	 * @param val2 the second byte to be ORed.
+	 * @param val3 the third byte to be ORed.
+	 * @param val4 the third byte to be ORed.
+	 * @param val5 the third byte to be ORed.
+	 * @param val6 the third byte to be ORed.
+	 */
+	static constexpr uint8_t OR8(uint8_t val1, uint8_t val2, uint8_t val3, uint8_t val4, uint8_t val5, uint8_t val6)
+	{
+		return uint8_t(OR8(val1, val2, val3) | OR8(val4, val5, val6));
+	}
+
+	/**
+	 * return @p val if @p flag is `true`, otherwise `0`, as an `uint8_t`.
+	 * Concretely, this is simply the `(flag ? val : 0U)` expression.
+	 * This method exists to ensure proper result cast to `uint8_t`.
+	 * @param flag the flag used to determine if @p val should be returned or `0`
+	 * @param val the value returned if @p flag is `true`
+	 */
+	static constexpr uint8_t IF8(bool flag, uint8_t val)
+	{
+		return uint8_t(flag ? val : 0U);
+	}
+
+	/**
+	 * Create a `uint8_t` bitwise OR boolean operation between `uint8_t` operands,
+	 * conditioned by `bool` flags.
+	 * Concretely, this is simply the `(flag1 ? val1 : 0) | (flag2 ? val2 : 0)` expression.
+	 * @param flag1 the flag used to determine if @p val1 should be used or `0`
+	 * @param val1 the first byte to be ORed.
+	 * @param flag2 the flag used to determine if @p val2 should be used or `0`
+	 * @param val2 the second byte to be ORed.
+	 */
+	static constexpr uint8_t ORIF8(bool flag1, uint8_t val1, bool flag2, uint8_t val2)
+	{
+		return OR8(IF8(flag1, val1), IF8(flag2, val2));
+	}
+
+	/**
+	 * Create a `uint8_t` bitwise OR boolean operation between `uint8_t` operands,
+	 * conditioned by `bool` flags.
+	 * @param flag1 the flag used to determine if @p val1 should be used or `0`
+	 * @param val1 the first byte to be ORed.
+	 * @param flag2 the flag used to determine if @p val2 should be used or `0`
+	 * @param val2 the second byte to be ORed.
+	 * @param flag3 the flag used to determine if @p val3 should be used or `0`
+	 * @param val3 the second byte to be ORed.
+	 */
+	static constexpr uint8_t ORIF8(bool flag1, uint8_t val1, bool flag2, uint8_t val2, bool flag3, uint8_t val3)
+	{
+		return OR8(IF8(flag1, val1), IF8(flag2, val2), IF8(flag3, val3));
+	}
+
+	/**
+	 * Create a `uint8_t` bitwise OR boolean operation between `uint8_t` operands,
+	 * conditioned by `bool` flags.
+	 * @param flag1 the flag used to determine if @p val1 should be used or `0`
+	 * @param val1 the first byte to be ORed.
+	 * @param flag2 the flag used to determine if @p val2 should be used or `0`
+	 * @param val2 the second byte to be ORed.
+	 * @param flag3 the flag used to determine if @p val3 should be used or `0`
+	 * @param val3 the second byte to be ORed.
+	 * @param flag4 the flag used to determine if @p val4 should be used or `0`
+	 * @param val4 the second byte to be ORed.
+	 */
+	static constexpr uint8_t ORIF8(
+		bool flag1, uint8_t val1, bool flag2, uint8_t val2, bool flag3, uint8_t val3, bool flag4, uint8_t val4)
+	{
+		return OR8(IF8(flag1, val1), IF8(flag2, val2), IF8(flag3, val3), IF8(flag4, val4));
+	}
+
+	/**
+	 * Create a `uint8_t` bitwise OR boolean operation between `uint8_t` operands,
+	 * conditioned by `bool` flags.
+	 * @param flag1 the flag used to determine if @p val1 should be used or `0`
+	 * @param val1 the first byte to be ORed.
+	 * @param flag2 the flag used to determine if @p val2 should be used or `0`
+	 * @param val2 the second byte to be ORed.
+	 * @param flag3 the flag used to determine if @p val3 should be used or `0`
+	 * @param val3 the second byte to be ORed.
+	 * @param flag4 the flag used to determine if @p val4 should be used or `0`
+	 * @param val4 the second byte to be ORed.
+	 * @param flag5 the flag used to determine if @p val5 should be used or `0`
+	 * @param val5 the second byte to be ORed.
+	 */
+	static constexpr uint8_t ORIF8(bool flag1, uint8_t val1, bool flag2, uint8_t val2, bool flag3, uint8_t val3, 
+		bool flag4, uint8_t val4, bool flag5, uint8_t val5)
+	{
+		return OR8(IF8(flag1, val1), IF8(flag2, val2), IF8(flag3, val3), IF8(flag4, val4), IF8(flag5, val5));
+	}
+
+	/**
+	 * Create a `uint8_t` bitwise OR boolean operation between `uint8_t` operands,
+	 * conditioned by `bool` flags.
+	 * @param flag1 the flag used to determine if @p val1 should be used or `0`
+	 * @param val1 the first byte to be ORed.
+	 * @param flag2 the flag used to determine if @p val2 should be used or `0`
+	 * @param val2 the second byte to be ORed.
+	 * @param flag3 the flag used to determine if @p val3 should be used or `0`
+	 * @param val3 the second byte to be ORed.
+	 * @param flag4 the flag used to determine if @p val4 should be used or `0`
+	 * @param val4 the second byte to be ORed.
+	 * @param flag5 the flag used to determine if @p val5 should be used or `0`
+	 * @param val5 the second byte to be ORed.
+	 * @param flag6 the flag used to determine if @p val6 should be used or `0`
+	 * @param val6 the second byte to be ORed.
+	 */
+	static constexpr uint8_t ORIF8(bool flag1, uint8_t val1, bool flag2, uint8_t val2, bool flag3, uint8_t val3, 
+		bool flag4, uint8_t val4, bool flag5, uint8_t val5, bool flag6, uint8_t val6)
+	{
+		return OR8(IF8(flag1, val1), IF8(flag2, val2), IF8(flag3, val3), 
+			IF8(flag4, val4), IF8(flag5, val5), IF8(flag6, val6));
+	}
 }
 
 #endif /* BITS_HH */

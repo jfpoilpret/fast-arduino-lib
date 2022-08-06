@@ -24,6 +24,7 @@
 
 #include <math.h>
 #include "common_magneto.h"
+#include "../bits.h"
 #include "../functors.h"
 #include "../i2c_device.h"
 #include "../i2c_device_utilities.h"
@@ -277,7 +278,7 @@ namespace devices::magneto
 									DataOutput rate = DataOutput::RATE_15HZ, 
 									SamplesAveraged samples = SamplesAveraged::ONE_SAMPLE,
 									MeasurementMode measurement = MeasurementMode::NORMAL)
-				:	PARENT{	uint8_t(uint8_t(measurement) | uint8_t(rate) | uint8_t(samples)),
+				:	PARENT{ bits::OR8(uint8_t(measurement), uint8_t(rate), uint8_t(samples)),
 							uint8_t(gain), uint8_t(mode)} {}
 			BeginFuture(BeginFuture&&) = default;
 			BeginFuture& operator=(BeginFuture&&) = default;
