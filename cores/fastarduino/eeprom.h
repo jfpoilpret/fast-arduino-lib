@@ -762,7 +762,7 @@ namespace eeprom
 
 		void write_next()
 		{
-			uint8_t value;
+			uint8_t value = 0;
 			buffer_.pull_(value);
 			EEPROM::write_byte(current_.address++, value);
 			--current_.size;
@@ -818,11 +818,11 @@ namespace eeprom
 
 		WriteItem next_item()
 		{
-			uint8_t value1;
+			uint8_t value1 = 0;
 			buffer_.pull_(value1);
-			uint8_t value2;
+			uint8_t value2 = 0;
 			buffer_.pull_(value2);
-			uint8_t value3;
+			uint8_t value3 = 0;
 			buffer_.pull_(value3);
 			return WriteItem{value1, value2, value3};
 		}
