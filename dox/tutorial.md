@@ -87,7 +87,7 @@ The problem here is that Arduino API accept a simple number when they need a pin
 
 This problem cannot occur with FastArduino as the available pins are stored in a strong enum and it becomes impossible to select a pin that does not exist for the board we target!
 
-Now, what is really interesting in comparing both working code examples is the size of the built program (measured with UNO as a target, FastArduino project built with AVR GCC 10.2.0, Arduino API project built with Arduino CLI 0.7.0):
+Now, what is really interesting in comparing both working code examples is the size of the built program (measured with UNO as a target, FastArduino project built with AVR GCC 11.1.0, Arduino API project built with Arduino CLI 0.7.0):
 
 @snippetdoc tables.txt gpiotime_1_blink
 
