@@ -41,6 +41,16 @@ My complete setup is described in [ArduinoDevSetup.docx](basedoc/ArduinoDevSetup
 
 One easy way to start a new project using FastArduino is to checkout [this project template](https://github.com/jfpoilpret/fastarduino-project-template).
 
+Limitations
+===========
+
+As of 07.08.2022 (future version 1.9), FastArduino prevents usage of dynamic allocation (`new` and `delete`) because it is bad for AVR MCU with such limited amount of SRAM, as it may lead to heap fragmentation and ultimately program crash.
+
+FastArduino has always encouraged static allocation only throughout its API and implementation.
+
+Allowing dynamic allocation would have undesirable effects on classes with virtual methods: they should also define a virtual destructor, which has an impact on generated code and data (vtable) size.
+Hence, we have decided to not define virtual destructors in such FastArduino classes, and prevent overall dynamic allocation to avoid virtual destructors.
+
 Status
 ======
 
