@@ -103,7 +103,8 @@ class LedHandler: public EventHandler<EVENT>
 public:
 	LedHandler() {}
 	LedHandler(uint8_t type) : EventHandler<EVENT>{type}, _led{gpio::PinMode::OUTPUT} {}
-	virtual void on_event(UNUSED const EVENT& event) override
+
+	void on_event(UNUSED const EVENT& event) final
 	{
 		_led.toggle();
 	}

@@ -62,7 +62,7 @@ class LedHandler: public EventHandler<EVENT>, private gpio::FastPort<LED_PORT>
 {
 public:
 	LedHandler() : EventHandler<EVENT>{Type::WDT_TIMER}, FastPort{0xFF}, _value{0} {}
-	virtual void on_event(UNUSED const EVENT& event) override
+	void on_event(UNUSED const EVENT& event) final
 	{
 		uint8_t value = _value;
 		if (value == 0)

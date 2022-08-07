@@ -52,7 +52,7 @@ public:
 	LedHandler() : Job{0, PERIOD}, _led{gpio::PinMode::OUTPUT, false} {}
 
 protected:
-	virtual void on_schedule(UNUSED uint32_t millis) override
+	void on_schedule(UNUSED uint32_t millis) final
 	{
 		_led.toggle();
 	}

@@ -62,7 +62,7 @@ public:
 	LedHandler() : Job{0, PERIOD}, FastPort{0xFF}, _value{0} {}
 
 protected:
-	virtual void on_schedule(UNUSED uint32_t millis) override
+	void on_schedule(UNUSED uint32_t millis) final
 	{
 		uint8_t value = _value;
 		if (value == 0)
