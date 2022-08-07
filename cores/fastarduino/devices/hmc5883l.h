@@ -113,7 +113,7 @@ namespace devices::magneto
 		Status() = default;
 		bool ready() const
 		{
-			return data_ & READY;;
+			return data_ & READY;
 		}
 		bool lock() const
 		{
