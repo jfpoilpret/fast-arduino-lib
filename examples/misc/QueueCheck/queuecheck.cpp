@@ -38,7 +38,8 @@ REGISTER_UATX_ISR(0)
 static const uint8_t OUTPUT_BUFFER_SIZE = 128;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
-static const uint8_t BUFFER_SIZE = 10;
+static const uint8_t QUEUE_SIZE = 9;
+static const uint8_t BUFFER_SIZE = QUEUE_SIZE + 1;
 
 using namespace streams;
 using namespace containers;
@@ -83,18 +84,18 @@ int main()
 	char val;
 
 	out << "New empty queue" << endl;
-	assert(out, "size()", BUFFER_SIZE - 1, queue.size());
-	assert(out, queue, true, false, 0, BUFFER_SIZE - 1);
+	assert(out, "size()", QUEUE_SIZE, queue.size());
+	assert(out, queue, true, false, 0, QUEUE_SIZE);
 	assert(out, "peek(c)", false, queue.peek(val));
-	assert(out, queue, true, false, 0, BUFFER_SIZE - 1);
+	assert(out, queue, true, false, 0, QUEUE_SIZE);
 
 	out << "Push 1 char" << endl;
 	queue.push('a');
-	assert(out, queue, false, false, 1, BUFFER_SIZE - 2);
+	assert(out, queue, false, false, 1, QUEUE_SIZE - 1);
 
 	out << "Pull 1 char" << endl;
 	assert(out, "pull()", true, queue.pull(val));
-	assert(out, queue, true, false, 0, BUFFER_SIZE - 1);
+	assert(out, queue, true, false, 0, QUEUE_SIZE);
 
 	out << "Push 9 chars" << endl;
 	queue.push('1');
@@ -106,35 +107,35 @@ int main()
 	queue.push('7');
 	queue.push('8');
 	queue.push('9');
-	assert(out, queue, false, true, BUFFER_SIZE - 1, 0);
+	assert(out, queue, false, true, QUEUE_SIZE, 0);
 	out << "Push extra char" << endl;
 	bool result = queue.push('A');
 	assert(out, "1st extra push", false, result);
-	assert(out, queue, false, true, BUFFER_SIZE - 1, 0);
+	assert(out, queue, false, true, QUEUE_SIZE, 0);
 	out << "Push extra char" << endl;
 	result = queue.push('B');
 	assert(out, "2nd extra push", false, result);
-	assert(out, queue, false, true, BUFFER_SIZE - 1, 0);
+	assert(out, queue, false, true, QUEUE_SIZE, 0);
 
 	out << "Peek functions" << endl;
 	assert(out, "peek(c)", true, queue.peek(val));
 	assert(out, "peeked c", '1', val);
-	assert(out, queue, false, true, BUFFER_SIZE - 1, 0);
+	assert(out, queue, false, true, QUEUE_SIZE, 0);
 	assert(out, "peek(c)", true, queue.peek(val));
 	assert(out, "peeked c", '1', val);
-	assert(out, queue, false, true, BUFFER_SIZE - 1, 0);
+	assert(out, queue, false, true, QUEUE_SIZE, 0);
 
 	assert(out, "peek(buf[5])", 5, queue.peek(peek_buffer5));
-	assert(out, queue, false, true, BUFFER_SIZE - 1, 0);
+	assert(out, queue, false, true, QUEUE_SIZE, 0);
 
 	assert(out, "peek(buf[15])", 9, queue.peek(peek_buffer15));
 	assert(out, "peeked buf[15] Vs \"123456789\"", 0, strcmp(peek_buffer15, "123456789"));
-	assert(out, queue, false, true, BUFFER_SIZE - 1, 0);
+	assert(out, queue, false, true, QUEUE_SIZE, 0);
 
 	assert(out, "peek(buf, 5)", 5, queue.peek(peek_buffer20, 5));
 	assert(out, "peeked buf Vs \"12345\"", 0, strcmp(peek_buffer20, "12345"));
 	out << "peek_buffer20 = '" << peek_buffer20 << "'" << endl;
-	assert(out, queue, false, true, BUFFER_SIZE - 1, 0);
+	assert(out, queue, false, true, QUEUE_SIZE, 0);
 
 	out << "Pull 8 chars" << endl;
 	assert(out, "pull() 1", true, queue.pull(val));
@@ -145,15 +146,59 @@ int main()
 	assert(out, "pull() 6", true, queue.pull(val));
 	assert(out, "pull() 7", true, queue.pull(val));
 	assert(out, "pull() 8", true, queue.pull(val));
-	assert(out, queue, false, false, 1, BUFFER_SIZE - 2);
+	assert(out, queue, false, false, 1, QUEUE_SIZE - 1);
+
+	// repush new chars to check content after the ring buffer has been "rounded" 
+	out << "Push 3 chars" << endl;
+	queue.push('A');
+	queue.push('B');
+	queue.push('C');
+	assert(out, queue, false, false, 4, QUEUE_SIZE - 4);
+	memset(peek_buffer5, 0, 5);
+	assert(out, "peek(buf[5])", 4, queue.peek(peek_buffer5));
+	assert(out, "peeked buf[5] Vs \"9ABC\"", 0, strcmp(peek_buffer5, "9ABC"));
+	assert(out, queue, false, false, 4, QUEUE_SIZE - 4);
+
+	// push more chars to ensure we fill up the queue again
+	out << "Push 5 chars" << endl;
+	queue.push('D');
+	queue.push('E');
+	queue.push('F');
+	queue.push('G');
+	queue.push('H');
+	assert(out, queue, false, true, QUEUE_SIZE, 0);
+	out << "Push extra char" << endl;
+	result = queue.push('I');
+	assert(out, "extra push", false, result);
+	assert(out, queue, false, true, QUEUE_SIZE, 0);
+
+	out << "Pull 8 chars" << endl;
+	assert(out, "pull() 9", true, queue.pull(val));
+	assert(out, "pull() 9", '9', val);
+	assert(out, "pull() A", true, queue.pull(val));
+	assert(out, "pull() A", 'A', val);
+	assert(out, "pull() B", true, queue.pull(val));
+	assert(out, "pull() B", 'B', val);
+	assert(out, "pull() C", true, queue.pull(val));
+	assert(out, "pull() C", 'C', val);
+	assert(out, "pull() D", true, queue.pull(val));
+	assert(out, "pull() D", 'D', val);
+	assert(out, "pull() E", true, queue.pull(val));
+	assert(out, "pull() E", 'E', val);
+	assert(out, "pull() F", true, queue.pull(val));
+	assert(out, "pull() F", 'F', val);
+	assert(out, "pull() G", true, queue.pull(val));
+	assert(out, "pull() G", 'G', val);
+	assert(out, queue, false, false, 1, QUEUE_SIZE - 1);
 
 	out << "Pull last char" << endl;
-	assert(out, "pull() 9", true, queue.pull(val));
-	assert(out, queue, true, false, 0, BUFFER_SIZE - 1);
+	assert(out, "pull() H", true, queue.pull(val));
+	assert(out, "pull() H", 'H', val);
+	assert(out, queue, true, false, 0, QUEUE_SIZE);
 
 	out << "Pull no char" << endl;
 	assert(out, "pull()", false, queue.pull(val));
-	assert(out, queue, true, false, 0, BUFFER_SIZE - 1);
+	assert(out, queue, true, false, 0, QUEUE_SIZE);
 
 	return 0;
 }
