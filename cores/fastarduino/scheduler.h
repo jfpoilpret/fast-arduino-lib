@@ -104,7 +104,7 @@ namespace events
 		Scheduler(const CLOCK& clock, uint8_t type) INLINE : EventHandler<EVENT>{type}, clock_{clock} {}
 
 		/// @cond notdocumented
-		void on_event(UNUSED const EVENT& event) override INLINE
+		void on_event(UNUSED const EVENT& event) final INLINE
 		{
 			traverse(JobCaller{clock_});
 		}
