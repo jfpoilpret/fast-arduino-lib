@@ -107,6 +107,14 @@ int main()
 	queue.push('8');
 	queue.push('9');
 	assert(out, queue, false, true, BUFFER_SIZE - 1, 0);
+	out << "Push extra char" << endl;
+	bool result = queue.push('A');
+	assert(out, "1st extra push", false, result);
+	assert(out, queue, false, true, BUFFER_SIZE - 1, 0);
+	out << "Push extra char" << endl;
+	result = queue.push('B');
+	assert(out, "2nd extra push", false, result);
+	assert(out, queue, false, true, BUFFER_SIZE - 1, 0);
 
 	out << "Peek functions" << endl;
 	assert(out, "peek(c)", true, queue.peek(val));
