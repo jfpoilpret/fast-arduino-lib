@@ -485,7 +485,7 @@ namespace containers
 	/// @cond notdocumented
 	template<typename T, typename TREF> bool Queue<T, TREF>::peek_(T& item) const
 	{
-		if (tail_ == head_) return false;
+		if (full_()) return false;
 		item = buffer_[head_];
 		return true;
 	}
