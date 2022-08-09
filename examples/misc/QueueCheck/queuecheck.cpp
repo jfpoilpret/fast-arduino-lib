@@ -41,8 +41,7 @@ static const uint8_t OUTPUT_BUFFER_SIZE = 128;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 static const uint8_t QUEUE_SIZE = 9;
-static const uint8_t BUFFER_SIZE = QUEUE_SIZE + 1;
-// static const uint8_t BUFFER_SIZE = QUEUE_SIZE;
+static const uint8_t BUFFER_SIZE = QUEUE_SIZE;
 
 using namespace streams;
 using namespace containers;

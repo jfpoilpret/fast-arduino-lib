@@ -70,13 +70,15 @@ namespace containers
 		/**
 		 * Create a new queue, based on the provided @p buffer array.
 		 * The queue size is determined by the size of `buffer`.
-		 * @tparam SIZE the number of @p T items that `buffer` can hold; note that,
-		 * for optimization reasons, only `SIZE - 1` items can be held in the buffer.
+		 * @tparam SIZE the number of @p T items that `buffer` can hold.
 		 * @param buffer the buffer used by this queue to store its items
 		 * @param locked when `true`, prevents pushing any data to this queue
 		 */
 		template<uint8_t SIZE> explicit Queue(T (&buffer)[SIZE], bool locked = false)
-		: buffer_{buffer}, size_{SIZE}, locked_{locked} {}
+		: buffer_{buffer}, size_{uint8_t(SIZE + 1)}, locked_{locked}
+		{
+			static_assert(SIZE != UINT8_MAX, "SIZE should be strictly less than 255");
+		}
 
 		/**
 		 * Lock this queue, ie prevent pushing any data to it.
