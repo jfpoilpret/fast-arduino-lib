@@ -100,7 +100,7 @@ namespace serial
 namespace serial::soft
 {
 	/// @cond notdocumented
-	class AbstractUATX
+	class AbstractUATX : protected streams::ostreambuf
 	{
 	public:
 		/**
@@ -116,11 +116,8 @@ namespace serial::soft
 		AbstractUATX(const AbstractUATX&) = delete;
 		AbstractUATX& operator=(const AbstractUATX&) = delete;
 
-		using CALLBACK = streams::ostreambuf::CALLBACK;
-
 		template<uint8_t SIZE_TX> 
-		explicit AbstractUATX(char (&output)[SIZE_TX], CALLBACK callback, void* arg)
-		: obuf_{output, callback, arg} {}
+		explicit AbstractUATX(char (&output)[SIZE_TX]) : streams::ostreambuf{output} {}
 
 		void compute_times(uint32_t rate, StopBits stop_bits)
 		{
@@ -149,12 +146,12 @@ namespace serial::soft
 
 		streams::ostreambuf& out_()
 		{
-			return obuf_;
+			return *this;
 		}
 
 		void check_overflow(Errors& errors)
 		{
-			errors.queue_overflow = obuf_.overflow();
+			errors.queue_overflow = overflow();
 		}
 
 		template<board::DigitalPin DPIN> void write(Parity parity, uint8_t value)
@@ -164,9 +161,6 @@ namespace serial::soft
 		template<board::DigitalPin DPIN> void write_(Parity parity, uint8_t value);
 
 	private:
-		// NOTE declaring obuf_ first instead of last optimizes code size (4 bytes)
-		streams::ostreambuf obuf_;
-
 		// Various timing constants based on rate
 		uint16_t interbit_tx_time_;
 		uint16_t start_bit_tx_time_;
@@ -217,9 +211,6 @@ namespace serial::soft
 	 */
 	template<board::DigitalPin TX_> class UATX : public AbstractUATX, public UARTErrors
 	{
-	private:
-		using THIS = UATX<TX_>;
-
 	public:
 		/** The `board::DigitalPin` to which transmitted signal is sent */
 		static constexpr const board::DigitalPin TX = TX_;
@@ -230,8 +221,7 @@ namespace serial::soft
 		 * @param output an array of characters used by this transmitter to
 		 * buffer output during transmission
 		 */
-		template<uint8_t SIZE_TX> explicit UATX(char (&output)[SIZE_TX])
-		: AbstractUATX{output, THIS::on_put, this} {}
+		template<uint8_t SIZE_TX> explicit UATX(char (&output)[SIZE_TX]) : AbstractUATX{output} {}
 
 		/**
 		 * Enable the transmitter. 
@@ -247,7 +237,7 @@ namespace serial::soft
 		{
 			parity_ = parity;
 			compute_times(rate, stop_bits);
-			out_().queue().unlock();
+			queue().unlock();
 		}
 
 		/**
@@ -260,18 +250,18 @@ namespace serial::soft
 		 */
 		void end(UNUSED BufferHandling buffer_handling = BufferHandling::KEEP)
 		{
-			out_().queue().lock();
+			queue().lock();
+		}
+
+	protected:
+		void on_put()
+		{
+			check_overflow(errors());
+			char value;
+			while (queue().pull(value)) write<TX>(parity_, uint8_t(value));
 		}
 
 	private:
-		static void on_put(void* arg)
-		{
-			THIS& target = *((THIS*) arg);
-			target.check_overflow(target.errors());
-			char value;
-			while (target.out_().queue().pull(value)) target.write<TX>(target.parity_, uint8_t(value));
-		}
-
 		Parity parity_;
 		gpio::FAST_PIN<TX> tx_ = gpio::FAST_PIN<TX>{gpio::PinMode::OUTPUT, true};
 	};
@@ -483,9 +473,6 @@ namespace serial::soft
 	template<board::ExternalInterruptPin RX_, board::DigitalPin TX_>
 	class UART<board::ExternalInterruptPin, RX_, TX_> : public AbstractUARX, public AbstractUATX, public UARTErrors
 	{
-	private:
-		using THIS = UART<board::ExternalInterruptPin, RX_, TX_>;
-
 	public:
 		/** The `board::DigitalPin` to which transmitted signal is sent */
 		static constexpr const board::DigitalPin TX = TX_;
@@ -515,7 +502,7 @@ namespace serial::soft
 		 */
 		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
 		explicit UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX], INT_TYPE& enabler)
-		:	AbstractUARX{input}, AbstractUATX{output, THIS::on_put, this}, int_{enabler}
+		:	AbstractUARX{input}, AbstractUATX{output}, int_{enabler}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -554,15 +541,15 @@ namespace serial::soft
 			out_().queue().lock();
 		}
 
-	private:
-		static void on_put(void* arg)
+	protected:
+		void on_put()
 		{
-			THIS& target = *((THIS*) arg);
-			target.check_overflow(target.errors());
+			check_overflow(errors());
 			char value;
-			while (target.out_().queue().pull(value)) target.write<TX>(target.parity_, uint8_t(value));
+			while (out_().queue().pull(value)) write<TX>(parity_, uint8_t(value));
 		}
 
+	private:
 		void on_pin_change()
 		{
 			this->pin_change<RX>(parity_, errors());
@@ -662,9 +649,6 @@ namespace serial::soft
 	template<board::InterruptPin RX_, board::DigitalPin TX_>
 	class UART<board::InterruptPin, RX_, TX_> : public AbstractUARX, public AbstractUATX, public UARTErrors
 	{
-	private:
-		using THIS = UART<board::InterruptPin, RX_, TX_>;
-
 	public:
 		/** The `board::DigitalPin` to which transmitted signal is sent */
 		static constexpr const board::DigitalPin TX = TX_;
@@ -694,7 +678,7 @@ namespace serial::soft
 		 */
 		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
 		explicit UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX], PCI_TYPE& enabler)
-		:	AbstractUARX{input}, AbstractUATX{output, THIS::on_put, this}, pci_{enabler}
+		:	AbstractUARX{input}, AbstractUATX{output}, pci_{enabler}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -734,15 +718,15 @@ namespace serial::soft
 			out_().queue().lock();
 		}
 
-	private:
-		static void on_put(void* arg)
+	protected:
+		void on_put()
 		{
-			THIS& target = *((THIS*) arg);
-			target.check_overflow(target.errors());
+			check_overflow(errors());
 			char value;
-			while (target.out_().queue().pull(value)) target.write<TX>(target.parity_, uint8_t(value));
+			while (out_().queue().pull(value)) write<TX>(parity_, uint8_t(value));
 		}
 
+	private:
 		void on_pin_change()
 		{
 			this->pin_change<RX>(parity_, errors());

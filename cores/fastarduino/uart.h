@@ -160,7 +160,7 @@ namespace serial::hard
 		}
 	};
 
-	class AbstractUATX : public AbstractUART
+	class AbstractUATX : public AbstractUART, protected streams::ostreambuf
 	{
 	public:
 		/**
@@ -169,19 +169,17 @@ namespace serial::hard
 		 */
 		streams::ostream out()
 		{
-			return streams::ostream(obuf_);
+			return streams::ostream(*this);
 		}
 
 	protected:
-		using CALLBACK = streams::ostreambuf::CALLBACK;
-
 		template<uint8_t SIZE_TX> 
-		AbstractUATX(char (&output)[SIZE_TX], CALLBACK callback, void* arg)
-		: obuf_{output, callback, arg} {}
+		AbstractUATX(char (&output)[SIZE_TX]) : streams::ostreambuf{output} {}
 
+		//TODO do we really need this?
 		streams::ostreambuf& out_()
 		{
-			return obuf_;
+			return (streams::ostreambuf&) *this;
 		}
 
 		template<board::USART USART>
@@ -190,7 +188,7 @@ namespace serial::hard
 			using TRAIT = board_traits::USART_trait<USART>;
 			errors.has_errors = 0;
 			char value;
-			if (obuf_.queue().pull_(value))
+			if (queue().pull_(value))
 				TRAIT::UDR = value;
 			else
 			{
@@ -204,7 +202,7 @@ namespace serial::hard
 		void on_put(Errors& errors)
 		{
 			using TRAIT = board_traits::USART_trait<USART>;
-			errors.queue_overflow = obuf_.overflow();
+			errors.queue_overflow = overflow();
 			synchronized
 			{
 				// Check if TX is not currently active, if so, activate it
@@ -212,7 +210,7 @@ namespace serial::hard
 				{
 					// Yes, trigger TX
 					char value;
-					if (obuf_.queue().pull_(value))
+					if (queue().pull_(value))
 					{
 						// Set UDR interrupt to be notified when we can send the next character
 						TRAIT::UCSRB |= TRAIT::UDRIE_MASK;
@@ -224,7 +222,6 @@ namespace serial::hard
 		}
 
 	private:
-		streams::ostreambuf obuf_;
 		bool transmitting_ = false;
 	};
 	/// @endcond
@@ -243,11 +240,6 @@ namespace serial::hard
 		/** The hardware `board::USART` used by this UATX. */
 		static constexpr const board::USART USART = USART_;
 
-	private:
-		using THIS = UATX<USART_>;
-		using TRAIT = board_traits::USART_trait<USART>;
-
-	public:
 		/**
 		 * Construct a new hardware serial transmitter and provide it with a
 		 * buffer for interrupt-based transmission.
@@ -256,8 +248,7 @@ namespace serial::hard
 		 * blocking.
 		 * @sa REGISTER_UATX_ISR()
 		 */
-		template<uint8_t SIZE_TX> explicit UATX(char (&output)[SIZE_TX])
-		: AbstractUATX{output, THIS::on_put, this}
+		template<uint8_t SIZE_TX> explicit UATX(char (&output)[SIZE_TX]) : AbstractUATX{output}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -292,10 +283,9 @@ namespace serial::hard
 
 	private:
 		// Listeners of events on the buffer
-		static void on_put(void* arg)
+		void on_put()
 		{
-			THIS& target = *((THIS *) arg);
-			target.AbstractUATX::on_put<USART>(target.errors());
+			AbstractUATX::on_put<USART>(errors());
 		}
 
 		void data_register_empty()
@@ -358,10 +348,6 @@ namespace serial::hard
 		/** The hardware `board::USART` used by this UARX. */
 		static constexpr const board::USART USART = USART_;
 
-	private:
-		using TRAIT = board_traits::USART_trait<USART>;
-
-	public:
 		/**
 		 * Construct a new hardware serial receiver and provide it with a
 		 * buffer for interrupt-based reception.
@@ -427,11 +413,6 @@ namespace serial::hard
 		/** The hardware `board::USART` used by this UART. */
 		static constexpr const board::USART USART = USART_;
 
-	private:
-		using THIS = UART<USART_>;
-		using TRAIT = board_traits::USART_trait<USART>;
-
-	public:
 		/**
 		 * Construct a new hardware serial receiver/transceiver and provide it 
 		 * with 2 buffers, one for interrupt-based reception, one for 
@@ -447,8 +428,7 @@ namespace serial::hard
 		 * @sa REGISTER_UART_ISR()
 		 */
 		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
-		UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX]) 
-		: AbstractUARX{input}, AbstractUATX{output, THIS::on_put, this}
+		UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX]) : AbstractUARX{input}, AbstractUATX{output}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -483,10 +463,9 @@ namespace serial::hard
 
 	private:
 		// Listeners of events on the buffer
-		static void on_put(void* arg)
+		void on_put()
 		{
-			THIS& target = *((THIS*) arg);
-			target.AbstractUATX::on_put<USART>(target.errors());
+			AbstractUATX::on_put<USART>(errors());
 		}
 
 		void data_register_empty()

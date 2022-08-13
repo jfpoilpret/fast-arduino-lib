@@ -23,7 +23,6 @@
 
 #include "queue.h"
 #include "flash.h"
-#include "virtual.h"
 
 namespace streams
 {
@@ -31,16 +30,13 @@ namespace streams
 	 * Output API based on a ring buffer.
 	 * Provides general methods to push characters or strings to the buffer;
 	 * the buffer is supposed to be consumed by another class (e.g. `serial::hard::UATX`).
-	 * The API provides protected "hooks" that get notified every time new content
-	 * is successfully pushed to the buffer, or when the buffer is full while new
-	 * content addition is attempted.
+	 * The API provides a protected "hook" (`virtual on_put()`) that get notified 
+	 * every time new content is successfully pushed to the buffer, or when the 
+	 * buffer is full while new content addition is attempted.
 	 * 
 	 * @param buffer the original ring buffer containing all pushed content; once
 	 * passed to the constructor, it should never be used directly as it will be
 	 * consumed by a `containers::Queue`.
-	 * @param callback a pointer to function that is called back when data is pushed
-	 * to this `ostreambuf`.
-	 * @param arg any pointer value that will be passed to @p callback
 	 */
 	class ostreambuf : private containers::Queue<char, char>
 	{
@@ -51,11 +47,8 @@ namespace streams
 		ostreambuf(const ostreambuf&) = delete;
 		ostreambuf& operator=(const ostreambuf&) = delete;
 		
-		using CALLBACK = virtual_support::VirtualMethod::METHOD;
-
 		template<uint8_t SIZE>
-		explicit ostreambuf(char (&buffer)[SIZE], CALLBACK callback = nullptr, void* arg = nullptr)
-		: QUEUE{buffer, true}, on_put_callback_{callback, arg} {}
+		explicit ostreambuf(char (&buffer)[SIZE]) : QUEUE{buffer, true} {}
 
 		/**
 		 * Wait until all buffer content has been pulled by a consumer.
@@ -182,14 +175,11 @@ namespace streams
 			overflow_ = false;
 		}
 
-	private:
-		void on_put()
-		{
-			on_put_callback_();
-		}
+		//TODO DOC
+		virtual void on_put() {}
 
+	private:
 		bool overflow_ = false;
-		const virtual_support::VirtualMethod on_put_callback_;
 
 		friend class ios_base;
 		friend class ostream;
