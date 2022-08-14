@@ -127,6 +127,7 @@ REGISTER_RTT_ISR(2)
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 REGISTER_UATX_ISR(USART_NUM)
+REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<UART>)
 #else
 #include <fastarduino/empty_streams.h>
 #endif

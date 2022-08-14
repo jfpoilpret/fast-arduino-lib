@@ -100,7 +100,7 @@ namespace serial
 namespace serial::soft
 {
 	/// @cond notdocumented
-	class AbstractUATX : protected streams::ostreambuf
+	class AbstractUATX
 	{
 	public:
 		/**
@@ -117,7 +117,7 @@ namespace serial::soft
 		AbstractUATX& operator=(const AbstractUATX&) = delete;
 
 		template<uint8_t SIZE_TX> 
-		explicit AbstractUATX(char (&output)[SIZE_TX]) : streams::ostreambuf{output} {}
+		explicit AbstractUATX(char (&output)[SIZE_TX]) : obuf_{output} {}
 
 		void compute_times(uint32_t rate, StopBits stop_bits)
 		{
@@ -146,12 +146,12 @@ namespace serial::soft
 
 		streams::ostreambuf& out_()
 		{
-			return *this;
+			return obuf_;
 		}
 
 		void check_overflow(Errors& errors)
 		{
-			errors.queue_overflow = overflow();
+			errors.queue_overflow = obuf_.overflow();
 		}
 
 		template<board::DigitalPin DPIN> void write(Parity parity, uint8_t value)
@@ -161,6 +161,9 @@ namespace serial::soft
 		template<board::DigitalPin DPIN> void write_(Parity parity, uint8_t value);
 
 	private:
+		// NOTE declaring obuf_ first instead of last optimizes code size (4 bytes)
+		streams::ostreambuf obuf_;
+
 		// Various timing constants based on rate
 		uint16_t interbit_tx_time_;
 		uint16_t start_bit_tx_time_;
@@ -221,7 +224,10 @@ namespace serial::soft
 		 * @param output an array of characters used by this transmitter to
 		 * buffer output during transmission
 		 */
-		template<uint8_t SIZE_TX> explicit UATX(char (&output)[SIZE_TX]) : AbstractUATX{output} {}
+		template<uint8_t SIZE_TX> explicit UATX(char (&output)[SIZE_TX]) : AbstractUATX{output} 
+		{
+			interrupt::register_handler(*this);
+		}
 
 		/**
 		 * Enable the transmitter. 
@@ -237,7 +243,7 @@ namespace serial::soft
 		{
 			parity_ = parity;
 			compute_times(rate, stop_bits);
-			queue().unlock();
+			out_().queue().unlock();
 		}
 
 		/**
@@ -250,20 +256,22 @@ namespace serial::soft
 		 */
 		void end(UNUSED BufferHandling buffer_handling = BufferHandling::KEEP)
 		{
-			queue().lock();
-		}
-
-	protected:
-		void on_put()
-		{
-			check_overflow(errors());
-			char value;
-			while (queue().pull(value)) write<TX>(parity_, uint8_t(value));
+			out_().queue().lock();
 		}
 
 	private:
+		bool on_put(streams::ostreambuf& obuf)
+		{
+			if (&obuf == &out_()) return false;
+			check_overflow(errors());
+			char value;
+			while (out_().queue().pull(value)) write<TX>(parity_, uint8_t(value));
+		}
+
 		Parity parity_;
 		gpio::FAST_PIN<TX> tx_ = gpio::FAST_PIN<TX>{gpio::PinMode::OUTPUT, true};
+
+		DECL_OSTREAMBUF_LISTENERS_FRIEND
 	};
 
 	/// @cond notdocumented
@@ -414,8 +422,7 @@ namespace serial::soft
 		 * @sa REGISTER_UART_INT_ISR()
 		 */
 		template<uint8_t SIZE_RX> 
-		explicit UARX(char (&input)[SIZE_RX], INT_TYPE& enabler)
-		: AbstractUARX{input}, int_{enabler}
+		explicit UARX(char (&input)[SIZE_RX], INT_TYPE& enabler) : AbstractUARX{input}, int_{enabler}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -541,15 +548,15 @@ namespace serial::soft
 			out_().queue().lock();
 		}
 
-	protected:
-		void on_put()
+	private:
+		bool on_put(streams::ostreambuf& obuf)
 		{
+			if (&obuf == &out_()) return false;
 			check_overflow(errors());
 			char value;
 			while (out_().queue().pull(value)) write<TX>(parity_, uint8_t(value));
 		}
 
-	private:
 		void on_pin_change()
 		{
 			this->pin_change<RX>(parity_, errors());
@@ -561,7 +568,9 @@ namespace serial::soft
 		gpio::FAST_PIN<TX> tx_ = gpio::FAST_PIN<TX>{gpio::PinMode::OUTPUT, true};
 		gpio::FAST_PIN<RX> rx_ = gpio::PinMode::INPUT;
 		INT_TYPE& int_;
+
 		friend struct isr_handler;
+		DECL_OSTREAMBUF_LISTENERS_FRIEND
 	};
 
 	/** @sa UARX_PCI */
@@ -718,15 +727,15 @@ namespace serial::soft
 			out_().queue().lock();
 		}
 
-	protected:
-		void on_put()
+	private:
+		bool on_put(streams::ostreambuf& obuf)
 		{
+			if (&obuf == &out_()) return false;
 			check_overflow(errors());
 			char value;
 			while (out_().queue().pull(value)) write<TX>(parity_, uint8_t(value));
 		}
 
-	private:
 		void on_pin_change()
 		{
 			this->pin_change<RX>(parity_, errors());
@@ -738,7 +747,9 @@ namespace serial::soft
 		gpio::FAST_PIN<TX> tx_ = gpio::FAST_PIN<TX>{gpio::PinMode::OUTPUT, true};
 		gpio::FAST_PIN<RX> rx_ = gpio::PinMode::INPUT;
 		PCI_TYPE& pci_;
+
 		friend struct isr_handler;
+		DECL_OSTREAMBUF_LISTENERS_FRIEND
 	};
 
 	// Useful type aliases

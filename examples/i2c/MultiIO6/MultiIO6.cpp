@@ -48,6 +48,7 @@
 static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 REGISTER_UATX_ISR(0)
+REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<UART>)
 
 // UART for traces
 static char output_buffer[OUTPUT_BUFFER_SIZE];

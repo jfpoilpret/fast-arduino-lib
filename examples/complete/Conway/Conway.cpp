@@ -99,6 +99,7 @@ static constexpr const board::DigitalPin START_STOP = board::DigitalPin::D5_PA5;
 #if HAS_TRACE
 #include <fastarduino/uart.h>
 REGISTER_UATX_ISR(0)
+REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<board::USART::USART0>)
 // Buffers for UART
 static const uint8_t OUTPUT_BUFFER_SIZE = 128;
 static char output_buffer[OUTPUT_BUFFER_SIZE];

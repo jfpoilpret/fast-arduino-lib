@@ -82,6 +82,12 @@ REGISTER_UATX_ISR(0)
 #error "Current target is not yet supported!"
 #endif
 
+#if HARDWARE_UART
+	REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<UART>)
+#else
+	REGISTER_OSTREAMBUF_LISTENERS(serial::soft::UATX<TX>)
+#endif
+
 #define DEBUG_I2C
 
 // UART buffer for traces

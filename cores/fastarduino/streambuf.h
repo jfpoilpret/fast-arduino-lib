@@ -21,11 +21,32 @@
 #ifndef STREAMBUF_H
 #define STREAMBUF_H
 
-#include "queue.h"
 #include "flash.h"
+#include "interrupts.h"
+#include "queue.h"
+
+//TODO DOC
+#define REGISTER_OSTREAMBUF_LISTENERS(HANDLER1, ...)								\
+	void streams::ostreambuf_on_put_dispatch(ostreambuf& obuf)						\
+	{																				\
+		streams::dispatch_handler::ostreambuf_on_put<HANDLER1, ##__VA_ARGS__>(obuf);\
+	}
+
+//TODO DOC
+#define REGISTER_OSTREAMBUF_NO_LISTENERS()							\
+	void streams::ostreambuf_on_put_dispatch(ostreambuf& obuf) {}
+
+//TODO DOC
+#define DECL_OSTREAMBUF_LISTENERS_FRIEND         \
+	friend struct streams::dispatch_handler;
 
 namespace streams
 {
+	/// @cond notdocumented
+	class ostreambuf;
+	extern void ostreambuf_on_put_dispatch(ostreambuf&);
+	/// @endcond 
+
 	/**
 	 * Output API based on a ring buffer.
 	 * Provides general methods to push characters or strings to the buffer;
@@ -175,10 +196,12 @@ namespace streams
 			overflow_ = false;
 		}
 
-		//TODO DOC
-		virtual void on_put() {}
-
 	private:
+		void on_put()
+		{
+			ostreambuf_on_put_dispatch(*this);
+		}
+
 		bool overflow_ = false;
 
 		friend class ios_base;
@@ -250,6 +273,30 @@ namespace streams
 			return *this;
 		}
 	};
+
+	/// @cond notdocumented
+	struct dispatch_handler
+	{
+		template<bool DUMMY_> static bool ostreambuf_on_put_helper(ostreambuf& obuf UNUSED)
+		{
+			return false;
+		}
+
+		template<bool DUMMY_, typename HANDLER1_, typename... HANDLERS_> 
+		static bool ostreambuf_on_put_helper(ostreambuf& obuf)
+		{
+			bool result = interrupt::HandlerHolder<HANDLER1_>::handler()->on_put(obuf);
+			// handle other handlers if needed
+			return result || ostreambuf_on_put_helper<DUMMY_, HANDLERS_...>(obuf);
+		}
+
+		template<typename... HANDLERS_> static void ostreambuf_on_put(ostreambuf& obuf)
+		{
+			// Ask each registered listener tohandle obuf on_put() if concerned
+			ostreambuf_on_put_helper<false, HANDLERS_...>(obuf);
+		}
+	};
+	/// @endcond 
 }
 
 #endif /* STREAMBUF_H */

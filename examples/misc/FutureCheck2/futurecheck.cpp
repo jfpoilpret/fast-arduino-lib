@@ -35,6 +35,8 @@ REGISTER_UATX_ISR(0)
 #error "Current target is not yet supported!"
 #endif
 
+REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<USART>)
+
 using namespace future;
 using namespace lifecycle;
 using namespace streams;

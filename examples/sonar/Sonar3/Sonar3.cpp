@@ -107,6 +107,12 @@ static constexpr const board::InterruptPin ECHO = board::InterruptPin::D1_PA1_PC
 #error "Current target is not yet supported!"
 #endif
 
+#if HARDWARE_UART
+	REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<UART>)
+#else
+	REGISTER_OSTREAMBUF_LISTENERS(serial::soft::UATX<TX>)
+#endif
+
 REGISTER_HCSR04_PCI_ISR(NTIMER, PCI_NUM, TRIGGER, ECHO)
 REGISTER_RTT_ISR(TIMER_NUM)
 

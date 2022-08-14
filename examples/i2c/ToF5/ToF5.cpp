@@ -42,6 +42,7 @@ static constexpr const uint8_t INPUT_BUFFER_SIZE = 32;
 static char input_buffer[INPUT_BUFFER_SIZE];
 
 REGISTER_UART_ISR(0)
+REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UART<UART>)
 
 #if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
 using MANAGER = i2c::I2CAsyncManager<MODE, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS>;

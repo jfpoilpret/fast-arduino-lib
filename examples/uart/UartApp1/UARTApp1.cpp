@@ -46,6 +46,7 @@ static const board::USART USART = board::USART::USART1;
 REGISTER_UART_ISR(0)
 static const board::USART USART = board::USART::USART0;
 #endif
+REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UART<USART>)
 
 // Buffers for UART
 static const uint8_t INPUT_BUFFER_SIZE = 64;

@@ -42,6 +42,7 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
 REGISTER_UATX_ISR(0)
+REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<UART>)
 #elif defined (ARDUINO_LEONARDO)
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART1;
@@ -49,6 +50,7 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
 REGISTER_UATX_ISR(1)
+REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<UART>)
 #elif defined (ARDUINO_MEGA)
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART0;
@@ -56,18 +58,21 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
 REGISTER_UATX_ISR(0)
+REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<UART>)
 #elif defined (BREADBOARD_ATTINYX4)
 #include <fastarduino/soft_uart.h>
 static constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
+REGISTER_OSTREAMBUF_LISTENERS(serial::soft::UATX<TX>)
 #elif defined (BREADBOARD_ATTINYX5)
 #include <fastarduino/soft_uart.h>
 static constexpr const board::DigitalPin TX = board::DigitalPin::D1_PB1;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
+REGISTER_OSTREAMBUF_LISTENERS(serial::soft::UATX<TX>)
 #elif defined (BREADBOARD_ATMEGAXX4P)
 #include <fastarduino/uart.h>
 static constexpr const board::USART UART = board::USART::USART0;
@@ -75,6 +80,7 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_RTT_ISR(0)
 REGISTER_UATX_ISR(0)
+REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<UART>)
 #else
 #error "Current target is not yet supported!"
 #endif

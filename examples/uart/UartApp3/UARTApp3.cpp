@@ -76,6 +76,7 @@ constexpr const board::InterruptPin RX = board::InterruptPin::D0_PA0_PCI0;
 
 // Define vectors we need in the example
 REGISTER_UART_PCI_ISR(RX, TX, PCI_NUM)
+REGISTER_OSTREAMBUF_LISTENERS(serial::soft::UART_PCI<RX, TX>)
 
 // Buffers for UART
 static const uint8_t INPUT_BUFFER_SIZE = 64;

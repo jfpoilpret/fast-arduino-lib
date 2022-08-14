@@ -23,6 +23,7 @@
 #include <fastarduino/soft_uart.h>
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
+REGISTER_OSTREAMBUF_LISTENERS(serial::soft::UATX<TX>)
 #else
 #error "Current target is not yet supported!"
 #endif

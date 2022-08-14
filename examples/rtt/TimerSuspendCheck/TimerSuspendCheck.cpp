@@ -72,9 +72,11 @@ static constexpr const board::Timer NTIMER = board::Timer::TIMER1;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(UART_NUM)
+REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<UART>)
 #else
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 32;
 #include <fastarduino/soft_uart.h>
+REGISTER_OSTREAMBUF_LISTENERS(serial::soft::UATX<TX>)
 #endif
 
 // Buffers for UART

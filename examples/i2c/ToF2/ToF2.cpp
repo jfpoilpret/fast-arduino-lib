@@ -41,6 +41,7 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 128;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 REGISTER_UATX_ISR(0)
+REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<UART>)
 
 #ifdef DEBUG_I2C
 static constexpr const uint8_t DEBUG_SIZE = 96;
