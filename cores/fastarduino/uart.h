@@ -285,8 +285,9 @@ namespace serial::hard
 		// Listeners of events on the buffer
 		bool on_put(streams::ostreambuf& obuf)
 		{
-			if (&obuf == &out_()) return false;
+			if (&obuf != &out_()) return false;
 			AbstractUATX::on_put<USART>(errors());
+			return true;
 		}
 
 		void data_register_empty()
@@ -468,8 +469,9 @@ namespace serial::hard
 		// Listeners of events on the buffer
 		bool on_put(streams::ostreambuf& obuf)
 		{
-			if (&obuf == &out_()) return false;
+			if (&obuf != &out_()) return false;
 			AbstractUATX::on_put<USART>(errors());
+			return true;
 		}
 
 		void data_register_empty()

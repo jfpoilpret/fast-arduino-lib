@@ -262,10 +262,11 @@ namespace serial::soft
 	private:
 		bool on_put(streams::ostreambuf& obuf)
 		{
-			if (&obuf == &out_()) return false;
+			if (&obuf != &out_()) return false;
 			check_overflow(errors());
 			char value;
 			while (out_().queue().pull(value)) write<TX>(parity_, uint8_t(value));
+			return true;
 		}
 
 		Parity parity_;
@@ -551,10 +552,11 @@ namespace serial::soft
 	private:
 		bool on_put(streams::ostreambuf& obuf)
 		{
-			if (&obuf == &out_()) return false;
+			if (&obuf != &out_()) return false;
 			check_overflow(errors());
 			char value;
 			while (out_().queue().pull(value)) write<TX>(parity_, uint8_t(value));
+			return true;
 		}
 
 		void on_pin_change()
@@ -730,10 +732,11 @@ namespace serial::soft
 	private:
 		bool on_put(streams::ostreambuf& obuf)
 		{
-			if (&obuf == &out_()) return false;
+			if (&obuf != &out_()) return false;
 			check_overflow(errors());
 			char value;
 			while (out_().queue().pull(value)) write<TX>(parity_, uint8_t(value));
+			return true;
 		}
 
 		void on_pin_change()
