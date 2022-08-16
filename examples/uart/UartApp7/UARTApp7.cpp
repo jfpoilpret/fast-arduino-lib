@@ -57,6 +57,7 @@ int main()
 	// OK
 	// uatx.begin(115200);
 	uatx.begin(230400);
+	// uatx.begin(230400, serial::Parity::NONE, serial::StopBits::TWO);
 	// uatx.begin(230400, serial::Parity::EVEN, serial::StopBits::TWO);
 
 	// KO

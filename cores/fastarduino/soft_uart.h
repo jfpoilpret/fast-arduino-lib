@@ -119,17 +119,37 @@ namespace serial::soft
 		template<uint8_t SIZE_TX> 
 		explicit AbstractUATX(char (&output)[SIZE_TX]) : obuf_{output} {}
 
+		// WARNING!!! This computation is super touchy for high rates because it depends totally on generated code
+		// Code generation may change:
+		// - when we change optimization options (we never do it and never shall)
+		// - when we change avr-gcc version: we have to recalculate based on write_,TX>() generated code analysis
+		// Actual timing is based on number of times to count 4 cycles, because we use _delay_loop_2(), this is
+		// why all values are divided by 4
 		void compute_times(uint32_t rate, StopBits stop_bits)
 		{
 			// Calculate timing for TX in number of cycles
 			uint16_t bit_time = uint16_t(F_CPU / rate);
-			// 11 or 12 cycles + delay counted from start bit (cbi) to first bit (sbi or cbi)
-			start_bit_tx_time_ = (bit_time - 12) / 4;
-			// 11 or 12 cycles + delay counted from first bit (sbi or cbi) to second bit (sbi or cbi)
-			interbit_tx_time_ = (bit_time - 12) / 4;
-			// For stop bit we lengthten the bit duration of 25% to guarantee alignment of RX side on stop duration
-			stop_bit_tx_time_ = (bit_time / 4) * 5 / 4;
+
+			// 5 or 6 cycles + delay [counted from start bit (cbi) to first bit (sbi or cbi)]
+			// if 1st bit is 1: ldi + sbrs + cbi		=> 1 + 2 + 2		= 5
+			// if 1st bit is 0: ldi + sbrs + rjmp + sbi	=> 1 + 1 + 2 + 2	= 6
+			// => we select 5 (because it is preferrable that rounding provides higher waiting times)
+			start_bit_tx_time_ = (bit_time - 5) / 4;
+			
+			// between 8 and 11 cycles + delay counted from first bit (sbi or cbi) to second bit (sbi or cbi)
+			// part 1: if previous bit is 1: nothing			=> 0
+			// part 1: if previous bit is 0: rjmp				=> 2
+			// part 2: lsr + subi + brne						=> 1 + 1 + 2 = 4
+			// part 3: if current bit is 1: sbrs + sbi			=> 2 + 2 = 4
+			// part 3: if current bit is 0: sbrs + rjmp + cbi	=> 1 + 2 + 2 = 5
+			// => we select 9 (mid-range lowest value, because it is preferrable that rounding provides higher waiting times)
+			interbit_tx_time_ = (bit_time - 9) / 4;
+			
+			// This one is simple because waiting loop occurs immediately after sbi (stop bit set)
+			stop_bit_tx_time_ = (bit_time / 4);
 			if (stop_bits == StopBits::TWO) stop_bit_tx_time_ *= 2;
+			// For stop bit we lengthen the bit duration of 25% to guarantee alignment of RX side on stop duration
+			stop_bit_tx_time_ = (bit_time / 4) * 5 / 4;
 		}
 		
 		static Parity calculate_parity(Parity parity, uint8_t value)
