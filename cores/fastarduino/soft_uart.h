@@ -332,16 +332,21 @@ namespace serial::soft
 			// - 3 cycles to generate the PCI interrupt
 			// - 1-4 (take 2) cycles to complete current instruction
 			// - 4 cycles to process the interrupt + 2 cycles rjmp in vector table
-			// - 32 cycles spent in PCINT vector to save context and check stop bit (sbic)
-			// - 8 cycles to setup stack variables
+			// - 48 cycles spent in PCINT vector to save context and check stop bit (sbic)
+			//		17 push + 1 in + 1 eor	=> 34 + 1 + 1 = 36
+			//		2 lds + 1 ldd + 1 in + 1 mov + 1 andi + 1 sbrc => 4 + 2 + 1 + 1 + 1 + 3 = 12
+			// - 2 cycles to setup stack variables
+			//		1 std => 2
 			// - (4N) + 4 in delay
 			// - 8 cycles until first bit sample read (sbis)
-			start_bit_rx_time_ = compute_delay(3 * bit_time / 2, 3 + 2 + 4 + 2 + 32 + 8 + 4 + 8);
+			//		2 ldd + 3 ldi + 1 sbis => 4 + 3 + 1
+			start_bit_rx_time_ = compute_delay(3 * bit_time / 2, 3 + 2 + 4 + 48 + 2 + 4 + 8);
 
 			// Time to wait (_delay_loop_2) between sampling of 2 consecutive data bits
 			// This is also use between last bit and parity bit (if checked) or stop bit
 			// We have to wait exactly for `bit_time` cycles
 			// We remove processing time due to each bit sampling and data value update
+			//TODO review detail code
 			// - 10+4N cycles elapse between processing of each bit
 			interbit_rx_time_ = compute_delay(bit_time, 10);
 
