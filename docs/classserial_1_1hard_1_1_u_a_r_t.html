@@ -171,16 +171,18 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>isr_handler</b></td
 class serial::hard::UART&lt; USART_ &gt;</h3>
 
 <p>Hardware serial receiver/transceiver API. </p>
-<p>For this API to be fully functional, you must register the right ISR in your program, through <code><a class="el" href="uart_8h.html#a8bd735d1a3a5a0a8e3253fd3f1720b29" title="Register the necessary ISR (Interrupt Service Routine) for an serial::hard::UART to work correctly.">REGISTER_UART_ISR()</a></code>.</p>
+<p>For this API to be fully functional, you must register the right ISR in your program, through <code><a class="el" href="uart_8h.html#a8bd735d1a3a5a0a8e3253fd3f1720b29" title="Register the necessary ISR (Interrupt Service Routine) for an serial::hard::UART to work correctly.">REGISTER_UART_ISR()</a></code>. You must also register this class as a <code><a class="el" href="classstreams_1_1ostreambuf.html" title="Output API based on a ring buffer.">streams::ostreambuf</a></code> callback listener through <code><a class="el" href="streambuf_8h.html#a94aa054887c53435c9f96e6f5e096982" title="Register the necessary callbacks that will be notified when a streams::ostreambuf is put new content ...">REGISTER_OSTREAMBUF_LISTENERS()</a></code>.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">USART_</td><td>the hardware <code><a class="el" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907" title="Defines all USART modules of ATmega644.">board::USART</a></code> to use </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="uart_8h.html#a8bd735d1a3a5a0a8e3253fd3f1720b29" title="Register the necessary ISR (Interrupt Service Routine) for an serial::hard::UART to work correctly.">REGISTER_UART_ISR()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="uart_8h.html#a8bd735d1a3a5a0a8e3253fd3f1720b29" title="Register the necessary ISR (Interrupt Service Routine) for an serial::hard::UART to work correctly.">REGISTER_UART_ISR()</a> </dd>
+<dd>
+<a class="el" href="streambuf_8h.html#a94aa054887c53435c9f96e6f5e096982" title="Register the necessary callbacks that will be notified when a streams::ostreambuf is put new content ...">REGISTER_OSTREAMBUF_LISTENERS()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="uart_8h_source.html#l00424">424</a> of file <a class="el" href="uart_8h_source.html">uart.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="uart_8h_source.html#l00419">419</a> of file <a class="el" href="uart_8h_source.html">uart.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aa4220cac127ba38d00c8facf49ed038b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa4220cac127ba38d00c8facf49ed038b">&#9670;&nbsp;</a></span>UART()</h2>
@@ -230,7 +232,7 @@ template&lt;uint8_t SIZE_RX, uint8_t SIZE_TX&gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="uart_8h.html#a8bd735d1a3a5a0a8e3253fd3f1720b29" title="Register the necessary ISR (Interrupt Service Routine) for an serial::hard::UART to work correctly.">REGISTER_UART_ISR()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="uart_8h_source.html#l00450">450</a> of file <a class="el" href="uart_8h_source.html">uart.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="uart_8h_source.html#l00440">440</a> of file <a class="el" href="uart_8h_source.html">uart.h</a>.</p>
 
 </div>
 </div>
@@ -288,7 +290,7 @@ template&lt;board::USART USART_&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="uart_8h_source.html#l00466">466</a> of file <a class="el" href="uart_8h_source.html">uart.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="uart_8h_source.html#l00456">456</a> of file <a class="el" href="uart_8h_source.html">uart.h</a>.</p>
 
 </div>
 </div>
@@ -327,7 +329,7 @@ template&lt;board::USART USART_&gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceserial.html#a1abc2ad4df0b9d422f51f63c81d0a2d7" title="How the TX/RX buffer should be handled when ending transmission (see end() methods) on UATX/UARX.">BufferHandling</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="uart_8h_source.html#l00479">479</a> of file <a class="el" href="uart_8h_source.html">uart.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="uart_8h_source.html#l00469">469</a> of file <a class="el" href="uart_8h_source.html">uart.h</a>.</p>
 
 </div>
 </div>

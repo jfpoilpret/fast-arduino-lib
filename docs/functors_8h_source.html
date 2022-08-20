@@ -241,7 +241,7 @@ $(document).ready(function(){initNavTree('functors_8h_source.html',''); initResi
 <div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    {</div>
 <div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        <span class="keyword">using</span> ARG_TYPE = <span class="keyword">typename</span> FUNCTOR::ARG_TYPE;</div>
 <div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;        <span class="keyword">using</span> RES_TYPE = <span class="keyword">typename</span> FUNCTOR::RES_TYPE;</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        <span class="keyword">static</span> <span class="keyword">inline</span> RES_TYPE call(<span class="keyword">const</span> ARG_TYPE&amp; value)</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        <span class="keyword">static</span> RES_TYPE call(<span class="keyword">const</span> ARG_TYPE&amp; value)</div>
 <div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;        {</div>
 <div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;            <span class="keywordflow">return</span> FUNCTOR{}(value);</div>
 <div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;        }</div>

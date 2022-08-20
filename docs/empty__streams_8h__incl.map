@@ -1,22 +1,23 @@
 <map id="fastarduino/empty_streams.h" name="fastarduino/empty_streams.h">
-<area shape="rect" id="node1" title="Empty version of streams API, useful when you want to introduce traces that you can easily disable wi..." alt="" coords="166,5,381,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,304,80,331"/>
-<area shape="rect" id="node3" href="$ios_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="331,80,384,107"/>
-<area shape="rect" id="node9" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="272,379,355,405"/>
-<area shape="rect" id="node18" href="$flash_8h.html" title="Flash memory utilities." alt="" coords="613,229,680,256"/>
-<area shape="rect" id="node4" title=" " alt="" coords="541,155,609,181"/>
-<area shape="rect" id="node5" title=" " alt="" coords="227,155,298,181"/>
-<area shape="rect" id="node6" title=" " alt="" coords="322,155,393,181"/>
-<area shape="rect" id="node7" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="417,155,517,181"/>
-<area shape="rect" id="node8" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="420,229,495,256"/>
-<area shape="rect" id="node20" href="$virtual_8h.html" title="Small utilities to emulate virtual methods without extra vtabl." alt="" coords="81,229,157,256"/>
-<area shape="rect" id="node14" href="$time_8h.html" title="Simple time utilities." alt="" coords="425,304,489,331"/>
-<area shape="rect" id="node10" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="284,453,367,480"/>
-<area shape="rect" id="node11" href="$board_8h_source.html" title=" " alt="" coords="391,453,510,480"/>
-<area shape="rect" id="node13" title=" " alt="" coords="156,453,260,480"/>
-<area shape="rect" id="node12" title=" " alt="" coords="415,528,486,555"/>
-<area shape="rect" id="node15" href="$io_8h_source.html" title=" " alt="" coords="590,379,685,405"/>
-<area shape="rect" id="node17" title=" " alt="" coords="379,379,515,405"/>
-<area shape="rect" id="node16" title=" " alt="" coords="602,453,673,480"/>
-<area shape="rect" id="node19" title=" " alt="" coords="675,304,802,331"/>
+<area shape="rect" id="node1" title="Empty version of streams API, useful when you want to introduce traces that you can easily disable wi..." alt="" coords="62,5,276,32"/>
+<area shape="rect" id="node2" title=" " alt="" coords="21,155,96,181"/>
+<area shape="rect" id="node3" href="$ios_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="180,80,233,107"/>
+<area shape="rect" id="node8" href="$flash_8h.html" title="Flash memory utilities." alt="" coords="100,229,166,256"/>
+<area shape="rect" id="node15" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="542,379,625,405"/>
+<area shape="rect" id="node4" title=" " alt="" coords="266,155,334,181"/>
+<area shape="rect" id="node5" title=" " alt="" coords="482,155,552,181"/>
+<area shape="rect" id="node6" title=" " alt="" coords="171,155,242,181"/>
+<area shape="rect" id="node7" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="358,155,458,181"/>
+<area shape="rect" id="node12" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="324,229,422,256"/>
+<area shape="rect" id="node14" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="446,229,521,256"/>
+<area shape="rect" id="node9" href="$io_8h_source.html" title=" " alt="" coords="188,379,283,405"/>
+<area shape="rect" id="node11" title=" " alt="" coords="84,304,211,331"/>
+<area shape="rect" id="node10" title=" " alt="" coords="200,453,271,480"/>
+<area shape="rect" id="node13" title=" " alt="" coords="236,304,350,331"/>
+<area shape="rect" id="node20" href="$time_8h.html" title="Simple time utilities." alt="" coords="438,304,502,331"/>
+<area shape="rect" id="node16" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="662,453,745,480"/>
+<area shape="rect" id="node17" href="$board_8h_source.html" title=" " alt="" coords="519,453,638,480"/>
+<area shape="rect" id="node19" title=" " alt="" coords="769,453,873,480"/>
+<area shape="rect" id="node18" title=" " alt="" coords="494,528,564,555"/>
+<area shape="rect" id="node21" title=" " alt="" coords="308,379,444,405"/>
 </map>

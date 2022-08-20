@@ -243,7 +243,7 @@ $(document).ready(function(){initNavTree('queue_8h_source.html',''); initResizab
 <div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160; </div>
 <div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> TREF&gt; <span class="keywordtype">bool</span> <a class="code" href="classcontainers_1_1_queue.html#af165b93d21c777f07c56f13d99289234">Queue&lt;T, TREF&gt;::peek_</a>(T&amp; item)<span class="keyword"> const</span></div>
 <div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;        <span class="keywordflow">if</span> (tail_ == head_) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;        <span class="keywordflow">if</span> (empty_()) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
 <div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;        item = buffer_[head_];</div>
 <div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;    }</div>

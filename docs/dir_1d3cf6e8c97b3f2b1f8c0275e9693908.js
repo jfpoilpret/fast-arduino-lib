@@ -12,6 +12,7 @@ var dir_1d3cf6e8c97b3f2b1f8c0275e9693908 =
     [ "array.h", "array_8h_source.html", null ],
     [ "bits.h", "bits_8h.html", "bits_8h" ],
     [ "defines.h", "defines_8h.html", "defines_8h" ],
+    [ "dynamic_allocation.cpp", "dynamic__allocation_8cpp_source.html", null ],
     [ "eeprom.h", "eeprom_8h.html", "eeprom_8h" ],
     [ "empty_streams.h", "empty__streams_8h.html", [
       [ "null_ostream", "classstreams_1_1null__ostream.html", null ]
@@ -81,10 +82,7 @@ var dir_1d3cf6e8c97b3f2b1f8c0275e9693908 =
     [ "square_wave.h", "square__wave_8h.html", [
       [ "SquareWave", "classtimer_1_1_square_wave.html", "classtimer_1_1_square_wave" ]
     ] ],
-    [ "streambuf.h", "streambuf_8h.html", [
-      [ "ostreambuf", "classstreams_1_1ostreambuf.html", "classstreams_1_1ostreambuf" ],
-      [ "istreambuf", "classstreams_1_1istreambuf.html", "classstreams_1_1istreambuf" ]
-    ] ],
+    [ "streambuf.h", "streambuf_8h.html", "streambuf_8h" ],
     [ "streams.cpp", "streams_8cpp_source.html", null ],
     [ "streams.h", "streams_8h.html", "streams_8h" ],
     [ "time.cpp", "time_8cpp_source.html", null ],

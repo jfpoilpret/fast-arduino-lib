@@ -263,7 +263,7 @@ $(document).ready(function(){initNavTree('utilities_8h_source.html',''); initRes
 <div class="line"><a name="l00417"></a><span class="lineno"><a class="line" href="namespaceutils.html#ad646807311bd7bcd02d6af12e3b51934">  417</a></span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="namespaceutils.html#a53f4a46843c0030ed1388d10c0ad6179">swap_bytes</a>(uint64_t&amp; value)</div>
 <div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;    {</div>
 <div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;        uint32_t value1 = uint32_t(value &gt;&gt; 32);</div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;        uint32_t value2 = uint32_t(value &amp; 0xFFFFFFFFUL);</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;        uint32_t value2 = uint32_t(value &amp; 0xFFFF&#39;FFFFUL);</div>
 <div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;        <a class="code" href="namespaceutils.html#a53f4a46843c0030ed1388d10c0ad6179">swap_bytes</a>(value1);</div>
 <div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;        <a class="code" href="namespaceutils.html#a53f4a46843c0030ed1388d10c0ad6179">swap_bytes</a>(value2);</div>
 <div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;        value = uint64_t(value1) | (uint64_t(value2) &lt;&lt; 32);</div>

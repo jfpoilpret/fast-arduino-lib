@@ -450,7 +450,7 @@ $(document).ready(function(){initNavTree('eeprom_8h_source.html',''); initResiza
 <div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160; </div>
 <div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;        <span class="keywordtype">void</span> write_next()</div>
 <div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;        {</div>
-<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;            uint8_t value;</div>
+<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;            uint8_t value = 0;</div>
 <div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;            buffer_.<a class="code" href="classcontainers_1_1_queue.html#a572b2ba5883b2d1fb6cce68cbabb417f">pull_</a>(value);</div>
 <div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;            EEPROM::write_byte(current_.address++, value);</div>
 <div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;            --current_.size;</div>
@@ -506,11 +506,11 @@ $(document).ready(function(){initNavTree('eeprom_8h_source.html',''); initResiza
 <div class="line"><a name="l00818"></a><span class="lineno">  818</span>&#160; </div>
 <div class="line"><a name="l00819"></a><span class="lineno">  819</span>&#160;        WriteItem next_item()</div>
 <div class="line"><a name="l00820"></a><span class="lineno">  820</span>&#160;        {</div>
-<div class="line"><a name="l00821"></a><span class="lineno">  821</span>&#160;            uint8_t value1;</div>
+<div class="line"><a name="l00821"></a><span class="lineno">  821</span>&#160;            uint8_t value1 = 0;</div>
 <div class="line"><a name="l00822"></a><span class="lineno">  822</span>&#160;            buffer_.<a class="code" href="classcontainers_1_1_queue.html#a572b2ba5883b2d1fb6cce68cbabb417f">pull_</a>(value1);</div>
-<div class="line"><a name="l00823"></a><span class="lineno">  823</span>&#160;            uint8_t value2;</div>
+<div class="line"><a name="l00823"></a><span class="lineno">  823</span>&#160;            uint8_t value2 = 0;</div>
 <div class="line"><a name="l00824"></a><span class="lineno">  824</span>&#160;            buffer_.<a class="code" href="classcontainers_1_1_queue.html#a572b2ba5883b2d1fb6cce68cbabb417f">pull_</a>(value2);</div>
-<div class="line"><a name="l00825"></a><span class="lineno">  825</span>&#160;            uint8_t value3;</div>
+<div class="line"><a name="l00825"></a><span class="lineno">  825</span>&#160;            uint8_t value3 = 0;</div>
 <div class="line"><a name="l00826"></a><span class="lineno">  826</span>&#160;            buffer_.<a class="code" href="classcontainers_1_1_queue.html#a572b2ba5883b2d1fb6cce68cbabb417f">pull_</a>(value3);</div>
 <div class="line"><a name="l00827"></a><span class="lineno">  827</span>&#160;            <span class="keywordflow">return</span> WriteItem{value1, value2, value3};</div>
 <div class="line"><a name="l00828"></a><span class="lineno">  828</span>&#160;        }</div>

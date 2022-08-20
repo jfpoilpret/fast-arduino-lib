@@ -78,8 +78,8 @@ var NAVTREEINDEX =
 "namespacedevices_1_1magneto.html#a73e5a83c3a0209228c48c115f21c01bc",
 "namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041a50a87f0d71f7221582dad4bf507a0f34",
 "namespaceutils.html#a983d6f3839652d22e2353e7cfeff63af",
-"timer_8h.html#a1dec37d0ac500f2d0dfc9b50fcf6e71f",
-"vl53l0x__types_8h.html#a9dd5b65f54eecca7c3cef80254c553d8a71ce24013b32fe18cc65dbcc1cd0808e"
+"timer_8h.html#a17d2af2848409a47612cd961ea27b5a0a5b9d80a04f3ec2025977abad33e94e61",
+"vl53l0x__types_8h.html#a9dd5b65f54eecca7c3cef80254c553d8"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
