@@ -141,9 +141,11 @@ As usual, at first we need to include the proper header (`uart.h`) to use its AP
 
 Then, we define a buffer that will be used by the `UART` API to transmit characters to your PC through USB. You may find it cumbersome to do it yourself but it brings a huge advantage: you are the one to decide of the buffer size, whereas in Arduino API, you have no choice. Here, we consider 64 bits to be big enough to store characters that will be transmitted to the PC. How `UART` is using this buffer is not important to you though.
 
-Then we *register an ISR* necessary for transmissions to take place; this is done by the `REGISTER_UATX_ISR(0)` macro. Explicit ISR registration is one important design choice of FastArduino: **you** decide which ISR should be registered to do what. This may again seem cumbersome but once again this gives you the benefit to decie what you need, hence build your application the way you want it.
+Then we *register an ISR* necessary for transmissions to take place; this is done by the `REGISTER_UATX_ISR(0)` macro. Explicit ISR registration is one important design choice of FastArduino: **you** decide which ISR should be registered to do what. This may again seem cumbersome but once again this gives you the benefit to decide what you need, hence build your application the way you want it.
 
-The code that follows instantiates a `uart::hard::UATX` object that is using `board::USART::USART0` (the only one available on UNO) and based on the previously created buffer. Note that `UATX` class is in charge of **only** transmitting characters, not receiving. Other classes exist for only receiving (`UARX`), or for doing both (`UART`).
+In addition, we register `UATX<board::USART::USART0>` class, which we instantiate at the beginning of `main()`, to be notified whenever some content is inserted into `uart.out()`; this is done with the `REGISTER_OSTREAMBUF_LISTENERS()` macro. If you forget it, building your program will fail at link time.
+
+The code that follows instantiates a `serial::hard::UATX` object that is using `board::USART::USART0` (the only one available on UNO) and based on the previously created buffer. Note that `UATX` class is in charge of **only** transmitting characters, not receiving. Other classes exist for only receiving (`UARX`), or for doing both (`UART`).
 
 Once created, we can set `uart` ready for transmission, at serial speed of 115200 bps.
 
@@ -602,33 +604,36 @@ All FastArduino API respects some guidelines for naming ISR registration macros.
 Here is a table showing all FastArduino macros to register ISR (*Name* is to be replaced in macro name `REGISTER_NAME_ISR`, `REGISTER_NAME_ISR_EMPTY`, `REGISTER_NAME_ISR_CALLBACK` or `REGISTER_NAME_ISR_FUNCTION`):
 | Header                | Name                      | Flavours | Comments                                                           |
 |-----------------------|---------------------------|----------|--------------------------------------------------------------------|
-| `analog_comparator.h` | `ANALOG_COMPARE`          | 2,3,4    | Called upon Analog Comparator interrupt.                           |
-| `eeprom.h`            | `EEPROM`                  | 1,3,4    | Called when asynchronous EEPROM write is finished.                 |
-| `int.h`               | `INT`                     | 2,3,4    | Called when an INT pin changes level.                              |
-| `pci.h`               | `PCI`                     | 2,3,4    | Called when a PCINT pin changes level.                             |
-| `pulse_timer.h`       | `PULSE_TIMER8_A`          | 1        | Called when a PulseTimer8 overflows or equals OCRA.                |
-| `pulse_timer.h`       | `PULSE_TIMER8_B`          | 1        | Called when a PulseTimer8 overflows or equals OCRB.                |
-| `pulse_timer.h`       | `PULSE_TIMER8_AB`         | 1        | Called when a PulseTimer8 overflows or equals OCRA or OCRB.        |
-| `realtime_timer.h`    | `RTT`                     | 1,3,4    | Called when RTT timer has one more millisecond elapsed.            |
-| `realtime_timer.h`    | `RTT_EVENT`               | 1        | Same as above, and trigger RTTEventCallback.                       |
-| `soft_uart.h`         | `UART_PCI`                | 1        | Called when a start bit is received on a PCINT pin linked to UATX. |
-| `soft_uart.h`         | `UART_INT`                | 1        | Called when a start bit is received on an INT pin linked to UATX.  |
-| `timer.h`             | `COMPARE`                 | 2,3,4    | Called when a Timer counter reaches OCRA.                          |
-| `timer.h`             | `OVERFLOW`                | 2,3,4    | Called when a Timer counter overflows.                             |
-| `timer.h`             | `CAPTURE`                 | 2,3,4    | Called when a Timer counter gets captured (when ICP level changes).|
-| `uart.h`              | `UATX`                    | 1        | Called when one character is finished transmitted on UATX.         |
-| `uart.h`              | `UARX`                    | 1        | Called when one character is finished received on UARX.            |
-| `uart.h`              | `UART`                    | 1        | Called when one character is finished transmitted/received on UART.|
-| `watchdog.h`          | `WATCHDOG_CLOCK`          | 1        | Called when Watchdog timeout occurs, and clock must be updated.    |
-| `watchdog.h`          | `WATCHDOG_RTT`            | 1        | Called when Watchdog timeout occurs, and RTT clock must be updated.|
-| `watchdog.h`          | `WATCHDOG`                | 2,3,4    | Called when WatchdogSignal timeout occurs.                         |
-| `i2c_handler_atmega.h`| `I2C`                     | 1,3,4    | Called when I2C status changes (ATmega only).                      |
-| `devices/sonar.h`     | `HCSR04_INT`              | 1,3,4    | Called when HCSR04 echo INT pin changes level.                     |
-| `devices/sonar.h`     | `HCSR04_PCI`              | 1,3,4    | Called when HCSR04 echo PCINT pin changes level.                   |
-| `devices/sonar.h`     | `HCSR04_RTT_TIMEOUT`      | 1,3,4    | Called when HCSR04 RTT times out (without any echo).               |
-| `devices/sonar.h`     | `DISTINCT_HCSR04_PCI`     | 1        | Called when HCSR04 any echo PCINT pin changes level.               |
-| `devices/sonar.h`     | `MULTI_HCSR04_PCI`        | 3,4      | Called when MultiHCSR04 any echo PCINT pin changes level.          |
-| `devices/sonar.h`     | `MULTI_HCSR04_RTT_TIMEOUT`| 1,3,4    | Called when MultiHCSR04 RTT times out (without any echo).          |
+| `analog_comparator.h` | `ANALOG_COMPARE`                  | 2,3,4    | Called upon Analog Comparator interrupt.                           |
+| `eeprom.h`            | `EEPROM`                          | 1,3,4    | Called when asynchronous EEPROM write is finished.                 |
+| `int.h`               | `INT`                             | 2,3,4    | Called when an INT pin changes level.                              |
+| `pci.h`               | `PCI`                             | 2,3,4    | Called when a PCINT pin changes level.                             |
+| `pulse_timer.h`       | `PULSE_TIMER8_A`                  | 1        | Called when a PulseTimer8 overflows or equals OCRA.                |
+| `pulse_timer.h`       | `PULSE_TIMER8_B`                  | 1        | Called when a PulseTimer8 overflows or equals OCRB.                |
+| `pulse_timer.h`       | `PULSE_TIMER8_AB`                 | 1        | Called when a PulseTimer8 overflows or equals OCRA or OCRB.        |
+| `realtime_timer.h`    | `RTT`                             | 1,3,4    | Called when RTT timer has one more millisecond elapsed.            |
+| `realtime_timer.h`    | `RTT_EVENT`                       | 1        | Same as above, and trigger RTTEventCallback.                       |
+| `soft_uart.h`         | `UARX_PCI`                        | 1        | Called when a start bit is received on a PCINT pin linked to UARX. |
+| `soft_uart.h`         | `UARX_INT`                        | 1        | Called when a start bit is received on an INT pin linked to UARX.  |
+| `soft_uart.h`         | `UART_PCI`                        | 1        | Called when a start bit is received on a PCINT pin linked to UATX. |
+| `soft_uart.h`         | `UART_INT`                        | 1        | Called when a start bit is received on an INT pin linked to UATX.  |
+| `timer.h`             | `COMPARE`                         | 2,3,4    | Called when a Timer counter reaches OCRA.                          |
+| `timer.h`             | `OVERFLOW`                        | 2,3,4    | Called when a Timer counter overflows.                             |
+| `timer.h`             | `CAPTURE`                         | 2,3,4    | Called when a Timer counter gets captured (when ICP level changes).|
+| `uart.h`              | `UATX`                            | 1        | Called when one character is finished transmitted on UATX.         |
+| `uart.h`              | `UARX`                            | 1        | Called when one character is finished received on UARX.            |
+| `uart.h`              | `UART`                            | 1        | Called when one character is finished transmitted/received on UART.|
+| `watchdog.h`          | `WATCHDOG_CLOCK`                  | 1        | Called when Watchdog timeout occurs, and clock must be updated.    |
+| `watchdog.h`          | `WATCHDOG_RTT`                    | 1        | Called when Watchdog timeout occurs, and RTT clock must be updated.|
+| `watchdog.h`          | `WATCHDOG`                        | 2,3,4    | Called when WatchdogSignal timeout occurs.                         |
+| `i2c_handler_atmega.h`| `I2C`                             | 1,3,4    | Called when I2C status changes (ATmega only).                      |
+| `devices/sonar.h`     | `HCSR04_INT`                      | 1,3,4    | Called when HCSR04 echo INT pin changes level.                     |
+| `devices/sonar.h`     | `HCSR04_PCI`                      | 1,3,4    | Called when HCSR04 echo PCINT pin changes level.                   |
+| `devices/sonar.h`     | `HCSR04_RTT_TIMEOUT`              | 1,3,4    | Called when HCSR04 RTT times out (without any echo).               |
+| `devices/sonar.h`     | `DISTINCT_HCSR04_PCI`             | 1        | Called when HCSR04 any echo PCINT pin changes level.               |
+| `devices/sonar.h`     | `MULTI_HCSR04_PCI`                | 3,4      | Called when MultiHCSR04 any echo PCINT pin changes level.          |
+| `devices/sonar.h`     | `MULTI_HCSR04_RTT_TIMEOUT`        | 1,3,4    | Called when MultiHCSR04 RTT times out or at every 1ms tick.        |
+| `devices/sonar.h`     | `MULTI_HCSR04_RTT_TIMEOUT_TRIGGER`| 3,4      | Called when MultiHCSR04 RTT times out or at every 1ms tick.        |
 
 For further details on ISR registration in FastArduino, you can check [`interrutps.h` API](interrupts_8h.html) for the general approach, and each individual API documentation for specific interrupts.
 
@@ -1231,6 +1236,8 @@ where one would need more UART ports than available.
 It is important to note that it is not possible, with software UART, to reach bitrates as high
 as with hardware UART.
 
+### Software UATX
+
 Here a simple example using software UATX for output through USB on an Arduino UNO:
 
 @includelineno fastarduino/softuart_1_ostream.cpp
@@ -1243,6 +1250,8 @@ The main difference is in `serial::soft::UATX<TX> uart{output_buffer};` where `T
 
 Besides, the same operations as for `serial::hard::UATX` are available, in particular output
 streams work the same with `serial::soft::UATX`.
+
+### Software UARX
 
 There are also two classes, `serial::soft::UARX_EXT` and `serial::soft::UARX_PCI`, that work similarly as `serial::hard::UARX`:
 
@@ -1257,6 +1266,8 @@ pin `RX` changes
 3. the `uarx` variable must be defined as a `serial::soft::UARX_PCI` if it is connected to an `board::InterruptPin` or a `serial::soft::UARX_EXT` if it is connected to an `board::ExternalInterruptPin`
 4. an interrupt handler must be setup (either `interrupt::PCISignal` or 
 `interrupt::INTSignal`), passed to the constructor then enabled
+
+### Software UART
 
 Finally, there are also two classes, `serial::soft::UART_PCI` and `serial::soft::UART_EXT`, that combine `serial::soft::UATX`
 and `serial::soft::UARX_PCI` or `serial::soft::UARX_EXT`, and work similarly as `serial::hard::UART`.
