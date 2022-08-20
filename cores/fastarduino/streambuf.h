@@ -25,18 +25,51 @@
 #include "interrupts.h"
 #include "queue.h"
 
-//TODO DOC
+/**
+ * Register the necessary callbacks that will be notified when a `streams::ostreambuf`
+ * is put new content (character or string). This is used by hardware and software
+ * UATX and UART.
+ * 
+ * Each handler registered here will be notified until one mentions it has handled
+ * the notification.
+ * 
+ * @warning this macro must be called only once, with all interested handlers classes;
+ * calling it more than once will lead to errors at link time.
+ * @note you do not need to call this macro if you do not use streams::ostreambuf
+ * in your program.
+ * 
+ * @param HANDLER1 a class which registered instance will be notified, through its
+ * `bool on_put(streams::ostreambuf&)` method when any ostreambuffer has new content
+ * put into it.
+ * @param ... other classes similar to HANDLER1.
+ * 
+ * @sa REGISTER_OSTREAMBUF_NO_LISTENERS()
+ * @sa interrupt::register_handler
+ */
 #define REGISTER_OSTREAMBUF_LISTENERS(HANDLER1, ...)								\
 	void streams::ostreambuf_on_put_dispatch(ostreambuf& obuf)						\
 	{																				\
 		streams::dispatch_handler::ostreambuf_on_put<HANDLER1, ##__VA_ARGS__>(obuf);\
 	}
 
-//TODO DOC
+/**
+ * Register no callback at all to `streams::ostreambuf`.
+ * You normally do not need this macro, except if you:
+ * - use streams::ostreambuf
+ * - but you do not use UATX, or UART
+ * - you do not need to be called back when content is put to your ostreambuf instances
+ * 
+ * @sa REGISTER_OSTREAMBUF_LISTENERS()
+ */
 #define REGISTER_OSTREAMBUF_NO_LISTENERS()							\
 	void streams::ostreambuf_on_put_dispatch(ostreambuf& obuf) {}
 
-//TODO DOC
+/**
+ * This macro shall be used in a class containing a private callback method
+ * `bool on_put(streams::ostreambuf&)`, registered by `REGISTER_OSTREAMBUF_LISTENERS`.
+ * It declares the class where it is used as a friend of all necessary functions
+ * so that the private callback method can be called properly.
+ */
 #define DECL_OSTREAMBUF_LISTENERS_FRIEND         \
 	friend struct streams::dispatch_handler;
 

@@ -230,9 +230,12 @@ namespace serial::hard
 	 * Hardware serial transmitter API.
 	 * For this API to be fully functional, you must register the right ISR in your
 	 * program, through `REGISTER_UATX_ISR()`.
+	 * You must also register this class as a `streams::ostreambuf` callback listener
+	 * through `REGISTER_OSTREAMBUF_LISTENERS()`.
 	 * 
 	 * @tparam USART_ the hardware `board::USART` to use
 	 * @sa REGISTER_UATX_ISR()
+	 * @sa REGISTER_OSTREAMBUF_LISTENERS()
 	 */
 	template<board::USART USART_> class UATX : public AbstractUATX, public UARTErrors
 	{
@@ -406,9 +409,12 @@ namespace serial::hard
 	 * Hardware serial receiver/transceiver API.
 	 * For this API to be fully functional, you must register the right ISR in your
 	 * program, through `REGISTER_UART_ISR()`.
+	 * You must also register this class as a `streams::ostreambuf` callback listener
+	 * through `REGISTER_OSTREAMBUF_LISTENERS()`.
 	 * 
 	 * @tparam USART_ the hardware `board::USART` to use
 	 * @sa REGISTER_UART_ISR()
+	 * @sa REGISTER_OSTREAMBUF_LISTENERS()
 	 */
 	template<board::USART USART_> class UART : public AbstractUARX, public AbstractUATX, public UARTErrors
 	{

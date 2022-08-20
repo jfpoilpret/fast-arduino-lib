@@ -226,11 +226,14 @@ namespace serial::soft
 
 	/**
 	 * Software-emulated serial transmitter API.
+	 * For this API to be fully functional, you must register this class as a 
+	 * `streams::ostreambuf` callback listener through `REGISTER_OSTREAMBUF_LISTENERS()`.
 	 * 
 	 * @tparam TX_ the `board::DigitalPin` to which transmitted signal is sent
 	 * 
 	 * @sa UARX
 	 * @sa UART
+	 * @sa REGISTER_OSTREAMBUF_LISTENERS()
 	 */
 	template<board::DigitalPin TX_> class UATX : public AbstractUATX, public UARTErrors
 	{
@@ -346,7 +349,6 @@ namespace serial::soft
 			// This is also use between last bit and parity bit (if checked) or stop bit
 			// We have to wait exactly for `bit_time` cycles
 			// We remove processing time due to each bit sampling and data value update
-			//TODO review detail code
 			// - 10+4N cycles elapse between processing of each bit
 			interbit_rx_time_ = compute_delay(bit_time, 10);
 
@@ -815,11 +817,14 @@ namespace serial::soft
 	 * Software-emulated serial receiver/transceiver API.
 	 * For this API to be fully functional, you must register the right ISR in your
 	 * program, through `REGISTER_UART_INT_ISR()`.
+	 * You must also register this class as a `streams::ostreambuf` callback 
+	 * listener through `REGISTER_OSTREAMBUF_LISTENERS()`.
 	 * 
 	 * @tparam RX_ the `board::ExternalInterruptPin` which shall receive serial signal
 	 * @tparam TX_ the `board::DigitalPin` to which transmitted signal is sent
 	 * 
 	 * @sa REGISTER_UART_INT_ISR()
+	 * @sa REGISTER_OSTREAMBUF_LISTENERS()
 	 * @sa UART
 	 * @sa UATX
 	 * @sa UARX
@@ -831,11 +836,14 @@ namespace serial::soft
 	 * Software-emulated serial receiver/transceiver API.
 	 * For this API to be fully functional, you must register the right ISR in your
 	 * program, through `REGISTER_UART_PCI_ISR()`.
+	 * You must also register this class as a `streams::ostreambuf` callback 
+	 * listener through `REGISTER_OSTREAMBUF_LISTENERS()`.
 	 * 
 	 * @tparam RX_ the `board::InterruptPin` which shall receive serial signal
 	 * @tparam TX_ the `board::DigitalPin` to which transmitted signal is sent
 	 * 
 	 * @sa REGISTER_UART_PCI_ISR()
+	 * @sa REGISTER_OSTREAMBUF_LISTENERS()
 	 * @sa UART
 	 * @sa UATX
 	 * @sa UARX
