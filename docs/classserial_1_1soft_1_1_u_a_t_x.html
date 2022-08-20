@@ -162,6 +162,7 @@ static constexpr const <a class="el" href="namespaceboard.html#a5082846fef8fdfb8
 class serial::soft::UATX&lt; TX_ &gt;</h3>
 
 <p>Software-emulated serial transmitter API. </p>
+<p>For this API to be fully functional, you must register this class as a <code><a class="el" href="classstreams_1_1ostreambuf.html" title="Output API based on a ring buffer.">streams::ostreambuf</a></code> callback listener through <code><a class="el" href="streambuf_8h.html#a94aa054887c53435c9f96e6f5e096982" title="Register the necessary callbacks that will be notified when a streams::ostreambuf is put new content ...">REGISTER_OSTREAMBUF_LISTENERS()</a></code>.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">TX_</td><td>the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of ATmega644, with reference to Arduino MEGA pins.">board::DigitalPin</a></code> to which transmitted signal is sent</td></tr>
@@ -170,9 +171,11 @@ class serial::soft::UATX&lt; TX_ &gt;</h3>
 </dl>
 <dl class="section see"><dt>See also</dt><dd>UARX </dd>
 <dd>
-UART </dd></dl>
+UART </dd>
+<dd>
+<a class="el" href="streambuf_8h.html#a94aa054887c53435c9f96e6f5e096982" title="Register the necessary callbacks that will be notified when a streams::ostreambuf is put new content ...">REGISTER_OSTREAMBUF_LISTENERS()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00218">218</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00238">238</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ab823008e711802840b92fe2c1339f6b3"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab823008e711802840b92fe2c1339f6b3">&#9670;&nbsp;</a></span>UATX()</h2>
@@ -210,7 +213,7 @@ template&lt;uint8_t SIZE_TX&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00233">233</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00250">250</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
 
 </div>
 </div>
@@ -268,7 +271,7 @@ template&lt;board::DigitalPin TX_&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00246">246</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00265">265</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
 
 </div>
 </div>
@@ -306,7 +309,7 @@ template&lt;board::DigitalPin TX_&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00261">261</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00280">280</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
 
 </div>
 </div>

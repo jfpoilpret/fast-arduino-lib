@@ -36,10 +36,12 @@ static constexpr const board::USART UART = board::USART::USART0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 128;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
+REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<UART>)
 #elif defined (BREADBOARD_ATTINYX4)
 #include <fastarduino/soft_uart.h>
 static constexpr const board::DigitalPin TX = board::DigitalPin::D8_PB0;
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
+REGISTER_OSTREAMBUF_LISTENERS(serial::soft::UATX<TX>)
 #else
 #error "Current target is not yet supported!"
 #endif

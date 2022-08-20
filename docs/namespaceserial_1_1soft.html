@@ -161,7 +161,7 @@ UARX </dd>
 <dd>
 UART </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00775">775</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00800">800</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
 
 </div>
 </div>
@@ -195,7 +195,7 @@ UARX </dd>
 <dd>
 UART </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00789">789</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00814">814</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
 
 </div>
 </div>
@@ -214,7 +214,7 @@ template&lt;board::ExternalInterruptPin RX_, board::DigitalPin TX_&gt; </div>
 </div><div class="memdoc">
 
 <p>Software-emulated serial receiver/transceiver API. </p>
-<p>For this API to be fully functional, you must register the right ISR in your program, through <code><a class="el" href="soft__uart_8h.html#a37329d53aca2f510c370d3721dcae2e7" title="Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UART to work correctly.">REGISTER_UART_INT_ISR()</a></code>.</p>
+<p>For this API to be fully functional, you must register the right ISR in your program, through <code><a class="el" href="soft__uart_8h.html#a37329d53aca2f510c370d3721dcae2e7" title="Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UART to work correctly.">REGISTER_UART_INT_ISR()</a></code>. You must also register this class as a <code><a class="el" href="classstreams_1_1ostreambuf.html" title="Output API based on a ring buffer.">streams::ostreambuf</a></code> callback listener through <code><a class="el" href="streambuf_8h.html#a94aa054887c53435c9f96e6f5e096982" title="Register the necessary callbacks that will be notified when a streams::ostreambuf is put new content ...">REGISTER_OSTREAMBUF_LISTENERS()</a></code>.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">RX_</td><td>the <code><a class="el" href="namespaceboard.html#adea66670db50b076b2c145657aa587f7" title="Defines all digital output pins of ATmega644, usable as direct external interrupt pins.">board::ExternalInterruptPin</a></code> which shall receive serial signal </td></tr>
@@ -224,13 +224,15 @@ template&lt;board::ExternalInterruptPin RX_, board::DigitalPin TX_&gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="soft__uart_8h.html#a37329d53aca2f510c370d3721dcae2e7" title="Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UART to work correctly.">REGISTER_UART_INT_ISR()</a> </dd>
 <dd>
+<a class="el" href="streambuf_8h.html#a94aa054887c53435c9f96e6f5e096982" title="Register the necessary callbacks that will be notified when a streams::ostreambuf is put new content ...">REGISTER_OSTREAMBUF_LISTENERS()</a> </dd>
+<dd>
 UART </dd>
 <dd>
 <a class="el" href="classserial_1_1soft_1_1_u_a_t_x.html" title="Software-emulated serial transmitter API.">UATX</a> </dd>
 <dd>
 UARX </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00805">805</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00833">833</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
 
 </div>
 </div>
@@ -249,7 +251,7 @@ template&lt;board::InterruptPin RX_, board::DigitalPin TX_&gt; </div>
 </div><div class="memdoc">
 
 <p>Software-emulated serial receiver/transceiver API. </p>
-<p>For this API to be fully functional, you must register the right ISR in your program, through <code><a class="el" href="soft__uart_8h.html#a410a4fbebe6a07a6564ea15a4a9fe82b" title="Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UART to work correctly.">REGISTER_UART_PCI_ISR()</a></code>.</p>
+<p>For this API to be fully functional, you must register the right ISR in your program, through <code><a class="el" href="soft__uart_8h.html#a410a4fbebe6a07a6564ea15a4a9fe82b" title="Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UART to work correctly.">REGISTER_UART_PCI_ISR()</a></code>. You must also register this class as a <code><a class="el" href="classstreams_1_1ostreambuf.html" title="Output API based on a ring buffer.">streams::ostreambuf</a></code> callback listener through <code><a class="el" href="streambuf_8h.html#a94aa054887c53435c9f96e6f5e096982" title="Register the necessary callbacks that will be notified when a streams::ostreambuf is put new content ...">REGISTER_OSTREAMBUF_LISTENERS()</a></code>.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">RX_</td><td>the <code><a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da" title="Defines all digital output pins of ATmega644, usable as pin change interrupt (PCI) pins.">board::InterruptPin</a></code> which shall receive serial signal </td></tr>
@@ -259,13 +261,15 @@ template&lt;board::InterruptPin RX_, board::DigitalPin TX_&gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="soft__uart_8h.html#a410a4fbebe6a07a6564ea15a4a9fe82b" title="Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UART to work correctly.">REGISTER_UART_PCI_ISR()</a> </dd>
 <dd>
+<a class="el" href="streambuf_8h.html#a94aa054887c53435c9f96e6f5e096982" title="Register the necessary callbacks that will be notified when a streams::ostreambuf is put new content ...">REGISTER_OSTREAMBUF_LISTENERS()</a> </dd>
+<dd>
 UART </dd>
 <dd>
 <a class="el" href="classserial_1_1soft_1_1_u_a_t_x.html" title="Software-emulated serial transmitter API.">UATX</a> </dd>
 <dd>
 UARX </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00821">821</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="soft__uart_8h_source.html#l00852">852</a> of file <a class="el" href="soft__uart_8h_source.html">soft_uart.h</a>.</p>
 
 </div>
 </div>

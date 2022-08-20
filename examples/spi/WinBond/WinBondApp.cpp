@@ -53,6 +53,7 @@ constexpr const size_t DATA_SIZE = 256;
 // Define vectors we need in the example
 constexpr const board::USART UART = board::USART::USART0;
 REGISTER_UATX_ISR(0)
+REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<UART>)
 #elif defined(ARDUINO_LEONARDO)
 #include <fastarduino/uart.h>
 constexpr const board::DigitalPin CS = board::DigitalPin::D7_PE6;
@@ -61,6 +62,7 @@ constexpr const size_t DATA_SIZE = 256;
 // Define vectors we need in the example
 constexpr const board::USART UART = board::USART::USART1;
 REGISTER_UATX_ISR(1)
+REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<UART>)
 #elif defined (ARDUINO_MEGA)
 #include <fastarduino/uart.h>
 constexpr const board::DigitalPin CS = board::DigitalPin::D7_PH4;
@@ -69,18 +71,21 @@ constexpr const size_t DATA_SIZE = 256;
 // Define vectors we need in the example
 constexpr const board::USART UART = board::USART::USART0;
 REGISTER_UATX_ISR(0)
+REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<UART>)
 #elif defined (BREADBOARD_ATTINYX4)
 #include <fastarduino/soft_uart.h>
 constexpr const board::DigitalPin TX = board::DigitalPin::D1_PA1;
 constexpr const board::DigitalPin CS = board::DigitalPin::D7_PA7;
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 constexpr const size_t DATA_SIZE = 128;
+REGISTER_OSTREAMBUF_LISTENERS(serial::soft::UATX<TX>)
 #elif defined (BREADBOARD_ATTINYX5)
 #include <fastarduino/soft_uart.h>
 constexpr const board::DigitalPin CS = board::DigitalPin::D3_PB3;
 constexpr const board::DigitalPin TX = board::DigitalPin::D4_PB4;
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 constexpr const size_t DATA_SIZE = 128;
+REGISTER_OSTREAMBUF_LISTENERS(serial::soft::UATX<TX>)
 #elif defined (BREADBOARD_ATMEGAXX4P)
 #include <fastarduino/uart.h>
 constexpr const board::DigitalPin CS = board::DigitalPin::D12_PB4;
@@ -89,6 +94,7 @@ constexpr const size_t DATA_SIZE = 256;
 // Define vectors we need in the example
 constexpr const board::USART UART = board::USART::USART0;
 REGISTER_UATX_ISR(0)
+REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<UART>)
 #else
 #error "Current target is not yet supported!"
 #endif

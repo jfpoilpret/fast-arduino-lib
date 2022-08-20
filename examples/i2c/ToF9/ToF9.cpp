@@ -46,6 +46,7 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 REGISTER_RTT_ISR(0)
 REGISTER_UATX_ISR(0)
+REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<UART>)
 
 using MANAGER = i2c::I2CAsyncManager<MODE, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS>;
 static constexpr const uint8_t I2C_BUFFER_SIZE = 32;

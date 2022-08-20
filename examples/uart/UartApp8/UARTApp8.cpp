@@ -66,7 +66,8 @@ int main()
 	// Start UART
 	// Following configurations have been tested successfully
 	// OK
-	uarx.begin(115200);
+	// uarx.begin(115200);
+	uarx.begin(230400);
 	// uarx.begin(115200, serial::Parity::EVEN);
 
 	streams::istream in = uarx.in();

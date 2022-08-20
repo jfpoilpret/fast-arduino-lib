@@ -23,6 +23,8 @@
 #include <fastarduino/empty_streams.h>
 #include <fastarduino/iomanip.h>
 
+REGISTER_OSTREAMBUF_NO_LISTENERS()
+
 // Buffer for normal stream
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static char output_buffer[OUTPUT_BUFFER_SIZE];

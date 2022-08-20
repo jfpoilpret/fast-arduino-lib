@@ -36,6 +36,8 @@ constexpr const board::DigitalPin TX = board::DigitalPin::D1_PD1;
 #error "Current target is not yet supported!"
 #endif
 
+REGISTER_OSTREAMBUF_LISTENERS(serial::soft::UATX<TX>)
+
 // Buffers for UART
 static const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
@@ -55,6 +57,7 @@ int main()
 	// OK
 	// uatx.begin(115200);
 	uatx.begin(230400);
+	// uatx.begin(230400, serial::Parity::NONE, serial::StopBits::TWO);
 	// uatx.begin(230400, serial::Parity::EVEN, serial::StopBits::TWO);
 
 	// KO

@@ -343,63 +343,64 @@ $(document).ready(function(){initNavTree('i2cdevices.html',''); initResizable();
 <div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="comment">// Define vectors we need in the example</span></div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<a class="code" href="uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10">REGISTER_UATX_ISR</a>(0)</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="comment">// UART for traces</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;static <span class="keywordtype">char</span> output_buffer[OUTPUT_BUFFER_SIZE];</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;static <a class="code" href="namespaceserial.html">serial</a>::hard::UATX&lt;<a class="code" href="namespaceboard.html">board</a>::<a class="code" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">USART</a>::USART0&gt; uart{output_buffer};</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="keyword">static</span> <a class="code" href="classstreams_1_1ostream.html">streams::ostream</a> out = uart.out();</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="comment">// Subclass I2CDevice to make protected methods available</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keyword">class </span>PublicDevice: <span class="keyword">public</span> PARENT</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;{</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    PublicDevice(MANAGER&amp; manager): PARENT{manager, DEVICE_ADDRESS, <a class="code" href="namespacei2c.html">i2c</a>::<a class="code" href="namespacespi.html#afad82e7a839263bc0851445fdcced0bb">Mode</a>&lt;MODE&gt;{}, <span class="keyword">true</span>} {}</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">friend</span> <span class="keywordtype">int</span> main();</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;};</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="keyword">using</span> <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">streams::endl</a>;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="keyword">using</span> <a class="code" href="namespacestreams.html#adaf650921b3a5d448f8aac51dba924d2">streams::dec</a>;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="keyword">using</span> <a class="code" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">streams::hex</a>;</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="keywordtype">int</span> main()</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;{</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <a class="code" href="namespaceboard.html#a2529f85498783a75dc75c281e0b754d3">board::init</a>();</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    sei();</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    uart.begin(115200);</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    out.<a class="code" href="classstreams_1_1ios__base.html#a46cf9813c05c34ff93d8ff19eff1ea9f">width</a>(2);</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    </div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="comment">// Start TWI interface</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="comment">//====================</span></div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    DEBUGGER debugger;</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    MANAGER manager{debugger, debugger};</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    manager.begin();</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;I2C interface started&quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    PublicDevice device{manager};</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    </div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="comment">// Init I2C device if needed</span></div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="comment">// Output all debug traces</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <a class="code" href="namespacei2c_1_1debug.html#aa73d62f49bbf5a9cd8ced80e467cefcc">DEBUG</a>(out);</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="comment">// Loop to show measures</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="keywordflow">while</span> (<span class="keyword">true</span>)</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    {</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <span class="comment">// Read measures and display them to UART</span></div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="comment">// Output all debug traces</span></div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <a class="code" href="namespacei2c_1_1debug.html#aa73d62f49bbf5a9cd8ced80e467cefcc">DEBUG</a>(out);</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <a class="code" href="namespacetime.html#af13fd17ddf6b751b8161691e608892b2">time::delay_ms</a>(1000);</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    }</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    </div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="comment">// Stop TWI interface</span></div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="comment">//===================</span></div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    manager.end();</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;End&quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;}</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<a class="code" href="streambuf_8h.html#a94aa054887c53435c9f96e6f5e096982">REGISTER_OSTREAMBUF_LISTENERS</a>(<a class="code" href="namespaceserial.html">serial</a>::hard::UATX&lt;<a class="code" href="namespaceboard.html">board</a>::<a class="code" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">USART</a>::USART0&gt;)</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="comment">// UART for traces</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;static <span class="keywordtype">char</span> output_buffer[OUTPUT_BUFFER_SIZE];</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;static <a class="code" href="namespaceserial.html">serial</a>::hard::UATX&lt;<a class="code" href="namespaceboard.html">board</a>::<a class="code" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">USART</a>::USART0&gt; uart{output_buffer};</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="keyword">static</span> <a class="code" href="classstreams_1_1ostream.html">streams::ostream</a> out = uart.out();</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="comment">// Subclass I2CDevice to make protected methods available</span></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="keyword">class </span>PublicDevice: <span class="keyword">public</span> PARENT</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;{</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    PublicDevice(MANAGER&amp; manager): PARENT{manager, DEVICE_ADDRESS, <a class="code" href="namespacei2c.html">i2c</a>::<a class="code" href="namespacespi.html#afad82e7a839263bc0851445fdcced0bb">Mode</a>&lt;MODE&gt;{}, <span class="keyword">true</span>} {}</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keyword">friend</span> <span class="keywordtype">int</span> main();</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;};</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;<span class="keyword">using</span> <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">streams::endl</a>;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;<span class="keyword">using</span> <a class="code" href="namespacestreams.html#adaf650921b3a5d448f8aac51dba924d2">streams::dec</a>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="keyword">using</span> <a class="code" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">streams::hex</a>;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;<span class="keywordtype">int</span> main()</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;{</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <a class="code" href="namespaceboard.html#a2529f85498783a75dc75c281e0b754d3">board::init</a>();</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    sei();</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    uart.begin(115200);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    out.<a class="code" href="classstreams_1_1ios__base.html#a46cf9813c05c34ff93d8ff19eff1ea9f">width</a>(2);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    <span class="comment">// Start TWI interface</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="comment">//====================</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    DEBUGGER debugger;</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    MANAGER manager{debugger, debugger};</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    manager.begin();</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;I2C interface started&quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    </div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    PublicDevice device{manager};</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="comment">// Init I2C device if needed</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="comment">// Output all debug traces</span></div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <a class="code" href="namespacei2c_1_1debug.html#aa73d62f49bbf5a9cd8ced80e467cefcc">DEBUG</a>(out);</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <span class="comment">// Loop to show measures</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keywordflow">while</span> (<span class="keyword">true</span>)</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    {</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        <span class="comment">// Read measures and display them to UART</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <span class="comment">// Output all debug traces</span></div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <a class="code" href="namespacei2c_1_1debug.html#aa73d62f49bbf5a9cd8ced80e467cefcc">DEBUG</a>(out);</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <a class="code" href="namespacetime.html#af13fd17ddf6b751b8161691e608892b2">time::delay_ms</a>(1000);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    }</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="comment">// Stop TWI interface</span></div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="comment">//===================</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    manager.end();</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;End&quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;}</div>
 <div class="ttc" id="aclassi2c_1_1_i2_c_sync_status_debug_manager_html"><div class="ttname"><a href="classi2c_1_1_i2_c_sync_status_debug_manager.html">i2c::I2CSyncStatusDebugManager</a></div><div class="ttdoc">Synchronous I2C Manager for ATmega architecture with status notification and debug facility.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__atmega_8h_source.html#l01247">i2c_handler_atmega.h:1249</a></div></div>
 <div class="ttc" id="aclassi2c_1_1debug_1_1_i2_c_debug_status_recorder_html"><div class="ttname"><a href="classi2c_1_1debug_1_1_i2_c_debug_status_recorder.html">i2c::debug::I2CDebugStatusRecorder</a></div><div class="ttdoc">Class recording I2C debug and status notifications for later output.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__debug_8h_source.html#l00309">i2c_debug.h:311</a></div></div>
 <div class="ttc" id="aclassstreams_1_1ios__base_html_a46cf9813c05c34ff93d8ff19eff1ea9f"><div class="ttname"><a href="classstreams_1_1ios__base.html#a46cf9813c05c34ff93d8ff19eff1ea9f">streams::ios_base::width</a></div><div class="ttdeci">void width(uint8_t width)</div><div class="ttdoc">Set minimum width used for displaying values.</div><div class="ttdef"><b>Definition:</b> <a href="ios_8h_source.html#l00390">ios.h:390</a></div></div>
@@ -418,6 +419,7 @@ $(document).ready(function(){initNavTree('i2cdevices.html',''); initResizable();
 <div class="ttc" id="anamespacestreams_html_a91675bd61b31e7382e8655930606f62f"><div class="ttname"><a href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">streams::hex</a></div><div class="ttdeci">void hex(FSTREAM &amp;stream)</div><div class="ttdoc">Manipulator for an output or input stream, which will set the base, used to represent (output) or int...</div><div class="ttdef"><b>Definition:</b> <a href="ios_8h_source.html#l00774">ios.h:774</a></div></div>
 <div class="ttc" id="anamespacestreams_html_adaf650921b3a5d448f8aac51dba924d2"><div class="ttname"><a href="namespacestreams.html#adaf650921b3a5d448f8aac51dba924d2">streams::dec</a></div><div class="ttdeci">void dec(FSTREAM &amp;stream)</div><div class="ttdoc">Manipulator for an output or input stream, which will set the base, used to represent (output) or int...</div><div class="ttdef"><b>Definition:</b> <a href="ios_8h_source.html#l00765">ios.h:765</a></div></div>
 <div class="ttc" id="anamespacetime_html_af13fd17ddf6b751b8161691e608892b2"><div class="ttname"><a href="namespacetime.html#af13fd17ddf6b751b8161691e608892b2">time::delay_ms</a></div><div class="ttdeci">void delay_ms(uint16_t ms) INLINE</div><div class="ttdoc">Delay program execution for the given amount of milliseconds.</div><div class="ttdef"><b>Definition:</b> <a href="time_8h_source.html#l00346">time.h:346</a></div></div>
+<div class="ttc" id="astreambuf_8h_html_a94aa054887c53435c9f96e6f5e096982"><div class="ttname"><a href="streambuf_8h.html#a94aa054887c53435c9f96e6f5e096982">REGISTER_OSTREAMBUF_LISTENERS</a></div><div class="ttdeci">#define REGISTER_OSTREAMBUF_LISTENERS(HANDLER1,...)</div><div class="ttdoc">Register the necessary callbacks that will be notified when a streams::ostreambuf is put new content ...</div><div class="ttdef"><b>Definition:</b> <a href="streambuf_8h_source.html#l00049">streambuf.h:49</a></div></div>
 <div class="ttc" id="atime_8h_html"><div class="ttname"><a href="time_8h.html">time.h</a></div><div class="ttdoc">Simple time utilities.</div></div>
 <div class="ttc" id="auart_8h_html"><div class="ttname"><a href="uart_8h.html">uart.h</a></div><div class="ttdoc">Hardware serial API.</div></div>
 <div class="ttc" id="auart_8h_html_aa33c57bb6fa1e93177abb21fe8fecb10"><div class="ttname"><a href="uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10">REGISTER_UATX_ISR</a></div><div class="ttdeci">#define REGISTER_UATX_ISR(UART_NUM)</div><div class="ttdoc">Register the necessary ISR (Interrupt Service Routine) for an serial::hard::UATX to work correctly.</div><div class="ttdef"><b>Definition:</b> <a href="uart_8h_source.html#l00037">uart.h:37</a></div></div>
@@ -443,6 +445,7 @@ $(document).ready(function(){initNavTree('i2cdevices.html',''); initResizable();
 <div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> OUT, <span class="keyword">typename</span> IN&gt; <span class="keyword">using</span> FUTURE = <span class="keyword">typename</span> PARENT::template FUTURE&lt;OUT, IN&gt;;</div>
 </div><!-- fragment --><p>This section defines various types aliases, for I2C Manager, I2C debugger, and types used as part of device API definition. In addition, a <code>DEBUG</code> macro to debug all I2C steps after API execution is defined.</p>
 <div class="fragment"><div class="line"><a class="code" href="uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10">REGISTER_UATX_ISR</a>(0)</div>
+<div class="line"><a class="code" href="streambuf_8h.html#a94aa054887c53435c9f96e6f5e096982">REGISTER_OSTREAMBUF_LISTENERS</a>(<a class="code" href="namespaceserial.html">serial</a>::hard::UATX&lt;<a class="code" href="namespaceboard.html">board</a>::<a class="code" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">USART</a>::USART0&gt;)</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// UART for traces</span></div>
 <div class="line">static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;</div>

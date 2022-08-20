@@ -99,6 +99,12 @@ static constexpr const board::DigitalPin ECHO = board::DigitalPin::D3_PA3;
 #error "Current target is not yet supported!"
 #endif
 
+#if HARDWARE_UART
+	REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<UART>)
+#else
+	REGISTER_OSTREAMBUF_LISTENERS(serial::soft::UATX<TX>)
+#endif
+
 REGISTER_RTT_ISR(TIMER_NUM)
 
 // Buffers for UART

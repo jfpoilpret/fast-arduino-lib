@@ -12,6 +12,7 @@
 
 // Register vector for UART (used for debug)
 REGISTER_UATX_ISR(0)
+REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<board::USART::USART0>)
 
 // Comment to use FakeFuture instead of real Future
 #define REAL_FUTURE

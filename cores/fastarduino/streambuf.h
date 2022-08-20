@@ -21,26 +21,76 @@
 #ifndef STREAMBUF_H
 #define STREAMBUF_H
 
-#include "queue.h"
 #include "flash.h"
-#include "virtual.h"
+#include "interrupts.h"
+#include "queue.h"
+
+/**
+ * Register the necessary callbacks that will be notified when a `streams::ostreambuf`
+ * is put new content (character or string). This is used by hardware and software
+ * UATX and UART.
+ * 
+ * Each handler registered here will be notified until one mentions it has handled
+ * the notification.
+ * 
+ * @warning this macro must be called only once, with all interested handlers classes;
+ * calling it more than once will lead to errors at link time.
+ * @note you do not need to call this macro if you do not use streams::ostreambuf
+ * in your program.
+ * 
+ * @param HANDLER1 a class which registered instance will be notified, through its
+ * `bool on_put(streams::ostreambuf&)` method when any ostreambuffer has new content
+ * put into it.
+ * @param ... other classes similar to HANDLER1.
+ * 
+ * @sa REGISTER_OSTREAMBUF_NO_LISTENERS()
+ * @sa interrupt::register_handler
+ */
+#define REGISTER_OSTREAMBUF_LISTENERS(HANDLER1, ...)								\
+	void streams::ostreambuf_on_put_dispatch(ostreambuf& obuf)						\
+	{																				\
+		streams::dispatch_handler::ostreambuf_on_put<HANDLER1, ##__VA_ARGS__>(obuf);\
+	}
+
+/**
+ * Register no callback at all to `streams::ostreambuf`.
+ * You normally do not need this macro, except if you:
+ * - use streams::ostreambuf
+ * - but you do not use UATX, or UART
+ * - you do not need to be called back when content is put to your ostreambuf instances
+ * 
+ * @sa REGISTER_OSTREAMBUF_LISTENERS()
+ */
+#define REGISTER_OSTREAMBUF_NO_LISTENERS()							\
+	void streams::ostreambuf_on_put_dispatch(ostreambuf& obuf) {}
+
+/**
+ * This macro shall be used in a class containing a private callback method
+ * `bool on_put(streams::ostreambuf&)`, registered by `REGISTER_OSTREAMBUF_LISTENERS`.
+ * It declares the class where it is used as a friend of all necessary functions
+ * so that the private callback method can be called properly.
+ */
+#define DECL_OSTREAMBUF_LISTENERS_FRIEND         \
+	friend struct streams::dispatch_handler;
 
 namespace streams
 {
+	/// @cond notdocumented
+	class ostreambuf;
+	extern void ostreambuf_on_put_dispatch(ostreambuf&);
+	/// @endcond 
+
 	/**
 	 * Output API based on a ring buffer.
 	 * Provides general methods to push characters or strings to the buffer;
 	 * the buffer is supposed to be consumed by another class (e.g. `serial::hard::UATX`).
-	 * The API provides protected "hooks" that get notified every time new content
-	 * is successfully pushed to the buffer, or when the buffer is full while new
-	 * content addition is attempted.
+	 * The API provides a protected "hook" (`virtual on_put()`) that get notified 
+	 * every time new content is successfully pushed to the buffer, or when the 
+	 * buffer is full while new content addition is attempted.
 	 * 
 	 * @param buffer the original ring buffer containing all pushed content; once
 	 * passed to the constructor, it should never be used directly as it will be
 	 * consumed by a `containers::Queue`.
-	 * @param callback a pointer to function that is called back when data is pushed
-	 * to this `ostreambuf`.
-	 * @param arg any pointer value that will be passed to @p callback
 	 */
 	class ostreambuf : private containers::Queue<char, char>
 	{
@@ -51,11 +101,8 @@ namespace streams
 		ostreambuf(const ostreambuf&) = delete;
 		ostreambuf& operator=(const ostreambuf&) = delete;
 		
-		using CALLBACK = virtual_support::VirtualMethod::METHOD;
-
 		template<uint8_t SIZE>
-		explicit ostreambuf(char (&buffer)[SIZE], CALLBACK callback = nullptr, void* arg = nullptr)
-		: QUEUE{buffer, true}, on_put_callback_{callback, arg} {}
+		explicit ostreambuf(char (&buffer)[SIZE]) : QUEUE{buffer, true} {}
 
 		/**
 		 * Wait until all buffer content has been pulled by a consumer.
@@ -185,11 +232,10 @@ namespace streams
 	private:
 		void on_put()
 		{
-			on_put_callback_();
+			ostreambuf_on_put_dispatch(*this);
 		}
 
 		bool overflow_ = false;
-		const virtual_support::VirtualMethod on_put_callback_;
 
 		friend class ios_base;
 		friend class ostream;
@@ -260,6 +306,30 @@ namespace streams
 			return *this;
 		}
 	};
+
+	/// @cond notdocumented
+	struct dispatch_handler
+	{
+		template<bool DUMMY_> static bool ostreambuf_on_put_helper(ostreambuf& obuf UNUSED)
+		{
+			return false;
+		}
+
+		template<bool DUMMY_, typename HANDLER1_, typename... HANDLERS_> 
+		static bool ostreambuf_on_put_helper(ostreambuf& obuf)
+		{
+			bool result = interrupt::HandlerHolder<HANDLER1_>::handler()->on_put(obuf);
+			// handle other handlers if needed
+			return result || ostreambuf_on_put_helper<DUMMY_, HANDLERS_...>(obuf);
+		}
+
+		template<typename... HANDLERS_> static void ostreambuf_on_put(ostreambuf& obuf)
+		{
+			// Ask each registered listener tohandle obuf on_put() if concerned
+			ostreambuf_on_put_helper<false, HANDLERS_...>(obuf);
+		}
+	};
+	/// @endcond 
 }
 
 #endif /* STREAMBUF_H */

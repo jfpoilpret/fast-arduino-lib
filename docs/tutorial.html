@@ -197,7 +197,7 @@ $(document).ready(function(){initNavTree('tutorial.html',''); initResizable(); }
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;}</div>
 </div><!-- fragment --><p>The problem here is that Arduino API accept a simple number when they need a pin, hence it is perfectly possible to pass them the number of a pin that does not exist, as in the faulty code above: this code will compile and upload properly to an Arduino UNO, however it will not work, because pin 53 does not exist!</p>
 <p>This problem cannot occur with FastArduino as the available pins are stored in a strong enum and it becomes impossible to select a pin that does not exist for the board we target!</p>
-<p>Now, what is really interesting in comparing both working code examples is the size of the built program (measured with UNO as a target, FastArduino project built with AVR GCC 10.2.0, Arduino API project built with Arduino CLI 0.7.0):</p>
+<p>Now, what is really interesting in comparing both working code examples is the size of the built program (measured with UNO as a target, FastArduino project built with AVR GCC 11.1.0, Arduino API project built with Arduino CLI 0.7.0):</p>
 <p><table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone">Arduino API </th><th class="markdownTableHeadNone">FastArduino  </th></tr>
@@ -281,32 +281,38 @@ $(document).ready(function(){initNavTree('tutorial.html',''); initResizable(); }
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="keyword">static</span> <span class="keywordtype">char</span> output_buffer[OUTPUT_BUFFER_SIZE];</div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<a class="code" href="uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10">REGISTER_UATX_ISR</a>(0)</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;int main() __attribute__((OS_main));</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keywordtype">int</span> main()</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;{</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    <a class="code" href="namespaceboard.html#a2529f85498783a75dc75c281e0b754d3">board::init</a>();</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    sei();</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    </div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <a class="code" href="classserial_1_1hard_1_1_u_a_t_x.html">serial::hard::UATX&lt;board::USART::USART0&gt;</a> uart{output_buffer};</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    uart.<a class="code" href="classserial_1_1hard_1_1_u_a_t_x.html#a64b04d0617b28fd343a01f865dee787e">begin</a>(115200);</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <a class="code" href="classstreams_1_1ostream.html">streams::ostream</a> out = uart.out();</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    out.<a class="code" href="classstreams_1_1ostream.html#a001a2dd6c215d77e06492376bf791870">write</a>(<span class="stringliteral">&quot;Hello, World!\n&quot;</span>);</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    out.<a class="code" href="classstreams_1_1ostream.html#a00f6c7bdce1520b119c31cd7dde80ac2">flush</a>();</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;}</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<a class="code" href="streambuf_8h.html#a94aa054887c53435c9f96e6f5e096982">REGISTER_OSTREAMBUF_LISTENERS</a>(<a class="code" href="namespaceserial.html">serial</a>::hard::UATX&lt;<a class="code" href="namespaceboard.html">board</a>::<a class="code" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">USART</a>::USART0&gt;)</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keywordtype">int</span> main() __attribute__((OS_main));</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keywordtype">int</span> main()</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;{</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <a class="code" href="namespaceboard.html#a2529f85498783a75dc75c281e0b754d3">board::init</a>();</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    sei();</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <a class="code" href="classserial_1_1hard_1_1_u_a_t_x.html">serial::hard::UATX&lt;board::USART::USART0&gt;</a> uart{output_buffer};</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    uart.<a class="code" href="classserial_1_1hard_1_1_u_a_t_x.html#a64b04d0617b28fd343a01f865dee787e">begin</a>(115200);</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <a class="code" href="classstreams_1_1ostream.html">streams::ostream</a> out = uart.out();</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    out.<a class="code" href="classstreams_1_1ostream.html#a001a2dd6c215d77e06492376bf791870">write</a>(<span class="stringliteral">&quot;Hello, World!\n&quot;</span>);</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    out.<a class="code" href="classstreams_1_1ostream.html#a00f6c7bdce1520b119c31cd7dde80ac2">flush</a>();</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;}</div>
 <div class="ttc" id="aclassserial_1_1hard_1_1_u_a_t_x_html"><div class="ttname"><a href="classserial_1_1hard_1_1_u_a_t_x.html">serial::hard::UATX</a></div><div class="ttdoc">Hardware serial transmitter API.</div><div class="ttdef"><b>Definition:</b> <a href="uart_8h_source.html#l00240">uart.h:241</a></div></div>
-<div class="ttc" id="aclassserial_1_1hard_1_1_u_a_t_x_html_a64b04d0617b28fd343a01f865dee787e"><div class="ttname"><a href="classserial_1_1hard_1_1_u_a_t_x.html#a64b04d0617b28fd343a01f865dee787e">serial::hard::UATX::begin</a></div><div class="ttdeci">void begin(uint32_t rate, Parity parity=Parity::NONE, StopBits stop_bits=StopBits::ONE)</div><div class="ttdoc">Enable the transmitter.</div><div class="ttdef"><b>Definition:</b> <a href="uart_8h_source.html#l00275">uart.h:275</a></div></div>
+<div class="ttc" id="aclassserial_1_1hard_1_1_u_a_t_x_html_a64b04d0617b28fd343a01f865dee787e"><div class="ttname"><a href="classserial_1_1hard_1_1_u_a_t_x.html#a64b04d0617b28fd343a01f865dee787e">serial::hard::UATX::begin</a></div><div class="ttdeci">void begin(uint32_t rate, Parity parity=Parity::NONE, StopBits stop_bits=StopBits::ONE)</div><div class="ttdoc">Enable the transmitter.</div><div class="ttdef"><b>Definition:</b> <a href="uart_8h_source.html#l00269">uart.h:269</a></div></div>
 <div class="ttc" id="aclassstreams_1_1ostream_html"><div class="ttname"><a href="classstreams_1_1ostream.html">streams::ostream</a></div><div class="ttdoc">Output stream wrapper to provide formatted output API, a la C++.</div><div class="ttdef"><b>Definition:</b> <a href="streams_8h_source.html#l00060">streams.h:61</a></div></div>
 <div class="ttc" id="aclassstreams_1_1ostream_html_a001a2dd6c215d77e06492376bf791870"><div class="ttname"><a href="classstreams_1_1ostream.html#a001a2dd6c215d77e06492376bf791870">streams::ostream::write</a></div><div class="ttdeci">void write(const char *content, size_t size)</div><div class="ttdoc">Write a block of data to this stream.</div><div class="ttdef"><b>Definition:</b> <a href="streams_8h_source.html#l00113">streams.h:113</a></div></div>
 <div class="ttc" id="aclassstreams_1_1ostream_html_a00f6c7bdce1520b119c31cd7dde80ac2"><div class="ttname"><a href="classstreams_1_1ostream.html#a00f6c7bdce1520b119c31cd7dde80ac2">streams::ostream::flush</a></div><div class="ttdeci">void flush()</div><div class="ttdoc">Flush this ostream and blocks until all its buffer has been written to the underlying device.</div><div class="ttdef"><b>Definition:</b> <a href="streams_8h_source.html#l00086">streams.h:86</a></div></div>
+<div class="ttc" id="anamespaceboard_html"><div class="ttname"><a href="namespaceboard.html">board</a></div><div class="ttdoc">Defines all types and constants specific to support Arduino MEGA board (ATmega644 MCU target).</div><div class="ttdef"><b>Definition:</b> <a href="atmega__xx4_8h_source.html#l00038">atmega_xx4.h:39</a></div></div>
+<div class="ttc" id="anamespaceboard_html_a8541ca1f10a050c4356d6ccd76d9a907"><div class="ttname"><a href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">board::USART</a></div><div class="ttdeci">USART</div><div class="ttdoc">Defines all USART modules of target MCU.</div><div class="ttdef"><b>Definition:</b> <a href="empty_8h_source.html#l00104">empty.h:105</a></div></div>
+<div class="ttc" id="anamespaceserial_html"><div class="ttname"><a href="namespaceserial.html">serial</a></div><div class="ttdoc">Defines all API for UART features.</div><div class="ttdef"><b>Definition:</b> <a href="soft__uart_8h_source.html#l00083">soft_uart.h:84</a></div></div>
+<div class="ttc" id="astreambuf_8h_html_a94aa054887c53435c9f96e6f5e096982"><div class="ttname"><a href="streambuf_8h.html#a94aa054887c53435c9f96e6f5e096982">REGISTER_OSTREAMBUF_LISTENERS</a></div><div class="ttdeci">#define REGISTER_OSTREAMBUF_LISTENERS(HANDLER1,...)</div><div class="ttdoc">Register the necessary callbacks that will be notified when a streams::ostreambuf is put new content ...</div><div class="ttdef"><b>Definition:</b> <a href="streambuf_8h_source.html#l00049">streambuf.h:49</a></div></div>
 <div class="ttc" id="auart_8h_html"><div class="ttname"><a href="uart_8h.html">uart.h</a></div><div class="ttdoc">Hardware serial API.</div></div>
 <div class="ttc" id="auart_8h_html_aa33c57bb6fa1e93177abb21fe8fecb10"><div class="ttname"><a href="uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10">REGISTER_UATX_ISR</a></div><div class="ttdeci">#define REGISTER_UATX_ISR(UART_NUM)</div><div class="ttdoc">Register the necessary ISR (Interrupt Service Routine) for an serial::hard::UATX to work correctly.</div><div class="ttdef"><b>Definition:</b> <a href="uart_8h_source.html#l00037">uart.h:37</a></div></div>
 </div><!-- fragment --><p>As usual, at first we need to include the proper header (<code><a class="el" href="uart_8h.html" title="Hardware serial API.">uart.h</a></code>) to use its API.</p>
 <p>Then, we define a buffer that will be used by the <code>UART</code> API to transmit characters to your PC through USB. You may find it cumbersome to do it yourself but it brings a huge advantage: you are the one to decide of the buffer size, whereas in Arduino API, you have no choice. Here, we consider 64 bits to be big enough to store characters that will be transmitted to the PC. How <code>UART</code> is using this buffer is not important to you though.</p>
-<p>Then we <em>register an ISR</em> necessary for transmissions to take place; this is done by the <code><a class="el" href="uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10" title="Register the necessary ISR (Interrupt Service Routine) for an serial::hard::UATX to work correctly.">REGISTER_UATX_ISR(0)</a></code> macro. Explicit ISR registration is one important design choice of FastArduino: <b>you</b> decide which ISR should be registered to do what. This may again seem cumbersome but once again this gives you the benefit to decie what you need, hence build your application the way you want it.</p>
-<p>The code that follows instantiates a <code>uart::hard::UATX</code> object that is using <code><a class="el" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907ae4423159ddbc35ef0b6a05f8cc6185be" title="USART0 is connected to pins D24_PD0 (RX0) and D25_PD1 (TX0).">board::USART::USART0</a></code> (the only one available on UNO) and based on the previously created buffer. Note that <code>UATX</code> class is in charge of <b>only</b> transmitting characters, not receiving. Other classes exist for only receiving (<code>UARX</code>), or for doing both (<code>UART</code>).</p>
+<p>Then we <em>register an ISR</em> necessary for transmissions to take place; this is done by the <code><a class="el" href="uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10" title="Register the necessary ISR (Interrupt Service Routine) for an serial::hard::UATX to work correctly.">REGISTER_UATX_ISR(0)</a></code> macro. Explicit ISR registration is one important design choice of FastArduino: <b>you</b> decide which ISR should be registered to do what. This may again seem cumbersome but once again this gives you the benefit to decide what you need, hence build your application the way you want it.</p>
+<p>In addition, we register <code>UATX&lt;<a class="el" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907ae4423159ddbc35ef0b6a05f8cc6185be" title="USART0 is connected to pins D24_PD0 (RX0) and D25_PD1 (TX0).">board::USART::USART0</a>&gt;</code> class, which we instantiate at the beginning of <code>main()</code>, to be notified whenever some content is inserted into <code>uart.out()</code>; this is done with the <code><a class="el" href="streambuf_8h.html#a94aa054887c53435c9f96e6f5e096982" title="Register the necessary callbacks that will be notified when a streams::ostreambuf is put new content ...">REGISTER_OSTREAMBUF_LISTENERS()</a></code> macro. If you forget it, building your program will fail at link time.</p>
+<p>The code that follows instantiates a <code><a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html" title="Hardware serial transmitter API.">serial::hard::UATX</a></code> object that is using <code><a class="el" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907ae4423159ddbc35ef0b6a05f8cc6185be" title="USART0 is connected to pins D24_PD0 (RX0) and D25_PD1 (TX0).">board::USART::USART0</a></code> (the only one available on UNO) and based on the previously created buffer. Note that <code>UATX</code> class is in charge of <b>only</b> transmitting characters, not receiving. Other classes exist for only receiving (<code>UARX</code>), or for doing both (<code>UART</code>).</p>
 <p>Once created, we can set <code>uart</code> ready for transmission, at serial speed of 115200 bps.</p>
 <p>Next step consists in extracting, from <code>uart</code>, a <code><a class="el" href="classstreams_1_1ostream.html" title="Output stream wrapper to provide formatted output API, a la C++.">streams::ostream</a></code> that will allow us to send characters or strings to USB: </p><pre class="fragment">out.write("Hello, World!\n");
 </pre><p> The last important instruction, <code><a class="el" href="namespacestreams.html#a155684415ba442e665f551819429b3a0" title="Manipulator for an output stream, which will flush the stream buffer.">out.flush()</a></code>, waits for all characters to be transmitted before leaving the program.</p>
@@ -327,7 +333,7 @@ $(document).ready(function(){initNavTree('tutorial.html',''); initResizable(); }
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone">Arduino API </th><th class="markdownTableHeadNone">FastArduino  </th></tr>
 <tr class="markdownTableBody" class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">code size </td><td class="markdownTableBodyNone">1480 bytes </td><td class="markdownTableBodyNone">638 bytes  </td></tr>
+<td class="markdownTableBodyNone">code size </td><td class="markdownTableBodyNone">1480 bytes </td><td class="markdownTableBodyNone">624 bytes  </td></tr>
 <tr class="markdownTableBody" class="markdownTableRowEven">
 <td class="markdownTableBodyNone">data size </td><td class="markdownTableBodyNone">202 bytes </td><td class="markdownTableBodyNone">82 bytes  </td></tr>
 </table>
@@ -352,7 +358,7 @@ $(document).ready(function(){initNavTree('tutorial.html',''); initResizable(); }
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone">without F() </th><th class="markdownTableHeadNone">with F()  </th></tr>
 <tr class="markdownTableBody" class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">code size </td><td class="markdownTableBodyNone">638 bytes </td><td class="markdownTableBodyNone">624 bytes  </td></tr>
+<td class="markdownTableBodyNone">code size </td><td class="markdownTableBodyNone">624 bytes </td><td class="markdownTableBodyNone">610 bytes  </td></tr>
 <tr class="markdownTableBody" class="markdownTableRowEven">
 <td class="markdownTableBodyNone">data size </td><td class="markdownTableBodyNone">82 bytes </td><td class="markdownTableBodyNone">66 bytes  </td></tr>
 </table>
@@ -401,7 +407,7 @@ $(document).ready(function(){initNavTree('tutorial.html',''); initResizable(); }
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="keyword">static</span> <span class="keywordtype">char</span> output_buffer[OUTPUT_BUFFER_SIZE];</div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<a class="code" href="uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10">REGISTER_UATX_ISR</a>(0)</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<a class="code" href="streambuf_8h.html#a94aa054887c53435c9f96e6f5e096982">REGISTER_OSTREAMBUF_LISTENERS</a>(<a class="code" href="namespaceserial.html">serial</a>::hard::UATX&lt;<a class="code" href="namespaceboard.html">board</a>::<a class="code" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">USART</a>::USART0&gt;)</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;using namespace <a class="code" href="namespacestreams.html">streams</a>;</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keywordtype">int</span> main()</div>
@@ -453,7 +459,7 @@ $(document).ready(function(){initNavTree('tutorial.html',''); initResizable(); }
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone"></th><th class="markdownTableHeadNone">Arduino API </th><th class="markdownTableHeadNone">FastArduino  </th></tr>
 <tr class="markdownTableBody" class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">code size </td><td class="markdownTableBodyNone">1856 bytes </td><td class="markdownTableBodyNone">1710 bytes  </td></tr>
+<td class="markdownTableBodyNone">code size </td><td class="markdownTableBodyNone">1856 bytes </td><td class="markdownTableBodyNone">1692 bytes  </td></tr>
 <tr class="markdownTableBody" class="markdownTableRowEven">
 <td class="markdownTableBodyNone">data size </td><td class="markdownTableBodyNone">188 bytes </td><td class="markdownTableBodyNone">74 bytes  </td></tr>
 </table>
@@ -486,8 +492,8 @@ $(document).ready(function(){initNavTree('tutorial.html',''); initResizable(); }
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;}</div>
-<div class="ttc" id="aclassserial_1_1hard_1_1_u_a_r_x_html"><div class="ttname"><a href="classserial_1_1hard_1_1_u_a_r_x.html">serial::hard::UARX</a></div><div class="ttdoc">Hardware serial receiver API.</div><div class="ttdef"><b>Definition:</b> <a href="uart_8h_source.html#l00355">uart.h:356</a></div></div>
-<div class="ttc" id="aclassserial_1_1hard_1_1_u_a_r_x_html_ab990e6d4b45a811a451f1eeaa96faf1b"><div class="ttname"><a href="classserial_1_1hard_1_1_u_a_r_x.html#ab990e6d4b45a811a451f1eeaa96faf1b">serial::hard::UARX::begin</a></div><div class="ttdeci">void begin(uint32_t rate, Parity parity=Parity::NONE, StopBits stop_bits=StopBits::ONE)</div><div class="ttdoc">Enable the receiver.</div><div class="ttdef"><b>Definition:</b> <a href="uart_8h_source.html#l00389">uart.h:389</a></div></div>
+<div class="ttc" id="aclassserial_1_1hard_1_1_u_a_r_x_html"><div class="ttname"><a href="classserial_1_1hard_1_1_u_a_r_x.html">serial::hard::UARX</a></div><div class="ttdoc">Hardware serial receiver API.</div><div class="ttdef"><b>Definition:</b> <a href="uart_8h_source.html#l00351">uart.h:352</a></div></div>
+<div class="ttc" id="aclassserial_1_1hard_1_1_u_a_r_x_html_ab990e6d4b45a811a451f1eeaa96faf1b"><div class="ttname"><a href="classserial_1_1hard_1_1_u_a_r_x.html#ab990e6d4b45a811a451f1eeaa96faf1b">serial::hard::UARX::begin</a></div><div class="ttdeci">void begin(uint32_t rate, Parity parity=Parity::NONE, StopBits stop_bits=StopBits::ONE)</div><div class="ttdoc">Enable the receiver.</div><div class="ttdef"><b>Definition:</b> <a href="uart_8h_source.html#l00381">uart.h:381</a></div></div>
 <div class="ttc" id="aclassstreams_1_1istream_html"><div class="ttname"><a href="classstreams_1_1istream.html">streams::istream</a></div><div class="ttdoc">Input stream wrapper to provide formatted input API, a la C++.</div><div class="ttdef"><b>Definition:</b> <a href="streams_8h_source.html#l00356">streams.h:357</a></div></div>
 <div class="ttc" id="aclassstreams_1_1istream_html_a32740ec0eb870f855232b32d56fa0ef5"><div class="ttname"><a href="classstreams_1_1istream.html#a32740ec0eb870f855232b32d56fa0ef5">streams::istream::get</a></div><div class="ttdeci">int get()</div><div class="ttdoc">Extract a single character from this input stream.</div><div class="ttdef"><b>Definition:</b> <a href="streams_8h_source.html#l00394">streams.h:394</a></div></div>
 <div class="ttc" id="auart_8h_html_a4fed67375824a0fc63e21ecdb7ce0db0"><div class="ttname"><a href="uart_8h.html#a4fed67375824a0fc63e21ecdb7ce0db0">REGISTER_UARX_ISR</a></div><div class="ttdeci">#define REGISTER_UARX_ISR(UART_NUM)</div><div class="ttdoc">Register the necessary ISR (Interrupt Service Routine) for an serial::hard::UARX to work correctly.</div><div class="ttdef"><b>Definition:</b> <a href="uart_8h_source.html#l00048">uart.h:48</a></div></div>
@@ -1105,6 +1111,10 @@ $(document).ready(function(){initNavTree('tutorial.html',''); initResizable(); }
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code><a class="el" href="realtime__timer_8h.html" title="Real-time Timer API.">realtime_timer.h</a></code>   </td><td class="markdownTableBodyNone"><code>RTT_EVENT</code>   </td><td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone">Same as above, and trigger RTTEventCallback.    </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code><a class="el" href="soft__uart_8h.html" title="Software-emulated serial API.">soft_uart.h</a></code>   </td><td class="markdownTableBodyNone"><code>UARX_PCI</code>   </td><td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone">Called when a start bit is received on a PCINT pin linked to UARX.    </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><code><a class="el" href="soft__uart_8h.html" title="Software-emulated serial API.">soft_uart.h</a></code>   </td><td class="markdownTableBodyNone"><code>UARX_INT</code>   </td><td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone">Called when a start bit is received on an INT pin linked to UARX.    </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code><a class="el" href="soft__uart_8h.html" title="Software-emulated serial API.">soft_uart.h</a></code>   </td><td class="markdownTableBodyNone"><code>UART_PCI</code>   </td><td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone">Called when a start bit is received on a PCINT pin linked to UATX.    </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><code><a class="el" href="soft__uart_8h.html" title="Software-emulated serial API.">soft_uart.h</a></code>   </td><td class="markdownTableBodyNone"><code>UART_INT</code>   </td><td class="markdownTableBodyNone">1   </td><td class="markdownTableBodyNone">Called when a start bit is received on an INT pin linked to UATX.    </td></tr>
@@ -1139,7 +1149,9 @@ $(document).ready(function(){initNavTree('tutorial.html',''); initResizable(); }
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><code><a class="el" href="sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC-SR04.">devices/sonar.h</a></code>   </td><td class="markdownTableBodyNone"><code>MULTI_HCSR04_PCI</code>   </td><td class="markdownTableBodyNone">3,4   </td><td class="markdownTableBodyNone">Called when MultiHCSR04 any echo PCINT pin changes level.    </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><code><a class="el" href="sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC-SR04.">devices/sonar.h</a></code>   </td><td class="markdownTableBodyNone"><code>MULTI_HCSR04_RTT_TIMEOUT</code>   </td><td class="markdownTableBodyNone">1,3,4   </td><td class="markdownTableBodyNone">Called when MultiHCSR04 RTT times out (without any echo).   </td></tr>
+<td class="markdownTableBodyNone"><code><a class="el" href="sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC-SR04.">devices/sonar.h</a></code>   </td><td class="markdownTableBodyNone"><code>MULTI_HCSR04_RTT_TIMEOUT</code>   </td><td class="markdownTableBodyNone">1,3,4   </td><td class="markdownTableBodyNone">Called when MultiHCSR04 RTT times out or at every 1ms tick.    </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><code><a class="el" href="sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC-SR04.">devices/sonar.h</a></code>   </td><td class="markdownTableBodyNone"><code>MULTI_HCSR04_RTT_TIMEOUT_TRIGGER</code>   </td><td class="markdownTableBodyNone">3,4   </td><td class="markdownTableBodyNone">Called when MultiHCSR04 RTT times out or at every 1ms tick.   </td></tr>
 </table>
 <p>For further details on ISR registration in FastArduino, you can check <a href="interrupts_8h.html"><code>interrutps.h</code> API</a> for the general approach, and each individual API documentation for specific interrupts.</p>
 <h2>Pin Interrupts</h2>
@@ -1877,76 +1889,75 @@ $(document).ready(function(){initNavTree('tutorial.html',''); initResizable(); }
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="comment">// Define vectors we need in the example</span></div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<a class="code" href="uart_8h.html#a8bd735d1a3a5a0a8e3253fd3f1720b29">REGISTER_UART_ISR</a>(0)</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;static const <a class="code" href="namespaceboard.html">board</a>::<a class="code" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">USART</a> <a class="code" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">USART</a> = <a class="code" href="namespaceboard.html">board</a>::<a class="code" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">USART</a>::USART0;</div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160; </div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="comment">// Buffers for UART</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;static const uint8_t INPUT_BUFFER_SIZE = 64;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;static const uint8_t OUTPUT_BUFFER_SIZE = 64;</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;static <span class="keywordtype">char</span> input_buffer[INPUT_BUFFER_SIZE];</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;static <span class="keywordtype">char</span> output_buffer[OUTPUT_BUFFER_SIZE];</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="comment">// EEPROM stored information</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;static const uint8_t MAX_LEN = 64;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keywordtype">char</span> wifi_name[MAX_LEN+1] EEMEM = &quot;&quot;;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keywordtype">char</span> wifi_password[MAX_LEN+1] EEMEM = &quot;&quot;;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;using namespace <a class="code" href="namespaceeeprom.html">eeprom</a>;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;using <a class="code" href="namespacestreams.html">streams</a>::<a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;using <a class="code" href="namespacestreams.html">streams</a>::<a class="code" href="namespacestreams.html#a155684415ba442e665f551819429b3a0">flush</a>;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;using <a class="code" href="namespacestreams.html">streams</a>::<a class="code" href="namespacestreams.html#a69896b602e1678789bbad7b9fa98e3a3">noskipws</a>;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;using <a class="code" href="namespacestreams.html">streams</a>::<a class="code" href="namespacestreams.html#a76316854cb7b9c0c7688d02c660ed369">skipws</a>;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keywordtype">int</span> main()</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;{</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <a class="code" href="namespaceboard.html#a2529f85498783a75dc75c281e0b754d3">board::init</a>();</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    sei();</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <span class="comment">// Start UART</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <a class="code" href="classserial_1_1hard_1_1_u_a_r_t.html">serial::hard::UART&lt;USART&gt;</a> uart{input_buffer, output_buffer};</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    uart.<a class="code" href="classserial_1_1hard_1_1_u_a_r_t.html#ae89048a3748401f4e1c6defa02bca8f6">begin</a>(115200);</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <a class="code" href="classstreams_1_1istream.html">streams::istream</a> in = uart.in();</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <a class="code" href="classstreams_1_1ostream.html">streams::ostream</a> out = uart.out();</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="comment">// Get current WIFI name/password from EEPROM</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keywordtype">char</span> wifi[MAX_LEN+1];</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    EEPROM::read(wifi_name, wifi, MAX_LEN+1);</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    <span class="keywordtype">char</span> password[MAX_LEN+1];</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    EEPROM::read(wifi_password, password, MAX_LEN+1);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="comment">// If WIFI present check if user wants to keep it</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="keywordtype">bool</span> ask = <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keywordflow">if</span> (strlen(wifi))</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    {</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        <span class="keywordtype">char</span> answer;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Do you want to use WIFI `&quot;</span>) &lt;&lt; wifi &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;`? [Y/n] :&quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a155684415ba442e665f551819429b3a0">flush</a>;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        in &gt;&gt; <a class="code" href="namespacestreams.html#a76316854cb7b9c0c7688d02c660ed369">skipws</a> &gt;&gt; answer;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        in.<a class="code" href="classstreams_1_1istream.html#a99dafd2dce58830708b65dd4f4b6136f">ignore</a>(0, <span class="charliteral">&#39;\n&#39;</span>);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        ask = (toupper(answer) == <span class="charliteral">&#39;N&#39;</span>);</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    }</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="comment">// Ask for WIKI name &amp; password if needed</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordflow">if</span> (ask)</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    {</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Enter WIFI name: &quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a155684415ba442e665f551819429b3a0">flush</a>;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        in.<a class="code" href="classstreams_1_1istream.html#ab2b480d5069588a6e9c97e89dfd7c4d8">getline</a>(wifi, MAX_LEN+1);</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Enter WIFI password: &quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a155684415ba442e665f551819429b3a0">flush</a>;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        in.<a class="code" href="classstreams_1_1istream.html#ab2b480d5069588a6e9c97e89dfd7c4d8">getline</a>(password, MAX_LEN+1);</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="comment">// Store new settings to EEPROM</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        EEPROM::write(wifi_name, wifi, strlen(wifi) + 1);</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        EEPROM::write(wifi_password, password, strlen(password) + 1);</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    }</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="comment">// Start real program here, using wifi and password</span></div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="comment">//...</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;WIFI: &quot;</span>) &lt;&lt; wifi &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Password: &quot;</span>) &lt;&lt; password &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;}</div>
-<div class="ttc" id="aclassserial_1_1hard_1_1_u_a_r_t_html"><div class="ttname"><a href="classserial_1_1hard_1_1_u_a_r_t.html">serial::hard::UART</a></div><div class="ttdoc">Hardware serial receiver/transceiver API.</div><div class="ttdef"><b>Definition:</b> <a href="uart_8h_source.html#l00424">uart.h:425</a></div></div>
-<div class="ttc" id="aclassserial_1_1hard_1_1_u_a_r_t_html_ae89048a3748401f4e1c6defa02bca8f6"><div class="ttname"><a href="classserial_1_1hard_1_1_u_a_r_t.html#ae89048a3748401f4e1c6defa02bca8f6">serial::hard::UART::begin</a></div><div class="ttdeci">void begin(uint32_t rate, Parity parity=Parity::NONE, StopBits stop_bits=StopBits::ONE)</div><div class="ttdoc">Enable the receiver/transceiver.</div><div class="ttdef"><b>Definition:</b> <a href="uart_8h_source.html#l00466">uart.h:466</a></div></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<a class="code" href="streambuf_8h.html#a94aa054887c53435c9f96e6f5e096982">REGISTER_OSTREAMBUF_LISTENERS</a>(<a class="code" href="namespaceserial.html">serial</a>::hard::UART&lt;<a class="code" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">USART</a>&gt;)</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="comment">// Buffers for UART</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;static const uint8_t INPUT_BUFFER_SIZE = 64;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;static const uint8_t OUTPUT_BUFFER_SIZE = 64;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;static <span class="keywordtype">char</span> input_buffer[INPUT_BUFFER_SIZE];</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;static <span class="keywordtype">char</span> output_buffer[OUTPUT_BUFFER_SIZE];</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="comment">// EEPROM stored information</span></div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;static const uint8_t MAX_LEN = 64;</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keywordtype">char</span> wifi_name[MAX_LEN+1] EEMEM = &quot;&quot;;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keywordtype">char</span> wifi_password[MAX_LEN+1] EEMEM = &quot;&quot;;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;using namespace <a class="code" href="namespaceeeprom.html">eeprom</a>;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;using <a class="code" href="namespacestreams.html">streams</a>::<a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;using <a class="code" href="namespacestreams.html">streams</a>::<a class="code" href="namespacestreams.html#a155684415ba442e665f551819429b3a0">flush</a>;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;using <a class="code" href="namespacestreams.html">streams</a>::<a class="code" href="namespacestreams.html#a69896b602e1678789bbad7b9fa98e3a3">noskipws</a>;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;using <a class="code" href="namespacestreams.html">streams</a>::<a class="code" href="namespacestreams.html#a76316854cb7b9c0c7688d02c660ed369">skipws</a>;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keywordtype">int</span> main()</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;{</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <a class="code" href="namespaceboard.html#a2529f85498783a75dc75c281e0b754d3">board::init</a>();</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    sei();</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="comment">// Start UART</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <a class="code" href="classserial_1_1hard_1_1_u_a_r_t.html">serial::hard::UART&lt;USART&gt;</a> uart{input_buffer, output_buffer};</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    uart.<a class="code" href="classserial_1_1hard_1_1_u_a_r_t.html#ae89048a3748401f4e1c6defa02bca8f6">begin</a>(115200);</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <a class="code" href="classstreams_1_1istream.html">streams::istream</a> in = uart.in();</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <a class="code" href="classstreams_1_1ostream.html">streams::ostream</a> out = uart.out();</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="comment">// Get current WIFI name/password from EEPROM</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordtype">char</span> wifi[MAX_LEN+1];</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    EEPROM::read(wifi_name, wifi, MAX_LEN+1);</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordtype">char</span> password[MAX_LEN+1];</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    EEPROM::read(wifi_password, password, MAX_LEN+1);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <span class="comment">// If WIFI present check if user wants to keep it</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keywordtype">bool</span> ask = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keywordflow">if</span> (strlen(wifi))</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    {</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordtype">char</span> answer;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Do you want to use WIFI `&quot;</span>) &lt;&lt; wifi &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;`? [Y/n] :&quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a155684415ba442e665f551819429b3a0">flush</a>;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;        in &gt;&gt; <a class="code" href="namespacestreams.html#a76316854cb7b9c0c7688d02c660ed369">skipws</a> &gt;&gt; answer;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        in.<a class="code" href="classstreams_1_1istream.html#a99dafd2dce58830708b65dd4f4b6136f">ignore</a>(0, <span class="charliteral">&#39;\n&#39;</span>);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        ask = (toupper(answer) == <span class="charliteral">&#39;N&#39;</span>);</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    }</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="comment">// Ask for WIKI name &amp; password if needed</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keywordflow">if</span> (ask)</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    {</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Enter WIFI name: &quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a155684415ba442e665f551819429b3a0">flush</a>;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        in.<a class="code" href="classstreams_1_1istream.html#ab2b480d5069588a6e9c97e89dfd7c4d8">getline</a>(wifi, MAX_LEN+1);</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Enter WIFI password: &quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a155684415ba442e665f551819429b3a0">flush</a>;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        in.<a class="code" href="classstreams_1_1istream.html#ab2b480d5069588a6e9c97e89dfd7c4d8">getline</a>(password, MAX_LEN+1);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="comment">// Store new settings to EEPROM</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        EEPROM::write(wifi_name, wifi, strlen(wifi) + 1);</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        EEPROM::write(wifi_password, password, strlen(password) + 1);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    }</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="comment">// Start real program here, using wifi and password</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="comment">//...</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;WIFI: &quot;</span>) &lt;&lt; wifi &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Password: &quot;</span>) &lt;&lt; password &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;}</div>
+<div class="ttc" id="aclassserial_1_1hard_1_1_u_a_r_t_html"><div class="ttname"><a href="classserial_1_1hard_1_1_u_a_r_t.html">serial::hard::UART</a></div><div class="ttdoc">Hardware serial receiver/transceiver API.</div><div class="ttdef"><b>Definition:</b> <a href="uart_8h_source.html#l00419">uart.h:420</a></div></div>
+<div class="ttc" id="aclassserial_1_1hard_1_1_u_a_r_t_html_ae89048a3748401f4e1c6defa02bca8f6"><div class="ttname"><a href="classserial_1_1hard_1_1_u_a_r_t.html#ae89048a3748401f4e1c6defa02bca8f6">serial::hard::UART::begin</a></div><div class="ttdeci">void begin(uint32_t rate, Parity parity=Parity::NONE, StopBits stop_bits=StopBits::ONE)</div><div class="ttdoc">Enable the receiver/transceiver.</div><div class="ttdef"><b>Definition:</b> <a href="uart_8h_source.html#l00456">uart.h:456</a></div></div>
 <div class="ttc" id="aclassstreams_1_1istream_html_a99dafd2dce58830708b65dd4f4b6136f"><div class="ttname"><a href="classstreams_1_1istream.html#a99dafd2dce58830708b65dd4f4b6136f">streams::istream::ignore</a></div><div class="ttdeci">istream &amp; ignore(size_t n=1, int delim=istreambuf::EOF)</div><div class="ttdoc">Extract characters from this input stream and discards them, until either n characters have been extr...</div><div class="ttdef"><b>Definition:</b> <a href="streams_8h_source.html#l00461">streams.h:461</a></div></div>
 <div class="ttc" id="aclassstreams_1_1istream_html_ab2b480d5069588a6e9c97e89dfd7c4d8"><div class="ttname"><a href="classstreams_1_1istream.html#ab2b480d5069588a6e9c97e89dfd7c4d8">streams::istream::getline</a></div><div class="ttdeci">istream &amp; getline(char *str, size_t n, char delim='\n')</div><div class="ttdoc">Extract characters from this input stream and stores them as a C-string, until either (n - 1) charact...</div><div class="ttdef"><b>Definition:</b> <a href="streams_8h_source.html#l00442">streams.h:442</a></div></div>
-<div class="ttc" id="anamespaceboard_html"><div class="ttname"><a href="namespaceboard.html">board</a></div><div class="ttdoc">Defines all types and constants specific to support Arduino MEGA board (ATmega644 MCU target).</div><div class="ttdef"><b>Definition:</b> <a href="atmega__xx4_8h_source.html#l00038">atmega_xx4.h:39</a></div></div>
-<div class="ttc" id="anamespaceboard_html_a8541ca1f10a050c4356d6ccd76d9a907"><div class="ttname"><a href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">board::USART</a></div><div class="ttdeci">USART</div><div class="ttdoc">Defines all USART modules of target MCU.</div><div class="ttdef"><b>Definition:</b> <a href="empty_8h_source.html#l00104">empty.h:105</a></div></div>
 <div class="ttc" id="anamespacestreams_html_a155684415ba442e665f551819429b3a0"><div class="ttname"><a href="namespacestreams.html#a155684415ba442e665f551819429b3a0">streams::flush</a></div><div class="ttdeci">void flush(FSTREAM &amp;stream)</div><div class="ttdoc">Manipulator for an output stream, which will flush the stream buffer.</div><div class="ttdef"><b>Definition:</b> <a href="streams_8h_source.html#l00713">streams.h:713</a></div></div>
 <div class="ttc" id="anamespacestreams_html_a69896b602e1678789bbad7b9fa98e3a3"><div class="ttname"><a href="namespacestreams.html#a69896b602e1678789bbad7b9fa98e3a3">streams::noskipws</a></div><div class="ttdeci">void noskipws(FSTREAM &amp;stream)</div><div class="ttdoc">Manipulator for an input stream, which will deactivate whitespace discarding before formatted input o...</div><div class="ttdef"><b>Definition:</b> <a href="ios_8h_source.html#l00738">ios.h:738</a></div></div>
 <div class="ttc" id="auart_8h_html_a8bd735d1a3a5a0a8e3253fd3f1720b29"><div class="ttname"><a href="uart_8h.html#a8bd735d1a3a5a0a8e3253fd3f1720b29">REGISTER_UART_ISR</a></div><div class="ttdeci">#define REGISTER_UART_ISR(UART_NUM)</div><div class="ttdoc">Register the necessary ISR (Interrupt Service Routine) for an serial::hard::UART to work correctly.</div><div class="ttdef"><b>Definition:</b> <a href="uart_8h_source.html#l00059">uart.h:59</a></div></div>
@@ -1990,67 +2001,68 @@ $(document).ready(function(){initNavTree('tutorial.html',''); initResizable(); }
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">static</span> <span class="keywordtype">char</span> output_buffer[OUTPUT_BUFFER_SIZE];</div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;constexpr <span class="keyword">const</span> <a class="code" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907">board::USART</a> UART = <a class="code" href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907ae4423159ddbc35ef0b6a05f8cc6185be">board::USART::USART0</a>;</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<a class="code" href="uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10">REGISTER_UATX_ISR</a>(0)</div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;using namespace <a class="code" href="namespacestreams.html">streams</a>;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;constexpr const <a class="code" href="namespaceboard.html">board</a>::<a class="code" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">DigitalPin</a> CS = <a class="code" href="namespaceboard.html">board</a>::<a class="code" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">DigitalPin</a>::D7_PD7;</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;constexpr const <span class="keywordtype">size_t</span> DATA_SIZE = 256;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;static uint8_t data[DATA_SIZE];</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;constexpr const uint32_t PAGE = 0x010000;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keywordtype">int</span> main()</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;{</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <a class="code" href="namespaceboard.html#a2529f85498783a75dc75c281e0b754d3">board::init</a>();</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    sei();</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <a class="code" href="classserial_1_1hard_1_1_u_a_t_x.html">serial::hard::UATX&lt;UART&gt;</a> uart{output_buffer};</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    uart.<a class="code" href="classserial_1_1hard_1_1_u_a_t_x.html#a64b04d0617b28fd343a01f865dee787e">begin</a>(115200);</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    ostream out = uart.out();</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="comment">// Initialize SPI and device</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <a class="code" href="namespacespi.html#a7829182c423612511a05fa0434d7673e">spi::init</a>();</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <a class="code" href="classdevices_1_1_win_bond.html">devices::WinBond&lt;CS&gt;</a> <a class="code" href="namespaceflash.html">flash</a>;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <a class="code" href="namespacetime.html#af13fd17ddf6b751b8161691e608892b2">time::delay_ms</a>(1000);   </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;S: &quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">hex</a> &lt;&lt; <a class="code" href="namespaceflash.html">flash</a>.status().value &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="comment">// Read and display one page of flash memory</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <a class="code" href="namespaceflash.html">flash</a>.read_data(PAGE, data, <span class="keyword">sizeof</span> data);</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;RD, S: &quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">hex</a> &lt;&lt; <a class="code" href="namespaceflash.html">flash</a>.status().value &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Pg RD:&quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keywordflow">for</span> (uint16_t i = 0; i &lt; <span class="keyword">sizeof</span> data; ++i)</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    {</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        out &lt;&lt; <a class="code" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">hex</a> &lt;&lt; data[i] &lt;&lt; <span class="charliteral">&#39; &#39;</span>;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        <span class="keywordflow">if</span> ((i + 1) % 16 == 0) out &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    }</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    out &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="comment">// Erase one page of flash memory before writing</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <a class="code" href="namespaceflash.html">flash</a>.enable_write();</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <a class="code" href="namespaceflash.html">flash</a>.erase_sector(PAGE);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Erase, S: &quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">hex</a> &lt;&lt; <a class="code" href="namespaceflash.html">flash</a>.status().value &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <a class="code" href="namespaceflash.html">flash</a>.wait_until_ready(10);</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Wait, S: &quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">hex</a> &lt;&lt; <a class="code" href="namespaceflash.html">flash</a>.status().value &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="comment">// Write one page of flash memory</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keywordflow">for</span> (uint16_t i = 0; i &lt; <span class="keyword">sizeof</span> data; ++i) data[i] = uint8_t(i);</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <a class="code" href="namespaceflash.html">flash</a>.enable_write();</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <a class="code" href="namespaceflash.html">flash</a>.write_page(PAGE, data, (DATA_SIZE &gt;= 256 ? 0 : DATA_SIZE));</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Write, S: &quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">hex</a> &lt;&lt; <a class="code" href="namespaceflash.html">flash</a>.status().value &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <a class="code" href="namespaceflash.html">flash</a>.wait_until_ready(10);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Wait, S: &quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">hex</a> &lt;&lt; <a class="code" href="namespaceflash.html">flash</a>.status().value &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="comment">// Read back and display page of flash memory just written</span></div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordflow">for</span> (uint16_t i = 0; i &lt; <span class="keyword">sizeof</span> data; ++i) data[i] = 0;</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <a class="code" href="namespaceflash.html">flash</a>.read_data(PAGE, data, <span class="keyword">sizeof</span> data);</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Read, S: &quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">hex</a> &lt;&lt; <a class="code" href="namespaceflash.html">flash</a>.status().value &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Pg RD:&quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordflow">for</span> (uint16_t i = 0; i &lt; <span class="keyword">sizeof</span> data; ++i)</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    {</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        out &lt;&lt; <a class="code" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">hex</a> &lt;&lt; data[i] &lt;&lt; <span class="charliteral">&#39; &#39;</span>;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keywordflow">if</span> ((i + 1) % 16 == 0) out &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    }</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    out &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;}</div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<a class="code" href="streambuf_8h.html#a94aa054887c53435c9f96e6f5e096982">REGISTER_OSTREAMBUF_LISTENERS</a>(<a class="code" href="namespaceserial.html">serial</a>::hard::UATX&lt;UART&gt;)</div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;using namespace <a class="code" href="namespacestreams.html">streams</a>;</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;constexpr const <a class="code" href="namespaceboard.html">board</a>::<a class="code" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">DigitalPin</a> CS = <a class="code" href="namespaceboard.html">board</a>::<a class="code" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">DigitalPin</a>::D7_PD7;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;constexpr const <span class="keywordtype">size_t</span> DATA_SIZE = 256;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;static uint8_t data[DATA_SIZE];</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;constexpr const uint32_t PAGE = 0x010000;</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keywordtype">int</span> main()</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;{</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <a class="code" href="namespaceboard.html#a2529f85498783a75dc75c281e0b754d3">board::init</a>();</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    sei();</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <a class="code" href="classserial_1_1hard_1_1_u_a_t_x.html">serial::hard::UATX&lt;UART&gt;</a> uart{output_buffer};</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    uart.<a class="code" href="classserial_1_1hard_1_1_u_a_t_x.html#a64b04d0617b28fd343a01f865dee787e">begin</a>(115200);</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    ostream out = uart.out();</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="comment">// Initialize SPI and device</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <a class="code" href="namespacespi.html#a7829182c423612511a05fa0434d7673e">spi::init</a>();</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <a class="code" href="classdevices_1_1_win_bond.html">devices::WinBond&lt;CS&gt;</a> <a class="code" href="namespaceflash.html">flash</a>;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <a class="code" href="namespacetime.html#af13fd17ddf6b751b8161691e608892b2">time::delay_ms</a>(1000);   </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;S: &quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">hex</a> &lt;&lt; <a class="code" href="namespaceflash.html">flash</a>.status().value &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="comment">// Read and display one page of flash memory</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <a class="code" href="namespaceflash.html">flash</a>.read_data(PAGE, data, <span class="keyword">sizeof</span> data);</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;RD, S: &quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">hex</a> &lt;&lt; <a class="code" href="namespaceflash.html">flash</a>.status().value &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Pg RD:&quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keywordflow">for</span> (uint16_t i = 0; i &lt; <span class="keyword">sizeof</span> data; ++i)</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    {</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        out &lt;&lt; <a class="code" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">hex</a> &lt;&lt; data[i] &lt;&lt; <span class="charliteral">&#39; &#39;</span>;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordflow">if</span> ((i + 1) % 16 == 0) out &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    }</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    out &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="comment">// Erase one page of flash memory before writing</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    <a class="code" href="namespaceflash.html">flash</a>.enable_write();</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <a class="code" href="namespaceflash.html">flash</a>.erase_sector(PAGE);</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Erase, S: &quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">hex</a> &lt;&lt; <a class="code" href="namespaceflash.html">flash</a>.status().value &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <a class="code" href="namespaceflash.html">flash</a>.wait_until_ready(10);</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Wait, S: &quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">hex</a> &lt;&lt; <a class="code" href="namespaceflash.html">flash</a>.status().value &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="comment">// Write one page of flash memory</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keywordflow">for</span> (uint16_t i = 0; i &lt; <span class="keyword">sizeof</span> data; ++i) data[i] = uint8_t(i);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <a class="code" href="namespaceflash.html">flash</a>.enable_write();</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <a class="code" href="namespaceflash.html">flash</a>.write_page(PAGE, data, (DATA_SIZE &gt;= 256 ? 0 : DATA_SIZE));</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Write, S: &quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">hex</a> &lt;&lt; <a class="code" href="namespaceflash.html">flash</a>.status().value &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <a class="code" href="namespaceflash.html">flash</a>.wait_until_ready(10);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Wait, S: &quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">hex</a> &lt;&lt; <a class="code" href="namespaceflash.html">flash</a>.status().value &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="comment">// Read back and display page of flash memory just written</span></div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordflow">for</span> (uint16_t i = 0; i &lt; <span class="keyword">sizeof</span> data; ++i) data[i] = 0;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <a class="code" href="namespaceflash.html">flash</a>.read_data(PAGE, data, <span class="keyword">sizeof</span> data);</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Read, S: &quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">hex</a> &lt;&lt; <a class="code" href="namespaceflash.html">flash</a>.status().value &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;Pg RD:&quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordflow">for</span> (uint16_t i = 0; i &lt; <span class="keyword">sizeof</span> data; ++i)</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    {</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        out &lt;&lt; <a class="code" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">hex</a> &lt;&lt; data[i] &lt;&lt; <span class="charliteral">&#39; &#39;</span>;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keywordflow">if</span> ((i + 1) % 16 == 0) out &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    }</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    out &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;}</div>
 <div class="ttc" id="aclassdevices_1_1_win_bond_html"><div class="ttname"><a href="classdevices_1_1_win_bond.html">devices::WinBond</a></div><div class="ttdoc">SPI device driver for WinBond flash memory chips, like W25Q80BV (8 Mbit flash).</div><div class="ttdef"><b>Definition:</b> <a href="winbond_8h_source.html#l00054">winbond.h:55</a></div></div>
 <div class="ttc" id="anamespaceboard_html_a8541ca1f10a050c4356d6ccd76d9a907ae4423159ddbc35ef0b6a05f8cc6185be"><div class="ttname"><a href="namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907ae4423159ddbc35ef0b6a05f8cc6185be">board::USART::USART0</a></div><div class="ttdeci">@ USART0</div><div class="ttdoc">USART0 is connected to pins D24_PD0 (RX0) and D25_PD1 (TX0).</div></div>
 <div class="ttc" id="anamespaceflash_html"><div class="ttname"><a href="namespaceflash.html">flash</a></div><div class="ttdoc">Defines API to handle flash memory storage.</div><div class="ttdef"><b>Definition:</b> <a href="flash_8h_source.html#l00030">flash.h:31</a></div></div>
@@ -2122,38 +2134,39 @@ $(document).ready(function(){initNavTree('tutorial.html',''); initResizable(); }
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">static</span> <span class="keywordtype">char</span> output_buffer[OUTPUT_BUFFER_SIZE];</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<a class="code" href="uart_8h.html#aa33c57bb6fa1e93177abb21fe8fecb10">REGISTER_UATX_ISR</a>(0)</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;using <a class="code" href="namespacedevices.html">devices</a>::rtc::DS1307;</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;using <a class="code" href="namespacedevices.html">devices</a>::rtc::tm;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;using namespace <a class="code" href="namespacestreams.html">streams</a>;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keywordtype">int</span> main() __attribute__((OS_main));</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keywordtype">int</span> main()</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;{</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <a class="code" href="namespaceboard.html#a2529f85498783a75dc75c281e0b754d3">board::init</a>();</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    sei();</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <a class="code" href="classserial_1_1hard_1_1_u_a_t_x.html">serial::hard::UATX&lt;UART&gt;</a> uart{output_buffer};</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    uart.<a class="code" href="classserial_1_1hard_1_1_u_a_t_x.html#a64b04d0617b28fd343a01f865dee787e">begin</a>(115200);</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    ostream out = uart.out();</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    <span class="keyword">using</span> MANAGER = <a class="code" href="classi2c_1_1_i2_c_sync_manager.html">i2c::I2CSyncManager&lt;i2c::I2CMode::STANDARD&gt;</a>;</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    MANAGER manager;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    manager.<a class="code" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a66b6a7902f2d3e2354f344c154f4a841">begin</a>();</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    DS1307 rtc{manager};</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    tm now;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    rtc.get_datetime(now);</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    out &lt;&lt; <a class="code" href="namespacestreams.html#adaf650921b3a5d448f8aac51dba924d2">dec</a> &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;RTC: [&quot;</span>) </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;        &lt;&lt; uint8_t(now.tm_wday) &lt;&lt; <span class="charliteral">&#39;]&#39;</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        &lt;&lt; now.tm_mday &lt;&lt; <span class="charliteral">&#39;.&#39;</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        &lt;&lt; now.tm_mon &lt;&lt; <span class="charliteral">&#39;.&#39;</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        &lt;&lt; now.tm_year &lt;&lt; <span class="charliteral">&#39; &#39;</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        &lt;&lt; now.tm_hour &lt;&lt; <span class="charliteral">&#39;:&#39;</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        &lt;&lt; now.tm_min &lt;&lt; <span class="charliteral">&#39;:&#39;</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        &lt;&lt; now.tm_sec &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    manager.end();</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;}</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<a class="code" href="streambuf_8h.html#a94aa054887c53435c9f96e6f5e096982">REGISTER_OSTREAMBUF_LISTENERS</a>(<a class="code" href="namespaceserial.html">serial</a>::hard::UATX&lt;UART&gt;)</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;using <a class="code" href="namespacedevices.html">devices</a>::rtc::DS1307;</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;using <a class="code" href="namespacedevices.html">devices</a>::rtc::tm;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;using namespace <a class="code" href="namespacestreams.html">streams</a>;</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="keywordtype">int</span> main() __attribute__((OS_main));</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keywordtype">int</span> main()</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;{</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <a class="code" href="namespaceboard.html#a2529f85498783a75dc75c281e0b754d3">board::init</a>();</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    sei();</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <a class="code" href="classserial_1_1hard_1_1_u_a_t_x.html">serial::hard::UATX&lt;UART&gt;</a> uart{output_buffer};</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    uart.<a class="code" href="classserial_1_1hard_1_1_u_a_t_x.html#a64b04d0617b28fd343a01f865dee787e">begin</a>(115200);</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    ostream out = uart.out();</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keyword">using</span> MANAGER = <a class="code" href="classi2c_1_1_i2_c_sync_manager.html">i2c::I2CSyncManager&lt;i2c::I2CMode::STANDARD&gt;</a>;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    MANAGER manager;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    manager.<a class="code" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a66b6a7902f2d3e2354f344c154f4a841">begin</a>();</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    DS1307 rtc{manager};</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    tm now;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    rtc.get_datetime(now);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    out &lt;&lt; <a class="code" href="namespacestreams.html#adaf650921b3a5d448f8aac51dba924d2">dec</a> &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;RTC: [&quot;</span>) </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        &lt;&lt; uint8_t(now.tm_wday) &lt;&lt; <span class="charliteral">&#39;]&#39;</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        &lt;&lt; now.tm_mday &lt;&lt; <span class="charliteral">&#39;.&#39;</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        &lt;&lt; now.tm_mon &lt;&lt; <span class="charliteral">&#39;.&#39;</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;        &lt;&lt; now.tm_year &lt;&lt; <span class="charliteral">&#39; &#39;</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;        &lt;&lt; now.tm_hour &lt;&lt; <span class="charliteral">&#39;:&#39;</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;        &lt;&lt; now.tm_min &lt;&lt; <span class="charliteral">&#39;:&#39;</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        &lt;&lt; now.tm_sec &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    </div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    manager.end();</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;}</div>
 <div class="ttc" id="aclassi2c_1_1_abstract_i2_c_sync_manager_html_a66b6a7902f2d3e2354f344c154f4a841"><div class="ttname"><a href="classi2c_1_1_abstract_i2_c_sync_manager.html#a66b6a7902f2d3e2354f344c154f4a841">i2c::AbstractI2CSyncManager::begin</a></div><div class="ttdeci">void begin()</div><div class="ttdoc">Prepare and enable the MCU for I2C transmission.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__common_8h_source.html#l00434">i2c_handler_common.h:434</a></div></div>
 <div class="ttc" id="aclassi2c_1_1_i2_c_sync_manager_html"><div class="ttname"><a href="classi2c_1_1_i2_c_sync_manager.html">i2c::I2CSyncManager</a></div><div class="ttdoc">Synchronous I2C Manager for ATmega architecture.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__atmega_8h_source.html#l01182">i2c_handler_atmega.h:1184</a></div></div>
 <div class="ttc" id="ads1307_8h_html"><div class="ttname"><a href="ds1307_8h.html">ds1307.h</a></div><div class="ttdoc">API to handle Real-Time Clock DS1307 I2C chip.</div></div>
@@ -2178,38 +2191,42 @@ $(document).ready(function(){initNavTree('tutorial.html',''); initResizable(); }
 </div><!-- fragment --><h1><a class="anchor" id="softuart"></a>Advanced: software UART </h1>
 <p>AVR ATtiny MCU do not include hardware UART. For these MCU, UART can be simulated if needed. FastArduino has support for software UART. That support can also be useful with ATmega MCU, where one would need more UART ports than available.</p>
 <p>It is important to note that it is not possible, with software UART, to reach bitrates as high as with hardware UART.</p>
+<h2>Software UATX</h2>
 <p>Here a simple example using software UATX for output through USB on an Arduino UNO:</p>
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="soft__uart_8h.html">fastarduino/soft_uart.h</a>&gt;</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;constexpr <span class="keyword">const</span> <a class="code" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a> TX = board::DigitalPin::D1_PD1;</div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="keyword">static</span> constexpr <span class="keyword">const</span> uint8_t OUTPUT_BUFFER_SIZE = 64;</div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">static</span> <span class="keywordtype">char</span> output_buffer[OUTPUT_BUFFER_SIZE];</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">using namespace </span><a class="code" href="namespacestreams.html">streams</a>;</div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<a class="code" href="streambuf_8h.html#a94aa054887c53435c9f96e6f5e096982">REGISTER_OSTREAMBUF_LISTENERS</a>(<a class="code" href="classserial_1_1soft_1_1_u_a_t_x.html">serial::soft::UATX&lt;TX&gt;</a>)</div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160; </div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">static</span> constexpr <span class="keyword">const</span> uint8_t OUTPUT_BUFFER_SIZE = 64;</div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">static</span> <span class="keywordtype">char</span> output_buffer[OUTPUT_BUFFER_SIZE];</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keywordtype">int</span> main()</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;{</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <a class="code" href="namespaceboard.html#a2529f85498783a75dc75c281e0b754d3">board::init</a>();</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    sei();</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <a class="code" href="classserial_1_1soft_1_1_u_a_t_x.html">serial::soft::UATX&lt;TX&gt;</a> uart{output_buffer};</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    uart.<a class="code" href="classserial_1_1soft_1_1_u_a_t_x.html#afd47337a77c3f1146b8c5e2ccc73ce3e">begin</a>(115200);</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    <a class="code" href="classstreams_1_1ostream.html">ostream</a> out = uart.out();</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    uint16_t value = 0x8000;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;value = 0x&quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">hex</a> &lt;&lt; value </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;        &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;, &quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#adaf650921b3a5d448f8aac51dba924d2">dec</a> &lt;&lt; value </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;        &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;, 0&quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a9c09ef93f2d071416214cbe8ed0e1710">oct</a> &lt;&lt; value </div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;, B&quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a79c81dc9afb0ca3ce0495fb7a95e85e1">bin</a> &lt;&lt; value &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;}</div>
-<div class="ttc" id="aclassserial_1_1soft_1_1_u_a_t_x_html"><div class="ttname"><a href="classserial_1_1soft_1_1_u_a_t_x.html">serial::soft::UATX</a></div><div class="ttdoc">Software-emulated serial transmitter API.</div><div class="ttdef"><b>Definition:</b> <a href="soft__uart_8h_source.html#l00218">soft_uart.h:219</a></div></div>
-<div class="ttc" id="aclassserial_1_1soft_1_1_u_a_t_x_html_afd47337a77c3f1146b8c5e2ccc73ce3e"><div class="ttname"><a href="classserial_1_1soft_1_1_u_a_t_x.html#afd47337a77c3f1146b8c5e2ccc73ce3e">serial::soft::UATX::begin</a></div><div class="ttdeci">void begin(uint32_t rate, Parity parity=Parity::NONE, StopBits stop_bits=StopBits::ONE)</div><div class="ttdoc">Enable the transmitter.</div><div class="ttdef"><b>Definition:</b> <a href="soft__uart_8h_source.html#l00246">soft_uart.h:246</a></div></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">using namespace </span><a class="code" href="namespacestreams.html">streams</a>;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="keywordtype">int</span> main()</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;{</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <a class="code" href="namespaceboard.html#a2529f85498783a75dc75c281e0b754d3">board::init</a>();</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    sei();</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <a class="code" href="classserial_1_1soft_1_1_u_a_t_x.html">serial::soft::UATX&lt;TX&gt;</a> uart{output_buffer};</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    uart.<a class="code" href="classserial_1_1soft_1_1_u_a_t_x.html#afd47337a77c3f1146b8c5e2ccc73ce3e">begin</a>(115200);</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <a class="code" href="classstreams_1_1ostream.html">ostream</a> out = uart.out();</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    uint16_t value = 0x8000;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    out &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;value = 0x&quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">hex</a> &lt;&lt; value </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;        &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;, &quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#adaf650921b3a5d448f8aac51dba924d2">dec</a> &lt;&lt; value </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;        &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;, 0&quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a9c09ef93f2d071416214cbe8ed0e1710">oct</a> &lt;&lt; value </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;        &lt;&lt; <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;, B&quot;</span>) &lt;&lt; <a class="code" href="namespacestreams.html#a79c81dc9afb0ca3ce0495fb7a95e85e1">bin</a> &lt;&lt; value &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;}</div>
+<div class="ttc" id="aclassserial_1_1soft_1_1_u_a_t_x_html"><div class="ttname"><a href="classserial_1_1soft_1_1_u_a_t_x.html">serial::soft::UATX</a></div><div class="ttdoc">Software-emulated serial transmitter API.</div><div class="ttdef"><b>Definition:</b> <a href="soft__uart_8h_source.html#l00238">soft_uart.h:239</a></div></div>
+<div class="ttc" id="aclassserial_1_1soft_1_1_u_a_t_x_html_afd47337a77c3f1146b8c5e2ccc73ce3e"><div class="ttname"><a href="classserial_1_1soft_1_1_u_a_t_x.html#afd47337a77c3f1146b8c5e2ccc73ce3e">serial::soft::UATX::begin</a></div><div class="ttdeci">void begin(uint32_t rate, Parity parity=Parity::NONE, StopBits stop_bits=StopBits::ONE)</div><div class="ttdoc">Enable the transmitter.</div><div class="ttdef"><b>Definition:</b> <a href="soft__uart_8h_source.html#l00265">soft_uart.h:265</a></div></div>
 <div class="ttc" id="asoft__uart_8h_html"><div class="ttname"><a href="soft__uart_8h.html">soft_uart.h</a></div><div class="ttdoc">Software-emulated serial API.</div></div>
 </div><!-- fragment --><p>Except for a few lines, this is the same example as one hardware UART example above in this tutorial.</p>
 <p>The main difference is in <code><a class="el" href="classserial_1_1soft_1_1_u_a_t_x.html" title="Software-emulated serial transmitter API.">serial::soft::UATX</a>&lt;TX&gt; uart{output_buffer};</code> where <code>TX</code> is the <code><a class="el" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404" title="Defines all available digital input/output pins of ATmega644, with reference to Arduino MEGA pins.">board::DigitalPin</a></code> where the serial output will be directed.</p>
 <p>Besides, the same operations as for <code><a class="el" href="classserial_1_1hard_1_1_u_a_t_x.html" title="Hardware serial transmitter API.">serial::hard::UATX</a></code> are available, in particular output streams work the same with <code><a class="el" href="classserial_1_1soft_1_1_u_a_t_x.html" title="Software-emulated serial transmitter API.">serial::soft::UATX</a></code>.</p>
+<h2>Software UARX</h2>
 <p>There are also two classes, <code><a class="el" href="namespaceserial_1_1soft.html#a8df57c2eef46710582fd0e1bbb71aa25" title="Software-emulated serial receiver API.">serial::soft::UARX_EXT</a></code> and <code><a class="el" href="namespaceserial_1_1soft.html#a635413d48cfb8a9c87a89cfe5260f4fe" title="Software-emulated serial receiver API.">serial::soft::UARX_PCI</a></code>, that work similarly as <code><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html" title="Hardware serial receiver API.">serial::hard::UARX</a></code>:</p>
 <div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#include &lt;<a class="code" href="soft__uart_8h.html">fastarduino/soft_uart.h</a>&gt;</span></div>
 <div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160; </div>
@@ -2245,8 +2262,8 @@ $(document).ready(function(){initNavTree('tutorial.html',''); initResizable(); }
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <span class="keywordflow">return</span> 0;</div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;}</div>
-<div class="ttc" id="aclassserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4_html"><div class="ttname"><a href="classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html">serial::soft::UARX&lt; board::InterruptPin, RX_ &gt;</a></div><div class="ttdef"><b>Definition:</b> <a href="soft__uart_8h_source.html#l00581">soft_uart.h:582</a></div></div>
-<div class="ttc" id="aclassserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4_html_a7c67306fbe04d184f0c267d3041fcbfc"><div class="ttname"><a href="classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html#a7c67306fbe04d184f0c267d3041fcbfc">serial::soft::UARX&lt; board::InterruptPin, RX_ &gt;::begin</a></div><div class="ttdeci">void begin(uint32_t rate, Parity parity=Parity::NONE, StopBits stop_bits=StopBits::ONE)</div><div class="ttdoc">Enable the receiver.</div><div class="ttdef"><b>Definition:</b> <a href="soft__uart_8h_source.html#l00626">soft_uart.h:626</a></div></div>
+<div class="ttc" id="aclassserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4_html"><div class="ttname"><a href="classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html">serial::soft::UARX&lt; board::InterruptPin, RX_ &gt;</a></div><div class="ttdef"><b>Definition:</b> <a href="soft__uart_8h_source.html#l00606">soft_uart.h:607</a></div></div>
+<div class="ttc" id="aclassserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4_html_a7c67306fbe04d184f0c267d3041fcbfc"><div class="ttname"><a href="classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html#a7c67306fbe04d184f0c267d3041fcbfc">serial::soft::UARX&lt; board::InterruptPin, RX_ &gt;::begin</a></div><div class="ttdeci">void begin(uint32_t rate, Parity parity=Parity::NONE, StopBits stop_bits=StopBits::ONE)</div><div class="ttdoc">Enable the receiver.</div><div class="ttdef"><b>Definition:</b> <a href="soft__uart_8h_source.html#l00651">soft_uart.h:651</a></div></div>
 <div class="ttc" id="asoft__uart_8h_html_ab265bfe0b99f589a37c678b6fe187ae9"><div class="ttname"><a href="soft__uart_8h.html#ab265bfe0b99f589a37c678b6fe187ae9">REGISTER_UARX_PCI_ISR</a></div><div class="ttdeci">#define REGISTER_UARX_PCI_ISR(RX, PCI_NUM)</div><div class="ttdoc">Register the necessary ISR (Interrupt Service Routine) for an serial::soft::UARX to work correctly.</div><div class="ttdef"><b>Definition:</b> <a href="soft__uart_8h_source.html#l00039">soft_uart.h:39</a></div></div>
 </div><!-- fragment --><p>Note the following differences with a previous example using <code><a class="el" href="classserial_1_1hard_1_1_u_a_r_x.html" title="Hardware serial receiver API.">serial::hard::UARX</a></code>:</p>
 <ol type="1">
@@ -2255,6 +2272,7 @@ $(document).ready(function(){initNavTree('tutorial.html',''); initResizable(); }
 <li>the <code>uarx</code> variable must be defined as a <code><a class="el" href="namespaceserial_1_1soft.html#a635413d48cfb8a9c87a89cfe5260f4fe" title="Software-emulated serial receiver API.">serial::soft::UARX_PCI</a></code> if it is connected to an <code><a class="el" href="namespaceboard.html#a7abd24b042402c0691c0ad6db604e7da" title="Defines all digital output pins of ATmega644, usable as pin change interrupt (PCI) pins.">board::InterruptPin</a></code> or a <code><a class="el" href="namespaceserial_1_1soft.html#a8df57c2eef46710582fd0e1bbb71aa25" title="Software-emulated serial receiver API.">serial::soft::UARX_EXT</a></code> if it is connected to an <code><a class="el" href="namespaceboard.html#adea66670db50b076b2c145657aa587f7" title="Defines all digital output pins of ATmega644, usable as direct external interrupt pins.">board::ExternalInterruptPin</a></code></li>
 <li>an interrupt handler must be setup (either <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html" title="Handler of a Pin Change Interrupt vector.">interrupt::PCISignal</a></code> or <code><a class="el" href="classinterrupt_1_1_i_n_t_signal.html" title="Handler of an External Interrupt.">interrupt::INTSignal</a></code>), passed to the constructor then enabled</li>
 </ol>
+<h2>Software UART</h2>
 <p>Finally, there are also two classes, <code><a class="el" href="namespaceserial_1_1soft.html#aa9fec1860c9b09f2b1562a05e250c045" title="Software-emulated serial receiver/transceiver API.">serial::soft::UART_PCI</a></code> and <code><a class="el" href="namespaceserial_1_1soft.html#a6d58ad00a2b7df6d3ebfca1f7c89dba2" title="Software-emulated serial receiver/transceiver API.">serial::soft::UART_EXT</a></code>, that combine <code><a class="el" href="classserial_1_1soft_1_1_u_a_t_x.html" title="Software-emulated serial transmitter API.">serial::soft::UATX</a></code> and <code><a class="el" href="namespaceserial_1_1soft.html#a635413d48cfb8a9c87a89cfe5260f4fe" title="Software-emulated serial receiver API.">serial::soft::UARX_PCI</a></code> or <code><a class="el" href="namespaceserial_1_1soft.html#a8df57c2eef46710582fd0e1bbb71aa25" title="Software-emulated serial receiver API.">serial::soft::UARX_EXT</a></code>, and work similarly as <code><a class="el" href="classserial_1_1hard_1_1_u_a_r_t.html" title="Hardware serial receiver/transceiver API.">serial::hard::UART</a></code>. </p>
 </div></div><!-- contents -->
 </div><!-- PageDoc -->

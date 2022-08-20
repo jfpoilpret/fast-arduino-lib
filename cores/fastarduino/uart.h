@@ -173,11 +173,8 @@ namespace serial::hard
 		}
 
 	protected:
-		using CALLBACK = streams::ostreambuf::CALLBACK;
-
 		template<uint8_t SIZE_TX> 
-		AbstractUATX(char (&output)[SIZE_TX], CALLBACK callback, void* arg)
-		: obuf_{output, callback, arg} {}
+		AbstractUATX(char (&output)[SIZE_TX]) : obuf_{output} {}
 
 		streams::ostreambuf& out_()
 		{
@@ -233,9 +230,12 @@ namespace serial::hard
 	 * Hardware serial transmitter API.
 	 * For this API to be fully functional, you must register the right ISR in your
 	 * program, through `REGISTER_UATX_ISR()`.
+	 * You must also register this class as a `streams::ostreambuf` callback listener
+	 * through `REGISTER_OSTREAMBUF_LISTENERS()`.
 	 * 
 	 * @tparam USART_ the hardware `board::USART` to use
 	 * @sa REGISTER_UATX_ISR()
+	 * @sa REGISTER_OSTREAMBUF_LISTENERS()
 	 */
 	template<board::USART USART_> class UATX : public AbstractUATX, public UARTErrors
 	{
@@ -243,11 +243,6 @@ namespace serial::hard
 		/** The hardware `board::USART` used by this UATX. */
 		static constexpr const board::USART USART = USART_;
 
-	private:
-		using THIS = UATX<USART_>;
-		using TRAIT = board_traits::USART_trait<USART>;
-
-	public:
 		/**
 		 * Construct a new hardware serial transmitter and provide it with a
 		 * buffer for interrupt-based transmission.
@@ -256,8 +251,7 @@ namespace serial::hard
 		 * blocking.
 		 * @sa REGISTER_UATX_ISR()
 		 */
-		template<uint8_t SIZE_TX> explicit UATX(char (&output)[SIZE_TX])
-		: AbstractUATX{output, THIS::on_put, this}
+		template<uint8_t SIZE_TX> explicit UATX(char (&output)[SIZE_TX]) : AbstractUATX{output}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -292,10 +286,11 @@ namespace serial::hard
 
 	private:
 		// Listeners of events on the buffer
-		static void on_put(void* arg)
+		bool on_put(streams::ostreambuf& obuf)
 		{
-			THIS& target = *((THIS *) arg);
-			target.AbstractUATX::on_put<USART>(target.errors());
+			if (&obuf != &out_()) return false;
+			AbstractUATX::on_put<USART>(errors());
+			return true;
 		}
 
 		void data_register_empty()
@@ -304,6 +299,7 @@ namespace serial::hard
 		}
 
 		friend struct isr_handler;
+		DECL_OSTREAMBUF_LISTENERS_FRIEND
 	};
 
 	/// @cond notdocumented
@@ -358,10 +354,6 @@ namespace serial::hard
 		/** The hardware `board::USART` used by this UARX. */
 		static constexpr const board::USART USART = USART_;
 
-	private:
-		using TRAIT = board_traits::USART_trait<USART>;
-
-	public:
 		/**
 		 * Construct a new hardware serial receiver and provide it with a
 		 * buffer for interrupt-based reception.
@@ -417,9 +409,12 @@ namespace serial::hard
 	 * Hardware serial receiver/transceiver API.
 	 * For this API to be fully functional, you must register the right ISR in your
 	 * program, through `REGISTER_UART_ISR()`.
+	 * You must also register this class as a `streams::ostreambuf` callback listener
+	 * through `REGISTER_OSTREAMBUF_LISTENERS()`.
 	 * 
 	 * @tparam USART_ the hardware `board::USART` to use
 	 * @sa REGISTER_UART_ISR()
+	 * @sa REGISTER_OSTREAMBUF_LISTENERS()
 	 */
 	template<board::USART USART_> class UART : public AbstractUARX, public AbstractUATX, public UARTErrors
 	{
@@ -427,11 +422,6 @@ namespace serial::hard
 		/** The hardware `board::USART` used by this UART. */
 		static constexpr const board::USART USART = USART_;
 
-	private:
-		using THIS = UART<USART_>;
-		using TRAIT = board_traits::USART_trait<USART>;
-
-	public:
 		/**
 		 * Construct a new hardware serial receiver/transceiver and provide it 
 		 * with 2 buffers, one for interrupt-based reception, one for 
@@ -448,7 +438,7 @@ namespace serial::hard
 		 */
 		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
 		UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX]) 
-		: AbstractUARX{input}, AbstractUATX{output, THIS::on_put, this}
+		: AbstractUARX{input}, AbstractUATX{output}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -483,10 +473,11 @@ namespace serial::hard
 
 	private:
 		// Listeners of events on the buffer
-		static void on_put(void* arg)
+		bool on_put(streams::ostreambuf& obuf)
 		{
-			THIS& target = *((THIS*) arg);
-			target.AbstractUATX::on_put<USART>(target.errors());
+			if (&obuf != &out_()) return false;
+			AbstractUATX::on_put<USART>(errors());
+			return true;
 		}
 
 		void data_register_empty()
@@ -500,6 +491,7 @@ namespace serial::hard
 		}
 
 		friend struct isr_handler;
+		DECL_OSTREAMBUF_LISTENERS_FRIEND
 	};
 
 	// All UART-related methods called by pre-defined ISR are defined here

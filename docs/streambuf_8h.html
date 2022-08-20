@@ -85,7 +85,8 @@ $(document).ready(function(){initNavTree('streambuf_8h.html',''); initResizable(
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#namespaces">Namespaces</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#define-members">Macros</a>  </div>
   <div class="headertitle">
 <div class="title">streambuf.h File Reference</div>  </div>
 </div><!--header-->
@@ -93,29 +94,29 @@ $(document).ready(function(){initNavTree('streambuf_8h.html',''); initResizable(
 
 <p>C++-like std::iostream facilities.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;<a class="el" href="queue_8h_source.html">queue.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="flash_8h_source.html">flash.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="virtual_8h_source.html">virtual.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="flash_8h_source.html">flash.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="interrupts_8h_source.html">interrupts.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="queue_8h_source.html">queue.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for streambuf.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="streambuf_8h__incl.png" border="0" usemap="#afastarduino_2streambuf_8h" alt=""/></div>
 <map name="afastarduino_2streambuf_8h" id="afastarduino_2streambuf_8h">
-<area shape="rect" title="C++&#45;like std::iostream facilities." alt="" coords="456,5,635,32"/>
-<area shape="rect" href="queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="397,80,472,107"/>
-<area shape="rect" href="flash_8h.html" title="Flash memory utilities." alt="" coords="512,80,579,107"/>
-<area shape="rect" href="virtual_8h.html" title="Small utilities to emulate virtual methods without extra vtabl." alt="" coords="690,80,766,107"/>
-<area shape="rect" href="utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="267,229,349,256"/>
-<area shape="rect" href="time_8h.html" title="Simple time utilities." alt="" coords="403,155,467,181"/>
-<area shape="rect" href="defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="5,304,88,331"/>
-<area shape="rect" href="board_8h_source.html" title=" " alt="" coords="113,304,231,331"/>
-<area shape="rect" title=" " alt="" coords="256,304,360,331"/>
-<area shape="rect" title=" " alt="" coords="362,379,433,405"/>
-<area shape="rect" href="io_8h_source.html" title=" " alt="" coords="595,229,690,256"/>
-<area shape="rect" title=" " alt="" coords="435,229,571,256"/>
-<area shape="rect" title=" " alt="" coords="607,304,678,331"/>
-<area shape="rect" title=" " alt="" coords="563,155,690,181"/>
-<area shape="rect" title=" " alt="" coords="765,155,840,181"/>
+<area shape="rect" title="C++&#45;like std::iostream facilities." alt="" coords="150,5,328,32"/>
+<area shape="rect" href="flash_8h.html" title="Flash memory utilities." alt="" coords="54,80,120,107"/>
+<area shape="rect" href="interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="190,80,288,107"/>
+<area shape="rect" href="queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="359,80,434,107"/>
+<area shape="rect" href="io_8h_source.html" title=" " alt="" coords="141,229,236,256"/>
+<area shape="rect" title=" " alt="" coords="24,155,150,181"/>
+<area shape="rect" title=" " alt="" coords="153,304,224,331"/>
+<area shape="rect" title=" " alt="" coords="226,155,340,181"/>
+<area shape="rect" href="utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="479,229,562,256"/>
+<area shape="rect" href="time_8h.html" title="Simple time utilities." alt="" coords="364,155,428,181"/>
+<area shape="rect" href="defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="463,304,546,331"/>
+<area shape="rect" href="board_8h_source.html" title=" " alt="" coords="570,304,689,331"/>
+<area shape="rect" title=" " alt="" coords="335,304,439,331"/>
+<area shape="rect" title=" " alt="" coords="412,379,482,405"/>
+<area shape="rect" title=" " alt="" coords="319,229,455,256"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -171,12 +172,121 @@ Namespaces</h2></td></tr>
 <tr class="memitem:namespacestreams"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacestreams.html">streams</a></td></tr>
 <tr class="memdesc:namespacestreams"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines C++-like streams API, based on circular buffers for input or output. <br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
+Macros</h2></td></tr>
+<tr class="memitem:a94aa054887c53435c9f96e6f5e096982"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="streambuf_8h.html#a94aa054887c53435c9f96e6f5e096982">REGISTER_OSTREAMBUF_LISTENERS</a>(HANDLER1, ...)</td></tr>
+<tr class="memdesc:a94aa054887c53435c9f96e6f5e096982"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary callbacks that will be notified when a <code><a class="el" href="classstreams_1_1ostreambuf.html" title="Output API based on a ring buffer.">streams::ostreambuf</a></code> is put new content (character or string).  <a href="streambuf_8h.html#a94aa054887c53435c9f96e6f5e096982">More...</a><br /></td></tr>
+<tr class="separator:a94aa054887c53435c9f96e6f5e096982"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34daf15c0c7da9701157e71611bc75c5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="streambuf_8h.html#a34daf15c0c7da9701157e71611bc75c5">REGISTER_OSTREAMBUF_NO_LISTENERS</a>()&#160;&#160;&#160;	void streams::ostreambuf_on_put_dispatch(ostreambuf&amp; obuf) {}</td></tr>
+<tr class="memdesc:a34daf15c0c7da9701157e71611bc75c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register no callback at all to <code><a class="el" href="classstreams_1_1ostreambuf.html" title="Output API based on a ring buffer.">streams::ostreambuf</a></code>.  <a href="streambuf_8h.html#a34daf15c0c7da9701157e71611bc75c5">More...</a><br /></td></tr>
+<tr class="separator:a34daf15c0c7da9701157e71611bc75c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac24624ca27fb91ac4b99a02e4e5a7ca1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="streambuf_8h.html#ac24624ca27fb91ac4b99a02e4e5a7ca1">DECL_OSTREAMBUF_LISTENERS_FRIEND</a>&#160;&#160;&#160;	friend struct streams::dispatch_handler;</td></tr>
+<tr class="memdesc:ac24624ca27fb91ac4b99a02e4e5a7ca1"><td class="mdescLeft">&#160;</td><td class="mdescRight">This macro shall be used in a class containing a private callback method <code>bool on_put(streams::ostreambuf&amp;)</code>, registered by <code>REGISTER_OSTREAMBUF_LISTENERS</code>.  <a href="streambuf_8h.html#ac24624ca27fb91ac4b99a02e4e5a7ca1">More...</a><br /></td></tr>
+<tr class="separator:ac24624ca27fb91ac4b99a02e4e5a7ca1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>C++-like std::iostream facilities. </p>
 
 <p class="definition">Definition in file <a class="el" href="streambuf_8h_source.html">streambuf.h</a>.</p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a94aa054887c53435c9f96e6f5e096982"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a94aa054887c53435c9f96e6f5e096982">&#9670;&nbsp;</a></span>REGISTER_OSTREAMBUF_LISTENERS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define REGISTER_OSTREAMBUF_LISTENERS</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">HANDLER1, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>...</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">    <span class="keywordtype">void</span> streams::ostreambuf_on_put_dispatch(ostreambuf&amp; obuf)                      \</div>
+<div class="line">    {                                                                               \</div>
+<div class="line">        streams::dispatch_handler::ostreambuf_on_put&lt;HANDLER1, ##__VA_ARGS__&gt;(obuf);\</div>
+<div class="line">    }</div>
+</div><!-- fragment -->
+<p>Register the necessary callbacks that will be notified when a <code><a class="el" href="classstreams_1_1ostreambuf.html" title="Output API based on a ring buffer.">streams::ostreambuf</a></code> is put new content (character or string). </p>
+<p>This is used by hardware and software UATX and UART.</p>
+<p>Each handler registered here will be notified until one mentions it has handled the notification.</p>
+<dl class="section warning"><dt>Warning</dt><dd>this macro must be called only once, with all interested handlers classes; calling it more than once will lead to errors at link time. </dd></dl>
+<dl class="section note"><dt>Note</dt><dd>you do not need to call this macro if you do not use <a class="el" href="classstreams_1_1ostreambuf.html" title="Output API based on a ring buffer.">streams::ostreambuf</a> in your program.</dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">HANDLER1</td><td>a class which registered instance will be notified, through its <code>bool on_put(streams::ostreambuf&amp;)</code> method when any ostreambuffer has new content put into it. </td></tr>
+    <tr><td class="paramname">...</td><td>other classes similar to HANDLER1.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="streambuf_8h.html#a34daf15c0c7da9701157e71611bc75c5" title="Register no callback at all to streams::ostreambuf.">REGISTER_OSTREAMBUF_NO_LISTENERS()</a> </dd>
+<dd>
+<a class="el" href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de" title="Register a class instance containing methods that shall be called back by an ISR.">interrupt::register_handler</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="streambuf_8h_source.html#l00049">49</a> of file <a class="el" href="streambuf_8h_source.html">streambuf.h</a>.</p>
+
+</div>
+</div>
+<a id="a34daf15c0c7da9701157e71611bc75c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34daf15c0c7da9701157e71611bc75c5">&#9670;&nbsp;</a></span>REGISTER_OSTREAMBUF_NO_LISTENERS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define REGISTER_OSTREAMBUF_NO_LISTENERS</td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td>&#160;&#160;&#160;	void streams::ostreambuf_on_put_dispatch(ostreambuf&amp; obuf) {}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Register no callback at all to <code><a class="el" href="classstreams_1_1ostreambuf.html" title="Output API based on a ring buffer.">streams::ostreambuf</a></code>. </p>
+<p>You normally do not need this macro, except if you:</p><ul>
+<li>use <a class="el" href="classstreams_1_1ostreambuf.html" title="Output API based on a ring buffer.">streams::ostreambuf</a></li>
+<li>but you do not use UATX, or UART</li>
+<li>you do not need to be called back when content is put to your ostreambuf instances</li>
+</ul>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="streambuf_8h.html#a94aa054887c53435c9f96e6f5e096982" title="Register the necessary callbacks that will be notified when a streams::ostreambuf is put new content ...">REGISTER_OSTREAMBUF_LISTENERS()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="streambuf_8h_source.html#l00064">64</a> of file <a class="el" href="streambuf_8h_source.html">streambuf.h</a>.</p>
+
+</div>
+</div>
+<a id="ac24624ca27fb91ac4b99a02e4e5a7ca1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac24624ca27fb91ac4b99a02e4e5a7ca1">&#9670;&nbsp;</a></span>DECL_OSTREAMBUF_LISTENERS_FRIEND</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define DECL_OSTREAMBUF_LISTENERS_FRIEND&#160;&#160;&#160;	friend struct streams::dispatch_handler;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This macro shall be used in a class containing a private callback method <code>bool on_put(streams::ostreambuf&amp;)</code>, registered by <code>REGISTER_OSTREAMBUF_LISTENERS</code>. </p>
+<p>It declares the class where it is used as a friend of all necessary functions so that the private callback method can be called properly. </p>
+
+<p class="definition">Definition at line <a class="el" href="streambuf_8h_source.html#l00073">73</a> of file <a class="el" href="streambuf_8h_source.html">streambuf.h</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

@@ -111,6 +111,12 @@ static constexpr const board::ExternalInterruptPin ECHO = board::ExternalInterru
 #error "Current target is not yet supported!"
 #endif
 
+#if HARDWARE_UART
+	REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<UART>)
+#else
+	REGISTER_OSTREAMBUF_LISTENERS(serial::soft::UATX<TX>)
+#endif
+
 // Buffers for UART
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 

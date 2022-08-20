@@ -116,23 +116,40 @@ namespace serial::soft
 		AbstractUATX(const AbstractUATX&) = delete;
 		AbstractUATX& operator=(const AbstractUATX&) = delete;
 
-		using CALLBACK = streams::ostreambuf::CALLBACK;
-
 		template<uint8_t SIZE_TX> 
-		explicit AbstractUATX(char (&output)[SIZE_TX], CALLBACK callback, void* arg)
-		: obuf_{output, callback, arg} {}
+		explicit AbstractUATX(char (&output)[SIZE_TX]) : obuf_{output} {}
 
+		// WARNING!!! This computation is super touchy for high rates because it depends totally on generated code
+		// Code generation may change:
+		// - when we change optimization options (we never do it and never shall)
+		// - when we change avr-gcc version: we have to recalculate based on write_,TX>() generated code analysis
+		// Actual timing is based on number of times to count 4 cycles, because we use _delay_loop_2(), this is
+		// why all values are divided by 4
 		void compute_times(uint32_t rate, StopBits stop_bits)
 		{
 			// Calculate timing for TX in number of cycles
 			uint16_t bit_time = uint16_t(F_CPU / rate);
-			// 11 or 12 cycles + delay counted from start bit (cbi) to first bit (sbi or cbi)
-			start_bit_tx_time_ = (bit_time - 12) / 4;
-			// 11 or 12 cycles + delay counted from first bit (sbi or cbi) to second bit (sbi or cbi)
-			interbit_tx_time_ = (bit_time - 12) / 4;
-			// For stop bit we lengthten the bit duration of 25% to guarantee alignment of RX side on stop duration
-			stop_bit_tx_time_ = (bit_time / 4) * 5 / 4;
+
+			// 5 or 6 cycles + delay [counted from start bit (cbi) to first bit (sbi or cbi)]
+			// if 1st bit is 1: ldi + sbrs + cbi		=> 1 + 2 + 2		= 5
+			// if 1st bit is 0: ldi + sbrs + rjmp + sbi	=> 1 + 1 + 2 + 2	= 6
+			// => we select 5 (because it is preferrable that rounding provides higher waiting times)
+			start_bit_tx_time_ = (bit_time - 5) / 4;
+			
+			// between 8 and 11 cycles + delay counted from first bit (sbi or cbi) to second bit (sbi or cbi)
+			// part 1: if previous bit is 1: nothing			=> 0
+			// part 1: if previous bit is 0: rjmp				=> 2
+			// part 2: lsr + subi + brne						=> 1 + 1 + 2 = 4
+			// part 3: if current bit is 1: sbrs + sbi			=> 2 + 2 = 4
+			// part 3: if current bit is 0: sbrs + rjmp + cbi	=> 1 + 2 + 2 = 5
+			// => we select 9 (mid-range lowest value, because it is preferrable that rounding provides higher waiting times)
+			interbit_tx_time_ = (bit_time - 9) / 4;
+			
+			// This one is simple because waiting loop occurs immediately after sbi (stop bit set)
+			stop_bit_tx_time_ = (bit_time / 4);
 			if (stop_bits == StopBits::TWO) stop_bit_tx_time_ *= 2;
+			// For stop bit we lengthen the bit duration of 25% to guarantee alignment of RX side on stop duration
+			stop_bit_tx_time_ = (bit_time / 4) * 5 / 4;
 		}
 		
 		static Parity calculate_parity(Parity parity, uint8_t value)
@@ -209,17 +226,17 @@ namespace serial::soft
 
 	/**
 	 * Software-emulated serial transmitter API.
+	 * For this API to be fully functional, you must register this class as a 
+	 * `streams::ostreambuf` callback listener through `REGISTER_OSTREAMBUF_LISTENERS()`.
 	 * 
 	 * @tparam TX_ the `board::DigitalPin` to which transmitted signal is sent
 	 * 
 	 * @sa UARX
 	 * @sa UART
+	 * @sa REGISTER_OSTREAMBUF_LISTENERS()
 	 */
 	template<board::DigitalPin TX_> class UATX : public AbstractUATX, public UARTErrors
 	{
-	private:
-		using THIS = UATX<TX_>;
-
 	public:
 		/** The `board::DigitalPin` to which transmitted signal is sent */
 		static constexpr const board::DigitalPin TX = TX_;
@@ -230,8 +247,10 @@ namespace serial::soft
 		 * @param output an array of characters used by this transmitter to
 		 * buffer output during transmission
 		 */
-		template<uint8_t SIZE_TX> explicit UATX(char (&output)[SIZE_TX])
-		: AbstractUATX{output, THIS::on_put, this} {}
+		template<uint8_t SIZE_TX> explicit UATX(char (&output)[SIZE_TX]) : AbstractUATX{output} 
+		{
+			interrupt::register_handler(*this);
+		}
 
 		/**
 		 * Enable the transmitter. 
@@ -264,16 +283,19 @@ namespace serial::soft
 		}
 
 	private:
-		static void on_put(void* arg)
+		bool on_put(streams::ostreambuf& obuf)
 		{
-			THIS& target = *((THIS*) arg);
-			target.check_overflow(target.errors());
+			if (&obuf != &out_()) return false;
+			check_overflow(errors());
 			char value;
-			while (target.out_().queue().pull(value)) target.write<TX>(target.parity_, uint8_t(value));
+			while (out_().queue().pull(value)) write<TX>(parity_, uint8_t(value));
+			return true;
 		}
 
 		Parity parity_;
 		gpio::FAST_PIN<TX> tx_ = gpio::FAST_PIN<TX>{gpio::PinMode::OUTPUT, true};
+
+		DECL_OSTREAMBUF_LISTENERS_FRIEND
 	};
 
 	/// @cond notdocumented
@@ -313,11 +335,15 @@ namespace serial::soft
 			// - 3 cycles to generate the PCI interrupt
 			// - 1-4 (take 2) cycles to complete current instruction
 			// - 4 cycles to process the interrupt + 2 cycles rjmp in vector table
-			// - 32 cycles spent in PCINT vector to save context and check stop bit (sbic)
-			// - 8 cycles to setup stack variables
+			// - 48 cycles spent in PCINT vector to save context and check stop bit (sbic)
+			//		17 push + 1 in + 1 eor	=> 34 + 1 + 1 = 36
+			//		2 lds + 1 ldd + 1 in + 1 mov + 1 andi + 1 sbrc => 4 + 2 + 1 + 1 + 1 + 3 = 12
+			// - 2 cycles to setup stack variables
+			//		1 std => 2
 			// - (4N) + 4 in delay
 			// - 8 cycles until first bit sample read (sbis)
-			start_bit_rx_time_ = compute_delay(3 * bit_time / 2, 3 + 2 + 4 + 2 + 32 + 8 + 4 + 8);
+			//		2 ldd + 3 ldi + 1 sbis => 4 + 3 + 1
+			start_bit_rx_time_ = compute_delay(3 * bit_time / 2, 3 + 2 + 4 + 48 + 2 + 4 + 8);
 
 			// Time to wait (_delay_loop_2) between sampling of 2 consecutive data bits
 			// This is also use between last bit and parity bit (if checked) or stop bit
@@ -424,8 +450,7 @@ namespace serial::soft
 		 * @sa REGISTER_UART_INT_ISR()
 		 */
 		template<uint8_t SIZE_RX> 
-		explicit UARX(char (&input)[SIZE_RX], INT_TYPE& enabler)
-		: AbstractUARX{input}, int_{enabler}
+		explicit UARX(char (&input)[SIZE_RX], INT_TYPE& enabler) : AbstractUARX{input}, int_{enabler}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -483,9 +508,6 @@ namespace serial::soft
 	template<board::ExternalInterruptPin RX_, board::DigitalPin TX_>
 	class UART<board::ExternalInterruptPin, RX_, TX_> : public AbstractUARX, public AbstractUATX, public UARTErrors
 	{
-	private:
-		using THIS = UART<board::ExternalInterruptPin, RX_, TX_>;
-
 	public:
 		/** The `board::DigitalPin` to which transmitted signal is sent */
 		static constexpr const board::DigitalPin TX = TX_;
@@ -515,7 +537,7 @@ namespace serial::soft
 		 */
 		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
 		explicit UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX], INT_TYPE& enabler)
-		:	AbstractUARX{input}, AbstractUATX{output, THIS::on_put, this}, int_{enabler}
+		:	AbstractUARX{input}, AbstractUATX{output}, int_{enabler}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -555,12 +577,13 @@ namespace serial::soft
 		}
 
 	private:
-		static void on_put(void* arg)
+		bool on_put(streams::ostreambuf& obuf)
 		{
-			THIS& target = *((THIS*) arg);
-			target.check_overflow(target.errors());
+			if (&obuf != &out_()) return false;
+			check_overflow(errors());
 			char value;
-			while (target.out_().queue().pull(value)) target.write<TX>(target.parity_, uint8_t(value));
+			while (out_().queue().pull(value)) write<TX>(parity_, uint8_t(value));
+			return true;
 		}
 
 		void on_pin_change()
@@ -574,7 +597,9 @@ namespace serial::soft
 		gpio::FAST_PIN<TX> tx_ = gpio::FAST_PIN<TX>{gpio::PinMode::OUTPUT, true};
 		gpio::FAST_PIN<RX> rx_ = gpio::PinMode::INPUT;
 		INT_TYPE& int_;
+
 		friend struct isr_handler;
+		DECL_OSTREAMBUF_LISTENERS_FRIEND
 	};
 
 	/** @sa UARX_PCI */
@@ -662,9 +687,6 @@ namespace serial::soft
 	template<board::InterruptPin RX_, board::DigitalPin TX_>
 	class UART<board::InterruptPin, RX_, TX_> : public AbstractUARX, public AbstractUATX, public UARTErrors
 	{
-	private:
-		using THIS = UART<board::InterruptPin, RX_, TX_>;
-
 	public:
 		/** The `board::DigitalPin` to which transmitted signal is sent */
 		static constexpr const board::DigitalPin TX = TX_;
@@ -694,7 +716,7 @@ namespace serial::soft
 		 */
 		template<uint8_t SIZE_RX, uint8_t SIZE_TX>
 		explicit UART(char (&input)[SIZE_RX], char (&output)[SIZE_TX], PCI_TYPE& enabler)
-		:	AbstractUARX{input}, AbstractUATX{output, THIS::on_put, this}, pci_{enabler}
+		:	AbstractUARX{input}, AbstractUATX{output}, pci_{enabler}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -735,12 +757,13 @@ namespace serial::soft
 		}
 
 	private:
-		static void on_put(void* arg)
+		bool on_put(streams::ostreambuf& obuf)
 		{
-			THIS& target = *((THIS*) arg);
-			target.check_overflow(target.errors());
+			if (&obuf != &out_()) return false;
+			check_overflow(errors());
 			char value;
-			while (target.out_().queue().pull(value)) target.write<TX>(target.parity_, uint8_t(value));
+			while (out_().queue().pull(value)) write<TX>(parity_, uint8_t(value));
+			return true;
 		}
 
 		void on_pin_change()
@@ -754,7 +777,9 @@ namespace serial::soft
 		gpio::FAST_PIN<TX> tx_ = gpio::FAST_PIN<TX>{gpio::PinMode::OUTPUT, true};
 		gpio::FAST_PIN<RX> rx_ = gpio::PinMode::INPUT;
 		PCI_TYPE& pci_;
+
 		friend struct isr_handler;
+		DECL_OSTREAMBUF_LISTENERS_FRIEND
 	};
 
 	// Useful type aliases
@@ -792,11 +817,14 @@ namespace serial::soft
 	 * Software-emulated serial receiver/transceiver API.
 	 * For this API to be fully functional, you must register the right ISR in your
 	 * program, through `REGISTER_UART_INT_ISR()`.
+	 * You must also register this class as a `streams::ostreambuf` callback 
+	 * listener through `REGISTER_OSTREAMBUF_LISTENERS()`.
 	 * 
 	 * @tparam RX_ the `board::ExternalInterruptPin` which shall receive serial signal
 	 * @tparam TX_ the `board::DigitalPin` to which transmitted signal is sent
 	 * 
 	 * @sa REGISTER_UART_INT_ISR()
+	 * @sa REGISTER_OSTREAMBUF_LISTENERS()
 	 * @sa UART
 	 * @sa UATX
 	 * @sa UARX
@@ -808,11 +836,14 @@ namespace serial::soft
 	 * Software-emulated serial receiver/transceiver API.
 	 * For this API to be fully functional, you must register the right ISR in your
 	 * program, through `REGISTER_UART_PCI_ISR()`.
+	 * You must also register this class as a `streams::ostreambuf` callback 
+	 * listener through `REGISTER_OSTREAMBUF_LISTENERS()`.
 	 * 
 	 * @tparam RX_ the `board::InterruptPin` which shall receive serial signal
 	 * @tparam TX_ the `board::DigitalPin` to which transmitted signal is sent
 	 * 
 	 * @sa REGISTER_UART_PCI_ISR()
+	 * @sa REGISTER_OSTREAMBUF_LISTENERS()
 	 * @sa UART
 	 * @sa UATX
 	 * @sa UARX

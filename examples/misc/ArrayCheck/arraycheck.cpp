@@ -42,6 +42,12 @@ static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 #error "Current target is not yet supported!"
 #endif
 
+#ifdef HARD_UART
+	REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<UART>)
+#else
+	REGISTER_OSTREAMBUF_LISTENERS(serial::soft::UATX<TX>)
+#endif
+
 using namespace tests;
 using namespace streams;
 using containers::array;

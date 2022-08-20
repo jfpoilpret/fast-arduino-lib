@@ -28,6 +28,7 @@
 static const board::USART USART = board::USART::USART0;
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
+REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<USART>)
 #else
 #error "Current target is not yet supported!"
 #endif

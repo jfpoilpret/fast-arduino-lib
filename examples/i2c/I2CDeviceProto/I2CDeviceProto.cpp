@@ -51,6 +51,7 @@ template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUT
 
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
+REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<board::USART::USART0>)
 
 // UART for traces
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;

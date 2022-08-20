@@ -48,6 +48,7 @@
 
 // Define vectors we need in the example
 REGISTER_UART_ISR(0)
+REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UART<board::USART::USART0>)
 
 // Buffers for UART
 static const uint8_t INPUT_BUFFER_SIZE = 64;
