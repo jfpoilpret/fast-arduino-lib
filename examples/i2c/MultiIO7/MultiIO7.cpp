@@ -41,6 +41,7 @@ REGISTER_I2C_ISR(MANAGER)
 #else
 using MANAGER = i2c::I2CSyncManager<i2c::I2CMode::FAST>;
 #endif
+REGISTER_FUTURE_STATUS_NO_LISTENERS()
 
 class LedChaser
 {

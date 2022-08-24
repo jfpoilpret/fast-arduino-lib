@@ -62,6 +62,12 @@ using streams::flush;
 using namespace devices::vl53l0x;
 using TOF = VL53L0X<MANAGER>;
 
+#if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
+REGISTER_FUTURE_STATUS_LISTENERS(i2c::I2CSameFutureGroup<MANAGER>, TOF::SetGPIOSettingsFuture)
+#else
+REGISTER_FAKEFUTURE_STATUS_LISTENERS(i2c::I2CSameFutureGroup<MANAGER>, TOF::SetGPIOSettingsFuture)
+#endif
+
 #define CHECK_OK(STATEMENT) if (! STATEMENT) out << F(#STATEMENT) << F(" ERROR!") << endl
 
 static DeviceStatus display_status(streams::ostream& out, TOF& tof)

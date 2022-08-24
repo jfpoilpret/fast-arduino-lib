@@ -167,8 +167,8 @@ namespace devices::mcp230xx
 			/// @cond notdocumented
 			ConfigureGPIOFuture(uint8_t direction, uint8_t pullup = 0, uint8_t polarity = 0)
 				:	PARENT{direction, polarity, pullup} {}
-			ConfigureGPIOFuture(ConfigureGPIOFuture&&) = default;
-			ConfigureGPIOFuture& operator=(ConfigureGPIOFuture&&) = default;
+			ConfigureGPIOFuture(ConfigureGPIOFuture&&) = delete;
+			ConfigureGPIOFuture& operator=(ConfigureGPIOFuture&&) = delete;
 			/// @endcond
 		};
 
@@ -219,8 +219,8 @@ namespace devices::mcp230xx
 			/// @cond notdocumented
 			ConfigureInterruptsFuture(uint8_t int_pins, uint8_t ref = 0, uint8_t compare_ref = 0)
 				:	PARENT{int_pins, ref, compare_ref} {}
-			ConfigureInterruptsFuture(ConfigureInterruptsFuture&&) = default;
-			ConfigureInterruptsFuture& operator=(ConfigureInterruptsFuture&&) = default;
+			ConfigureInterruptsFuture(ConfigureInterruptsFuture&&) = delete;
+			ConfigureInterruptsFuture& operator=(ConfigureInterruptsFuture&&) = delete;
 			/// @endcond
 		};
 

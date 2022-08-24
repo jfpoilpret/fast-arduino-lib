@@ -62,7 +62,7 @@
  * @sa REGISTER_OSTREAMBUF_LISTENERS()
  */
 #define REGISTER_OSTREAMBUF_NO_LISTENERS()							\
-	void streams::ostreambuf_on_put_dispatch(ostreambuf& obuf) {}
+	void streams::ostreambuf_on_put_dispatch(ostreambuf&) {}
 
 /**
  * This macro shall be used in a class containing a private callback method

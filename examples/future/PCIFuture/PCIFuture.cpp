@@ -110,6 +110,8 @@ REGISTER_UATX_ISR(0)
 	REGISTER_OSTREAMBUF_LISTENERS(serial::soft::UATX<TX>)
 #endif
 
+REGISTER_FUTURE_STATUS_NO_LISTENERS()
+
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;
 static char output_buffer[OUTPUT_BUFFER_SIZE];
 
@@ -132,7 +134,7 @@ public:
 		// Wait for future result
 		bool result = future_.get(snapshot);
 		// Reset future
-		future_ = std::move(Future<uint8_t>{});
+		future_.reset_();
 		return result;
 	}
 

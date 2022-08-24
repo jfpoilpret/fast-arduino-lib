@@ -311,8 +311,8 @@ namespace devices::rtc
 			{
 				static_assert(SIZE_ <= RAM_SIZE, "SIZE_ template paraneter must be less than RAM_SIZE!");
 			}
-			SetRamFuture(SetRamFuture<SIZE_>&&) = default;
-			SetRamFuture& operator=(SetRamFuture<SIZE_>&&) = default;
+			SetRamFuture(SetRamFuture<SIZE_>&&) = delete;
+			SetRamFuture& operator=(SetRamFuture<SIZE_>&&) = delete;
 
 			bool is_input_valid() const
 			{
@@ -365,8 +365,8 @@ namespace devices::rtc
 			/// @cond notdocumented
 			explicit SetRam1Future(uint8_t address, uint8_t data)
 				:	PARENT{{static_cast<uint8_t>(address + RAM_START), data}} {}
-			SetRam1Future(SetRam1Future&&) = default;
-			SetRam1Future& operator=(SetRam1Future&&) = default;
+			SetRam1Future(SetRam1Future&&) = delete;
+			SetRam1Future& operator=(SetRam1Future&&) = delete;
 
 			bool is_input_valid() const
 			{
@@ -420,8 +420,8 @@ namespace devices::rtc
 			{
 				static_assert(SIZE_ <= RAM_SIZE, "SIZE_ template paraneter must be less than RAM_SIZE!");
 			}
-			GetRamFuture(GetRamFuture<SIZE_>&&) = default;
-			GetRamFuture& operator=(GetRamFuture<SIZE_>&&) = default;
+			GetRamFuture(GetRamFuture<SIZE_>&&) = delete;
+			GetRamFuture& operator=(GetRamFuture<SIZE_>&&) = delete;
 
 			bool is_input_valid() const
 			{
@@ -472,8 +472,8 @@ namespace devices::rtc
 		public:
 			/// @cond notdocumented
 			explicit GetRam1Future(uint8_t address) : PARENT{static_cast<uint8_t>(address + RAM_START)} {}
-			GetRam1Future(GetRam1Future&&) = default;
-			GetRam1Future& operator=(GetRam1Future&&) = default;
+			GetRam1Future(GetRam1Future&&) = delete;
+			GetRam1Future& operator=(GetRam1Future&&) = delete;
 
 			bool is_input_valid() const
 			{
@@ -520,8 +520,8 @@ namespace devices::rtc
 			/// @cond notdocumented
 			// just write 0x80 at address 0
 			HaltClockFuture() : TWriteRegisterFuture<TIME_ADDRESS>{CLOCK_HALT} {}
-			HaltClockFuture(HaltClockFuture&&) = default;
-			HaltClockFuture& operator=(HaltClockFuture&&) = default;
+			HaltClockFuture(HaltClockFuture&&) = delete;
+			HaltClockFuture& operator=(HaltClockFuture&&) = delete;
 			/// @endcond
 		};
 
@@ -567,8 +567,8 @@ namespace devices::rtc
 			/// @cond notdocumented
 			explicit EnableOutputFuture(SquareWaveFrequency frequency) 
 				: PARENT{ControlRegister::create_square_wave_enable(frequency)} {}
-			EnableOutputFuture(EnableOutputFuture&&) = default;
-			EnableOutputFuture& operator=(EnableOutputFuture&&) = default;
+			EnableOutputFuture(EnableOutputFuture&&) = delete;
+			EnableOutputFuture& operator=(EnableOutputFuture&&) = delete;
 			/// @endcond
 		};
 
@@ -612,8 +612,8 @@ namespace devices::rtc
 			/// @cond notdocumented
 			explicit DisableOutputFuture(bool output_value) 
 				: PARENT{ControlRegister::create_output_level(output_value)} {}
-			DisableOutputFuture(DisableOutputFuture&&) = default;
-			DisableOutputFuture& operator=(DisableOutputFuture&&) = default;
+			DisableOutputFuture(DisableOutputFuture&&) = delete;
+			DisableOutputFuture& operator=(DisableOutputFuture&&) = delete;
 			/// @endcond
 		};
 

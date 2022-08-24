@@ -159,6 +159,7 @@ private:
 };
 
 REGISTER_I2C_ISR_METHOD(MANAGER, ToFController, &ToFController::i2c_change)
+REGISTER_FUTURE_STATUS_LISTENERS(i2c::I2CSameFutureGroup<MANAGER>, TOF::SetGPIOSettingsFuture)
 
 static constexpr uint16_t NUM_LOOPS = 1000U;
 

@@ -87,8 +87,6 @@ namespace i2c
 	protected:
 		/// @cond notdocumented
 		using ABSTRACT_FUTURE = typename MANAGER::ABSTRACT_FUTURE;
-		using FUTURE_STATUS_LISTENER = future::FutureStatusListener<ABSTRACT_FUTURE>;
-		using FUTURE_OUTPUT_LISTENER = future::FutureOutputListener<ABSTRACT_FUTURE>;
 
 		uint8_t reg() const
 		{
@@ -107,12 +105,11 @@ namespace i2c
 		 * this future
 		 */
 		explicit ReadRegisterFuture(uint8_t reg,
-			FUTURE_STATUS_LISTENER* status_listener = nullptr,
-			FUTURE_OUTPUT_LISTENER* output_listener = nullptr)
-			:	PARENT{reg, status_listener, output_listener} {}
+			future::FutureNotification notification = future::FutureNotification::NONE)
+			:	PARENT{reg, notification} {}
 		/// @cond notdocumented
-		ReadRegisterFuture(ReadRegisterFuture&&) = default;
-		ReadRegisterFuture& operator=(ReadRegisterFuture&&) = default;
+		ReadRegisterFuture(ReadRegisterFuture&&) = delete;
+		ReadRegisterFuture& operator=(ReadRegisterFuture&&) = delete;
 
 		bool get(T& result)
 		{
@@ -172,12 +169,11 @@ namespace i2c
 		 * this future
 		 */
 		explicit TReadRegisterFuture(
-			typename PARENT::FUTURE_STATUS_LISTENER* status_listener = nullptr,
-			typename PARENT::FUTURE_OUTPUT_LISTENER* output_listener = nullptr)
-			:	PARENT{REGISTER, status_listener, output_listener} {}
+			future::FutureNotification notification = future::FutureNotification::NONE)
+			:	PARENT{REGISTER, notification} {}
 		/// @cond notdocumented
-		TReadRegisterFuture(TReadRegisterFuture&&) = default;
-		TReadRegisterFuture& operator=(TReadRegisterFuture&&) = default;
+		TReadRegisterFuture(TReadRegisterFuture&&) = delete;
+		TReadRegisterFuture& operator=(TReadRegisterFuture&&) = delete;
 
 		void reset_()
 		{
@@ -222,7 +218,6 @@ namespace i2c
 	protected:
 		/// @cond notdocumented
 		using ABSTRACT_FUTURE = typename MANAGER::ABSTRACT_FUTURE;
-		using FUTURE_STATUS_LISTENER = future::FutureStatusListener<ABSTRACT_FUTURE>;
 
 		uint8_t reg() const
 		{
@@ -241,11 +236,11 @@ namespace i2c
 		 */
 		explicit WriteRegisterFuture(
 			uint8_t reg, const ARG_TYPE& value, 
-			FUTURE_STATUS_LISTENER* status_listener = nullptr)
-			:	PARENT{CONTENT{reg, value}, status_listener} {}
+			future::FutureNotification notification = future::FutureNotification::NONE)
+			:	PARENT{CONTENT{reg, value}, notification} {}
 		/// @cond notdocumented
-		WriteRegisterFuture(WriteRegisterFuture&&) = default;
-		WriteRegisterFuture& operator=(WriteRegisterFuture&&) = default;
+		WriteRegisterFuture(WriteRegisterFuture&&) = delete;
+		WriteRegisterFuture& operator=(WriteRegisterFuture&&) = delete;
 		/// @endcond
 	};
 
@@ -299,11 +294,11 @@ namespace i2c
 		 * future
 		 */
 		explicit TWriteRegisterFuture(const ARG_TYPE& value = ARG_TYPE{},
-			typename PARENT::FUTURE_STATUS_LISTENER* status_listener = nullptr)
-			:	PARENT{REGISTER, value, status_listener} {}
+			future::FutureNotification notification = future::FutureNotification::NONE)
+			:	PARENT{REGISTER, value, notification} {}
 		/// @cond notdocumented
-		TWriteRegisterFuture(TWriteRegisterFuture&&) = default;
-		TWriteRegisterFuture& operator=(TWriteRegisterFuture&&) = default;
+		TWriteRegisterFuture(TWriteRegisterFuture&&) = delete;
+		TWriteRegisterFuture& operator=(TWriteRegisterFuture&&) = delete;
 
 		void reset_(const T& input = T{})
 		{
@@ -386,7 +381,6 @@ namespace i2c
 	protected:
 		/// @cond notdocumented
 		using ABSTRACT_FUTURE = typename MANAGER::ABSTRACT_FUTURE;
-		using FUTURE_STATUS_LISTENER = future::FutureStatusListener<ABSTRACT_FUTURE>;
 		/// @endcond
 
 	public:
@@ -414,11 +408,11 @@ namespace i2c
 		 */
 		explicit TWriteMultiRegisterFuture(
 			std::initializer_list<T> values, 
-			FUTURE_STATUS_LISTENER* status_listener = nullptr)
-			:	PARENT{CONTENT{values}, status_listener} {}
+			future::FutureNotification notification = future::FutureNotification::NONE)
+			:	PARENT{CONTENT{values}, notification} {}
 		/// @cond notdocumented
-		TWriteMultiRegisterFuture(TWriteMultiRegisterFuture&&) = default;
-		TWriteMultiRegisterFuture& operator=(TWriteMultiRegisterFuture&&) = default;
+		TWriteMultiRegisterFuture(TWriteMultiRegisterFuture&&) = delete;
+		TWriteMultiRegisterFuture& operator=(TWriteMultiRegisterFuture&&) = delete;
 
 		void reset_(std::initializer_list<T> values)
 		{
@@ -507,9 +501,9 @@ namespace i2c
 
 	protected:
 		using ABSTRACT_FUTURE = typename MANAGER::ABSTRACT_FUTURE;
-		using STATUS_LISTENER = typename GROUP::STATUS_LISTENER;
 
-		explicit AbstractI2CFuturesGroup(STATUS_LISTENER* status_listener = nullptr) : GROUP{status_listener} {}
+		explicit AbstractI2CFuturesGroup(future::FutureNotification notification = future::FutureNotification::NONE) 
+			: GROUP{notification} {}
 
 		// Check launch_commands() return and update own status if needed
 		bool check_error(int error)
@@ -577,7 +571,6 @@ namespace i2c
 	{
 		using PARENT = AbstractI2CFuturesGroup<MANAGER>;
 		using MANAGER_TRAIT = I2CManager_trait<MANAGER>;
-		using STATUS_LISTENER = typename PARENT::STATUS_LISTENER;
 		using ABSTRACT_FUTURE = typename PARENT::ABSTRACT_FUTURE;
 
 	protected:
@@ -589,9 +582,9 @@ namespace i2c
 		 * @param status_listener an optional listener to status changes on this 
 		 * future
 		 */
-		I2CFuturesGroup(
-			ABSTRACT_FUTURE** futures, uint8_t size, STATUS_LISTENER* status_listener = nullptr)
-			: PARENT{status_listener}, futures_{futures}, size_{size} {}
+		I2CFuturesGroup(ABSTRACT_FUTURE** futures, uint8_t size, 
+			future::FutureNotification notification = future::FutureNotification::NONE)
+			: PARENT{notification}, futures_{futures}, size_{size} {}
 
 		/**
 		 * Start the I2C transactions needed by this group of futures.
@@ -626,9 +619,11 @@ namespace i2c
 		}
 
 		/// @cond notdocumented
-		void on_status_change(const ABSTRACT_FUTURE& future, future::FutureStatus status) final
+		void on_status_change(const ABSTRACT_FUTURE& future, future::FutureStatus status)
 		{
-			PARENT::on_status_change(future, status);
+			// First check if it is one of our futures!
+			if (!is_own_future(future)) return;
+			PARENT::on_status_change_pre_step(future, status);
 			// In sync mode, we must avoid recursive calls generated by on_status_change()!
 			if (MANAGER_TRAIT::IS_ASYNC)
 			{
@@ -640,6 +635,19 @@ namespace i2c
 		/// @endcond
 
 	private:
+		bool is_own_future(const ABSTRACT_FUTURE& future) const
+		{
+			uint8_t i = size_;
+			ABSTRACT_FUTURE** ptr = futures_;
+			while (i != 0)
+			{
+				if (*ptr == &future) return true;
+				++ptr;
+				--i;
+			}
+			return false;
+		}
+
 		bool next_future()
 		{
 			if (index_ == size_)
@@ -677,6 +685,8 @@ namespace i2c
 		ABSTRACT_FUTURE** futures_;
 		uint8_t size_;
 		uint8_t index_ = 0;
+
+		DECL_FUTURE_LISTENERS_FRIEND
 	};
 
 	/**
@@ -697,7 +707,6 @@ namespace i2c
 	{
 		using PARENT = AbstractI2CFuturesGroup<MANAGER>;
 		using MANAGER_TRAIT = I2CManager_trait<MANAGER>;
-		using STATUS_LISTENER = typename PARENT::STATUS_LISTENER;
 		using ABSTRACT_FUTURE = typename PARENT::ABSTRACT_FUTURE;
 		using F = WriteRegisterFuture<MANAGER, uint8_t>;
 		using CONTENT = WriteContent<uint8_t>;
@@ -712,10 +721,18 @@ namespace i2c
 		 * @param size size in bytes of the array at @p address
 		 * @param status_listener an optional listener to status changes on this 
 		 */
-		I2CSameFutureGroup(uint16_t address, uint8_t size, STATUS_LISTENER* status_listener = nullptr)
-			: PARENT{status_listener}, address_{address}, size_{size}
+		I2CSameFutureGroup(uint16_t address, uint8_t size, 
+			future::FutureNotification notification = future::FutureNotification::NONE)
+			: PARENT{notification}, address_{address}, size_{size}
 		{
 			PARENT::init({&future_}, size / FUTURE_SIZE);
+			interrupt::register_handler(*this);
+		}
+
+		//TODO document?
+		~I2CSameFutureGroup()
+		{
+			interrupt::unregister_handler(*this);
 		}
 
 		/**
@@ -773,9 +790,11 @@ namespace i2c
 			return flash::read_flash(address_++, data);
 		}
 
-		void on_status_change(const ABSTRACT_FUTURE& future, future::FutureStatus status) final
+		//TODO rework
+		void on_status_change(const ABSTRACT_FUTURE& future, future::FutureStatus status)
 		{
-			PARENT::on_status_change(future, status);
+			if (&future != &future_) return;
+			PARENT::on_status_change_pre_step(future, status);
 			// In sync mode, we must avoid recursive calls generated by on_status_change()!
 			if (MANAGER_TRAIT::IS_ASYNC)
 			{
@@ -789,8 +808,9 @@ namespace i2c
 		uint16_t address_;
 		uint8_t size_;
 		// The future reused for all writes
-		F future_{0, 0};
+		F future_{0, 0, future::FutureNotification::STATUS};
 
+		DECL_FUTURE_LISTENERS_FRIEND
 		friend bool await_same_future_group<MANAGER>(I2CDevice<MANAGER>&, const uint8_t*, uint8_t);
 	};
 
@@ -892,12 +912,12 @@ namespace i2c
 	{
 		using PARENT = AbstractI2CFuturesGroup<MANAGER>;
 		using MANAGER_TRAIT = I2CManager_trait<MANAGER>;
-		using STATUS_LISTENER = typename PARENT::STATUS_LISTENER;
 		using ABSTRACT_FUTURE = typename PARENT::ABSTRACT_FUTURE;
 
 	protected:
-		ComplexI2CFuturesGroup(uint16_t flash_config, STATUS_LISTENER* status_listener = nullptr)
-			: PARENT{status_listener}, address_{flash_config} {}
+		ComplexI2CFuturesGroup(uint16_t flash_config, 
+			future::FutureNotification notification = future::FutureNotification::NONE)
+			: PARENT{notification}, address_{flash_config} {}
 
 		enum class ProcessAction : uint8_t
 		{

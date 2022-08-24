@@ -89,6 +89,12 @@ using streams::flush;
 using namespace devices::vl53l0x;
 using TOF = VL53L0X<MANAGER>;
 
+#if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
+REGISTER_FUTURE_STATUS_LISTENERS(i2c::I2CSameFutureGroup<MANAGER>, TOF::GetGPIOSettingsFuture)
+#else
+REGISTER_FAKEFUTURE_STATUS_LISTENERS(i2c::I2CSameFutureGroup<MANAGER>, TOF::GetGPIOSettingsFuture)
+#endif
+
 void display_memory(streams::ostream& out)
 {
 	out << F("free mem=") << dec << memory::free_mem() << endl;

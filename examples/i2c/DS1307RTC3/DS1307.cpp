@@ -119,6 +119,7 @@ static MANAGER::I2CCOMMAND i2c_buffer[I2C_BUFFER_SIZE];
 using RTC = DS1307<MANAGER>;
 
 REGISTER_I2C_ISR(MANAGER)
+REGISTER_FUTURE_STATUS_NO_LISTENERS()
 
 void display_ram(ostream& out, const uint8_t* data, uint8_t size)
 {

@@ -21,6 +21,7 @@
  *   - D25 (PD1): TX output connected through USB Serial converter to console for display
  */
 
+#include <fastarduino/move.h>
 #include <fastarduino/flash.h>
 #include <fastarduino/future.h>
 #include <fastarduino/uart.h>
@@ -41,6 +42,7 @@ REGISTER_UATX_ISR(0)
 #endif
 
 REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<USART>)
+REGISTER_FUTURE_STATUS_NO_LISTENERS()
 
 using namespace future;
 using namespace streams;
@@ -59,16 +61,8 @@ public:
 	MyFuture() : Future<uint16_t>{} {}
 	~MyFuture() = default;
 
-	MyFuture(MyFuture&& that) : Future<uint16_t>{std::move(that)}
-	{
-	}
-	MyFuture& operator=(MyFuture&& that)
-	{
-		if (this == &that) return *this;
-		(Future<uint16_t>&) *this = std::move(that);
-		return *this;
-	}
-
+	MyFuture(MyFuture&&) = delete;
+	MyFuture& operator=(MyFuture&&) = delete;
 	MyFuture(const MyFuture&) = delete;
 	MyFuture& operator=(const MyFuture&) = delete;
 
@@ -200,82 +194,6 @@ int main()
 	out << F("#6.5 set_future_value() after get() additional byte") << endl;
 	ASSERT(out, !future6.set_future_value_(uint8_t(0xBB)));
 	ASSERT_STATUS(out, READY, future6);
-	out << endl;
-
-	// Check reuse of a future in various states
-	out << F("TEST #7 check Future status after move constructor") << endl;
-	out << F("#7.1 instantiate future") << endl;
-	Future<uint16_t> future7;
-	ASSERT_STATUS(out, NOT_READY, future7);
-	out << F("#7.3 check status (NOT_READY, INVALID) -> (INVALID, NOT_READY)") << endl;
-	Future<uint16_t> future8 = std::move(future7);
-	ASSERT_STATUS(out, INVALID, future7);
-	ASSERT_STATUS(out, NOT_READY, future8);
-	out << F("#7.4 check status (READY, INVALID) -> (READY, READY)") << endl;
-	ASSERT(out, future8.set_future_value_(0xFFFFu));
-	Future<uint16_t> future9 = std::move(future8);
-	ASSERT_STATUS(out, READY, future8);
-	ASSERT_STATUS(out, READY, future9);
-	ASSERT_VALUE(out, 0xFFFFu, future9);
-	out << F("#7.5 check status (ERROR, INVALID) -> (ERROR, ERROR)") << endl;
-	Future<uint16_t> future10;
-	ASSERT(out, future10.set_future_error_(-10000));
-	Future<uint16_t> future11 = std::move(future10);
-	ASSERT_STATUS(out, ERROR, future10);
-	ASSERT_ERROR(out, -10000, future10);
-	ASSERT_STATUS(out, ERROR, future11);
-	ASSERT_ERROR(out, -10000, future11);
-	out << F("#7.6 check status (NOT_READY, NOT_READY) -> (INVALID, NOT_READY)") << endl;
-	Future<uint16_t> future12;
-	Future<uint16_t> future13 = std::move(future12);
-	ASSERT_STATUS(out, INVALID, future12);
-	ASSERT_STATUS(out, NOT_READY, future13);
-	out << F("#7.7 check status (partial NOT_READY, INVALID) -> (INVALID, partial NOT_READY)") << endl;
-	Future<uint16_t> future14;
-	ASSERT(out, future14.set_future_value_(uint8_t(0xBB)));
-	Future<uint16_t> future15 = std::move(future14);
-	ASSERT_STATUS(out, INVALID, future14);
-	ASSERT_STATUS(out, NOT_READY, future15);
-	ASSERT(out, future15.set_future_value_(uint8_t(0xCC)));
-	out << F("#7.8 Complete set value") << endl;
-	ASSERT_STATUS(out, READY, future15);
-	ASSERT_ERROR(out, 0, future15);
-	ASSERT_VALUE(out, 0xCCBBu, future15);
-	out << endl;
-
-	// Check reuse of a future in various states
-	out << F("TEST #8 check Future status after move assignment") << endl;
-	out << F("#8.1 instantiate futures") << endl;
-	Future<uint16_t> future17, future18, future19, future20, future21, future22, future23, future24, future25;
-	out << F("#8.2 register future") << endl;
-	ASSERT_STATUS(out, NOT_READY, future17);
-	out << F("#8.3 check status (NOT_READY, INVALID) -> (INVALID, NOT_READY)") << endl;
-	future18 = std::move(future17);
-	ASSERT_STATUS(out, INVALID, future17);
-	ASSERT_STATUS(out, NOT_READY, future18);
-	out << F("#8.4 check status (READY, INVALID) -> (READY, READY)") << endl;
-	ASSERT(out, future18.set_future_value_(0xFFFFu));
-	future19 = std::move(future18);
-	ASSERT_STATUS(out, READY, future18);
-	ASSERT_STATUS(out, READY, future19);
-	ASSERT_VALUE(out, 0xFFFFu, future19);
-	out << F("#8.5 check status (ERROR, INVALID) -> (ERROR, ERROR)") << endl;
-	ASSERT(out, future20.set_future_error_(-10000));
-	future21 = std::move(future20);
-	ASSERT_STATUS(out, ERROR, future20);
-	ASSERT_ERROR(out, -10000, future20);
-	ASSERT_STATUS(out, ERROR, future21);
-	ASSERT_ERROR(out, -10000, future21);
-	out << F("#8.7 check status (partial NOT_READY, INVALID) -> (INVALID, partial NOT_READY)") << endl;
-	ASSERT(out, future24.set_future_value_(uint8_t(0xBB)));
-	future25 = std::move(future24);
-	ASSERT_STATUS(out, INVALID, future24);
-	ASSERT_STATUS(out, NOT_READY, future25);
-	out << F("#8.8 after complete set value, status shall be READY") << endl;
-	ASSERT(out, future25.set_future_value_(uint8_t(0xCC)));
-	ASSERT_STATUS(out, READY, future25);
-	ASSERT_ERROR(out, 0, future25);
-	ASSERT_VALUE(out, 0xCCBBu, future25);
 	out << endl;
 
 	// Check Future subclassing

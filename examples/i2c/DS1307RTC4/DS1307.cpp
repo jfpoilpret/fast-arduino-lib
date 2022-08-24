@@ -150,6 +150,7 @@ private:
 };
 
 REGISTER_I2C_ISR_METHOD(MANAGER, RTCAsyncHandler, &RTCAsyncHandler::i2c_change)
+REGISTER_FUTURE_STATUS_NO_LISTENERS()
 
 void display_ram(ostream& out, const uint8_t* data, uint8_t size)
 {

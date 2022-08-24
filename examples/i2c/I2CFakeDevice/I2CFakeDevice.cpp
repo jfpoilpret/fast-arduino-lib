@@ -83,6 +83,7 @@ using MANAGER = i2c::I2CSyncStatusManager<i2c::I2CMode::FAST, DEBUGGER&>;
 #if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
 REGISTER_I2C_ISR(MANAGER)
 #endif
+REGISTER_FUTURE_STATUS_NO_LISTENERS()
 
 // UART buffer for traces
 static char output_buffer[OUTPUT_BUFFER_SIZE];

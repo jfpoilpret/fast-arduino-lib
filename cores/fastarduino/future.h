@@ -26,9 +26,35 @@
 #include <string.h>
 #include "iterator.h"
 #include "errors.h"
-#include "move.h"
 #include "streams.h"
 #include "time.h"
+
+//TODO DOC
+//TODO find a way (I2C) to ensure that proper AbstractFuture type is used (correct macro is called)
+#define REGISTER_FUTURE_STATUS_LISTENERS(HANDLER1, ...)												\
+	void future::future_on_status_change_dispatch(const AbstractFuture& future, FutureStatus status)\
+	{																								\
+		future::dispatch_handler::future_on_status_change<AbstractFuture, HANDLER1, ##__VA_ARGS__>(	\
+			future, status);																		\
+	}																								\
+	void future::future_on_status_change_dispatch(const AbstractFakeFuture&, FutureStatus) {}
+
+#define REGISTER_FAKEFUTURE_STATUS_LISTENERS(HANDLER1, ...)												\
+	void future::future_on_status_change_dispatch(const AbstractFuture&, FutureStatus) {}				\
+	void future::future_on_status_change_dispatch(const AbstractFakeFuture& future, FutureStatus status)\
+	{																									\
+		future::dispatch_handler::future_on_status_change<AbstractFakeFuture, HANDLER1, ##__VA_ARGS__>(	\
+			future, status);																			\
+	}
+
+//TODO DOC
+#define REGISTER_FUTURE_STATUS_NO_LISTENERS()													\
+	void future::future_on_status_change_dispatch(const AbstractFuture&, FutureStatus) {}		\
+	void future::future_on_status_change_dispatch(const AbstractFakeFuture&, FutureStatus) {}
+
+//TODO DOC
+#define DECL_FUTURE_LISTENERS_FRIEND         \
+	friend struct future::dispatch_handler;
 
 /**
  * Contains the API around Future implementation.
@@ -161,56 +187,20 @@ namespace future
 	streams::ostream& operator<<(streams::ostream& out, future::FutureStatus s);
 	/// @endcond
 
-	/**
-	 * Listener is the interface allowing to listen to changes of a Future status.
-	 * This may be added to any Future at construction time.
-	 * 
-	 * @tparam F the type of Future to listen to; this may be `AbstractFuture`,
-	 * `AbstractFakeFuture`, or any subclass of these.
-	 * 
-	 * @sa Future
-	 * @sa FutureStatus
-	 * @sa FutureOutputListener
-	 */
-	template<typename F> class FutureStatusListener
-	{
-	protected:
-		/**
-		 * Called whenever a listened-to Future changes its FutureStatus.
-		 * @param future a reference to the Future which status has changed
-		 * @param new_status the new FutureStatus of @p future
-		 */
-		virtual void on_status_change(const F& future, FutureStatus new_status) = 0;
-		friend F;
-	};
+	/// @cond notdocumented
+	class AbstractFuture;
+	extern void future_on_status_change_dispatch(const AbstractFuture&, FutureStatus);
+	class AbstractFakeFuture;
+	extern void future_on_status_change_dispatch(const AbstractFakeFuture&, FutureStatus);
+	/// @endcond
 
-	/**
-	 * Listener is the interface allowing to listen to changes of a Future output
-	 * buffer (while being fed by a producer).
-	 * This may be added to any Future at construction time.
-	 * 
-	 * @tparam F the type of Future to listen to; this may be `AbstractFuture`,
-	 * `AbstractFakeFuture`, or any subclass of these.
-	 * 
-	 * @sa Future
-	 * @sa FutureStatus
-	 * @sa FutureStatusListener
-	 */
-	template<typename F> class FutureOutputListener
+	//TODO DOC
+	enum class FutureNotification : uint8_t
 	{
-	protected:
-		/**
-		 * Called whenever a listened-to Future has its output buffer changed.
-		 * This is called for every byte added to the output buffer.
-		 * @param future a reference to the Future which output has been updated
-		 * @param output_data pointer to the beginning of @p future output buffer;
-		 * will be `null` if @p future is an `AbstractFakeFuture` or subclass.
-		 * @param output_current pointer to the next byte to be written to 
-		 * @p future output buffer; `*(9)output_current - 1)` points to the byte
-		 * newly added.
-		 */
-		virtual void on_output_change(const F& future, uint8_t* output_data, uint8_t* output_current) = 0;
-		friend F;
+		NONE = 0,
+		STATUS = 1,
+		OUTPUT = 2,
+		BOTH = 3
 	};
 
 	/**
@@ -566,26 +556,14 @@ namespace future
 			return true;
 		}
 
-		/**
-		 * The type to use for status listeners for this type of Future.
-		 * @sa FutureStatusListener
-		 */
-		using STATUS_LISTENER = FutureStatusListener<AbstractFuture>;
-
-		/**
-		 * The type to use for output listeners for this type of Future.
-		 * @sa FutureOutputListener
-		 */
-		using OUTPUT_LISTENER = FutureOutputListener<AbstractFuture>;
-
 	protected:
 		/// @cond notdocumented
 		// "default" constructor
 		AbstractFuture(uint8_t* output_data, uint8_t output_size, uint8_t* input_data, uint8_t input_size,
-			STATUS_LISTENER* status_listener = nullptr,	OUTPUT_LISTENER* output_listener = nullptr)
+			FutureNotification notifications = FutureNotification::NONE)
 			:	output_data_{output_data}, output_current_{output_data}, output_size_{output_size},
 				input_data_{input_data}, input_current_{input_data}, input_size_{input_size},
-				status_listener_{status_listener}, output_listener_{output_listener} {}
+				notifications_{notifications} {}
 
 		// these constructors are forbidden (subclass ctors shall call above move/copy ctor instead)
 		AbstractFuture(const AbstractFuture&) = delete;
@@ -612,44 +590,21 @@ namespace future
 		{
 			return (input_current_ == input_data_);
 		}
-
-		// This method is called by subclass in their move constructor and assignment operator
-		void move_(AbstractFuture&& that, uint8_t full_output_size, uint8_t full_input_size)
-		{
-			// Now copy all attributes from rhs (output_data_ was already initialized when this was constructed)
-			status_listener_ = that.status_listener_;
-			output_listener_ = that.output_listener_;
-
-			const FutureStatus status = that.status_;
-			status_ = status;
-			// Make rhs Future invalid
-			if (status == FutureStatus::NOT_READY)
-				that.status_ = FutureStatus::INVALID;
-
-			error_ = that.error_;
-			const uint8_t output_size = that.output_size_;
-			// Calculate data pointer attribute for next set value calls
-			output_current_ = output_data_ + full_output_size - output_size;
-			output_size_ = output_size;
-
-			const uint8_t input_size = that.input_size_;
-			// Calculate data pointer attribute for next set value calls
-			input_current_ = input_data_ + full_input_size - input_size;
-			input_size_ = input_size;
-		}
 		/// @endcond
 
 	private:
 		void callback_status()
 		{
-			if (status_listener_ != nullptr)
-				status_listener_->on_status_change(*this, status_);
+			if (uint8_t(notifications_) & uint8_t(FutureNotification::STATUS))
+				future_on_status_change_dispatch(*this, status_);
 		}
 		
 		void callback_output()
 		{
-			if (output_listener_ != nullptr)
-				output_listener_->on_output_change(*this, output_data_, output_current_);
+			if (uint8_t(notifications_) & uint8_t(FutureNotification::OUTPUT))
+			{
+				//TODO LATER
+			}
 		}
 		
 		volatile FutureStatus status_ = FutureStatus::NOT_READY;
@@ -663,8 +618,7 @@ namespace future
 		uint8_t* input_current_ = nullptr;
 		uint8_t input_size_ = 0;
 
-		STATUS_LISTENER* status_listener_ = nullptr;
-		OUTPUT_LISTENER* output_listener_ = nullptr;
+		FutureNotification notifications_;
 
 		template<typename F> friend class AbstractFuturesGroup;
 	};
@@ -731,24 +685,14 @@ namespace future
 		 * @sa status()
 		 * @sa FutureStatus
 		 */
-		explicit Future(const IN& input = IN{}, STATUS_LISTENER* status_listener = nullptr,
-			OUTPUT_LISTENER* output_listener = nullptr)
+		explicit Future(const IN& input = IN{}, FutureNotification notifications = FutureNotification::NONE)
 			:	AbstractFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN), 
-					status_listener, output_listener}, input_{input} {}
+					notifications}, input_{input} {}
 
 		/// @cond notdocumented
 		~Future() = default;
-		Future(Future&& that) : AbstractFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN)}
-		{
-			move(std::move(that));
-		}
-		Future& operator=(Future&& that)
-		{
-			if (this == &that) return *this;
-			move(std::move(that));
-			return *this;
-		}
-
+		Future(Future&&) = delete;
+		Future& operator=(Future&&) = delete;
 		Future(const Future&) = delete;
 		Future& operator=(const Future&) = delete;
 		/// @endcond
@@ -838,16 +782,6 @@ namespace future
 		}
 
 	private:
-		void move(Future&& that)
-		{
-			synchronized
-			{
-				memcpy(output_buffer_, that.output_buffer_, sizeof(OUT));
-				memcpy(input_buffer_, that.input_buffer_, sizeof(IN));
-				move_(std::move(that), sizeof(OUT), sizeof(IN));
-			}
-		}
-
 		union
 		{
 			OUT output_;
@@ -875,21 +809,12 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = sizeof(OUT);
 		static constexpr uint8_t IN_SIZE = 0;
 
-		Future(STATUS_LISTENER* status_listener = nullptr, OUTPUT_LISTENER* output_listener = nullptr)
-		: AbstractFuture{output_buffer_, sizeof(OUT), nullptr, 0, status_listener, output_listener} {}
+		Future(FutureNotification notifications = FutureNotification::NONE)
+		: AbstractFuture{output_buffer_, sizeof(OUT), nullptr, 0, notifications} {}
 		~Future() = default;
 
-		Future(Future&& that) : AbstractFuture{output_buffer_, sizeof(OUT), nullptr, 0}
-		{
-			move(std::move(that));
-		}
-		Future& operator=(Future&& that)
-		{
-			if (this == &that) return *this;
-			move(std::move(that));
-			return *this;
-		}
-
+		Future(Future&&) = delete;
+		Future& operator=(Future&&) = delete;
 		Future(const Future&) = delete;
 		Future& operator=(const Future&) = delete;
 
@@ -909,15 +834,6 @@ namespace future
 		}
 
 	private:
-		void move(Future&& that)
-		{
-			synchronized
-			{
-				memcpy(output_buffer_, that.output_buffer_, sizeof(OUT));
-				move_(std::move(that), sizeof(OUT), 0);
-			}
-		}
-
 		union
 		{
 			OUT output_;
@@ -939,21 +855,12 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = 0;
 		static constexpr uint8_t IN_SIZE = sizeof(IN);
 
-		explicit Future(const IN& input = IN{}, STATUS_LISTENER* status_listener = nullptr)
-			: AbstractFuture{nullptr, 0, input_buffer_, sizeof(IN), status_listener}, input_{input} {}
+		explicit Future(const IN& input = IN{}, FutureNotification notifications = FutureNotification::NONE)
+			: AbstractFuture{nullptr, 0, input_buffer_, sizeof(IN), notifications}, input_{input} {}
 		~Future() = default;
 
-		Future(Future&& that) : AbstractFuture{nullptr, 0, input_buffer_, sizeof(IN)}
-		{
-			move(std::move(that));
-		}
-		Future& operator=(Future&& that)
-		{
-			if (this == &that) return *this;
-			move(std::move(that));
-			return *this;
-		}
-
+		Future(Future&&) = delete;
+		Future& operator=(Future&&) = delete;
 		Future(const Future&) = delete;
 		Future& operator=(const Future&) = delete;
 
@@ -988,15 +895,6 @@ namespace future
 		}
 
 	private:
-		void move(Future&& that)
-		{
-			synchronized
-			{
-				memcpy(input_buffer_, that.input_buffer_, sizeof(IN));
-				move_(std::move(that), 0, sizeof(IN));
-			}
-		}
-
 		union
 		{
 			IN input_;
@@ -1016,21 +914,12 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = 0;
 		static constexpr uint8_t IN_SIZE = 0;
 
-		explicit Future(STATUS_LISTENER* status_listener = nullptr)
-		: AbstractFuture{nullptr, 0,nullptr, 0, status_listener} {}
+		explicit Future(FutureNotification notifications = FutureNotification::NONE)
+		: AbstractFuture{nullptr, 0,nullptr, 0, notifications} {}
 		~Future() = default;
 
-		Future(Future&& that) : AbstractFuture{nullptr, 0, nullptr, 0}
-		{
-			synchronized move_(std::move(that), 0, 0);
-		}
-		Future& operator=(Future&& that)
-		{
-			if (this == &that) return *this;
-			synchronized move_(std::move(that), 0, 0);
-			return *this;
-		}
-
+		Future(Future&&) = delete;
+		Future& operator=(Future&&) = delete;
 		Future(const Future&) = delete;
 		Future& operator=(const Future&) = delete;
 
@@ -1145,18 +1034,16 @@ namespace future
 			return true;
 		}
 
-		using STATUS_LISTENER = FutureStatusListener<AbstractFakeFuture>;
-		using OUTPUT_LISTENER = FutureOutputListener<AbstractFakeFuture>;
 		/// @endcond
 		
 	protected:
 		/// @cond notdocumented
 		// "default" constructor
 		AbstractFakeFuture(uint8_t* output_data, uint8_t output_size, uint8_t* input_data, uint8_t input_size,
-			STATUS_LISTENER* status_listener = nullptr, OUTPUT_LISTENER* output_listener = nullptr)
+			FutureNotification notifications = FutureNotification::NONE)
 			:	output_current_{output_data}, output_size_{output_size},
 				input_current_{input_data}, input_size_{input_size},
-				status_listener_{status_listener}, output_listener_{output_listener} {}
+				notifications_{notifications} {}
 
 		// these constructors are forbidden (subclass ctors shall call above move/copy ctor instead)
 		AbstractFakeFuture(const AbstractFakeFuture&) = delete;
@@ -1187,14 +1074,16 @@ namespace future
 	private:
 		void callback_status()
 		{
-			if (status_listener_ != nullptr)
-				status_listener_->on_status_change(*this, status());
+			if (uint8_t(notifications_) & uint8_t(FutureNotification::STATUS))
+				future_on_status_change_dispatch(*this, status());
 		}
 		
 		void callback_output()
 		{
-			if (output_listener_ != nullptr)
-				output_listener_->on_output_change(*this, nullptr, output_current_);
+			if (uint8_t(notifications_) & uint8_t(FutureNotification::OUTPUT))
+			{
+				//TODO LATER
+			}
 		}
 
 		int error_ = 0;
@@ -1205,8 +1094,7 @@ namespace future
 		uint8_t* input_current_ = nullptr;
 		uint8_t input_size_ = 0;
 
-		STATUS_LISTENER* status_listener_ = nullptr;
-		OUTPUT_LISTENER* output_listener_ = nullptr;
+		FutureNotification notifications_;
 
 		template<typename F> friend class AbstractFuturesGroup;
 	};
@@ -1233,9 +1121,9 @@ namespace future
 		static constexpr uint8_t IN_SIZE = sizeof(IN);
 
 		explicit FakeFuture(const IN& input = IN{}, 
-			STATUS_LISTENER* status_listener = nullptr, OUTPUT_LISTENER* output_listener = nullptr)
+			FutureNotification notifications = FutureNotification::NONE)
 			:	AbstractFakeFuture{output_buffer_, sizeof(OUT), input_buffer_, sizeof(IN),
-				status_listener, output_listener}, input_{input} {}
+				notifications}, input_{input} {}
 
 		~FakeFuture() = default;
 
@@ -1295,9 +1183,9 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = sizeof(OUT);
 		static constexpr uint8_t IN_SIZE = 0;
 
-		explicit FakeFuture(STATUS_LISTENER* status_listener = nullptr, OUTPUT_LISTENER* output_listener = nullptr)
+		explicit FakeFuture(FutureNotification notifications = FutureNotification::NONE)
 			:	AbstractFakeFuture{output_buffer_, sizeof(OUT), nullptr, 0,
-				status_listener, output_listener} {}
+				notifications} {}
 
 		~FakeFuture() = default;
 
@@ -1335,8 +1223,8 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = 0;
 		static constexpr uint8_t IN_SIZE = sizeof(IN);
 
-		explicit FakeFuture(const IN& input = IN{}, STATUS_LISTENER* status_listener = nullptr)
-			: AbstractFakeFuture{nullptr, 0, input_buffer_, sizeof(IN), status_listener}, input_{input} {}
+		explicit FakeFuture(const IN& input = IN{}, FutureNotification notifications = FutureNotification::NONE)
+			: AbstractFakeFuture{nullptr, 0, input_buffer_, sizeof(IN), notifications}, input_{input} {}
 
 		~FakeFuture() = default;
 
@@ -1388,8 +1276,8 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = 0;
 		static constexpr uint8_t IN_SIZE = 0;
 
-		explicit FakeFuture(STATUS_LISTENER* status_listener = nullptr)
-			: AbstractFakeFuture{nullptr, 0, nullptr, 0, status_listener} {}
+		explicit FakeFuture(FutureNotification notifications = FutureNotification::NONE)
+			: AbstractFakeFuture{nullptr, 0, nullptr, 0, notifications} {}
 
 		~FakeFuture() = default;
 
@@ -1470,17 +1358,10 @@ namespace future
 	 * @tparam F the type of Future to aggregate int this group; this shall be
 	 * either `AbstractFuture` or `AbstractFakeFuture`.
 	 */
-	template<typename F> class AbstractFuturesGroup : public F, public FutureStatusListener<F>
+	template<typename F> class AbstractFuturesGroup : public F
 	{
 		static_assert(Future_trait<F>::IS_FUTURE, "F must be a Future");
 		static_assert(Future_trait<F>::IS_ABSTRACT, "F must be an abstract Future");
-
-	public:
-		/**
-		 * The type to use for status listeners for this type of Future.
-		 * @sa FutureStatusListener
-		 */
-		using STATUS_LISTENER = FutureStatusListener<F>;
 
 	protected:
 		/**
@@ -1504,8 +1385,8 @@ namespace future
 		 * @sa init()
 		 * @sa FutureStatus
 		 */
-		explicit AbstractFuturesGroup(STATUS_LISTENER* status_listener = nullptr)
-			:	F{nullptr, 0, nullptr, 0, status_listener} {}
+		explicit AbstractFuturesGroup(FutureNotification notifications = FutureNotification::NONE)
+			:	F{nullptr, 0, nullptr, 0, notifications} {}
 
 		/**
 		 * Called from constructors of subclasses, this method allows this group
@@ -1525,7 +1406,7 @@ namespace future
 		{
 			num_ready_ = (actual_size != 0 ? actual_size : futures.size());
 			for (F* future: futures)
-				future->status_listener_ = this;
+				future->notifications_ = FutureNotification::STATUS;
 		}
 		/// @cond notdocumented
 		AbstractFuturesGroup(AbstractFuturesGroup&&) = delete;
@@ -1533,7 +1414,7 @@ namespace future
 		AbstractFuturesGroup(const AbstractFuturesGroup&) = delete;
 		AbstractFuturesGroup& operator=(const AbstractFuturesGroup&) = delete;
 
-		void on_status_change(const F& future, FutureStatus status) override
+		void on_status_change_pre_step(const F& future, FutureStatus status)
 		{
 			switch (status)
 			{
@@ -1559,6 +1440,34 @@ namespace future
 	private:
 		uint16_t num_ready_ = 0;
 	};
+
+	/// @cond notdocumented
+	struct dispatch_handler
+	{
+		template<typename F> static void future_on_status_change_helper(
+			const F& future UNUSED, FutureStatus status UNUSED)
+		{
+			return;
+		}
+
+		template<typename F, typename HANDLER1_, typename... HANDLERS_> 
+		static void future_on_status_change_helper(const F& future, FutureStatus status)
+		{
+			HANDLER1_* handler = interrupt::HandlerHolder<HANDLER1_>::handler();
+			if (handler != nullptr)
+				handler->on_status_change(future, status);
+			// handle other handlers
+			future_on_status_change_helper<F, HANDLERS_...>(future, status);
+		}
+
+		template<typename F, typename... HANDLERS_>
+		static void future_on_status_change(const F& future, FutureStatus status)
+		{
+			// Ask each registered listener to handle on_status_change() if concerned
+			future_on_status_change_helper<F, HANDLERS_...>(future, status);
+		}
+	};
+	/// @endcond 
 }
 
 #endif /* FUTURE_HH */

@@ -113,7 +113,6 @@ namespace devices::vl53l0x
 			i2c::TWriteRegisterFuture<MANAGER, uint8_t(REGISTER), T, functor::ChangeEndianness<T>>;
 
 		using I2CFuturesGroup = i2c::I2CFuturesGroup<MANAGER>;
-		using I2CSameFutureGroup = i2c::I2CSameFutureGroup<MANAGER>;
 
 	public:
 		/**
@@ -567,10 +566,15 @@ namespace devices::vl53l0x
 			/// @cond notdocumented
 			GetGPIOSettingsFuture() : PARENT{futures_, NUM_FUTURES}
 			{
+				interrupt::register_handler(*this);
 				PARENT::init(futures_);
 			}
-			GetGPIOSettingsFuture(GetGPIOSettingsFuture&&) = default;
-			GetGPIOSettingsFuture& operator=(GetGPIOSettingsFuture&&) = default;
+			~GetGPIOSettingsFuture()
+			{
+				interrupt::unregister_handler(*this);
+			}
+			GetGPIOSettingsFuture(GetGPIOSettingsFuture&&) = delete;
+			GetGPIOSettingsFuture& operator=(GetGPIOSettingsFuture&&) = delete;
 
 			bool get(vl53l0x::GPIOSettings& settings)
 			{
@@ -606,6 +610,7 @@ namespace devices::vl53l0x
 				&read_high_threshold_
 			};
 
+			DECL_FUTURE_LISTENERS_FRIEND
 			friend VL53L0X<MANAGER>;
 		};
 
@@ -669,10 +674,15 @@ namespace devices::vl53l0x
 					write_low_threshold_{settings.low_threshold() / 2},
 					write_high_threshold_{settings.high_threshold() / 2}
 			{
+				interrupt::register_handler(*this);
 				PARENT::init(futures_);
 			}
-			SetGPIOSettingsFuture(SetGPIOSettingsFuture&&) = default;
-			SetGPIOSettingsFuture& operator=(SetGPIOSettingsFuture&&) = default;
+			~SetGPIOSettingsFuture()
+			{
+				interrupt::unregister_handler(*this);
+			}
+			SetGPIOSettingsFuture(SetGPIOSettingsFuture&&) = delete;
+			SetGPIOSettingsFuture& operator=(SetGPIOSettingsFuture&&) = delete;
 			/// @endcond
 
 		private:

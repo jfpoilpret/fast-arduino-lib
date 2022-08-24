@@ -200,8 +200,8 @@ namespace devices::mcp230xx
 				InterruptPolarity interrupt_polarity = InterruptPolarity::ACTIVE_HIGH)
 				:	PARENT{build_IOCON(
 						mirror_interrupts, interrupt_polarity == InterruptPolarity::ACTIVE_HIGH)} {}
-			BeginFuture(BeginFuture&&) = default;
-			BeginFuture& operator=(BeginFuture&&) = default;
+			BeginFuture(BeginFuture&&) = delete;
+			BeginFuture& operator=(BeginFuture&&) = delete;
 			/// @endcond
 		};
 
@@ -255,8 +255,8 @@ namespace devices::mcp230xx
 			/// @cond notdocumented
 			ConfigureGPIOFuture(T<P_> direction, T<P_> pullup = T<P_>{}, T<P_> polarity = T<P_>{})
 				:	PARENT{direction, polarity, pullup} {}
-			ConfigureGPIOFuture(ConfigureGPIOFuture<P_>&&) = default;
-			ConfigureGPIOFuture<P_>& operator=(ConfigureGPIOFuture<P_>&&) = default;
+			ConfigureGPIOFuture(ConfigureGPIOFuture<P_>&&) = delete;
+			ConfigureGPIOFuture<P_>& operator=(ConfigureGPIOFuture<P_>&&) = delete;
 			/// @endcond
 		};
 
@@ -315,8 +315,8 @@ namespace devices::mcp230xx
 			/// @cond notdocumented
 			ConfigureInterruptsFuture(T<P_> int_pins, T<P_> ref = T<P_>{}, T<P_> compare_ref = T<P_>{})
 				:	PARENT{int_pins, ref, compare_ref} {}
-			ConfigureInterruptsFuture(ConfigureInterruptsFuture<P_>&&) = default;
-			ConfigureInterruptsFuture<P_>& operator=(ConfigureInterruptsFuture<P_>&&) = default;
+			ConfigureInterruptsFuture(ConfigureInterruptsFuture<P_>&&) = delete;
+			ConfigureInterruptsFuture<P_>& operator=(ConfigureInterruptsFuture<P_>&&) = delete;
 			/// @endcond
 		};
 
