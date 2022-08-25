@@ -104,11 +104,7 @@ private:
 	DECL_FUTURE_LISTENERS_FRIEND
 };
 
-#ifdef REAL_FUTURE
-REGISTER_FUTURE_STATUS_LISTENERS(MyGroup, FutureListener)
-#else
-REGISTER_FAKEFUTURE_STATUS_LISTENERS(MyGroup, FutureListener)
-#endif
+REGISTER_FUTURE_STATUS_LISTENERS(ABSTRACTFUTURE, MyGroup, FutureListener)
 
 int main() __attribute__((OS_main));
 int main()

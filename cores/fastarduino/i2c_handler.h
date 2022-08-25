@@ -31,6 +31,9 @@
 #include "i2c_handler_attiny.h"
 #endif
 
+//TODO DOC
+#define MANAGER_FUTURE(M) typename M::ABSTRACT_FUTURE
+
 /**
  * This namespace defines everything related to I2C.
  * In FastArduino, I2C communication is centralized by an I2C Manager; 

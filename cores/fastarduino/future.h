@@ -31,21 +31,20 @@
 
 //TODO DOC
 //TODO find a way (I2C) to ensure that proper AbstractFuture type is used (correct macro is called)
-#define REGISTER_FUTURE_STATUS_LISTENERS(HANDLER1, ...)												\
-	void future::future_on_status_change_dispatch(const AbstractFuture& future, FutureStatus status)\
+#define REGISTER_FUTURE_STATUS_LISTENERS(ABSTRACT_TYPE, HANDLER1, ...)								\
+	namespace future																				\
 	{																								\
-		future::dispatch_handler::future_on_status_change<AbstractFuture, HANDLER1, ##__VA_ARGS__>(	\
-			future, status);																		\
+		void future_on_status_change_dispatch(const AbstractFuture& future, FutureStatus status)	\
+		{																							\
+			dispatch_handler<ABSTRACT_TYPE, AbstractFuture>::future_on_status_change<				\
+				HANDLER1, ##__VA_ARGS__>(future, status);											\
+		}																							\
+		void future_on_status_change_dispatch(const AbstractFakeFuture& future, FutureStatus status)\
+		{																							\
+			dispatch_handler<ABSTRACT_TYPE, AbstractFakeFuture>::future_on_status_change<			\
+				HANDLER1, ##__VA_ARGS__>(future, status);											\
+		}																							\
 	}																								\
-	void future::future_on_status_change_dispatch(const AbstractFakeFuture&, FutureStatus) {}
-
-#define REGISTER_FAKEFUTURE_STATUS_LISTENERS(HANDLER1, ...)												\
-	void future::future_on_status_change_dispatch(const AbstractFuture&, FutureStatus) {}				\
-	void future::future_on_status_change_dispatch(const AbstractFakeFuture& future, FutureStatus status)\
-	{																									\
-		future::dispatch_handler::future_on_status_change<AbstractFakeFuture, HANDLER1, ##__VA_ARGS__>(	\
-			future, status);																			\
-	}
 
 //TODO DOC
 #define REGISTER_FUTURE_STATUS_NO_LISTENERS()													\
@@ -54,7 +53,7 @@
 
 //TODO DOC
 #define DECL_FUTURE_LISTENERS_FRIEND         \
-	friend struct future::dispatch_handler;
+	template<typename> friend struct future::dispatch_handler_impl;
 
 /**
  * Contains the API around Future implementation.
@@ -1442,29 +1441,56 @@ namespace future
 	};
 
 	/// @cond notdocumented
-	struct dispatch_handler
+	template<typename F>
+	struct dispatch_handler_impl
 	{
-		template<typename F> static void future_on_status_change_helper(
-			const F& future UNUSED, FutureStatus status UNUSED)
-		{
-			return;
-		}
+		template<bool DUMMY> static void future_on_status_change_helper(
+			const F&, FutureStatus) {}
 
-		template<typename F, typename HANDLER1_, typename... HANDLERS_> 
+		template<bool DUMMY, typename HANDLER1_, typename... HANDLERS_> 
 		static void future_on_status_change_helper(const F& future, FutureStatus status)
 		{
 			HANDLER1_* handler = interrupt::HandlerHolder<HANDLER1_>::handler();
 			if (handler != nullptr)
 				handler->on_status_change(future, status);
 			// handle other handlers
-			future_on_status_change_helper<F, HANDLERS_...>(future, status);
+			future_on_status_change_helper<true, HANDLERS_...>(future, status);
 		}
 
-		template<typename F, typename... HANDLERS_>
+		template<typename... HANDLERS_>
 		static void future_on_status_change(const F& future, FutureStatus status)
 		{
 			// Ask each registered listener to handle on_status_change() if concerned
-			future_on_status_change_helper<F, HANDLERS_...>(future, status);
+			future_on_status_change_helper<true, HANDLERS_...>(future, status);
+		}
+	};
+
+	template<typename F1, typename F2>
+	struct dispatch_handler
+	{
+		template<typename... HANDLERS_>
+		static void future_on_status_change(const F2&, FutureStatus) {}
+	};
+
+	template<>
+	struct dispatch_handler<AbstractFuture, AbstractFuture>
+	{
+		template<typename... HANDLERS_>
+		static void future_on_status_change(const AbstractFuture& future, FutureStatus status)
+		{
+			dispatch_handler_impl<AbstractFuture>::future_on_status_change<HANDLERS_...>(
+				future, status);
+		}
+	};
+
+	template<>
+	struct dispatch_handler<AbstractFakeFuture, AbstractFakeFuture>
+	{
+		template<typename... HANDLERS_>
+		static void future_on_status_change(const AbstractFuture& future, FutureStatus status)
+		{
+			dispatch_handler_impl<AbstractFuture>::future_on_status_change<HANDLERS_...>(
+				future, status);
 		}
 	};
 	/// @endcond 
