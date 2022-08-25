@@ -42,7 +42,7 @@ REGISTER_UATX_ISR(0)
 #endif
 
 REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<USART>)
-REGISTER_FUTURE_STATUS_NO_LISTENERS()
+REGISTER_FUTURE_NO_LISTENERS()
 
 using namespace future;
 using namespace streams;

@@ -105,6 +105,7 @@ private:
 };
 
 REGISTER_FUTURE_STATUS_LISTENERS(ABSTRACTFUTURE, MyGroup, FutureListener)
+REGISTER_FUTURE_OUTPUT_NO_LISTENERS()
 
 int main() __attribute__((OS_main));
 int main()

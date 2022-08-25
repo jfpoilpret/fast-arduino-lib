@@ -132,7 +132,7 @@ using MANAGER = i2c::I2CSyncManager<i2c::I2CMode::FAST>;
 #if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
 REGISTER_I2C_ISR(MANAGER)
 #endif
-REGISTER_FUTURE_STATUS_NO_LISTENERS()
+REGISTER_FUTURE_NO_LISTENERS()
 
 using streams::dec;
 using streams::hex;

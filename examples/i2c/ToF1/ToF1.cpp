@@ -90,6 +90,7 @@ using namespace devices::vl53l0x;
 using TOF = VL53L0X<MANAGER>;
 
 REGISTER_FUTURE_STATUS_LISTENERS(MANAGER_FUTURE(MANAGER), i2c::I2CSameFutureGroup<MANAGER>, TOF::GetGPIOSettingsFuture)
+REGISTER_FUTURE_OUTPUT_NO_LISTENERS()
 
 void display_memory(streams::ostream& out)
 {

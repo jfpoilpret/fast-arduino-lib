@@ -30,7 +30,6 @@
 #include "time.h"
 
 //TODO DOC
-//TODO find a way (I2C) to ensure that proper AbstractFuture type is used (correct macro is called)
 #define REGISTER_FUTURE_STATUS_LISTENERS(ABSTRACT_TYPE, HANDLER1, ...)								\
 	namespace future																				\
 	{																								\
@@ -50,6 +49,32 @@
 #define REGISTER_FUTURE_STATUS_NO_LISTENERS()													\
 	void future::future_on_status_change_dispatch(const AbstractFuture&, FutureStatus) {}		\
 	void future::future_on_status_change_dispatch(const AbstractFakeFuture&, FutureStatus) {}
+
+//TODO DOC
+#define REGISTER_FUTURE_OUTPUT_LISTENERS(ABSTRACT_TYPE, HANDLER1, ...)						\
+	namespace future																		\
+	{																						\
+		void future_on_output_change_dispatch(const AbstractFuture& future)					\
+		{																					\
+			dispatch_handler<ABSTRACT_TYPE, AbstractFuture>::future_on_output_change<		\
+				HANDLER1, ##__VA_ARGS__>(future);											\
+		}																					\
+		void future_on_output_change_dispatch(const AbstractFakeFuture& future)				\
+		{																					\
+			dispatch_handler<ABSTRACT_TYPE, AbstractFakeFuture>::future_on_output_change<	\
+				HANDLER1, ##__VA_ARGS__>(future);											\
+		}																					\
+	}																						\
+
+//TODO DOC
+#define REGISTER_FUTURE_OUTPUT_NO_LISTENERS()									\
+	void future::future_on_output_change_dispatch(const AbstractFuture&) {}		\
+	void future::future_on_output_change_dispatch(const AbstractFakeFuture&) {}
+
+//TODO DOC
+#define REGISTER_FUTURE_NO_LISTENERS()		\
+	REGISTER_FUTURE_STATUS_NO_LISTENERS()	\
+	REGISTER_FUTURE_OUTPUT_NO_LISTENERS()
 
 //TODO DOC
 #define DECL_FUTURE_LISTENERS_FRIEND         \
@@ -189,8 +214,10 @@ namespace future
 	/// @cond notdocumented
 	class AbstractFuture;
 	extern void future_on_status_change_dispatch(const AbstractFuture&, FutureStatus);
+	extern void future_on_output_change_dispatch(const AbstractFuture&);
 	class AbstractFakeFuture;
 	extern void future_on_status_change_dispatch(const AbstractFakeFuture&, FutureStatus);
+	extern void future_on_output_change_dispatch(const AbstractFakeFuture&);
 	/// @endcond
 
 	//TODO DOC
@@ -601,9 +628,7 @@ namespace future
 		void callback_output()
 		{
 			if (uint8_t(notifications_) & uint8_t(FutureNotification::OUTPUT))
-			{
-				//TODO LATER
-			}
+				future_on_output_change_dispatch(*this);
 		}
 		
 		volatile FutureStatus status_ = FutureStatus::NOT_READY;
@@ -1080,9 +1105,7 @@ namespace future
 		void callback_output()
 		{
 			if (uint8_t(notifications_) & uint8_t(FutureNotification::OUTPUT))
-			{
-				//TODO LATER
-			}
+				future_on_output_change_dispatch(*this);
 		}
 
 		int error_ = 0;
@@ -1463,6 +1486,25 @@ namespace future
 			// Ask each registered listener to handle on_status_change() if concerned
 			future_on_status_change_helper<true, HANDLERS_...>(future, status);
 		}
+
+		template<bool DUMMY> static void future_on_output_change_helper(const F&) {}
+
+		template<bool DUMMY, typename HANDLER1_, typename... HANDLERS_> 
+		static void future_on_output_change_helper(const F& future)
+		{
+			HANDLER1_* handler = interrupt::HandlerHolder<HANDLER1_>::handler();
+			if (handler != nullptr)
+				handler->on_output_change(future);
+			// handle other handlers
+			future_on_output_change_helper<true, HANDLERS_...>(future);
+		}
+
+		template<typename... HANDLERS_>
+		static void future_on_output_change(const F& future)
+		{
+			// Ask each registered listener to handle on_output_change() if concerned
+			future_on_output_change_helper<true, HANDLERS_...>(future);
+		}
 	};
 
 	template<typename F1, typename F2>
@@ -1470,6 +1512,8 @@ namespace future
 	{
 		template<typename... HANDLERS_>
 		static void future_on_status_change(const F2&, FutureStatus) {}
+		template<typename... HANDLERS_>
+		static void future_on_output_change(const F2&) {}
 	};
 
 	template<>
@@ -1481,6 +1525,11 @@ namespace future
 			dispatch_handler_impl<AbstractFuture>::future_on_status_change<HANDLERS_...>(
 				future, status);
 		}
+		template<typename... HANDLERS_>
+		static void future_on_output_change(const AbstractFuture& future)
+		{
+			dispatch_handler_impl<AbstractFuture>::future_on_output_change<HANDLERS_...>(future);
+		}
 	};
 
 	template<>
@@ -1489,8 +1538,13 @@ namespace future
 		template<typename... HANDLERS_>
 		static void future_on_status_change(const AbstractFuture& future, FutureStatus status)
 		{
-			dispatch_handler_impl<AbstractFuture>::future_on_status_change<HANDLERS_...>(
+			dispatch_handler_impl<AbstractFakeFuture>::future_on_status_change<HANDLERS_...>(
 				future, status);
+		}
+		template<typename... HANDLERS_>
+		static void future_on_output_change(const AbstractFakeFuture& future)
+		{
+			dispatch_handler_impl<AbstractFakeFuture>::future_on_output_change<HANDLERS_...>(future);
 		}
 	};
 	/// @endcond 
