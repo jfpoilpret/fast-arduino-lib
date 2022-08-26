@@ -266,8 +266,8 @@ namespace devices::audio
 	template<board::Timer NTIMER, board::PWMPin OUTPUT> class QTonePlay
 	{
 	public:
-		QTonePlay(const QTonePlay<NTIMER, OUTPUT>&) = default;
-		QTonePlay<NTIMER, OUTPUT>& operator=(const QTonePlay<NTIMER, OUTPUT>&) = default;
+		QTonePlay(const QTonePlay&) = default;
+		QTonePlay& operator=(const QTonePlay&) = default;
 
 		/**
 		 * Default constructor, used only to declare an uninitialized
@@ -460,9 +460,10 @@ namespace devices::audio
 	class AbstractTonePlayer
 	{
 	protected:
-		AbstractTonePlayer(const AbstractTonePlayer<NTIMER, OUTPUT, TONEPLAY>&) = delete;
-		AbstractTonePlayer<NTIMER, OUTPUT, TONEPLAY>& operator=(
-			const AbstractTonePlayer<NTIMER, OUTPUT, TONEPLAY>&) = delete;
+		/// @cond notdocumented
+		AbstractTonePlayer(const AbstractTonePlayer&) = delete;
+		AbstractTonePlayer& operator=(const AbstractTonePlayer&) = delete;
+		/// @endcond
 
 		/** The type that holds unit of information of a melody. */
 		using TONE_PLAY = TONEPLAY;

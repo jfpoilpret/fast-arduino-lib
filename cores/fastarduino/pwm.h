@@ -66,8 +66,8 @@ namespace analog
 		using TIMER_TRAIT = board_traits::Timer_trait<TRAIT::TIMER>;
 
 	public:
-		PWMOutput(const PWMOutput<PWMPIN_, PULSED_>&) = delete;
-		PWMOutput<PWMPIN_, PULSED_>& operator=(const PWMOutput<PWMPIN_, PULSED_>&) = delete;
+		PWMOutput(const PWMOutput&) = delete;
+		PWMOutput& operator=(const PWMOutput&) = delete;
 		
 		/** The digital pin for this PWMOutput. */
 		static constexpr const board::DigitalPin PIN = TRAIT::ACTUAL_PIN;

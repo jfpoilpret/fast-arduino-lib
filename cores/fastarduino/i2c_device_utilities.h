@@ -108,9 +108,6 @@ namespace i2c
 			future::FutureNotification notification = future::FutureNotification::NONE)
 			:	PARENT{reg, notification} {}
 		/// @cond notdocumented
-		ReadRegisterFuture(ReadRegisterFuture&&) = delete;
-		ReadRegisterFuture& operator=(ReadRegisterFuture&&) = delete;
-
 		bool get(T& result)
 		{
 			ARG_TYPE temp;
@@ -172,9 +169,6 @@ namespace i2c
 			future::FutureNotification notification = future::FutureNotification::NONE)
 			:	PARENT{REGISTER, notification} {}
 		/// @cond notdocumented
-		TReadRegisterFuture(TReadRegisterFuture&&) = delete;
-		TReadRegisterFuture& operator=(TReadRegisterFuture&&) = delete;
-
 		void reset_()
 		{
 			PARENT::reset_(REGISTER);
@@ -297,9 +291,6 @@ namespace i2c
 			future::FutureNotification notification = future::FutureNotification::NONE)
 			:	PARENT{REGISTER, value, notification} {}
 		/// @cond notdocumented
-		TWriteRegisterFuture(TWriteRegisterFuture&&) = delete;
-		TWriteRegisterFuture& operator=(TWriteRegisterFuture&&) = delete;
-
 		void reset_(const T& input = T{})
 		{
 			PARENT::reset_(CONTENT{REGISTER, input});
@@ -411,9 +402,6 @@ namespace i2c
 			future::FutureNotification notification = future::FutureNotification::NONE)
 			:	PARENT{CONTENT{values}, notification} {}
 		/// @cond notdocumented
-		TWriteMultiRegisterFuture(TWriteMultiRegisterFuture&&) = delete;
-		TWriteMultiRegisterFuture& operator=(TWriteMultiRegisterFuture&&) = delete;
-
 		void reset_(std::initializer_list<T> values)
 		{
 			PARENT::reset_(CONTENT{values});

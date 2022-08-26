@@ -573,8 +573,6 @@ namespace devices::vl53l0x
 			{
 				interrupt::unregister_handler(*this);
 			}
-			GetGPIOSettingsFuture(GetGPIOSettingsFuture&&) = delete;
-			GetGPIOSettingsFuture& operator=(GetGPIOSettingsFuture&&) = delete;
 
 			bool get(vl53l0x::GPIOSettings& settings)
 			{

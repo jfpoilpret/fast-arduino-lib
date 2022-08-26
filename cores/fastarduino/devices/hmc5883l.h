@@ -281,8 +281,6 @@ namespace devices::magneto
 									MeasurementMode measurement = MeasurementMode::NORMAL)
 				:	PARENT{ bits::OR8(uint8_t(measurement), uint8_t(rate), uint8_t(samples)),
 							uint8_t(gain), uint8_t(mode)} {}
-			BeginFuture(BeginFuture&&) = delete;
-			BeginFuture& operator=(BeginFuture&&) = delete;
 
 			Gain gain() const
 			{

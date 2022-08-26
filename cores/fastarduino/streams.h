@@ -66,7 +66,10 @@ namespace streams
 		 */
 		explicit ostream(ostreambuf& streambuf) : streambuf_{streambuf} {}
 
+		/// @cond notdocumented
+		ostream(const ostream&) = delete;
 		ostream& operator=(const ostream&) = delete;
+		/// @endcond
 
 		/**
 		 * Return the stream buffer associated with this stream.

@@ -361,8 +361,6 @@ namespace devices::magneto
 									ClockSelect clock_select = ClockSelect::INTERNAL_8MHZ)
 				: PARENT{{	CONFIG, uint8_t(low_pass_filter), uint8_t(gyro_range), uint8_t(accel_range),
 							PWR_MGMT_1, utils::as_uint8_t(PowerManagement{clock_select})}} {}
-			BeginFuture(BeginFuture&&) = delete;
-			BeginFuture& operator=(BeginFuture&&) = delete;
 			/// @endcond
 		};
 
@@ -431,8 +429,6 @@ namespace devices::magneto
 							FIFO_EN, utils::as_uint8_t(fifo_enable),
 							INT_PIN_CFG, 0, utils::as_uint8_t(int_enable),
 							USER_CTRL, FIFO_ENABLE | FIFO_RESET}} {}
-			FifoBeginFuture(FifoBeginFuture&&) = delete;
-			FifoBeginFuture& operator=(FifoBeginFuture&&) = delete;
 			/// @endcond
 		};
 
@@ -490,8 +486,6 @@ namespace devices::magneto
 		public:
 			/// @cond notdocumented
 			EndFuture() : PowerManagementFuture{PowerManagement{false, false, true, false}} {}
-			EndFuture(EndFuture&&) = delete;
-			EndFuture& operator=(EndFuture&&) = delete;
 			/// @endcond
 		};
 
@@ -533,8 +527,6 @@ namespace devices::magneto
 		public:
 			/// @cond notdocumented
 			ResetFuture() : PowerManagementFuture{PowerManagement{false, false, false, true}} {}
-			ResetFuture(ResetFuture&&) = delete;
-			ResetFuture& operator=(ResetFuture&&) = delete;
 			/// @endcond
 		};
 

@@ -715,10 +715,6 @@ namespace future
 
 		/// @cond notdocumented
 		~Future() = default;
-		Future(Future&&) = delete;
-		Future& operator=(Future&&) = delete;
-		Future(const Future&) = delete;
-		Future& operator=(const Future&) = delete;
 		/// @endcond
 
 		/**
@@ -837,11 +833,6 @@ namespace future
 		: AbstractFuture{output_buffer_, sizeof(OUT), nullptr, 0, notifications} {}
 		~Future() = default;
 
-		Future(Future&&) = delete;
-		Future& operator=(Future&&) = delete;
-		Future(const Future&) = delete;
-		Future& operator=(const Future&) = delete;
-
 		// This method completely resets this future (for reuse from scratch)
 		void reset_()
 		{
@@ -882,11 +873,6 @@ namespace future
 		explicit Future(const IN& input = IN{}, FutureNotification notifications = FutureNotification::NONE)
 			: AbstractFuture{nullptr, 0, input_buffer_, sizeof(IN), notifications}, input_{input} {}
 		~Future() = default;
-
-		Future(Future&&) = delete;
-		Future& operator=(Future&&) = delete;
-		Future(const Future&) = delete;
-		Future& operator=(const Future&) = delete;
 
 		// This method completely resets this future (for reuse from scratch)
 		void reset_(const IN& input = IN{})
@@ -941,11 +927,6 @@ namespace future
 		explicit Future(FutureNotification notifications = FutureNotification::NONE)
 		: AbstractFuture{nullptr, 0,nullptr, 0, notifications} {}
 		~Future() = default;
-
-		Future(Future&&) = delete;
-		Future& operator=(Future&&) = delete;
-		Future(const Future&) = delete;
-		Future& operator=(const Future&) = delete;
 
 		// This method completely resets this future (for reuse from scratch)
 		void reset_()
@@ -1430,12 +1411,8 @@ namespace future
 			for (F* future: futures)
 				future->notifications_ = FutureNotification::STATUS;
 		}
-		/// @cond notdocumented
-		AbstractFuturesGroup(AbstractFuturesGroup&&) = delete;
-		AbstractFuturesGroup& operator=(AbstractFuturesGroup&&) = delete;
-		AbstractFuturesGroup(const AbstractFuturesGroup&) = delete;
-		AbstractFuturesGroup& operator=(const AbstractFuturesGroup&) = delete;
 
+		//TODO DOC
 		void on_status_change_pre_step(const F& future, FutureStatus status)
 		{
 			switch (status)
@@ -1457,7 +1434,6 @@ namespace future
 				break;
 			}
 		}
-		/// @endcond
 
 	private:
 		uint16_t num_ready_ = 0;

@@ -92,8 +92,8 @@ namespace gpio
 		using TRAIT = board_traits::Port_trait<PORT_>;
 
 	public:
-		FastPin(const FastPin<PORT_, BIT_>&) = default;
-		FastPin<PORT_, BIT_>& operator=(const FastPin<PORT_, BIT_>&) = default;
+		FastPin(const FastPin&) = default;
+		FastPin& operator=(const FastPin&) = default;
 
 		/** The port to which this pin belongs. */
 		static constexpr const board::Port PORT = PORT_;
@@ -204,8 +204,8 @@ namespace gpio
 		using TRAIT = board_traits::Port_trait<PORT_>;
 
 	public:
-		FastPort(const FastPort<PORT_>&) = default;
-		FastPort<PORT_>& operator=(const FastPort<PORT_>&) = default;
+		FastPort(const FastPort&) = default;
+		FastPort& operator=(const FastPort&) = default;
 
 		/** The actual port in target MCU. */
 		static constexpr const board::Port PORT = PORT_;
@@ -378,8 +378,8 @@ namespace gpio
 		using TRAIT = board_traits::Port_trait<PORT_>;
 
 	public:
-		FastMaskedPort(const FastMaskedPort<PORT_, MASK_>&) = default;
-		FastMaskedPort<PORT_, MASK_>& operator=(const FastMaskedPort<PORT_, MASK_>&) = default;
+		FastMaskedPort(const FastMaskedPort&) = default;
+		FastMaskedPort& operator=(const FastMaskedPort&) = default;
 
 		/** The actual port in target MCU. */
 		static constexpr const board::Port PORT = PORT_;
@@ -649,8 +649,8 @@ namespace gpio
 	template<> class FastPin<board::Port::NONE, 0>
 	{
 	public:
-		FastPin(const FastPin<board::Port::NONE, 0>&) = default;
-		FastPin<board::Port::NONE, 0>& operator=(const FastPin<board::Port::NONE, 0>&) = default;
+		FastPin(const FastPin&) = default;
+		FastPin& operator=(const FastPin&) = default;
 		FastPin() INLINE = default;
 		FastPin(PinMode mode UNUSED, bool value UNUSED = false) INLINE {}
 		void set() INLINE {}

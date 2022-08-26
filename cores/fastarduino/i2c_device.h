@@ -88,7 +88,6 @@ namespace i2c
 		using MANAGER = MANAGER_;
 
 	private:
-		using THIS = I2CDevice<MANAGER>;
 		using MANAGER_TRAIT = I2CManager_trait<MANAGER>;
 		// Ensure MANAGER is an accepted I2C Manager type
 		static_assert(

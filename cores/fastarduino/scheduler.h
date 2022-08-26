@@ -88,8 +88,8 @@ namespace events
 	class Scheduler : public EventHandler<EVENT_>, public containers::LinkedList<Job>
 	{
 	public:
-		Scheduler(const Scheduler<CLOCK_, EVENT_>&) = delete;
-		Scheduler<CLOCK_, EVENT_>& operator=(const Scheduler<CLOCK_, EVENT_>&) = delete;
+		Scheduler(const Scheduler&) = delete;
+		Scheduler& operator=(const Scheduler&) = delete;
 
 		/** The type of @p clock source used by this Scheduler. */
 		using CLOCK = CLOCK_;

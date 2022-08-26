@@ -64,8 +64,10 @@ namespace devices
 		/** The output pin that will send serial data to the chip. */
 		static constexpr const board::DigitalPin DATA = DATA_;
 
-		SIPO(const SIPO<CLOCK_, LATCH_, DATA_>&) = delete;
-		SIPO<CLOCK_, LATCH_, DATA_>& operator=(const SIPO<CLOCK_, LATCH_, DATA_>&) = delete;
+		/// @cond notdocumented
+		SIPO(const SIPO&) = delete;
+		SIPO& operator=(const SIPO&) = delete;
+		/// @endcond
 		
 		/**
 		 * Create a new SIPO handler, according to pins defined by class template

@@ -135,8 +135,8 @@ namespace timer
 	template<typename T> class RTTRawTime
 	{
 	public:
-		RTTRawTime(const RTTRawTime<T>&) = default;
-		RTTRawTime<T>& operator=(const RTTRawTime<T>&) = default;
+		RTTRawTime(const RTTRawTime&) = default;
+		RTTRawTime& operator=(const RTTRawTime&) = default;
 
 		/**
 		 * Create a new `RTTRawTime` from @p millis milliseconds, and values
@@ -212,8 +212,8 @@ namespace timer
 		using PRESCALER = typename Timer<NTIMER>::PRESCALER;
 
 	public:
-		RTT(const RTT<NTIMER_>&) = delete;
-		RTT<NTIMER_>& operator=(const RTT<NTIMER_>&) = delete;
+		RTT(const RTT&) = delete;
+		RTT& operator=(const RTT&) = delete;
 
 		/**
 		 * The adequate `RTTRawTime` type for this `RTT`.
@@ -538,8 +538,8 @@ namespace timer
 		static_assert((PERIOD_MS & (PERIOD_MS - 1)) == 0, "PERIOD_MS must be a power of 2");
 
 	public:
-		RTTEventCallback(const RTTEventCallback<EVENT, PERIOD_MS>&) = delete;
-		RTTEventCallback<EVENT, PERIOD_MS>& operator=(const RTTEventCallback<EVENT, PERIOD_MS>&) = delete;
+		RTTEventCallback(const RTTEventCallback&) = delete;
+		RTTEventCallback& operator=(const RTTEventCallback&) = delete;
 		
 		//FIXME we should allow Queue<EVENT, ?>
 		/**

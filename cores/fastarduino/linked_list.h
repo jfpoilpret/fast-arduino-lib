@@ -87,8 +87,8 @@ namespace containers
 			UNUSED DERIVES_FROM_LINK dummy = DERIVES_FROM_LINK();
 		}
 
-		LinkedList(const LinkedList<T_>&) = default;
-		LinkedList<T_>& operator=(const LinkedList<T_>&) = delete;
+		LinkedList(const LinkedList&) = default;
+		LinkedList& operator=(const LinkedList&) = delete;
 
 		/**
 		 * The type of items in this list.
@@ -177,8 +177,8 @@ namespace containers
 	
 	protected:
 		Link() = default;
-		Link(const Link<T_>&) = default;
-		Link<T_>& operator=(const Link<T_>&) = delete;
+		Link(const Link&) = default;
+		Link& operator=(const Link&) = delete;
 
 	private:
 		T* next() INLINE
@@ -223,8 +223,8 @@ namespace containers
 	class LinkWrapper : private LinkImpl
 	{
 	public:
-		LinkWrapper(const LinkWrapper<T_, TREF_, CTREF_>&) = default;
-		LinkWrapper<T_, TREF_, CTREF_>& operator=(const LinkWrapper<T_, TREF_, CTREF_>&) = delete;
+		LinkWrapper(const LinkWrapper&) = default;
+		LinkWrapper& operator=(const LinkWrapper&) = delete;
 
 		/** The type of item wrapped by this class. */
 		using T = T_;
