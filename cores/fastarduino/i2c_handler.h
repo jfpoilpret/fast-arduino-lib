@@ -31,7 +31,23 @@
 #include "i2c_handler_attiny.h"
 #endif
 
-//TODO DOC
+/**
+ * Utility macro to extract the abstract future type for a given I2C Manager.
+ * This is useful when used with `REGISTER_FUTURE_STATUS_LISTENERS()` to provide
+ * its first argument.
+ * 
+ * @code
+ * using MANAGER = i2c::I2CAsyncManager<MODE, i2c::I2CErrorPolicy::CLEAR_ALL_COMMANDS>;
+ * using namespace devices::vl53l0x;
+ * using TOF = VL53L0X<MANAGER>;
+ * REGISTER_FUTURE_STATUS_LISTENERS(MANAGER_FUTURE(MANAGER), 
+ *     i2c::I2CSameFutureGroup<MANAGER>, TOF::SetGPIOSettingsFuture)
+ * REGISTER_FUTURE_OUTPUT_NO_LISTENERS()
+ * @endcode
+ * 
+ * @sa REGISTER_FUTURE_STATUS_LISTENERS()
+ * @sa REGISTER_FUTURE_OUTPUT_LISTENERS()
+ */
 #define MANAGER_FUTURE(M) typename M::ABSTRACT_FUTURE
 
 /**

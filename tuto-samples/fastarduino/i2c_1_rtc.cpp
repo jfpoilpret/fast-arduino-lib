@@ -9,6 +9,7 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 
 REGISTER_UATX_ISR(0)
 REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<UART>)
+REGISTER_FUTURE_NO_LISTENERS()
 
 using devices::rtc::DS1307;
 using devices::rtc::tm;

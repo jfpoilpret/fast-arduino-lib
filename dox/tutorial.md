@@ -1202,7 +1202,7 @@ The first part is the I2C and the RTC device initialization:
 @dontinclude fastarduino/i2c_1_rtc.cpp
 @skip MANAGER
 @until DS1307
-`i2c::I2CSyncManager` is a template class with a parameter of type `i2c::I2CMode`, which can any of:
+`i2c::I2CSyncManager` is a template class with a parameter of type `i2c::I2CMode`, which can be anyone of:
 - `i2c::I2CMode::STANDARD`: slow I2C mode (100 kHz), this the default
 - `i2c::I2CMode::FAST`: fast I2C mode (400 kHz)
 

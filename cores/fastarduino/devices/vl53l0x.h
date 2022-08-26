@@ -95,6 +95,13 @@ namespace devices::vl53l0x
 	 * experiments to make this device work. Not all original STM API is provided
 	 * here.
 	 * 
+	 * @warning This I2C device driver for VL53L0X requires you to call
+	 * `REGISTER_FUTURE_STATUS_LISTENERS()` for the following classes:
+	 * - `i2c::I2CSameFutureGroup<MANAGER>`: mandatory
+	 * - `VL53L0X<MANAGER>::SetGPIOSettingsFuture`: mandatory
+	 * - `VL53L0X<MANAGER>::GetGPIOSettingsFuture`: needed if you call API 
+	 * `get_GPIO_settings()`
+	 * 
 	 * @tparam MANAGER one of FastArduino available I2C Manager
 	 */
 	template<typename MANAGER>

@@ -187,7 +187,23 @@ namespace interrupt
 		HandlerHolder<Handler>::handler_ = &handler;
 	}
 
-	//TODO DOC
+	/**
+	 * Unregister a class instance that was previously registered with
+	 * `interrupt::register_handler`.
+	 * 
+	 * @note unregistration will be effective only if @p handler is the current
+	 * value held for @p Handler type.
+	 * 
+	 * @warning in normal circumstances (ISR callback registration) it is unlikely
+	 * you would need this method because it would crash the ISR needing a callback!
+	 * This method would be rather used for `future::Future` callbacks for which
+	 * lifetime may not be as long as for an ISR.
+	 * 
+	 * @tparam Handler the class containing callback methods
+	 * @param handler the @p Handler instance to be deregistered.
+	 * 
+	 * @sa register_handler()
+	 */
 	template<typename Handler> void unregister_handler(Handler& handler)
 	{
 		if (HandlerHolder<Handler>::handler_ == &handler)
