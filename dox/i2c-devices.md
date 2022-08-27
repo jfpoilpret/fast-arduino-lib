@@ -56,9 +56,13 @@ derive from `i2c::I2CDevice`:
 @image html classdevices_1_1magneto_1_1_h_m_c5883_l__inherit__graph.png
 @image latex classdevices_1_1magneto_1_1_h_m_c5883_l__inherit__graph.pdf
 
+6. VL53L0X Time of Flight ranging sensor
+@image html classdevices_1_1vl53l0x_1_1_v_l53_l0_x__inherit__graph.png
+@image latex classdevices_1_1vl53l0x_1_1_v_l53_l0_x__inherit__graph.pdf
+
 Creating a new driver for an I2C device must follow these steps:
 1. Create a `i2c::I2CDevice` template subclass; let's call it `MyI2CDevice` in the rest of this page.
-2. Redefine (as `private`) the following type aliases inherited from `i2c::I2CDevice`: `PARENT`, `PROXY`, `FUTURE` 
+2. Redefine (as `private`) the following type aliases inherited from `i2c::I2CDevice`: `PARENT`, `FUTURE` 
 3. Add a `public` constructor with one argument: `MyI2CDevice::MyI2CDevice(MANAGER& manager)` where `MANAGER` is a class 
 template argument of both `MyI2CDevice` and `i2c::I2CDevice`; this constructor must call the inherited constructor
 and pass it 3 arguments: `manager`, the default I2C address for your device, and finally, one of `i2c::I2C_STANDARD` 
@@ -69,9 +73,11 @@ values written to the device, as well as values later read from the device. Each
 `FUTURE` (type alias defined above). This future will allow asynchronous execution of the API.
 FastArduino guidelines for I2C devices suggest to name the future class according to the API name itself e.g. 
 `SetDatetimeFuture` for the `set_datetime()` API.
-6. For each `public` API, define a method that takes a `PROXY` to the future defined above and return an `int`. 
+6. For each `public` API, define a method that takes a reference to the future defined above and return an `int`. 
 The implementation of this method is based on mainly 3 inherited `protected` methods: `i2c::I2CDevice.read()`,
-`i2c::I2CDevice.write()` and `i2c::I2CDevice.launch_commands()`
+`i2c::I2CDevice.write()` and `i2c::I2CDevice.launch_commands()`. In simple situations, there are even simpler
+methods that your I2C device API can call: `i2c::I2CDevice.async_read()`, `i2c::I2CDevice.sync_read()`,
+`i2c::I2CDevice.async_write()` and `i2c::I2CDevice.sync_write()`.
 7. For each `public` API, also define a similar method (same name) with a synchronous flavour. That method will
 directly take "natural" arguments (no futures) as input or output (reference), and return a `bool` to indicate
 if API was performed without any error.
@@ -84,8 +90,6 @@ your own support for an I2C device.
 
 Subclassing `i2c::I2CDevice` gives `MyI2CDevice` access to all low-level `protected` aliases:
 - `PARENT`: this is simply defined as `i2c::I2CDevice<MANAGER>` and is useful for accessing next aliases
-- `i2c::I2CDevice::PROXY`: this is the type of lifecycle proxy used by `MANAGER`; it must be used for all asynchronous 
-API of `MyI2CDevice` to embed actual Future types
 - `i2c::I2CDevice::FUTURE`: this is the type of Future used by `MANAGER`; it must be used for defining your own
 Future types for all asynchronous API of `MyI2CDevice`
 
@@ -93,7 +97,6 @@ Note that to be accessible from `MyI2CDevice` class, these types must be redefin
 @code{.cpp}
 	private:
 		using PARENT = i2c::I2CDevice<MANAGER>;
-		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
 		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 @endcode
 
@@ -106,15 +109,15 @@ one bit to leave the LSB available for I2C direction read or write)
 `MyI2CDevice`: this will impact what `MANAGER` type can be used when instantiating `MyI2CDevice` template
 4. `bool auto_stop`: this defines whether all chains of commands of `MyI2CDevice` shall automatically be ended with
 a STOP condition on the I2C bus or not. In most cases, the default (`false`) should work, but some devices 
-(e.g. DS1307) do not work properly in 2 chains of commands are not separated by a STOP condition.
+(e.g. DS1307) do not work properly if 2 chains of commands are not separated by a STOP condition.
 
 Note that `device` address must be provided at construction time but can optionally be changed later.
 Regarding its I2C address, typically an I2C device falls in one of the following categories:
 1. it has a fixed I2C address that cannot be changed (e.g. DS1307 RTC chip)
 2. it has an I2C address that can be changed by hardware (e.g. jumpers) among a limited range of possible addresses
 (e.g. MCP23017 I/O expander chip, MPU 6050 acceleromete/gyroscope chip)
-3. it has a fixed I2C address that can be changed by software (e.g. VL53L0X "micro lidar" chip); 
-this is generally harder to support.
+3. it has a fixed default I2C address that can be changed by software (e.g. VL53L0X "micro lidar" chip); 
+this is generally a bit harder to support (extra API to implement for your I2C device).
 
 For devices in category 1, you would typically define the address as a constant in `MyI2CDevice` and pass it 
 directly to `i2c::I2CDevice` constructor.
@@ -122,7 +125,7 @@ directly to `i2c::I2CDevice` constructor.
 Here is a snippet from DS1307 device:
 @code{.cpp}
 	public:
-		explicit DS1307(MANAGER& manager) : PARENT{manager, DEVICE_ADDRESS, i2c::I2C_STANDARD} {}
+		explicit DS1307(MANAGER& manager) : PARENT{manager, DEVICE_ADDRESS, i2c::I2C_STANDARD, true} {}
 
 	private:
 		static constexpr const uint8_t DEVICE_ADDRESS = 0x68 << 1;
@@ -131,23 +134,19 @@ Here is a snippet from DS1307 device:
 For devices in category 2, you would rather define an `enum class` limiting the possible addresses configurable by
 hardware, or pass the address (as `uint8_t`) to the driver class constructor.
 
-For devices in category 3, you would first define the fixed address as a constant, then define an API to change it
-(as a data member of `MyI2CDevice`).
+For devices in category 3, you would first define the fixed default address as a constant, then define an API 
+to change it (as a data member of `MyI2CDevice`).
 
 Subclassing `i2c::I2CDevice` gives `MyI2CDevice` access to all low-level `protected` methods:
 - `i2c::I2CDevice.read(uint8_t read_count, bool finish_future, bool stop)`: create a command to read bytes from the 
 I2C device; read bytes will be added to the related Future (passed to `launch_commands()`)
 - `i2c::I2CDevice.write(uint8_t write_count, bool finish_future, bool stop)`:create a command to write bytes to the
 I2C device; written bytes are taken from the related Future (passed to `launch_commands()`)
-- `i2c::I2CDevice.launch_commands(PROXY<> proxy, initializer_list<> commands)`: prepare passed read/write 
+- `i2c::I2CDevice.launch_commands(ABSTRACT_FUTURE& future, initializer_list<> commands)`: prepare passed read/write 
 `commands` and send them to `MANAGER` for later asynchronous execution (commands are queued); the `Future` referenced
-by `proxy` is used to provide data to write to, and store data to read from, the I2C device.
+by `future` is used to provide data to write to, and store data to read from, the I2C device.
 - `i2c::I2CDevice.set_device(uint8_t device)`: change the I2C address of this device. This is useful for devices
 that allow changing their I2C address by software.
-- `i2c::I2CDevice.resolve(PROXY<T> proxy)`: this method must be used when you need to resolve a `PROXY` passed to
-one of your API, in order to access some parts of its proxied Future. This method is seldom used.
-- `i2c::I2CDevice.make_proxy(const T& target)`: this method must be used in your synchronous API, in order to
-"proxify" a local Future before calling the related asynchronous API.
 
 Note that `read()` and `write()` methods do not actually perform any I2C operation! They only prepare an I2C read 
 or write command (`i2c::I2CLightCommand` type embedding necessary information) based on their arguments:
@@ -165,10 +164,85 @@ is directly `READY` (or in `ERROR`) when the method returns
 - with an asynchronous I2C Manager, it enqueues all commands for asynchronous execution and returns immediately; the
 assigned Future will be later updated (it status will become either `READY` or `ERROR`) once all commands are complete.
 
+In addtion to low-levels methods discussed above, `i2c::I2CDevice` also provides the following higher-level methods
+that will make it even simpler to use for simple cases:
+- `i2c::I2CDevice.async_read(F& future, bool stop = true)`: start an asynchronous read of future which type is `F` 
+(template argument of the method)
+- `i2c::I2CDevice.sync_read(T& result)`: start a synchronous read through future which type is `F` 
+(1st template argument of the method) and await for result of type `T` (2nd template argument of the method)
+- `i2c::I2CDevice.async_write(F& future, bool stop = true)`: start an asynchronous write of future which type is `F` 
+(template argument of the method)
+- `i2c::I2CDevice.sync_write(const T& value)`: start a synchronous write of value of type `T` (2nd template argument 
+of the method) through future which type is `F` (1st template argument of the method) and await until write is finished.
+
+All these methods are based on low-level methods but they make the implementation of your device API a blaze 
+(one-liner for each API method).
+These methods work in simple situations which typically represent most cases you will have to deal with for
+a given I2C chip:
+- read is made of a write part followed by a read part (in the same I2C transaction)
+- write is made only of a write part
+
+As long as your API fits in these situations, those high-level API can apply. Here is an example excerpted from 
+`DS1307` device implementation:
+
+@code{.cpp}
+    int set_datetime(SetDatetimeFuture& future)
+    {
+        return this->async_write(future);
+    }
+    bool set_datetime(const tm& datetime)
+    {
+        return this->template sync_write<SetDatetimeFuture>(datetime);
+    }
+
+    int get_datetime(GetDatetimeFuture& future)
+    {
+        return this->async_read(future);
+    }
+    bool get_datetime(tm& datetime)
+    {
+        return this->template sync_read<GetDatetimeFuture>(datetime);
+    }
+@endcode
+
+In this snippet you see 4 one-liner examples showing each high-level read/write methods.
+
+Although each of these methods is a template, only the "sync" flavours require explicit
+template argument for the Future used.
+Indeed, sync methods need to instantiate the future and cannot "guess" the future type to instantiate.
+
+Those high-level methods will not be used in the case where you need several writes or several reads
+in the same I2C transaction. For instance, the `MPU6050` device has some cases where several write commands
+must be processed but with a "REPEAT START" condition in between:
+@code{.cpp}
+    class BeginFuture : public FUTURE<void, containers::array<uint8_t, 6>>
+    {
+        using PARENT = FUTURE<void, containers::array<uint8_t, 6>>;
+    public:
+        explicit BeginFuture(	GyroRange gyro_range = GyroRange::RANGE_250,
+                                AccelRange accel_range = AccelRange::RANGE_2G,
+                                DLPF low_pass_filter = DLPF::ACCEL_BW_260HZ,
+                                ClockSelect clock_select = ClockSelect::INTERNAL_8MHZ)
+            : PARENT{{	CONFIG, uint8_t(low_pass_filter), uint8_t(gyro_range), uint8_t(accel_range),
+                        PWR_MGMT_1, utils::as_uint8_t(PowerManagement{clock_select})}} {}
+    };
+    int begin(BeginFuture& future)
+    {
+        // We split the transaction in 2 write commands (3 bytes starting at CONFIG, 1 byte at PWR_MGT_1)
+        return this->launch_commands(future, {this->write(4), this->write(2)});
+    }
+@endcode
+
+In that snippet, `BeginFuture` is prepared to:
+1. write 3 **consecutive** registers (1 byte each), starting at `CONFIG` register
+2. write 1 register (1 byte), at `PWR_MGMT_1` register
+
+`begin()` implementation then calls `launch_commands()` with 2 distinct write commands.
+
 
 ### I2C device registers common operations ###
 
-Most I2C devices API consists in reading and writing device registers at a specific address (referenced by a byte);
+Most I2C devices API consist in reading and writing device registers at a specific address (referenced by a byte);
 registers may be one byte long or more depending on what each register represents.
 
 In order to simplify support of new I2C devices, FastArduino comes with a few extra utilities that can greatly speed
@@ -200,7 +274,12 @@ The `VL53L0X` Time-of-Flight laser device is much complex and makes heavy use of
                 write_low_threshold_{settings.low_threshold() / 2},
                 write_high_threshold_{settings.high_threshold() / 2}
         {
+			interrupt::register_handler(*this);
             I2CFuturesGroup::init(futures_);
+        }
+        ~SetGPIOSettingsFuture()
+        {
+            interrupt::unregister_handler(*this);
         }
 
     private:
@@ -270,8 +349,6 @@ by specific API to read registers:
         using PARENT = FUTURE<uint8_t, uint8_t>;
     protected:
         ReadRegisterFuture(uint8_t address) : PARENT{address} {}
-        ReadRegisterFuture(ReadRegisterFuture&&) = default;
-        ReadRegisterFuture& operator=(ReadRegisterFuture&&) = default;
     };
 @endcode
 
@@ -280,33 +357,19 @@ Futures needed by all API reading registers, like in the following excerpt from 
 @code{.cpp}
     // Address of GPIO register (to read digital input pins from MCP23008)
 	static constexpr const uint8_t GPIO = 0x09;
+	using GetValuesFuture = TReadRegisterFuture<GPIO>;
 
-    class GetValuesFuture : public ReadRegisterFuture
+    int values(GetValuesFuture& future)
     {
-    public:
-        GetValuesFuture() : ReadRegisterFuture{GPIO} {}
-        GetValuesFuture(GetValuesFuture&&) = default;
-        GetValuesFuture& operator=(GetValuesFuture&&) = default;
-    };
-
-    int values(PROXY<GetValuesFuture> future)
-    {
-        return this->launch_commands(future, {this->write(), this->read()});
+        return this->async_read(future);
     }
 @endcode
 
-In the above code, the only added value of `GetValuesFuture` class is to embed the `GPIO` register address; this allows
-callers of the `values()` API to directly instantiate this Future without further input.
+In the above code, we heavily depend on I2C device utilities: `GetValuesFuture` is just defines as an alias based
+on `TReadRegisterFuture` for register address `GPIO`; this allows callers of the `values()` API to directly 
+instantiate this Future without further input.
 
-The implementation of `values()` is a one-liner that requires a few explanations:
-- `launch_commands()` has only 2 arguments: `future` that is directly passed from the API argument, and a list of 
-commands (embedded within braces)
-- in this example, there are only 2 commands; the first, returned by `write()`, writes all input content of `future`, 
-i.e. the `GPIO` register address (single) byte); the second command, created by `read()`, reads enough bytes (only 
-one here) from the decice to fill the output of `future`.
-- both commands are created with default calls to `read()` and `write()` i.e. `0` for bytes count (special meaning:
-use full content size of `future`), `false` for `finish_future` and `stop`, leading to generation of "START" condition at the
-beginning, and no STOP forced at the end.
+The implementation of `values()` is a one-liner that requires no further explanation.
 
 A similar approach is used for writing a value to a device register and will not be detailed here.
 
@@ -355,6 +418,9 @@ This section defines various types aliases, for I2C Manager, I2C debugger, and t
 @skip REGISTER
 @until uart.out()
 Then an output stream is created for tracing through UART, and the necessary UART ISR is registered.
+Also, we declare that no future listener is used; this is needed because you shall use futures in your tests.
+Note that if you use complex futures, you may need to register future listeners, but that is for complex I2C
+devices only (e.g. VL53L0X).
 
 @skip PublicDevice
 @until };
@@ -374,8 +440,8 @@ Here we simply initialize I2C function on the UNO.
 We then declare the `device` variable that we will use for testing our I2C device.
 
 Finally the rest of the code is placeholder for any initialization API,
-followed by an infinite loop where you can call lauinch_commands/read/write methods on `device` in order to test
-the way to handle the target device.
+followed by an infinite loop where you can call sync_read/sync_write or launch_commands/read/write methods on 
+`device` in order to test the way to handle the target device.
 
 
 Defining the driver API based on device features
@@ -402,78 +468,18 @@ Implementing the driver API
 This step consists in implementing the API defined in the step before.
 
 Typically every API will be made of:
-- a specific Future class taht encapsulates input arguments (in its constructor) and holds place for output;
+- a specific Future class that encapsulates input arguments (in its constructor) and holds place for output;
 this Future shall embed any necessary conversion of input arguments if needed, as well as conversion of output,
 through override of `get()` method
-- one asynchronous method taking as only argument `PROXY` to the Future defined above, calling `launch_commands()`
-withe `write()` and `read()` calls to prepare I2C commands, as described above in the description of 
-`i2c::I2CDevice` API
+- one asynchronous method taking as only argument a reference to the Future defined above, and calling
+either low-level `I2CDevice` methods (`launch_commands()`, with `write()` and `read()` calls to prepare I2C commands),
+or high-level methods (`async_read()`, `async_write()`), as described above
 - one synchronous method taking same arguments as Future constructor defined above, plus a reference argument
 for any output; this method instantiates the above Future, calls the asynchronous method defined before, and 
-awaits the Future to be ready and get its output
+awaits the Future to be ready and get its output; another simpler option could use high-level methods 
+(`sync_read()`, `sync_write()`).
 
-Here is a concrete example from `devices::rtc::DS1307`, another I2C device driver in FastArduino.
-
-The first snippet below defines a specific Future for getting current datetime from the device:
-@code{.cpp}
-	static constexpr const uint8_t TIME_ADDRESS = 0x00;
-
-    class GetDatetimeFuture : public FUTURE<tm, uint8_t>
-    {
-    public:
-        GetDatetimeFuture() : FUTURE<tm, uint8_t>{TIME_ADDRESS} {}
-        GetDatetimeFuture(GetDatetimeFuture&&) = default;
-        GetDatetimeFuture& operator=(GetDatetimeFuture&&) = default;
-
-        bool get(tm& datetime)
-        {
-            if (!FUTURE<tm, uint8_t>::get(datetime)) return false;
-            // convert DS1307 output (BCD) to integer type
-            datetime.tm_sec = utils::bcd_to_binary(datetime.tm_sec);
-            datetime.tm_min = utils::bcd_to_binary(datetime.tm_min);
-            datetime.tm_hour = utils::bcd_to_binary(datetime.tm_hour);
-            datetime.tm_mday = utils::bcd_to_binary(datetime.tm_mday);
-            datetime.tm_mon = utils::bcd_to_binary(datetime.tm_mon);
-            datetime.tm_year = utils::bcd_to_binary(datetime.tm_year);
-            return true;
-        }
-    };
-@endcode
-In this code, `tm` is a strcuture to hold all parts of a datetime.
-
-The constructor takes no argument: it just passes `TIME_ADDRESS` constant to the superclass.
-
-Note the overridden `get()` method, necessary to convert raw datetime data read from the device,
-to properly formatted data, usable by the caller program.
-
-The second snippet shows the asynchronous API method:
-@code{.cpp}
-    int get_datetime(PROXY<GetDatetimeFuture> future)
-    {
-        return this->launch_commands(future, {this->write(), this->read()});
-    }
-@endcode
-In this code, one read and one write commands are generated and sent to the I2C Manager for execution (immediate 
-or deferred, depending on the I2C Manager associated to the device); the write command writes all bytes from 
-`GetDatetimeFuture`, i.e. one byte; the read command reads as many bytes as expected by `GetDatetimeFuture`, i.e. 
-one byte. Although not directly visible in this snippet, at the end of the I2C transaction (end of read command), 
-a "STOP" condition is generated, releasing the I2C bus. This seems required by DS1307 device (from experiment) to 
-release the bus between two consecutive transactions. This is why `DS1307` device constructor sets `auto_stop`
-to `true`.
-
-The last snippet demonstrates implementation of the synchronous API method:
-@code{.cpp}
-    bool get_datetime(tm& datetime)
-    {
-        GetDatetimeFuture future;
-        if (get_datetime(PARENT::make_proxy(future)) != 0) return false;
-        return future.get(datetime);
-    }
-@endcode
-The implementation is totally based on the asynchronous method: it instantiates a `GetDatetimeFuture` future,
-passes it as a `PROXY`, through `PARENT::make_proxy(future)` to the asynchronous method.
-If the asynchronous method fails (return `!= 0`), then we return `false` immediately; otherwise, we await on 
-`future`, through the call of `future.get(datetime)` which is blocked until `future` is `READY` or in `ERROR`.
+Previous sections provide snippets.
 
 
 The last mile: add driver to FastArduino project!

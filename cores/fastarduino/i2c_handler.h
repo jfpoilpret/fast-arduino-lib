@@ -78,29 +78,15 @@
  * 
  * FastArduino defines many specific I2C Manager classes among the following:
  * - I2CAsyncManager: bare bones asynchronous I2C Manager 
- * - I2CAsyncLCManager: asynchronous I2C Manager with lifecycle support
  * - I2CAsyncDebugManager: asynchronous I2C Manager with a debug callback hook
  * - I2CAsyncStatusManager: asynchronous I2C Manager with an I2C status callback hook
  * - I2CAsyncStatusDebugManager: asynchronous I2C Manager with both an I2C status 
  *   callback hook and a debug callback hook
- * - I2CAsyncLCDebugManager: asynchronous I2C Manager with lifecycle support and 
- *   a debug callback hook
- * - I2CAsyncLCStatusManager: asynchronous I2C Manager with lifecycle support and 
- *   an I2C status callback hook
- * - I2CAsyncLCStatusDebugManager: asynchronous I2C Manager with lifecycle support
- *   and both an I2C status callback hook and a debug callback hook
  * - I2CSyncManager: bare bones synchronous I2C Manager
- * - I2CSyncLCManager: synchronous I2C Manager with lifecycle support
  * - I2CSyncDebugManager: synchronous I2C Manager with a debug callback hook
  * - I2CSyncStatusManager: synchronous I2C Manager with an I2C status callback hook
  * - I2CSyncStatusDebugManager: synchronous I2C Manager with both an I2C status 
  *   callback hook and a debug callback hook
- * - I2CSyncLCDebugManager: synchronous I2C Manager with lifecycle support and 
- *   a debug callback hook
- * - I2CSyncLCStatusManager: synchronous I2C Manager with lifecycle support and 
- *   an I2C status callback hook
- * - I2CSyncLCStatusDebugManager: synchronous I2C Manager with lifecycle support
- *   and both an I2C status callback hook and a debug callback hook
  * 
  * All these classes are template classes with various arguments (the actual list
  * of arguments depends on each specific class):
@@ -114,10 +100,6 @@
  * 
  * All these different flavors of I2C Manager share the same API (except for their 
  * constructor that may need different arguments).
- * 
- * Lifecycle support enables programs to move futures around without losing track
- * of the right location, thanks to the use of lifecycle::LightProxy. Although not often 
- * needed, it can prove useful in some situations.
  * 
  * All I2C Manager asynchronous flavors operate based on a queue of I2C commands.
  * It is up to the end program to create the properly sized buffer for that 

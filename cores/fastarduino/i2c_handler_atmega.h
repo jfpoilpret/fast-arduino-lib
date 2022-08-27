@@ -69,7 +69,7 @@ ISR(TWI_vect)                                                       \
  * @param MANAGER one of many asynchronous I2C managers defined in this header
  * @param CALLBACK the function that will be called when the interrupt is
  * triggered; it should follow this prototype: 
- * `void f(I2CCallback, typename MANAGER::FUTURE_PROXY)`
+ * `void f(I2CCallback, typename MANAGER::ABSTRACT_FUTURE&)`
  * 
  * @sa i2c::I2CCallback
  */
@@ -89,7 +89,7 @@ ISR(TWI_vect)                                                       \
  * @param HANDLER the class holding the callback method
  * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
  * is triggered; this must be a proper PTMF (pointer to member function); it should
- * follow this prototype: `void f(I2CCallback, typename MANAGER::FUTURE_PROXY)`
+ * follow this prototype: `void f(I2CCallback, typename MANAGER::ABSTRACT_FUTURE&)`
  * 
  * @sa i2c::I2CCallback
  */
@@ -156,7 +156,6 @@ namespace i2c
 	};
 
 	/// @cond notdocumented
-	// Generic support for LifeCycle resolution
 	template<I2CErrorPolicy POLICY = I2CErrorPolicy::DO_NOTHING> struct I2CErrorPolicySupport
 	{
 		I2CErrorPolicySupport() = default;
@@ -477,9 +476,9 @@ namespace i2c
 		}
 
 		bool push_command_(
-			I2CLightCommand command, uint8_t target, ABSTRACT_FUTURE& proxy)
+			I2CLightCommand command, uint8_t target, ABSTRACT_FUTURE& future)
 		{
-			return commands_.push_(I2CCOMMAND{command, target, proxy});
+			return commands_.push_(I2CCOMMAND{command, target, future});
 		}
 
 		void last_command_pushed_()

@@ -220,18 +220,16 @@ namespace i2c
 		 * - provide data to write commands
 		 * - store data returned by read commands
 		 * 
-		 * @param proxy a proxy (actual type defined by `PROXY` alias) to the Future
+		 * @param future a reference to the Future
 		 * containing all write data and ready to store all read data; it is shared
-		 * by all @p commands ; passing a Future will be accepted as the compiler 
-		 * will automatically construct the proper proxy for it.
+		 * by all @p commands .
 		 * @param commands the list of I2CCommand to be executed, one after another;
 		 * this list must be embedded within braces {}.
 		 * 
 		 * @retval 0 when the method did not encounter any error
 		 * @retval errors::EINVAL if passed arguments are invalid e.g. if @p commands
-		 * is empty, if @p proxy is dynamic but associated @p MANAGER does not
-		 * have a lifecycle::LifeCycleManager, or if the total number of bytes read
-		 * or written by all @p commands does not match @p proxy future input and
+		 * is empty, or if the total number of bytes read
+		 * or written by all @p commands does not match @p future future input and
 		 * output sizes.
 		 * @retval errors::EAGAIN if the associated @p MANAGER has not enough space
 		 * in its queue of commands; in such situation, you may retry the same call
@@ -297,7 +295,7 @@ namespace i2c
 		 * @warning Asynchronous API!
 		 * 
 		 * @tparam F the type of @p future automatically deduced from @p future
-		 * @param future a proxy to the Future to be updated by the launched I2C 
+		 * @param future a reference to the Future to be updated by the launched I2C 
 		 * commands
 		 * @param stop force a STOP condition on the I2C bus at the end of the
 		 * read command
@@ -346,7 +344,7 @@ namespace i2c
 		 * @warning Asynchronous API!
 		 * 
 		 * @tparam F the type of @p future automatically deduced from @p future
-		 * @param future a proxy to the Future to be updated by the launched I2C 
+		 * @param future a reference to the Future to be updated by the launched I2C 
 		 * commands
 		 * @param stop force a STOP condition on the I2C bus at the end of the
 		 * write command
@@ -368,7 +366,7 @@ namespace i2c
 		 * 
 		 * @tparam F the type of @p future automatically deduced from @p future;
 		 * this must be a `TWriteMultiRegisterFuture` specialization or a subclass.
-		 * @param future a proxy to the Future to be updated by the launched I2C 
+		 * @param future a reference to the Future to be updated by the launched I2C 
 		 * commands
 		 * @param stop force a STOP condition on the I2C bus at the end of each
 		 * write command

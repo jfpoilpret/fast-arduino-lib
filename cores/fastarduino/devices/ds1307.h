@@ -33,13 +33,13 @@
 
 // Device driver guidelines:
 // - Template on MANAGER, subclass of I2CDevice
-// - define types aliases PARENT, PROXY and FUTURE
+// - define types aliases PARENT and FUTURE
 // - constructor shall pass one of i2c::Mode i2c::I2C_STANDARD or i2c::I2C_FAST
 //   to inherited constructor, in order tos pecify the BEST mode supported by this driver
 // - Define FUTURE subclass (inside device class) for every future requiring input (constant, or user-provided)
 //   naming convention: MethodNameFuture
 // - FUTURE subclass shall have explicit constructor with mandatory input arguments (no default)
-// - each async API method returns int (error code) and takes a PROXY to specific future as unique argument
+// - each async API method returns int (error code) and takes a reference to specific future as unique argument
 // - each async API shall have a matching sync API with same name but different prototype:
 //   direct input arguments, reference to output arguments, bool return (true if OK)
 //   each sync API calls the matching async API after creating the proper Future on the stack

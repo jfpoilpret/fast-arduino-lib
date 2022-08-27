@@ -218,7 +218,7 @@ namespace i2c
 	 * - the command type (read, write...), 
 	 * - the count of bytes to be read or  written,
 	 * - the address of target slave device
-	 * - a proxy to the future holding inputs and results of the I2C transaction 
+	 * - a pointer to the future holding inputs and results of the I2C transaction 
 	 * 
 	 * @warning You should never need to use this API by yourself. This is 
 	 * internally used by FastArduino I2C Manager to handle I2C transactions.
@@ -253,7 +253,7 @@ namespace i2c
 	private:
 		// Address of the target device (on 8 bits, already left-shifted)
 		uint8_t target_ = 0;
-		// A proxy to the future to be used for this command
+		// A pointer to the future to be used for this command
 		T* future_ = nullptr;
 	};
 

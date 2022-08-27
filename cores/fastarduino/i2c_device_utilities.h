@@ -132,7 +132,7 @@ namespace i2c
 	 * @code
 	 * // Excerpt from VL53L0X device
 	 * using GetDirectRangeFuture = TReadRegisterFuture<Register::RESULT_RANGE_MILLIMETER, uint16_t>;
-	 * int get_direct_range(PROXY<GetDirectRangeFuture> future) {
+	 * int get_direct_range(GetDirectRangeFuture& future) {
 	 * ...
 	 * }
 	 * @endcode
@@ -251,7 +251,7 @@ namespace i2c
 	 * @code
 	 * // Excerpt from VL53L0X device
 	 * using ClearInterruptFuture = TWriteRegisterFuture<Register::SYSTEM_INTERRUPT_CLEAR>;
-	 * int clear_interrupt(PROXY<ClearInterruptFuture> future) {
+	 * int clear_interrupt(ClearInterruptFuture& future) {
 	 * ...
 	 * }
 	 * @endcode
@@ -452,9 +452,9 @@ namespace i2c
 			return DEVICE::write(write_count, finish_future, stop);
 		}
 
-		int launch_commands(ABSTRACT_FUTURE& proxy, utils::range<I2CLightCommand> commands)
+		int launch_commands(ABSTRACT_FUTURE& future, utils::range<I2CLightCommand> commands)
 		{
-			return device_->launch_commands(proxy, commands);
+			return device_->launch_commands(future, commands);
 		}
 
 		void set_device(DEVICE& device)

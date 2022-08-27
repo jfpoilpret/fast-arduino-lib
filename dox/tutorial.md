@@ -1187,6 +1187,7 @@ which handles only synchronous (blocking) I2C operations.
 
 There are also asynchronous I2C Managers but they will not be explained here. If you want
 to learn more about there, please take a look at the API and examples using it.
+The asynchronous API is heavily based on FastArduino [Futures API](namespacefuture.html) support. 
 
 In order to illustrate concretely I2C API usage in this tutorial, we will focus on a concrete
 example with the DS1307 RTC chip. If you want to develop an API for your own I2C device then
