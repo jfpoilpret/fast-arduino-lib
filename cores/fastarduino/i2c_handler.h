@@ -186,19 +186,19 @@ namespace i2c
 	// Specific traits for I2C Async Managers (both ATmega and ATtiny)
 	template<I2CMode MODE_>
 	struct I2CManager_trait<I2CSyncManager<MODE_>>
-		:	I2CManager_trait_impl<false, false, false, false, MODE_> {};
+		:	I2CManager_trait_impl<false, false, false, MODE_> {};
 
 	template<I2CMode MODE_, typename STATUS_HOOK_>
 	struct I2CManager_trait<I2CSyncStatusManager<MODE_, STATUS_HOOK_>>
-		:	I2CManager_trait_impl<false, false, true, false, MODE_> {};
+		:	I2CManager_trait_impl<false, true, false, MODE_> {};
 
 	template<I2CMode MODE_, typename DEBUG_HOOK_>
 	struct I2CManager_trait<I2CSyncDebugManager<MODE_, DEBUG_HOOK_>>
-		:	I2CManager_trait_impl<false, false, false, true, MODE_> {};
+		:	I2CManager_trait_impl<false, false, true, MODE_> {};
 
 	template<I2CMode MODE_, typename STATUS_HOOK_, typename DEBUG_HOOK_>
 	struct I2CManager_trait<I2CSyncStatusDebugManager<MODE_, STATUS_HOOK_, DEBUG_HOOK_>>
-		:	I2CManager_trait_impl<false, false, true, true, MODE_> {};
+		:	I2CManager_trait_impl<false, true, true, MODE_> {};
 	/// @endcond
 }
 

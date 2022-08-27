@@ -343,16 +343,13 @@ namespace i2c
 
 	/**
 	 * Abstract synchronous I2C Manager for all MCU architectures.
-	 * A specifi abstract subclass is defined for each MCU architecture 
+	 * A specific abstract subclass is defined for each MCU architecture 
 	 * (ATmega, ATtiny).
 	 * You should never need to subclass AbstractI2CSyncManager yourself.
 	 * 
 	 * @tparam ARCH_HANDLER_ the type of an actual class handling I2C control
 	 * on actual target architecture
 	 * @tparam MODE_ the I2C mode for this manager
-	 * @tparam HAS_LC_ tells if this I2C Manager must be able to handle 
-	 * proxies to Future that can move around and must be controlled by a 
-	 * LifeCycleManager; using `false` will generate smaller code.
 	 * @tparam STATUS_HOOK_ the type of the hook to be called. This can be a 
 	 * simple function pointer (of type `I2C_STATUS_HOOK`) or a Functor class 
 	 * (or Functor class reference). Using a Functor class will generate smaller
@@ -373,8 +370,7 @@ namespace i2c
 	 * 
 	 */
 	// Abstract generic class for synchronous I2C management
-	template<typename ARCH_HANDLER_, I2CMode MODE_, bool HAS_LC_, 
-		typename STATUS_HOOK_, bool HAS_DEBUG_, typename DEBUG_HOOK_>
+	template<typename ARCH_HANDLER_, I2CMode MODE_, typename STATUS_HOOK_, bool HAS_DEBUG_, typename DEBUG_HOOK_>
 	class AbstractI2CSyncManager
 	{
 	protected:
@@ -616,18 +612,16 @@ namespace i2c
 	{
 		static constexpr bool IS_I2CMANAGER = false;
 		static constexpr bool IS_ASYNC = false;
-		// static constexpr bool HAS_LIFECYCLE = false;
 		static constexpr bool IS_DEBUG = false;
 		static constexpr bool IS_STATUS = false;
 		static constexpr I2CMode MODE = I2CMode::STANDARD;
 	};
 
-	template<bool IS_ASYNC_, bool HAS_LIFECYCLE_, bool IS_STATUS_, bool IS_DEBUG_, I2CMode MODE_>
+	template<bool IS_ASYNC_, bool IS_STATUS_, bool IS_DEBUG_, I2CMode MODE_>
 	struct I2CManager_trait_impl
 	{
 		static constexpr bool IS_I2CMANAGER = true;
 		static constexpr bool IS_ASYNC = IS_ASYNC_;
-		// static constexpr bool HAS_LIFECYCLE = HAS_LIFECYCLE_;
 		static constexpr bool IS_DEBUG = IS_DEBUG_;
 		static constexpr bool IS_STATUS = IS_STATUS_;
 		static constexpr I2CMode MODE = MODE_;
