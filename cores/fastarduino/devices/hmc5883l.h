@@ -202,7 +202,6 @@ namespace devices::magneto
 	{
 	private:
 		using PARENT = i2c::I2CDevice<MANAGER>;
-		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
 		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
 		// Forward declarations needed by compiler
@@ -308,9 +307,9 @@ namespace devices::magneto
 		 * @sa begin(OperatingMode, Gain, DataOutput, SamplesAveraged, MeasurementMode)
 		 * @sa errors
 		 */
-		int begin(PROXY<BeginFuture> future)
+		int begin(BeginFuture& future)
 		{
-			gain_ = GAIN(this->resolve(future).gain());
+			gain_ = GAIN(future.gain());
 			return this->async_multi_write(future);
 		}
 
@@ -344,7 +343,7 @@ namespace devices::magneto
 		 * @sa begin(BeginFuture&)
 		 * @sa errors
 		 */
-		int end(PROXY<EndFuture> future) INLINE
+		int end(EndFuture& future) INLINE
 		{
 			return this->async_write(future);
 		}
@@ -376,7 +375,7 @@ namespace devices::magneto
 		 * @sa status()
 		 * @sa errors
 		 */
-		int status(PROXY<StatusFuture> future) INLINE
+		int status(StatusFuture& future) INLINE
 		{
 			return this->async_read(future);
 		}
@@ -413,7 +412,7 @@ namespace devices::magneto
 		 * @sa magnetic_fields(Sensor3D&)
 		 * @sa errors
 		 */
-		int magnetic_fields(PROXY<MagneticFieldsFuture> future)
+		int magnetic_fields(MagneticFieldsFuture& future)
 		{
 			return this->async_read(future);
 		}
@@ -441,7 +440,7 @@ namespace devices::magneto
 				   MeasurementMode measurement = MeasurementMode::NORMAL)
 		{
 			BeginFuture future{mode, gain, rate, samples, measurement};
-			if (begin(PARENT::make_proxy(future)) != 0) return false;
+			if (begin(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 

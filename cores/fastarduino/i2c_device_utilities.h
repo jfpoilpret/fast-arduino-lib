@@ -420,7 +420,6 @@ namespace i2c
 	protected:
 		using DEVICE = I2CDevice<MANAGER>;
 		using ABSTRACT_FUTURE = typename MANAGER::ABSTRACT_FUTURE;
-		template<typename T> using PROXY = typename MANAGER::template PROXY<T>;
 
 		I2CFutureHelper() = default;
 
@@ -453,7 +452,7 @@ namespace i2c
 			return DEVICE::write(write_count, finish_future, stop);
 		}
 
-		int launch_commands(PROXY<ABSTRACT_FUTURE> proxy, utils::range<I2CLightCommand> commands)
+		int launch_commands(ABSTRACT_FUTURE& proxy, utils::range<I2CLightCommand> commands)
 		{
 			return device_->launch_commands(proxy, commands);
 		}

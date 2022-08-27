@@ -139,9 +139,9 @@ public:
 	}
 
 private:
-	void i2c_change(UNUSED i2c::I2CCallback callback, MANAGER::FUTURE_PROXY proxy)
+	void i2c_change(UNUSED i2c::I2CCallback callback, MANAGER::ABSTRACT_FUTURE& future)
 	{
-		status_ = proxy()->status();
+		status_ = future.status();
 	}
 
 	volatile FutureStatus status_ = FutureStatus::NOT_READY;

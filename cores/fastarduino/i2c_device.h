@@ -26,7 +26,6 @@
 #include "errors.h"
 #include "i2c.h"
 #include "future.h"
-#include "lifecycle.h"
 #include "i2c_handler.h"
 #include "utilities.h"
 
@@ -94,13 +93,6 @@ namespace i2c
 			MANAGER_TRAIT::IS_I2CMANAGER, "MANAGER_ must be a valid I2C Manager type");
 
 	protected:
-		/**
-		 * The actual type used for all proxies; may be `lifecycle::LightProxy` 
-		 * or `lifecycle::DirectProxy`. This is defined by MANAGER type, whether
-		 * it uses a lifecycle::AbstractLifeCycleManager or not.
-		 */
-		template<typename T> using PROXY = typename MANAGER::template PROXY<T>;
-
 		/**
 		 * The abstract base class of all futures to be defined for a device.
 		 * This may be `future::AbstractFuture` or `future::AbstractFakeFuture`;
@@ -251,7 +243,7 @@ namespace i2c
 		 * @sa errors
 		 */
 		int launch_commands(
-			PROXY<ABSTRACT_FUTURE> proxy, utils::range<I2CLightCommand> commands)
+			ABSTRACT_FUTURE& future, utils::range<I2CLightCommand> commands)
 		{
 			uint8_t num_commands = commands.size();
 			if (num_commands == 0) return errors::EINVAL;
@@ -267,7 +259,6 @@ namespace i2c
 					UNUSED auto inner_sync = DisableInterrupts<!MANAGER_TRAIT::IS_ASYNC>{};
 					// pre-conditions (must be synchronized)
 					if (!handler_.ensure_num_commands_(num_commands)) return errors::EAGAIN;
-					ABSTRACT_FUTURE& future = resolve(proxy);
 					max_read = future.get_future_value_size_();
 					max_write = future.get_storage_value_size_();
 				}
@@ -287,7 +278,7 @@ namespace i2c
 					if (num_commands == 0)
 						command.type().add_flags(auto_stop_flags_);
 					// Note: on ATtiny, this method blocks until I2C command is finished!
-					if (!handler_.push_command_(command, device_, proxy))
+					if (!handler_.push_command_(command, device_, future))
 					{
 						error = errors::EPROTO;
 						break;
@@ -317,7 +308,7 @@ namespace i2c
 		 * @sa read()
 		 * @sa sync_read()
 		 */
-		template<typename F> int async_read(PROXY<F> future, bool stop = true)
+		template<typename F> int async_read(F& future, bool stop = true)
 		{
 			return launch_commands(future, {write(), read(0, false, stop)});
 		}
@@ -365,7 +356,7 @@ namespace i2c
 		 * @sa write()
 		 * @sa sync_write()
 		 */
-		template<typename F> int async_write(PROXY<F> future, bool stop = true)
+		template<typename F> int async_write(F& future, bool stop = true)
 		{
 			return launch_commands(future, {write(0, false, stop)});
 		}
@@ -387,7 +378,7 @@ namespace i2c
 		 * @sa write()
 		 * @sa TWriteMultiRegisterFuture()
 		 */
-		template<typename F> int async_multi_write(PROXY<F> future, bool stop = true)
+		template<typename F> int async_multi_write(F& future, bool stop = true)
 		{
 			constexpr uint8_t NUM_WRITES = F::NUM_WRITES;
 			constexpr uint8_t WRITE_SIZE = F::WRITE_SIZE;
@@ -442,29 +433,6 @@ namespace i2c
 			F future{};
 			if (async_write<F>(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
-		}
-
-		/**
-		 * Resolve @p proxy to an actual @p T (typically a `Future`).
-		 * @tparam T the type pointed to by @p proxy
-		 * @param proxy the proxy (actual type defined by `PROXY` alias) to a 
-		 * Future to resolve
-		 * @return a reference to the proxied Future
-		 */
-		template<typename T> T& resolve(PROXY<T> proxy) const
-		{
-			return handler_.resolve(proxy);
-		}
-
-		/**
-		 * Create a PROXY from @p target.
-		 * Depending on actual PROXY type, that may lead to a lifecycle::LightProxy
-		 * or a lifecycle::DirectProxy.
-		 * This can be used by device methods working in blocking mode.
-		 */
-		template<typename T> static PROXY<T> make_proxy(const T& target)
-		{
-			return MANAGER::LC::make_proxy(target);
 		}
 
 	private:

@@ -115,7 +115,7 @@ private:
 		synchronized return next_range_time_;
 	}
 
-	void i2c_change(i2c::I2CCallback callback, UNUSED MANAGER::FUTURE_PROXY proxy)
+	void i2c_change(i2c::I2CCallback callback, UNUSED MANAGER::ABSTRACT_FUTURE& future)
 	{
 		if (callback != i2c::I2CCallback::END_TRANSACTION) return;
 		switch (phase_)

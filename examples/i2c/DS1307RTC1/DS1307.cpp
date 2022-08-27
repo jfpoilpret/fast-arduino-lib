@@ -136,7 +136,6 @@ REGISTER_FUTURE_NO_LISTENERS()
 static constexpr uint8_t DEVICE_ADDRESS = 0x68 << 1;
 
 using PARENT = i2c::I2CDevice<MANAGER>;
-template<typename T> using PROXY = typename PARENT::template PROXY<T>;
 template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
 // Subclass I2CDevice to make protected methods available

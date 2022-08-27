@@ -28,7 +28,6 @@
 #include "i2c.h"
 #include "streams.h"
 #include "future.h"
-#include "lifecycle.h"
 #include "queue.h"
 #include "utilities.h"
 
@@ -231,23 +230,23 @@ namespace i2c
 		constexpr I2CCommand() = default;
 		constexpr I2CCommand(const I2CCommand&) = default;
 		constexpr I2CCommand(
-			const I2CLightCommand& that, uint8_t target, T future)
-			:	I2CLightCommand{that}, target_{target}, future_{future} {}
+			const I2CLightCommand& that, uint8_t target, T& future)
+			:	I2CLightCommand{that}, target_{target}, future_{&future} {}
 		constexpr I2CCommand& operator=(const I2CCommand&) = default;
 
 		uint8_t target() const
 		{
 			return target_;
 		}
-		T future() const
+		T& future() const
 		{
-			return future_;
+			return *future_;
 		}
 
-		void set_target(uint8_t target, T future)
+		void set_target(uint8_t target, T& future)
 		{
 			target_ = target;
-			future_ = future;
+			future_ = &future;
 		}
 		/// @endcond
 
@@ -255,7 +254,7 @@ namespace i2c
 		// Address of the target device (on 8 bits, already left-shifted)
 		uint8_t target_ = 0;
 		// A proxy to the future to be used for this command
-		T future_{};
+		T* future_ = nullptr;
 	};
 
 	/// @cond notdocumented
@@ -309,39 +308,6 @@ namespace i2c
 		}
 	private:
 		STATUS_HOOK_ hook_;
-	};
-	/// @endcond
-
-	/// @cond notdocumented
-	// Generic support for LifeCycle resolution
-	template<bool HAS_LIFECYCLE_ = false> struct I2CLifeCycleSupport
-	{
-		template<typename T> using PROXY = lifecycle::DirectProxy<T>;
-		template<typename T> static PROXY<T> make_proxy(const T& dest)
-		{
-			return lifecycle::make_direct_proxy(dest);
-		}
-		explicit I2CLifeCycleSupport(UNUSED lifecycle::AbstractLifeCycleManager* lifecycle_manager = nullptr) {}
-		template<typename T> T& resolve(PROXY<T> proxy) const
-		{
-			return *proxy();
-		}
-	};
-	template<> struct I2CLifeCycleSupport<true>
-	{
-		template<typename T> using PROXY = lifecycle::LightProxy<T>;
-		template<typename T> static PROXY<T> make_proxy(const T& dest)
-		{
-			return lifecycle::make_light_proxy(dest);
-		}
-		explicit I2CLifeCycleSupport(lifecycle::AbstractLifeCycleManager* lifecycle_manager)
-			:	lifecycle_manager_{*lifecycle_manager} {}
-		template<typename T> T& resolve(PROXY<T> proxy) const
-		{
-			return *proxy(lifecycle_manager_);
-		}
-	private:
-		lifecycle::AbstractLifeCycleManager& lifecycle_manager_;
 	};
 	/// @endcond
 
@@ -417,11 +383,9 @@ namespace i2c
 		using I2C_TRAIT = board_traits::TWI_trait;
 		using REG8 = board_traits::REG8;
 		using DEBUG = I2CDebugSupport<HAS_DEBUG_, DEBUG_HOOK_>;
-		using LC = I2CLifeCycleSupport<HAS_LC_>;
 
 	public:
 		using ABSTRACT_FUTURE = future::AbstractFakeFuture;
-		template<typename T> using PROXY = typename LC::template PROXY<T>;
 		template<typename OUT, typename IN> using FUTURE = future::FakeFuture<OUT, IN>;
 
 		/**
@@ -473,10 +437,9 @@ namespace i2c
 	protected:
 		/// @cond notdocumented
 		explicit AbstractI2CSyncManager(
-			lifecycle::AbstractLifeCycleManager* lifecycle_manager = nullptr, 
 			STATUS_HOOK_ status_hook = nullptr,
 			DEBUG_HOOK_ debug_hook = nullptr)
-			:	handler_{status_hook}, lc_{lifecycle_manager}, debug_hook_{debug_hook} {}
+			:	handler_{status_hook}, debug_hook_{debug_hook} {}
 		/// @endcond
 
 	private:
@@ -486,13 +449,12 @@ namespace i2c
 		}
 
 		bool push_command_(
-			I2CLightCommand command, uint8_t target, PROXY<ABSTRACT_FUTURE> proxy)
+			I2CLightCommand command, uint8_t target, ABSTRACT_FUTURE& future)
 		{
 			// Check command is not empty
 			const I2CCommandType type = command.type();
 			if (type.is_none()) return true;
 			if (clear_commands_) return false;
-			ABSTRACT_FUTURE& future = lc_.resolve(proxy);
 			// Execute command immediately, from start to optional stop
 			bool ok = (no_stop_ ? exec_repeat_start_() : exec_start_());
 			stopped_already_ = false;
@@ -544,11 +506,6 @@ namespace i2c
 			stopped_already_ = false;
 		}
 
-		template<typename T> T& resolve(PROXY<T> proxy) const
-		{
-			return lc_.resolve(proxy);
-		}
-		
 		// Low-level methods to handle the bus in an asynchronous way
 		bool exec_start_()
 		{
@@ -648,7 +605,6 @@ namespace i2c
 		bool stopped_already_ = false;
 
 		ARCH_HANDLER handler_;
-		LC lc_;
 		DEBUG debug_hook_;
 
 		template<typename> friend class I2CDevice;
@@ -660,7 +616,7 @@ namespace i2c
 	{
 		static constexpr bool IS_I2CMANAGER = false;
 		static constexpr bool IS_ASYNC = false;
-		static constexpr bool HAS_LIFECYCLE = false;
+		// static constexpr bool HAS_LIFECYCLE = false;
 		static constexpr bool IS_DEBUG = false;
 		static constexpr bool IS_STATUS = false;
 		static constexpr I2CMode MODE = I2CMode::STANDARD;
@@ -671,7 +627,7 @@ namespace i2c
 	{
 		static constexpr bool IS_I2CMANAGER = true;
 		static constexpr bool IS_ASYNC = IS_ASYNC_;
-		static constexpr bool HAS_LIFECYCLE = HAS_LIFECYCLE_;
+		// static constexpr bool HAS_LIFECYCLE = HAS_LIFECYCLE_;
 		static constexpr bool IS_DEBUG = IS_DEBUG_;
 		static constexpr bool IS_STATUS = IS_STATUS_;
 		static constexpr I2CMode MODE = MODE_;
