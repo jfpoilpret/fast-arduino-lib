@@ -112,34 +112,6 @@ ISR(TWI_vect)                                                           \
 namespace i2c
 {
 	/**
-	 * I2C Manager policy to use in case of an error during I2C transaction.
-	 * @warning available only on ATmega MCU.
-	 * @sa I2CAsyncManager
-	 */
-	enum class I2CErrorPolicy : uint8_t
-	{
-		/**
-		 * Do nothing at all in case of an error; useful only with a synchronous
-		 * I2C Manager.
-		 */
-		DO_NOTHING,
-
-		/**
-		 * In case of an error during I2C transaction, then all I2CCommand currently
-		 * in queue will be removed.
-		 * @warning this means that an error with device A can trigger a removal
-		 * of pending commands for device B.
-		 */
-		CLEAR_ALL_COMMANDS,
-
-		/**
-		 * In case of an error during I2C transaction, then all pending I2CCommand
-		 * of the current transaction will be removed.
-		 */
-		CLEAR_TRANSACTION_COMMANDS
-	};
-
-	/**
 	 * Type passed to I2C ISR registered callbacks (asynchronous I2C Manager only)
 	 * when an asynchronous I2C transaction is executed. 
 	 */
@@ -392,9 +364,16 @@ namespace i2c
 		using POLICY = I2CErrorPolicySupport<POLICY_>;
 
 	public:
-		//TODO DOC
+		/**
+		 * The abstract base class of all futures to be defined for this I2C Manager.
+		 * For an asynchronous manager, it is always `future::AbstractFuture`.
+		 */
 		using ABSTRACT_FUTURE = future::AbstractFuture;
-		//TODO DOC
+
+		/**
+		 * The template base class of all futures to be defined for this I2C Manager.
+		 * For an asynchronous manager, it is always `future::Future`.
+		 */
 		template<typename OUT, typename IN> using FUTURE = future::Future<OUT, IN>;
 
 		/**
