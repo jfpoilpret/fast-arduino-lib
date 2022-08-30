@@ -152,6 +152,7 @@ using MANAGER = i2c::I2CSyncStatusManager<i2c::I2CMode::STANDARD, STATUS&>;
 #if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
 REGISTER_I2C_ISR(MANAGER)
 #endif
+REGISTER_FUTURE_NO_LISTENERS()
 
 void display_ram(ostream& out, const uint8_t* data, uint8_t size)
 {

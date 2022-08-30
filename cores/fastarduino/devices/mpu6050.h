@@ -280,7 +280,6 @@ namespace devices::magneto
 	{
 	private:
 		using PARENT = i2c::I2CDevice<MANAGER>;
-		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
 		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
 		// Forward declarations needed by compiler
@@ -361,8 +360,6 @@ namespace devices::magneto
 									ClockSelect clock_select = ClockSelect::INTERNAL_8MHZ)
 				: PARENT{{	CONFIG, uint8_t(low_pass_filter), uint8_t(gyro_range), uint8_t(accel_range),
 							PWR_MGMT_1, utils::as_uint8_t(PowerManagement{clock_select})}} {}
-			BeginFuture(BeginFuture&&) = default;
-			BeginFuture& operator=(BeginFuture&&) = default;
 			/// @endcond
 		};
 
@@ -387,7 +384,7 @@ namespace devices::magneto
 		 * @sa begin(FifoBeginFuture&)
 		 * @sa errors
 		 */
-		int begin(PROXY<BeginFuture> future)
+		int begin(BeginFuture& future)
 		{
 			// We split the transaction in 2 write commands (3 bytes starting at CONFIG, 1 byte at PWR_MGT_1)
 			return this->launch_commands(future, {this->write(4), this->write(2)});
@@ -431,8 +428,6 @@ namespace devices::magneto
 							FIFO_EN, utils::as_uint8_t(fifo_enable),
 							INT_PIN_CFG, 0, utils::as_uint8_t(int_enable),
 							USER_CTRL, FIFO_ENABLE | FIFO_RESET}} {}
-			FifoBeginFuture(FifoBeginFuture&&) = default;
-			FifoBeginFuture& operator=(FifoBeginFuture&&) = default;
 			/// @endcond
 		};
 
@@ -459,7 +454,7 @@ namespace devices::magneto
 		 * @sa begin(BeginFuture&)
 		 * @sa errors
 		 */
-		int begin(PROXY<FifoBeginFuture> future)
+		int begin(FifoBeginFuture& future)
 		{
 			return this->launch_commands(future, {	
 				// CONFIG, GYRO_CONFIG, ACCEL_CONFIG
@@ -490,8 +485,6 @@ namespace devices::magneto
 		public:
 			/// @cond notdocumented
 			EndFuture() : PowerManagementFuture{PowerManagement{false, false, true, false}} {}
-			EndFuture(EndFuture&&) = default;
-			EndFuture& operator=(EndFuture&&) = default;
 			/// @endcond
 		};
 
@@ -514,7 +507,7 @@ namespace devices::magneto
 		 * @sa end()
 		 * @sa errors
 		 */
-		int end(PROXY<EndFuture> future) INLINE
+		int end(EndFuture& future) INLINE
 		{
 			// Put to sleep mode
 			return this->async_write(future);
@@ -533,8 +526,6 @@ namespace devices::magneto
 		public:
 			/// @cond notdocumented
 			ResetFuture() : PowerManagementFuture{PowerManagement{false, false, false, true}} {}
-			ResetFuture(ResetFuture&&) = default;
-			ResetFuture& operator=(ResetFuture&&) = default;
 			/// @endcond
 		};
 
@@ -554,7 +545,7 @@ namespace devices::magneto
 		 * @sa reset()
 		 * @sa errors
 		 */
-		int reset(PROXY<ResetFuture> future) INLINE
+		int reset(ResetFuture& future) INLINE
 		{
 			return this->async_write(future);
 		}
@@ -585,7 +576,7 @@ namespace devices::magneto
 		 * @sa gyro_measures(Sensor3D&)
 		 * @sa errors
 		 */
-		int gyro_measures(PROXY<GyroFuture> future)
+		int gyro_measures(GyroFuture& future)
 		{
 			return this->async_read(future);
 		}
@@ -621,7 +612,7 @@ namespace devices::magneto
 		 * @sa convert_temp_to_centi_degrees()
 		 * @sa errors
 		 */
-		int temperature(PROXY<TemperatureFuture> future)
+		int temperature(TemperatureFuture& future)
 		{
 			return this->async_read(future);
 		}
@@ -662,7 +653,7 @@ namespace devices::magneto
 		 * @sa accel_measures(Sensor3D&)
 		 * @sa errors
 		 */
-		int accel_measures(PROXY<AccelFuture> future)
+		int accel_measures(AccelFuture& future)
 		{
 			return this->async_read(future);
 		}
@@ -695,7 +686,7 @@ namespace devices::magneto
 		 * @sa all_measures(AllSensors&)
 		 * @sa errors
 		 */
-		int all_measures(PROXY<AllMeasuresFuture> future)
+		int all_measures(AllMeasuresFuture& future)
 		{
 			return this->async_read(future);
 		}
@@ -728,7 +719,7 @@ namespace devices::magneto
 		 * @sa interrupt_status()
 		 * @sa errors
 		 */
-		int interrupt_status(PROXY<InterruptStatusFuture> future)
+		int interrupt_status(InterruptStatusFuture& future)
 		{
 			return this->async_read(future);
 		}
@@ -760,7 +751,7 @@ namespace devices::magneto
 		 * @sa reset_fifo()
 		 * @sa errors
 		 */
-		int reset_fifo(PROXY<ResetFifoFuture> future)
+		int reset_fifo(ResetFifoFuture& future)
 		{
 			return this->async_write(future);
 		}
@@ -795,7 +786,7 @@ namespace devices::magneto
 		 * @sa fifo_count()
 		 * @sa errors
 		 */
-		int fifo_count(PROXY<FifoCountFuture> future)
+		int fifo_count(FifoCountFuture& future)
 		{
 			return this->async_read(future);
 		}
@@ -841,7 +832,7 @@ namespace devices::magneto
 		 * @sa fifo_pop(T&)
 		 * @sa errors
 		 */
-		template<typename T> int fifo_pop(PROXY<FifoPopFuture<T>> future)
+		template<typename T> int fifo_pop(FifoPopFuture<T>& future)
 		{
 			return this->async_read(future);
 		}
@@ -878,7 +869,7 @@ namespace devices::magneto
 		 * @sa fifo_push(uint8_t)
 		 * @sa errors
 		 */
-		int fifo_push(PROXY<FifoPushFuture> future)
+		int fifo_push(FifoPushFuture& future)
 		{
 			return this->async_write(future);
 		}
@@ -908,7 +899,7 @@ namespace devices::magneto
 					ClockSelect clock_select = ClockSelect::INTERNAL_8MHZ)
 		{
 			BeginFuture future{gyro_range, accel_range, low_pass_filter, clock_select};
-			if (begin(PARENT::make_proxy(future)) != 0) return false;
+			if (begin(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -949,7 +940,7 @@ namespace devices::magneto
 		{
 			FifoBeginFuture future{
 				fifo_enable, int_enable, sample_rate_divider, gyro_range, accel_range, low_pass_filter, clock_select};
-			if (begin(PARENT::make_proxy(future)) != 0) return false;
+			if (begin(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 

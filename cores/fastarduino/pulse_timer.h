@@ -127,8 +127,8 @@ namespace timer
 		static_assert(TRAIT::IS_16BITS, "TIMER must be a 16 bits timer");
 
 	public:
-		PulseTimer16(const PulseTimer16<NTIMER_, PRESCALER_>&) = delete;
-		PulseTimer16<NTIMER_, PRESCALER_>& operator=(const PulseTimer16<NTIMER_, PRESCALER_>&) = delete;
+		PulseTimer16(const PulseTimer16&) = delete;
+		PulseTimer16& operator=(const PulseTimer16&) = delete;
 
 		using CALCULATOR = Calculator<NTIMER>;
 		using TPRESCALER = typename CALCULATOR::PRESCALER;
@@ -164,8 +164,8 @@ namespace timer
 		static_assert(!TRAIT::IS_16BITS, "TIMER must be an 8 bits timer");
 
 	public:
-		PulseTimer8(const PulseTimer8<NTIMER_, PRESCALER_>&) = delete;
-		PulseTimer8<NTIMER_, PRESCALER_>& operator=(const PulseTimer8<NTIMER_, PRESCALER_>&) = delete;
+		PulseTimer8(const PulseTimer8&) = delete;
+		PulseTimer8& operator=(const PulseTimer8&) = delete;
 
 		using CALCULATOR = Calculator<NTIMER>;
 		using TPRESCALER = typename CALCULATOR::PRESCALER;

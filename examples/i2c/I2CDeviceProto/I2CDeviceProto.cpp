@@ -29,7 +29,9 @@
  */
 
 #include <fastarduino/time.h>
+#include <fastarduino/future.h>
 #include <fastarduino/i2c_device.h>
+#include <fastarduino/i2c_device_utilities.h>
 #include <fastarduino/utilities.h>
 #include <fastarduino/uart.h>
 #include <fastarduino/i2c_debug.h>
@@ -46,12 +48,12 @@ using MANAGER = i2c::I2CSyncStatusDebugManager<MODE, DEBUGGER&, DEBUGGER&>;
 
 // The following type aliases will be useful for declaring proper Futures and calling I2CDevice API
 using PARENT = i2c::I2CDevice<MANAGER>;
-template<typename T> using PROXY = typename PARENT::template PROXY<T>;
 template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
 // Define vectors we need in the example
 REGISTER_UATX_ISR(0)
 REGISTER_OSTREAMBUF_LISTENERS(serial::hard::UATX<board::USART::USART0>)
+REGISTER_FUTURE_NO_LISTENERS()
 
 // UART for traces
 static constexpr const uint8_t OUTPUT_BUFFER_SIZE = 64;

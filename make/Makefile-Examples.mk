@@ -54,12 +54,12 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						misc/ArrayCheck							\
 						misc/InitializerListCheck				\
 						misc/FutureCheck						\
-						misc/FutureCheck2						\
 						misc/LifecycleCheck						\
 						misc/QueueCheck							\
 						misc/LinkedListCheck					\
 						misc/UtilsCheck							\
 						future/improved_futures					\
+						future/improved_futures2				\
 						pci/PinChangeInterrupt4					\
 						sonar/Sonar10 sonar/Sonar11				\
 						i2c/DS1307RTC3 i2c/DS1307RTC4			\
@@ -82,7 +82,8 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						uart/UartApp9							\
 						uart/UartApp10							\
 						uart/UartApp11							\
-						uart/UartApp12							
+						uart/UartApp12							\
+						uart/UartApp13							
 
 EXAMPLES_BREADBOARD_ATMEGAXX4P=	int/ExternalInterrupt3					\
 								analog/AnalogComparator1				\
@@ -91,6 +92,7 @@ EXAMPLES_BREADBOARD_ATMEGAXX4P=	int/ExternalInterrupt3					\
 								analog/AnalogComparator5				\
 								analog/AnalogComparator6				\
 								future/improved_futures					\
+								future/improved_futures2				\
 								pci/PinChangeInterrupt4					\
 								i2c/DS1307RTC3 i2c/DS1307RTC4			\
 								uart/UartApp1							\

@@ -95,6 +95,13 @@ namespace devices::vl53l0x
 	 * experiments to make this device work. Not all original STM API is provided
 	 * here.
 	 * 
+	 * @warning This I2C device driver for VL53L0X requires you to call
+	 * `REGISTER_FUTURE_STATUS_LISTENERS()` for the following classes:
+	 * - `i2c::I2CSameFutureGroup<MANAGER>`: mandatory
+	 * - `VL53L0X<MANAGER>::SetGPIOSettingsFuture`: mandatory
+	 * - `VL53L0X<MANAGER>::GetGPIOSettingsFuture`: needed if you call API 
+	 * `get_GPIO_settings()`
+	 * 
 	 * @tparam MANAGER one of FastArduino available I2C Manager
 	 */
 	template<typename MANAGER>
@@ -103,7 +110,6 @@ namespace devices::vl53l0x
 	private:
 		using PARENT = i2c::I2CDevice<MANAGER>;
 		using ABSTRACT_FUTURE = typename MANAGER::ABSTRACT_FUTURE;
-		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
 
 		template<Register REGISTER, typename T = uint8_t>
 		using TReadRegisterFuture = 
@@ -113,7 +119,6 @@ namespace devices::vl53l0x
 			i2c::TWriteRegisterFuture<MANAGER, uint8_t(REGISTER), T, functor::ChangeEndianness<T>>;
 
 		using I2CFuturesGroup = i2c::I2CFuturesGroup<MANAGER>;
-		using I2CSameFutureGroup = i2c::I2CSameFutureGroup<MANAGER>;
 
 	public:
 		/**
@@ -534,7 +539,7 @@ namespace devices::vl53l0x
 		 * 
 		 * @sa get_range_status(DeviceStatus&)
 		 */
-		int get_range_status(PROXY<GetRangeStatusFuture> future)
+		int get_range_status(GetRangeStatusFuture& future)
 		{
 			return this->async_read(future);
 		}
@@ -567,10 +572,13 @@ namespace devices::vl53l0x
 			/// @cond notdocumented
 			GetGPIOSettingsFuture() : PARENT{futures_, NUM_FUTURES}
 			{
+				interrupt::register_handler(*this);
 				PARENT::init(futures_);
 			}
-			GetGPIOSettingsFuture(GetGPIOSettingsFuture&&) = default;
-			GetGPIOSettingsFuture& operator=(GetGPIOSettingsFuture&&) = default;
+			~GetGPIOSettingsFuture()
+			{
+				interrupt::unregister_handler(*this);
+			}
 
 			bool get(vl53l0x::GPIOSettings& settings)
 			{
@@ -606,6 +614,7 @@ namespace devices::vl53l0x
 				&read_high_threshold_
 			};
 
+			DECL_FUTURE_LISTENERS_FRIEND
 			friend VL53L0X<MANAGER>;
 		};
 
@@ -669,10 +678,15 @@ namespace devices::vl53l0x
 					write_low_threshold_{settings.low_threshold() / 2},
 					write_high_threshold_{settings.high_threshold() / 2}
 			{
+				interrupt::register_handler(*this);
 				PARENT::init(futures_);
 			}
-			SetGPIOSettingsFuture(SetGPIOSettingsFuture&&) = default;
-			SetGPIOSettingsFuture& operator=(SetGPIOSettingsFuture&&) = default;
+			~SetGPIOSettingsFuture()
+			{
+				interrupt::unregister_handler(*this);
+			}
+			SetGPIOSettingsFuture(SetGPIOSettingsFuture&&) = delete;
+			SetGPIOSettingsFuture& operator=(SetGPIOSettingsFuture&&) = delete;
 			/// @endcond
 
 		private:
@@ -759,7 +773,7 @@ namespace devices::vl53l0x
 		 * @sa clear_interrupt()
 		 * @sa get_interrupt_status(InterruptStatus&)
 		 */
-		int get_interrupt_status(PROXY<GetInterruptStatusFuture> future)
+		int get_interrupt_status(GetInterruptStatusFuture& future)
 		{
 			return this->async_read(future);
 		}
@@ -804,7 +818,7 @@ namespace devices::vl53l0x
 		 * @sa clear_interrupt(uint8_t)
 		 * @sa get_interrupt_status()
 		 */
-		int clear_interrupt(PROXY<ClearInterruptFuture> future)
+		int clear_interrupt(ClearInterruptFuture& future)
 		{
 			return this->async_write(future);
 		}
@@ -887,7 +901,7 @@ namespace devices::vl53l0x
 		 * @sa await_continuous_range()
 		 * @sa get_direct_range(uint16_t&)
 		 */
-		int get_direct_range(PROXY<GetDirectRangeFuture> future)
+		int get_direct_range(GetDirectRangeFuture& future)
 		{
 			return this->async_read(future);
 		}
@@ -1393,7 +1407,7 @@ namespace devices::vl53l0x
 		 * @sa get_register(T& value)
 		 */
 		template<Register REGISTER, typename T = uint8_t>
-		int get_register(PROXY<TReadRegisterFuture<REGISTER, T>> future)
+		int get_register(TReadRegisterFuture<REGISTER, T>& future)
 		{
 			return this->async_read(future);
 		}
@@ -1419,7 +1433,7 @@ namespace devices::vl53l0x
 		 * @sa set_register(T value)
 		 */
 		template<Register REGISTER, typename T = uint8_t>
-		int set_register(PROXY<TWriteRegisterFuture<REGISTER, T>> future)
+		int set_register(TWriteRegisterFuture<REGISTER, T>& future)
 		{
 			return this->async_write(future);
 		}

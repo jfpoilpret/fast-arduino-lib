@@ -71,7 +71,6 @@ namespace analog
 		static constexpr const board::AnalogClock MAXFREQ = MAXFREQ_;
 
 	private:
-		using THIS = AnalogInput<APIN_, SAMPLE_TYPE_, AREF_, MAXFREQ_>;
 		using TRAIT = board_traits::AnalogPin_trait<APIN>;
 		using GLOBAL_TRAIT = board_traits::GlobalAnalogPin_trait;
 		using AREF_TRAIT = board_traits::AnalogReference_trait<AREF>;
@@ -82,8 +81,8 @@ namespace analog
 
 	public:
 		AnalogInput() = default;
-		AnalogInput(const THIS&) = delete;
-		THIS& operator=(const THIS&) = delete;
+		AnalogInput(const AnalogInput&) = delete;
+		AnalogInput& operator=(const AnalogInput&) = delete;
 
 		/**
 		 * The type of samples returned by `sample()`.
@@ -148,8 +147,8 @@ namespace analog
 
 	public:
 		PowerVoltage() = default;
-		PowerVoltage(const PowerVoltage<BANDGAP_>&) = delete;
-		PowerVoltage<BANDGAP_>& operator=(const PowerVoltage<BANDGAP_>&) = delete;
+		PowerVoltage(const PowerVoltage&) = delete;
+		PowerVoltage& operator=(const PowerVoltage&) = delete;
 
 		/**
 		 * Get the voltage, in mV, feeding the MCU.

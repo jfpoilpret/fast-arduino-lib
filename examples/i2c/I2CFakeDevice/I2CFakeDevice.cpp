@@ -83,6 +83,7 @@ using MANAGER = i2c::I2CSyncStatusManager<i2c::I2CMode::FAST, DEBUGGER&>;
 #if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)
 REGISTER_I2C_ISR(MANAGER)
 #endif
+REGISTER_FUTURE_NO_LISTENERS()
 
 // UART buffer for traces
 static char output_buffer[OUTPUT_BUFFER_SIZE];
@@ -93,7 +94,6 @@ class FakeDevice: public i2c::I2CDevice<MANAGER>
 {
 	// The following type aliases will be useful for declaring proper Futures and calling I2CDevice API
 	using PARENT = i2c::I2CDevice<MANAGER>;
-	template<typename T> using PROXY = typename PARENT::template PROXY<T>;
 	template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
 public:
@@ -108,14 +108,14 @@ public:
 		WriteRegister& operator=(WriteRegister&&) = default;
 	};
 
-	int write_register(PROXY<WriteRegister> future)
+	int write_register(WriteRegister& future)
 	{
 		return this->launch_commands(future, {this->write()});
 	}
 	bool write_register(uint8_t address, uint8_t value)
 	{
 		WriteRegister future{address, value};
-		if (write_register(PARENT::make_proxy(future)) != 0) return false;
+		if (write_register(future) != 0) return false;
 		return (future.await() == future::FutureStatus::READY);
 	}
 
@@ -128,14 +128,14 @@ public:
 		ReadRegister& operator=(ReadRegister&&) = default;
 	};
 
-	int read_register(PROXY<ReadRegister> future)
+	int read_register(ReadRegister& future)
 	{
 		return this->launch_commands(future, {this->write(), this->read()});
 	}
 	bool read_register(uint8_t address, uint8_t& value)
 	{
 		ReadRegister future{address};
-		if (read_register(PARENT::make_proxy(future)) != 0) return false;
+		if (read_register(future) != 0) return false;
 		return future.get(value);
 	}
 };

@@ -33,13 +33,13 @@
 
 // Device driver guidelines:
 // - Template on MANAGER, subclass of I2CDevice
-// - define types aliases PARENT, PROXY and FUTURE
+// - define types aliases PARENT and FUTURE
 // - constructor shall pass one of i2c::Mode i2c::I2C_STANDARD or i2c::I2C_FAST
 //   to inherited constructor, in order tos pecify the BEST mode supported by this driver
 // - Define FUTURE subclass (inside device class) for every future requiring input (constant, or user-provided)
 //   naming convention: MethodNameFuture
 // - FUTURE subclass shall have explicit constructor with mandatory input arguments (no default)
-// - each async API method returns int (error code) and takes a PROXY to specific future as unique argument
+// - each async API method returns int (error code) and takes a reference to specific future as unique argument
 // - each async API shall have a matching sync API with same name but different prototype:
 //   direct input arguments, reference to output arguments, bool return (true if OK)
 //   each sync API calls the matching async API after creating the proper Future on the stack
@@ -117,7 +117,6 @@ namespace devices::rtc
 	{
 	private:
 		using PARENT = i2c::I2CDevice<MANAGER>;
-		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
 		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
 		template<uint8_t REGISTER, typename T = uint8_t, typename FUNCTOR = functor::Identity<T>>
@@ -242,7 +241,7 @@ namespace devices::rtc
 		 * @sa set_datetime(const tm&)
 		 * @sa errors
 		 */
-		int set_datetime(PROXY<SetDatetimeFuture> future)
+		int set_datetime(SetDatetimeFuture& future)
 		{
 			return this->async_write(future);
 		}
@@ -273,7 +272,7 @@ namespace devices::rtc
 		 * @sa get_datetime(tm&)
 		 * @sa errors
 		 */
-		int get_datetime(PROXY<GetDatetimeFuture> future)
+		int get_datetime(GetDatetimeFuture& future)
 		{
 			return this->async_read(future);
 		}
@@ -311,8 +310,6 @@ namespace devices::rtc
 			{
 				static_assert(SIZE_ <= RAM_SIZE, "SIZE_ template paraneter must be less than RAM_SIZE!");
 			}
-			SetRamFuture(SetRamFuture<SIZE_>&&) = default;
-			SetRamFuture& operator=(SetRamFuture<SIZE_>&&) = default;
 
 			bool is_input_valid() const
 			{
@@ -341,9 +338,9 @@ namespace devices::rtc
 		 * @sa get_ram(GetRamFuture<SIZE>&)
 		 * @sa errors
 		 */
-		template<uint8_t SIZE> int set_ram(PROXY<SetRamFuture<SIZE>> future)
+		template<uint8_t SIZE> int set_ram(SetRamFuture<SIZE>& future)
 		{
-			if (!this->resolve(future).is_input_valid())
+			if (!future.is_input_valid())
 				return errors::EINVAL;
 			return this->async_write(future);
 		}
@@ -365,8 +362,6 @@ namespace devices::rtc
 			/// @cond notdocumented
 			explicit SetRam1Future(uint8_t address, uint8_t data)
 				:	PARENT{{static_cast<uint8_t>(address + RAM_START), data}} {}
-			SetRam1Future(SetRam1Future&&) = default;
-			SetRam1Future& operator=(SetRam1Future&&) = default;
 
 			bool is_input_valid() const
 			{
@@ -393,9 +388,9 @@ namespace devices::rtc
 		 * @sa set_ram(uint8_t, uint8_t)
 		 * @sa errors
 		 */
-		int set_ram(PROXY<SetRam1Future> future)
+		int set_ram(SetRam1Future& future)
 		{
-			if (!this->resolve(future).is_input_valid())
+			if (!future.is_input_valid())
 				return errors::EINVAL;
 			return this->async_write(future);
 		}
@@ -420,8 +415,6 @@ namespace devices::rtc
 			{
 				static_assert(SIZE_ <= RAM_SIZE, "SIZE_ template paraneter must be less than RAM_SIZE!");
 			}
-			GetRamFuture(GetRamFuture<SIZE_>&&) = default;
-			GetRamFuture& operator=(GetRamFuture<SIZE_>&&) = default;
 
 			bool is_input_valid() const
 			{
@@ -450,9 +443,9 @@ namespace devices::rtc
 		 * @sa get_ram(uint8_t, uint8_t*, uint8_t)
 		 * @sa errors
 		 */
-		template<uint8_t SIZE> int get_ram(PROXY<GetRamFuture<SIZE>> future)
+		template<uint8_t SIZE> int get_ram(GetRamFuture<SIZE>& future)
 		{
-			if (!this->resolve(future).is_input_valid())
+			if (!future.is_input_valid())
 				return errors::EINVAL;
 			return this->async_read(future);
 		}
@@ -472,8 +465,6 @@ namespace devices::rtc
 		public:
 			/// @cond notdocumented
 			explicit GetRam1Future(uint8_t address) : PARENT{static_cast<uint8_t>(address + RAM_START)} {}
-			GetRam1Future(GetRam1Future&&) = default;
-			GetRam1Future& operator=(GetRam1Future&&) = default;
 
 			bool is_input_valid() const
 			{
@@ -500,9 +491,9 @@ namespace devices::rtc
 		 * @sa set_ram(SetRam1Future&)
 		 * @sa errors
 		 */
-		int get_ram(PROXY<GetRam1Future> future)
+		int get_ram(GetRam1Future& future)
 		{
-			if (!this->resolve(future).is_input_valid())
+			if (!future.is_input_valid())
 				return errors::EINVAL;
 			return this->async_read(future);
 		}
@@ -520,8 +511,6 @@ namespace devices::rtc
 			/// @cond notdocumented
 			// just write 0x80 at address 0
 			HaltClockFuture() : TWriteRegisterFuture<TIME_ADDRESS>{CLOCK_HALT} {}
-			HaltClockFuture(HaltClockFuture&&) = default;
-			HaltClockFuture& operator=(HaltClockFuture&&) = default;
 			/// @endcond
 		};
 
@@ -545,7 +534,7 @@ namespace devices::rtc
 		 * @sa halt_clock()
 		 * @sa errors
 		 */
-		int halt_clock(PROXY<HaltClockFuture> future)
+		int halt_clock(HaltClockFuture& future)
 		{
 			return this->async_write(future);
 		}
@@ -567,8 +556,6 @@ namespace devices::rtc
 			/// @cond notdocumented
 			explicit EnableOutputFuture(SquareWaveFrequency frequency) 
 				: PARENT{ControlRegister::create_square_wave_enable(frequency)} {}
-			EnableOutputFuture(EnableOutputFuture&&) = default;
-			EnableOutputFuture& operator=(EnableOutputFuture&&) = default;
 			/// @endcond
 		};
 
@@ -590,7 +577,7 @@ namespace devices::rtc
 		 * @sa disable_output(DisableOutputFuture&)
 		 * @sa errors
 		 */
-		int enable_output(PROXY<EnableOutputFuture> future)
+		int enable_output(EnableOutputFuture& future)
 		{
 			return this->async_write(future);
 		}
@@ -612,8 +599,6 @@ namespace devices::rtc
 			/// @cond notdocumented
 			explicit DisableOutputFuture(bool output_value) 
 				: PARENT{ControlRegister::create_output_level(output_value)} {}
-			DisableOutputFuture(DisableOutputFuture&&) = default;
-			DisableOutputFuture& operator=(DisableOutputFuture&&) = default;
 			/// @endcond
 		};
 
@@ -635,7 +620,7 @@ namespace devices::rtc
 		 * @sa enable_output()
 		 * @sa errors
 		 */
-		int disable_output(PROXY<DisableOutputFuture> future)
+		int disable_output(DisableOutputFuture& future)
 		{
 			return this->async_write(future);
 		}
@@ -742,7 +727,7 @@ namespace devices::rtc
 		bool set_ram(uint8_t address, uint8_t data)
 		{
 			SetRam1Future future{address, data};
-			if (set_ram(PARENT::make_proxy(future)) != 0) return false;
+			if (set_ram(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -760,7 +745,7 @@ namespace devices::rtc
 		uint8_t get_ram(uint8_t address)
 		{
 			GetRam1Future future{address};
-			if (get_ram(PARENT::make_proxy(future)) != 0) return false;
+			if (get_ram(future) != 0) return false;
 			uint8_t data = 0;
 			future.get(data);
 			return data;
@@ -784,7 +769,7 @@ namespace devices::rtc
 		template<uint8_t SIZE> bool set_ram(uint8_t address, const uint8_t (&data)[SIZE])
 		{
 			SetRamFuture<SIZE> future{address, data};
-			if (set_ram(PARENT::make_proxy(future)) != 0) return false;
+			if (set_ram(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -806,7 +791,7 @@ namespace devices::rtc
 		template<uint8_t SIZE> bool get_ram(uint8_t address, uint8_t (&data)[SIZE])
 		{
 			GetRamFuture<SIZE> future{address};
-			if (get_ram(PARENT::make_proxy(future)) != 0) return false;
+			if (get_ram(future) != 0) return false;
 			typename GetRamFuture<SIZE>::OUT temp;
 			if (!future.get(temp)) return false;
 			memcpy(data, temp.data(), SIZE);
@@ -832,7 +817,7 @@ namespace devices::rtc
 			uint8_t temp[sizeof(T)];
 			utils::as_array<T>(data, temp);
 			SetRamFuture<sizeof(T)> future{address, temp};
-			if (set_ram(PARENT::make_proxy(future)) != 0) return false;
+			if (set_ram(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -856,7 +841,7 @@ namespace devices::rtc
 		template<typename T> bool get_ram(uint8_t address, T& data)
 		{
 			GetRamFuture<sizeof(T)> future{address};
-			if (get_ram(PARENT::make_proxy(future)) != 0) return false;
+			if (get_ram(future) != 0) return false;
 			return future.get(reinterpret_cast<uint8_t&>(data));
 		}
 	};

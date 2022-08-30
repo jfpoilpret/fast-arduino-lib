@@ -1187,6 +1187,7 @@ which handles only synchronous (blocking) I2C operations.
 
 There are also asynchronous I2C Managers but they will not be explained here. If you want
 to learn more about there, please take a look at the API and examples using it.
+The asynchronous API is heavily based on FastArduino [Futures API](namespacefuture.html) support. 
 
 In order to illustrate concretely I2C API usage in this tutorial, we will focus on a concrete
 example with the DS1307 RTC chip. If you want to develop an API for your own I2C device then
@@ -1202,7 +1203,7 @@ The first part is the I2C and the RTC device initialization:
 @dontinclude fastarduino/i2c_1_rtc.cpp
 @skip MANAGER
 @until DS1307
-`i2c::I2CSyncManager` is a template class with a parameter of type `i2c::I2CMode`, which can any of:
+`i2c::I2CSyncManager` is a template class with a parameter of type `i2c::I2CMode`, which can be anyone of:
 - `i2c::I2CMode::STANDARD`: slow I2C mode (100 kHz), this the default
 - `i2c::I2CMode::FAST`: fast I2C mode (400 kHz)
 

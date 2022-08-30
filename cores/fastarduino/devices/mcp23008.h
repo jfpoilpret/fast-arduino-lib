@@ -41,7 +41,6 @@ namespace devices::mcp230xx
 	{
 	private:
 		using PARENT = i2c::I2CDevice<MANAGER>;
-		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
 
 		// Forward declarations needed by compiler
 		template<uint8_t REGISTER, typename T = uint8_t, typename FUNCTOR = functor::Identity<T>>
@@ -138,7 +137,7 @@ namespace devices::mcp230xx
 		 * @sa begin(InterruptPolarity)
 		 * @sa errors
 		 */
-		int begin(PROXY<BeginFuture> future)
+		int begin(BeginFuture& future)
 		{
 			return this->async_write(future);
 		}
@@ -167,8 +166,6 @@ namespace devices::mcp230xx
 			/// @cond notdocumented
 			ConfigureGPIOFuture(uint8_t direction, uint8_t pullup = 0, uint8_t polarity = 0)
 				:	PARENT{direction, polarity, pullup} {}
-			ConfigureGPIOFuture(ConfigureGPIOFuture&&) = default;
-			ConfigureGPIOFuture& operator=(ConfigureGPIOFuture&&) = default;
 			/// @endcond
 		};
 
@@ -189,7 +186,7 @@ namespace devices::mcp230xx
 		 * @sa configure_gpio(uint8_t, uint8_t, uint8_t)
 		 * @sa errors
 		 */
-		int configure_gpio(PROXY<ConfigureGPIOFuture> future)
+		int configure_gpio(ConfigureGPIOFuture& future)
 		{
 			return this->async_multi_write(future);
 		}
@@ -219,8 +216,6 @@ namespace devices::mcp230xx
 			/// @cond notdocumented
 			ConfigureInterruptsFuture(uint8_t int_pins, uint8_t ref = 0, uint8_t compare_ref = 0)
 				:	PARENT{int_pins, ref, compare_ref} {}
-			ConfigureInterruptsFuture(ConfigureInterruptsFuture&&) = default;
-			ConfigureInterruptsFuture& operator=(ConfigureInterruptsFuture&&) = default;
 			/// @endcond
 		};
 
@@ -241,7 +236,7 @@ namespace devices::mcp230xx
 		 * @sa configure_interrupts(uint8_t, uint8_t, uint8_t)
 		 * @sa errors
 		 */
-		int configure_interrupts(PROXY<ConfigureInterruptsFuture> future)
+		int configure_interrupts(ConfigureInterruptsFuture& future)
 		{
 			return this->async_multi_write(future);
 		}
@@ -276,7 +271,7 @@ namespace devices::mcp230xx
 		 * @sa values(uint8_t value)
 		 * @sa errors
 		 */
-		int values(PROXY<SetValuesFuture> future)
+		int values(SetValuesFuture& future)
 		{
 			return this->async_write(future);
 		}
@@ -308,7 +303,7 @@ namespace devices::mcp230xx
 		 * @sa uint8_t values()
 		 * @sa errors
 		 */
-		int values(PROXY<GetValuesFuture> future)
+		int values(GetValuesFuture& future)
 		{
 			return this->async_read(future);
 		}
@@ -342,7 +337,7 @@ namespace devices::mcp230xx
 		 * @sa uint8_t interrupt_flags()
 		 * @sa errors
 		 */
-		int interrupt_flags(PROXY<InterruptFlagsFuture> future)
+		int interrupt_flags(InterruptFlagsFuture& future)
 		{
 			return this->async_read(future);
 		}
@@ -378,7 +373,7 @@ namespace devices::mcp230xx
 		 * @sa uint8_t captured_values()
 		 * @sa errors
 		 */
-		int captured_values(PROXY<CapturedValuesFuture> future)
+		int captured_values(CapturedValuesFuture& future)
 		{
 			return this->async_read(future);
 		}
@@ -421,7 +416,7 @@ namespace devices::mcp230xx
 		bool configure_gpio(uint8_t direction, uint8_t pullup = 0, uint8_t polarity = 0)
 		{
 			ConfigureGPIOFuture future{direction, pullup, polarity};
-			if (configure_gpio(PARENT::make_proxy(future)) != 0) return false;
+			if (configure_gpio(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -445,7 +440,7 @@ namespace devices::mcp230xx
 		bool configure_interrupts(uint8_t int_pins, uint8_t ref = 0, uint8_t compare_ref = 0)
 		{
 			ConfigureInterruptsFuture future{int_pins, ref, compare_ref};
-			if (configure_interrupts(PARENT::make_proxy(future)) != 0) return false;
+			if (configure_interrupts(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 

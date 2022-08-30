@@ -69,8 +69,10 @@ namespace devices::servo
 		static constexpr const TPRESCALER PRESCALER = TIMER::PRESCALER;
 
 	public:
-		Servo(const Servo<TIMER_, PWMPIN_>&) = delete;
-		Servo<TIMER_, PWMPIN_>& operator=(const Servo<TIMER_, PWMPIN_>&) = delete;
+		/// @cond notdocument
+		Servo(const Servo&) = delete;
+		Servo& operator=(const Servo&) = delete;
+		/// @endcond
 		
 		/**
 		 * Create a new servo handler, based on the provided @p timer (which will

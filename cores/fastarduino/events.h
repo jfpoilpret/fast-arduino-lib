@@ -143,8 +143,8 @@ namespace events
 	template<typename T> class Event
 	{
 	public:
-		Event(const Event<T>&) = default;
-		Event<T>& operator=(const Event<T>&) = default;
+		Event(const Event&) = default;
+		Event& operator=(const Event&) = default;
 
 		/**
 		 * The type of additional event value, as defined in template paraneter @p T.
@@ -186,8 +186,8 @@ namespace events
 	template<> class Event<void>
 	{
 	public:
-		Event(const Event<void>&) = default;
-		Event<void>& operator=(const Event<void>&) = default;
+		Event(const Event&) = default;
+		Event& operator=(const Event&) = default;
 
 		using TYPE = void;
 
@@ -242,8 +242,8 @@ namespace events
 
 	public:
 		Dispatcher() = default;
-		Dispatcher(const Dispatcher<EVENT>&) = delete;
-		Dispatcher<EVENT>& operator=(const Dispatcher<EVENT>&) = delete;
+		Dispatcher(const Dispatcher&) = delete;
+		Dispatcher& operator=(const Dispatcher&) = delete;
 
 		/**
 		 * Dispatch the given @p event to the right `EventHandler`, based on the event type.

@@ -144,9 +144,11 @@ namespace watchdog
 	class WatchdogSignal
 	{
 	public:
+		/// @cond notdocumented
 		WatchdogSignal() = default;
 		WatchdogSignal(const WatchdogSignal&) = delete;
 		WatchdogSignal& operator=(const WatchdogSignal&) = delete;
+		/// @endcond
 
 		/**
 		 * Start the watchdog timer with the given @p timeout period.

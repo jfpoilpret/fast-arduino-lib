@@ -530,9 +530,6 @@ namespace eeprom
 	class QueuedWriter : private EEPROM
 	{
 	public:
-		QueuedWriter(const QueuedWriter&) = delete;
-		QueuedWriter& operator=(const QueuedWriter&) = delete;
-		
 		/**
 		 * Construct a QueuedWriter from a given @p buffer array.
 		 * 

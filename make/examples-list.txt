@@ -23,6 +23,7 @@ UartApp9	HW UART test of begin/end
 UartApp10	HW UART test of begin/end
 UartApp11	SW UART test of begin/end
 UartApp12	SW UART test of begin/end
+UartApp13	SW UART test of TX/RX supported rates
 Flash1	Display (UATX) strings and structures from Flash
 InputCapture1	Measure button switch duration through timer ICP (UATX)
 RTTApp1b	Check all timers with RTT to blink a LED based on delay
@@ -63,7 +64,6 @@ ArrayCheck	Unit Tests for array container
 InitializerListCheck	Unit Tests for initializer_list
 LifecycleCheck	Unit Tests of lifecycle/proxy API
 FutureCheck	Unit Tests of future API
-FutureCheck2	Unit Tests of future API used with Lifecycle API
 QueueCheck	Unit Tests of queue container
 LinkedListCheck	Unit Tests of linked list container
 UtilsCheck	Unit Tests of conversion utilities
@@ -120,5 +120,6 @@ tones5	Tone player from SRAM, playing asynchronously from ISR (QTonePlay)
 tones6	Tone player from Flash, playing 2 channels asynchronously from RTT events (QTonePlay)
 tones7	Tone player from Flash, playing asynchronously from RTT events (QTonePlay)
 PCIFuture	Example of Future concept usage with PCI ISR
-improved_futures	Example of FuturesGroup
+improved_futures	Example of FuturesGroup & status listener
+improved_futures2	Example of output content listener
 Conway	Game of Life (8x8 LED) 1KB Hackaday

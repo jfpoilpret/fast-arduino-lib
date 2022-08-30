@@ -115,7 +115,7 @@ private:
 		synchronized return next_range_time_;
 	}
 
-	void i2c_change(i2c::I2CCallback callback, UNUSED MANAGER::FUTURE_PROXY proxy)
+	void i2c_change(i2c::I2CCallback callback, UNUSED MANAGER::ABSTRACT_FUTURE& future)
 	{
 		if (callback != i2c::I2CCallback::END_TRANSACTION) return;
 		switch (phase_)
@@ -198,6 +198,8 @@ private:
 
 REGISTER_I2C_ISR_METHOD(MANAGER, ToFController, &ToFController::i2c_change)
 REGISTER_INT_ISR_METHOD(0, GPIO, ToFController, &ToFController::gpio_raised)
+REGISTER_FUTURE_STATUS_LISTENERS(MANAGER_FUTURE(MANAGER), i2c::I2CSameFutureGroup<MANAGER>, TOF::SetGPIOSettingsFuture)
+REGISTER_FUTURE_OUTPUT_NO_LISTENERS()
 
 static constexpr uint16_t NUM_LOOPS = 1000U;
 

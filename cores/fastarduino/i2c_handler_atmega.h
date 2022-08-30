@@ -69,7 +69,7 @@ ISR(TWI_vect)                                                       \
  * @param MANAGER one of many asynchronous I2C managers defined in this header
  * @param CALLBACK the function that will be called when the interrupt is
  * triggered; it should follow this prototype: 
- * `void f(I2CCallback, typename MANAGER::FUTURE_PROXY)`
+ * `void f(I2CCallback, typename MANAGER::ABSTRACT_FUTURE&)`
  * 
  * @sa i2c::I2CCallback
  */
@@ -89,7 +89,7 @@ ISR(TWI_vect)                                                       \
  * @param HANDLER the class holding the callback method
  * @param CALLBACK the method of @p HANDLER that will be called when the interrupt
  * is triggered; this must be a proper PTMF (pointer to member function); it should
- * follow this prototype: `void f(I2CCallback, typename MANAGER::FUTURE_PROXY)`
+ * follow this prototype: `void f(I2CCallback, typename MANAGER::ABSTRACT_FUTURE&)`
  * 
  * @sa i2c::I2CCallback
  */
@@ -112,34 +112,6 @@ ISR(TWI_vect)                                                           \
 namespace i2c
 {
 	/**
-	 * I2C Manager policy to use in case of an error during I2C transaction.
-	 * @warning available only on ATmega MCU.
-	 * @sa I2CAsyncManager
-	 */
-	enum class I2CErrorPolicy : uint8_t
-	{
-		/**
-		 * Do nothing at all in case of an error; useful only with a synchronous
-		 * I2C Manager.
-		 */
-		DO_NOTHING,
-
-		/**
-		 * In case of an error during I2C transaction, then all I2CCommand currently
-		 * in queue will be removed.
-		 * @warning this means that an error with device A can trigger a removal
-		 * of pending commands for device B.
-		 */
-		CLEAR_ALL_COMMANDS,
-
-		/**
-		 * In case of an error during I2C transaction, then all pending I2CCommand
-		 * of the current transaction will be removed.
-		 */
-		CLEAR_TRANSACTION_COMMANDS
-	};
-
-	/**
 	 * Type passed to I2C ISR registered callbacks (asynchronous I2C Manager only)
 	 * when an asynchronous I2C transaction is executed. 
 	 */
@@ -156,7 +128,6 @@ namespace i2c
 	};
 
 	/// @cond notdocumented
-	// Generic support for LifeCycle resolution
 	template<I2CErrorPolicy POLICY = I2CErrorPolicy::DO_NOTHING> struct I2CErrorPolicySupport
 	{
 		I2CErrorPolicySupport() = default;
@@ -307,9 +278,6 @@ namespace i2c
 	 * You should never need to subclass AbstractI2CSyncATmegaManager yourself.
 	 * 
 	 * @tparam MODE_ the I2C mode for this manager
-	 * @tparam HAS_LC_ tells if this I2C Manager must be able to handle 
-	 * proxies to Future that can move around and must be controlled by a 
-	 * LifeCycleManager; using `false` will generate smaller code.
 	 * @tparam HAS_STATUS_ tells this I2C Manager to call a status hook at each 
 	 * step of an I2C transaction; using `false` will generate smaller code.
 	 * @tparam STATUS_HOOK_ the type of the hook to be called when `HAS_STATUS_` is 
@@ -330,27 +298,24 @@ namespace i2c
 	 * @sa i2c::debug
 	 * @sa i2c::status
 	 */
-	template<I2CMode MODE_, bool HAS_LC_, 
-		bool HAS_STATUS_, typename STATUS_HOOK_, bool HAS_DEBUG_, typename DEBUG_HOOK_>
+	template<I2CMode MODE_, bool HAS_STATUS_, typename STATUS_HOOK_, bool HAS_DEBUG_, typename DEBUG_HOOK_>
 	class AbstractI2CSyncATmegaManager
 		: public AbstractI2CSyncManager<ATmegaI2CSyncHandler<MODE_, HAS_STATUS_, STATUS_HOOK_>, 
-			MODE_, HAS_LC_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_>
+			MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_>
 	{
 	private:
 		using PARENT = AbstractI2CSyncManager<ATmegaI2CSyncHandler<MODE_, HAS_STATUS_, STATUS_HOOK_>, 
-			MODE_, HAS_LC_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_>;
+			MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_>;
 
 	public:
 		using ABSTRACT_FUTURE = typename PARENT::ABSTRACT_FUTURE;
-		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
 		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
 	protected:
 		/// @cond notdocumented
 		explicit AbstractI2CSyncATmegaManager(
-			lifecycle::AbstractLifeCycleManager* lifecycle_manager = nullptr, 
 			STATUS_HOOK_ status_hook = nullptr, DEBUG_HOOK_ debug_hook = nullptr)
-			:	PARENT{lifecycle_manager, status_hook, debug_hook} {}
+			:	PARENT{status_hook, debug_hook} {}
 		/// @endcond
 
 		template<typename> friend class I2CDevice;
@@ -366,9 +331,6 @@ namespace i2c
 	 * 
 	 * @tparam MODE_ the I2C mode for this manager
 	 * @tparam POLICY_ the policy to use in case of an error during I2C transaction
-	 * @tparam HAS_LC_ tells if this I2C Manager must be able to handle 
-	 * proxies to Future that can move around and must be controlled by a 
-	 * LifeCycleManager; using `false` will generate smaller code.
 	 * @tparam HAS_STATUS_ tells this I2C Manager to call a status hook at each 
 	 * step of an I2C transaction; using `false` will generate smaller code.
 	 * @tparam STATUS_HOOK_ the type of the hook to be called when `HAS_STATUS_` is 
@@ -389,7 +351,7 @@ namespace i2c
 	 * @sa i2c::debug
 	 * @sa i2c::status
 	 */
-	template<I2CMode MODE_, I2CErrorPolicy POLICY_, bool HAS_LC_, 
+	template<I2CMode MODE_, I2CErrorPolicy POLICY_,
 		bool HAS_STATUS_, typename STATUS_HOOK_, bool HAS_DEBUG_, typename DEBUG_HOOK_>
 	class AbstractI2CAsyncManager
 	{
@@ -400,28 +362,25 @@ namespace i2c
 		using STATUS = I2CStatusSupport<HAS_STATUS_, STATUS_HOOK_>;
 		using DEBUG = I2CDebugSupport<HAS_DEBUG_, DEBUG_HOOK_>;
 		using POLICY = I2CErrorPolicySupport<POLICY_>;
-		using LC = I2CLifeCycleSupport<HAS_LC_>;
 
 	public:
+		/**
+		 * The abstract base class of all futures to be defined for this I2C Manager.
+		 * For an asynchronous manager, it is always `future::AbstractFuture`.
+		 */
 		using ABSTRACT_FUTURE = future::AbstractFuture;
-		template<typename T> using PROXY = typename LC::template PROXY<T>;
-		template<typename OUT, typename IN> using FUTURE = future::Future<OUT, IN>;
 
 		/**
-		 * The type passed to callback functions registered alongside ISR.
-		 * Callbacks cam use it to check the status of the Future used for the
-		 * current I2C transaction.
-		 * 
-		 * @sa REGISTER_I2C_ISR_FUNCTION
-		 * @sa REGISTER_I2C_ISR_METHOD
+		 * The template base class of all futures to be defined for this I2C Manager.
+		 * For an asynchronous manager, it is always `future::Future`.
 		 */
-		using FUTURE_PROXY = PROXY<ABSTRACT_FUTURE>;
+		template<typename OUT, typename IN> using FUTURE = future::Future<OUT, IN>;
 
 		/**
 		 * The type of I2CCommand to use in the buffer passed to the constructor 
 		 * of this AbstractI2CAsyncManager.
 		 */
-		using I2CCOMMAND = I2CCommand<FUTURE_PROXY>;
+		using I2CCOMMAND = I2CCommand<ABSTRACT_FUTURE>;
 
 		/**
 		 * Prepare and enable the MCU for I2C transmission.
@@ -483,10 +442,9 @@ namespace i2c
 		template<uint8_t SIZE>
 		explicit AbstractI2CAsyncManager(
 			I2CCOMMAND (&buffer)[SIZE], 
-			lifecycle::AbstractLifeCycleManager* lifecycle_manager = nullptr,
 			STATUS_HOOK_ status_hook = nullptr,
 			DEBUG_HOOK_ debug_hook = nullptr)
-			:	commands_{buffer}, lc_{lifecycle_manager}, 
+			:	commands_{buffer}, 
 				status_hook_{status_hook}, debug_hook_{debug_hook} {}
 		/// @endcond
 
@@ -497,9 +455,9 @@ namespace i2c
 		}
 
 		bool push_command_(
-			I2CLightCommand command, uint8_t target, FUTURE_PROXY proxy)
+			I2CLightCommand command, uint8_t target, ABSTRACT_FUTURE& future)
 		{
-			return commands_.push_(I2CCOMMAND{command, target, proxy});
+			return commands_.push_(I2CCOMMAND{command, target, future});
 		}
 
 		void last_command_pushed_()
@@ -510,11 +468,6 @@ namespace i2c
 				// Dequeue first pending command and start TWI operation
 				dequeue_command_(true);
 			}
-		}
-
-		template<typename T> T& resolve(PROXY<T> proxy) const
-		{
-			return lc_.resolve(proxy);
 		}
 
 		static constexpr const REG8 TWBR_{TWBR};
@@ -537,12 +490,6 @@ namespace i2c
 
 		ABSTRACT_FUTURE& current_future() const
 		{
-			return lc_.resolve(command_.future());
-		}
-
-		FUTURE_PROXY current_proxy() const
-		{
-			//TODO shall we convert to a full Proxy<> or keep it as-is?
 			return command_.future();
 		}
 
@@ -793,7 +740,6 @@ namespace i2c
 		containers::Queue<I2CCOMMAND> commands_;
 
 		POLICY policy_{};
-		LC lc_;
 		STATUS status_hook_;
 		DEBUG debug_hook_;
 
@@ -817,9 +763,9 @@ namespace i2c
 	 */
 	template<I2CMode MODE_, I2CErrorPolicy POLICY_ = I2CErrorPolicy::CLEAR_ALL_COMMANDS>
 	class I2CAsyncManager : 
-		public AbstractI2CAsyncManager<MODE_, POLICY_, false, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK>
+		public AbstractI2CAsyncManager<MODE_, POLICY_, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK>
 	{
-		using PARENT = AbstractI2CAsyncManager<MODE_, POLICY_, false, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK>;
+		using PARENT = AbstractI2CAsyncManager<MODE_, POLICY_, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK>;
 	public:
 		/**
 		 * Create an asynchronous I2C Manager for ATmega MCUs.
@@ -858,9 +804,9 @@ namespace i2c
 		I2CErrorPolicy POLICY_ = I2CErrorPolicy::CLEAR_ALL_COMMANDS, 
 		typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
 	class I2CAsyncDebugManager : 
-		public AbstractI2CAsyncManager<MODE_, POLICY_, false, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_>
+		public AbstractI2CAsyncManager<MODE_, POLICY_, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_>
 	{
-		using PARENT = AbstractI2CAsyncManager<MODE_, POLICY_, false, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_>;
+		using PARENT = AbstractI2CAsyncManager<MODE_, POLICY_, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_>;
 	public:
 		/**
 		 * Create an asynchronous I2C Manager for ATmega MCUs.
@@ -875,7 +821,7 @@ namespace i2c
 		template<uint8_t SIZE>
 		explicit I2CAsyncDebugManager(
 			typename PARENT::I2CCOMMAND (&buffer)[SIZE], DEBUG_HOOK_ debug_hook) 
-			: PARENT{buffer, nullptr, nullptr, debug_hook}
+			: PARENT{buffer, nullptr, debug_hook}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -903,9 +849,9 @@ namespace i2c
 		I2CErrorPolicy POLICY_ = I2CErrorPolicy::CLEAR_ALL_COMMANDS, 
 		typename STATUS_HOOK_ = I2C_STATUS_HOOK>
 	class I2CAsyncStatusManager : 
-		public AbstractI2CAsyncManager<MODE_, POLICY_, false, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK>
+		public AbstractI2CAsyncManager<MODE_, POLICY_, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK>
 	{
-		using PARENT = AbstractI2CAsyncManager<MODE_, POLICY_, false, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK>;
+		using PARENT = AbstractI2CAsyncManager<MODE_, POLICY_, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK>;
 	public:
 		/**
 		 * Create an asynchronous I2C Manager for ATmega MCUs.
@@ -920,7 +866,7 @@ namespace i2c
 		template<uint8_t SIZE>
 		explicit I2CAsyncStatusManager(
 			typename PARENT::I2CCOMMAND (&buffer)[SIZE], STATUS_HOOK_ status_hook) 
-			: PARENT{buffer, nullptr, status_hook}
+			: PARENT{buffer, status_hook}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -953,9 +899,9 @@ namespace i2c
 		typename STATUS_HOOK_ = I2C_STATUS_HOOK,
 		typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
 	class I2CAsyncStatusDebugManager : 
-		public AbstractI2CAsyncManager<MODE_, POLICY_, false, true, STATUS_HOOK_, true, DEBUG_HOOK_>
+		public AbstractI2CAsyncManager<MODE_, POLICY_, true, STATUS_HOOK_, true, DEBUG_HOOK_>
 	{
-		using PARENT = AbstractI2CAsyncManager<MODE_, POLICY_, false, true, STATUS_HOOK_, true, DEBUG_HOOK_>;
+		using PARENT = AbstractI2CAsyncManager<MODE_, POLICY_, true, STATUS_HOOK_, true, DEBUG_HOOK_>;
 	public:
 		/**
 		 * Create an asynchronous I2C Manager for ATmega MCUs.
@@ -972,199 +918,7 @@ namespace i2c
 		template<uint8_t SIZE>
 		explicit I2CAsyncStatusDebugManager(
 			typename PARENT::I2CCOMMAND (&buffer)[SIZE], STATUS_HOOK_ status_hook, DEBUG_HOOK_ debug_hook) 
-			: PARENT{buffer, nullptr, status_hook, debug_hook}
-		{
-			interrupt::register_handler(*this);
-		}
-	};
-
-	/**
-	 * Asynchronous I2C Manager for ATmega architecture with support for dynamic proxies.
-	 * This class offers no debug facility.
-	 * @warning You need to register the proper ISR for this class to work properly.
-	 * 
-	 * @tparam MODE_ the I2C mode for this manager
-	 * @tparam POLICY_ the policy to use in case of an error during I2C transaction
-	 * 
-	 * @sa i2c::I2CMode
-	 * @sa i2c::I2CErrorPolicy
-	 * @sa REGISTER_I2C_ISR()
-	 * @sa REGISTER_I2C_ISR_FUNCTION()
-	 * @sa REGISTER_I2C_ISR_METHOD()
-	 */
-	template<I2CMode MODE_, I2CErrorPolicy POLICY_ = I2CErrorPolicy::CLEAR_ALL_COMMANDS>
-	class I2CAsyncLCManager : 
-		public AbstractI2CAsyncManager<MODE_, POLICY_, true, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK>
-	{
-		using PARENT = AbstractI2CAsyncManager<MODE_, POLICY_, true, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK>;
-	public:
-		/**
-		 * Create an asynchronous I2C Manager for ATmega MCUs.
-		 * 
-		 * @tparam SIZE the size of I2CCommand buffer that will be queued for 
-		 * asynchronous handling
-		 * @param buffer a buffer of @p SIZE I2CCommand items, that will be used to
-		 * queue I2C command for asynchronous handling
-		 * @param lifecycle_manager the AbstractLifeCycleManager used to handle 
-		 * the lifecycle of Future used by this I2C Manager
-		 */
-		template<uint8_t SIZE>
-		explicit I2CAsyncLCManager(
-			typename PARENT::I2CCOMMAND (&buffer)[SIZE], lifecycle::AbstractLifeCycleManager& lifecycle_manager)
-			:	PARENT{buffer, &lifecycle_manager}
-		{
-			interrupt::register_handler(*this);
-		}
-	};
-
-	/**
-	 * Asynchronous I2C Manager for ATmega architecture with debug facility
-	 * and support for dynamic proxies.
-	 * @warning You need to register the proper ISR for this class to work properly.
-	 * 
-	 * @tparam MODE_ the I2C mode for this manager
-	 * @tparam POLICY_ the policy to use in case of an error during I2C transaction
-	 * @tparam DEBUG_HOOK_ the type of the hook to be called. This can be a simple 
-	 * function pointer (of type `I2C_DEBUG_HOOK`) or a Functor class (or Functor 
-	 * class reference). Using a Functor class will generate smaller code.
-	 * 
-	 * @sa i2c::I2CMode
-	 * @sa i2c::I2CErrorPolicy
-	 * @sa REGISTER_I2C_ISR()
-	 * @sa REGISTER_I2C_ISR_FUNCTION()
-	 * @sa REGISTER_I2C_ISR_METHOD()
-	 */
-	template<
-		I2CMode MODE_, 
-		I2CErrorPolicy POLICY_ = I2CErrorPolicy::CLEAR_ALL_COMMANDS, 
-		typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
-	class I2CAsyncLCDebugManager : 
-		public AbstractI2CAsyncManager<MODE_, POLICY_, true, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_>
-	{
-		using PARENT = AbstractI2CAsyncManager<MODE_, POLICY_, true, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_>;
-	public:
-		/**
-		 * Create an asynchronous I2C Manager for ATmega MCUs.
-		 * 
-		 * @tparam SIZE the size of I2CCommand buffer that will be queued for 
-		 * asynchronous handling
-		 * @param buffer a buffer of @p SIZE I2CCommand items, that will be used to
-		 * queue I2C command for asynchronous handling
-		 * @param lifecycle_manager the AbstractLifeCycleManager used to handle 
-		 * the lifecycle of Future used by this I2C Manager
-		 * @param debug_hook the debug hook function or functor that is called during
-		 * I2C transaction execution
-		 */
-		template<uint8_t SIZE>
-		explicit I2CAsyncLCDebugManager(
-			typename PARENT::I2CCOMMAND (&buffer)[SIZE], 
-			lifecycle::AbstractLifeCycleManager& lifecycle_manager, 
-			DEBUG_HOOK_ debug_hook)
-			:	PARENT{buffer, &lifecycle_manager, nullptr, debug_hook}
-		{
-			interrupt::register_handler(*this);
-		}
-	};
-
-	/**
-	 * Asynchronous I2C Manager for ATmega architecture with status notification
-	 * facility and support for dynamic proxies.
-	 * @warning You need to register the proper ISR for this class to work properly.
-	 * 
-	 * @tparam MODE_ the I2C mode for this manager
-	 * @tparam POLICY_ the policy to use in case of an error during I2C transaction
-	 * @tparam STATUS_HOOK_ the type of the hook to be called. This can be a simple 
-	 * function pointer (of type `I2C_STATUS_HOOK`) or a Functor class (or Functor 
-	 * class reference). Using a Functor class will generate smaller code.
-	 * 
-	 * @sa i2c::I2CMode
-	 * @sa i2c::I2CErrorPolicy
-	 * @sa REGISTER_I2C_ISR()
-	 * @sa REGISTER_I2C_ISR_FUNCTION()
-	 * @sa REGISTER_I2C_ISR_METHOD()
-	 */
-	template<
-		I2CMode MODE_, 
-		I2CErrorPolicy POLICY_ = I2CErrorPolicy::CLEAR_ALL_COMMANDS, 
-		typename STATUS_HOOK_ = I2C_STATUS_HOOK>
-	class I2CAsyncLCStatusManager : 
-		public AbstractI2CAsyncManager<MODE_, POLICY_, true, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK>
-	{
-		using PARENT = AbstractI2CAsyncManager<MODE_, POLICY_, true, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK>;
-	public:
-		/**
-		 * Create an asynchronous I2C Manager for ATmega MCUs.
-		 * 
-		 * @tparam SIZE the size of I2CCommand buffer that will be queued for 
-		 * asynchronous handling
-		 * @param buffer a buffer of @p SIZE I2CCommand items, that will be used to
-		 * queue I2C command for asynchronous handling
-		 * @param lifecycle_manager the AbstractLifeCycleManager used to handle 
-		 * the lifecycle of Future used by this I2C Manager
-		 * @param status_hook the status hook function or functor that is called during
-		 * I2C transaction execution.
-		 */
-		template<uint8_t SIZE>
-		explicit I2CAsyncLCStatusManager(
-			typename PARENT::I2CCOMMAND (&buffer)[SIZE], 
-			lifecycle::AbstractLifeCycleManager& lifecycle_manager, 
-			STATUS_HOOK_ status_hook)
-			:	PARENT{buffer, &lifecycle_manager, status_hook}
-		{
-			interrupt::register_handler(*this);
-		}
-	};
-
-	/**
-	 * Asynchronous I2C Manager for ATmega architecture with debug and status 
-	 * notification facilities and support for dynamic proxies.
-	 * @warning You need to register the proper ISR for this class to work properly.
-	 * 
-	 * @tparam MODE_ the I2C mode for this manager
-	 * @tparam POLICY_ the policy to use in case of an error during I2C transaction
-	 * @tparam STATUS_HOOK_ the type of the hook to be called. This can be a simple 
-	 * function pointer (of type `I2C_STATUS_HOOK`) or a Functor class (or Functor 
-	 * class reference). Using a Functor class will generate smaller code.
-	 * @tparam DEBUG_HOOK_ the type of the hook to be called. This can be a simple 
-	 * function pointer (of type `I2C_DEBUG_HOOK`) or a Functor class (or Functor 
-	 * class reference). Using a Functor class will generate smaller code.
-	 * 
-	 * @sa i2c::I2CMode
-	 * @sa i2c::I2CErrorPolicy
-	 * @sa REGISTER_I2C_ISR()
-	 * @sa REGISTER_I2C_ISR_FUNCTION()
-	 * @sa REGISTER_I2C_ISR_METHOD()
-	 */
-	template<
-		I2CMode MODE_, 
-		I2CErrorPolicy POLICY_ = I2CErrorPolicy::CLEAR_ALL_COMMANDS, 
-		typename STATUS_HOOK_ = I2C_STATUS_HOOK,
-		typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
-	class I2CAsyncLCStatusDebugManager : 
-		public AbstractI2CAsyncManager<MODE_, POLICY_, true, true, STATUS_HOOK_, true, DEBUG_HOOK_>
-	{
-		using PARENT = AbstractI2CAsyncManager<MODE_, POLICY_, true, true, STATUS_HOOK_, true, DEBUG_HOOK_>;
-	public:
-		/**
-		 * Create an asynchronous I2C Manager for ATmega MCUs.
-		 * 
-		 * @tparam SIZE the size of I2CCommand buffer that will be queued for 
-		 * asynchronous handling
-		 * @param buffer a buffer of @p SIZE I2CCommand items, that will be used to
-		 * queue I2C command for asynchronous handling
-		 * @param lifecycle_manager the AbstractLifeCycleManager used to handle 
-		 * the lifecycle of Future used by this I2C Manager
-		 * @param status_hook the status hook function or functor that is called during
-		 * I2C transaction execution.
-		 * @param debug_hook the debug hook function or functor that is called during
-		 * I2C transaction execution.
-		 */
-		template<uint8_t SIZE>
-		explicit I2CAsyncLCStatusDebugManager(
-			typename PARENT::I2CCOMMAND (&buffer)[SIZE], 
-			lifecycle::AbstractLifeCycleManager& lifecycle_manager, 
-			STATUS_HOOK_ status_hook, DEBUG_HOOK_ debug_hook)
-			:	PARENT{buffer, &lifecycle_manager, status_hook, debug_hook}
+			: PARENT{buffer, status_hook, debug_hook}
 		{
 			interrupt::register_handler(*this);
 		}
@@ -1180,9 +934,9 @@ namespace i2c
 	 */
 	template<I2CMode MODE_>
 	class I2CSyncManager : 
-		public AbstractI2CSyncATmegaManager<MODE_, false, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK>
+		public AbstractI2CSyncATmegaManager<MODE_, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK>
 	{
-		using PARENT = AbstractI2CSyncATmegaManager<MODE_, false, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK>;
+		using PARENT = AbstractI2CSyncATmegaManager<MODE_, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK>;
 	public:
 		I2CSyncManager() : PARENT{} {}
 	};
@@ -1201,11 +955,11 @@ namespace i2c
 	 */
 	template<I2CMode MODE_, typename STATUS_HOOK_ = I2C_STATUS_HOOK>
 	class I2CSyncStatusManager : 
-		public AbstractI2CSyncATmegaManager<MODE_, false, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK>
+		public AbstractI2CSyncATmegaManager<MODE_, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK>
 	{
-		using PARENT = AbstractI2CSyncATmegaManager<MODE_, false, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK>;
+		using PARENT = AbstractI2CSyncATmegaManager<MODE_, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK>;
 	public:
-		explicit I2CSyncStatusManager(STATUS_HOOK_ status_hook) : PARENT{nullptr, status_hook} {}
+		explicit I2CSyncStatusManager(STATUS_HOOK_ status_hook) : PARENT{status_hook} {}
 	};
 
 	/**
@@ -1221,11 +975,11 @@ namespace i2c
 	 */
 	template<I2CMode MODE_, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
 	class I2CSyncDebugManager : 
-		public AbstractI2CSyncATmegaManager<MODE_, false, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_>
+		public AbstractI2CSyncATmegaManager<MODE_, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_>
 	{
-		using PARENT = AbstractI2CSyncATmegaManager<MODE_, false, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_>;
+		using PARENT = AbstractI2CSyncATmegaManager<MODE_, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_>;
 	public:
-		explicit I2CSyncDebugManager(DEBUG_HOOK_ debug_hook) : PARENT{nullptr, nullptr, debug_hook} {}
+		explicit I2CSyncDebugManager(DEBUG_HOOK_ debug_hook) : PARENT{nullptr, debug_hook} {}
 	};
 
 	/**
@@ -1245,99 +999,12 @@ namespace i2c
 	 */
 	template<I2CMode MODE_, typename STATUS_HOOK_ = I2C_STATUS_HOOK, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
 	class I2CSyncStatusDebugManager : 
-		public AbstractI2CSyncATmegaManager<MODE_, false, true, STATUS_HOOK_, true, DEBUG_HOOK_>
+		public AbstractI2CSyncATmegaManager<MODE_,  true, STATUS_HOOK_, true, DEBUG_HOOK_>
 	{
-		using PARENT = AbstractI2CSyncATmegaManager<MODE_, false, true, STATUS_HOOK_, true, DEBUG_HOOK_>;
+		using PARENT = AbstractI2CSyncATmegaManager<MODE_, true, STATUS_HOOK_, true, DEBUG_HOOK_>;
 	public:
 		explicit I2CSyncStatusDebugManager(STATUS_HOOK_ status_hook, DEBUG_HOOK_ debug_hook) 
-		: PARENT{nullptr, status_hook, debug_hook} {}
-	};
-
-	/**
-	 * Synchronous I2C Manager for ATmega architecture with support for dynamic proxies.
-	 * This class offers no debug facility.
-	 * 
-	 * @tparam MODE_ the I2C mode for this manager
-	 * 
-	 * @sa i2c::I2CMode
-	 */
-	template<I2CMode MODE_>
-	class I2CSyncLCManager : 
-		public AbstractI2CSyncATmegaManager<MODE_, true, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK>
-	{
-		using PARENT = AbstractI2CSyncATmegaManager<MODE_, true, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK>;
-	public:
-		explicit I2CSyncLCManager(lifecycle::AbstractLifeCycleManager& lifecycle_manager)
-			:	PARENT{&lifecycle_manager} {}
-	};
-
-	/**
-	 * Synchronous I2C Manager for ATmega architecture with status notification
-	 * facility and support for dynamic proxies.
-	 * 
-	 * @tparam MODE_ the I2C mode for this manager
-	 * @tparam STATUS_HOOK_ the type of the hook to be called. This can be a simple 
-	 * function pointer (of type `I2C_STATUS_HOOK`) or a Functor class (or Functor 
-	 * class reference). Using a Functor class will generate smaller code.
-	 * 
-	 * @sa i2c::I2CMode
-	 */
-	template<I2CMode MODE_, typename STATUS_HOOK_>
-	class I2CSyncLCStatusManager : 
-		public AbstractI2CSyncATmegaManager<MODE_, true, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK>
-	{
-		using PARENT = AbstractI2CSyncATmegaManager<MODE_, true, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK>;
-	public:
-		explicit I2CSyncLCStatusManager(
-			lifecycle::AbstractLifeCycleManager& lifecycle_manager, STATUS_HOOK_ status_hook)
-			:	PARENT{&lifecycle_manager, status_hook} {}
-	};
-
-	/**
-	 * Synchronous I2C Manager for ATmega architecture with debug facility
-	 * and support for dynamic proxies.
-	 * 
-	 * @tparam MODE_ the I2C mode for this manager
-	 * @tparam DEBUG_HOOK_ the type of the hook to be called. This can be a simple 
-	 * function pointer (of type `I2C_DEBUG_HOOK`) or a Functor class (or Functor 
-	 * class reference). Using a Functor class will generate smaller code.
-	 * 
-	 * @sa i2c::I2CMode
-	 */
-	template<I2CMode MODE_, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
-	class I2CSyncLCDebugManager : 
-		public AbstractI2CSyncATmegaManager<MODE_, true, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_>
-	{
-		using PARENT = AbstractI2CSyncATmegaManager<MODE_, true, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_>;
-	public:
-		explicit I2CSyncLCDebugManager(
-			lifecycle::AbstractLifeCycleManager& lifecycle_manager, DEBUG_HOOK_ debug_hook)
-			:	PARENT{&lifecycle_manager, nullptr, debug_hook} {}
-	};
-
-	/**
-	 * Synchronous I2C Manager for ATmega architecture with status notification
-	 * and debug facilities and support for dynamic proxies.
-	 * 
-	 * @tparam MODE_ the I2C mode for this manager
-	 * @tparam STATUS_HOOK_ the type of the hook to be called. This can be a simple 
-	 * function pointer (of type `I2C_STATUS_HOOK`) or a Functor class (or Functor 
-	 * class reference). Using a Functor class will generate smaller code.
-	 * @tparam DEBUG_HOOK_ the type of the hook to be called. This can be a simple 
-	 * function pointer (of type `I2C_DEBUG_HOOK`) or a Functor class (or Functor 
-	 * class reference). Using a Functor class will generate smaller code.
-	 * 
-	 * @sa i2c::I2CMode
-	 */
-	template<I2CMode MODE_, typename STATUS_HOOK_ = I2C_STATUS_HOOK, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>
-	class I2CSyncLCStatusDebugManager : 
-		public AbstractI2CSyncATmegaManager<MODE_, true, true, STATUS_HOOK_, true, DEBUG_HOOK_>
-	{
-		using PARENT = AbstractI2CSyncATmegaManager<MODE_, true, true, STATUS_HOOK_, true, DEBUG_HOOK_>;
-	public:
-		explicit I2CSyncLCStatusDebugManager(
-			lifecycle::AbstractLifeCycleManager& lifecycle_manager, STATUS_HOOK_ status_hook, DEBUG_HOOK_ debug_hook)
-			:	PARENT{&lifecycle_manager, status_hook, debug_hook} {}
+		: PARENT{status_hook, debug_hook} {}
 	};
 
 	/// @cond notdocumented
@@ -1345,35 +1012,19 @@ namespace i2c
 	// Async managers first
 	template<I2CMode MODE_, I2CErrorPolicy POLICY_>
 	struct I2CManager_trait<I2CAsyncManager<MODE_, POLICY_>>
-		:	I2CManager_trait_impl<true, false, false, false, MODE_> {};
-
-	template<I2CMode MODE_, I2CErrorPolicy POLICY_>
-	struct I2CManager_trait<I2CAsyncLCManager<MODE_, POLICY_>>
-		:	I2CManager_trait_impl<true, true, false, false, MODE_> {};
+		:	I2CManager_trait_impl<true, false, false, MODE_> {};
 
 	template<I2CMode MODE_, I2CErrorPolicy POLICY_, typename DEBUG_HOOK_>
 	struct I2CManager_trait<I2CAsyncDebugManager<MODE_, POLICY_, DEBUG_HOOK_>>
-		:	I2CManager_trait_impl<true, false, false, true, MODE_> {};
+		:	I2CManager_trait_impl<true, false, true, MODE_> {};
 
 	template<I2CMode MODE_, I2CErrorPolicy POLICY_, typename STATUS_HOOK_>
 	struct I2CManager_trait<I2CAsyncStatusManager<MODE_, POLICY_, STATUS_HOOK_>>
-		:	I2CManager_trait_impl<true, false, true, false, MODE_> {};
+		:	I2CManager_trait_impl<true, true, false, MODE_> {};
 
 	template<I2CMode MODE_, I2CErrorPolicy POLICY_, typename STATUS_HOOK_, typename DEBUG_HOOK_>
 	struct I2CManager_trait<I2CAsyncStatusDebugManager<MODE_, POLICY_, STATUS_HOOK_, DEBUG_HOOK_>>
-		:	I2CManager_trait_impl<true, false, true, true, MODE_> {};
-
-	template<I2CMode MODE_, I2CErrorPolicy POLICY_, typename DEBUG_HOOK_>
-	struct I2CManager_trait<I2CAsyncLCDebugManager<MODE_, POLICY_, DEBUG_HOOK_>>
-		:	I2CManager_trait_impl<true, true, false, true, MODE_> {};
-	
-	template<I2CMode MODE_, I2CErrorPolicy POLICY_, typename STATUS_HOOK_>
-	struct I2CManager_trait<I2CAsyncLCStatusManager<MODE_, POLICY_, STATUS_HOOK_>>
-		:	I2CManager_trait_impl<true, true, true, false, MODE_> {};
-	
-	template<I2CMode MODE_, I2CErrorPolicy POLICY_, typename STATUS_HOOK_, typename DEBUG_HOOK_>
-	struct I2CManager_trait<I2CAsyncLCStatusDebugManager<MODE_, POLICY_, STATUS_HOOK_, DEBUG_HOOK_>>
-		:	I2CManager_trait_impl<true, true, true, true, MODE_> {};
+		:	I2CManager_trait_impl<true, true, true, MODE_> {};
 	/// @endcond
 
 	/// @cond notdocumented
@@ -1387,35 +1038,35 @@ namespace i2c
 			interrupt::HandlerHolder<MANAGER>::handler()->i2c_change();
 		}
 
-		template<typename MANAGER, void (*CALLBACK_)(I2CCallback, typename MANAGER::FUTURE_PROXY)>
+		template<typename MANAGER, void (*CALLBACK_)(I2CCallback, typename MANAGER::ABSTRACT_FUTURE&)>
 		static void i2c_change_function()
 		{
 			using interrupt::HandlerHolder;
 			static_assert(I2CManager_trait<MANAGER>::IS_I2CMANAGER, "MANAGER must be an I2C Manager");
 			static_assert(I2CManager_trait<MANAGER>::IS_ASYNC, "MANAGER must be an asynchronous I2C Manager");
-			auto proxy = HandlerHolder<MANAGER>::handler()->current_proxy();
+			typename MANAGER::ABSTRACT_FUTURE& future = HandlerHolder<MANAGER>::handler()->current_future();
 			I2CCallback callback =  HandlerHolder<MANAGER>::handler()->i2c_change();
 			if (callback != I2CCallback::NONE)
 			{
-				CALLBACK_(callback, proxy);
+				CALLBACK_(callback, future);
 			}
 		}
 
 		template<typename MANAGER, typename HANDLER_, 
-			void (HANDLER_::*CALLBACK_)(I2CCallback, typename MANAGER::FUTURE_PROXY)>
+			void (HANDLER_::*CALLBACK_)(I2CCallback, typename MANAGER::ABSTRACT_FUTURE&)>
 		static void i2c_change_method()
 		{
 			using interrupt::HandlerHolder;
 			using interrupt::CallbackHandler;
 			static_assert(I2CManager_trait<MANAGER>::IS_I2CMANAGER, "MANAGER must be an I2C Manager");
 			static_assert(I2CManager_trait<MANAGER>::IS_ASYNC, "MANAGER must be an asynchronous I2C Manager");
-			auto proxy = HandlerHolder<MANAGER>::handler()->current_proxy();
+			typename MANAGER::ABSTRACT_FUTURE& future = HandlerHolder<MANAGER>::handler()->current_future();
 			I2CCallback callback =  HandlerHolder<MANAGER>::handler()->i2c_change();
 			if (callback != I2CCallback::NONE)
 			{
 				using HANDLER = 
-					CallbackHandler<void (HANDLER_::*)(I2CCallback, typename MANAGER::FUTURE_PROXY), CALLBACK_>;
-				HANDLER::call(callback, proxy);
+					CallbackHandler<void (HANDLER_::*)(I2CCallback, typename MANAGER::ABSTRACT_FUTURE&), CALLBACK_>;
+				HANDLER::call(callback, future);
 			}
 		}
 	};

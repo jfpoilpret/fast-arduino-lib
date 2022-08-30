@@ -402,7 +402,7 @@ namespace lifecycle
 		 * @sa std::move()
 		 * @sa AbstractLifeCycleManager::move_()
 		 */
-		LifeCycle(LifeCycle<T>&& that) = default;
+		LifeCycle(LifeCycle&& that) = default;
 
 		/**
 		 * Destroy this `LifeCycle<T>` instance.
@@ -425,7 +425,7 @@ namespace lifecycle
 		 * @sa std::move()
 		 * @sa AbstractLifeCycleManager::move_()
 		 */
-		LifeCycle<T>& operator=(LifeCycle<T>&& that) = default;
+		LifeCycle& operator=(LifeCycle&& that) = default;
 	};
 
 	// Forward declarations for Proxy and LightProxy classes

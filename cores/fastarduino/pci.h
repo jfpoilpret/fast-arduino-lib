@@ -178,8 +178,8 @@ namespace interrupt
 		using TRAIT = board_traits::PCI_trait<PCINT_>;
 
 	public:
-		PCISignal(const PCISignal<PCINT_>&) = delete;
-		PCISignal<PCINT_>& operator=(const PCISignal<PCINT_>&) = delete;
+		PCISignal(const PCISignal&) = delete;
+		PCISignal& operator=(const PCISignal&) = delete;
 		
 		/// @cond notdocumented
 		//NOTE this constructor exists only to add a static_assert checked when

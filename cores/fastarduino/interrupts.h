@@ -86,6 +86,8 @@ namespace interrupt
 {
 	/// @cond notdocumented
 	template<typename Handler> void register_handler(Handler&);
+	template<typename Handler> void unregister_handler(Handler&);
+
 	template<typename Handler> class HandlerHolder
 	{
 	public:
@@ -106,12 +108,21 @@ namespace interrupt
 					FIX_BASE_POINTER(handler_instance);
 					return (handler_instance->*Callback)(args...);
 				}
+				static Ret safe_handle(Args... args)
+				{
+					Handler* handler_instance = Holder::handler();
+					if (handler_instance == nullptr)
+						return Ret{};
+					FIX_BASE_POINTER(handler_instance);
+					return (handler_instance->*Callback)(args...);
+				}
 			};
 		};
 
 	private:
 		static Handler* handler_;
 		friend void register_handler<Handler>(Handler&);
+		friend void unregister_handler<Handler>(Handler&);
 	};
 
 	template<typename Handler> Handler* HandlerHolder<Handler>::handler_ = nullptr;
@@ -132,11 +143,24 @@ namespace interrupt
 			using CALLBACK_HOLDER = typename ARGS_HOLDER::template CallbackHolder<CALLBACK>;
 			return CALLBACK_HOLDER::handle(args...);
 		}
+		static RET safe_call(ARGS... args)
+		{
+			// NOTE the following line does not compile, it must be broken down for the compiler to understand
+			// return HandlerHolder<HANDLER>::ArgsHolder<RET, ARGS...>::CallbackHolder<CALLBACK>::handle(args...);
+			using HOLDER = HandlerHolder<HANDLER>;
+			using ARGS_HOLDER = typename HOLDER::template ArgsHolder<RET, ARGS...>;
+			using CALLBACK_HOLDER = typename ARGS_HOLDER::template CallbackHolder<CALLBACK>;
+			return CALLBACK_HOLDER::safe_handle(args...);
+		}
 	};
 	template<typename RET, typename... ARGS, RET (*CALLBACK)(ARGS...)>
 	struct CallbackHandler<RET (*)(ARGS...), CALLBACK>
 	{
 		static RET call(ARGS... args)
+		{
+			return CALLBACK(args...);
+		}
+		static RET safe_call(ARGS... args)
 		{
 			return CALLBACK(args...);
 		}
@@ -147,16 +171,43 @@ namespace interrupt
 	 * Register a class instance containing methods that shall be called back by an ISR.
 	 * The class and member function shall be passed to one of `REGISTER_XXXX_ISR_METHOD()`
 	 * macros proposed by various FastArduino API, e.g. `REGISTER_WATCHDOG_ISR_METHOD()`.
-	 * Note that you can register different classes, but only one instance of a given class.
-	 * Also, one class may have different methods to handle different ISR callbacks.
+	 * The same class may have different methods to handle different ISR callbacks.
+	 * 
+	 * @warning you can register different classes, but only one instance of a given class
+	 * at one time.
 	 * 
 	 * @tparam Handler the class containing callback methods
 	 * @param handler the @p Handler instance which methods will be called back by 
 	 * registered ISR.
+	 * 
+	 * @sa unregister_handler()
 	 */
 	template<typename Handler> void register_handler(Handler& handler)
 	{
 		HandlerHolder<Handler>::handler_ = &handler;
+	}
+
+	/**
+	 * Unregister a class instance that was previously registered with
+	 * `interrupt::register_handler`.
+	 * 
+	 * @note unregistration will be effective only if @p handler is the current
+	 * value held for @p Handler type.
+	 * 
+	 * @warning in normal circumstances (ISR callback registration) it is unlikely
+	 * you would need this method because it would crash the ISR needing a callback!
+	 * This method would be rather used for `future::Future` callbacks for which
+	 * lifetime may not be as long as for an ISR.
+	 * 
+	 * @tparam Handler the class containing callback methods
+	 * @param handler the @p Handler instance to be deregistered.
+	 * 
+	 * @sa register_handler()
+	 */
+	template<typename Handler> void unregister_handler(Handler& handler)
+	{
+		if (HandlerHolder<Handler>::handler_ == &handler)
+			HandlerHolder<Handler>::handler_ = nullptr;
 	}
 }
 

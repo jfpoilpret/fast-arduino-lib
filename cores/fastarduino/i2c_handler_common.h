@@ -28,7 +28,6 @@
 #include "i2c.h"
 #include "streams.h"
 #include "future.h"
-#include "lifecycle.h"
 #include "queue.h"
 #include "utilities.h"
 
@@ -82,6 +81,28 @@ namespace i2c
 	 */
 	using I2C_DEBUG_HOOK = void (*)(DebugStatus status, uint8_t data);
 
+	/// @cond notdocumented
+	// Generic support for I2C debugging
+	template<bool IS_DEBUG_ = false, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>  struct I2CDebugSupport
+	{
+		explicit I2CDebugSupport(UNUSED DEBUG_HOOK_ hook = nullptr) {}
+		void call_hook(UNUSED DebugStatus status, UNUSED uint8_t data = 0)
+		{
+			// Intentionally left empty
+		}
+	};
+	template<typename DEBUG_HOOK_> struct I2CDebugSupport<true, DEBUG_HOOK_>
+	{
+		explicit I2CDebugSupport(DEBUG_HOOK_ hook) : hook_{hook} {}
+		void call_hook(DebugStatus status, uint8_t data = 0)
+		{
+			hook_(status, data);
+		}
+	private:
+		DEBUG_HOOK_ hook_;
+	};
+	/// @endcond
+
 	/**
 	 * The default status observer hook type.
 	 * @warning Do not use this (function pointer) for your hooks! This will 
@@ -96,15 +117,62 @@ namespace i2c
 	using I2C_STATUS_HOOK = void (*)(Status expected, Status actual);
 
 	/// @cond notdocumented
+	// Generic support for I2C status hook
+	template<bool IS_STATUS_ = false, typename STATUS_HOOK_ = I2C_STATUS_HOOK>  struct I2CStatusSupport
+	{
+		explicit I2CStatusSupport(UNUSED STATUS_HOOK_ hook = nullptr) {}
+		void call_hook(UNUSED Status expected, UNUSED Status actual)
+		{
+			// Intentionally left empty
+		}
+	};
+	template<typename STATUS_HOOK_> struct I2CStatusSupport<true, STATUS_HOOK_>
+	{
+		explicit I2CStatusSupport(STATUS_HOOK_ hook) : hook_{hook} {}
+		void call_hook(Status expected, Status actual)
+		{
+			hook_(expected, actual);
+		}
+	private:
+		STATUS_HOOK_ hook_;
+	};
+	/// @endcond
+
+	/**
+	 * I2C Manager policy to use in case of an error during I2C transaction.
+	 * @warning available only on ATmega MCU.
+	 * @sa I2CAsyncManager
+	 */
+	enum class I2CErrorPolicy : uint8_t
+	{
+		/**
+		 * Do nothing at all in case of an error; useful only with a synchronous
+		 * I2C Manager.
+		 */
+		DO_NOTHING,
+
+		/**
+		 * In case of an error during I2C transaction, then all I2CCommand currently
+		 * in queue will be removed.
+		 * @warning this means that an error with device A can trigger a removal
+		 * of pending commands for device B.
+		 */
+		CLEAR_ALL_COMMANDS,
+
+		/**
+		 * In case of an error during I2C transaction, then all pending I2CCommand
+		 * of the current transaction will be removed.
+		 */
+		CLEAR_TRANSACTION_COMMANDS
+	};
+
+	/// @cond notdocumented
 	// Type of commands in queue
 	class I2CCommandType
 	{
 	public:
 		constexpr I2CCommandType() = default;
 		constexpr I2CCommandType(const I2CCommandType&) = default;
-		explicit constexpr I2CCommandType(uint8_t value) : value_{value} {}
-		constexpr I2CCommandType(bool write, bool stop, bool finish, bool end)
-			:	value_{value(write, stop, finish, end)} {}
 		I2CCommandType& operator=(const I2CCommandType&) = default;
 
 		bool is_none() const
@@ -127,6 +195,12 @@ namespace i2c
 		{
 			return value_ & END;
 		}
+
+	private:
+		explicit constexpr I2CCommandType(uint8_t value) : value_{value} {}
+		constexpr I2CCommandType(bool write, bool stop, bool finish, bool end)
+			:	value_{value(write, stop, finish, end)} {}
+
 		void add_flags(uint8_t value)
 		{
 			value_ |= value;
@@ -137,7 +211,6 @@ namespace i2c
 			return bits::ORIF8(stop, STOP, finish, FINISH, end, END);
 		}
 
-	private:
 		static constexpr const uint8_t NONE = 0;
 		static constexpr const uint8_t NOT_NONE = bits::BV8(0);
 		static constexpr const uint8_t WRITE = bits::BV8(1);
@@ -152,6 +225,7 @@ namespace i2c
 
 		uint8_t value_ = NONE;
 
+		template<typename> friend class I2CDevice;
 		friend bool operator==(const I2CCommandType&, const I2CCommandType&);
 		friend bool operator!=(const I2CCommandType&, const I2CCommandType&);
 	};
@@ -178,7 +252,6 @@ namespace i2c
 		/// @cond notdocumented
 		constexpr I2CLightCommand() = default;
 		constexpr I2CLightCommand(const I2CLightCommand&) = default;
-		constexpr I2CLightCommand(I2CCommandType type, uint8_t byte_count) : type_{type}, byte_count_{byte_count} {}
 
 		I2CCommandType type() const
 		{
@@ -192,22 +265,30 @@ namespace i2c
 		{
 			return byte_count_;
 		}
+		/// @endcond
+
+	private:
+		constexpr I2CLightCommand(I2CCommandType type, uint8_t byte_count) : type_{type}, byte_count_{byte_count} {}
+
 		void decrement_byte_count()
 		{
 			--byte_count_;
 		}
+
 		void update_byte_count(uint8_t read_count, uint8_t write_count)
 		{
 			if (byte_count_ == 0)
 				byte_count_ = (type_.is_write() ? write_count : read_count);
 		}
-		/// @endcond
 
-	private:
 		// Type of this command
 		I2CCommandType type_ = I2CCommandType{};
 		// The number of remaining bytes to be read or write
 		uint8_t byte_count_ = 0;
+
+		template<typename> friend class I2CDevice;
+		template<typename, I2CMode, typename, bool, typename> friend class AbstractI2CSyncManager;
+		template<I2CMode, I2CErrorPolicy, bool, typename, bool, typename> friend class AbstractI2CAsyncManager;
 	};
 
 	/**
@@ -219,7 +300,7 @@ namespace i2c
 	 * - the command type (read, write...), 
 	 * - the count of bytes to be read or  written,
 	 * - the address of target slave device
-	 * - a proxy to the future holding inputs and results of the I2C transaction 
+	 * - a pointer to the future holding inputs and results of the I2C transaction 
 	 * 
 	 * @warning You should never need to use this API by yourself. This is 
 	 * internally used by FastArduino I2C Manager to handle I2C transactions.
@@ -230,32 +311,29 @@ namespace i2c
 		/// @cond notdocumented
 		constexpr I2CCommand() = default;
 		constexpr I2CCommand(const I2CCommand&) = default;
-		constexpr I2CCommand(
-			const I2CLightCommand& that, uint8_t target, T future)
-			:	I2CLightCommand{that}, target_{target}, future_{future} {}
 		constexpr I2CCommand& operator=(const I2CCommand&) = default;
 
 		uint8_t target() const
 		{
 			return target_;
 		}
-		T future() const
+		T& future() const
 		{
-			return future_;
-		}
-
-		void set_target(uint8_t target, T future)
-		{
-			target_ = target;
-			future_ = future;
+			return *future_;
 		}
 		/// @endcond
 
 	private:
+		constexpr I2CCommand(
+			const I2CLightCommand& that, uint8_t target, T& future)
+			:	I2CLightCommand{that}, target_{target}, future_{&future} {}
+
 		// Address of the target device (on 8 bits, already left-shifted)
 		uint8_t target_ = 0;
-		// A proxy to the future to be used for this command
-		T future_{};
+		// A pointer to the future to be used for this command
+		T* future_ = nullptr;
+
+		template<I2CMode, I2CErrorPolicy, bool, typename, bool, typename> friend class AbstractI2CAsyncManager;
 	};
 
 	/// @cond notdocumented
@@ -266,83 +344,6 @@ namespace i2c
 			<< streams::hex << c.target() << '}' << streams::flush;
 		return out;
 	}
-	/// @endcond
-
-	/// @cond notdocumented
-	// Generic support for I2C debugging
-	template<bool IS_DEBUG_ = false, typename DEBUG_HOOK_ = I2C_DEBUG_HOOK>  struct I2CDebugSupport
-	{
-		explicit I2CDebugSupport(UNUSED DEBUG_HOOK_ hook = nullptr) {}
-		void call_hook(UNUSED DebugStatus status, UNUSED uint8_t data = 0)
-		{
-			// Intentionally left empty
-		}
-	};
-	template<typename DEBUG_HOOK_> struct I2CDebugSupport<true, DEBUG_HOOK_>
-	{
-		explicit I2CDebugSupport(DEBUG_HOOK_ hook) : hook_{hook} {}
-		void call_hook(DebugStatus status, uint8_t data = 0)
-		{
-			hook_(status, data);
-		}
-	private:
-		DEBUG_HOOK_ hook_;
-	};
-	/// @endcond
-
-	/// @cond notdocumented
-	// Generic support for I2C status hook
-	template<bool IS_STATUS_ = false, typename STATUS_HOOK_ = I2C_STATUS_HOOK>  struct I2CStatusSupport
-	{
-		explicit I2CStatusSupport(UNUSED STATUS_HOOK_ hook = nullptr) {}
-		void call_hook(UNUSED Status expected, UNUSED Status actual)
-		{
-			// Intentionally left empty
-		}
-	};
-	template<typename STATUS_HOOK_> struct I2CStatusSupport<true, STATUS_HOOK_>
-	{
-		explicit I2CStatusSupport(STATUS_HOOK_ hook) : hook_{hook} {}
-		void call_hook(Status expected, Status actual)
-		{
-			hook_(expected, actual);
-		}
-	private:
-		STATUS_HOOK_ hook_;
-	};
-	/// @endcond
-
-	/// @cond notdocumented
-	// Generic support for LifeCycle resolution
-	template<bool HAS_LIFECYCLE_ = false> struct I2CLifeCycleSupport
-	{
-		template<typename T> using PROXY = lifecycle::DirectProxy<T>;
-		template<typename T> static PROXY<T> make_proxy(const T& dest)
-		{
-			return lifecycle::make_direct_proxy(dest);
-		}
-		explicit I2CLifeCycleSupport(UNUSED lifecycle::AbstractLifeCycleManager* lifecycle_manager = nullptr) {}
-		template<typename T> T& resolve(PROXY<T> proxy) const
-		{
-			return *proxy();
-		}
-	};
-	template<> struct I2CLifeCycleSupport<true>
-	{
-		template<typename T> using PROXY = lifecycle::LightProxy<T>;
-		template<typename T> static PROXY<T> make_proxy(const T& dest)
-		{
-			return lifecycle::make_light_proxy(dest);
-		}
-		explicit I2CLifeCycleSupport(lifecycle::AbstractLifeCycleManager* lifecycle_manager)
-			:	lifecycle_manager_{*lifecycle_manager} {}
-		template<typename T> T& resolve(PROXY<T> proxy) const
-		{
-			return *proxy(lifecycle_manager_);
-		}
-	private:
-		lifecycle::AbstractLifeCycleManager& lifecycle_manager_;
-	};
 	/// @endcond
 
 	/// @cond notdocumented
@@ -377,16 +378,13 @@ namespace i2c
 
 	/**
 	 * Abstract synchronous I2C Manager for all MCU architectures.
-	 * A specifi abstract subclass is defined for each MCU architecture 
+	 * A specific abstract subclass is defined for each MCU architecture 
 	 * (ATmega, ATtiny).
 	 * You should never need to subclass AbstractI2CSyncManager yourself.
 	 * 
 	 * @tparam ARCH_HANDLER_ the type of an actual class handling I2C control
 	 * on actual target architecture
 	 * @tparam MODE_ the I2C mode for this manager
-	 * @tparam HAS_LC_ tells if this I2C Manager must be able to handle 
-	 * proxies to Future that can move around and must be controlled by a 
-	 * LifeCycleManager; using `false` will generate smaller code.
 	 * @tparam STATUS_HOOK_ the type of the hook to be called. This can be a 
 	 * simple function pointer (of type `I2C_STATUS_HOOK`) or a Functor class 
 	 * (or Functor class reference). Using a Functor class will generate smaller
@@ -406,9 +404,7 @@ namespace i2c
 	 * @sa i2c::status
 	 * 
 	 */
-	// Abstract generic class for synchronous I2C management
-	template<typename ARCH_HANDLER_, I2CMode MODE_, bool HAS_LC_, 
-		typename STATUS_HOOK_, bool HAS_DEBUG_, typename DEBUG_HOOK_>
+	template<typename ARCH_HANDLER_, I2CMode MODE_, typename STATUS_HOOK_, bool HAS_DEBUG_, typename DEBUG_HOOK_>
 	class AbstractI2CSyncManager
 	{
 	protected:
@@ -417,11 +413,18 @@ namespace i2c
 		using I2C_TRAIT = board_traits::TWI_trait;
 		using REG8 = board_traits::REG8;
 		using DEBUG = I2CDebugSupport<HAS_DEBUG_, DEBUG_HOOK_>;
-		using LC = I2CLifeCycleSupport<HAS_LC_>;
 
 	public:
+		/**
+		 * The abstract base class of all futures to be defined for this I2C Manager.
+		 * For a synchronous manager, it is always `future::AbstractFakeFuture`.
+		 */
 		using ABSTRACT_FUTURE = future::AbstractFakeFuture;
-		template<typename T> using PROXY = typename LC::template PROXY<T>;
+
+		/**
+		 * The template base class of all futures to be defined for this I2C Manager.
+		 * For a synchronous manager, it is always `future::FakeFuture`.
+		 */
 		template<typename OUT, typename IN> using FUTURE = future::FakeFuture<OUT, IN>;
 
 		/**
@@ -473,10 +476,9 @@ namespace i2c
 	protected:
 		/// @cond notdocumented
 		explicit AbstractI2CSyncManager(
-			lifecycle::AbstractLifeCycleManager* lifecycle_manager = nullptr, 
 			STATUS_HOOK_ status_hook = nullptr,
 			DEBUG_HOOK_ debug_hook = nullptr)
-			:	handler_{status_hook}, lc_{lifecycle_manager}, debug_hook_{debug_hook} {}
+			:	handler_{status_hook}, debug_hook_{debug_hook} {}
 		/// @endcond
 
 	private:
@@ -486,13 +488,12 @@ namespace i2c
 		}
 
 		bool push_command_(
-			I2CLightCommand command, uint8_t target, PROXY<ABSTRACT_FUTURE> proxy)
+			I2CLightCommand command, uint8_t target, ABSTRACT_FUTURE& future)
 		{
 			// Check command is not empty
 			const I2CCommandType type = command.type();
 			if (type.is_none()) return true;
 			if (clear_commands_) return false;
-			ABSTRACT_FUTURE& future = lc_.resolve(proxy);
 			// Execute command immediately, from start to optional stop
 			bool ok = (no_stop_ ? exec_repeat_start_() : exec_start_());
 			stopped_already_ = false;
@@ -544,11 +545,6 @@ namespace i2c
 			stopped_already_ = false;
 		}
 
-		template<typename T> T& resolve(PROXY<T> proxy) const
-		{
-			return lc_.resolve(proxy);
-		}
-		
 		// Low-level methods to handle the bus in an asynchronous way
 		bool exec_start_()
 		{
@@ -648,7 +644,6 @@ namespace i2c
 		bool stopped_already_ = false;
 
 		ARCH_HANDLER handler_;
-		LC lc_;
 		DEBUG debug_hook_;
 
 		template<typename> friend class I2CDevice;
@@ -660,18 +655,16 @@ namespace i2c
 	{
 		static constexpr bool IS_I2CMANAGER = false;
 		static constexpr bool IS_ASYNC = false;
-		static constexpr bool HAS_LIFECYCLE = false;
 		static constexpr bool IS_DEBUG = false;
 		static constexpr bool IS_STATUS = false;
 		static constexpr I2CMode MODE = I2CMode::STANDARD;
 	};
 
-	template<bool IS_ASYNC_, bool HAS_LIFECYCLE_, bool IS_STATUS_, bool IS_DEBUG_, I2CMode MODE_>
+	template<bool IS_ASYNC_, bool IS_STATUS_, bool IS_DEBUG_, I2CMode MODE_>
 	struct I2CManager_trait_impl
 	{
 		static constexpr bool IS_I2CMANAGER = true;
 		static constexpr bool IS_ASYNC = IS_ASYNC_;
-		static constexpr bool HAS_LIFECYCLE = HAS_LIFECYCLE_;
 		static constexpr bool IS_DEBUG = IS_DEBUG_;
 		static constexpr bool IS_STATUS = IS_STATUS_;
 		static constexpr I2CMode MODE = MODE_;

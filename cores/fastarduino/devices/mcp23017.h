@@ -103,7 +103,6 @@ namespace devices::mcp230xx
 	{
 	private:
 		using PARENT = i2c::I2CDevice<MANAGER>;
-		template<typename T> using PROXY = typename PARENT::template PROXY<T>;
 		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
 
 		template<MCP23017Port P> using TRAIT = mcp23017_traits::Port_trait<P>;
@@ -200,8 +199,6 @@ namespace devices::mcp230xx
 				InterruptPolarity interrupt_polarity = InterruptPolarity::ACTIVE_HIGH)
 				:	PARENT{build_IOCON(
 						mirror_interrupts, interrupt_polarity == InterruptPolarity::ACTIVE_HIGH)} {}
-			BeginFuture(BeginFuture&&) = default;
-			BeginFuture& operator=(BeginFuture&&) = default;
 			/// @endcond
 		};
 
@@ -222,7 +219,7 @@ namespace devices::mcp230xx
 		 * @sa begin(bool, InterruptPolarity)
 		 * @sa errors
 		 */
-		int begin(PROXY<BeginFuture> future)
+		int begin(BeginFuture& future)
 		{
 			return this->async_write(future);
 		}
@@ -255,8 +252,6 @@ namespace devices::mcp230xx
 			/// @cond notdocumented
 			ConfigureGPIOFuture(T<P_> direction, T<P_> pullup = T<P_>{}, T<P_> polarity = T<P_>{})
 				:	PARENT{direction, polarity, pullup} {}
-			ConfigureGPIOFuture(ConfigureGPIOFuture<P_>&&) = default;
-			ConfigureGPIOFuture<P_>& operator=(ConfigureGPIOFuture<P_>&&) = default;
 			/// @endcond
 		};
 
@@ -281,7 +276,7 @@ namespace devices::mcp230xx
 		 * @sa configure_gpio(T<P_>, T<P_>, T<P_>)
 		 * @sa errors
 		 */
-		template<MCP23017Port P_> int configure_gpio(PROXY<ConfigureGPIOFuture<P_>> future)
+		template<MCP23017Port P_> int configure_gpio(ConfigureGPIOFuture<P_>& future)
 		{
 			return this->async_multi_write(future);
 		}
@@ -315,8 +310,6 @@ namespace devices::mcp230xx
 			/// @cond notdocumented
 			ConfigureInterruptsFuture(T<P_> int_pins, T<P_> ref = T<P_>{}, T<P_> compare_ref = T<P_>{})
 				:	PARENT{int_pins, ref, compare_ref} {}
-			ConfigureInterruptsFuture(ConfigureInterruptsFuture<P_>&&) = default;
-			ConfigureInterruptsFuture<P_>& operator=(ConfigureInterruptsFuture<P_>&&) = default;
 			/// @endcond
 		};
 
@@ -342,7 +335,7 @@ namespace devices::mcp230xx
 		 * @sa errors
 		 */
 		template<MCP23017Port P_>
-		int configure_interrupts(PROXY<ConfigureInterruptsFuture<P_>> future)
+		int configure_interrupts(ConfigureInterruptsFuture<P_>& future)
 		{
 			return this->async_multi_write(future);
 		}
@@ -385,7 +378,7 @@ namespace devices::mcp230xx
 		 * @sa values(T<P_> value)
 		 * @sa errors
 		 */
-		template<MCP23017Port P_> int values(PROXY<SetValuesFuture<P_>> future)
+		template<MCP23017Port P_> int values(SetValuesFuture<P_>& future)
 		{
 			return this->async_write(future);
 		}
@@ -425,7 +418,7 @@ namespace devices::mcp230xx
 		 * @sa T<P_> values()
 		 * @sa errors
 		 */
-		template<MCP23017Port P_> int values(PROXY<GetValuesFuture<P_>> future)
+		template<MCP23017Port P_> int values(GetValuesFuture<P_>& future)
 		{
 			return this->async_read(future);
 		}
@@ -468,7 +461,7 @@ namespace devices::mcp230xx
 		 * @sa T<P_> interrupt_flags()
 		 * @sa errors
 		 */
-		template<MCP23017Port P_> int interrupt_flags(PROXY<InterruptFlagsFuture<P_>> future)
+		template<MCP23017Port P_> int interrupt_flags(InterruptFlagsFuture<P_>& future)
 		{
 			return this->async_read(future);
 		}
@@ -513,7 +506,7 @@ namespace devices::mcp230xx
 		 * @sa T<P_> captured_values()
 		 * @sa errors
 		 */
-		template<MCP23017Port P_> int captured_values(PROXY<CapturedValuesFuture<P_>> future)
+		template<MCP23017Port P_> int captured_values(CapturedValuesFuture<P_>& future)
 		{
 			return this->async_read(future);
 		}
@@ -539,7 +532,7 @@ namespace devices::mcp230xx
 				   InterruptPolarity interrupt_polarity = InterruptPolarity::ACTIVE_HIGH)
 		{
 			BeginFuture future{mirror_interrupts, interrupt_polarity};
-			if (begin(PARENT::make_proxy(future)) != 0) return false;
+			if (begin(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -566,7 +559,7 @@ namespace devices::mcp230xx
 		template<MCP23017Port P_> bool configure_gpio(T<P_> direction, T<P_> pullup = T<P_>{}, T<P_> polarity = T<P_>{})
 		{
 			ConfigureGPIOFuture<P_> future{direction, pullup, polarity};
-			if (configure_gpio(PARENT::make_proxy(future)) != 0) return false;
+			if (configure_gpio(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 
@@ -594,7 +587,7 @@ namespace devices::mcp230xx
 		bool configure_interrupts(T<P_> int_pins, T<P_> ref = T<P_>{}, T<P_> compare_ref = T<P_>{})
 		{
 			ConfigureInterruptsFuture<P_> future{int_pins, ref, compare_ref};
-			if (configure_interrupts(PARENT::make_proxy(future)) != 0) return false;
+			if (configure_interrupts(future) != 0) return false;
 			return (future.await() == future::FutureStatus::READY);
 		}
 

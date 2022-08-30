@@ -46,8 +46,8 @@ namespace timer
 	template<board::Timer NTIMER_, board::PWMPin OUTPUT_> class SquareWave
 	{
 	public:
-		SquareWave(const SquareWave<NTIMER_, OUTPUT_>&) = delete;
-		SquareWave<NTIMER_, OUTPUT_>& operator=(const SquareWave<NTIMER_, OUTPUT_>&) = delete;
+		SquareWave(const SquareWave&) = delete;
+		SquareWave& operator=(const SquareWave&) = delete;
 		
 		/** The AVR timer used for the underlying Timer. */
 		static constexpr const board::Timer NTIMER = NTIMER_;
