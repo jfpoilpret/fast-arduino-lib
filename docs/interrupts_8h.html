@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.9</span>
+   &#160;<span id="projectnumber">v1.9 alpha</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -178,6 +178,10 @@ Functions</h2></td></tr>
 <tr class="memitem:abfd5857208f49006bde8c472497273de"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de">interrupt::register_handler</a> (Handler &amp;handler)</td></tr>
 <tr class="memdesc:abfd5857208f49006bde8c472497273de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a class instance containing methods that shall be called back by an ISR.  <a href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de">More...</a><br /></td></tr>
 <tr class="separator:abfd5857208f49006bde8c472497273de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1ddd2a9164979134cf71e9b692ec0e3"><td class="memTemplParams" colspan="2">template&lt;typename Handler &gt; </td></tr>
+<tr class="memitem:af1ddd2a9164979134cf71e9b692ec0e3"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceinterrupt.html#af1ddd2a9164979134cf71e9b692ec0e3">interrupt::unregister_handler</a> (Handler &amp;handler)</td></tr>
+<tr class="memdesc:af1ddd2a9164979134cf71e9b692ec0e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unregister a class instance that was previously registered with <code><a class="el" href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de" title="Register a class instance containing methods that shall be called back by an ISR.">interrupt::register_handler</a></code>.  <a href="namespaceinterrupt.html#af1ddd2a9164979134cf71e9b692ec0e3">More...</a><br /></td></tr>
+<tr class="separator:af1ddd2a9164979134cf71e9b692ec0e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>General API for handling AVR interrupt vectors. </p>

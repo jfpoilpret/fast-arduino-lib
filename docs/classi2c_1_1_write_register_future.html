@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.9</span>
+   &#160;<span id="projectnumber">v1.9 alpha</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -121,9 +121,9 @@ Collaboration diagram for i2c::WriteRegisterFuture&lt; MANAGER, T, FUNCTOR &gt;:
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac4f10c998954b8404f42d37b53a97e1d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_write_register_future.html#ac4f10c998954b8404f42d37b53a97e1d">WriteRegisterFuture</a> (uint8_t reg, const ARG_TYPE &amp;value, FUTURE_STATUS_LISTENER *status_listener=nullptr)</td></tr>
-<tr class="memdesc:ac4f10c998954b8404f42d37b53a97e1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="classi2c_1_1_write_register_future.html" title="General Future that can be used to write to an I2C device register.">WriteRegisterFuture</a> future for a given device register <code>reg</code>.  <a href="classi2c_1_1_write_register_future.html#ac4f10c998954b8404f42d37b53a97e1d">More...</a><br /></td></tr>
-<tr class="separator:ac4f10c998954b8404f42d37b53a97e1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee07124eef2b4556d7edb1134049047c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_write_register_future.html#aee07124eef2b4556d7edb1134049047c">WriteRegisterFuture</a> (uint8_t reg, const ARG_TYPE &amp;value, <a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337">future::FutureNotification</a> notification=<a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337ab50339a10e1de285ac99d4c3990b8693">future::FutureNotification::NONE</a>)</td></tr>
+<tr class="memdesc:aee07124eef2b4556d7edb1134049047c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="classi2c_1_1_write_register_future.html" title="General Future that can be used to write to an I2C device register.">WriteRegisterFuture</a> future for a given device register <code>reg</code>.  <a href="classi2c_1_1_write_register_future.html#aee07124eef2b4556d7edb1134049047c">More...</a><br /></td></tr>
+<tr class="separator:aee07124eef2b4556d7edb1134049047c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename MANAGER, typename T, typename FUNCTOR = functor::Identity&lt;T&gt;&gt;<br />
@@ -149,10 +149,10 @@ class i2c::WriteRegisterFuture&lt; MANAGER, T, FUNCTOR &gt;</h3>
 <dd>
 <a class="el" href="namespacefunctor.html" title="This namespace defines a few useful functors.">functor</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__device__utilities_8h_source.html#l00216">216</a> of file <a class="el" href="i2c__device__utilities_8h_source.html">i2c_device_utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__device__utilities_8h_source.html#l00202">202</a> of file <a class="el" href="i2c__device__utilities_8h_source.html">i2c_device_utilities.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ac4f10c998954b8404f42d37b53a97e1d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac4f10c998954b8404f42d37b53a97e1d">&#9670;&nbsp;</a></span>WriteRegisterFuture()</h2>
+<a id="aee07124eef2b4556d7edb1134049047c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee07124eef2b4556d7edb1134049047c">&#9670;&nbsp;</a></span>WriteRegisterFuture()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -177,8 +177,8 @@ template&lt;typename MANAGER , typename T , typename FUNCTOR  = functor::Identit
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">FUTURE_STATUS_LISTENER *&#160;</td>
-          <td class="paramname"><em>status_listener</em> = <code>nullptr</code>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337">future::FutureNotification</a>&#160;</td>
+          <td class="paramname"><em>notification</em> = <code><a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337ab50339a10e1de285ac99d4c3990b8693">future::FutureNotification::NONE</a></code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -198,12 +198,12 @@ template&lt;typename MANAGER , typename T , typename FUNCTOR  = functor::Identit
   <table class="params">
     <tr><td class="paramname">reg</td><td>the address of the register to write to in the I2C device </td></tr>
     <tr><td class="paramname">value</td><td>the value to write to the register in the I2C device </td></tr>
-    <tr><td class="paramname">status_listener</td><td>an optional listener to status changes on this future </td></tr>
+    <tr><td class="paramname">notifications</td><td>determines if and which notifications should be dispatched by this <a class="el" href="classi2c_1_1_write_register_future.html" title="General Future that can be used to write to an I2C device register.">WriteRegisterFuture</a>; default is none. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__device__utilities_8h_source.html#l00242">242</a> of file <a class="el" href="i2c__device__utilities_8h_source.html">i2c_device_utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__device__utilities_8h_source.html#l00227">227</a> of file <a class="el" href="i2c__device__utilities_8h_source.html">i2c_device_utilities.h</a>.</p>
 
 </div>
 </div>

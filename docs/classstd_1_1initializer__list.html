@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.9</span>
+   &#160;<span id="projectnumber">v1.9 alpha</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -124,7 +124,7 @@ class std::initializer_list&lt; T &gt;</h3>
 <div class="line">    <span class="keywordflow">for</span> (<span class="keyword">auto</span> x : list)</div>
 <div class="line">        cout &lt;&lt; *x &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>
 <div class="line">}</div>
-<div class="ttc" id="anamespacestreams_html_a25bd12279d518b57e4fb97c533c17b22"><div class="ttname"><a href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">streams::endl</a></div><div class="ttdeci">void endl(FSTREAM &amp;stream)</div><div class="ttdoc">Manipulator for an output stream, which will insert a new-line character and flush the stream buffer.</div><div class="ttdef"><b>Definition:</b> <a href="streams_8h_source.html#l00722">streams.h:722</a></div></div>
+<div class="ttc" id="anamespacestreams_html_a25bd12279d518b57e4fb97c533c17b22"><div class="ttname"><a href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">streams::endl</a></div><div class="ttdeci">void endl(FSTREAM &amp;stream)</div><div class="ttdoc">Manipulator for an output stream, which will insert a new-line character and flush the stream buffer.</div><div class="ttdef"><b>Definition:</b> <a href="streams_8h_source.html#l00725">streams.h:725</a></div></div>
 </div><!-- fragment --><p> where the iterator type is simply <code>const T*</code>. That code could also be written in a more traditional and more verbose way: </p><div class="fragment"><div class="line"><span class="keywordtype">void</span> f(initializer_list&lt;int&gt; list) {</div>
 <div class="line">    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keywordtype">int</span>* x = list.begin(); x != list.end(); ++x)</div>
 <div class="line">        cout &lt;&lt; *x &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a>;</div>

@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.9</span>
+   &#160;<span id="projectnumber">v1.9 alpha</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -134,9 +134,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac52818e51d0fd5e4156c9b5dd4ab59bc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#ac52818e51d0fd5e4156c9b5dd4ab59bc">ostream</a> (<a class="el" href="classstreams_1_1ostreambuf.html">ostreambuf</a> &amp;streambuf)</td></tr>
 <tr class="memdesc:ac52818e51d0fd5e4156c9b5dd4ab59bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a formatted output wrapper of <code>streambuf</code>.  <a href="classstreams_1_1ostream.html#ac52818e51d0fd5e4156c9b5dd4ab59bc">More...</a><br /></td></tr>
 <tr class="separator:ac52818e51d0fd5e4156c9b5dd4ab59bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a65ff162585aea4d98bf63c66619e92d6"><td class="memItemLeft" align="right" valign="top"><a id="a65ff162585aea4d98bf63c66619e92d6"></a>
-<a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classstreams_1_1ostream.html">ostream</a> &amp;)=delete</td></tr>
-<tr class="separator:a65ff162585aea4d98bf63c66619e92d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af874202c30293f8c8cd4ce05e17d477f"><td class="memItemLeft" align="right" valign="top"><a id="af874202c30293f8c8cd4ce05e17d477f"></a>
 <a class="el" href="classstreams_1_1ostreambuf.html">ostreambuf</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classstreams_1_1ostream.html#af874202c30293f8c8cd4ce05e17d477f">rdbuf</a> () const</td></tr>
 <tr class="memdesc:af874202c30293f8c8cd4ce05e17d477f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the stream buffer associated with this stream. <br /></td></tr>
@@ -408,7 +405,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 <dd>
 <a class="el" href="namespacestreams.html#a155684415ba442e665f551819429b3a0" title="Manipulator for an output stream, which will flush the stream buffer.">streams::flush()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00086">86</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00089">89</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
 
 </div>
 </div>
@@ -439,7 +436,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 <p>Insert character <code>c</code> into this stream. </p>
 <p>The character is buffered by the underlying ostreambuf and transmitted to the connected device when possible. If the underlying ostreambuf overflows, then <code>badbit</code> is set for this stream. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classstreams_1_1ostreambuf.html#ad1fe405fcecf6e1d1bd97d7f14792438" title="Append a character to the buffer.">ostreambuf::sputc(char)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00098">98</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00101">101</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
 
 </div>
 </div>
@@ -487,7 +484,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classstreams_1_1ostreambuf.html#aec033507c6f9c2fe741ea03a7fb6cda3" title="Append several characters to the buffer.">ostreambuf::sputn(const char*, size_t)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00113">113</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00116">116</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
 
 </div>
 </div>
@@ -524,7 +521,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classstreams_1_1ostreambuf.html#a539d9780be35a7082615f4b4cc20dbc9" title="Append a string to the buffer.">ostreambuf::sputn(const char*)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00127">127</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00130">130</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
 
 </div>
 </div>
@@ -561,7 +558,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classstreams_1_1ostreambuf.html#a5ae9b4a7aeef87bcec0ca2bf5c3c3204" title="Append a string, stored on flash memory, to the buffer.">ostreambuf::sputn(const flash::FlashStorage*)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00141">141</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00144">144</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
 
 </div>
 </div>
@@ -601,7 +598,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>this</code> formatted output </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00157">157</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00160">160</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
 
 </div>
 </div>
@@ -639,7 +636,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>this</code> formatted output </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00172">172</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00175">175</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
 
 </div>
 </div>
@@ -677,7 +674,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>this</code> formatted output </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00187">187</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00190">190</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
 
 </div>
 </div>
@@ -715,7 +712,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>this</code> formatted output </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00202">202</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00205">205</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
 
 </div>
 </div>
@@ -754,7 +751,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>this</code> formatted output </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00217">217</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00220">220</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
 
 </div>
 </div>
@@ -793,7 +790,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>this</code> formatted output </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00234">234</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00237">237</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
 
 </div>
 </div>
@@ -832,7 +829,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>this</code> formatted output </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00251">251</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00254">254</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
 
 </div>
 </div>
@@ -871,7 +868,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>this</code> formatted output </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00268">268</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00271">271</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
 
 </div>
 </div>
@@ -910,7 +907,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>this</code> formatted output </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00285">285</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00288">288</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
 
 </div>
 </div>
@@ -949,7 +946,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>this</code> formatted output </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00302">302</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00305">305</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
 
 </div>
 </div>
@@ -988,9 +985,9 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 <div class="line"> </div>
 <div class="line">out &lt;&lt; <a class="code" href="classstreams_1_1ios__base.html#aafd29f140be78e8402102dba405d9b61">hex</a> &lt;&lt; 16384 &lt;&lt; <a class="code" href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">endl</a> &lt;&lt; <a class="code" href="classstreams_1_1ostream.html#a00f6c7bdce1520b119c31cd7dde80ac2">flush</a>;</div>
 <div class="ttc" id="aclassstreams_1_1ios__base_html_aafd29f140be78e8402102dba405d9b61"><div class="ttname"><a href="classstreams_1_1ios__base.html#aafd29f140be78e8402102dba405d9b61">streams::ios_base::hex</a></div><div class="ttdeci">static constexpr fmtflags hex</div><div class="ttdoc">Read or write integral values using hexadecimal (0..9,A..F) base format.</div><div class="ttdef"><b>Definition:</b> <a href="ios_8h_source.html#l00218">ios.h:218</a></div></div>
-<div class="ttc" id="aclassstreams_1_1ostream_html_a00f6c7bdce1520b119c31cd7dde80ac2"><div class="ttname"><a href="classstreams_1_1ostream.html#a00f6c7bdce1520b119c31cd7dde80ac2">streams::ostream::flush</a></div><div class="ttdeci">void flush()</div><div class="ttdoc">Flush this ostream and blocks until all its buffer has been written to the underlying device.</div><div class="ttdef"><b>Definition:</b> <a href="streams_8h_source.html#l00086">streams.h:86</a></div></div>
-<div class="ttc" id="anamespacestreams_html_a155684415ba442e665f551819429b3a0"><div class="ttname"><a href="namespacestreams.html#a155684415ba442e665f551819429b3a0">streams::flush</a></div><div class="ttdeci">void flush(FSTREAM &amp;stream)</div><div class="ttdoc">Manipulator for an output stream, which will flush the stream buffer.</div><div class="ttdef"><b>Definition:</b> <a href="streams_8h_source.html#l00713">streams.h:713</a></div></div>
-<div class="ttc" id="anamespacestreams_html_a25bd12279d518b57e4fb97c533c17b22"><div class="ttname"><a href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">streams::endl</a></div><div class="ttdeci">void endl(FSTREAM &amp;stream)</div><div class="ttdoc">Manipulator for an output stream, which will insert a new-line character and flush the stream buffer.</div><div class="ttdef"><b>Definition:</b> <a href="streams_8h_source.html#l00722">streams.h:722</a></div></div>
+<div class="ttc" id="aclassstreams_1_1ostream_html_a00f6c7bdce1520b119c31cd7dde80ac2"><div class="ttname"><a href="classstreams_1_1ostream.html#a00f6c7bdce1520b119c31cd7dde80ac2">streams::ostream::flush</a></div><div class="ttdeci">void flush()</div><div class="ttdoc">Flush this ostream and blocks until all its buffer has been written to the underlying device.</div><div class="ttdef"><b>Definition:</b> <a href="streams_8h_source.html#l00089">streams.h:89</a></div></div>
+<div class="ttc" id="anamespacestreams_html_a155684415ba442e665f551819429b3a0"><div class="ttname"><a href="namespacestreams.html#a155684415ba442e665f551819429b3a0">streams::flush</a></div><div class="ttdeci">void flush(FSTREAM &amp;stream)</div><div class="ttdoc">Manipulator for an output stream, which will flush the stream buffer.</div><div class="ttdef"><b>Definition:</b> <a href="streams_8h_source.html#l00716">streams.h:716</a></div></div>
+<div class="ttc" id="anamespacestreams_html_a25bd12279d518b57e4fb97c533c17b22"><div class="ttname"><a href="namespacestreams.html#a25bd12279d518b57e4fb97c533c17b22">streams::endl</a></div><div class="ttdeci">void endl(FSTREAM &amp;stream)</div><div class="ttdoc">Manipulator for an output stream, which will insert a new-line character and flush the stream buffer.</div><div class="ttdef"><b>Definition:</b> <a href="streams_8h_source.html#l00725">streams.h:725</a></div></div>
 <div class="ttc" id="anamespacestreams_html_a91675bd61b31e7382e8655930606f62f"><div class="ttname"><a href="namespacestreams.html#a91675bd61b31e7382e8655930606f62f">streams::hex</a></div><div class="ttdeci">void hex(FSTREAM &amp;stream)</div><div class="ttdoc">Manipulator for an output or input stream, which will set the base, used to represent (output) or int...</div><div class="ttdef"><b>Definition:</b> <a href="ios_8h_source.html#l00774">ios.h:774</a></div></div>
 </div><!-- fragment --> <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -1000,7 +997,7 @@ static constexpr <a class="el" href="classstreams_1_1ios__base.html#a21f734427c6
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>this</code> formatted output </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00330">330</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="streams_8h_source.html#l00333">333</a> of file <a class="el" href="streams_8h_source.html">streams.h</a>.</p>
 
 </div>
 </div>

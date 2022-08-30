@@ -1,4 +1,4 @@
 <map id="i2c::I2CAsyncManager&lt; MODE_, POLICY_ &gt;" name="i2c::I2CAsyncManager&lt; MODE_, POLICY_ &gt;">
-<area shape="rect" id="node1" title="Asynchronous I2C Manager for ATmega architecture." alt="" coords="288,27,455,69"/>
-<area shape="rect" id="node2" href="$classi2c_1_1_abstract_i2_c_async_manager.html" title=" " alt="" coords="5,5,240,91"/>
+<area shape="rect" id="node1" title="Asynchronous I2C Manager for ATmega architecture." alt="" coords="279,27,445,69"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_abstract_i2_c_async_manager.html" title=" " alt="" coords="5,5,231,91"/>
 </map>

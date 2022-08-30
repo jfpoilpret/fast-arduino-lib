@@ -2,7 +2,7 @@ var classfuture_1_1_future =
 [
     [ "OUT", "classfuture_1_1_future.html#a69fa180a31984104be53d4925c5361c9", null ],
     [ "IN", "classfuture_1_1_future.html#a137fd082483740594714b3a551ba64eb", null ],
-    [ "Future", "classfuture_1_1_future.html#a5f5afbf61ba1b465aee0a9a81ac5d346", null ],
+    [ "Future", "classfuture_1_1_future.html#aad693ec0851c9d63ce095a8b7618a655", null ],
     [ "reset_", "classfuture_1_1_future.html#a8993ab76018cb71ad98cb87c2e69c07f", null ],
     [ "reset_input_", "classfuture_1_1_future.html#a2d63a2bd2a1f9284c7d1b2c19897bf62", null ],
     [ "get", "classfuture_1_1_future.html#a790fe9b24ef1c4f26df490a4f22635f9", null ],

@@ -66,20 +66,20 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "abi_8cpp.html#a0055b650fe2a5c91dc80a467a0a516ea",
-"classdevices_1_1audio_1_1_async_tone_player.html#adfb30cb51c01a95f794c3f1bcc9b01a6",
-"classdevices_1_1rtc_1_1_d_s1307.html#a6bed9dfa8c1dcd33b45730058b3eda56",
-"classfunctor_1_1_compose.html",
-"classi2c_1_1status_1_1_i2_c_status_live_logger.html#a5b456edc00a33b8ddb4f3baea70f35d4",
-"classstreams_1_1istreambuf.html#a0f0d8b518b00e5fe7949d300c83b934f",
-"empty_8h.html#a5082846fef8fdfb8c8cbcf1163c7b404a6770cb53b685fa8d23adfdcad29e0cc6",
-"i2c__debug_8h.html#aa73d62f49bbf5a9cd8ced80e467cefcca4bcd24fbcc42cd0cbd1c0e70ee29e463",
-"mcp3304_8h.html#a7b06f5b297ce9a8af7267e4d89b5330da5328b632ebed5a255d3afcb41b9d875b",
-"namespaceboard.html#a7abd24b042402c0691c0ad6db604e7daa45b33ca54306823e81e6d64863187183",
-"namespacedevices_1_1magneto.html#a73e5a83c3a0209228c48c115f21c01bc",
-"namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041a50a87f0d71f7221582dad4bf507a0f34",
-"namespaceutils.html#a983d6f3839652d22e2353e7cfeff63af",
-"timer_8h.html#a17d2af2848409a47612cd961ea27b5a0a5b9d80a04f3ec2025977abad33e94e61",
-"vl53l0x__types_8h.html#a9dd5b65f54eecca7c3cef80254c553d8"
+"classdevices_1_1audio_1_1_q_tone_play.html#a4d7dd52f4c88f0954c0da42a70f99e08",
+"classdevices_1_1rtc_1_1_d_s1307.html#aa77501ab764c7641ed021dd3d9b373bb",
+"classfuture_1_1_abstract_fake_future.html",
+"classlifecycle_1_1_abstract_life_cycle_manager.html#a2d6ab5c0d938740ff89b1c6ca3d3a0ce",
+"classtime_1_1_r_t_t_time.html#a037345112c94343780bb9efd42cdf42e",
+"empty_8h.html#a7abd24b042402c0691c0ad6db604e7daab9b619cbd487f28a41ba7be71aaeed12",
+"i2c__handler__common_8h.html#a2572e0fde7ef325c8f5c1c974c2de720acbefb7345e20459bf05682fa57a439f9",
+"mpu6050_8h.html#a3eb67bba736029c8e9267803a614fe63a09d4d696b4e935115b9313e3c412509a",
+"namespaceboard.html#a7abd24b042402c0691c0ad6db604e7daaf3271e0cebdec5849479eaed05e54217",
+"namespacedevices_1_1mcp230xx.html#ab180a3010d19bcd655569e6a2e022969a74be45e4297a389149136838447505eb",
+"namespacei2c.html#adb5bfde92afd6cbc048d1ee7472bf394a4732cb8574071463f6bba0b25d081cd2",
+"power__internals_8cpp_source.html",
+"tone__player_8h.html#a9ec897420c4939aebbe29ccdbe3d1eada46a31ccb6974d5b2c709021f1f7bae28",
+"watchdog_8h.html#ae2234bf414f2a2e1b774538e7cecd01baf043bc9855a6e47ea123ff80769e7870"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -1,5 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" title=" " alt="" coords="107,5,145,32"/>
-<area shape="rect" id="node2" href="$classfuture_1_1_abstract_futures_group.html" title="Abstract class to allow aggregation of several futures." alt="" coords="295,31,543,57"/>
-<area shape="rect" id="node3" href="$classfuture_1_1_future_status_listener.html" title="Listener is the interface allowing to listen to changes of a Future status." alt="" coords="5,56,247,83"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,5,44,32"/>
+<area shape="rect" id="node2" href="$classfuture_1_1_abstract_futures_group.html" title="Abstract class to allow aggregation of several futures." alt="" coords="92,5,340,32"/>
 </map>

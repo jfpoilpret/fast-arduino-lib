@@ -1,4 +1,4 @@
 <map id="i2c::I2CAsyncStatusDebugManager&lt; MODE_, POLICY_, STATUS_HOOK_, DEBUG_HOOK_ &gt;" name="i2c::I2CAsyncStatusDebugManager&lt; MODE_, POLICY_, STATUS_HOOK_, DEBUG_HOOK_ &gt;">
-<area shape="rect" id="node1" title="Asynchronous I2C Manager for ATmega architecture with debug and status notification facilities." alt="" coords="279,13,473,83"/>
-<area shape="rect" id="node2" href="$classi2c_1_1_abstract_i2_c_async_manager.html" title=" " alt="" coords="5,5,231,91"/>
+<area shape="rect" id="node1" title="Asynchronous I2C Manager for ATmega architecture with debug and status notification facilities." alt="" coords="273,13,468,83"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_abstract_i2_c_async_manager.html" title=" " alt="" coords="5,5,225,91"/>
 </map>

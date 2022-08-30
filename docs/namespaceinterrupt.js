@@ -11,5 +11,6 @@ var namespaceinterrupt =
       [ "FALLING_EDGE", "namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1ba297f5ea19073f4b51715b029f48d5d52", null ],
       [ "RISING_EDGE", "namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1bad85243a747ac5537ef0b7adde99c3e98", null ]
     ] ],
-    [ "register_handler", "namespaceinterrupt.html#abfd5857208f49006bde8c472497273de", null ]
+    [ "register_handler", "namespaceinterrupt.html#abfd5857208f49006bde8c472497273de", null ],
+    [ "unregister_handler", "namespaceinterrupt.html#af1ddd2a9164979134cf71e9b692ec0e3", null ]
 ];

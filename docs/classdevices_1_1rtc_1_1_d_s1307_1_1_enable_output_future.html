@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.9</span>
+   &#160;<span id="projectnumber">v1.9 alpha</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -90,7 +90,7 @@ $(document).ready(function(){initNavTree('classdevices_1_1rtc_1_1_d_s1307_1_1_en
 </div><!--header-->
 <div class="contents">
 
-<p>Create a future to be used by asynchronous method enable_output(EnableOutputFuture&amp;).  
+<p>Create a future to be used by asynchronous method <a class="el" href="classdevices_1_1rtc_1_1_d_s1307.html#ac0b5253ef3dd6530ecd4f5c33ced1963" title="Enable square wave output to the SQW/OUT pin of the RTC chip.">enable_output(EnableOutputFuture&amp;)</a>.  
  <a href="classdevices_1_1rtc_1_1_d_s1307_1_1_enable_output_future.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="ds1307_8h_source.html">fastarduino/devices/ds1307.h</a>&gt;</code></p>
@@ -120,28 +120,28 @@ Collaboration diagram for devices::rtc::DS1307&lt; MANAGER &gt;::EnableOutputFut
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pub_methods_classi2c_1_1_t_write_register_future"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classi2c_1_1_t_write_register_future')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classi2c_1_1_t_write_register_future.html">i2c::TWriteRegisterFuture&lt; MANAGER, REGISTER, T, FUNCTOR &gt;</a></td></tr>
-<tr class="memitem:aeda7c3b4b3470ed54064ddba065eeb42 inherit pub_methods_classi2c_1_1_t_write_register_future"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_t_write_register_future.html#aeda7c3b4b3470ed54064ddba065eeb42">TWriteRegisterFuture</a> (const ARG_TYPE &amp;value=ARG_TYPE{}, typename PARENT::FUTURE_STATUS_LISTENER *status_listener=nullptr)</td></tr>
-<tr class="memdesc:aeda7c3b4b3470ed54064ddba065eeb42 inherit pub_methods_classi2c_1_1_t_write_register_future"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="classi2c_1_1_t_write_register_future.html" title="Generic Future that can be used to write to an I2C device register.">TWriteRegisterFuture</a> future.  <a href="classi2c_1_1_t_write_register_future.html#aeda7c3b4b3470ed54064ddba065eeb42">More...</a><br /></td></tr>
-<tr class="separator:aeda7c3b4b3470ed54064ddba065eeb42 inherit pub_methods_classi2c_1_1_t_write_register_future"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af897d3051e9d8a85f29bfc234da2c1d9 inherit pub_methods_classi2c_1_1_t_write_register_future"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_t_write_register_future.html#af897d3051e9d8a85f29bfc234da2c1d9">TWriteRegisterFuture</a> (const ARG_TYPE &amp;value=ARG_TYPE{}, <a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337">future::FutureNotification</a> notification=<a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337ab50339a10e1de285ac99d4c3990b8693">future::FutureNotification::NONE</a>)</td></tr>
+<tr class="memdesc:af897d3051e9d8a85f29bfc234da2c1d9 inherit pub_methods_classi2c_1_1_t_write_register_future"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="classi2c_1_1_t_write_register_future.html" title="Generic Future that can be used to write to an I2C device register.">TWriteRegisterFuture</a> future.  <a href="classi2c_1_1_t_write_register_future.html#af897d3051e9d8a85f29bfc234da2c1d9">More...</a><br /></td></tr>
+<tr class="separator:af897d3051e9d8a85f29bfc234da2c1d9 inherit pub_methods_classi2c_1_1_t_write_register_future"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classi2c_1_1_write_register_future"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classi2c_1_1_write_register_future')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classi2c_1_1_write_register_future.html">i2c::WriteRegisterFuture&lt; MANAGER, T, functor::Identity&lt; T &gt; &gt;</a></td></tr>
-<tr class="memitem:ac4f10c998954b8404f42d37b53a97e1d inherit pub_methods_classi2c_1_1_write_register_future"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_write_register_future.html#ac4f10c998954b8404f42d37b53a97e1d">WriteRegisterFuture</a> (uint8_t reg, const ARG_TYPE &amp;value, FUTURE_STATUS_LISTENER *status_listener=nullptr)</td></tr>
-<tr class="memdesc:ac4f10c998954b8404f42d37b53a97e1d inherit pub_methods_classi2c_1_1_write_register_future"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a WriteRegisterFuture future for a given device register <code>reg</code>.  <a href="classi2c_1_1_write_register_future.html#ac4f10c998954b8404f42d37b53a97e1d">More...</a><br /></td></tr>
-<tr class="separator:ac4f10c998954b8404f42d37b53a97e1d inherit pub_methods_classi2c_1_1_write_register_future"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee07124eef2b4556d7edb1134049047c inherit pub_methods_classi2c_1_1_write_register_future"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_write_register_future.html#aee07124eef2b4556d7edb1134049047c">WriteRegisterFuture</a> (uint8_t reg, const ARG_TYPE &amp;value, <a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337">future::FutureNotification</a> notification=<a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337ab50339a10e1de285ac99d4c3990b8693">future::FutureNotification::NONE</a>)</td></tr>
+<tr class="memdesc:aee07124eef2b4556d7edb1134049047c inherit pub_methods_classi2c_1_1_write_register_future"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a WriteRegisterFuture future for a given device register <code>reg</code>.  <a href="classi2c_1_1_write_register_future.html#aee07124eef2b4556d7edb1134049047c">More...</a><br /></td></tr>
+<tr class="separator:aee07124eef2b4556d7edb1134049047c inherit pub_methods_classi2c_1_1_write_register_future"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename MANAGER&gt;<br />
 class devices::rtc::DS1307&lt; MANAGER &gt;::EnableOutputFuture</h3>
 
-<p>Create a future to be used by asynchronous method enable_output(EnableOutputFuture&amp;). </p>
-<p>This is used by <code><a class="el" href="classdevices_1_1rtc_1_1_d_s1307.html#a55df3c7ac4dcdba7f9d614f42a4adfc9" title="Enable square wave output to the SQW/OUT pin of the RTC chip.">enable_output()</a></code> to set device data, and it shall be used by the caller to determine when the I2C transaction is finished. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Create a future to be used by asynchronous method <a class="el" href="classdevices_1_1rtc_1_1_d_s1307.html#ac0b5253ef3dd6530ecd4f5c33ced1963" title="Enable square wave output to the SQW/OUT pin of the RTC chip.">enable_output(EnableOutputFuture&amp;)</a>. </p>
+<p>This is used by <code><a class="el" href="classdevices_1_1rtc_1_1_d_s1307.html#ac0b5253ef3dd6530ecd4f5c33ced1963" title="Enable square wave output to the SQW/OUT pin of the RTC chip.">enable_output()</a></code> to set device data, and it shall be used by the caller to determine when the I2C transaction is finished. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">frequency</td><td>one of the supported RTC frequencies, defined in <code>SquareWaveFrequency</code> enum</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd>enable_output(EnableOutputFuture&amp;) </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1rtc_1_1_d_s1307.html#ac0b5253ef3dd6530ecd4f5c33ced1963" title="Enable square wave output to the SQW/OUT pin of the RTC chip.">enable_output(EnableOutputFuture&amp;)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="ds1307_8h_source.html#l00562">562</a> of file <a class="el" href="ds1307_8h_source.html">ds1307.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="ds1307_8h_source.html#l00551">551</a> of file <a class="el" href="ds1307_8h_source.html">ds1307.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>fastarduino/devices/<a class="el" href="ds1307_8h_source.html">ds1307.h</a></li>
 </ul>

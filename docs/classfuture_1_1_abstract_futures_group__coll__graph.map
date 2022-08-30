@@ -1,5 +1,4 @@
 <map id="future::AbstractFuturesGroup&lt; F &gt;" name="future::AbstractFuturesGroup&lt; F &gt;">
-<area shape="rect" id="node1" title="Abstract class to allow aggregation of several futures." alt="" coords="5,80,228,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="21,5,60,32"/>
-<area shape="rect" id="node3" href="$classfuture_1_1_future_status_listener.html" title="Listener is the interface allowing to listen to changes of a Future status." alt="" coords="85,5,301,32"/>
+<area shape="rect" id="node1" title="Abstract class to allow aggregation of several futures." alt="" coords="5,80,253,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="110,5,149,32"/>
 </map>

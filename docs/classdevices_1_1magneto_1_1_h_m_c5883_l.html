@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.9</span>
+   &#160;<span id="projectnumber">v1.9 alpha</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -119,19 +119,19 @@ Collaboration diagram for devices::magneto::HMC5883L&lt; MANAGER &gt;:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_begin_future.html">BeginFuture</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a future to be used by asynchronous method begin(BeginFuture&amp;).  <a href="classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_begin_future.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a future to be used by asynchronous method <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad54790197f6f354e76917aea86382439" title="Start operation of this compass chip.">begin(BeginFuture&amp;)</a>.  <a href="classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_begin_future.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
 <tr class="memitem:ae06b238f1066ec30518cdecc29ed57c5"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ae06b238f1066ec30518cdecc29ed57c5">EndFuture</a> = <a class="el" href="classi2c_1_1_t_write_register_future.html">TWriteRegisterFuture</a>&lt; MODE_REG, uint8_t, <a class="el" href="classfunctor_1_1_constant.html">functor::Constant</a>&lt; uint8_t, uint8_t(OperatingMode::IDLE)&gt; &gt;</td></tr>
-<tr class="memdesc:ae06b238f1066ec30518cdecc29ed57c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a future to be used by asynchronous method end(EndFuture&amp;).  <a href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ae06b238f1066ec30518cdecc29ed57c5">More...</a><br /></td></tr>
+<tr class="memdesc:ae06b238f1066ec30518cdecc29ed57c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a future to be used by asynchronous method <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#afdb03b3dac0f4ea7e5f782206bd2a209" title="Stop operation of this compass chip.">end(EndFuture&amp;)</a>.  <a href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ae06b238f1066ec30518cdecc29ed57c5">More...</a><br /></td></tr>
 <tr class="separator:ae06b238f1066ec30518cdecc29ed57c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80329c252225a7c28f65af719a4f57dc"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a80329c252225a7c28f65af719a4f57dc">StatusFuture</a> = <a class="el" href="classi2c_1_1_t_read_register_future.html">TReadRegisterFuture</a>&lt; STATUS_REG, <a class="el" href="classdevices_1_1magneto_1_1_status.html">Status</a> &gt;</td></tr>
-<tr class="memdesc:a80329c252225a7c28f65af719a4f57dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a future to be used by asynchronous method status(StatusFuture&amp;).  <a href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a80329c252225a7c28f65af719a4f57dc">More...</a><br /></td></tr>
+<tr class="memdesc:a80329c252225a7c28f65af719a4f57dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a future to be used by asynchronous method <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a6f289cdfe7fd30a4c47fcfcae4296dfd" title="Get the curent chip status.">status(StatusFuture&amp;)</a>.  <a href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a80329c252225a7c28f65af719a4f57dc">More...</a><br /></td></tr>
 <tr class="separator:a80329c252225a7c28f65af719a4f57dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2b85b67b2476a040de0783ccd18de0f1"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a2b85b67b2476a040de0783ccd18de0f1">MagneticFieldsFuture</a> = <a class="el" href="classi2c_1_1_t_read_register_future.html">TReadRegisterFuture</a>&lt; OUTPUT_REG_1, <a class="el" href="structdevices_1_1magneto_1_1_sensor3_d.html">Sensor3D</a>, <a class="el" href="classfunctor_1_1_compose.html">Sensor3DTransformer</a> &gt;</td></tr>
-<tr class="memdesc:a2b85b67b2476a040de0783ccd18de0f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a future to be used by asynchronous method magnetic_fields(MagneticFieldsFuture&amp;).  <a href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a2b85b67b2476a040de0783ccd18de0f1">More...</a><br /></td></tr>
+<tr class="memdesc:a2b85b67b2476a040de0783ccd18de0f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a future to be used by asynchronous method <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#acd5d5781dd23fcf97602f745832c0a37" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).">magnetic_fields(MagneticFieldsFuture&amp;)</a>.  <a href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a2b85b67b2476a040de0783ccd18de0f1">More...</a><br /></td></tr>
 <tr class="separator:a2b85b67b2476a040de0783ccd18de0f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_types_classi2c_1_1_i2_c_device"><td colspan="2" onclick="javascript:toggleInherit('pub_types_classi2c_1_1_i2_c_device')"><img src="closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="classi2c_1_1_i2_c_device.html">i2c::I2CDevice&lt; MANAGER &gt;</a></td></tr>
 <tr class="memitem:a7b3f6509519292904a636f4262b404ae inherit pub_types_classi2c_1_1_i2_c_device"><td class="memItemLeft" align="right" valign="top"><a id="a7b3f6509519292904a636f4262b404ae"></a>
@@ -144,18 +144,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af906ae6a559cf9a656c02b6cc7853105"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#af906ae6a559cf9a656c02b6cc7853105">HMC5883L</a> (<a class="el" href="classi2c_1_1_i2_c_device.html#a7b3f6509519292904a636f4262b404ae">MANAGER</a> &amp;manager)</td></tr>
 <tr class="memdesc:af906ae6a559cf9a656c02b6cc7853105"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new device driver for a <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html" title="I2C device driver for the HMC5883L compass chip.">HMC5883L</a> chip.  <a href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#af906ae6a559cf9a656c02b6cc7853105">More...</a><br /></td></tr>
 <tr class="separator:af906ae6a559cf9a656c02b6cc7853105"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0ce7a3c37c9fc922853d65336ab13c0"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ae0ce7a3c37c9fc922853d65336ab13c0">begin</a> (PROXY&lt; <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_begin_future.html">BeginFuture</a> &gt; future)</td></tr>
-<tr class="memdesc:ae0ce7a3c37c9fc922853d65336ab13c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start operation of this compass chip.  <a href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ae0ce7a3c37c9fc922853d65336ab13c0">More...</a><br /></td></tr>
-<tr class="separator:ae0ce7a3c37c9fc922853d65336ab13c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4389d62530fecd8b428c2c24af7921fb"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a4389d62530fecd8b428c2c24af7921fb">end</a> (PROXY&lt; <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ae06b238f1066ec30518cdecc29ed57c5">EndFuture</a> &gt; future) <a class="el" href="defines_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a></td></tr>
-<tr class="memdesc:a4389d62530fecd8b428c2c24af7921fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop operation of this compass chip.  <a href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a4389d62530fecd8b428c2c24af7921fb">More...</a><br /></td></tr>
-<tr class="separator:a4389d62530fecd8b428c2c24af7921fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35a2cb0f3926ab9241dbb12a41d33e9b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a35a2cb0f3926ab9241dbb12a41d33e9b">status</a> (PROXY&lt; <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a80329c252225a7c28f65af719a4f57dc">StatusFuture</a> &gt; future) <a class="el" href="defines_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a></td></tr>
-<tr class="memdesc:a35a2cb0f3926ab9241dbb12a41d33e9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the curent chip status.  <a href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a35a2cb0f3926ab9241dbb12a41d33e9b">More...</a><br /></td></tr>
-<tr class="separator:a35a2cb0f3926ab9241dbb12a41d33e9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1611972921dbb4aeeafd373f5fc3355"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad1611972921dbb4aeeafd373f5fc3355">magnetic_fields</a> (PROXY&lt; <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a2b85b67b2476a040de0783ccd18de0f1">MagneticFieldsFuture</a> &gt; future)</td></tr>
-<tr class="memdesc:ad1611972921dbb4aeeafd373f5fc3355"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).  <a href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad1611972921dbb4aeeafd373f5fc3355">More...</a><br /></td></tr>
-<tr class="separator:ad1611972921dbb4aeeafd373f5fc3355"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad54790197f6f354e76917aea86382439"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad54790197f6f354e76917aea86382439">begin</a> (<a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_begin_future.html">BeginFuture</a> &amp;future)</td></tr>
+<tr class="memdesc:ad54790197f6f354e76917aea86382439"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start operation of this compass chip.  <a href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad54790197f6f354e76917aea86382439">More...</a><br /></td></tr>
+<tr class="separator:ad54790197f6f354e76917aea86382439"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afdb03b3dac0f4ea7e5f782206bd2a209"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#afdb03b3dac0f4ea7e5f782206bd2a209">end</a> (<a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ae06b238f1066ec30518cdecc29ed57c5">EndFuture</a> &amp;future) <a class="el" href="defines_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a></td></tr>
+<tr class="memdesc:afdb03b3dac0f4ea7e5f782206bd2a209"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stop operation of this compass chip.  <a href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#afdb03b3dac0f4ea7e5f782206bd2a209">More...</a><br /></td></tr>
+<tr class="separator:afdb03b3dac0f4ea7e5f782206bd2a209"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f289cdfe7fd30a4c47fcfcae4296dfd"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a6f289cdfe7fd30a4c47fcfcae4296dfd">status</a> (<a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a80329c252225a7c28f65af719a4f57dc">StatusFuture</a> &amp;future) <a class="el" href="defines_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a></td></tr>
+<tr class="memdesc:a6f289cdfe7fd30a4c47fcfcae4296dfd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the curent chip status.  <a href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a6f289cdfe7fd30a4c47fcfcae4296dfd">More...</a><br /></td></tr>
+<tr class="separator:a6f289cdfe7fd30a4c47fcfcae4296dfd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd5d5781dd23fcf97602f745832c0a37"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#acd5d5781dd23fcf97602f745832c0a37">magnetic_fields</a> (<a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a2b85b67b2476a040de0783ccd18de0f1">MagneticFieldsFuture</a> &amp;future)</td></tr>
+<tr class="memdesc:acd5d5781dd23fcf97602f745832c0a37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).  <a href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#acd5d5781dd23fcf97602f745832c0a37">More...</a><br /></td></tr>
+<tr class="separator:acd5d5781dd23fcf97602f745832c0a37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19bf9cd74723ddf77b3a2178ca65af71"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a19bf9cd74723ddf77b3a2178ca65af71">begin</a> (<a class="el" href="namespacedevices_1_1magneto.html#ab5a939dc4c5640584198a3ae0a7914f0">OperatingMode</a> mode=OperatingMode::SINGLE, <a class="el" href="namespacedevices_1_1magneto.html#a9e3190fff3a9a97602b890647846068d">Gain</a> gain=Gain::GAIN_1_3GA, <a class="el" href="namespacedevices_1_1magneto.html#af2ffe07596a9831289b3eb76e83ec2aa">DataOutput</a> rate=DataOutput::RATE_15HZ, <a class="el" href="namespacedevices_1_1magneto.html#a9e686e1825471f8625d03061992dc76e">SamplesAveraged</a> samples=SamplesAveraged::ONE_SAMPLE, <a class="el" href="namespacedevices_1_1magneto.html#a73e5a83c3a0209228c48c115f21c01bc">MeasurementMode</a> measurement=MeasurementMode::NORMAL)</td></tr>
 <tr class="memdesc:a19bf9cd74723ddf77b3a2178ca65af71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start operation of this compass chip.  <a href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a19bf9cd74723ddf77b3a2178ca65af71">More...</a><br /></td></tr>
 <tr class="separator:a19bf9cd74723ddf77b3a2178ca65af71"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -169,15 +169,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:af456fd08242c50fb317ac133d820451b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).  <a href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#af456fd08242c50fb317ac133d820451b">More...</a><br /></td></tr>
 <tr class="separator:af456fd08242c50fb317ac133d820451b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe99f25491c1c5b822267aacae28ca45"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#abe99f25491c1c5b822267aacae28ca45">convert_fields_to_mGA</a> (<a class="el" href="structdevices_1_1magneto_1_1_sensor3_d.html">Sensor3D</a> &amp;fields)</td></tr>
-<tr class="memdesc:abe99f25491c1c5b822267aacae28ca45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert raw fields measured obtained with <code><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad1611972921dbb4aeeafd373f5fc3355" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).">magnetic_fields()</a></code> to actual physical values, using the <code>Gain</code> configured for the device.  <a href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#abe99f25491c1c5b822267aacae28ca45">More...</a><br /></td></tr>
+<tr class="memdesc:abe99f25491c1c5b822267aacae28ca45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert raw fields measured obtained with <code><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#acd5d5781dd23fcf97602f745832c0a37" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).">magnetic_fields()</a></code> to actual physical values, using the <code>Gain</code> configured for the device.  <a href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#abe99f25491c1c5b822267aacae28ca45">More...</a><br /></td></tr>
 <tr class="separator:abe99f25491c1c5b822267aacae28ca45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_types_classi2c_1_1_i2_c_device"><td colspan="2" onclick="javascript:toggleInherit('pro_types_classi2c_1_1_i2_c_device')"><img src="closed.png" alt="-"/>&#160;Protected Types inherited from <a class="el" href="classi2c_1_1_i2_c_device.html">i2c::I2CDevice&lt; MANAGER &gt;</a></td></tr>
-<tr class="memitem:aaa72ad76688bfbf7057b4fdfa426a95c inherit pro_types_classi2c_1_1_i2_c_device"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#aaa72ad76688bfbf7057b4fdfa426a95c">PROXY</a> = typename MANAGER::template <a class="el" href="classi2c_1_1_i2_c_device.html#aaa72ad76688bfbf7057b4fdfa426a95c">PROXY</a>&lt; T &gt;</td></tr>
-<tr class="memdesc:aaa72ad76688bfbf7057b4fdfa426a95c inherit pro_types_classi2c_1_1_i2_c_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">The actual type used for all proxies; may be <code><a class="el" href="classlifecycle_1_1_light_proxy.html" title="A light proxy class that encapsulates access to a fixed T instance, or to a dynamic LifeCycle&lt;T&gt; inst...">lifecycle::LightProxy</a></code> or <code><a class="el" href="classlifecycle_1_1_direct_proxy.html" title="A kind of proxy class that encapsulates access to a fixed T instance.">lifecycle::DirectProxy</a></code>.  <a href="classi2c_1_1_i2_c_device.html#aaa72ad76688bfbf7057b4fdfa426a95c">More...</a><br /></td></tr>
-<tr class="separator:aaa72ad76688bfbf7057b4fdfa426a95c inherit pro_types_classi2c_1_1_i2_c_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac2e7c57ed9de99169a280c189724af0a inherit pro_types_classi2c_1_1_i2_c_device"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#ac2e7c57ed9de99169a280c189724af0a">ABSTRACT_FUTURE</a> = typename MANAGER::ABSTRACT_FUTURE</td></tr>
 <tr class="memdesc:ac2e7c57ed9de99169a280c189724af0a inherit pro_types_classi2c_1_1_i2_c_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">The abstract base class of all futures to be defined for a device.  <a href="classi2c_1_1_i2_c_device.html#ac2e7c57ed9de99169a280c189724af0a">More...</a><br /></td></tr>
 <tr class="separator:ac2e7c57ed9de99169a280c189724af0a inherit pro_types_classi2c_1_1_i2_c_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -197,30 +194,27 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:a1325f82f4aaf8290a2d4cc4c70dfe83b inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#a1325f82f4aaf8290a2d4cc4c70dfe83b">set_device</a> (uint8_t device)</td></tr>
 <tr class="memdesc:a1325f82f4aaf8290a2d4cc4c70dfe83b inherit pro_methods_classi2c_1_1_i2_c_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Change the I2C address of this device.  <a href="classi2c_1_1_i2_c_device.html#a1325f82f4aaf8290a2d4cc4c70dfe83b">More...</a><br /></td></tr>
 <tr class="separator:a1325f82f4aaf8290a2d4cc4c70dfe83b inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af937a51b38ea97dee521319c1fc09f46 inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#af937a51b38ea97dee521319c1fc09f46">launch_commands</a> (<a class="el" href="classi2c_1_1_i2_c_device.html#aaa72ad76688bfbf7057b4fdfa426a95c">PROXY</a>&lt; <a class="el" href="classi2c_1_1_i2_c_device.html#ac2e7c57ed9de99169a280c189724af0a">ABSTRACT_FUTURE</a> &gt; proxy, <a class="el" href="classutils_1_1range.html">utils::range</a>&lt; <a class="el" href="classi2c_1_1_i2_c_light_command.html">I2CLightCommand</a> &gt; commands)</td></tr>
-<tr class="memdesc:af937a51b38ea97dee521319c1fc09f46 inherit pro_methods_classi2c_1_1_i2_c_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Launch execution (asynchronously or synchronously, depending on MANAGER) of a chain of I2CLightCommand items (constructed with <code><a class="el" href="classi2c_1_1_i2_c_device.html#a75fe1fe6a563488eb06f86266e15c923" title="Build a read I2CLightCommand that can be later pushed to the I2C Manager for proper handling.">read()</a></code> and <code><a class="el" href="classi2c_1_1_i2_c_device.html#a161423972dd35fbd4b32cd1e8048b5ad" title="Build a write I2CLightCommand that can be later pushed to the I2C Manager for proper handling.">write()</a></code> methods).  <a href="classi2c_1_1_i2_c_device.html#af937a51b38ea97dee521319c1fc09f46">More...</a><br /></td></tr>
-<tr class="separator:af937a51b38ea97dee521319c1fc09f46 inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac433c1975b0be78ce89071ac7ca7a538 inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#ac433c1975b0be78ce89071ac7ca7a538">async_read</a> (<a class="el" href="classi2c_1_1_i2_c_device.html#aaa72ad76688bfbf7057b4fdfa426a95c">PROXY</a>&lt; <a class="el" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a> &gt; future, bool stop=true)</td></tr>
-<tr class="memdesc:ac433c1975b0be78ce89071ac7ca7a538 inherit pro_methods_classi2c_1_1_i2_c_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method that asynchronously launches I2C commands for a simple Future performing one write followed by one read (typically for device register reading).  <a href="classi2c_1_1_i2_c_device.html#ac433c1975b0be78ce89071ac7ca7a538">More...</a><br /></td></tr>
-<tr class="separator:ac433c1975b0be78ce89071ac7ca7a538 inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf582694ddcd91341e1a57379d42fe3a inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#acf582694ddcd91341e1a57379d42fe3a">launch_commands</a> (<a class="el" href="classi2c_1_1_i2_c_device.html#ac2e7c57ed9de99169a280c189724af0a">ABSTRACT_FUTURE</a> &amp;future, <a class="el" href="classutils_1_1range.html">utils::range</a>&lt; <a class="el" href="classi2c_1_1_i2_c_light_command.html">I2CLightCommand</a> &gt; commands)</td></tr>
+<tr class="memdesc:acf582694ddcd91341e1a57379d42fe3a inherit pro_methods_classi2c_1_1_i2_c_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Launch execution (asynchronously or synchronously, depending on MANAGER) of a chain of I2CLightCommand items (constructed with <code><a class="el" href="classi2c_1_1_i2_c_device.html#a75fe1fe6a563488eb06f86266e15c923" title="Build a read I2CLightCommand that can be later pushed to the I2C Manager for proper handling.">read()</a></code> and <code><a class="el" href="classi2c_1_1_i2_c_device.html#a161423972dd35fbd4b32cd1e8048b5ad" title="Build a write I2CLightCommand that can be later pushed to the I2C Manager for proper handling.">write()</a></code> methods).  <a href="classi2c_1_1_i2_c_device.html#acf582694ddcd91341e1a57379d42fe3a">More...</a><br /></td></tr>
+<tr class="separator:acf582694ddcd91341e1a57379d42fe3a inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1dcf668010bab5c73df29d80cad3063 inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#aa1dcf668010bab5c73df29d80cad3063">async_read</a> (<a class="el" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a> &amp;future, bool stop=true)</td></tr>
+<tr class="memdesc:aa1dcf668010bab5c73df29d80cad3063 inherit pro_methods_classi2c_1_1_i2_c_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method that asynchronously launches I2C commands for a simple Future performing one write followed by one read (typically for device register reading).  <a href="classi2c_1_1_i2_c_device.html#aa1dcf668010bab5c73df29d80cad3063">More...</a><br /></td></tr>
+<tr class="separator:aa1dcf668010bab5c73df29d80cad3063 inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0dfdb3fb784b939e8140a1c900a8e64e inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#a0dfdb3fb784b939e8140a1c900a8e64e">sync_read</a> (T &amp;result)</td></tr>
 <tr class="memdesc:a0dfdb3fb784b939e8140a1c900a8e64e inherit pro_methods_classi2c_1_1_i2_c_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method that launches I2C commands for a simple Future performing one write followed by one read (typically for device register reading); the method blocks until the end of the I2C transaction.  <a href="classi2c_1_1_i2_c_device.html#a0dfdb3fb784b939e8140a1c900a8e64e">More...</a><br /></td></tr>
 <tr class="separator:a0dfdb3fb784b939e8140a1c900a8e64e inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a877f1d20e75ed28de13314fc7d5a73f0 inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#a877f1d20e75ed28de13314fc7d5a73f0">async_write</a> (<a class="el" href="classi2c_1_1_i2_c_device.html#aaa72ad76688bfbf7057b4fdfa426a95c">PROXY</a>&lt; <a class="el" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a> &gt; future, bool stop=true)</td></tr>
-<tr class="memdesc:a877f1d20e75ed28de13314fc7d5a73f0 inherit pro_methods_classi2c_1_1_i2_c_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method that asynchronously launches I2C commands for a simple Future performing only one write (typically for device register writing).  <a href="classi2c_1_1_i2_c_device.html#a877f1d20e75ed28de13314fc7d5a73f0">More...</a><br /></td></tr>
-<tr class="separator:a877f1d20e75ed28de13314fc7d5a73f0 inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35f45f8b0a60893e99fc8266f834da5d inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#a35f45f8b0a60893e99fc8266f834da5d">async_multi_write</a> (<a class="el" href="classi2c_1_1_i2_c_device.html#aaa72ad76688bfbf7057b4fdfa426a95c">PROXY</a>&lt; <a class="el" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a> &gt; future, bool stop=true)</td></tr>
-<tr class="memdesc:a35f45f8b0a60893e99fc8266f834da5d inherit pro_methods_classi2c_1_1_i2_c_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method that asynchronously launches I2C commands for a simple Future performing several register writes.  <a href="classi2c_1_1_i2_c_device.html#a35f45f8b0a60893e99fc8266f834da5d">More...</a><br /></td></tr>
-<tr class="separator:a35f45f8b0a60893e99fc8266f834da5d inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3847f2712b7d623007e65dbfa5256428 inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#a3847f2712b7d623007e65dbfa5256428">async_write</a> (<a class="el" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a> &amp;future, bool stop=true)</td></tr>
+<tr class="memdesc:a3847f2712b7d623007e65dbfa5256428 inherit pro_methods_classi2c_1_1_i2_c_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method that asynchronously launches I2C commands for a simple Future performing only one write (typically for device register writing).  <a href="classi2c_1_1_i2_c_device.html#a3847f2712b7d623007e65dbfa5256428">More...</a><br /></td></tr>
+<tr class="separator:a3847f2712b7d623007e65dbfa5256428 inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a468e871cf020c937f885ac68897563bb inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#a468e871cf020c937f885ac68897563bb">async_multi_write</a> (<a class="el" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a> &amp;future, bool stop=true)</td></tr>
+<tr class="memdesc:a468e871cf020c937f885ac68897563bb inherit pro_methods_classi2c_1_1_i2_c_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method that asynchronously launches I2C commands for a simple Future performing several register writes.  <a href="classi2c_1_1_i2_c_device.html#a468e871cf020c937f885ac68897563bb">More...</a><br /></td></tr>
+<tr class="separator:a468e871cf020c937f885ac68897563bb inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5733ebd749415b43fbfab76cf6cfc234 inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#a5733ebd749415b43fbfab76cf6cfc234">sync_write</a> (const T &amp;value)</td></tr>
 <tr class="memdesc:a5733ebd749415b43fbfab76cf6cfc234 inherit pro_methods_classi2c_1_1_i2_c_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method that launches I2C commands for a simple Future performing only one write (typically for device register writing); the method blocks until the end of the I2C transaction.  <a href="classi2c_1_1_i2_c_device.html#a5733ebd749415b43fbfab76cf6cfc234">More...</a><br /></td></tr>
 <tr class="separator:a5733ebd749415b43fbfab76cf6cfc234 inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad570da8ac6c407c7046b1f539fa5a8e inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#aad570da8ac6c407c7046b1f539fa5a8e">sync_write</a> ()</td></tr>
 <tr class="memdesc:aad570da8ac6c407c7046b1f539fa5a8e inherit pro_methods_classi2c_1_1_i2_c_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper method that launches I2C commands for a simple Future performing only one write (typically for device register writing); the method blocks until the end of the I2C transaction.  <a href="classi2c_1_1_i2_c_device.html#aad570da8ac6c407c7046b1f539fa5a8e">More...</a><br /></td></tr>
 <tr class="separator:aad570da8ac6c407c7046b1f539fa5a8e inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf6df66445e2f4c39501b5621191f51e inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memItemLeft" align="right" valign="top">T &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#aaf6df66445e2f4c39501b5621191f51e">resolve</a> (<a class="el" href="classi2c_1_1_i2_c_device.html#aaa72ad76688bfbf7057b4fdfa426a95c">PROXY</a>&lt; T &gt; proxy) const</td></tr>
-<tr class="memdesc:aaf6df66445e2f4c39501b5621191f51e inherit pro_methods_classi2c_1_1_i2_c_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resolve <code>proxy</code> to an actual <code>T</code> (typically a <code>Future</code>).  <a href="classi2c_1_1_i2_c_device.html#aaf6df66445e2f4c39501b5621191f51e">More...</a><br /></td></tr>
-<tr class="separator:aaf6df66445e2f4c39501b5621191f51e inherit pro_methods_classi2c_1_1_i2_c_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_static_methods_classi2c_1_1_i2_c_device"><td colspan="2" onclick="javascript:toggleInherit('pro_static_methods_classi2c_1_1_i2_c_device')"><img src="closed.png" alt="-"/>&#160;Static Protected Member Functions inherited from <a class="el" href="classi2c_1_1_i2_c_device.html">i2c::I2CDevice&lt; MANAGER &gt;</a></td></tr>
 <tr class="memitem:a75fe1fe6a563488eb06f86266e15c923 inherit pro_static_methods_classi2c_1_1_i2_c_device"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="classi2c_1_1_i2_c_light_command.html">I2CLightCommand</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#a75fe1fe6a563488eb06f86266e15c923">read</a> (uint8_t read_count=0, bool finish_future=false, bool stop=false)</td></tr>
 <tr class="memdesc:a75fe1fe6a563488eb06f86266e15c923 inherit pro_static_methods_classi2c_1_1_i2_c_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Build a read I2CLightCommand that can be later pushed to the I2C Manager for proper handling.  <a href="classi2c_1_1_i2_c_device.html#a75fe1fe6a563488eb06f86266e15c923">More...</a><br /></td></tr>
@@ -228,9 +222,6 @@ Additional Inherited Members</h2></td></tr>
 <tr class="memitem:a161423972dd35fbd4b32cd1e8048b5ad inherit pro_static_methods_classi2c_1_1_i2_c_device"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="classi2c_1_1_i2_c_light_command.html">I2CLightCommand</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#a161423972dd35fbd4b32cd1e8048b5ad">write</a> (uint8_t write_count=0, bool finish_future=false, bool stop=false)</td></tr>
 <tr class="memdesc:a161423972dd35fbd4b32cd1e8048b5ad inherit pro_static_methods_classi2c_1_1_i2_c_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Build a write I2CLightCommand that can be later pushed to the I2C Manager for proper handling.  <a href="classi2c_1_1_i2_c_device.html#a161423972dd35fbd4b32cd1e8048b5ad">More...</a><br /></td></tr>
 <tr class="separator:a161423972dd35fbd4b32cd1e8048b5ad inherit pro_static_methods_classi2c_1_1_i2_c_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a358f5bdfc2a7f4cfbcca0e253f42d676 inherit pro_static_methods_classi2c_1_1_i2_c_device"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classi2c_1_1_i2_c_device.html#aaa72ad76688bfbf7057b4fdfa426a95c">PROXY</a>&lt; T &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_device.html#a358f5bdfc2a7f4cfbcca0e253f42d676">make_proxy</a> (const T &amp;target)</td></tr>
-<tr class="memdesc:a358f5bdfc2a7f4cfbcca0e253f42d676 inherit pro_static_methods_classi2c_1_1_i2_c_device"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a PROXY from <code>target</code>.  <a href="classi2c_1_1_i2_c_device.html#a358f5bdfc2a7f4cfbcca0e253f42d676">More...</a><br /></td></tr>
-<tr class="separator:a358f5bdfc2a7f4cfbcca0e253f42d676 inherit pro_static_methods_classi2c_1_1_i2_c_device"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename MANAGER&gt;<br />
@@ -305,7 +296,7 @@ class devices::magneto::HMC5883L&lt; MANAGER &gt;</h3>
 <div class="ttc" id="aint_8h_html_ac8d31ae95551a7ba072fd11cd7339f68"><div class="ttname"><a href="int_8h.html#ac8d31ae95551a7ba072fd11cd7339f68">DECL_INT_ISR_HANDLERS_FRIEND</a></div><div class="ttdeci">#define DECL_INT_ISR_HANDLERS_FRIEND</div><div class="ttdoc">This macro shall be used in a class containing a private callback method, registered by REGISTER_INT_...</div><div class="ttdef"><b>Definition:</b> <a href="int_8h_source.html#l00083">int.h:83</a></div></div>
 <div class="ttc" id="anamespaceboard_html_adea66670db50b076b2c145657aa587f7"><div class="ttname"><a href="namespaceboard.html#adea66670db50b076b2c145657aa587f7">board::ExternalInterruptPin</a></div><div class="ttdeci">ExternalInterruptPin</div><div class="ttdoc">Defines all digital output pins of ATmega644, usable as direct external interrupt pins.</div><div class="ttdef"><b>Definition:</b> <a href="atmega__xx4_8h_source.html#l00243">atmega_xx4.h:244</a></div></div>
 <div class="ttc" id="anamespaceinterrupt_html_a27eee51cf0393a75a91aac0425e65d1bad85243a747ac5537ef0b7adde99c3e98"><div class="ttname"><a href="namespaceinterrupt.html#a27eee51cf0393a75a91aac0425e65d1bad85243a747ac5537ef0b7adde99c3e98">interrupt::InterruptTrigger::RISING_EDGE</a></div><div class="ttdeci">@ RISING_EDGE</div><div class="ttdoc">Interrupt is triggered whenever pin level is rising from low to high.</div></div>
-<div class="ttc" id="anamespaceinterrupt_html_abfd5857208f49006bde8c472497273de"><div class="ttname"><a href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de">interrupt::register_handler</a></div><div class="ttdeci">void register_handler(Handler &amp;handler)</div><div class="ttdoc">Register a class instance containing methods that shall be called back by an ISR.</div><div class="ttdef"><b>Definition:</b> <a href="interrupts_8h_source.html#l00157">interrupts.h:157</a></div></div>
+<div class="ttc" id="anamespaceinterrupt_html_abfd5857208f49006bde8c472497273de"><div class="ttname"><a href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de">interrupt::register_handler</a></div><div class="ttdeci">void register_handler(Handler &amp;handler)</div><div class="ttdoc">Register a class instance containing methods that shall be called back by an ISR.</div><div class="ttdef"><b>Definition:</b> <a href="interrupts_8h_source.html#l00185">interrupts.h:185</a></div></div>
 <div class="ttc" id="anamespacetime_html_a5396c009ace06e55985ccf6b7bff179a"><div class="ttname"><a href="namespacetime.html#a5396c009ace06e55985ccf6b7bff179a">time::yield</a></div><div class="ttdeci">void yield()</div><div class="ttdoc">Utility method used by many FastArduino API in order to &quot;yield&quot; some processor time; concretely it ju...</div><div class="ttdef"><b>Definition:</b> <a href="time_8cpp_source.html#l00022">time.cpp:22</a></div></div>
 </div><!-- fragment --> 
 <p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00201">201</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
@@ -324,11 +315,11 @@ template&lt;typename MANAGER &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Create a future to be used by asynchronous method end(EndFuture&amp;). </p>
+<p>Create a future to be used by asynchronous method <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#afdb03b3dac0f4ea7e5f782206bd2a209" title="Stop operation of this compass chip.">end(EndFuture&amp;)</a>. </p>
 <p>This is used by <code><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a9d3acd456413b577f2a25fef37acddef" title="Stop operation of this compass chip.">end()</a></code> to asynchronously launch the I2C transaction, and it shall be used by the caller to determine when the I2C transaction is finished.</p>
-<dl class="section see"><dt>See also</dt><dd>end(EndFuture&amp;) </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#afdb03b3dac0f4ea7e5f782206bd2a209" title="Stop operation of this compass chip.">end(EndFuture&amp;)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00327">327</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00324">324</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
 
 </div>
 </div>
@@ -346,11 +337,11 @@ template&lt;typename MANAGER &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Create a future to be used by asynchronous method status(StatusFuture&amp;). </p>
+<p>Create a future to be used by asynchronous method <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a6f289cdfe7fd30a4c47fcfcae4296dfd" title="Get the curent chip status.">status(StatusFuture&amp;)</a>. </p>
 <p>This is used by <code><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a27e8fc9be962a57c415fa9b9afd9434f" title="Get the curent chip status.">status()</a></code> to asynchronously launch the I2C transaction, and it shall be used by the caller to determine when the I2C transaction is finished.</p>
-<dl class="section see"><dt>See also</dt><dd>status(StatusFuture&amp;) </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a6f289cdfe7fd30a4c47fcfcae4296dfd" title="Get the curent chip status.">status(StatusFuture&amp;)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00362">362</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00359">359</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
 
 </div>
 </div>
@@ -368,13 +359,13 @@ template&lt;typename MANAGER &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p>Create a future to be used by asynchronous method magnetic_fields(MagneticFieldsFuture&amp;). </p>
-<p>This is used by <code><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad1611972921dbb4aeeafd373f5fc3355" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).">magnetic_fields()</a></code> to asynchronously launch the I2C transaction, and it shall be used by the caller to determine when the I2C transaction is finished.</p>
-<dl class="section see"><dt>See also</dt><dd>magnetic_fields(MagneticFieldsFuture&amp;) </dd>
+<p>Create a future to be used by asynchronous method <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#acd5d5781dd23fcf97602f745832c0a37" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).">magnetic_fields(MagneticFieldsFuture&amp;)</a>. </p>
+<p>This is used by <code><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#acd5d5781dd23fcf97602f745832c0a37" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).">magnetic_fields()</a></code> to asynchronously launch the I2C transaction, and it shall be used by the caller to determine when the I2C transaction is finished.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#acd5d5781dd23fcf97602f745832c0a37" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).">magnetic_fields(MagneticFieldsFuture&amp;)</a> </dd>
 <dd>
 <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#abe99f25491c1c5b822267aacae28ca45" title="Convert raw fields measured obtained with magnetic_fields() to actual physical values,...">convert_fields_to_mGA()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00395">395</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00392">392</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
 
 </div>
 </div>
@@ -413,13 +404,13 @@ template&lt;typename MANAGER &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00253">253</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00252">252</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ae0ce7a3c37c9fc922853d65336ab13c0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae0ce7a3c37c9fc922853d65336ab13c0">&#9670;&nbsp;</a></span>begin() <span class="overload">[1/2]</span></h2>
+<a id="ad54790197f6f354e76917aea86382439"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad54790197f6f354e76917aea86382439">&#9670;&nbsp;</a></span>begin() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -432,7 +423,7 @@ template&lt;typename MANAGER &gt; </div>
         <tr>
           <td class="memname">int <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html">devices::magneto::HMC5883L</a>&lt; <a class="el" href="classi2c_1_1_i2_c_device.html#a7b3f6509519292904a636f4262b404ae">MANAGER</a> &gt;::begin </td>
           <td>(</td>
-          <td class="paramtype">PROXY&lt; <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_begin_future.html">BeginFuture</a> &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_begin_future.html">BeginFuture</a> &amp;&#160;</td>
           <td class="paramname"><em>future</em></td><td>)</td>
           <td></td>
         </tr>
@@ -445,7 +436,7 @@ template&lt;typename MANAGER &gt; </div>
 </div><div class="memdoc">
 
 <p>Start operation of this compass chip. </p>
-<p>Once this method has been called, you may use <code><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad1611972921dbb4aeeafd373f5fc3355" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).">magnetic_fields()</a></code> to find out the directions of the device. </p><dl class="section warning"><dt>Warning</dt><dd>Asynchronous API!</dd></dl>
+<p>Once this method has been called, you may use <code><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#acd5d5781dd23fcf97602f745832c0a37" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).">magnetic_fields()</a></code> to find out the directions of the device. </p><dl class="section warning"><dt>Warning</dt><dd>Asynchronous API!</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">future</td><td>a <code><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_begin_future.html" title="Create a future to be used by asynchronous method begin(BeginFuture&amp;).">BeginFuture</a></code> passed by the caller, that will be updated once the current I2C action is finished. </td></tr>
@@ -467,12 +458,12 @@ template&lt;typename MANAGER &gt; </div>
 <dd>
 <a class="el" href="namespaceerrors.html" title="This namespace defines common errors that can be returned by some FastArduino API methods,...">errors</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00313">313</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00310">310</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
 
 </div>
 </div>
-<a id="a4389d62530fecd8b428c2c24af7921fb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4389d62530fecd8b428c2c24af7921fb">&#9670;&nbsp;</a></span>end() <span class="overload">[1/2]</span></h2>
+<a id="afdb03b3dac0f4ea7e5f782206bd2a209"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afdb03b3dac0f4ea7e5f782206bd2a209">&#9670;&nbsp;</a></span>end() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -485,7 +476,7 @@ template&lt;typename MANAGER &gt; </div>
         <tr>
           <td class="memname">int <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html">devices::magneto::HMC5883L</a>&lt; <a class="el" href="classi2c_1_1_i2_c_device.html#a7b3f6509519292904a636f4262b404ae">MANAGER</a> &gt;::end </td>
           <td>(</td>
-          <td class="paramtype">PROXY&lt; <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ae06b238f1066ec30518cdecc29ed57c5">EndFuture</a> &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ae06b238f1066ec30518cdecc29ed57c5">EndFuture</a> &amp;&#160;</td>
           <td class="paramname"><em>future</em></td><td>)</td>
           <td></td>
         </tr>
@@ -498,7 +489,7 @@ template&lt;typename MANAGER &gt; </div>
 </div><div class="memdoc">
 
 <p>Stop operation of this compass chip. </p>
-<p>You should not call <code><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad1611972921dbb4aeeafd373f5fc3355" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).">magnetic_fields()</a></code> after calling this method. </p><dl class="section warning"><dt>Warning</dt><dd>Asynchronous API!</dd></dl>
+<p>You should not call <code><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#acd5d5781dd23fcf97602f745832c0a37" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).">magnetic_fields()</a></code> after calling this method. </p><dl class="section warning"><dt>Warning</dt><dd>Asynchronous API!</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">future</td><td>an <code>EndFuture</code> passed by the caller, that will be updated once the current I2C action is finished. </td></tr>
@@ -516,16 +507,16 @@ template&lt;typename MANAGER &gt; </div>
 <dd>
 <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a9d3acd456413b577f2a25fef37acddef" title="Stop operation of this compass chip.">end()</a> </dd>
 <dd>
-begin(BeginFuture&amp;) </dd>
+<a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad54790197f6f354e76917aea86382439" title="Start operation of this compass chip.">begin(BeginFuture&amp;)</a> </dd>
 <dd>
 <a class="el" href="namespaceerrors.html" title="This namespace defines common errors that can be returned by some FastArduino API methods,...">errors</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00349">349</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00346">346</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
 
 </div>
 </div>
-<a id="a35a2cb0f3926ab9241dbb12a41d33e9b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a35a2cb0f3926ab9241dbb12a41d33e9b">&#9670;&nbsp;</a></span>status() <span class="overload">[1/2]</span></h2>
+<a id="a6f289cdfe7fd30a4c47fcfcae4296dfd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f289cdfe7fd30a4c47fcfcae4296dfd">&#9670;&nbsp;</a></span>status() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -538,7 +529,7 @@ template&lt;typename MANAGER &gt; </div>
         <tr>
           <td class="memname">int <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html">devices::magneto::HMC5883L</a>&lt; <a class="el" href="classi2c_1_1_i2_c_device.html#a7b3f6509519292904a636f4262b404ae">MANAGER</a> &gt;::status </td>
           <td>(</td>
-          <td class="paramtype">PROXY&lt; <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a80329c252225a7c28f65af719a4f57dc">StatusFuture</a> &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a80329c252225a7c28f65af719a4f57dc">StatusFuture</a> &amp;&#160;</td>
           <td class="paramname"><em>future</em></td><td>)</td>
           <td></td>
         </tr>
@@ -571,12 +562,12 @@ template&lt;typename MANAGER &gt; </div>
 <dd>
 <a class="el" href="namespaceerrors.html" title="This namespace defines common errors that can be returned by some FastArduino API methods,...">errors</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00381">381</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00378">378</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
 
 </div>
 </div>
-<a id="ad1611972921dbb4aeeafd373f5fc3355"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad1611972921dbb4aeeafd373f5fc3355">&#9670;&nbsp;</a></span>magnetic_fields() <span class="overload">[1/2]</span></h2>
+<a id="acd5d5781dd23fcf97602f745832c0a37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd5d5781dd23fcf97602f745832c0a37">&#9670;&nbsp;</a></span>magnetic_fields() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -589,7 +580,7 @@ template&lt;typename MANAGER &gt; </div>
         <tr>
           <td class="memname">int <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html">devices::magneto::HMC5883L</a>&lt; <a class="el" href="classi2c_1_1_i2_c_device.html#a7b3f6509519292904a636f4262b404ae">MANAGER</a> &gt;::magnetic_fields </td>
           <td>(</td>
-          <td class="paramtype">PROXY&lt; <a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a2b85b67b2476a040de0783ccd18de0f1">MagneticFieldsFuture</a> &gt;&#160;</td>
+          <td class="paramtype"><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a2b85b67b2476a040de0783ccd18de0f1">MagneticFieldsFuture</a> &amp;&#160;</td>
           <td class="paramname"><em>future</em></td><td>)</td>
           <td></td>
         </tr>
@@ -624,7 +615,7 @@ template&lt;typename MANAGER &gt; </div>
 <dd>
 <a class="el" href="namespaceerrors.html" title="This namespace defines common errors that can be returned by some FastArduino API methods,...">errors</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00418">418</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00415">415</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
 
 </div>
 </div>
@@ -683,7 +674,7 @@ template&lt;typename MANAGER &gt; </div>
 </div><div class="memdoc">
 
 <p>Start operation of this compass chip. </p>
-<p>Once this method has been called, you may use <code><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad1611972921dbb4aeeafd373f5fc3355" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).">magnetic_fields()</a></code> to find out the directions of the device. </p><dl class="section warning"><dt>Warning</dt><dd>Blocking API!</dd></dl>
+<p>Once this method has been called, you may use <code><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#acd5d5781dd23fcf97602f745832c0a37" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).">magnetic_fields()</a></code> to find out the directions of the device. </p><dl class="section warning"><dt>Warning</dt><dd>Blocking API!</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">mode</td><td>the <code>OperatingMode</code> to operate this chip </td></tr>
@@ -703,9 +694,9 @@ template&lt;typename MANAGER &gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a9d3acd456413b577f2a25fef37acddef" title="Stop operation of this compass chip.">end()</a> </dd>
 <dd>
-begin(BeginFuture&amp;) </dd></dl>
+<a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad54790197f6f354e76917aea86382439" title="Start operation of this compass chip.">begin(BeginFuture&amp;)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00441">441</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00438">438</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
 
 </div>
 </div>
@@ -735,7 +726,7 @@ template&lt;typename MANAGER &gt; </div>
 </div><div class="memdoc">
 
 <p>Stop operation of this compass chip. </p>
-<p>You should not call <code><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad1611972921dbb4aeeafd373f5fc3355" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).">magnetic_fields()</a></code> after calling this method. </p><dl class="section warning"><dt>Warning</dt><dd>Blocking API!</dd></dl>
+<p>You should not call <code><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#acd5d5781dd23fcf97602f745832c0a37" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).">magnetic_fields()</a></code> after calling this method. </p><dl class="section warning"><dt>Warning</dt><dd>Blocking API!</dd></dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
     <tr><td class="paramname">true</td><td>if the operation succeeded </td></tr>
@@ -743,11 +734,11 @@ template&lt;typename MANAGER &gt; </div>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ae0ce7a3c37c9fc922853d65336ab13c0" title="Start operation of this compass chip.">begin()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad54790197f6f354e76917aea86382439" title="Start operation of this compass chip.">begin()</a> </dd>
 <dd>
-end(EndFuture&amp;) </dd></dl>
+<a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#afdb03b3dac0f4ea7e5f782206bd2a209" title="Stop operation of this compass chip.">end(EndFuture&amp;)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00461">461</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00458">458</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
 
 </div>
 </div>
@@ -780,9 +771,9 @@ template&lt;typename MANAGER &gt; </div>
 <dl class="section warning"><dt>Warning</dt><dd>Blocking API!</dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1magneto_1_1_status.html" title="The chip status, as defined in datasheet p16.">Status</a> </dd>
 <dd>
-status(StatusFuture&amp;) </dd></dl>
+<a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#a6f289cdfe7fd30a4c47fcfcae4296dfd" title="Get the curent chip status.">status(StatusFuture&amp;)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00473">473</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00470">470</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
 
 </div>
 </div>
@@ -829,9 +820,9 @@ template&lt;typename MANAGER &gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#abe99f25491c1c5b822267aacae28ca45" title="Convert raw fields measured obtained with magnetic_fields() to actual physical values,...">convert_fields_to_mGA()</a> </dd>
 <dd>
-magnetic_fields(MagneticFieldsFuture&amp;) </dd></dl>
+<a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#acd5d5781dd23fcf97602f745832c0a37" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).">magnetic_fields(MagneticFieldsFuture&amp;)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00496">496</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00493">493</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
 
 </div>
 </div>
@@ -861,18 +852,18 @@ template&lt;typename MANAGER &gt; </div>
 </table>
 </div><div class="memdoc">
 
-<p>Convert raw fields measured obtained with <code><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad1611972921dbb4aeeafd373f5fc3355" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).">magnetic_fields()</a></code> to actual physical values, using the <code>Gain</code> configured for the device. </p>
+<p>Convert raw fields measured obtained with <code><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#acd5d5781dd23fcf97602f745832c0a37" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).">magnetic_fields()</a></code> to actual physical values, using the <code>Gain</code> configured for the device. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">fields</td><td>a reference to a <code><a class="el" href="structdevices_1_1magneto_1_1_sensor3_d.html" title="Structure to store 3 axis data for one sensor (gyroscope or accelerometer).">Sensor3D</a></code> variable that will be converted from raw to physical values</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad1611972921dbb4aeeafd373f5fc3355" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).">magnetic_fields()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#acd5d5781dd23fcf97602f745832c0a37" title="Read the magnetic fields (as raw values) on 3 axes (datasheet p15-16).">magnetic_fields()</a> </dd>
 <dd>
-<a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ae0ce7a3c37c9fc922853d65336ab13c0" title="Start operation of this compass chip.">begin()</a> </dd></dl>
+<a class="el" href="classdevices_1_1magneto_1_1_h_m_c5883_l.html#ad54790197f6f354e76917aea86382439" title="Start operation of this compass chip.">begin()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00511">511</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="hmc5883l_8h_source.html#l00508">508</a> of file <a class="el" href="hmc5883l_8h_source.html">hmc5883l.h</a>.</p>
 
 </div>
 </div>

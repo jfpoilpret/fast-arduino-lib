@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.9</span>
+   &#160;<span id="projectnumber">v1.9 alpha</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -116,72 +116,72 @@ $(document).ready(function(){initNavTree('sipo_8h_source.html',''); initResizabl
 <div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="classdevices_1_1_s_i_p_o.html#a2f698804766863c127d1fab0a0820dbb">   63</a></span>&#160;        <span class="keyword">static</span> constexpr <span class="keyword">const</span> <a class="code" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a> <a class="code" href="classdevices_1_1_s_i_p_o.html#a2f698804766863c127d1fab0a0820dbb">LATCH</a> = LATCH_;</div>
 <div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="classdevices_1_1_s_i_p_o.html#a65ba8db33cb58fb001e5f3fe6f1bf2e8">   65</a></span>&#160;        <span class="keyword">static</span> constexpr <span class="keyword">const</span> <a class="code" href="namespaceboard.html#a5082846fef8fdfb8c8cbcf1163c7b404">board::DigitalPin</a> <a class="code" href="classdevices_1_1_s_i_p_o.html#a65ba8db33cb58fb001e5f3fe6f1bf2e8">DATA</a> = DATA_;</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <a class="code" href="classdevices_1_1_s_i_p_o.html#ac435abc96f30d6c67714aec531b88898">SIPO</a>(<span class="keyword">const</span> <a class="code" href="classdevices_1_1_s_i_p_o.html">SIPO&lt;CLOCK_, LATCH_, DATA_&gt;</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <a class="code" href="classdevices_1_1_s_i_p_o.html">SIPO&lt;CLOCK_, LATCH_, DATA_&gt;</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classdevices_1_1_s_i_p_o.html">SIPO&lt;CLOCK_, LATCH_, DATA_&gt;</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        </div>
-<div class="line"><a name="l00077"></a><span class="lineno"><a class="line" href="classdevices_1_1_s_i_p_o.html#ac435abc96f30d6c67714aec531b88898">   77</a></span>&#160;        <a class="code" href="classdevices_1_1_s_i_p_o.html#ac435abc96f30d6c67714aec531b88898">SIPO</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
-<div class="line"><a name="l00086"></a><span class="lineno"><a class="line" href="classdevices_1_1_s_i_p_o.html#aacceaec314ea0e24b6f6803892c494a2">   86</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classdevices_1_1_s_i_p_o.html#aacceaec314ea0e24b6f6803892c494a2">init</a>()</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        {</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            clock_.set_mode(<a class="code" href="namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041a50a87f0d71f7221582dad4bf507a0f34">gpio::PinMode::OUTPUT</a>, <span class="keyword">false</span>);</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            latch_.set_mode(<a class="code" href="namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041a50a87f0d71f7221582dad4bf507a0f34">gpio::PinMode::OUTPUT</a>, <span class="keyword">true</span>);</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;            data_.set_mode(<a class="code" href="namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041a50a87f0d71f7221582dad4bf507a0f34">gpio::PinMode::OUTPUT</a>, <span class="keyword">false</span>);</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        }</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
-<div class="line"><a name="l00100"></a><span class="lineno"><a class="line" href="classdevices_1_1_s_i_p_o.html#a4e967a43abad23c0fa00fe00f76205f0">  100</a></span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="keywordtype">void</span> <a class="code" href="classdevices_1_1_s_i_p_o.html#a4e967a43abad23c0fa00fe00f76205f0">output</a>(T data)</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        {</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;            uint8_t* pdata = (uint8_t*) data;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;            latch_.clear();</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            <span class="keywordflow">for</span> (uint8_t i = 0; i &lt; <span class="keyword">sizeof</span>(T); ++i) bit_bang_data(pdata[i]);</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            latch_.set();</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        }</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        <span class="comment">// Specialized output for most common types</span></div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classdevices_1_1_s_i_p_o.html#a4e967a43abad23c0fa00fe00f76205f0">output</a>(uint8_t data) <a class="code" href="defines_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a></div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        {</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;            latch_.clear();</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            bit_bang_data(data);</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            latch_.set();</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        }</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classdevices_1_1_s_i_p_o.html#a4e967a43abad23c0fa00fe00f76205f0">output</a>(uint16_t data) <a class="code" href="defines_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a></div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;        {</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;            latch_.clear();</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;            bit_bang_data(<a class="code" href="namespacebits.html#a17afee8fb8f509dbda0a5944d7a1ba31">bits::HIGH_BYTE</a>(data));</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;            bit_bang_data(<a class="code" href="namespacebits.html#aa2e0d50727d964c50b3e444018cce593">bits::LOW_BYTE</a>(data));</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;            latch_.set();</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        }</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        <span class="keywordtype">void</span> bit_bang_data(uint8_t data)</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;        {</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;            <span class="comment">// Start with MSB</span></div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;            uint8_t mask = 0x80;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;            <span class="keywordflow">do</span></div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;            {</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;                <span class="keywordflow">if</span> (data &amp; mask)</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;                    data_.set();</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;                <span class="keywordflow">else</span></div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;                    data_.clear();</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;                clock_.set();</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;                mask &gt;&gt;= 1;</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;                clock_.clear();</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;            } <span class="keywordflow">while</span> (mask);</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        }</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160; </div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        <a class="code" href="namespacegpio.html#a3cbdad86ced6494ca615a425b433fd57">gpio::FAST_PIN&lt;CLOCK&gt;</a> clock_;</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        <a class="code" href="namespacegpio.html#a3cbdad86ced6494ca615a425b433fd57">gpio::FAST_PIN&lt;LATCH&gt;</a> latch_;</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <a class="code" href="namespacegpio.html#a3cbdad86ced6494ca615a425b433fd57">gpio::FAST_PIN&lt;DATA&gt;</a> data_;</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    };</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;}</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160; </div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* SIPO_HH */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <a class="code" href="classdevices_1_1_s_i_p_o.html#ac435abc96f30d6c67714aec531b88898">SIPO</a>(<span class="keyword">const</span> <a class="code" href="classdevices_1_1_s_i_p_o.html">SIPO</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <a class="code" href="classdevices_1_1_s_i_p_o.html">SIPO</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classdevices_1_1_s_i_p_o.html">SIPO</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        </div>
+<div class="line"><a name="l00079"></a><span class="lineno"><a class="line" href="classdevices_1_1_s_i_p_o.html#ac435abc96f30d6c67714aec531b88898">   79</a></span>&#160;        <a class="code" href="classdevices_1_1_s_i_p_o.html#ac435abc96f30d6c67714aec531b88898">SIPO</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno"><a class="line" href="classdevices_1_1_s_i_p_o.html#aacceaec314ea0e24b6f6803892c494a2">   88</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classdevices_1_1_s_i_p_o.html#aacceaec314ea0e24b6f6803892c494a2">init</a>()</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        {</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;            clock_.set_mode(<a class="code" href="namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041a50a87f0d71f7221582dad4bf507a0f34">gpio::PinMode::OUTPUT</a>, <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            latch_.set_mode(<a class="code" href="namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041a50a87f0d71f7221582dad4bf507a0f34">gpio::PinMode::OUTPUT</a>, <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            data_.set_mode(<a class="code" href="namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041a50a87f0d71f7221582dad4bf507a0f34">gpio::PinMode::OUTPUT</a>, <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        }</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno"><a class="line" href="classdevices_1_1_s_i_p_o.html#a4e967a43abad23c0fa00fe00f76205f0">  102</a></span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt; <span class="keywordtype">void</span> <a class="code" href="classdevices_1_1_s_i_p_o.html#a4e967a43abad23c0fa00fe00f76205f0">output</a>(T data)</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        {</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;            uint8_t* pdata = (uint8_t*) data;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;            latch_.clear();</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;            <span class="keywordflow">for</span> (uint8_t i = 0; i &lt; <span class="keyword">sizeof</span>(T); ++i) bit_bang_data(pdata[i]);</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            latch_.set();</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        }</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <span class="comment">// Specialized output for most common types</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classdevices_1_1_s_i_p_o.html#a4e967a43abad23c0fa00fe00f76205f0">output</a>(uint8_t data) <a class="code" href="defines_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        {</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            latch_.clear();</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;            bit_bang_data(data);</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;            latch_.set();</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;        }</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classdevices_1_1_s_i_p_o.html#a4e967a43abad23c0fa00fe00f76205f0">output</a>(uint16_t data) <a class="code" href="defines_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a></div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        {</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;            latch_.clear();</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;            bit_bang_data(<a class="code" href="namespacebits.html#a17afee8fb8f509dbda0a5944d7a1ba31">bits::HIGH_BYTE</a>(data));</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;            bit_bang_data(<a class="code" href="namespacebits.html#aa2e0d50727d964c50b3e444018cce593">bits::LOW_BYTE</a>(data));</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;            latch_.set();</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        }</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;        <span class="keywordtype">void</span> bit_bang_data(uint8_t data)</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;        {</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;            <span class="comment">// Start with MSB</span></div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;            uint8_t mask = 0x80;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;            <span class="keywordflow">do</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;            {</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;                <span class="keywordflow">if</span> (data &amp; mask)</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;                    data_.set();</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;                <span class="keywordflow">else</span></div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;                    data_.clear();</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;                clock_.set();</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;                mask &gt;&gt;= 1;</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;                clock_.clear();</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;            } <span class="keywordflow">while</span> (mask);</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        }</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160; </div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <a class="code" href="namespacegpio.html#a3cbdad86ced6494ca615a425b433fd57">gpio::FAST_PIN&lt;CLOCK&gt;</a> clock_;</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        <a class="code" href="namespacegpio.html#a3cbdad86ced6494ca615a425b433fd57">gpio::FAST_PIN&lt;LATCH&gt;</a> latch_;</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;        <a class="code" href="namespacegpio.html#a3cbdad86ced6494ca615a425b433fd57">gpio::FAST_PIN&lt;DATA&gt;</a> data_;</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    };</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;}</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160; </div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* SIPO_HH */</span><span class="preprocessor"></span></div>
 <div class="ttc" id="aclassdevices_1_1_s_i_p_o_html"><div class="ttname"><a href="classdevices_1_1_s_i_p_o.html">devices::SIPO</a></div><div class="ttdoc">This template class supports one SIPO chip, connected to the MCU through 3 pins.</div><div class="ttdef"><b>Definition:</b> <a href="sipo_8h_source.html#l00057">sipo.h:58</a></div></div>
 <div class="ttc" id="aclassdevices_1_1_s_i_p_o_html_a29dd88c71a634007146d6ff3bbedbcfd"><div class="ttname"><a href="classdevices_1_1_s_i_p_o.html#a29dd88c71a634007146d6ff3bbedbcfd">devices::SIPO::CLOCK</a></div><div class="ttdeci">static constexpr const board::DigitalPin CLOCK</div><div class="ttdoc">The output pin that will send the clock signal to the chip.</div><div class="ttdef"><b>Definition:</b> <a href="sipo_8h_source.html#l00061">sipo.h:61</a></div></div>
 <div class="ttc" id="aclassdevices_1_1_s_i_p_o_html_a2f698804766863c127d1fab0a0820dbb"><div class="ttname"><a href="classdevices_1_1_s_i_p_o.html#a2f698804766863c127d1fab0a0820dbb">devices::SIPO::LATCH</a></div><div class="ttdeci">static constexpr const board::DigitalPin LATCH</div><div class="ttdoc">The output pin that will tell the chip to copy its shift register content to its output pins.</div><div class="ttdef"><b>Definition:</b> <a href="sipo_8h_source.html#l00063">sipo.h:63</a></div></div>
-<div class="ttc" id="aclassdevices_1_1_s_i_p_o_html_a4e967a43abad23c0fa00fe00f76205f0"><div class="ttname"><a href="classdevices_1_1_s_i_p_o.html#a4e967a43abad23c0fa00fe00f76205f0">devices::SIPO::output</a></div><div class="ttdeci">void output(T data)</div><div class="ttdoc">Handles output and latching of all bits in data to the SIPO chip.</div><div class="ttdef"><b>Definition:</b> <a href="sipo_8h_source.html#l00100">sipo.h:100</a></div></div>
+<div class="ttc" id="aclassdevices_1_1_s_i_p_o_html_a4e967a43abad23c0fa00fe00f76205f0"><div class="ttname"><a href="classdevices_1_1_s_i_p_o.html#a4e967a43abad23c0fa00fe00f76205f0">devices::SIPO::output</a></div><div class="ttdeci">void output(T data)</div><div class="ttdoc">Handles output and latching of all bits in data to the SIPO chip.</div><div class="ttdef"><b>Definition:</b> <a href="sipo_8h_source.html#l00102">sipo.h:102</a></div></div>
 <div class="ttc" id="aclassdevices_1_1_s_i_p_o_html_a65ba8db33cb58fb001e5f3fe6f1bf2e8"><div class="ttname"><a href="classdevices_1_1_s_i_p_o.html#a65ba8db33cb58fb001e5f3fe6f1bf2e8">devices::SIPO::DATA</a></div><div class="ttdeci">static constexpr const board::DigitalPin DATA</div><div class="ttdoc">The output pin that will send serial data to the chip.</div><div class="ttdef"><b>Definition:</b> <a href="sipo_8h_source.html#l00065">sipo.h:65</a></div></div>
-<div class="ttc" id="aclassdevices_1_1_s_i_p_o_html_aacceaec314ea0e24b6f6803892c494a2"><div class="ttname"><a href="classdevices_1_1_s_i_p_o.html#aacceaec314ea0e24b6f6803892c494a2">devices::SIPO::init</a></div><div class="ttdeci">void init()</div><div class="ttdoc">Initialize (direction, value) all used pins.</div><div class="ttdef"><b>Definition:</b> <a href="sipo_8h_source.html#l00086">sipo.h:86</a></div></div>
+<div class="ttc" id="aclassdevices_1_1_s_i_p_o_html_aacceaec314ea0e24b6f6803892c494a2"><div class="ttname"><a href="classdevices_1_1_s_i_p_o.html#aacceaec314ea0e24b6f6803892c494a2">devices::SIPO::init</a></div><div class="ttdeci">void init()</div><div class="ttdoc">Initialize (direction, value) all used pins.</div><div class="ttdef"><b>Definition:</b> <a href="sipo_8h_source.html#l00088">sipo.h:88</a></div></div>
 <div class="ttc" id="aclassdevices_1_1_s_i_p_o_html_ac435abc96f30d6c67714aec531b88898"><div class="ttname"><a href="classdevices_1_1_s_i_p_o.html#ac435abc96f30d6c67714aec531b88898">devices::SIPO::SIPO</a></div><div class="ttdeci">SIPO()=default</div><div class="ttdoc">Create a new SIPO handler, according to pins defined by class template parameters.</div></div>
 <div class="ttc" id="adefines_8h_html_a2eb6f9e0395b47b8d5e3eeae4fe0c116"><div class="ttname"><a href="defines_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a></div><div class="ttdeci">#define INLINE</div><div class="ttdoc">Specific GCC attribute to force the compiler to always inline code of a given function.</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00057">defines.h:57</a></div></div>
 <div class="ttc" id="anamespacebits_html_a17afee8fb8f509dbda0a5944d7a1ba31"><div class="ttname"><a href="namespacebits.html#a17afee8fb8f509dbda0a5944d7a1ba31">bits::HIGH_BYTE</a></div><div class="ttdeci">static constexpr uint8_t HIGH_BYTE(uint16_t value)</div><div class="ttdoc">Extract the high byte (aka Most Significant Byte, MSB) of a uint16_t value.</div><div class="ttdef"><b>Definition:</b> <a href="bits_8h_source.html#l00269">bits.h:269</a></div></div>

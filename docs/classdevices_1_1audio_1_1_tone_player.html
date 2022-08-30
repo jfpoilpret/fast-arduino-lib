@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.9</span>
+   &#160;<span id="projectnumber">v1.9 alpha</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -160,15 +160,9 @@ using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="cla
 <tr class="memdesc:a491b9f1635b99b1c84805739c4d5d7c8 inherit pro_types_classdevices_1_1audio_1_1_abstract_tone_player"><td class="mdescLeft">&#160;</td><td class="mdescRight">The type of <code>ToneGenerator</code> to use as constructor's argument. <br /></td></tr>
 <tr class="separator:a491b9f1635b99b1c84805739c4d5d7c8 inherit pro_types_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classdevices_1_1audio_1_1_abstract_tone_player')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html">devices::audio::AbstractTonePlayer&lt; NTIMER, OUTPUT, QTonePlay&lt; NTIMER, OUTPUT &gt; &gt;</a></td></tr>
-<tr class="memitem:aaf90909ee14abd8ff81e8b4b8251efe3 inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memItemLeft" align="right" valign="top"><a id="aaf90909ee14abd8ff81e8b4b8251efe3"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>AbstractTonePlayer</b> (const <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html">AbstractTonePlayer</a>&lt; NTIMER, OUTPUT, <a class="el" href="classdevices_1_1audio_1_1_q_tone_play.html">QTonePlay</a>&lt; NTIMER, OUTPUT &gt; &gt; &amp;)=delete</td></tr>
-<tr class="separator:aaf90909ee14abd8ff81e8b4b8251efe3 inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc86fc481f1049eb4c6ba658ef62488a inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#acc86fc481f1049eb4c6ba658ef62488a">AbstractTonePlayer</a> (<a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#a491b9f1635b99b1c84805739c4d5d7c8">GENERATOR</a> &amp;tone_generator)</td></tr>
 <tr class="memdesc:acc86fc481f1049eb4c6ba658ef62488a inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a new tone player, based on an existing <code>ToneGenerator</code>.  <a href="classdevices_1_1audio_1_1_abstract_tone_player.html#acc86fc481f1049eb4c6ba658ef62488a">More...</a><br /></td></tr>
 <tr class="separator:acc86fc481f1049eb4c6ba658ef62488a inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af741020b475f49af7f97acb3152593b9 inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memItemLeft" align="right" valign="top"><a id="af741020b475f49af7f97acb3152593b9"></a>
-<a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html">AbstractTonePlayer</a>&lt; NTIMER, OUTPUT, <a class="el" href="classdevices_1_1audio_1_1_q_tone_play.html">QTonePlay</a>&lt; NTIMER, OUTPUT &gt; &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html">AbstractTonePlayer</a>&lt; NTIMER, OUTPUT, <a class="el" href="classdevices_1_1audio_1_1_q_tone_play.html">QTonePlay</a>&lt; NTIMER, OUTPUT &gt; &gt; &amp;)=delete</td></tr>
-<tr class="separator:af741020b475f49af7f97acb3152593b9 inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a03c6699c7a65f7d51dfe73d73bafd7 inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#a2a03c6699c7a65f7d51dfe73d73bafd7">set_min_duration</a> (uint16_t min_duration)</td></tr>
 <tr class="memdesc:a2a03c6699c7a65f7d51dfe73d73bafd7 inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the duration, in milliseconds, of a 32nd note.  <a href="classdevices_1_1audio_1_1_abstract_tone_player.html#a2a03c6699c7a65f7d51dfe73d73bafd7">More...</a><br /></td></tr>
 <tr class="separator:a2a03c6699c7a65f7d51dfe73d73bafd7 inherit pro_methods_classdevices_1_1audio_1_1_abstract_tone_player"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -225,7 +219,7 @@ class devices::audio::TonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</h3>
 <dd>
 <a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations.">AsyncTonePlayer</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00707">707</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00708">708</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a32bb2fd479a64ba15a10bcf38b0588ce"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a32bb2fd479a64ba15a10bcf38b0588ce">&#9670;&nbsp;</a></span>TonePlayer()</h2>
@@ -261,7 +255,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00722">722</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00723">723</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
@@ -316,7 +310,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
 <dd>
 <a class="el" href="classdevices_1_1audio_1_1_tone_player.html#a0db8d1577bdaa0bfe8b7dbb660e54b7c" title="Stop playing current melody (if any).">stop()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00736">736</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00737">737</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
@@ -370,7 +364,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
 <dd>
 <a class="el" href="classdevices_1_1audio_1_1_tone_player.html#a0db8d1577bdaa0bfe8b7dbb660e54b7c" title="Stop playing current melody (if any).">stop()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00755">755</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00756">756</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
@@ -424,7 +418,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
 <dd>
 <a class="el" href="classdevices_1_1audio_1_1_tone_player.html#a0db8d1577bdaa0bfe8b7dbb660e54b7c" title="Stop playing current melody (if any).">stop()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00774">774</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00775">775</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
@@ -456,7 +450,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
 <p>Stop playing current melody (if any). </p>
 <p>Effect is not immediate but will stop at the end of the current tone. </p>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00785">785</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00786">786</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>

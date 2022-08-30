@@ -5,9 +5,5 @@ var i2c__handler__attiny_8h =
     [ "I2CSyncStatusManager", "classi2c_1_1_i2_c_sync_status_manager.html", "classi2c_1_1_i2_c_sync_status_manager" ],
     [ "I2CSyncDebugManager", "classi2c_1_1_i2_c_sync_debug_manager.html", "classi2c_1_1_i2_c_sync_debug_manager" ],
     [ "I2CSyncStatusDebugManager", "classi2c_1_1_i2_c_sync_status_debug_manager.html", "classi2c_1_1_i2_c_sync_status_debug_manager" ],
-    [ "I2CSyncLCManager", "classi2c_1_1_i2_c_sync_l_c_manager.html", "classi2c_1_1_i2_c_sync_l_c_manager" ],
-    [ "I2CSyncLCStatusManager", "classi2c_1_1_i2_c_sync_l_c_status_manager.html", "classi2c_1_1_i2_c_sync_l_c_status_manager" ],
-    [ "I2CSyncLCDebugManager", "classi2c_1_1_i2_c_sync_l_c_debug_manager.html", "classi2c_1_1_i2_c_sync_l_c_debug_manager" ],
-    [ "I2CSyncLCStatusDebugManager", "classi2c_1_1_i2_c_sync_l_c_status_debug_manager.html", "classi2c_1_1_i2_c_sync_l_c_status_debug_manager" ],
     [ "I2C_TRUE_ASYNC", "i2c__handler__attiny_8h.html#ad7a97f1a2c21c7824c90b646dfdb14cc", null ]
 ];

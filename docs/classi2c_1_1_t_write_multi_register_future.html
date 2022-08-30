@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.9</span>
+   &#160;<span id="projectnumber">v1.9 alpha</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -122,9 +122,9 @@ Collaboration diagram for i2c::TWriteMultiRegisterFuture&lt; MANAGER, T, REGISTE
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a925ca05af5607edbd23c25b46614fa51"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_t_write_multi_register_future.html#a925ca05af5607edbd23c25b46614fa51">TWriteMultiRegisterFuture</a> (<a class="el" href="classstd_1_1initializer__list.html">std::initializer_list</a>&lt; T &gt; values, FUTURE_STATUS_LISTENER *status_listener=nullptr)</td></tr>
-<tr class="memdesc:a925ca05af5607edbd23c25b46614fa51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="classi2c_1_1_t_write_multi_register_future.html" title="Generic Future that can be used to write to several I2C device registers.">TWriteMultiRegisterFuture</a> future.  <a href="classi2c_1_1_t_write_multi_register_future.html#a925ca05af5607edbd23c25b46614fa51">More...</a><br /></td></tr>
-<tr class="separator:a925ca05af5607edbd23c25b46614fa51"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b4f0f4037c36bb98394685d8b5be945"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_t_write_multi_register_future.html#a1b4f0f4037c36bb98394685d8b5be945">TWriteMultiRegisterFuture</a> (<a class="el" href="classstd_1_1initializer__list.html">std::initializer_list</a>&lt; T &gt; values, <a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337">future::FutureNotification</a> notification=<a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337ab50339a10e1de285ac99d4c3990b8693">future::FutureNotification::NONE</a>)</td></tr>
+<tr class="memdesc:a1b4f0f4037c36bb98394685d8b5be945"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="classi2c_1_1_t_write_multi_register_future.html" title="Generic Future that can be used to write to several I2C device registers.">TWriteMultiRegisterFuture</a> future.  <a href="classi2c_1_1_t_write_multi_register_future.html#a1b4f0f4037c36bb98394685d8b5be945">More...</a><br /></td></tr>
+<tr class="separator:a1b4f0f4037c36bb98394685d8b5be945"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -159,10 +159,10 @@ class i2c::TWriteMultiRegisterFuture&lt; MANAGER, T, REGISTERS &gt;</h3>
 <dd>
 <a class="el" href="classi2c_1_1_i2_c_async_manager.html" title="Asynchronous I2C Manager for ATmega architecture.">i2c::I2CAsyncManager</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__device__utilities_8h_source.html#l00381">381</a> of file <a class="el" href="i2c__device__utilities_8h_source.html">i2c_device_utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__device__utilities_8h_source.html#l00363">363</a> of file <a class="el" href="i2c__device__utilities_8h_source.html">i2c_device_utilities.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a925ca05af5607edbd23c25b46614fa51"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a925ca05af5607edbd23c25b46614fa51">&#9670;&nbsp;</a></span>TWriteMultiRegisterFuture()</h2>
+<a id="a1b4f0f4037c36bb98394685d8b5be945"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b4f0f4037c36bb98394685d8b5be945">&#9670;&nbsp;</a></span>TWriteMultiRegisterFuture()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -181,8 +181,8 @@ template&lt;typename MANAGER , typename T , uint8_t... REGISTERS&gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">FUTURE_STATUS_LISTENER *&#160;</td>
-          <td class="paramname"><em>status_listener</em> = <code>nullptr</code>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337">future::FutureNotification</a>&#160;</td>
+          <td class="paramname"><em>notification</em> = <code><a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337ab50339a10e1de285ac99d4c3990b8693">future::FutureNotification::NONE</a></code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -201,12 +201,12 @@ template&lt;typename MANAGER , typename T , uint8_t... REGISTERS&gt; </div>
 <p>This future can then be used to write values to all registers for this instance. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">values</td><td>the values to write to the registers in the I2C device; all values must be the same type <code>T</code> and the list must contains the same number of values as there are registers for this instance. </td></tr>
-    <tr><td class="paramname">status_listener</td><td>an optional listener to status changes on this future </td></tr>
+    <tr><td class="paramname">notifications</td><td>determines if and which notifications should be dispatched by this <a class="el" href="classi2c_1_1_t_write_multi_register_future.html" title="Generic Future that can be used to write to several I2C device registers.">TWriteMultiRegisterFuture</a>; default is none. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__device__utilities_8h_source.html#l00415">415</a> of file <a class="el" href="i2c__device__utilities_8h_source.html">i2c_device_utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__device__utilities_8h_source.html#l00396">396</a> of file <a class="el" href="i2c__device__utilities_8h_source.html">i2c_device_utilities.h</a>.</p>
 
 </div>
 </div>

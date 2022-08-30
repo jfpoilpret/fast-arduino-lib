@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.9</span>
+   &#160;<span id="projectnumber">v1.9 alpha</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -117,18 +117,18 @@ Collaboration diagram for i2c::I2CSameFutureGroup&lt; MANAGER &gt;:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a051b996691d40382ae527e2e69c667ab"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_same_future_group.html#a051b996691d40382ae527e2e69c667ab">I2CSameFutureGroup</a> (uint16_t address, uint8_t size, STATUS_LISTENER *status_listener=nullptr)</td></tr>
-<tr class="memdesc:a051b996691d40382ae527e2e69c667ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classi2c_1_1_i2_c_same_future_group.html" title="Class to allow dynamic creation of futures from values stored in flash memory, leading to launch of I...">I2CSameFutureGroup</a> from an array of bytes stored in flash memory.  <a href="classi2c_1_1_i2_c_same_future_group.html#a051b996691d40382ae527e2e69c667ab">More...</a><br /></td></tr>
-<tr class="separator:a051b996691d40382ae527e2e69c667ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab13060f7abe439d8be5a1fb074c18f7b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_same_future_group.html#ab13060f7abe439d8be5a1fb074c18f7b">I2CSameFutureGroup</a> (uint16_t address, uint8_t size, <a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337">future::FutureNotification</a> notification=<a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337ab50339a10e1de285ac99d4c3990b8693">future::FutureNotification::NONE</a>)</td></tr>
+<tr class="memdesc:ab13060f7abe439d8be5a1fb074c18f7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new <a class="el" href="classi2c_1_1_i2_c_same_future_group.html" title="Class to allow dynamic creation of futures from values stored in flash memory, leading to launch of I...">I2CSameFutureGroup</a> from an array of bytes stored in flash memory.  <a href="classi2c_1_1_i2_c_same_future_group.html#ab13060f7abe439d8be5a1fb074c18f7b">More...</a><br /></td></tr>
+<tr class="separator:ab13060f7abe439d8be5a1fb074c18f7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acfcf8a6befabf4a63d3bbc0bd99c9a65"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_same_future_group.html#acfcf8a6befabf4a63d3bbc0bd99c9a65">start</a> (typename PARENT::DEVICE &amp;device)</td></tr>
 <tr class="memdesc:acfcf8a6befabf4a63d3bbc0bd99c9a65"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start the I2C transactions needed by this group of futures.  <a href="classi2c_1_1_i2_c_same_future_group.html#acfcf8a6befabf4a63d3bbc0bd99c9a65">More...</a><br /></td></tr>
 <tr class="separator:acfcf8a6befabf4a63d3bbc0bd99c9a65"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
-<tr class="memitem:a330610d565a96a146deea9bdf490bbd5"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_same_future_group.html#a330610d565a96a146deea9bdf490bbd5">await_same_future_group</a> (<a class="el" href="classi2c_1_1_i2_c_device.html">I2CDevice</a>&lt; MANAGER &gt; &amp;, const uint8_t *, uint8_t)</td></tr>
-<tr class="memdesc:a330610d565a96a146deea9bdf490bbd5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function that creates a <code><a class="el" href="classi2c_1_1_i2_c_same_future_group.html" title="Class to allow dynamic creation of futures from values stored in flash memory, leading to launch of I...">I2CSameFutureGroup</a></code> instance for the provided flash array, launches its I2C transactions on the provided I2C device, and waits for the transaction to finish.  <a href="classi2c_1_1_i2_c_same_future_group.html#a330610d565a96a146deea9bdf490bbd5">More...</a><br /></td></tr>
-<tr class="separator:a330610d565a96a146deea9bdf490bbd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee390ccbdc4a53fcf1d0e88acbeee806"><td class="memItemLeft" align="right" valign="top"><a class="el" href="future_8h.html#a7d79a82d74738c61625037531c565485">DECL_FUTURE_LISTENERS_FRIEND</a> friend bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_same_future_group.html#aee390ccbdc4a53fcf1d0e88acbeee806">await_same_future_group</a> (<a class="el" href="classi2c_1_1_i2_c_device.html">I2CDevice</a>&lt; MANAGER &gt; &amp;, const uint8_t *, uint8_t)</td></tr>
+<tr class="memdesc:aee390ccbdc4a53fcf1d0e88acbeee806"><td class="mdescLeft">&#160;</td><td class="mdescRight">Helper function that creates a <code><a class="el" href="classi2c_1_1_i2_c_same_future_group.html" title="Class to allow dynamic creation of futures from values stored in flash memory, leading to launch of I...">I2CSameFutureGroup</a></code> instance for the provided flash array, launches its I2C transactions on the provided I2C device, and waits for the transaction to finish.  <a href="classi2c_1_1_i2_c_same_future_group.html#aee390ccbdc4a53fcf1d0e88acbeee806">More...</a><br /></td></tr>
+<tr class="separator:aee390ccbdc4a53fcf1d0e88acbeee806"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename MANAGER&gt;<br />
@@ -142,12 +142,12 @@ class i2c::I2CSameFutureGroup&lt; MANAGER &gt;</h3>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1_i2_c_same_future_group.html#a330610d565a96a146deea9bdf490bbd5" title="Helper function that creates a I2CSameFutureGroup instance for the provided flash array,...">await_same_future_group()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1_i2_c_same_future_group.html#aee390ccbdc4a53fcf1d0e88acbeee806" title="Helper function that creates a I2CSameFutureGroup instance for the provided flash array,...">await_same_future_group()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__device__utilities_8h_source.html#l00696">696</a> of file <a class="el" href="i2c__device__utilities_8h_source.html">i2c_device_utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__device__utilities_8h_source.html#l00693">693</a> of file <a class="el" href="i2c__device__utilities_8h_source.html">i2c_device_utilities.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a051b996691d40382ae527e2e69c667ab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a051b996691d40382ae527e2e69c667ab">&#9670;&nbsp;</a></span>I2CSameFutureGroup()</h2>
+<a id="ab13060f7abe439d8be5a1fb074c18f7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab13060f7abe439d8be5a1fb074c18f7b">&#9670;&nbsp;</a></span>I2CSameFutureGroup()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -172,8 +172,8 @@ template&lt;typename MANAGER &gt; </div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">STATUS_LISTENER *&#160;</td>
-          <td class="paramname"><em>status_listener</em> = <code>nullptr</code>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337">future::FutureNotification</a>&#160;</td>
+          <td class="paramname"><em>notification</em> = <code><a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337ab50339a10e1de285ac99d4c3990b8693">future::FutureNotification::NONE</a></code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -193,12 +193,12 @@ template&lt;typename MANAGER &gt; </div>
   <table class="params">
     <tr><td class="paramname">address</td><td>address in flash space of the first byte to write to the I2C device </td></tr>
     <tr><td class="paramname">size</td><td>size in bytes of the array at <code>address</code> </td></tr>
-    <tr><td class="paramname">status_listener</td><td>an optional listener to status changes on this </td></tr>
+    <tr><td class="paramname">notifications</td><td>determines if and which notifications should be dispatched by this <a class="el" href="classi2c_1_1_i2_c_same_future_group.html" title="Class to allow dynamic creation of futures from values stored in flash memory, leading to launch of I...">I2CSameFutureGroup</a>; default is none. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__device__utilities_8h_source.html#l00715">715</a> of file <a class="el" href="i2c__device__utilities_8h_source.html">i2c_device_utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__device__utilities_8h_source.html#l00712">712</a> of file <a class="el" href="i2c__device__utilities_8h_source.html">i2c_device_utilities.h</a>.</p>
 
 </div>
 </div>
@@ -230,7 +230,7 @@ template&lt;typename MANAGER &gt; </div>
 </div><div class="memdoc">
 
 <p>Start the I2C transactions needed by this group of futures. </p>
-<p>This is either called by the I2C device support class or by the helper function <code><a class="el" href="classi2c_1_1_i2_c_same_future_group.html#a330610d565a96a146deea9bdf490bbd5" title="Helper function that creates a I2CSameFutureGroup instance for the provided flash array,...">await_same_future_group()</a></code>.</p>
+<p>This is either called by the I2C device support class or by the helper function <code><a class="el" href="classi2c_1_1_i2_c_same_future_group.html#aee390ccbdc4a53fcf1d0e88acbeee806" title="Helper function that creates a I2CSameFutureGroup instance for the provided flash array,...">await_same_future_group()</a></code>.</p>
 <dl class="section warning"><dt>Warning</dt><dd>Asynchronous API! If the currently active I2C Manager is asynchronous, then this method is too! </dd>
 <dd>
 Blocking API! If the currently active I2C Manager is synchronous, then this method is blocking!</dd></dl>
@@ -247,13 +247,13 @@ Blocking API! If the currently active I2C Manager is synchronous, then this meth
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__device__utilities_8h_source.html#l00735">735</a> of file <a class="el" href="i2c__device__utilities_8h_source.html">i2c_device_utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__device__utilities_8h_source.html#l00741">741</a> of file <a class="el" href="i2c__device__utilities_8h_source.html">i2c_device_utilities.h</a>.</p>
 
 </div>
 </div>
 <h2 class="groupheader">Friends And Related Function Documentation</h2>
-<a id="a330610d565a96a146deea9bdf490bbd5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a330610d565a96a146deea9bdf490bbd5">&#9670;&nbsp;</a></span>await_same_future_group</h2>
+<a id="aee390ccbdc4a53fcf1d0e88acbeee806"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee390ccbdc4a53fcf1d0e88acbeee806">&#9670;&nbsp;</a></span>await_same_future_group</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -264,7 +264,7 @@ template&lt;typename MANAGER &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool await_same_future_group </td>
+          <td class="memname"><a class="el" href="future_8h.html#a7d79a82d74738c61625037531c565485">DECL_FUTURE_LISTENERS_FRIEND</a> friend bool await_same_future_group </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classi2c_1_1_i2_c_device.html">I2CDevice</a>&lt; MANAGER &gt; &amp;&#160;</td>
           <td class="paramname"><em>device</em>, </td>
@@ -318,7 +318,7 @@ template&lt;typename MANAGER &gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1_i2_c_same_future_group.html" title="Class to allow dynamic creation of futures from values stored in flash memory, leading to launch of I...">I2CSameFutureGroup</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__device__utilities_8h_source.html#l00815">815</a> of file <a class="el" href="i2c__device__utilities_8h_source.html">i2c_device_utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__device__utilities_8h_source.html#l00823">823</a> of file <a class="el" href="i2c__device__utilities_8h_source.html">i2c_device_utilities.h</a>.</p>
 
 </div>
 </div>

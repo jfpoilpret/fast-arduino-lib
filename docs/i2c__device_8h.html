@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.9</span>
+   &#160;<span id="projectnumber">v1.9 alpha</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -99,7 +99,6 @@ $(document).ready(function(){initNavTree('i2c__device_8h.html',''); initResizabl
 <code>#include &quot;<a class="el" href="errors_8h_source.html">errors.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="i2c_8h_source.html">i2c.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="future_8h_source.html">future.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="lifecycle_8h_source.html">lifecycle.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="i2c__handler_8h_source.html">i2c_handler.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="utilities_8h_source.html">utilities.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -107,42 +106,39 @@ Include dependency graph for i2c_device.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="i2c__device_8h__incl.png" border="0" usemap="#afastarduino_2i2c__device_8h" alt=""/></div>
 <map name="afastarduino_2i2c__device_8h" id="afastarduino_2i2c__device_8h">
-<area shape="rect" title="I2C Device API." alt="" coords="347,5,528,32"/>
+<area shape="rect" title="I2C Device API." alt="" coords="527,5,708,32"/>
 <area shape="rect" href="initializer__list_8h_source.html" title=" " alt="" coords="5,453,128,480"/>
-<area shape="rect" href="iterator_8h.html" title="Utilities to convert arrays into an iterable (usable if for x: list construct)." alt="" coords="119,379,201,405"/>
-<area shape="rect" href="errors_8h.html" title="Common errors definition." alt="" coords="1273,379,1345,405"/>
-<area shape="rect" href="i2c_8h.html" title="I2C API common definitions." alt="" coords="1273,304,1327,331"/>
-<area shape="rect" href="utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="795,752,877,779"/>
-<area shape="rect" href="future_8h.html" title="Utility API to handle the concept of futures." alt="" coords="634,304,707,331"/>
-<area shape="rect" href="lifecycle_8h.html" title="Utility API to handle lifecycle of objects so that:" alt="" coords="367,304,457,331"/>
-<area shape="rect" href="i2c__handler_8h.html" title="Common I2C Manager API." alt="" coords="1528,80,1637,107"/>
-<area shape="rect" title=" " alt="" coords="203,528,277,555"/>
-<area shape="rect" title=" " alt="" coords="431,901,502,928"/>
-<area shape="rect" href="streams_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="987,379,1074,405"/>
-<area shape="rect" title=" " alt="" coords="1047,453,1118,480"/>
-<area shape="rect" href="queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="816,603,891,629"/>
-<area shape="rect" href="time_8h.html" title="Simple time utilities." alt="" coords="733,677,797,704"/>
-<area shape="rect" href="flash_8h.html" title="Flash memory utilities." alt="" coords="1160,603,1227,629"/>
-<area shape="rect" href="ios_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="969,453,1023,480"/>
-<area shape="rect" href="streambuf_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="1143,528,1243,555"/>
-<area shape="rect" href="defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="556,827,639,853"/>
-<area shape="rect" href="board_8h_source.html" title=" " alt="" coords="907,827,1026,853"/>
-<area shape="rect" title=" " alt="" coords="779,827,883,853"/>
-<area shape="rect" href="io_8h_source.html" title=" " alt="" coords="1177,752,1271,779"/>
-<area shape="rect" title=" " alt="" coords="508,752,644,779"/>
-<area shape="rect" title=" " alt="" coords="1189,827,1259,853"/>
-<area shape="rect" title=" " alt="" coords="1059,677,1186,704"/>
-<area shape="rect" title=" " alt="" coords="999,528,1067,555"/>
-<area shape="rect" title=" " alt="" coords="905,528,975,555"/>
-<area shape="rect" title=" " alt="" coords="606,528,677,555"/>
-<area shape="rect" href="interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="1435,603,1533,629"/>
-<area shape="rect" title=" " alt="" coords="1427,677,1541,704"/>
-<area shape="rect" href="move_8h_source.html" title=" " alt="" coords="327,379,398,405"/>
-<area shape="rect" href="types__traits_8h.html" title="Useful traits for common types." alt="" coords="259,453,370,480"/>
-<area shape="rect" href="i2c__handler__atmega_8h.html" title="ATmega I2C Manager API." alt="" coords="1217,155,1383,181"/>
-<area shape="rect" href="bits_8h.html" title="Useful bits manipulation utilities." alt="" coords="551,304,609,331"/>
-<area shape="rect" href="i2c__handler__common_8h.html" title="Common I2C Manager API." alt="" coords="797,229,971,256"/>
-<area shape="rect" title=" " alt="" coords="833,304,993,331"/>
+<area shape="rect" href="iterator_8h.html" title="Utilities to convert arrays into an iterable (usable if for x: list construct)." alt="" coords="148,379,231,405"/>
+<area shape="rect" href="errors_8h.html" title="Common errors definition." alt="" coords="307,379,379,405"/>
+<area shape="rect" href="i2c_8h.html" title="I2C API common definitions." alt="" coords="705,304,759,331"/>
+<area shape="rect" href="utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="1243,752,1325,779"/>
+<area shape="rect" href="future_8h.html" title="Utility API to handle the concept of futures." alt="" coords="594,304,667,331"/>
+<area shape="rect" href="i2c__handler_8h.html" title="Common I2C Manager API." alt="" coords="756,80,865,107"/>
+<area shape="rect" title=" " alt="" coords="104,528,179,555"/>
+<area shape="rect" title=" " alt="" coords="957,901,1027,928"/>
+<area shape="rect" href="streams_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="753,379,839,405"/>
+<area shape="rect" title=" " alt="" coords="854,453,925,480"/>
+<area shape="rect" href="queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="972,603,1047,629"/>
+<area shape="rect" href="time_8h.html" title="Simple time utilities." alt="" coords="721,677,785,704"/>
+<area shape="rect" href="flash_8h.html" title="Flash memory utilities." alt="" coords="491,603,557,629"/>
+<area shape="rect" href="ios_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="561,453,615,480"/>
+<area shape="rect" href="streambuf_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="842,528,942,555"/>
+<area shape="rect" href="defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="1243,827,1325,853"/>
+<area shape="rect" href="board_8h_source.html" title=" " alt="" coords="1099,827,1218,853"/>
+<area shape="rect" title=" " alt="" coords="1349,827,1453,853"/>
+<area shape="rect" href="io_8h_source.html" title=" " alt="" coords="706,752,801,779"/>
+<area shape="rect" title=" " alt="" coords="451,752,587,779"/>
+<area shape="rect" title=" " alt="" coords="718,827,789,853"/>
+<area shape="rect" title=" " alt="" coords="562,677,689,704"/>
+<area shape="rect" title=" " alt="" coords="647,528,715,555"/>
+<area shape="rect" title=" " alt="" coords="553,528,623,555"/>
+<area shape="rect" title=" " alt="" coords="406,528,477,555"/>
+<area shape="rect" href="interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="846,603,943,629"/>
+<area shape="rect" title=" " alt="" coords="860,677,975,704"/>
+<area shape="rect" href="i2c__handler__atmega_8h.html" title="ATmega I2C Manager API." alt="" coords="842,155,1009,181"/>
+<area shape="rect" href="bits_8h.html" title="Useful bits manipulation utilities." alt="" coords="1372,304,1431,331"/>
+<area shape="rect" href="i2c__handler__common_8h.html" title="Common I2C Manager API." alt="" coords="943,229,1116,256"/>
+<area shape="rect" title=" " alt="" coords="985,304,1145,331"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">

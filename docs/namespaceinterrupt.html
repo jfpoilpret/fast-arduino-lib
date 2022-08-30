@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.9</span>
+   &#160;<span id="projectnumber">v1.9 alpha</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -141,6 +141,10 @@ Functions</h2></td></tr>
 <tr class="memitem:abfd5857208f49006bde8c472497273de"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de">register_handler</a> (Handler &amp;handler)</td></tr>
 <tr class="memdesc:abfd5857208f49006bde8c472497273de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a class instance containing methods that shall be called back by an ISR.  <a href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de">More...</a><br /></td></tr>
 <tr class="separator:abfd5857208f49006bde8c472497273de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af1ddd2a9164979134cf71e9b692ec0e3"><td class="memTemplParams" colspan="2">template&lt;typename Handler &gt; </td></tr>
+<tr class="memitem:af1ddd2a9164979134cf71e9b692ec0e3"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceinterrupt.html#af1ddd2a9164979134cf71e9b692ec0e3">unregister_handler</a> (Handler &amp;handler)</td></tr>
+<tr class="memdesc:af1ddd2a9164979134cf71e9b692ec0e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unregister a class instance that was previously registered with <code><a class="el" href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de" title="Register a class instance containing methods that shall be called back by an ISR.">interrupt::register_handler</a></code>.  <a href="namespaceinterrupt.html#af1ddd2a9164979134cf71e9b692ec0e3">More...</a><br /></td></tr>
+<tr class="separator:af1ddd2a9164979134cf71e9b692ec0e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Defines API to handle AVR interruptions. </p>
@@ -243,7 +247,8 @@ template&lt;typename Handler &gt; </div>
 </div><div class="memdoc">
 
 <p>Register a class instance containing methods that shall be called back by an ISR. </p>
-<p>The class and member function shall be passed to one of <code>REGISTER_XXXX_ISR_METHOD()</code> macros proposed by various FastArduino API, e.g. <code><a class="el" href="watchdog_8h.html#a04cf0d3a526304c80ae5bf73ee63edb0" title="Register the necessary ISR (Interrupt Service Routine) with a callback method that will be called eve...">REGISTER_WATCHDOG_ISR_METHOD()</a></code>. Note that you can register different classes, but only one instance of a given class. Also, one class may have different methods to handle different ISR callbacks.</p>
+<p>The class and member function shall be passed to one of <code>REGISTER_XXXX_ISR_METHOD()</code> macros proposed by various FastArduino API, e.g. <code><a class="el" href="watchdog_8h.html#a04cf0d3a526304c80ae5bf73ee63edb0" title="Register the necessary ISR (Interrupt Service Routine) with a callback method that will be called eve...">REGISTER_WATCHDOG_ISR_METHOD()</a></code>. The same class may have different methods to handle different ISR callbacks.</p>
+<dl class="section warning"><dt>Warning</dt><dd>you can register different classes, but only one instance of a given class at one time.</dd></dl>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">Handler</td><td>the class containing callback methods </td></tr>
@@ -252,12 +257,52 @@ template&lt;typename Handler &gt; </div>
 </dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">handler</td><td>the <code>Handler</code> instance which methods will be called back by registered ISR. </td></tr>
+    <tr><td class="paramname">handler</td><td>the <code>Handler</code> instance which methods will be called back by registered ISR.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceinterrupt.html#af1ddd2a9164979134cf71e9b692ec0e3" title="Unregister a class instance that was previously registered with interrupt::register_handler.">unregister_handler()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00157">157</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00185">185</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
+
+</div>
+</div>
+<a id="af1ddd2a9164979134cf71e9b692ec0e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af1ddd2a9164979134cf71e9b692ec0e3">&#9670;&nbsp;</a></span>unregister_handler()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Handler &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">void interrupt::unregister_handler </td>
+          <td>(</td>
+          <td class="paramtype">Handler &amp;&#160;</td>
+          <td class="paramname"><em>handler</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Unregister a class instance that was previously registered with <code><a class="el" href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de" title="Register a class instance containing methods that shall be called back by an ISR.">interrupt::register_handler</a></code>. </p>
+<dl class="section note"><dt>Note</dt><dd>unregistration will be effective only if <code>handler</code> is the current value held for <code>Handler</code> type.</dd></dl>
+<dl class="section warning"><dt>Warning</dt><dd>in normal circumstances (ISR callback registration) it is unlikely you would need this method because it would crash the ISR needing a callback! This method would be rather used for <code><a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">future::Future</a></code> callbacks for which lifetime may not be as long as for an ISR.</dd></dl>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Handler</td><td>the class containing callback methods </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">handler</td><td>the <code>Handler</code> instance to be deregistered.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de" title="Register a class instance containing methods that shall be called back by an ISR.">register_handler()</a> </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="interrupts_8h_source.html#l00207">207</a> of file <a class="el" href="interrupts_8h_source.html">interrupts.h</a>.</p>
 
 </div>
 </div>

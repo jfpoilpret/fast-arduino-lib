@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.9</span>
+   &#160;<span id="projectnumber">v1.9 alpha</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -118,9 +118,9 @@ Collaboration diagram for devices::vl53l0x::VL53L0X&lt; MANAGER &gt;::SetGPIOSet
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_methods_classi2c_1_1_i2_c_futures_group"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classi2c_1_1_i2_c_futures_group')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classi2c_1_1_i2_c_futures_group.html">i2c::I2CFuturesGroup&lt; MANAGER &gt;</a></td></tr>
-<tr class="memitem:a88e4a540f7d0f268373c533d16d4670a inherit pro_methods_classi2c_1_1_i2_c_futures_group"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_futures_group.html#a88e4a540f7d0f268373c533d16d4670a">I2CFuturesGroup</a> (ABSTRACT_FUTURE **futures, uint8_t size, STATUS_LISTENER *status_listener=nullptr)</td></tr>
-<tr class="memdesc:a88e4a540f7d0f268373c533d16d4670a inherit pro_methods_classi2c_1_1_i2_c_futures_group"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by subclass constructor, this constructs a new <a class="el" href="classi2c_1_1_i2_c_futures_group.html" title="Abstract class to allow aggregation of several futures in relation to I2C transactions.">I2CFuturesGroup</a> instance with the provided list of <code>futures</code>.  <a href="classi2c_1_1_i2_c_futures_group.html#a88e4a540f7d0f268373c533d16d4670a">More...</a><br /></td></tr>
-<tr class="separator:a88e4a540f7d0f268373c533d16d4670a inherit pro_methods_classi2c_1_1_i2_c_futures_group"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56db62cc5a416a495d47cd9680ef7e5e inherit pro_methods_classi2c_1_1_i2_c_futures_group"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_futures_group.html#a56db62cc5a416a495d47cd9680ef7e5e">I2CFuturesGroup</a> (ABSTRACT_FUTURE **futures, uint8_t size, <a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337">future::FutureNotification</a> notification=<a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337ab50339a10e1de285ac99d4c3990b8693">future::FutureNotification::NONE</a>)</td></tr>
+<tr class="memdesc:a56db62cc5a416a495d47cd9680ef7e5e inherit pro_methods_classi2c_1_1_i2_c_futures_group"><td class="mdescLeft">&#160;</td><td class="mdescRight">Called by subclass constructor, this constructs a new <a class="el" href="classi2c_1_1_i2_c_futures_group.html" title="Abstract class to allow aggregation of several futures in relation to I2C transactions.">I2CFuturesGroup</a> instance with the provided list of <code>futures</code>.  <a href="classi2c_1_1_i2_c_futures_group.html#a56db62cc5a416a495d47cd9680ef7e5e">More...</a><br /></td></tr>
+<tr class="separator:a56db62cc5a416a495d47cd9680ef7e5e inherit pro_methods_classi2c_1_1_i2_c_futures_group"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e826619debb355293c07c47dcb6792c inherit pro_methods_classi2c_1_1_i2_c_futures_group"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_i2_c_futures_group.html#a3e826619debb355293c07c47dcb6792c">start</a> (typename PARENT::DEVICE &amp;device)</td></tr>
 <tr class="memdesc:a3e826619debb355293c07c47dcb6792c inherit pro_methods_classi2c_1_1_i2_c_futures_group"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start the I2C transactions needed by this group of futures.  <a href="classi2c_1_1_i2_c_futures_group.html#a3e826619debb355293c07c47dcb6792c">More...</a><br /></td></tr>
 <tr class="separator:a3e826619debb355293c07c47dcb6792c inherit pro_methods_classi2c_1_1_i2_c_futures_group"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -132,7 +132,7 @@ class devices::vl53l0x::VL53L0X&lt; MANAGER &gt;::SetGPIOSettingsFuture</h3>
 <p>Future to set device GPIO settings. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1vl53l0x_1_1_v_l53_l0_x.html#ade2b985682bbaf683ef14d03a0f601f0" title="Set new GPIOSettings for this device.">set_GPIO_settings()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="vl53l0x_8h_source.html#l00657">657</a> of file <a class="el" href="vl53l0x_8h_source.html">vl53l0x.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="vl53l0x_8h_source.html#l00666">666</a> of file <a class="el" href="vl53l0x_8h_source.html">vl53l0x.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>fastarduino/devices/<a class="el" href="vl53l0x_8h_source.html">vl53l0x.h</a></li>
 </ul>

@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.9</span>
+   &#160;<span id="projectnumber">v1.9 alpha</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -89,18 +89,6 @@ $(document).ready(function(){initNavTree('functions_i.html',''); initResizable()
 <li>I2CAsyncDebugManager()
 : <a class="el" href="classi2c_1_1_i2_c_async_debug_manager.html#ae709f90fc089d581616f712c05a8f660">i2c::I2CAsyncDebugManager&lt; MODE_, POLICY_, DEBUG_HOOK_ &gt;</a>
 </li>
-<li>I2CAsyncLCDebugManager()
-: <a class="el" href="classi2c_1_1_i2_c_async_l_c_debug_manager.html#a7dedc83116162a8c59b766b23fc1774c">i2c::I2CAsyncLCDebugManager&lt; MODE_, POLICY_, DEBUG_HOOK_ &gt;</a>
-</li>
-<li>I2CAsyncLCManager()
-: <a class="el" href="classi2c_1_1_i2_c_async_l_c_manager.html#a3c7483faf074b985c6dccc785dc090e9">i2c::I2CAsyncLCManager&lt; MODE_, POLICY_ &gt;</a>
-</li>
-<li>I2CAsyncLCStatusDebugManager()
-: <a class="el" href="classi2c_1_1_i2_c_async_l_c_status_debug_manager.html#a510ded5f09f6542c702f8ece6d7417ca">i2c::I2CAsyncLCStatusDebugManager&lt; MODE_, POLICY_, STATUS_HOOK_, DEBUG_HOOK_ &gt;</a>
-</li>
-<li>I2CAsyncLCStatusManager()
-: <a class="el" href="classi2c_1_1_i2_c_async_l_c_status_manager.html#a11d8bc04cd5d159e552443668dc4242d">i2c::I2CAsyncLCStatusManager&lt; MODE_, POLICY_, STATUS_HOOK_ &gt;</a>
-</li>
 <li>I2CAsyncManager()
 : <a class="el" href="classi2c_1_1_i2_c_async_manager.html#acbfd5b2ee0b0f6c4dc7cd514373b976e">i2c::I2CAsyncManager&lt; MODE_, POLICY_ &gt;</a>
 </li>
@@ -111,7 +99,7 @@ $(document).ready(function(){initNavTree('functions_i.html',''); initResizable()
 : <a class="el" href="classi2c_1_1_i2_c_async_status_manager.html#a45e72d489cee98f0549b6db976537550">i2c::I2CAsyncStatusManager&lt; MODE_, POLICY_, STATUS_HOOK_ &gt;</a>
 </li>
 <li>I2CCOMMAND
-: <a class="el" href="classi2c_1_1_abstract_i2_c_async_manager.html#a0aa387320e417f214891d33bdd3e7878">i2c::AbstractI2CAsyncManager&lt; MODE_, POLICY_, HAS_LC_, HAS_STATUS_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt;</a>
+: <a class="el" href="classi2c_1_1_abstract_i2_c_async_manager.html#a2c17eb00ff87fe1110e3fff78a4a68f0">i2c::AbstractI2CAsyncManager&lt; MODE_, POLICY_, HAS_STATUS_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt;</a>
 </li>
 <li>I2CDebugLiveLogger()
 : <a class="el" href="classi2c_1_1debug_1_1_i2_c_debug_live_logger.html#aabc7827816f365910f598b35d02f2156">i2c::debug::I2CDebugLiveLogger</a>
@@ -129,13 +117,13 @@ $(document).ready(function(){initNavTree('functions_i.html',''); initResizable()
 : <a class="el" href="classi2c_1_1_i2_c_device.html#ac9dbb29fefbc1a66a6df687d9874fec4">i2c::I2CDevice&lt; MANAGER_ &gt;</a>
 </li>
 <li>I2CFuturesGroup()
-: <a class="el" href="classi2c_1_1_i2_c_futures_group.html#a88e4a540f7d0f268373c533d16d4670a">i2c::I2CFuturesGroup&lt; MANAGER &gt;</a>
+: <a class="el" href="classi2c_1_1_i2_c_futures_group.html#a56db62cc5a416a495d47cd9680ef7e5e">i2c::I2CFuturesGroup&lt; MANAGER &gt;</a>
 </li>
 <li>I2CLatestStatusHolder()
 : <a class="el" href="classi2c_1_1status_1_1_i2_c_latest_status_holder.html#a831167d862fd8b69f64f06a2d6571c32">i2c::status::I2CLatestStatusHolder</a>
 </li>
 <li>I2CSameFutureGroup()
-: <a class="el" href="classi2c_1_1_i2_c_same_future_group.html#a051b996691d40382ae527e2e69c667ab">i2c::I2CSameFutureGroup&lt; MANAGER &gt;</a>
+: <a class="el" href="classi2c_1_1_i2_c_same_future_group.html#ab13060f7abe439d8be5a1fb074c18f7b">i2c::I2CSameFutureGroup&lt; MANAGER &gt;</a>
 </li>
 <li>I2CStatusLiveLogger()
 : <a class="el" href="classi2c_1_1status_1_1_i2_c_status_live_logger.html#a5b456edc00a33b8ddb4f3baea70f35d4">i2c::status::I2CStatusLiveLogger</a>
@@ -188,11 +176,11 @@ $(document).ready(function(){initNavTree('functions_i.html',''); initResizable()
 , <a class="el" href="classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_external_interrupt_pin_00_01_r_x___01_4.html#afc25f7f62f531f0d10af83e2194074bc">serial::soft::UARX&lt; board::ExternalInterruptPin, RX_ &gt;</a>
 </li>
 <li>interrupt_flags()
-: <a class="el" href="classdevices_1_1mcp230xx_1_1_m_c_p23008.html#a1879dfeaf63d26f2aa1af8715f077446">devices::mcp230xx::MCP23008&lt; MANAGER &gt;</a>
-, <a class="el" href="classdevices_1_1mcp230xx_1_1_m_c_p23017.html#a1342339d2ec9c86924fbe2a3d69514d3">devices::mcp230xx::MCP23017&lt; MANAGER &gt;</a>
+: <a class="el" href="classdevices_1_1mcp230xx_1_1_m_c_p23008.html#aad6509d1a5f51fe3122cb28c08abe152">devices::mcp230xx::MCP23008&lt; MANAGER &gt;</a>
+, <a class="el" href="classdevices_1_1mcp230xx_1_1_m_c_p23017.html#a967bf0ba8071dd4ded913dcc300f6ef7">devices::mcp230xx::MCP23017&lt; MANAGER &gt;</a>
 </li>
 <li>interrupt_status()
-: <a class="el" href="classdevices_1_1magneto_1_1_m_p_u6050.html#a8ca37ef4a81271beab63d3c0a75bcba1">devices::magneto::MPU6050&lt; MANAGER &gt;</a>
+: <a class="el" href="classdevices_1_1magneto_1_1_m_p_u6050.html#aed635f5d0c2a83d493ac98ca580b7ffe">devices::magneto::MPU6050&lt; MANAGER &gt;</a>
 </li>
 <li>InterruptFlagsFuture
 : <a class="el" href="classdevices_1_1mcp230xx_1_1_m_c_p23008.html#a8d353b7dcbf8c8bd5dd8ed80df149613">devices::mcp230xx::MCP23008&lt; MANAGER &gt;</a>

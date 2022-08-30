@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.9</span>
+   &#160;<span id="projectnumber">v1.9 alpha</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -160,167 +160,167 @@ $(document).ready(function(){initNavTree('watchdog_8h_source.html',''); initResi
 <div class="line"><a name="l00144"></a><span class="lineno"><a class="line" href="classwatchdog_1_1_watchdog_signal.html">  144</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classwatchdog_1_1_watchdog_signal.html">WatchdogSignal</a></div>
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    {</div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;        <a class="code" href="classwatchdog_1_1_watchdog_signal.html">WatchdogSignal</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <a class="code" href="classwatchdog_1_1_watchdog_signal.html">WatchdogSignal</a>(<span class="keyword">const</span> <a class="code" href="classwatchdog_1_1_watchdog_signal.html">WatchdogSignal</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        <a class="code" href="classwatchdog_1_1_watchdog_signal.html">WatchdogSignal</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classwatchdog_1_1_watchdog_signal.html">WatchdogSignal</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160; </div>
-<div class="line"><a name="l00157"></a><span class="lineno"><a class="line" href="classwatchdog_1_1_watchdog_signal.html#a3040c8929991e081f02619ed89513b5a">  157</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwatchdog_1_1_watchdog_signal.html#a3040c8929991e081f02619ed89513b5a">begin</a>(<a class="code" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01b">TimeOut</a> timeout = <a class="code" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01ba511365e7b9dbb67d36a5652065e21c9c">TimeOut::TO_16ms</a>)</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        {</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;            uint8_t config = <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(WDIE) | (uint8_t(timeout) &amp; MASK_WDP012) |</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;                             ((uint8_t(timeout) &amp; MASK_WDP3) ? <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(WDP3) : 0);</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;            <span class="keyword">synchronized</span> begin_with_config(config);</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        }</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160; </div>
-<div class="line"><a name="l00167"></a><span class="lineno"><a class="line" href="classwatchdog_1_1_watchdog_signal.html#a080a9c4a33228be0eb5584fb64eb47ab">  167</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwatchdog_1_1_watchdog_signal.html#a080a9c4a33228be0eb5584fb64eb47ab">end</a>()</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        {</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;            <span class="keyword">synchronized</span></div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;            {</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;                WDTCSR_ = <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(WDCE, WDE);</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;                WDTCSR_ = 0;</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;            }</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;        }</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160; </div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        <span class="keywordtype">void</span> begin_with_config(uint8_t config) <a class="code" href="defines_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a></div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        {</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;            __asm__ __volatile__(<span class="stringliteral">&quot;wdr&quot;</span>);</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;            MCUSR_ |= 1 &lt;&lt; WDRF;</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;            WDTCSR_ = <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(WDCE, WDE);</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;            WDTCSR_ = config;</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        }</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160; </div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        <span class="keyword">static</span> constexpr <span class="keyword">const</span> uint8_t MASK_WDP012 = <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(WDP0, WDP1, WDP2);</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        <span class="keyword">static</span> constexpr <span class="keyword">const</span> uint8_t MASK_WDP3 = 0x08U;</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160; </div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        <span class="keyword">using</span> REG8 = board_traits::REG8;</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        <span class="keyword">static</span> constexpr <span class="keyword">const</span> REG8 MCUSR_{MCUSR};</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        <span class="keyword">static</span> constexpr <span class="keyword">const</span> REG8 WDTCSR_{WDTCSR};</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;    };</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160; </div>
-<div class="line"><a name="l00201"></a><span class="lineno"><a class="line" href="classwatchdog_1_1_watchdog_r_t_t.html">  201</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html">WatchdogRTT</a> : <span class="keyword">public</span> <a class="code" href="classwatchdog_1_1_watchdog_signal.html">WatchdogSignal</a></div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;    {</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00209"></a><span class="lineno"><a class="line" href="classwatchdog_1_1_watchdog_r_t_t.html#ad8bebd66247d2a9bbfb57fa173930477">  209</a></span>&#160;        <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html#ad8bebd66247d2a9bbfb57fa173930477">WatchdogRTT</a>()</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;        {</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;            <a class="code" href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de">interrupt::register_handler</a>(*<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        }</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160; </div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;        <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html#ad8bebd66247d2a9bbfb57fa173930477">WatchdogRTT</a>(<span class="keyword">const</span> <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html">WatchdogRTT</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;        <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html">WatchdogRTT</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html">WatchdogRTT</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160; </div>
-<div class="line"><a name="l00225"></a><span class="lineno"><a class="line" href="classwatchdog_1_1_watchdog_r_t_t.html#af97953c441f885b7a3b0c21aa7e375e2">  225</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html#af97953c441f885b7a3b0c21aa7e375e2">begin</a>(<a class="code" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01b">TimeOut</a> timeout = <a class="code" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01ba511365e7b9dbb67d36a5652065e21c9c">TimeOut::TO_16ms</a>)</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        {</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;            uint16_t ms_per_tick = <a class="code" href="namespacebits.html#a9e409fd8b873b9e5717117a874e890f3">bits::BV16</a>(uint8_t(timeout) + 4);</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;            uint8_t config = <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(WDIE) | (uint8_t(timeout) &amp; MASK_WDP012) |</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;                             ((uint8_t(timeout) &amp; MASK_WDP3) ? <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(WDP3) : 0);</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160; </div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;            <span class="keyword">synchronized</span></div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;            {</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;                begin_with_config(config);</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;                millis_per_tick_ = ms_per_tick;</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;                millis_ = 0;</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;            }</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;        }</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160; </div>
-<div class="line"><a name="l00245"></a><span class="lineno"><a class="line" href="classwatchdog_1_1_watchdog_r_t_t.html#a14d6153a6676bcecddfc7519c824ef77">  245</a></span>&#160;        uint32_t <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html#a14d6153a6676bcecddfc7519c824ef77">millis</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;<span class="keyword">        </span>{</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;            <span class="keyword">synchronized</span> <span class="keywordflow">return</span> millis_;</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        }</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160; </div>
-<div class="line"><a name="l00254"></a><span class="lineno"><a class="line" href="classwatchdog_1_1_watchdog_r_t_t.html#a8b000bf47369faf9b4a2ca47f85c6d5b">  254</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html#a8b000bf47369faf9b4a2ca47f85c6d5b">reset</a>()</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        {</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;            <span class="keyword">synchronized</span> millis_ = 0;</div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        }</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160; </div>
-<div class="line"><a name="l00271"></a><span class="lineno"><a class="line" href="classwatchdog_1_1_watchdog_r_t_t.html#aea02a3b9597f346d30b0781fae69506d">  271</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html#aea02a3b9597f346d30b0781fae69506d">delay</a>(uint32_t ms)</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;        {</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;            uint32_t limit = <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html#a14d6153a6676bcecddfc7519c824ef77">millis</a>() + ms;</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;            <span class="keywordflow">while</span> (<a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html#a14d6153a6676bcecddfc7519c824ef77">millis</a>() &lt; limit)</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;            {</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;                <a class="code" href="namespacetime.html#a5396c009ace06e55985ccf6b7bff179a">time::yield</a>();</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;            }</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        }</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160; </div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    <span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;        <span class="comment">// This constructor is used by subclass to avoid calling register_handler()</span></div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html#ad8bebd66247d2a9bbfb57fa173930477">WatchdogRTT</a>(<span class="keywordtype">bool</span> dummy <a class="code" href="defines_8h.html#addf5ec070e9499d36b7f2009ce736076">UNUSED</a>) {}</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160; </div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;        <span class="keywordtype">void</span> on_tick()</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;        {</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;            millis_ += millis_per_tick_;</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;        }</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160; </div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;        <span class="keyword">volatile</span> uint32_t millis_ = 0UL;</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;        uint16_t millis_per_tick_ = 0U;</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160; </div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        <span class="keyword">friend</span> <span class="keyword">struct </span>isr_handler;</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;    };</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160; </div>
-<div class="line"><a name="l00304"></a><span class="lineno"><a class="line" href="classwatchdog_1_1_watchdog.html">  304</a></span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> EVENT&gt; <span class="keyword">class </span><a class="code" href="classwatchdog_1_1_watchdog.html">Watchdog</a> : <span class="keyword">public</span> <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html">WatchdogRTT</a></div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;    {</div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;        static_assert(events::Event_trait&lt;EVENT&gt;::IS_EVENT, <span class="stringliteral">&quot;EVENT type must be an events::Event&lt;T&gt;&quot;</span>);</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160; </div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00319"></a><span class="lineno"><a class="line" href="classwatchdog_1_1_watchdog.html#a981e579a4e24b0cf9cb3d1031f5a1731">  319</a></span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classwatchdog_1_1_watchdog.html#a981e579a4e24b0cf9cb3d1031f5a1731">Watchdog</a>(<a class="code" href="classcontainers_1_1_queue.html">containers::Queue&lt;EVENT&gt;</a>&amp; event_queue) : <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html">WatchdogRTT</a>{true}, event_queue_{event_queue}</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        {</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;            <a class="code" href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de">interrupt::register_handler</a>(*<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        }</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160; </div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;        <a class="code" href="classwatchdog_1_1_watchdog.html#a981e579a4e24b0cf9cb3d1031f5a1731">Watchdog</a>(<span class="keyword">const</span> <a class="code" href="classwatchdog_1_1_watchdog.html">Watchdog</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        <a class="code" href="classwatchdog_1_1_watchdog.html">Watchdog</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classwatchdog_1_1_watchdog.html">Watchdog</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160; </div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;        <span class="keywordtype">void</span> on_tick()</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;        {</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;            WatchdogRTT::on_tick();</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;            event_queue_.<a class="code" href="classcontainers_1_1_queue.html#ae506aa92e594cbac6f338c2b65d1e3b6">push_</a>(EVENT{<a class="code" href="namespaceevents_1_1_type.html#a89956491c3bf31c616baf63fcd335405">events::Type::WDT_TIMER</a>});</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;        }</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160; </div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        <a class="code" href="classcontainers_1_1_queue.html">containers::Queue&lt;EVENT&gt;</a>&amp; event_queue_;</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        <a class="code" href="classwatchdog_1_1_watchdog_signal.html">WatchdogSignal</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        <a class="code" href="classwatchdog_1_1_watchdog_signal.html">WatchdogSignal</a>(<span class="keyword">const</span> <a class="code" href="classwatchdog_1_1_watchdog_signal.html">WatchdogSignal</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        <a class="code" href="classwatchdog_1_1_watchdog_signal.html">WatchdogSignal</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classwatchdog_1_1_watchdog_signal.html">WatchdogSignal</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160; </div>
+<div class="line"><a name="l00159"></a><span class="lineno"><a class="line" href="classwatchdog_1_1_watchdog_signal.html#a3040c8929991e081f02619ed89513b5a">  159</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwatchdog_1_1_watchdog_signal.html#a3040c8929991e081f02619ed89513b5a">begin</a>(<a class="code" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01b">TimeOut</a> timeout = <a class="code" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01ba511365e7b9dbb67d36a5652065e21c9c">TimeOut::TO_16ms</a>)</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;        {</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;            uint8_t config = <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(WDIE) | (uint8_t(timeout) &amp; MASK_WDP012) |</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                             ((uint8_t(timeout) &amp; MASK_WDP3) ? <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(WDP3) : 0);</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;            <span class="keyword">synchronized</span> begin_with_config(config);</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;        }</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160; </div>
+<div class="line"><a name="l00169"></a><span class="lineno"><a class="line" href="classwatchdog_1_1_watchdog_signal.html#a080a9c4a33228be0eb5584fb64eb47ab">  169</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwatchdog_1_1_watchdog_signal.html#a080a9c4a33228be0eb5584fb64eb47ab">end</a>()</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        {</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;            <span class="keyword">synchronized</span></div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;            {</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;                WDTCSR_ = <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(WDCE, WDE);</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;                WDTCSR_ = 0;</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;            }</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;        }</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160; </div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <span class="keywordtype">void</span> begin_with_config(uint8_t config) <a class="code" href="defines_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a></div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        {</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;            __asm__ __volatile__(<span class="stringliteral">&quot;wdr&quot;</span>);</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;            MCUSR_ |= 1 &lt;&lt; WDRF;</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;            WDTCSR_ = <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(WDCE, WDE);</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;            WDTCSR_ = config;</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        }</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        <span class="keyword">static</span> constexpr <span class="keyword">const</span> uint8_t MASK_WDP012 = <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(WDP0, WDP1, WDP2);</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        <span class="keyword">static</span> constexpr <span class="keyword">const</span> uint8_t MASK_WDP3 = 0x08U;</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160; </div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        <span class="keyword">using</span> REG8 = board_traits::REG8;</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        <span class="keyword">static</span> constexpr <span class="keyword">const</span> REG8 MCUSR_{MCUSR};</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;        <span class="keyword">static</span> constexpr <span class="keyword">const</span> REG8 WDTCSR_{WDTCSR};</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    };</div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160; </div>
+<div class="line"><a name="l00203"></a><span class="lineno"><a class="line" href="classwatchdog_1_1_watchdog_r_t_t.html">  203</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html">WatchdogRTT</a> : <span class="keyword">public</span> <a class="code" href="classwatchdog_1_1_watchdog_signal.html">WatchdogSignal</a></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    {</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00211"></a><span class="lineno"><a class="line" href="classwatchdog_1_1_watchdog_r_t_t.html#ad8bebd66247d2a9bbfb57fa173930477">  211</a></span>&#160;        <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html#ad8bebd66247d2a9bbfb57fa173930477">WatchdogRTT</a>()</div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        {</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;            <a class="code" href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de">interrupt::register_handler</a>(*<span class="keyword">this</span>);</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;        }</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160; </div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html#ad8bebd66247d2a9bbfb57fa173930477">WatchdogRTT</a>(<span class="keyword">const</span> <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html">WatchdogRTT</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;        <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html">WatchdogRTT</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html">WatchdogRTT</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160; </div>
+<div class="line"><a name="l00227"></a><span class="lineno"><a class="line" href="classwatchdog_1_1_watchdog_r_t_t.html#af97953c441f885b7a3b0c21aa7e375e2">  227</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html#af97953c441f885b7a3b0c21aa7e375e2">begin</a>(<a class="code" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01b">TimeOut</a> timeout = <a class="code" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01ba511365e7b9dbb67d36a5652065e21c9c">TimeOut::TO_16ms</a>)</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;        {</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;            uint16_t ms_per_tick = <a class="code" href="namespacebits.html#a9e409fd8b873b9e5717117a874e890f3">bits::BV16</a>(uint8_t(timeout) + 4);</div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;            uint8_t config = <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(WDIE) | (uint8_t(timeout) &amp; MASK_WDP012) |</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;                             ((uint8_t(timeout) &amp; MASK_WDP3) ? <a class="code" href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a>(WDP3) : 0);</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160; </div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;            <span class="keyword">synchronized</span></div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;            {</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;                begin_with_config(config);</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;                millis_per_tick_ = ms_per_tick;</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;                millis_ = 0;</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;            }</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;        }</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160; </div>
+<div class="line"><a name="l00247"></a><span class="lineno"><a class="line" href="classwatchdog_1_1_watchdog_r_t_t.html#a14d6153a6676bcecddfc7519c824ef77">  247</a></span>&#160;        uint32_t <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html#a14d6153a6676bcecddfc7519c824ef77">millis</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;<span class="keyword">        </span>{</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;            <span class="keyword">synchronized</span> <span class="keywordflow">return</span> millis_;</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        }</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160; </div>
+<div class="line"><a name="l00256"></a><span class="lineno"><a class="line" href="classwatchdog_1_1_watchdog_r_t_t.html#a8b000bf47369faf9b4a2ca47f85c6d5b">  256</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html#a8b000bf47369faf9b4a2ca47f85c6d5b">reset</a>()</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        {</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;            <span class="keyword">synchronized</span> millis_ = 0;</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;        }</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160; </div>
+<div class="line"><a name="l00273"></a><span class="lineno"><a class="line" href="classwatchdog_1_1_watchdog_r_t_t.html#aea02a3b9597f346d30b0781fae69506d">  273</a></span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html#aea02a3b9597f346d30b0781fae69506d">delay</a>(uint32_t ms)</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        {</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;            uint32_t limit = <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html#a14d6153a6676bcecddfc7519c824ef77">millis</a>() + ms;</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;            <span class="keywordflow">while</span> (<a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html#a14d6153a6676bcecddfc7519c824ef77">millis</a>() &lt; limit)</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;            {</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;                <a class="code" href="namespacetime.html#a5396c009ace06e55985ccf6b7bff179a">time::yield</a>();</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;            }</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        }</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160; </div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;    <span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        <span class="comment">// This constructor is used by subclass to avoid calling register_handler()</span></div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html#ad8bebd66247d2a9bbfb57fa173930477">WatchdogRTT</a>(<span class="keywordtype">bool</span> dummy <a class="code" href="defines_8h.html#addf5ec070e9499d36b7f2009ce736076">UNUSED</a>) {}</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160; </div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;        <span class="keywordtype">void</span> on_tick()</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;        {</div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;            millis_ += millis_per_tick_;</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;        }</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160; </div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        <span class="keyword">volatile</span> uint32_t millis_ = 0UL;</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        uint16_t millis_per_tick_ = 0U;</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160; </div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        <span class="keyword">friend</span> <span class="keyword">struct </span>isr_handler;</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;    };</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160; </div>
+<div class="line"><a name="l00306"></a><span class="lineno"><a class="line" href="classwatchdog_1_1_watchdog.html">  306</a></span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> EVENT&gt; <span class="keyword">class </span><a class="code" href="classwatchdog_1_1_watchdog.html">Watchdog</a> : <span class="keyword">public</span> <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html">WatchdogRTT</a></div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;    {</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        static_assert(events::Event_trait&lt;EVENT&gt;::IS_EVENT, <span class="stringliteral">&quot;EVENT type must be an events::Event&lt;T&gt;&quot;</span>);</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160; </div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00321"></a><span class="lineno"><a class="line" href="classwatchdog_1_1_watchdog.html#a981e579a4e24b0cf9cb3d1031f5a1731">  321</a></span>&#160;        <span class="keyword">explicit</span> <a class="code" href="classwatchdog_1_1_watchdog.html#a981e579a4e24b0cf9cb3d1031f5a1731">Watchdog</a>(<a class="code" href="classcontainers_1_1_queue.html">containers::Queue&lt;EVENT&gt;</a>&amp; event_queue) : <a class="code" href="classwatchdog_1_1_watchdog_r_t_t.html">WatchdogRTT</a>{true}, event_queue_{event_queue}</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        {</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;            <a class="code" href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de">interrupt::register_handler</a>(*<span class="keyword">this</span>);</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;        }</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160; </div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;        <a class="code" href="classwatchdog_1_1_watchdog.html#a981e579a4e24b0cf9cb3d1031f5a1731">Watchdog</a>(<span class="keyword">const</span> <a class="code" href="classwatchdog_1_1_watchdog.html">Watchdog</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;        <a class="code" href="classwatchdog_1_1_watchdog.html">Watchdog</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classwatchdog_1_1_watchdog.html">Watchdog</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160; </div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;        <span class="keywordtype">void</span> on_tick()</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        {</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;            WatchdogRTT::on_tick();</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;            event_queue_.<a class="code" href="classcontainers_1_1_queue.html#ae506aa92e594cbac6f338c2b65d1e3b6">push_</a>(EVENT{<a class="code" href="namespaceevents_1_1_type.html#a89956491c3bf31c616baf63fcd335405">events::Type::WDT_TIMER</a>});</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;        }</div>
 <div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160; </div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;        <span class="keyword">friend</span> <span class="keyword">struct </span>isr_handler;</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;    };</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160; </div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;    <span class="keyword">struct </span>isr_handler</div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;    {</div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> EVENT&gt; <span class="keyword">static</span> <span class="keywordtype">void</span> watchdog_clock()</div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;        {</div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;            interrupt::HandlerHolder&lt;watchdog::Watchdog&lt;EVENT&gt;&gt;::handler()-&gt;on_tick();</div>
-<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;        }</div>
-<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160; </div>
-<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">void</span> watchdog_rtt()</div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;        {</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;            interrupt::HandlerHolder&lt;watchdog::WatchdogRTT&gt;::handler()-&gt;on_tick();</div>
-<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;        }</div>
-<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160; </div>
-<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> HANDLER, <span class="keywordtype">void</span> (HANDLER::*CALLBACK)()&gt; <span class="keyword">static</span> <span class="keywordtype">void</span> watchdog_method()</div>
-<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;        {</div>
-<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;            interrupt::CallbackHandler&lt;void (HANDLER::*)(), CALLBACK&gt;::call();</div>
-<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;        }</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160; </div>
-<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;        <span class="keyword">template</span>&lt;<span class="keywordtype">void</span> (*CALLBACK)()&gt; <span class="keyword">static</span> <span class="keywordtype">void</span> watchdog_function()</div>
-<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;        {</div>
-<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;            interrupt::CallbackHandler&lt;void (*)(), CALLBACK&gt;::call();</div>
-<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;        }</div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;    };</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;}</div>
-<div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160; </div>
-<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* WATCHDOG_HH */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;        <a class="code" href="classcontainers_1_1_queue.html">containers::Queue&lt;EVENT&gt;</a>&amp; event_queue_;</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160; </div>
+<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;        <span class="keyword">friend</span> <span class="keyword">struct </span>isr_handler;</div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    };</div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160; </div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;    <span class="keyword">struct </span>isr_handler</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    {</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> EVENT&gt; <span class="keyword">static</span> <span class="keywordtype">void</span> watchdog_clock()</div>
+<div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160;        {</div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;            interrupt::HandlerHolder&lt;watchdog::Watchdog&lt;EVENT&gt;&gt;::handler()-&gt;on_tick();</div>
+<div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;        }</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160; </div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;        <span class="keyword">static</span> <span class="keywordtype">void</span> watchdog_rtt()</div>
+<div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;        {</div>
+<div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160;            interrupt::HandlerHolder&lt;watchdog::WatchdogRTT&gt;::handler()-&gt;on_tick();</div>
+<div class="line"><a name="l00354"></a><span class="lineno">  354</span>&#160;        }</div>
+<div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160; </div>
+<div class="line"><a name="l00356"></a><span class="lineno">  356</span>&#160;        <span class="keyword">template</span>&lt;<span class="keyword">typename</span> HANDLER, <span class="keywordtype">void</span> (HANDLER::*CALLBACK)()&gt; <span class="keyword">static</span> <span class="keywordtype">void</span> watchdog_method()</div>
+<div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;        {</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;            interrupt::CallbackHandler&lt;void (HANDLER::*)(), CALLBACK&gt;::call();</div>
+<div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;        }</div>
+<div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160; </div>
+<div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160;        <span class="keyword">template</span>&lt;<span class="keywordtype">void</span> (*CALLBACK)()&gt; <span class="keyword">static</span> <span class="keywordtype">void</span> watchdog_function()</div>
+<div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;        {</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;            interrupt::CallbackHandler&lt;void (*)(), CALLBACK&gt;::call();</div>
+<div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;        }</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;    };</div>
+<div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160;}</div>
+<div class="line"><a name="l00368"></a><span class="lineno">  368</span>&#160; </div>
+<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* WATCHDOG_HH */</span><span class="preprocessor"></span></div>
 <div class="ttc" id="aclasscontainers_1_1_queue_html"><div class="ttname"><a href="classcontainers_1_1_queue.html">containers::Queue&lt; EVENT &gt;</a></div></div>
 <div class="ttc" id="aclasscontainers_1_1_queue_html_ae506aa92e594cbac6f338c2b65d1e3b6"><div class="ttname"><a href="classcontainers_1_1_queue.html#ae506aa92e594cbac6f338c2b65d1e3b6">containers::Queue::push_</a></div><div class="ttdeci">bool push_(TREF item)</div><div class="ttdoc">Push item to the end of this queue, provided there is still available space in its ring buffer.</div></div>
-<div class="ttc" id="aclasswatchdog_1_1_watchdog_html"><div class="ttname"><a href="classwatchdog_1_1_watchdog.html">watchdog::Watchdog</a></div><div class="ttdoc">Simple API to use watchdog timer as a clock for events generation.</div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00304">watchdog.h:305</a></div></div>
-<div class="ttc" id="aclasswatchdog_1_1_watchdog_html_a981e579a4e24b0cf9cb3d1031f5a1731"><div class="ttname"><a href="classwatchdog_1_1_watchdog.html#a981e579a4e24b0cf9cb3d1031f5a1731">watchdog::Watchdog::Watchdog</a></div><div class="ttdeci">Watchdog(containers::Queue&lt; EVENT &gt; &amp;event_queue)</div><div class="ttdoc">Construct a new watchdog-based clock that will, for each watchdog timeout, add an event to the given ...</div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00319">watchdog.h:319</a></div></div>
-<div class="ttc" id="aclasswatchdog_1_1_watchdog_r_t_t_html"><div class="ttname"><a href="classwatchdog_1_1_watchdog_r_t_t.html">watchdog::WatchdogRTT</a></div><div class="ttdoc">Simple API to use watchdog timer as a real-time clock.</div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00201">watchdog.h:202</a></div></div>
-<div class="ttc" id="aclasswatchdog_1_1_watchdog_r_t_t_html_a14d6153a6676bcecddfc7519c824ef77"><div class="ttname"><a href="classwatchdog_1_1_watchdog_r_t_t.html#a14d6153a6676bcecddfc7519c824ef77">watchdog::WatchdogRTT::millis</a></div><div class="ttdeci">uint32_t millis() const</div><div class="ttdoc">Get the number of milliseconds that elapsed since begin() was called.</div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00245">watchdog.h:245</a></div></div>
-<div class="ttc" id="aclasswatchdog_1_1_watchdog_r_t_t_html_a8b000bf47369faf9b4a2ca47f85c6d5b"><div class="ttname"><a href="classwatchdog_1_1_watchdog_r_t_t.html#a8b000bf47369faf9b4a2ca47f85c6d5b">watchdog::WatchdogRTT::reset</a></div><div class="ttdeci">void reset()</div><div class="ttdoc">Reset current counter to 0.</div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00254">watchdog.h:254</a></div></div>
-<div class="ttc" id="aclasswatchdog_1_1_watchdog_r_t_t_html_ad8bebd66247d2a9bbfb57fa173930477"><div class="ttname"><a href="classwatchdog_1_1_watchdog_r_t_t.html#ad8bebd66247d2a9bbfb57fa173930477">watchdog::WatchdogRTT::WatchdogRTT</a></div><div class="ttdeci">WatchdogRTT()</div><div class="ttdoc">Construct a new watchdog-based clock that will count elapsed milliseconds since it was started with b...</div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00209">watchdog.h:209</a></div></div>
-<div class="ttc" id="aclasswatchdog_1_1_watchdog_r_t_t_html_aea02a3b9597f346d30b0781fae69506d"><div class="ttname"><a href="classwatchdog_1_1_watchdog_r_t_t.html#aea02a3b9597f346d30b0781fae69506d">watchdog::WatchdogRTT::delay</a></div><div class="ttdeci">void delay(uint32_t ms)</div><div class="ttdoc">Delay program execution for the given amount of milliseconds.</div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00271">watchdog.h:271</a></div></div>
-<div class="ttc" id="aclasswatchdog_1_1_watchdog_r_t_t_html_af97953c441f885b7a3b0c21aa7e375e2"><div class="ttname"><a href="classwatchdog_1_1_watchdog_r_t_t.html#af97953c441f885b7a3b0c21aa7e375e2">watchdog::WatchdogRTT::begin</a></div><div class="ttdeci">void begin(TimeOut timeout=TimeOut::TO_16ms)</div><div class="ttdoc">Start the watchdog clock with the given timeout period.</div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00225">watchdog.h:225</a></div></div>
+<div class="ttc" id="aclasswatchdog_1_1_watchdog_html"><div class="ttname"><a href="classwatchdog_1_1_watchdog.html">watchdog::Watchdog</a></div><div class="ttdoc">Simple API to use watchdog timer as a clock for events generation.</div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00306">watchdog.h:307</a></div></div>
+<div class="ttc" id="aclasswatchdog_1_1_watchdog_html_a981e579a4e24b0cf9cb3d1031f5a1731"><div class="ttname"><a href="classwatchdog_1_1_watchdog.html#a981e579a4e24b0cf9cb3d1031f5a1731">watchdog::Watchdog::Watchdog</a></div><div class="ttdeci">Watchdog(containers::Queue&lt; EVENT &gt; &amp;event_queue)</div><div class="ttdoc">Construct a new watchdog-based clock that will, for each watchdog timeout, add an event to the given ...</div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00321">watchdog.h:321</a></div></div>
+<div class="ttc" id="aclasswatchdog_1_1_watchdog_r_t_t_html"><div class="ttname"><a href="classwatchdog_1_1_watchdog_r_t_t.html">watchdog::WatchdogRTT</a></div><div class="ttdoc">Simple API to use watchdog timer as a real-time clock.</div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00203">watchdog.h:204</a></div></div>
+<div class="ttc" id="aclasswatchdog_1_1_watchdog_r_t_t_html_a14d6153a6676bcecddfc7519c824ef77"><div class="ttname"><a href="classwatchdog_1_1_watchdog_r_t_t.html#a14d6153a6676bcecddfc7519c824ef77">watchdog::WatchdogRTT::millis</a></div><div class="ttdeci">uint32_t millis() const</div><div class="ttdoc">Get the number of milliseconds that elapsed since begin() was called.</div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00247">watchdog.h:247</a></div></div>
+<div class="ttc" id="aclasswatchdog_1_1_watchdog_r_t_t_html_a8b000bf47369faf9b4a2ca47f85c6d5b"><div class="ttname"><a href="classwatchdog_1_1_watchdog_r_t_t.html#a8b000bf47369faf9b4a2ca47f85c6d5b">watchdog::WatchdogRTT::reset</a></div><div class="ttdeci">void reset()</div><div class="ttdoc">Reset current counter to 0.</div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00256">watchdog.h:256</a></div></div>
+<div class="ttc" id="aclasswatchdog_1_1_watchdog_r_t_t_html_ad8bebd66247d2a9bbfb57fa173930477"><div class="ttname"><a href="classwatchdog_1_1_watchdog_r_t_t.html#ad8bebd66247d2a9bbfb57fa173930477">watchdog::WatchdogRTT::WatchdogRTT</a></div><div class="ttdeci">WatchdogRTT()</div><div class="ttdoc">Construct a new watchdog-based clock that will count elapsed milliseconds since it was started with b...</div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00211">watchdog.h:211</a></div></div>
+<div class="ttc" id="aclasswatchdog_1_1_watchdog_r_t_t_html_aea02a3b9597f346d30b0781fae69506d"><div class="ttname"><a href="classwatchdog_1_1_watchdog_r_t_t.html#aea02a3b9597f346d30b0781fae69506d">watchdog::WatchdogRTT::delay</a></div><div class="ttdeci">void delay(uint32_t ms)</div><div class="ttdoc">Delay program execution for the given amount of milliseconds.</div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00273">watchdog.h:273</a></div></div>
+<div class="ttc" id="aclasswatchdog_1_1_watchdog_r_t_t_html_af97953c441f885b7a3b0c21aa7e375e2"><div class="ttname"><a href="classwatchdog_1_1_watchdog_r_t_t.html#af97953c441f885b7a3b0c21aa7e375e2">watchdog::WatchdogRTT::begin</a></div><div class="ttdeci">void begin(TimeOut timeout=TimeOut::TO_16ms)</div><div class="ttdoc">Start the watchdog clock with the given timeout period.</div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00227">watchdog.h:227</a></div></div>
 <div class="ttc" id="aclasswatchdog_1_1_watchdog_signal_html"><div class="ttname"><a href="classwatchdog_1_1_watchdog_signal.html">watchdog::WatchdogSignal</a></div><div class="ttdoc">Simple API to handle watchdog signals.</div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00144">watchdog.h:145</a></div></div>
-<div class="ttc" id="aclasswatchdog_1_1_watchdog_signal_html_a080a9c4a33228be0eb5584fb64eb47ab"><div class="ttname"><a href="classwatchdog_1_1_watchdog_signal.html#a080a9c4a33228be0eb5584fb64eb47ab">watchdog::WatchdogSignal::end</a></div><div class="ttdeci">void end()</div><div class="ttdoc">Stop this watchdog timer.</div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00167">watchdog.h:167</a></div></div>
-<div class="ttc" id="aclasswatchdog_1_1_watchdog_signal_html_a3040c8929991e081f02619ed89513b5a"><div class="ttname"><a href="classwatchdog_1_1_watchdog_signal.html#a3040c8929991e081f02619ed89513b5a">watchdog::WatchdogSignal::begin</a></div><div class="ttdeci">void begin(TimeOut timeout=TimeOut::TO_16ms)</div><div class="ttdoc">Start the watchdog timer with the given timeout period.</div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00157">watchdog.h:157</a></div></div>
+<div class="ttc" id="aclasswatchdog_1_1_watchdog_signal_html_a080a9c4a33228be0eb5584fb64eb47ab"><div class="ttname"><a href="classwatchdog_1_1_watchdog_signal.html#a080a9c4a33228be0eb5584fb64eb47ab">watchdog::WatchdogSignal::end</a></div><div class="ttdeci">void end()</div><div class="ttdoc">Stop this watchdog timer.</div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00169">watchdog.h:169</a></div></div>
+<div class="ttc" id="aclasswatchdog_1_1_watchdog_signal_html_a3040c8929991e081f02619ed89513b5a"><div class="ttname"><a href="classwatchdog_1_1_watchdog_signal.html#a3040c8929991e081f02619ed89513b5a">watchdog::WatchdogSignal::begin</a></div><div class="ttdeci">void begin(TimeOut timeout=TimeOut::TO_16ms)</div><div class="ttdoc">Start the watchdog timer with the given timeout period.</div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00159">watchdog.h:159</a></div></div>
 <div class="ttc" id="adefines_8h_html_a2eb6f9e0395b47b8d5e3eeae4fe0c116"><div class="ttname"><a href="defines_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a></div><div class="ttdeci">#define INLINE</div><div class="ttdoc">Specific GCC attribute to force the compiler to always inline code of a given function.</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00057">defines.h:57</a></div></div>
 <div class="ttc" id="adefines_8h_html_addf5ec070e9499d36b7f2009ce736076"><div class="ttname"><a href="defines_8h.html#addf5ec070e9499d36b7f2009ce736076">UNUSED</a></div><div class="ttdeci">#define UNUSED</div><div class="ttdoc">Specific GCC attribute to declare an argument or variable unused, so that the compiler does not emit ...</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00045">defines.h:45</a></div></div>
 <div class="ttc" id="aevents_8h_html"><div class="ttname"><a href="events_8h.html">events.h</a></div><div class="ttdoc">Support for events management.</div></div>
@@ -328,7 +328,7 @@ $(document).ready(function(){initNavTree('watchdog_8h_source.html',''); initResi
 <div class="ttc" id="anamespacebits_html_a61b82475468b428f5a65a21da09f1938"><div class="ttname"><a href="namespacebits.html#a61b82475468b428f5a65a21da09f1938">bits::BV8</a></div><div class="ttdeci">static constexpr uint8_t BV8(uint8_t bit)</div><div class="ttdoc">Create a uint8_t bitmask for the given bit number.</div><div class="ttdef"><b>Definition:</b> <a href="bits_8h_source.html#l00041">bits.h:41</a></div></div>
 <div class="ttc" id="anamespacebits_html_a9e409fd8b873b9e5717117a874e890f3"><div class="ttname"><a href="namespacebits.html#a9e409fd8b873b9e5717117a874e890f3">bits::BV16</a></div><div class="ttdeci">static constexpr uint16_t BV16(uint8_t bit)</div><div class="ttdoc">Create a uint16_t bitmask for the given bit number.</div><div class="ttdef"><b>Definition:</b> <a href="bits_8h_source.html#l00148">bits.h:148</a></div></div>
 <div class="ttc" id="anamespaceevents_1_1_type_html_a89956491c3bf31c616baf63fcd335405"><div class="ttname"><a href="namespaceevents_1_1_type.html#a89956491c3bf31c616baf63fcd335405">events::Type::WDT_TIMER</a></div><div class="ttdeci">const uint8_t WDT_TIMER</div><div class="ttdoc">Type of events generated by watchdog::Watchdog for each watchdog timeout interrupt.</div><div class="ttdef"><b>Definition:</b> <a href="events_8h_source.html#l00105">events.h:105</a></div></div>
-<div class="ttc" id="anamespaceinterrupt_html_abfd5857208f49006bde8c472497273de"><div class="ttname"><a href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de">interrupt::register_handler</a></div><div class="ttdeci">void register_handler(Handler &amp;handler)</div><div class="ttdoc">Register a class instance containing methods that shall be called back by an ISR.</div><div class="ttdef"><b>Definition:</b> <a href="interrupts_8h_source.html#l00157">interrupts.h:157</a></div></div>
+<div class="ttc" id="anamespaceinterrupt_html_abfd5857208f49006bde8c472497273de"><div class="ttname"><a href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de">interrupt::register_handler</a></div><div class="ttdeci">void register_handler(Handler &amp;handler)</div><div class="ttdoc">Register a class instance containing methods that shall be called back by an ISR.</div><div class="ttdef"><b>Definition:</b> <a href="interrupts_8h_source.html#l00185">interrupts.h:185</a></div></div>
 <div class="ttc" id="anamespacetime_html_a5396c009ace06e55985ccf6b7bff179a"><div class="ttname"><a href="namespacetime.html#a5396c009ace06e55985ccf6b7bff179a">time::yield</a></div><div class="ttdeci">void yield()</div><div class="ttdoc">Utility method used by many FastArduino API in order to &quot;yield&quot; some processor time; concretely it ju...</div><div class="ttdef"><b>Definition:</b> <a href="time_8cpp_source.html#l00022">time.cpp:22</a></div></div>
 <div class="ttc" id="anamespacewatchdog_html"><div class="ttname"><a href="namespacewatchdog.html">watchdog</a></div><div class="ttdoc">Defines the simple API for Watchdog timer management.</div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00100">watchdog.h:101</a></div></div>
 <div class="ttc" id="anamespacewatchdog_html_ae2234bf414f2a2e1b774538e7cecd01b"><div class="ttname"><a href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01b">watchdog::TimeOut</a></div><div class="ttdeci">TimeOut</div><div class="ttdoc">Defines the watchdog timeout period; watchdog interrupts will be triggered at the selected period.</div><div class="ttdef"><b>Definition:</b> <a href="watchdog_8h_source.html#l00109">watchdog.h:110</a></div></div>

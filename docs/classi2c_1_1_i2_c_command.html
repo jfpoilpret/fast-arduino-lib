@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.9</span>
+   &#160;<span id="projectnumber">v1.9 alpha</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -84,6 +84,7 @@ $(document).ready(function(){initNavTree('classi2c_1_1_i2_c_command.html',''); i
 
 <div class="header">
   <div class="summary">
+<a href="#friends">Friends</a> &#124;
 <a href="classi2c_1_1_i2_c_command-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">i2c::I2CCommand&lt; T &gt; Class Template Reference</div>  </div>
@@ -112,6 +113,14 @@ Collaboration diagram for i2c::I2CCommand&lt; T &gt;:</div>
 <area shape="rect" href="classi2c_1_1_i2_c_light_command.html" title="Light atomic I2C command as prepared by an I2C device." alt="" coords="8,5,177,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a19dbe0ae432084d63c8435046d20a665"><td class="memTemplParams" colspan="2"><a id="a19dbe0ae432084d63c8435046d20a665"></a>
+template&lt;I2CMode , I2CErrorPolicy , bool , typename , bool , typename &gt; </td></tr>
+<tr class="memitem:a19dbe0ae432084d63c8435046d20a665"><td class="memTemplItemLeft" align="right" valign="top">class&#160;</td><td class="memTemplItemRight" valign="bottom"><b>AbstractI2CAsyncManager</b></td></tr>
+<tr class="separator:a19dbe0ae432084d63c8435046d20a665"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename T&gt;<br />
 class i2c::I2CCommand&lt; T &gt;</h3>
@@ -122,11 +131,11 @@ class i2c::I2CCommand&lt; T &gt;</h3>
 <li>the command type (read, write...),</li>
 <li>the count of bytes to be read or written,</li>
 <li>the address of target slave device</li>
-<li>a proxy to the future holding inputs and results of the I2C transaction</li>
+<li>a pointer to the future holding inputs and results of the I2C transaction</li>
 </ul>
 <dl class="section warning"><dt>Warning</dt><dd>You should never need to use this API by yourself. This is internally used by FastArduino I2C Manager to handle I2C transactions. </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00227">227</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00308">308</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
 </div><hr/>The documentation for this class was generated from the following file:<ul>
 <li>fastarduino/<a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a></li>
 </ul>

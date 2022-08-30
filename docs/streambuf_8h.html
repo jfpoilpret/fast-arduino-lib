@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.9</span>
+   &#160;<span id="projectnumber">v1.9 alpha</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -178,7 +178,7 @@ Macros</h2></td></tr>
 <tr class="memitem:a94aa054887c53435c9f96e6f5e096982"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="streambuf_8h.html#a94aa054887c53435c9f96e6f5e096982">REGISTER_OSTREAMBUF_LISTENERS</a>(HANDLER1, ...)</td></tr>
 <tr class="memdesc:a94aa054887c53435c9f96e6f5e096982"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the necessary callbacks that will be notified when a <code><a class="el" href="classstreams_1_1ostreambuf.html" title="Output API based on a ring buffer.">streams::ostreambuf</a></code> is put new content (character or string).  <a href="streambuf_8h.html#a94aa054887c53435c9f96e6f5e096982">More...</a><br /></td></tr>
 <tr class="separator:a94aa054887c53435c9f96e6f5e096982"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a34daf15c0c7da9701157e71611bc75c5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="streambuf_8h.html#a34daf15c0c7da9701157e71611bc75c5">REGISTER_OSTREAMBUF_NO_LISTENERS</a>()&#160;&#160;&#160;	void streams::ostreambuf_on_put_dispatch(ostreambuf&amp; obuf) {}</td></tr>
+<tr class="memitem:a34daf15c0c7da9701157e71611bc75c5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="streambuf_8h.html#a34daf15c0c7da9701157e71611bc75c5">REGISTER_OSTREAMBUF_NO_LISTENERS</a>()&#160;&#160;&#160;	void streams::ostreambuf_on_put_dispatch(ostreambuf&amp;) {}</td></tr>
 <tr class="memdesc:a34daf15c0c7da9701157e71611bc75c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register no callback at all to <code><a class="el" href="classstreams_1_1ostreambuf.html" title="Output API based on a ring buffer.">streams::ostreambuf</a></code>.  <a href="streambuf_8h.html#a34daf15c0c7da9701157e71611bc75c5">More...</a><br /></td></tr>
 <tr class="separator:a34daf15c0c7da9701157e71611bc75c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac24624ca27fb91ac4b99a02e4e5a7ca1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="streambuf_8h.html#ac24624ca27fb91ac4b99a02e4e5a7ca1">DECL_OSTREAMBUF_LISTENERS_FRIEND</a>&#160;&#160;&#160;	friend struct streams::dispatch_handler;</td></tr>
@@ -250,7 +250,7 @@ Macros</h2></td></tr>
           <td class="memname">#define REGISTER_OSTREAMBUF_NO_LISTENERS</td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td>&#160;&#160;&#160;	void streams::ostreambuf_on_put_dispatch(ostreambuf&amp; obuf) {}</td>
+          <td>&#160;&#160;&#160;	void streams::ostreambuf_on_put_dispatch(ostreambuf&amp;) {}</td>
         </tr>
       </table>
 </div><div class="memdoc">

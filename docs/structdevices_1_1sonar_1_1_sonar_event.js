@@ -2,9 +2,9 @@ var structdevices_1_1sonar_1_1_sonar_event =
 [
     [ "RTT", "structdevices_1_1sonar_1_1_sonar_event.html#ac070d4377cd1219c62db54d21257ee54", null ],
     [ "RAW_TIME", "structdevices_1_1sonar_1_1_sonar_event.html#a138e285a4ab71b34de21642fc7a167be", null ],
-    [ "SonarEvent", "structdevices_1_1sonar_1_1_sonar_event.html#ac1fe796e7f4cc9c6128c5081f179719d", null ],
+    [ "SonarEvent", "structdevices_1_1sonar_1_1_sonar_event.html#afa732ef5140690945fda477669f9d1d6", null ],
     [ "SonarEvent", "structdevices_1_1sonar_1_1_sonar_event.html#ad8775814aef11f07d6785511407bb245", null ],
-    [ "operator=", "structdevices_1_1sonar_1_1_sonar_event.html#ab565904dd9f4d0d6345d62416bfe4361", null ],
+    [ "operator=", "structdevices_1_1sonar_1_1_sonar_event.html#ae840aa6ca2714d8ee34823b152a57c37", null ],
     [ "timeout", "structdevices_1_1sonar_1_1_sonar_event.html#a438cded47e35742f2da72fcbd1c2c3d6", null ],
     [ "started", "structdevices_1_1sonar_1_1_sonar_event.html#a45487c0872a470eb3a6e641963b384d2", null ],
     [ "ready", "structdevices_1_1sonar_1_1_sonar_event.html#aaa9fe430fd043ca3992f37ac66a24ec1", null ],

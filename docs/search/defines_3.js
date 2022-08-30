@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['naked_5fsignal_2820',['NAKED_SIGNAL',['../defines_8h.html#a330c425a6677b0f5b1d88f864161ff90',1,'defines.h']]],
-  ['nop_2821',['NOP',['../defines_8h.html#ad99fda6bb7696991797c925f968234b9',1,'defines.h']]]
+  ['manager_5ffuture_2762',['MANAGER_FUTURE',['../i2c__handler_8h.html#adb3d371ce2a66fef0a44e4badc247ddf',1,'i2c_handler.h']]]
 ];

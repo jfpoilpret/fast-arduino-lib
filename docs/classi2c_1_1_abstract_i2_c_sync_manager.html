@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>FastArduino: i2c::AbstractI2CSyncManager&lt; ARCH_HANDLER_, MODE_, HAS_LC_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt; Class Template Reference</title>
+<title>FastArduino: i2c::AbstractI2CSyncManager&lt; ARCH_HANDLER_, MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.9</span>
+   &#160;<span id="projectnumber">v1.9 alpha</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -90,7 +90,7 @@ $(document).ready(function(){initNavTree('classi2c_1_1_abstract_i2_c_sync_manage
 <a href="#friends">Friends</a> &#124;
 <a href="classi2c_1_1_abstract_i2_c_sync_manager-members.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">i2c::AbstractI2CSyncManager&lt; ARCH_HANDLER_, MODE_, HAS_LC_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt; Class Template Reference</div>  </div>
+<div class="title">i2c::AbstractI2CSyncManager&lt; ARCH_HANDLER_, MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
@@ -99,87 +99,68 @@ $(document).ready(function(){initNavTree('classi2c_1_1_abstract_i2_c_sync_manage
 
 <p><code>#include &lt;<a class="el" href="i2c__handler__common_8h_source.html">fastarduino/i2c_handler_common.h</a>&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for i2c::AbstractI2CSyncManager&lt; ARCH_HANDLER_, MODE_, HAS_LC_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt;:</div>
+Inheritance diagram for i2c::AbstractI2CSyncManager&lt; ARCH_HANDLER_, MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt;:</div>
 <div class="dyncontent">
-<div class="center"><img src="classi2c_1_1_abstract_i2_c_sync_manager__inherit__graph.png" border="0" usemap="#ai2c_1_1_abstract_i2_c_sync_manager_3_01_a_r_c_h___h_a_n_d_l_e_r___00_01_m_o_d_e___00_01_h_a_s___l_c___00_01_s_t_a_t_u_s___h_o_o_k___00_01_h_a_s___d_e_b_u_g___00_01_d_e_b_u_g___h_o_o_k___01_4_inherit__map" alt="Inheritance graph"/></div>
-<map name="ai2c_1_1_abstract_i2_c_sync_manager_3_01_a_r_c_h___h_a_n_d_l_e_r___00_01_m_o_d_e___00_01_h_a_s___l_c___00_01_s_t_a_t_u_s___h_o_o_k___00_01_h_a_s___d_e_b_u_g___00_01_d_e_b_u_g___h_o_o_k___01_4_inherit__map" id="ai2c_1_1_abstract_i2_c_sync_manager_3_01_a_r_c_h___h_a_n_d_l_e_r___00_01_m_o_d_e___00_01_h_a_s___l_c___00_01_s_t_a_t_u_s___h_o_o_k___00_01_h_a_s___d_e_b_u_g___00_01_d_e_b_u_g___h_o_o_k___01_4_inherit__map">
-<area shape="rect" title="Abstract synchronous I2C Manager for all MCU architectures." alt="" coords="5,716,235,787"/>
-<area shape="rect" href="classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="285,5,499,76"/>
-<area shape="rect" href="classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="287,195,497,265"/>
-<area shape="rect" href="classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="283,384,501,455"/>
-<area shape="rect" href="classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="287,573,497,644"/>
-<area shape="rect" href="classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="285,763,499,833"/>
-<area shape="rect" href="classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="283,952,501,1023"/>
-<area shape="rect" href="classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="287,1141,497,1212"/>
-<area shape="rect" href="classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="287,1331,497,1401"/>
-<area shape="rect" href="classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="285,100,499,171"/>
-<area shape="rect" href="classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="293,289,491,360"/>
-<area shape="rect" href="classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="283,479,501,549"/>
-<area shape="rect" href="classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="291,668,493,739"/>
-<area shape="rect" href="classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="285,857,499,928"/>
-<area shape="rect" href="classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="283,1047,501,1117"/>
-<area shape="rect" href="classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="293,1236,491,1307"/>
-<area shape="rect" href="classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="291,1425,493,1496"/>
-<area shape="rect" href="classi2c_1_1_i2_c_sync_l_c_status_debug_manager.html" title="Synchronous I2C Manager for ATmega architecture with status notification and debug facilities and sup..." alt="" coords="609,61,809,117"/>
-<area shape="rect" href="classi2c_1_1_i2_c_sync_debug_manager.html" title="Synchronous I2C Manager for ATmega architecture with debug facility." alt="" coords="605,257,812,299"/>
-<area shape="rect" href="classi2c_1_1_i2_c_sync_l_c_debug_manager.html" title="Synchronous I2C Manager for ATmega architecture with debug facility and support for dynamic proxies." alt="" coords="601,447,817,488"/>
-<area shape="rect" href="classi2c_1_1_i2_c_sync_status_manager.html" title="Synchronous I2C Manager for ATmega architecture wit status notification facility." alt="" coords="603,636,814,677"/>
-<area shape="rect" href="classi2c_1_1_i2_c_sync_l_c_status_manager.html" title="Synchronous I2C Manager for ATmega architecture with status notification facility and support for dyn..." alt="" coords="601,825,816,867"/>
-<area shape="rect" href="classi2c_1_1_i2_c_sync_l_c_manager.html" title="Synchronous I2C Manager for ATmega architecture with support for dynamic proxies." alt="" coords="621,1015,796,1056"/>
-<area shape="rect" href="classi2c_1_1_i2_c_sync_status_debug_manager.html" title="Synchronous I2C Manager for ATmega architecture with status notification and debug facility." alt="" coords="549,1204,868,1245"/>
-<area shape="rect" href="classi2c_1_1_i2_c_sync_manager.html" title="Synchronous I2C Manager for ATmega architecture." alt="" coords="629,1392,788,1433"/>
+<div class="center"><img src="classi2c_1_1_abstract_i2_c_sync_manager__inherit__graph.png" border="0" usemap="#ai2c_1_1_abstract_i2_c_sync_manager_3_01_a_r_c_h___h_a_n_d_l_e_r___00_01_m_o_d_e___00_01_s_t_a_t_u_s___h_o_o_k___00_01_h_a_s___d_e_b_u_g___00_01_d_e_b_u_g___h_o_o_k___01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="ai2c_1_1_abstract_i2_c_sync_manager_3_01_a_r_c_h___h_a_n_d_l_e_r___00_01_m_o_d_e___00_01_s_t_a_t_u_s___h_o_o_k___00_01_h_a_s___d_e_b_u_g___00_01_d_e_b_u_g___h_o_o_k___01_4_inherit__map" id="ai2c_1_1_abstract_i2_c_sync_manager_3_01_a_r_c_h___h_a_n_d_l_e_r___00_01_m_o_d_e___00_01_s_t_a_t_u_s___h_o_o_k___00_01_h_a_s___d_e_b_u_g___00_01_d_e_b_u_g___h_o_o_k___01_4_inherit__map">
+<area shape="rect" title="Abstract synchronous I2C Manager for all MCU architectures." alt="" coords="5,337,224,408"/>
+<area shape="rect" href="classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="319,5,528,76"/>
+<area shape="rect" href="classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="319,195,528,265"/>
+<area shape="rect" href="classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="319,384,528,455"/>
+<area shape="rect" href="classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="272,574,575,630"/>
+<area shape="rect" href="classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="325,100,522,171"/>
+<area shape="rect" href="classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="325,289,522,360"/>
+<area shape="rect" href="classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="321,479,525,549"/>
+<area shape="rect" href="classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="272,654,575,710"/>
+<area shape="rect" href="classi2c_1_1_i2_c_sync_debug_manager.html" title="Synchronous I2C Manager for ATmega architecture with debug facility." alt="" coords="679,68,885,109"/>
+<area shape="rect" href="classi2c_1_1_i2_c_sync_manager.html" title="Synchronous I2C Manager for ATmega architecture." alt="" coords="703,257,861,299"/>
+<area shape="rect" href="classi2c_1_1_i2_c_sync_status_manager.html" title="Synchronous I2C Manager for ATmega architecture wit status notification facility." alt="" coords="677,447,887,488"/>
+<area shape="rect" href="classi2c_1_1_i2_c_sync_status_debug_manager.html" title="Synchronous I2C Manager for ATmega architecture with status notification and debug facility." alt="" coords="623,621,941,663"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a590e80815346e28ea461b80575ce0cbb"><td class="memItemLeft" align="right" valign="top"><a id="a590e80815346e28ea461b80575ce0cbb"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>ABSTRACT_FUTURE</b> = <a class="el" href="classfuture_1_1_abstract_fake_future.html">future::AbstractFakeFuture</a></td></tr>
-<tr class="separator:a590e80815346e28ea461b80575ce0cbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a130d169c0933a9693677f9882fc86f50"><td class="memTemplParams" colspan="2"><a id="a130d169c0933a9693677f9882fc86f50"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a130d169c0933a9693677f9882fc86f50"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>PROXY</b> = typename LC::template PROXY&lt; T &gt;</td></tr>
-<tr class="separator:a130d169c0933a9693677f9882fc86f50"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a051463402d68f5c0b13011ec6c4cd8dd"><td class="memTemplParams" colspan="2"><a id="a051463402d68f5c0b13011ec6c4cd8dd"></a>
-template&lt;typename OUT , typename IN &gt; </td></tr>
-<tr class="memitem:a051463402d68f5c0b13011ec6c4cd8dd"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><b>FUTURE</b> = <a class="el" href="classfuture_1_1_fake_future.html">future::FakeFuture</a>&lt; OUT, IN &gt;</td></tr>
-<tr class="separator:a051463402d68f5c0b13011ec6c4cd8dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75664cf3b7cf130bb19c2c7cd109c12e"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a75664cf3b7cf130bb19c2c7cd109c12e">ABSTRACT_FUTURE</a> = <a class="el" href="classfuture_1_1_abstract_fake_future.html">future::AbstractFakeFuture</a></td></tr>
+<tr class="memdesc:a75664cf3b7cf130bb19c2c7cd109c12e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The abstract base class of all futures to be defined for this I2C Manager.  <a href="classi2c_1_1_abstract_i2_c_sync_manager.html#a75664cf3b7cf130bb19c2c7cd109c12e">More...</a><br /></td></tr>
+<tr class="separator:a75664cf3b7cf130bb19c2c7cd109c12e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30e83392b998952b6d52212a650ef778"><td class="memTemplParams" colspan="2">template&lt;typename OUT , typename IN &gt; </td></tr>
+<tr class="memitem:a30e83392b998952b6d52212a650ef778"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a30e83392b998952b6d52212a650ef778">FUTURE</a> = <a class="el" href="classfuture_1_1_fake_future.html">future::FakeFuture</a>&lt; OUT, IN &gt;</td></tr>
+<tr class="memdesc:a30e83392b998952b6d52212a650ef778"><td class="mdescLeft">&#160;</td><td class="mdescRight">The template base class of all futures to be defined for this I2C Manager.  <a href="classi2c_1_1_abstract_i2_c_sync_manager.html#a30e83392b998952b6d52212a650ef778">More...</a><br /></td></tr>
+<tr class="separator:a30e83392b998952b6d52212a650ef778"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a66b6a7902f2d3e2354f344c154f4a841"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a66b6a7902f2d3e2354f344c154f4a841">begin</a> ()</td></tr>
-<tr class="memdesc:a66b6a7902f2d3e2354f344c154f4a841"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepare and enable the MCU for I2C transmission.  <a href="classi2c_1_1_abstract_i2_c_sync_manager.html#a66b6a7902f2d3e2354f344c154f4a841">More...</a><br /></td></tr>
-<tr class="separator:a66b6a7902f2d3e2354f344c154f4a841"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89d6aa837d6c10f2de51725dd76abd2e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a89d6aa837d6c10f2de51725dd76abd2e">end</a> ()</td></tr>
-<tr class="memdesc:a89d6aa837d6c10f2de51725dd76abd2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable MCU I2C transmission.  <a href="classi2c_1_1_abstract_i2_c_sync_manager.html#a89d6aa837d6c10f2de51725dd76abd2e">More...</a><br /></td></tr>
-<tr class="separator:a89d6aa837d6c10f2de51725dd76abd2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1aefd3e66aa6e1443c2a85970855658a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a1aefd3e66aa6e1443c2a85970855658a">begin_</a> ()</td></tr>
-<tr class="memdesc:a1aefd3e66aa6e1443c2a85970855658a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepare and enable the MCU for I2C transmission.  <a href="classi2c_1_1_abstract_i2_c_sync_manager.html#a1aefd3e66aa6e1443c2a85970855658a">More...</a><br /></td></tr>
-<tr class="separator:a1aefd3e66aa6e1443c2a85970855658a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5feead7877946d4d75f38d5b68cd4ec8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a5feead7877946d4d75f38d5b68cd4ec8">end_</a> ()</td></tr>
-<tr class="memdesc:a5feead7877946d4d75f38d5b68cd4ec8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable MCU I2C transmission.  <a href="classi2c_1_1_abstract_i2_c_sync_manager.html#a5feead7877946d4d75f38d5b68cd4ec8">More...</a><br /></td></tr>
-<tr class="separator:a5feead7877946d4d75f38d5b68cd4ec8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1d57efe73e4e8d75bf303f148be8fe1d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a1d57efe73e4e8d75bf303f148be8fe1d">begin</a> ()</td></tr>
+<tr class="memdesc:a1d57efe73e4e8d75bf303f148be8fe1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepare and enable the MCU for I2C transmission.  <a href="classi2c_1_1_abstract_i2_c_sync_manager.html#a1d57efe73e4e8d75bf303f148be8fe1d">More...</a><br /></td></tr>
+<tr class="separator:a1d57efe73e4e8d75bf303f148be8fe1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2511a80e2ce5b2b6142922a306b4588e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a2511a80e2ce5b2b6142922a306b4588e">end</a> ()</td></tr>
+<tr class="memdesc:a2511a80e2ce5b2b6142922a306b4588e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable MCU I2C transmission.  <a href="classi2c_1_1_abstract_i2_c_sync_manager.html#a2511a80e2ce5b2b6142922a306b4588e">More...</a><br /></td></tr>
+<tr class="separator:a2511a80e2ce5b2b6142922a306b4588e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acbe7922dbd874a27497701245011fcf8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#acbe7922dbd874a27497701245011fcf8">begin_</a> ()</td></tr>
+<tr class="memdesc:acbe7922dbd874a27497701245011fcf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Prepare and enable the MCU for I2C transmission.  <a href="classi2c_1_1_abstract_i2_c_sync_manager.html#acbe7922dbd874a27497701245011fcf8">More...</a><br /></td></tr>
+<tr class="separator:acbe7922dbd874a27497701245011fcf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad568177e9821c9b33bca622518e54581"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#ad568177e9821c9b33bca622518e54581">end_</a> ()</td></tr>
+<tr class="memdesc:ad568177e9821c9b33bca622518e54581"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable MCU I2C transmission.  <a href="classi2c_1_1_abstract_i2_c_sync_manager.html#ad568177e9821c9b33bca622518e54581">More...</a><br /></td></tr>
+<tr class="separator:ad568177e9821c9b33bca622518e54581"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
 Protected Types</h2></td></tr>
-<tr class="memitem:a640a6c6e11f677be7a6d12651730c2ed"><td class="memItemLeft" align="right" valign="top"><a id="a640a6c6e11f677be7a6d12651730c2ed"></a>
+<tr class="memitem:ac233f628727fed78482526fabafd006c"><td class="memItemLeft" align="right" valign="top"><a id="ac233f628727fed78482526fabafd006c"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>ARCH_HANDLER</b> = ARCH_HANDLER_</td></tr>
-<tr class="separator:a640a6c6e11f677be7a6d12651730c2ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a61dceb5891e501eaca60b87ef67eed40"><td class="memItemLeft" align="right" valign="top"><a id="a61dceb5891e501eaca60b87ef67eed40"></a>
+<tr class="separator:ac233f628727fed78482526fabafd006c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad0b7cb5ba65d6e4e5612a8a03e2f3a4"><td class="memItemLeft" align="right" valign="top"><a id="aad0b7cb5ba65d6e4e5612a8a03e2f3a4"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>MODE_TRAIT</b> = I2CMode_trait&lt; MODE_ &gt;</td></tr>
-<tr class="separator:a61dceb5891e501eaca60b87ef67eed40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a345716fe78b43f15210f4615f10253bb"><td class="memItemLeft" align="right" valign="top"><a id="a345716fe78b43f15210f4615f10253bb"></a>
+<tr class="separator:aad0b7cb5ba65d6e4e5612a8a03e2f3a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f5256c789aa19fc696ae49075c66fbf"><td class="memItemLeft" align="right" valign="top"><a id="a7f5256c789aa19fc696ae49075c66fbf"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>I2C_TRAIT</b> = board_traits::TWI_trait</td></tr>
-<tr class="separator:a345716fe78b43f15210f4615f10253bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef118a71cc12e3e0c5740b7f499929cf"><td class="memItemLeft" align="right" valign="top"><a id="aef118a71cc12e3e0c5740b7f499929cf"></a>
+<tr class="separator:a7f5256c789aa19fc696ae49075c66fbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4a08998b76952375f4b4148530a364f6"><td class="memItemLeft" align="right" valign="top"><a id="a4a08998b76952375f4b4148530a364f6"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>REG8</b> = board_traits::REG8</td></tr>
-<tr class="separator:aef118a71cc12e3e0c5740b7f499929cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35816d840d707cc1899f59f511cd06ab"><td class="memItemLeft" align="right" valign="top"><a id="a35816d840d707cc1899f59f511cd06ab"></a>
+<tr class="separator:a4a08998b76952375f4b4148530a364f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a018e64d86091cc70f750abe7404cd223"><td class="memItemLeft" align="right" valign="top"><a id="a018e64d86091cc70f750abe7404cd223"></a>
 using&#160;</td><td class="memItemRight" valign="bottom"><b>DEBUG</b> = I2CDebugSupport&lt; HAS_DEBUG_, DEBUG_HOOK_ &gt;</td></tr>
-<tr class="separator:a35816d840d707cc1899f59f511cd06ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a307f9c6d09b983e79fe2a06a11b0d7b1"><td class="memItemLeft" align="right" valign="top"><a id="a307f9c6d09b983e79fe2a06a11b0d7b1"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>LC</b> = I2CLifeCycleSupport&lt; HAS_LC_ &gt;</td></tr>
-<tr class="separator:a307f9c6d09b983e79fe2a06a11b0d7b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="separator:a018e64d86091cc70f750abe7404cd223"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
@@ -189,16 +170,15 @@ template&lt;typename &gt; </td></tr>
 <tr class="separator:a787499b46e8ad88439f896ceefe1da54"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;typename ARCH_HANDLER_, I2CMode MODE_, bool HAS_LC_, typename STATUS_HOOK_, bool HAS_DEBUG_, typename DEBUG_HOOK_&gt;<br />
-class i2c::AbstractI2CSyncManager&lt; ARCH_HANDLER_, MODE_, HAS_LC_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt;</h3>
+<div class="textblock"><h3>template&lt;typename ARCH_HANDLER_, I2CMode MODE_, typename STATUS_HOOK_, bool HAS_DEBUG_, typename DEBUG_HOOK_&gt;<br />
+class i2c::AbstractI2CSyncManager&lt; ARCH_HANDLER_, MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt;</h3>
 
 <p>Abstract synchronous I2C Manager for all MCU architectures. </p>
-<p>A specifi abstract subclass is defined for each MCU architecture (ATmega, ATtiny). You should never need to subclass <a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html" title="Abstract synchronous I2C Manager for all MCU architectures.">AbstractI2CSyncManager</a> yourself.</p>
+<p>A specific abstract subclass is defined for each MCU architecture (ATmega, ATtiny). You should never need to subclass <a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html" title="Abstract synchronous I2C Manager for all MCU architectures.">AbstractI2CSyncManager</a> yourself.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">ARCH_HANDLER_</td><td>the type of an actual class handling I2C control on actual target architecture </td></tr>
     <tr><td class="paramname">MODE_</td><td>the I2C mode for this manager </td></tr>
-    <tr><td class="paramname">HAS_LC_</td><td>tells if this I2C Manager must be able to handle proxies to Future that can move around and must be controlled by a LifeCycleManager; using <code>false</code> will generate smaller code. </td></tr>
     <tr><td class="paramname">STATUS_HOOK_</td><td>the type of the hook to be called. This can be a simple function pointer (of type <code>I2C_STATUS_HOOK</code>) or a Functor class (or Functor class reference). Using a Functor class will generate smaller code. </td></tr>
     <tr><td class="paramname">HAS_DEBUG_</td><td>tells this I2C Manager to call a debugging hook at each step of an I2C transaction; this is useful for debugging support for a new I2C device; using <code>false</code> will generate smaller code. </td></tr>
     <tr><td class="paramname">DEBUG_HOOK_</td><td>the type of the hook to be called when <code>HAS_DEBUG_</code> is <code>true</code>. This can be a simple function pointer (of type <code>I2C_DEBUG_HOOK</code>) or a Functor class (or Functor class reference). Using a Functor class will generate smaller code.</td></tr>
@@ -215,21 +195,66 @@ class i2c::AbstractI2CSyncManager&lt; ARCH_HANDLER_, MODE_, HAS_LC_, STATUS_HOOK
 <dd>
 <a class="el" href="namespacei2c_1_1status.html" title="Defines API to ease I2C manager status tracing and debugging.">i2c::status</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00412">412</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a66b6a7902f2d3e2354f344c154f4a841"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a66b6a7902f2d3e2354f344c154f4a841">&#9670;&nbsp;</a></span>begin()</h2>
+<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00408">408</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a75664cf3b7cf130bb19c2c7cd109c12e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75664cf3b7cf130bb19c2c7cd109c12e">&#9670;&nbsp;</a></span>ABSTRACT_FUTURE</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename ARCH_HANDLER_ , I2CMode MODE_, bool HAS_LC_, typename STATUS_HOOK_ , bool HAS_DEBUG_, typename DEBUG_HOOK_ &gt; </div>
+template&lt;typename ARCH_HANDLER_ , I2CMode MODE_, typename STATUS_HOOK_ , bool HAS_DEBUG_, typename DEBUG_HOOK_ &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html">i2c::AbstractI2CSyncManager</a>&lt; ARCH_HANDLER_, MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt;::<a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a75664cf3b7cf130bb19c2c7cd109c12e">ABSTRACT_FUTURE</a> =  <a class="el" href="classfuture_1_1_abstract_fake_future.html">future::AbstractFakeFuture</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The abstract base class of all futures to be defined for this I2C Manager. </p>
+<p>For a synchronous manager, it is always <code><a class="el" href="classfuture_1_1_abstract_fake_future.html" title="Base class for all FakeFutures.">future::AbstractFakeFuture</a></code>. </p>
+
+<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00422">422</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
+
+</div>
+</div>
+<a id="a30e83392b998952b6d52212a650ef778"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30e83392b998952b6d52212a650ef778">&#9670;&nbsp;</a></span>FUTURE</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ARCH_HANDLER_ , I2CMode MODE_, typename STATUS_HOOK_ , bool HAS_DEBUG_, typename DEBUG_HOOK_ &gt; </div>
+<div class="memtemplate">
+template&lt;typename OUT , typename IN &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html">i2c::AbstractI2CSyncManager</a>&lt; ARCH_HANDLER_, MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt;::<a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a30e83392b998952b6d52212a650ef778">FUTURE</a> =  <a class="el" href="classfuture_1_1_fake_future.html">future::FakeFuture</a>&lt;OUT, IN&gt;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The template base class of all futures to be defined for this I2C Manager. </p>
+<p>For a synchronous manager, it is always <code><a class="el" href="classfuture_1_1_fake_future.html" title="Actual FakeFuture, it has the exact same API as Future and can be used in lieu of Future.">future::FakeFuture</a></code>. </p>
+
+<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00428">428</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a1d57efe73e4e8d75bf303f148be8fe1d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d57efe73e4e8d75bf303f148be8fe1d">&#9670;&nbsp;</a></span>begin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename ARCH_HANDLER_ , I2CMode MODE_, typename STATUS_HOOK_ , bool HAS_DEBUG_, typename DEBUG_HOOK_ &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html">i2c::AbstractI2CSyncManager</a>&lt; ARCH_HANDLER_, MODE_, HAS_LC_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt;::begin </td>
+          <td class="memname">void <a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html">i2c::AbstractI2CSyncManager</a>&lt; ARCH_HANDLER_, MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt;::begin </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -243,27 +268,27 @@ template&lt;typename ARCH_HANDLER_ , I2CMode MODE_, bool HAS_LC_, typename STATU
 </div><div class="memdoc">
 
 <p>Prepare and enable the MCU for I2C transmission. </p>
-<p>Preparation includes setup of I2C pins (SDA and SCL). This method is synchronized. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a89d6aa837d6c10f2de51725dd76abd2e" title="Disable MCU I2C transmission.">end()</a> </dd>
+<p>Preparation includes setup of I2C pins (SDA and SCL). This method is synchronized. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a2511a80e2ce5b2b6142922a306b4588e" title="Disable MCU I2C transmission.">end()</a> </dd>
 <dd>
-<a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a1aefd3e66aa6e1443c2a85970855658a" title="Prepare and enable the MCU for I2C transmission.">begin_()</a> </dd></dl>
+<a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#acbe7922dbd874a27497701245011fcf8" title="Prepare and enable the MCU for I2C transmission.">begin_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00434">434</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00437">437</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
 
 </div>
 </div>
-<a id="a89d6aa837d6c10f2de51725dd76abd2e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a89d6aa837d6c10f2de51725dd76abd2e">&#9670;&nbsp;</a></span>end()</h2>
+<a id="a2511a80e2ce5b2b6142922a306b4588e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2511a80e2ce5b2b6142922a306b4588e">&#9670;&nbsp;</a></span>end()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename ARCH_HANDLER_ , I2CMode MODE_, bool HAS_LC_, typename STATUS_HOOK_ , bool HAS_DEBUG_, typename DEBUG_HOOK_ &gt; </div>
+template&lt;typename ARCH_HANDLER_ , I2CMode MODE_, typename STATUS_HOOK_ , bool HAS_DEBUG_, typename DEBUG_HOOK_ &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html">i2c::AbstractI2CSyncManager</a>&lt; ARCH_HANDLER_, MODE_, HAS_LC_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt;::end </td>
+          <td class="memname">void <a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html">i2c::AbstractI2CSyncManager</a>&lt; ARCH_HANDLER_, MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt;::end </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -277,27 +302,27 @@ template&lt;typename ARCH_HANDLER_ , I2CMode MODE_, bool HAS_LC_, typename STATU
 </div><div class="memdoc">
 
 <p>Disable MCU I2C transmission. </p>
-<p>This method is synchronized. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a66b6a7902f2d3e2354f344c154f4a841" title="Prepare and enable the MCU for I2C transmission.">begin()</a> </dd>
+<p>This method is synchronized. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a1d57efe73e4e8d75bf303f148be8fe1d" title="Prepare and enable the MCU for I2C transmission.">begin()</a> </dd>
 <dd>
-<a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a5feead7877946d4d75f38d5b68cd4ec8" title="Disable MCU I2C transmission.">end_()</a> </dd></dl>
+<a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#ad568177e9821c9b33bca622518e54581" title="Disable MCU I2C transmission.">end_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00445">445</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00448">448</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
 
 </div>
 </div>
-<a id="a1aefd3e66aa6e1443c2a85970855658a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1aefd3e66aa6e1443c2a85970855658a">&#9670;&nbsp;</a></span>begin_()</h2>
+<a id="acbe7922dbd874a27497701245011fcf8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbe7922dbd874a27497701245011fcf8">&#9670;&nbsp;</a></span>begin_()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename ARCH_HANDLER_ , I2CMode MODE_, bool HAS_LC_, typename STATUS_HOOK_ , bool HAS_DEBUG_, typename DEBUG_HOOK_ &gt; </div>
+template&lt;typename ARCH_HANDLER_ , I2CMode MODE_, typename STATUS_HOOK_ , bool HAS_DEBUG_, typename DEBUG_HOOK_ &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html">i2c::AbstractI2CSyncManager</a>&lt; ARCH_HANDLER_, MODE_, HAS_LC_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt;::begin_ </td>
+          <td class="memname">void <a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html">i2c::AbstractI2CSyncManager</a>&lt; ARCH_HANDLER_, MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt;::begin_ </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -311,27 +336,27 @@ template&lt;typename ARCH_HANDLER_ , I2CMode MODE_, bool HAS_LC_, typename STATU
 </div><div class="memdoc">
 
 <p>Prepare and enable the MCU for I2C transmission. </p>
-<p>Preparation includes setup of I2C pins (SDA and SCL). This method is NOT synchronized. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a5feead7877946d4d75f38d5b68cd4ec8" title="Disable MCU I2C transmission.">end_()</a> </dd>
+<p>Preparation includes setup of I2C pins (SDA and SCL). This method is NOT synchronized. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#ad568177e9821c9b33bca622518e54581" title="Disable MCU I2C transmission.">end_()</a> </dd>
 <dd>
-<a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a66b6a7902f2d3e2354f344c154f4a841" title="Prepare and enable the MCU for I2C transmission.">begin()</a> </dd></dl>
+<a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a1d57efe73e4e8d75bf303f148be8fe1d" title="Prepare and enable the MCU for I2C transmission.">begin()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00457">457</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00460">460</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
 
 </div>
 </div>
-<a id="a5feead7877946d4d75f38d5b68cd4ec8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5feead7877946d4d75f38d5b68cd4ec8">&#9670;&nbsp;</a></span>end_()</h2>
+<a id="ad568177e9821c9b33bca622518e54581"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad568177e9821c9b33bca622518e54581">&#9670;&nbsp;</a></span>end_()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename ARCH_HANDLER_ , I2CMode MODE_, bool HAS_LC_, typename STATUS_HOOK_ , bool HAS_DEBUG_, typename DEBUG_HOOK_ &gt; </div>
+template&lt;typename ARCH_HANDLER_ , I2CMode MODE_, typename STATUS_HOOK_ , bool HAS_DEBUG_, typename DEBUG_HOOK_ &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html">i2c::AbstractI2CSyncManager</a>&lt; ARCH_HANDLER_, MODE_, HAS_LC_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt;::end_ </td>
+          <td class="memname">void <a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html">i2c::AbstractI2CSyncManager</a>&lt; ARCH_HANDLER_, MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt;::end_ </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -345,11 +370,11 @@ template&lt;typename ARCH_HANDLER_ , I2CMode MODE_, bool HAS_LC_, typename STATU
 </div><div class="memdoc">
 
 <p>Disable MCU I2C transmission. </p>
-<p>This method is NOT synchronized. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a1aefd3e66aa6e1443c2a85970855658a" title="Prepare and enable the MCU for I2C transmission.">begin_()</a> </dd>
+<p>This method is NOT synchronized. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#acbe7922dbd874a27497701245011fcf8" title="Prepare and enable the MCU for I2C transmission.">begin_()</a> </dd>
 <dd>
-<a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a89d6aa837d6c10f2de51725dd76abd2e" title="Disable MCU I2C transmission.">end()</a> </dd></dl>
+<a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a2511a80e2ce5b2b6142922a306b4588e" title="Disable MCU I2C transmission.">end()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00468">468</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00471">471</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
 
 </div>
 </div>

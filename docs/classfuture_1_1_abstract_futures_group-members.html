@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.9</span>
+   &#160;<span id="projectnumber">v1.9 alpha</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -90,12 +90,10 @@ $(document).ready(function(){initNavTree('classfuture_1_1_abstract_futures_group
 
 <p>This is the complete list of members for <a class="el" href="classfuture_1_1_abstract_futures_group.html">future::AbstractFuturesGroup&lt; F &gt;</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="classfuture_1_1_abstract_futures_group.html#a78c4460292c06938377dbdde7108b889">AbstractFuturesGroup</a>(STATUS_LISTENER *status_listener=nullptr)</td><td class="entry"><a class="el" href="classfuture_1_1_abstract_futures_group.html">future::AbstractFuturesGroup&lt; F &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">explicit</span><span class="mlabel">protected</span></td></tr>
-  <tr bgcolor="#f0f0f0"><td class="entry"><b>F</b> (defined in <a class="el" href="classfuture_1_1_future_status_listener.html">future::FutureStatusListener&lt; F &gt;</a>)</td><td class="entry"><a class="el" href="classfuture_1_1_future_status_listener.html">future::FutureStatusListener&lt; F &gt;</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classfuture_1_1_abstract_futures_group.html#ad4662d690087c9bccd480a19b60ed50e">init</a>(utils::range&lt; F * &gt; futures, uint16_t actual_size=0)</td><td class="entry"><a class="el" href="classfuture_1_1_abstract_futures_group.html">future::AbstractFuturesGroup&lt; F &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">protected</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classfuture_1_1_abstract_futures_group.html#a5c1ce2a59be93e2876bbe89c62d7306d">NO_LIMIT</a></td><td class="entry"><a class="el" href="classfuture_1_1_abstract_futures_group.html">future::AbstractFuturesGroup&lt; F &gt;</a></td><td class="entry"><span class="mlabel">protected</span><span class="mlabel">static</span></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="classfuture_1_1_future_status_listener.html#aacfb09b7fc20a36e101a084a6d5f308c">on_status_change</a>(const F &amp;future, FutureStatus new_status)=0</td><td class="entry"><a class="el" href="classfuture_1_1_future_status_listener.html">future::FutureStatusListener&lt; F &gt;</a></td><td class="entry"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></td></tr>
-  <tr><td class="entry"><a class="el" href="classfuture_1_1_abstract_futures_group.html#ad36dac49460d77667e990be44f6c8051">STATUS_LISTENER</a> typedef</td><td class="entry"><a class="el" href="classfuture_1_1_abstract_futures_group.html">future::AbstractFuturesGroup&lt; F &gt;</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classfuture_1_1_abstract_futures_group.html#a8aa5b49d3471f182e248515dba435cdc">AbstractFuturesGroup</a>(FutureNotification notifications=FutureNotification::NONE)</td><td class="entry"><a class="el" href="classfuture_1_1_abstract_futures_group.html">future::AbstractFuturesGroup&lt; F &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">explicit</span><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="classfuture_1_1_abstract_futures_group.html#ad4662d690087c9bccd480a19b60ed50e">init</a>(utils::range&lt; F * &gt; futures, uint16_t actual_size=0)</td><td class="entry"><a class="el" href="classfuture_1_1_abstract_futures_group.html">future::AbstractFuturesGroup&lt; F &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="classfuture_1_1_abstract_futures_group.html#a5c1ce2a59be93e2876bbe89c62d7306d">NO_LIMIT</a></td><td class="entry"><a class="el" href="classfuture_1_1_abstract_futures_group.html">future::AbstractFuturesGroup&lt; F &gt;</a></td><td class="entry"><span class="mlabel">protected</span><span class="mlabel">static</span></td></tr>
+  <tr><td class="entry"><a class="el" href="classfuture_1_1_abstract_futures_group.html#a6913702db1fdd311459727cacacd4980">on_status_change_pre_step</a>(const F &amp;future, FutureStatus status)</td><td class="entry"><a class="el" href="classfuture_1_1_abstract_futures_group.html">future::AbstractFuturesGroup&lt; F &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">protected</span></td></tr>
 </table></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

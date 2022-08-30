@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.9</span>
+   &#160;<span id="projectnumber">v1.9 alpha</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -120,9 +120,9 @@ Collaboration diagram for i2c::ReadRegisterFuture&lt; MANAGER, T, FUNCTOR &gt;:<
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a80fe7e9f680af4e3fc5e4228ab8333b3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_read_register_future.html#a80fe7e9f680af4e3fc5e4228ab8333b3">ReadRegisterFuture</a> (uint8_t reg, FUTURE_STATUS_LISTENER *status_listener=nullptr, FUTURE_OUTPUT_LISTENER *output_listener=nullptr)</td></tr>
-<tr class="memdesc:a80fe7e9f680af4e3fc5e4228ab8333b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="classi2c_1_1_read_register_future.html" title="General Future that can be used to read an I2C device register.">ReadRegisterFuture</a> future for a given device register <code>reg</code>.  <a href="classi2c_1_1_read_register_future.html#a80fe7e9f680af4e3fc5e4228ab8333b3">More...</a><br /></td></tr>
-<tr class="separator:a80fe7e9f680af4e3fc5e4228ab8333b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adacafdaf722e83d8bbff250ba3b266c1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1_read_register_future.html#adacafdaf722e83d8bbff250ba3b266c1">ReadRegisterFuture</a> (uint8_t reg, <a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337">future::FutureNotification</a> notification=<a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337ab50339a10e1de285ac99d4c3990b8693">future::FutureNotification::NONE</a>)</td></tr>
+<tr class="memdesc:adacafdaf722e83d8bbff250ba3b266c1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a <a class="el" href="classi2c_1_1_read_register_future.html" title="General Future that can be used to read an I2C device register.">ReadRegisterFuture</a> future for a given device register <code>reg</code>.  <a href="classi2c_1_1_read_register_future.html#adacafdaf722e83d8bbff250ba3b266c1">More...</a><br /></td></tr>
+<tr class="separator:adacafdaf722e83d8bbff250ba3b266c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;typename MANAGER, typename T, typename FUNCTOR = functor::Identity&lt;T&gt;&gt;<br />
@@ -150,8 +150,8 @@ class i2c::ReadRegisterFuture&lt; MANAGER, T, FUNCTOR &gt;</h3>
 
 <p class="definition">Definition at line <a class="el" href="i2c__device__utilities_8h_source.html#l00082">82</a> of file <a class="el" href="i2c__device__utilities_8h_source.html">i2c_device_utilities.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a80fe7e9f680af4e3fc5e4228ab8333b3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a80fe7e9f680af4e3fc5e4228ab8333b3">&#9670;&nbsp;</a></span>ReadRegisterFuture()</h2>
+<a id="adacafdaf722e83d8bbff250ba3b266c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adacafdaf722e83d8bbff250ba3b266c1">&#9670;&nbsp;</a></span>ReadRegisterFuture()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -170,14 +170,8 @@ template&lt;typename MANAGER , typename T , typename FUNCTOR  = functor::Identit
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">FUTURE_STATUS_LISTENER *&#160;</td>
-          <td class="paramname"><em>status_listener</em> = <code>nullptr</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">FUTURE_OUTPUT_LISTENER *&#160;</td>
-          <td class="paramname"><em>output_listener</em> = <code>nullptr</code>&#160;</td>
+          <td class="paramtype"><a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337">future::FutureNotification</a>&#160;</td>
+          <td class="paramname"><em>notification</em> = <code><a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337ab50339a10e1de285ac99d4c3990b8693">future::FutureNotification::NONE</a></code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -196,13 +190,12 @@ template&lt;typename MANAGER , typename T , typename FUNCTOR  = functor::Identit
 <p>This future can then be used to read the register value. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">reg</td><td>the address of the register to read from the I2C device </td></tr>
-    <tr><td class="paramname">status_listener</td><td>an optional listener to status changes on this future </td></tr>
-    <tr><td class="paramname">output_listener</td><td>an optional listener to output buffer changes on this future </td></tr>
+    <tr><td class="paramname">notifications</td><td>determines if and which notifications should be dispatched by this <a class="el" href="classi2c_1_1_read_register_future.html" title="General Future that can be used to read an I2C device register.">ReadRegisterFuture</a>; default is none. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__device__utilities_8h_source.html#l00109">109</a> of file <a class="el" href="i2c__device__utilities_8h_source.html">i2c_device_utilities.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__device__utilities_8h_source.html#l00105">105</a> of file <a class="el" href="i2c__device__utilities_8h_source.html">i2c_device_utilities.h</a>.</p>
 
 </div>
 </div>

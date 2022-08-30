@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.9</span>
+   &#160;<span id="projectnumber">v1.9 alpha</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -134,12 +134,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:aea02a3b9597f346d30b0781fae69506d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delay program execution for the given amount of milliseconds.  <a href="classwatchdog_1_1_watchdog_r_t_t.html#aea02a3b9597f346d30b0781fae69506d">More...</a><br /></td></tr>
 <tr class="separator:aea02a3b9597f346d30b0781fae69506d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classwatchdog_1_1_watchdog_signal"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classwatchdog_1_1_watchdog_signal')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classwatchdog_1_1_watchdog_signal.html">watchdog::WatchdogSignal</a></td></tr>
-<tr class="memitem:af981b70c9475721d1b0e30628f85f195 inherit pub_methods_classwatchdog_1_1_watchdog_signal"><td class="memItemLeft" align="right" valign="top"><a id="af981b70c9475721d1b0e30628f85f195"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>WatchdogSignal</b> (const <a class="el" href="classwatchdog_1_1_watchdog_signal.html">WatchdogSignal</a> &amp;)=delete</td></tr>
-<tr class="separator:af981b70c9475721d1b0e30628f85f195 inherit pub_methods_classwatchdog_1_1_watchdog_signal"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac220222de2a570c405aaa7f78ac72c8 inherit pub_methods_classwatchdog_1_1_watchdog_signal"><td class="memItemLeft" align="right" valign="top"><a id="aac220222de2a570c405aaa7f78ac72c8"></a>
-<a class="el" href="classwatchdog_1_1_watchdog_signal.html">WatchdogSignal</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classwatchdog_1_1_watchdog_signal.html">WatchdogSignal</a> &amp;)=delete</td></tr>
-<tr class="separator:aac220222de2a570c405aaa7f78ac72c8 inherit pub_methods_classwatchdog_1_1_watchdog_signal"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3040c8929991e081f02619ed89513b5a inherit pub_methods_classwatchdog_1_1_watchdog_signal"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classwatchdog_1_1_watchdog_signal.html#a3040c8929991e081f02619ed89513b5a">begin</a> (<a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01b">TimeOut</a> timeout=<a class="el" href="namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01ba511365e7b9dbb67d36a5652065e21c9c">TimeOut::TO_16ms</a>)</td></tr>
 <tr class="memdesc:a3040c8929991e081f02619ed89513b5a inherit pub_methods_classwatchdog_1_1_watchdog_signal"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start the watchdog timer with the given <code>timeout</code> period.  <a href="classwatchdog_1_1_watchdog_signal.html#a3040c8929991e081f02619ed89513b5a">More...</a><br /></td></tr>
 <tr class="separator:a3040c8929991e081f02619ed89513b5a inherit pub_methods_classwatchdog_1_1_watchdog_signal"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -157,7 +151,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>isr_handler</b></td
 <div class="textblock"><p>Simple API to use watchdog timer as a real-time clock. </p>
 <p>For this to work correctly, you need to register the proper ISR through <code><a class="el" href="watchdog_8h.html#acf8c96f84107c380f8208e0e8f22a879" title="Register the necessary ISR (Interrupt Service Routine) for a watchdog::WatchdogRTT to work properly.">REGISTER_WATCHDOG_RTT_ISR()</a></code> macro first. </p>
 
-<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00201">201</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00203">203</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ad8bebd66247d2a9bbfb57fa173930477"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad8bebd66247d2a9bbfb57fa173930477">&#9670;&nbsp;</a></span>WatchdogRTT()</h2>
@@ -185,7 +179,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>isr_handler</b></td
 <p>Construct a new watchdog-based clock that will count elapsed milliseconds since it was started with <code><a class="el" href="classwatchdog_1_1_watchdog_r_t_t.html#af97953c441f885b7a3b0c21aa7e375e2" title="Start the watchdog clock with the given timeout period.">begin()</a></code>. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="watchdog_8h.html#acf8c96f84107c380f8208e0e8f22a879" title="Register the necessary ISR (Interrupt Service Routine) for a watchdog::WatchdogRTT to work properly.">REGISTER_WATCHDOG_RTT_ISR()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00209">209</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00211">211</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 
 </div>
 </div>
@@ -222,7 +216,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>isr_handler</b></td
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00225">225</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00227">227</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 
 </div>
 </div>
@@ -252,7 +246,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>isr_handler</b></td
 <p>Get the number of milliseconds that elapsed since <code><a class="el" href="classwatchdog_1_1_watchdog_r_t_t.html#af97953c441f885b7a3b0c21aa7e375e2" title="Start the watchdog clock with the given timeout period.">begin()</a></code> was called. </p>
 <p>Note: the precision is limited by the <code>timeout</code> value used with <code><a class="el" href="classwatchdog_1_1_watchdog_r_t_t.html#af97953c441f885b7a3b0c21aa7e375e2" title="Start the watchdog clock with the given timeout period.">begin()</a></code>. </p><dl class="section return"><dt>Returns</dt><dd>number of milliseconds elpased since watchdog was started </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00245">245</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00247">247</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 
 </div>
 </div>
@@ -282,7 +276,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>isr_handler</b></td
 <p>Reset current counter to 0. </p>
 <p>This method is synchronized. </p>
 
-<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00254">254</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00256">256</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 
 </div>
 </div>
@@ -320,7 +314,7 @@ struct&#160;</td><td class="memItemRight" valign="bottom"><b>isr_handler</b></td
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacetime.html#a5396c009ace06e55985ccf6b7bff179a" title="Utility method used by many FastArduino API in order to &quot;yield&quot; some processor time; concretely it ju...">time::yield()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00271">271</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="watchdog_8h_source.html#l00273">273</a> of file <a class="el" href="watchdog_8h_source.html">watchdog.h</a>.</p>
 
 </div>
 </div>

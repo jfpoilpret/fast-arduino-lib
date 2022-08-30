@@ -6,30 +6,18 @@ var hierarchy =
     [ "future::AbstractFuture", "classfuture_1_1_abstract_future.html", [
       [ "future::Future< OUT_, IN_ >", "classfuture_1_1_future.html", null ]
     ] ],
-    [ "i2c::AbstractI2CAsyncManager< MODE_, POLICY_, HAS_LC_, HAS_STATUS_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_async_manager.html", null ],
-    [ "i2c::AbstractI2CAsyncManager< MODE_, I2CErrorPolicy::CLEAR_ALL_COMMANDS, false, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_async_manager.html", [
+    [ "i2c::AbstractI2CAsyncManager< MODE_, POLICY_, HAS_STATUS_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_async_manager.html", null ],
+    [ "i2c::AbstractI2CAsyncManager< MODE_, I2CErrorPolicy::CLEAR_ALL_COMMANDS, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_async_manager.html", [
       [ "i2c::I2CAsyncManager< MODE_, POLICY_ >", "classi2c_1_1_i2_c_async_manager.html", null ]
     ] ],
-    [ "i2c::AbstractI2CAsyncManager< MODE_, I2CErrorPolicy::CLEAR_ALL_COMMANDS, false, false, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_async_manager.html", [
+    [ "i2c::AbstractI2CAsyncManager< MODE_, I2CErrorPolicy::CLEAR_ALL_COMMANDS, false, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_async_manager.html", [
       [ "i2c::I2CAsyncDebugManager< MODE_, POLICY_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_async_debug_manager.html", null ]
     ] ],
-    [ "i2c::AbstractI2CAsyncManager< MODE_, I2CErrorPolicy::CLEAR_ALL_COMMANDS, false, true, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_async_manager.html", [
+    [ "i2c::AbstractI2CAsyncManager< MODE_, I2CErrorPolicy::CLEAR_ALL_COMMANDS, true, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_async_manager.html", [
       [ "i2c::I2CAsyncStatusManager< MODE_, POLICY_, STATUS_HOOK_ >", "classi2c_1_1_i2_c_async_status_manager.html", null ]
     ] ],
-    [ "i2c::AbstractI2CAsyncManager< MODE_, I2CErrorPolicy::CLEAR_ALL_COMMANDS, false, true, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_async_manager.html", [
+    [ "i2c::AbstractI2CAsyncManager< MODE_, I2CErrorPolicy::CLEAR_ALL_COMMANDS, true, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_async_manager.html", [
       [ "i2c::I2CAsyncStatusDebugManager< MODE_, POLICY_, STATUS_HOOK_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_async_status_debug_manager.html", null ]
-    ] ],
-    [ "i2c::AbstractI2CAsyncManager< MODE_, I2CErrorPolicy::CLEAR_ALL_COMMANDS, true, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_async_manager.html", [
-      [ "i2c::I2CAsyncLCManager< MODE_, POLICY_ >", "classi2c_1_1_i2_c_async_l_c_manager.html", null ]
-    ] ],
-    [ "i2c::AbstractI2CAsyncManager< MODE_, I2CErrorPolicy::CLEAR_ALL_COMMANDS, true, false, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_async_manager.html", [
-      [ "i2c::I2CAsyncLCDebugManager< MODE_, POLICY_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_async_l_c_debug_manager.html", null ]
-    ] ],
-    [ "i2c::AbstractI2CAsyncManager< MODE_, I2CErrorPolicy::CLEAR_ALL_COMMANDS, true, true, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_async_manager.html", [
-      [ "i2c::I2CAsyncLCStatusManager< MODE_, POLICY_, STATUS_HOOK_ >", "classi2c_1_1_i2_c_async_l_c_status_manager.html", null ]
-    ] ],
-    [ "i2c::AbstractI2CAsyncManager< MODE_, I2CErrorPolicy::CLEAR_ALL_COMMANDS, true, true, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_async_manager.html", [
-      [ "i2c::I2CAsyncLCStatusDebugManager< MODE_, POLICY_, STATUS_HOOK_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_async_l_c_status_debug_manager.html", null ]
     ] ],
     [ "AbstractI2CFuturesGroup", null, [
       [ "i2c::I2CFuturesGroup< MANAGER >", "classi2c_1_1_i2_c_futures_group.html", [
@@ -38,61 +26,37 @@ var hierarchy =
       ] ],
       [ "i2c::I2CSameFutureGroup< MANAGER >", "classi2c_1_1_i2_c_same_future_group.html", null ]
     ] ],
-    [ "i2c::AbstractI2CSyncManager< ARCH_HANDLER_, MODE_, HAS_LC_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_sync_manager.html", [
-      [ "i2c::AbstractI2CSyncATmegaManager< MODE_, true, true, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html", [
-        [ "i2c::I2CSyncLCStatusDebugManager< MODE_, STATUS_HOOK_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_sync_l_c_status_debug_manager.html", null ]
-      ] ],
-      [ "i2c::AbstractI2CSyncATmegaManager< MODE_, false, false, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html", [
+    [ "i2c::AbstractI2CSyncManager< ARCH_HANDLER_, MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_sync_manager.html", [
+      [ "i2c::AbstractI2CSyncATmegaManager< MODE_, false, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html", [
         [ "i2c::I2CSyncDebugManager< MODE_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_sync_debug_manager.html", null ]
       ] ],
-      [ "i2c::AbstractI2CSyncATmegaManager< MODE_, true, false, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html", [
-        [ "i2c::I2CSyncLCDebugManager< MODE_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_sync_l_c_debug_manager.html", null ]
-      ] ],
-      [ "i2c::AbstractI2CSyncATmegaManager< MODE_, false, true, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html", [
-        [ "i2c::I2CSyncStatusManager< MODE_, STATUS_HOOK_ >", "classi2c_1_1_i2_c_sync_status_manager.html", null ]
-      ] ],
-      [ "i2c::AbstractI2CSyncATmegaManager< MODE_, true, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html", [
-        [ "i2c::I2CSyncLCStatusManager< MODE_, STATUS_HOOK_ >", "classi2c_1_1_i2_c_sync_l_c_status_manager.html", null ]
-      ] ],
-      [ "i2c::AbstractI2CSyncATmegaManager< MODE_, true, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html", [
-        [ "i2c::I2CSyncLCManager< MODE_ >", "classi2c_1_1_i2_c_sync_l_c_manager.html", null ]
-      ] ],
-      [ "i2c::AbstractI2CSyncATmegaManager< MODE_, false, true, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html", [
-        [ "i2c::I2CSyncStatusDebugManager< MODE_, STATUS_HOOK_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_sync_status_debug_manager.html", null ]
-      ] ],
-      [ "i2c::AbstractI2CSyncATmegaManager< MODE_, false, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html", [
+      [ "i2c::AbstractI2CSyncATmegaManager< MODE_, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html", [
         [ "i2c::I2CSyncManager< MODE_ >", "classi2c_1_1_i2_c_sync_manager.html", null ]
       ] ],
-      [ "i2c::AbstractI2CSyncATtinyManager< MODE_, true, true, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", [
-        [ "i2c::I2CSyncLCStatusDebugManager< MODE_, STATUS_HOOK_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_sync_l_c_status_debug_manager.html", null ]
+      [ "i2c::AbstractI2CSyncATmegaManager< MODE_, true, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html", [
+        [ "i2c::I2CSyncStatusManager< MODE_, STATUS_HOOK_ >", "classi2c_1_1_i2_c_sync_status_manager.html", null ]
       ] ],
-      [ "i2c::AbstractI2CSyncATtinyManager< MODE_, false, false, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", [
+      [ "i2c::AbstractI2CSyncATmegaManager< MODE_, true, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html", [
+        [ "i2c::I2CSyncStatusDebugManager< MODE_, STATUS_HOOK_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_sync_status_debug_manager.html", null ]
+      ] ],
+      [ "i2c::AbstractI2CSyncATtinyManager< MODE_, false, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", [
         [ "i2c::I2CSyncDebugManager< MODE_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_sync_debug_manager.html", null ]
       ] ],
-      [ "i2c::AbstractI2CSyncATtinyManager< MODE_, true, false, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", [
-        [ "i2c::I2CSyncLCDebugManager< MODE_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_sync_l_c_debug_manager.html", null ]
+      [ "i2c::AbstractI2CSyncATtinyManager< MODE_, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", [
+        [ "i2c::I2CSyncManager< MODE_ >", "classi2c_1_1_i2_c_sync_manager.html", null ]
       ] ],
-      [ "i2c::AbstractI2CSyncATtinyManager< MODE_, false, true, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", [
+      [ "i2c::AbstractI2CSyncATtinyManager< MODE_, true, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", [
         [ "i2c::I2CSyncStatusManager< MODE_, STATUS_HOOK_ >", "classi2c_1_1_i2_c_sync_status_manager.html", null ]
       ] ],
-      [ "i2c::AbstractI2CSyncATtinyManager< MODE_, true, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", [
-        [ "i2c::I2CSyncLCStatusManager< MODE_, STATUS_HOOK_ >", "classi2c_1_1_i2_c_sync_l_c_status_manager.html", null ]
-      ] ],
-      [ "i2c::AbstractI2CSyncATtinyManager< MODE_, true, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", [
-        [ "i2c::I2CSyncLCManager< MODE_ >", "classi2c_1_1_i2_c_sync_l_c_manager.html", null ]
-      ] ],
-      [ "i2c::AbstractI2CSyncATtinyManager< MODE_, false, true, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", [
+      [ "i2c::AbstractI2CSyncATtinyManager< MODE_, true, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", [
         [ "i2c::I2CSyncStatusDebugManager< MODE_, STATUS_HOOK_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_sync_status_debug_manager.html", null ]
-      ] ],
-      [ "i2c::AbstractI2CSyncATtinyManager< MODE_, false, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", [
-        [ "i2c::I2CSyncManager< MODE_ >", "classi2c_1_1_i2_c_sync_manager.html", null ]
       ] ]
     ] ],
-    [ "i2c::AbstractI2CSyncManager< ATmegaI2CSyncHandler< MODE_, HAS_STATUS_, STATUS_HOOK_ >, MODE_, HAS_LC_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_sync_manager.html", [
-      [ "i2c::AbstractI2CSyncATmegaManager< MODE_, HAS_LC_, HAS_STATUS_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html", null ]
+    [ "i2c::AbstractI2CSyncManager< ATmegaI2CSyncHandler< MODE_, HAS_STATUS_, STATUS_HOOK_ >, MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_sync_manager.html", [
+      [ "i2c::AbstractI2CSyncATmegaManager< MODE_, HAS_STATUS_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html", null ]
     ] ],
-    [ "i2c::AbstractI2CSyncManager< ATtinyI2CSyncHandler< MODE_, HAS_STATUS_, STATUS_HOOK_ >, MODE_, HAS_LC_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_sync_manager.html", [
-      [ "i2c::AbstractI2CSyncATtinyManager< MODE_, HAS_LC_, HAS_STATUS_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", null ]
+    [ "i2c::AbstractI2CSyncManager< ATtinyI2CSyncHandler< MODE_, HAS_STATUS_, STATUS_HOOK_ >, MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_sync_manager.html", [
+      [ "i2c::AbstractI2CSyncATtinyManager< MODE_, HAS_STATUS_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", null ]
     ] ],
     [ "lifecycle::AbstractLifeCycle", "classlifecycle_1_1_abstract_life_cycle.html", [
       [ "lifecycle::LifeCycle< T >", "classlifecycle_1_1_life_cycle.html", null ]
@@ -181,10 +145,6 @@ var hierarchy =
       [ "devices::rtc::DS1307< MANAGER >::SetRam1Future", "classdevices_1_1rtc_1_1_d_s1307_1_1_set_ram1_future.html", null ],
       [ "devices::rtc::DS1307< MANAGER >::SetRamFuture< SIZE_ >", "classdevices_1_1rtc_1_1_d_s1307_1_1_set_ram_future.html", null ]
     ] ],
-    [ "future::FutureOutputListener< F >", "classfuture_1_1_future_output_listener.html", null ],
-    [ "future::FutureStatusListener< F >", "classfuture_1_1_future_status_listener.html", [
-      [ "future::AbstractFuturesGroup< F >", "classfuture_1_1_abstract_futures_group.html", null ]
-    ] ],
     [ "devices::vl53l0x::GPIOSettings", "classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html", null ],
     [ "i2c::debug::I2CDebugLiveLogger", "classi2c_1_1debug_1_1_i2_c_debug_live_logger.html", [
       [ "i2c::debug::I2CDebugStatusLiveLogger", "classi2c_1_1debug_1_1_i2_c_debug_status_live_logger.html", null ]
@@ -204,7 +164,7 @@ var hierarchy =
     ] ],
     [ "i2c::status::I2CLatestStatusHolder", "classi2c_1_1status_1_1_i2_c_latest_status_holder.html", null ],
     [ "i2c::I2CLightCommand", "classi2c_1_1_i2_c_light_command.html", [
-      [ "i2c::I2CCommand< FUTURE_PROXY >", "classi2c_1_1_i2_c_command.html", null ],
+      [ "i2c::I2CCommand< ABSTRACT_FUTURE >", "classi2c_1_1_i2_c_command.html", null ],
       [ "i2c::I2CCommand< T >", "classi2c_1_1_i2_c_command.html", null ]
     ] ],
     [ "i2c::status::I2CStatusLiveLogger", "classi2c_1_1status_1_1_i2_c_status_live_logger.html", [
@@ -264,7 +224,7 @@ var hierarchy =
       [ "streams::ostreambuf", "classstreams_1_1ostreambuf.html", null ]
     ] ],
     [ "containers::Queue< EVENT >", "classcontainers_1_1_queue.html", null ],
-    [ "containers::Queue< I2CCommand< FUTURE_PROXY > >", "classcontainers_1_1_queue.html", null ],
+    [ "containers::Queue< I2CCommand< ABSTRACT_FUTURE > >", "classcontainers_1_1_queue.html", null ],
     [ "containers::Queue< uint8_t, uint8_t >", "classcontainers_1_1_queue.html", null ],
     [ "utils::range< T >", "classutils_1_1range.html", null ],
     [ "types_traits::remove_reference< T >", "structtypes__traits_1_1remove__reference.html", null ],
@@ -342,7 +302,6 @@ var hierarchy =
       [ "serial::soft::UARX< board::InterruptPin, RX_ >", "classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html", null ],
       [ "serial::soft::UATX< TX_ >", "classserial_1_1soft_1_1_u_a_t_x.html", null ]
     ] ],
-    [ "virtual_support::VirtualMethod", "classvirtual__support_1_1_virtual_method.html", null ],
     [ "watchdog::WatchdogSignal", "classwatchdog_1_1_watchdog_signal.html", [
       [ "watchdog::WatchdogRTT", "classwatchdog_1_1_watchdog_r_t_t.html", [
         [ "watchdog::Watchdog< EVENT >", "classwatchdog_1_1_watchdog.html", null ]

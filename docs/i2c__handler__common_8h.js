@@ -1,7 +1,7 @@
 var i2c__handler__common_8h =
 [
-    [ "I2CLightCommand", "classi2c_1_1_i2_c_light_command.html", null ],
-    [ "I2CCommand", "classi2c_1_1_i2_c_command.html", null ],
+    [ "I2CLightCommand", "classi2c_1_1_i2_c_light_command.html", "classi2c_1_1_i2_c_light_command" ],
+    [ "I2CCommand", "classi2c_1_1_i2_c_command.html", "classi2c_1_1_i2_c_command" ],
     [ "AbstractI2CSyncManager", "classi2c_1_1_abstract_i2_c_sync_manager.html", "classi2c_1_1_abstract_i2_c_sync_manager" ],
     [ "I2C_DEBUG_HOOK", "i2c__handler__common_8h.html#a28595eabdfa2ce6a84220d6eb59233e0", null ],
     [ "I2C_STATUS_HOOK", "i2c__handler__common_8h.html#a0d00ac941e250c51b3cde59069e2fbec", null ],
@@ -18,5 +18,10 @@ var i2c__handler__common_8h =
       [ "SEND_ERROR", "i2c__handler__common_8h.html#a2572e0fde7ef325c8f5c1c974c2de720a2722a1c4409a8a5aad2b5467f3cb5b2d", null ],
       [ "RECV_OK", "i2c__handler__common_8h.html#a2572e0fde7ef325c8f5c1c974c2de720a351db13aaeaf87c513f33e9f00b3dcb4", null ],
       [ "RECV_ERROR", "i2c__handler__common_8h.html#a2572e0fde7ef325c8f5c1c974c2de720acbefb7345e20459bf05682fa57a439f9", null ]
+    ] ],
+    [ "I2CErrorPolicy", "i2c__handler__common_8h.html#a2b806d8952ab67c30889f49248e7fa09", [
+      [ "DO_NOTHING", "i2c__handler__common_8h.html#a2b806d8952ab67c30889f49248e7fa09acd6102c4e0e339658526415ee06ad67d", null ],
+      [ "CLEAR_ALL_COMMANDS", "i2c__handler__common_8h.html#a2b806d8952ab67c30889f49248e7fa09a6838e2ec9e1458cb5470fdd5aa8dbb39", null ],
+      [ "CLEAR_TRANSACTION_COMMANDS", "i2c__handler__common_8h.html#a2b806d8952ab67c30889f49248e7fa09a9767f7913244ec57b19a3adf2fff4030", null ]
     ] ]
 ];

@@ -16,21 +16,13 @@ var namespacei2c =
     [ "I2CAsyncDebugManager", "classi2c_1_1_i2_c_async_debug_manager.html", "classi2c_1_1_i2_c_async_debug_manager" ],
     [ "I2CAsyncStatusManager", "classi2c_1_1_i2_c_async_status_manager.html", "classi2c_1_1_i2_c_async_status_manager" ],
     [ "I2CAsyncStatusDebugManager", "classi2c_1_1_i2_c_async_status_debug_manager.html", "classi2c_1_1_i2_c_async_status_debug_manager" ],
-    [ "I2CAsyncLCManager", "classi2c_1_1_i2_c_async_l_c_manager.html", "classi2c_1_1_i2_c_async_l_c_manager" ],
-    [ "I2CAsyncLCDebugManager", "classi2c_1_1_i2_c_async_l_c_debug_manager.html", "classi2c_1_1_i2_c_async_l_c_debug_manager" ],
-    [ "I2CAsyncLCStatusManager", "classi2c_1_1_i2_c_async_l_c_status_manager.html", "classi2c_1_1_i2_c_async_l_c_status_manager" ],
-    [ "I2CAsyncLCStatusDebugManager", "classi2c_1_1_i2_c_async_l_c_status_debug_manager.html", "classi2c_1_1_i2_c_async_l_c_status_debug_manager" ],
     [ "I2CSyncManager", "classi2c_1_1_i2_c_sync_manager.html", "classi2c_1_1_i2_c_sync_manager" ],
     [ "I2CSyncStatusManager", "classi2c_1_1_i2_c_sync_status_manager.html", "classi2c_1_1_i2_c_sync_status_manager" ],
     [ "I2CSyncDebugManager", "classi2c_1_1_i2_c_sync_debug_manager.html", "classi2c_1_1_i2_c_sync_debug_manager" ],
     [ "I2CSyncStatusDebugManager", "classi2c_1_1_i2_c_sync_status_debug_manager.html", "classi2c_1_1_i2_c_sync_status_debug_manager" ],
-    [ "I2CSyncLCManager", "classi2c_1_1_i2_c_sync_l_c_manager.html", "classi2c_1_1_i2_c_sync_l_c_manager" ],
-    [ "I2CSyncLCStatusManager", "classi2c_1_1_i2_c_sync_l_c_status_manager.html", "classi2c_1_1_i2_c_sync_l_c_status_manager" ],
-    [ "I2CSyncLCDebugManager", "classi2c_1_1_i2_c_sync_l_c_debug_manager.html", "classi2c_1_1_i2_c_sync_l_c_debug_manager" ],
-    [ "I2CSyncLCStatusDebugManager", "classi2c_1_1_i2_c_sync_l_c_status_debug_manager.html", "classi2c_1_1_i2_c_sync_l_c_status_debug_manager" ],
     [ "AbstractI2CSyncATtinyManager", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager" ],
-    [ "I2CLightCommand", "classi2c_1_1_i2_c_light_command.html", null ],
-    [ "I2CCommand", "classi2c_1_1_i2_c_command.html", null ],
+    [ "I2CLightCommand", "classi2c_1_1_i2_c_light_command.html", "classi2c_1_1_i2_c_light_command" ],
+    [ "I2CCommand", "classi2c_1_1_i2_c_command.html", "classi2c_1_1_i2_c_command" ],
     [ "AbstractI2CSyncManager", "classi2c_1_1_abstract_i2_c_sync_manager.html", "classi2c_1_1_abstract_i2_c_sync_manager" ],
     [ "I2C_DEBUG_HOOK", "namespacei2c.html#a28595eabdfa2ce6a84220d6eb59233e0", null ],
     [ "I2C_STATUS_HOOK", "namespacei2c.html#a0d00ac941e250c51b3cde59069e2fbec", null ],
@@ -52,11 +44,6 @@ var namespacei2c =
       [ "STANDARD", "namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36a94e94133f4bdc1794c6b647b8ea134d0", null ],
       [ "FAST", "namespacei2c.html#ac2780f0139dbc26f4d83a426dad67e36adca6e617f6fb54033deb311e7e7c93cc", null ]
     ] ],
-    [ "I2CErrorPolicy", "namespacei2c.html#a2b806d8952ab67c30889f49248e7fa09", [
-      [ "DO_NOTHING", "namespacei2c.html#a2b806d8952ab67c30889f49248e7fa09acd6102c4e0e339658526415ee06ad67d", null ],
-      [ "CLEAR_ALL_COMMANDS", "namespacei2c.html#a2b806d8952ab67c30889f49248e7fa09a6838e2ec9e1458cb5470fdd5aa8dbb39", null ],
-      [ "CLEAR_TRANSACTION_COMMANDS", "namespacei2c.html#a2b806d8952ab67c30889f49248e7fa09a9767f7913244ec57b19a3adf2fff4030", null ]
-    ] ],
     [ "I2CCallback", "namespacei2c.html#a25d59895330a8395962d09a25a3f9f6d", [
       [ "NONE", "namespacei2c.html#a25d59895330a8395962d09a25a3f9f6dab50339a10e1de285ac99d4c3990b8693", null ],
       [ "END_COMMAND", "namespacei2c.html#a25d59895330a8395962d09a25a3f9f6da711552a437320497067695003417ad61", null ],
@@ -76,6 +63,11 @@ var namespacei2c =
       [ "SEND_ERROR", "namespacei2c.html#a2572e0fde7ef325c8f5c1c974c2de720a2722a1c4409a8a5aad2b5467f3cb5b2d", null ],
       [ "RECV_OK", "namespacei2c.html#a2572e0fde7ef325c8f5c1c974c2de720a351db13aaeaf87c513f33e9f00b3dcb4", null ],
       [ "RECV_ERROR", "namespacei2c.html#a2572e0fde7ef325c8f5c1c974c2de720acbefb7345e20459bf05682fa57a439f9", null ]
+    ] ],
+    [ "I2CErrorPolicy", "namespacei2c.html#a2b806d8952ab67c30889f49248e7fa09", [
+      [ "DO_NOTHING", "namespacei2c.html#a2b806d8952ab67c30889f49248e7fa09acd6102c4e0e339658526415ee06ad67d", null ],
+      [ "CLEAR_ALL_COMMANDS", "namespacei2c.html#a2b806d8952ab67c30889f49248e7fa09a6838e2ec9e1458cb5470fdd5aa8dbb39", null ],
+      [ "CLEAR_TRANSACTION_COMMANDS", "namespacei2c.html#a2b806d8952ab67c30889f49248e7fa09a9767f7913244ec57b19a3adf2fff4030", null ]
     ] ],
     [ "await_same_future_group", "namespacei2c.html#a5794e860eddf1016c5eb16ae1c9629bd", null ],
     [ "I2C_STANDARD", "namespacei2c.html#ab75faf1b696d9d3d0383268167116746", null ],

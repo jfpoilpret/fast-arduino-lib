@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.9</span>
+   &#160;<span id="projectnumber">v1.9 alpha</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -87,10 +87,12 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 
 <h3><a id="index_a"></a>- a -</h3><ul>
 <li>ABSTRACT_FUTURE
-: <a class="el" href="classi2c_1_1_i2_c_device.html#ac2e7c57ed9de99169a280c189724af0a">i2c::I2CDevice&lt; MANAGER_ &gt;</a>
+: <a class="el" href="classi2c_1_1_abstract_i2_c_async_manager.html#ac06e3d9c874513f5d18a7dd6cdb01089">i2c::AbstractI2CAsyncManager&lt; MODE_, POLICY_, HAS_STATUS_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt;</a>
+, <a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a75664cf3b7cf130bb19c2c7cd109c12e">i2c::AbstractI2CSyncManager&lt; ARCH_HANDLER_, MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt;</a>
+, <a class="el" href="classi2c_1_1_i2_c_device.html#ac2e7c57ed9de99169a280c189724af0a">i2c::I2CDevice&lt; MANAGER_ &gt;</a>
 </li>
 <li>AbstractFuturesGroup()
-: <a class="el" href="classfuture_1_1_abstract_futures_group.html#a78c4460292c06938377dbdde7108b889">future::AbstractFuturesGroup&lt; F &gt;</a>
+: <a class="el" href="classfuture_1_1_abstract_futures_group.html#a8aa5b49d3471f182e248515dba435cdc">future::AbstractFuturesGroup&lt; F &gt;</a>
 </li>
 <li>AbstractTonePlayer()
 : <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#acc86fc481f1049eb4c6ba658ef62488a">devices::audio::AbstractTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a>
@@ -99,7 +101,7 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 : <a class="el" href="classdevices_1_1magneto_1_1_f_i_f_o_enable.html#a675d426460d240d5377bbfac486b59a7">devices::magneto::FIFOEnable</a>
 </li>
 <li>accel_measures()
-: <a class="el" href="classdevices_1_1magneto_1_1_m_p_u6050.html#aef8af59c1293623786ecc70a1e9543f7">devices::magneto::MPU6050&lt; MANAGER &gt;</a>
+: <a class="el" href="classdevices_1_1magneto_1_1_m_p_u6050.html#a8a179c6602a01ef560db9f22d4a16349">devices::magneto::MPU6050&lt; MANAGER &gt;</a>
 </li>
 <li>AccelFuture
 : <a class="el" href="classdevices_1_1magneto_1_1_m_p_u6050.html#ad2b271fae065e8fcbf61d5c0d33e6f2d">devices::magneto::MPU6050&lt; MANAGER &gt;</a>
@@ -114,7 +116,7 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 : <a class="el" href="classdevices_1_1vl53l0x_1_1_sequence_steps.html#aa68c2f2ef21ad07f6f386e43aacac3a2">devices::vl53l0x::SequenceSteps</a>
 </li>
 <li>all_measures()
-: <a class="el" href="classdevices_1_1magneto_1_1_m_p_u6050.html#ac83875c514080c3df58dda0eac778926">devices::magneto::MPU6050&lt; MANAGER &gt;</a>
+: <a class="el" href="classdevices_1_1magneto_1_1_m_p_u6050.html#a3b3f99f837c5e618c74b856a4ba3ec6f">devices::magneto::MPU6050&lt; MANAGER &gt;</a>
 </li>
 <li>all_ready()
 : <a class="el" href="classdevices_1_1sonar_1_1_multi_h_c_s_r04.html#a91a6278019999628c1b7552272567a55">devices::sonar::MultiHCSR04&lt; NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ &gt;</a>
@@ -149,13 +151,13 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 : <a class="el" href="classdevices_1_1sonar_1_1_h_c_s_r04.html#a804424433c4ebce79b5660150dd1ecd7">devices::sonar::HCSR04&lt; NTIMER_, TRIGGER_, ECHO_, SONAR_TYPE_ &gt;</a>
 </li>
 <li>async_multi_write()
-: <a class="el" href="classi2c_1_1_i2_c_device.html#a35f45f8b0a60893e99fc8266f834da5d">i2c::I2CDevice&lt; MANAGER_ &gt;</a>
+: <a class="el" href="classi2c_1_1_i2_c_device.html#a468e871cf020c937f885ac68897563bb">i2c::I2CDevice&lt; MANAGER_ &gt;</a>
 </li>
 <li>async_read()
-: <a class="el" href="classi2c_1_1_i2_c_device.html#ac433c1975b0be78ce89071ac7ca7a538">i2c::I2CDevice&lt; MANAGER_ &gt;</a>
+: <a class="el" href="classi2c_1_1_i2_c_device.html#aa1dcf668010bab5c73df29d80cad3063">i2c::I2CDevice&lt; MANAGER_ &gt;</a>
 </li>
 <li>async_write()
-: <a class="el" href="classi2c_1_1_i2_c_device.html#a877f1d20e75ed28de13314fc7d5a73f0">i2c::I2CDevice&lt; MANAGER_ &gt;</a>
+: <a class="el" href="classi2c_1_1_i2_c_device.html#a3847f2712b7d623007e65dbfa5256428">i2c::I2CDevice&lt; MANAGER_ &gt;</a>
 </li>
 <li>AsyncTonePlayer()
 : <a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html#aadcca6f8bf13f9a7c4cae454157330a7">devices::audio::AsyncTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</a>
@@ -182,7 +184,7 @@ $(document).ready(function(){initNavTree('functions.html',''); initResizable(); 
 : <a class="el" href="classdevices_1_1vl53l0x_1_1_v_l53_l0_x.html#abd38fce6e1cfac0c6eca209d818b72ec">devices::vl53l0x::VL53L0X&lt; MANAGER &gt;</a>
 </li>
 <li>await_same_future_group
-: <a class="el" href="classi2c_1_1_i2_c_same_future_group.html#a330610d565a96a146deea9bdf490bbd5">i2c::I2CSameFutureGroup&lt; MANAGER &gt;</a>
+: <a class="el" href="classi2c_1_1_i2_c_same_future_group.html#aee390ccbdc4a53fcf1d0e88acbeee806">i2c::I2CSameFutureGroup&lt; MANAGER &gt;</a>
 </li>
 <li>await_single_range()
 : <a class="el" href="classdevices_1_1vl53l0x_1_1_v_l53_l0_x.html#ac4f4e6608fff114b29b5fc2a0239d66f">devices::vl53l0x::VL53L0X&lt; MANAGER &gt;</a>

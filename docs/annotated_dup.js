@@ -89,8 +89,6 @@ var annotated_dup =
       [ "Functor", "structfunctor_1_1_functor.html", "structfunctor_1_1_functor" ]
     ] ],
     [ "future", "namespacefuture.html", [
-      [ "FutureStatusListener", "classfuture_1_1_future_status_listener.html", "classfuture_1_1_future_status_listener" ],
-      [ "FutureOutputListener", "classfuture_1_1_future_output_listener.html", "classfuture_1_1_future_output_listener" ],
       [ "AbstractFuture", "classfuture_1_1_abstract_future.html", "classfuture_1_1_abstract_future" ],
       [ "Future", "classfuture_1_1_future.html", "classfuture_1_1_future" ],
       [ "AbstractFakeFuture", "classfuture_1_1_abstract_fake_future.html", "classfuture_1_1_abstract_fake_future" ],
@@ -129,21 +127,13 @@ var annotated_dup =
       [ "I2CAsyncDebugManager", "classi2c_1_1_i2_c_async_debug_manager.html", "classi2c_1_1_i2_c_async_debug_manager" ],
       [ "I2CAsyncStatusManager", "classi2c_1_1_i2_c_async_status_manager.html", "classi2c_1_1_i2_c_async_status_manager" ],
       [ "I2CAsyncStatusDebugManager", "classi2c_1_1_i2_c_async_status_debug_manager.html", "classi2c_1_1_i2_c_async_status_debug_manager" ],
-      [ "I2CAsyncLCManager", "classi2c_1_1_i2_c_async_l_c_manager.html", "classi2c_1_1_i2_c_async_l_c_manager" ],
-      [ "I2CAsyncLCDebugManager", "classi2c_1_1_i2_c_async_l_c_debug_manager.html", "classi2c_1_1_i2_c_async_l_c_debug_manager" ],
-      [ "I2CAsyncLCStatusManager", "classi2c_1_1_i2_c_async_l_c_status_manager.html", "classi2c_1_1_i2_c_async_l_c_status_manager" ],
-      [ "I2CAsyncLCStatusDebugManager", "classi2c_1_1_i2_c_async_l_c_status_debug_manager.html", "classi2c_1_1_i2_c_async_l_c_status_debug_manager" ],
       [ "I2CSyncManager", "classi2c_1_1_i2_c_sync_manager.html", "classi2c_1_1_i2_c_sync_manager" ],
       [ "I2CSyncStatusManager", "classi2c_1_1_i2_c_sync_status_manager.html", "classi2c_1_1_i2_c_sync_status_manager" ],
       [ "I2CSyncDebugManager", "classi2c_1_1_i2_c_sync_debug_manager.html", "classi2c_1_1_i2_c_sync_debug_manager" ],
       [ "I2CSyncStatusDebugManager", "classi2c_1_1_i2_c_sync_status_debug_manager.html", "classi2c_1_1_i2_c_sync_status_debug_manager" ],
-      [ "I2CSyncLCManager", "classi2c_1_1_i2_c_sync_l_c_manager.html", "classi2c_1_1_i2_c_sync_l_c_manager" ],
-      [ "I2CSyncLCStatusManager", "classi2c_1_1_i2_c_sync_l_c_status_manager.html", "classi2c_1_1_i2_c_sync_l_c_status_manager" ],
-      [ "I2CSyncLCDebugManager", "classi2c_1_1_i2_c_sync_l_c_debug_manager.html", "classi2c_1_1_i2_c_sync_l_c_debug_manager" ],
-      [ "I2CSyncLCStatusDebugManager", "classi2c_1_1_i2_c_sync_l_c_status_debug_manager.html", "classi2c_1_1_i2_c_sync_l_c_status_debug_manager" ],
       [ "AbstractI2CSyncATtinyManager", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager" ],
-      [ "I2CLightCommand", "classi2c_1_1_i2_c_light_command.html", null ],
-      [ "I2CCommand", "classi2c_1_1_i2_c_command.html", null ],
+      [ "I2CLightCommand", "classi2c_1_1_i2_c_light_command.html", "classi2c_1_1_i2_c_light_command" ],
+      [ "I2CCommand", "classi2c_1_1_i2_c_command.html", "classi2c_1_1_i2_c_command" ],
       [ "AbstractI2CSyncManager", "classi2c_1_1_abstract_i2_c_sync_manager.html", "classi2c_1_1_abstract_i2_c_sync_manager" ]
     ] ],
     [ "interrupt", "namespaceinterrupt.html", [
@@ -214,9 +204,6 @@ var annotated_dup =
     ] ],
     [ "utils", "namespaceutils.html", [
       [ "range", "classutils_1_1range.html", null ]
-    ] ],
-    [ "virtual_support", "namespacevirtual__support.html", [
-      [ "VirtualMethod", "classvirtual__support_1_1_virtual_method.html", "classvirtual__support_1_1_virtual_method" ]
     ] ],
     [ "watchdog", "namespacewatchdog.html", [
       [ "WatchdogSignal", "classwatchdog_1_1_watchdog_signal.html", "classwatchdog_1_1_watchdog_signal" ],

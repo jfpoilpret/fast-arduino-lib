@@ -26,7 +26,7 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">FastArduino
-   &#160;<span id="projectnumber">v1.9</span>
+   &#160;<span id="projectnumber">v1.9 alpha</span>
    </div>
    <div id="projectbrief">C++ library to build fast but small Arduino/AVR projects</div>
   </td>
@@ -96,12 +96,6 @@ $(document).ready(function(){initNavTree('namespacefuture.html',''); initResizab
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuture_1_1_future_status_listener.html">FutureStatusListener</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Listener is the interface allowing to listen to changes of a <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a> status.  <a href="classfuture_1_1_future_status_listener.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuture_1_1_future_output_listener.html">FutureOutputListener</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Listener is the interface allowing to listen to changes of a <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a> output buffer (while being fed by a producer).  <a href="classfuture_1_1_future_output_listener.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classfuture_1_1_abstract_future.html">AbstractFuture</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Base class for all <code><a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a></code>s.  <a href="classfuture_1_1_abstract_future.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -132,6 +126,18 @@ Enumerations</h2></td></tr>
  }</td></tr>
 <tr class="memdesc:a9f72173fcd5be9bfef028415665efbe4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Status of a Future.  <a href="namespacefuture.html#a9f72173fcd5be9bfef028415665efbe4">More...</a><br /></td></tr>
 <tr class="separator:a9f72173fcd5be9bfef028415665efbe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add2f32719a897ef408be1bd9e270b337"><td class="memItemLeft" align="right" valign="top">enum class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337">FutureNotification</a> : uint8_t { <br />
+&#160;&#160;<a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337ab50339a10e1de285ac99d4c3990b8693">NONE</a> = 0
+, <br />
+&#160;&#160;<a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337a5f241c8c8f985b3c51e05d39cf030f4c">STATUS</a> = 1
+, <br />
+&#160;&#160;<a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337a50a87f0d71f7221582dad4bf507a0f34">OUTPUT</a> = 2
+, <br />
+&#160;&#160;<a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337a6328e5e3186c227a021ef2ff77e40197">BOTH</a> = 3
+<br />
+ }</td></tr>
+<tr class="memdesc:add2f32719a897ef408be1bd9e270b337"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notification(s) dispatched by a Future.  <a href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337">More...</a><br /></td></tr>
+<tr class="separator:add2f32719a897ef408be1bd9e270b337"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Contains the API around <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a> implementation. </p>
@@ -149,6 +155,30 @@ Enumerations</h2></td></tr>
 <li>Storage input value consumers must hold a reference (or pointer) to the <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a> in order to get its storage value</li>
 <li>It is possible to subclass a <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a> to add last minute transformation on <code><a class="el" href="classfuture_1_1_future.html#a790fe9b24ef1c4f26df490a4f22635f9" title="Wait until an output value has been completely filled in this Future and return that value to the cal...">Future.get()</a></code> method</li>
 </ul>
+<p>There are two hierarchies of futures:</p><ul>
+<li>"real futures": all derive from <code><a class="el" href="classfuture_1_1_abstract_future.html" title="Base class for all Futures.">AbstractFuture</a></code></li>
+<li>"fake futures": all derive from <code><a class="el" href="classfuture_1_1_abstract_fake_future.html" title="Base class for all FakeFutures.">AbstractFakeFuture</a></code></li>
+</ul>
+<p>The main difference is that fake futures must be filled in immediately (not piece after piece, e.g. through an ISR).</p>
+<p>In general you won't need fake futures in your program, but these exist to fit some FastArduino API (I2C) that can work in either asynchronous or synchronous mode. In synchronous mode, the cost of "real futures" (code size and execution speed) is not needed, but in order to fulfill internal requirements to work with a future API, we have implemented fake futures too, with the same API as real ones.</p>
+<p>Futures can be listened to through a special, virtual-free, mechanism. Futures can send notfications to dedicated listeners. There are 2 kinds of notifications that a future may dispatch:</p><ul>
+<li><code><a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337a5f241c8c8f985b3c51e05d39cf030f4c" title="Notification is dispatched whenever the Future status changes.">FutureNotification::STATUS</a></code>: a notification is dispatched whenever the future status changes</li>
+<li><code><a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337a50a87f0d71f7221582dad4bf507a0f34" title="Notification is dispatched whenever the Future output buffer gets filled, even partly.">FutureNotification::OUTPUT</a></code>: a notification is dispatched whenever the future outpur buffer changes A combination of both is possible.</li>
+</ul>
+<p>Listeners to future notification are instances of classes that must:</p><ol type="1">
+<li>Call <code><a class="el" href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de" title="Register a class instance containing methods that shall be called back by an ISR.">interrupt::register_handler()</a></code> at construction time and <code><a class="el" href="namespaceinterrupt.html#af1ddd2a9164979134cf71e9b692ec0e3" title="Unregister a class instance that was previously registered with interrupt::register_handler.">interrupt::unregister_handler()</a></code> at destruction time</li>
+<li>Must be registered statically with <code><a class="el" href="future_8h.html#a7281d4ab1166cfa15b1ef930b883615e" title="Register the necessary callbacks that will be notified when a future::Future (or a future::FakeFuture...">REGISTER_FUTURE_STATUS_LISTENERS()</a></code>, <code><a class="el" href="future_8h.html#a07560a03dcdd34ae1a6ddc80c74ade6d" title="Register the necessary callbacks that will be notified when a future::Future (or a future::FakeFuture...">REGISTER_FUTURE_OUTPUT_LISTENERS()</a></code> or both (if they want to be notified of both kinds of notifications)</li>
+<li>Have a <code>on_status_change(const F&amp;, FutureStatus)</code> or <code>on_output_change(const F&amp;)</code> methods (F is either <code><a class="el" href="classfuture_1_1_abstract_future.html" title="Base class for all Futures.">AbstractFuture</a></code> or <code><a class="el" href="classfuture_1_1_abstract_fake_future.html" title="Base class for all FakeFutures.">AbstractFakeFuture</a></code>, based on which future ind you want to use)</li>
+<li>These methods must either be <code>public</code> in the class or, if not, the class must use <code>DECL_FUTURE_LISTENERS_FRIEND</code> in its definition, so that FastArduino notification dispatch mechanism can call those methods</li>
+</ol>
+<dl class="section warning"><dt>Warning</dt><dd>Only one instance can exist for each listener class at a given time; behavior is undefined if several instances exist at the same time.</dd>
+<dd>
+All listeners receive all notifications coming from all futures having notification enabled. Hence any listener callback method shall start by checking the passed future reference is of interest or not, then act accordingly.</dd>
+<dd>
+All listener classes must be registered statically at the same time, with a single call to <code><a class="el" href="future_8h.html#a7281d4ab1166cfa15b1ef930b883615e" title="Register the necessary callbacks that will be notified when a future::Future (or a future::FakeFuture...">REGISTER_FUTURE_STATUS_LISTENERS()</a></code> (resp. <code>REGISTER_FUTURE_OUTPUT_LISTENERS</code>). Doing otherwise will result in link errors.</dd>
+<dd>
+If you use futures in your program but do not need notifications (of one or both kinds), you still need to use <code><a class="el" href="future_8h.html#a17791fea608278a9f31e93ab2e8ae658" title="Register no callback at all to Future status changes notification.">REGISTER_FUTURE_STATUS_NO_LISTENERS()</a></code>, <code><a class="el" href="future_8h.html#a6f4825b94b6ce794eb9abe9d197b4b87" title="Register no callback at all to Future output buffer changes notification.">REGISTER_FUTURE_OUTPUT_NO_LISTENERS()</a></code> or <code><a class="el" href="future_8h.html#abbe2c42cd8698fda4be9fd78e9ee7410" title="Register no callback at all to any Future notification.">REGISTER_FUTURE_NO_LISTENERS()</a></code>. Doing otherwise will result in a link failure.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>FastArduino I2C API is based on futures, thus the previous warnings apply when you use I2C in your program.</dd></dl>
 <p>Here is a simple usage example of this API, using PCINT0 interrupt to take a "snapshot" of 6 input buttons connected to all PORTB pins, after one of them has changed level: </p><div class="fragment"><div class="line"><span class="comment">// PCINT0 ISR</span></div>
 <div class="line"><span class="keyword">class </span>ButtonsSnapshot {</div>
 <div class="line"><span class="keyword">public</span>:</div>
@@ -162,7 +192,7 @@ Enumerations</h2></td></tr>
 <div class="line">        <span class="comment">// Wait for future result</span></div>
 <div class="line">        <span class="keywordtype">bool</span> result = future_.get(snapshot);</div>
 <div class="line">        <span class="comment">// Reset future</span></div>
-<div class="line">        future_ = <a class="code" href="namespacestd.html#a50d34a9238459a60c64dc2639dc01901">std::move</a>(Future&lt;uint8_t&gt;{});</div>
+<div class="line">        future_.reset_();</div>
 <div class="line">        <span class="keywordflow">return</span> result;</div>
 <div class="line">    }</div>
 <div class="line"> </div>
@@ -200,8 +230,7 @@ Enumerations</h2></td></tr>
 <div class="ttc" id="aclassgpio_1_1_fast_port_html"><div class="ttname"><a href="classgpio_1_1_fast_port.html">gpio::FastPort</a></div><div class="ttdoc">API that manipulates a whole digital IO port.</div><div class="ttdef"><b>Definition:</b> <a href="gpio_8h_source.html#l00201">gpio.h:202</a></div></div>
 <div class="ttc" id="aclassinterrupt_1_1_p_c_i_signal_html"><div class="ttname"><a href="classinterrupt_1_1_p_c_i_signal.html">interrupt::PCISignal</a></div><div class="ttdoc">Handler of a Pin Change Interrupt vector.</div><div class="ttdef"><b>Definition:</b> <a href="pci_8h_source.html#l00175">pci.h:176</a></div></div>
 <div class="ttc" id="anamespaceboard_html_a2529f85498783a75dc75c281e0b754d3"><div class="ttname"><a href="namespaceboard.html#a2529f85498783a75dc75c281e0b754d3">board::init</a></div><div class="ttdeci">static void init()</div><div class="ttdoc">Performs special initialization for ATmega644, actually nothing at all.</div><div class="ttdef"><b>Definition:</b> <a href="atmega__xx4_8h_source.html#l00049">atmega_xx4.h:49</a></div></div>
-<div class="ttc" id="anamespaceinterrupt_html_abfd5857208f49006bde8c472497273de"><div class="ttname"><a href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de">interrupt::register_handler</a></div><div class="ttdeci">void register_handler(Handler &amp;handler)</div><div class="ttdoc">Register a class instance containing methods that shall be called back by an ISR.</div><div class="ttdef"><b>Definition:</b> <a href="interrupts_8h_source.html#l00157">interrupts.h:157</a></div></div>
-<div class="ttc" id="anamespacestd_html_a50d34a9238459a60c64dc2639dc01901"><div class="ttname"><a href="namespacestd.html#a50d34a9238459a60c64dc2639dc01901">std::move</a></div><div class="ttdeci">constexpr types_traits::remove_reference&lt; T &gt;::type &amp;&amp; move(T &amp;&amp;t)</div><div class="ttdoc">Obtain an &quot;rvalue&quot; reference.</div><div class="ttdef"><b>Definition:</b> <a href="move_8h_source.html#l00040">move.h:40</a></div></div>
+<div class="ttc" id="anamespaceinterrupt_html_abfd5857208f49006bde8c472497273de"><div class="ttname"><a href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de">interrupt::register_handler</a></div><div class="ttdeci">void register_handler(Handler &amp;handler)</div><div class="ttdoc">Register a class instance containing methods that shall be called back by an ISR.</div><div class="ttdef"><b>Definition:</b> <a href="interrupts_8h_source.html#l00185">interrupts.h:185</a></div></div>
 <div class="ttc" id="apci_8h_html_a64be10f04dd31643ee243b564a0d910c"><div class="ttname"><a href="pci_8h.html#a64be10f04dd31643ee243b564a0d910c">REGISTER_PCI_ISR_METHOD</a></div><div class="ttdeci">#define REGISTER_PCI_ISR_METHOD(PCI_NUM, HANDLER, CALLBACK, PIN,...)</div><div class="ttdoc">Register the necessary ISR (Interrupt Service Routine) for a Pin Change Interrupt vector.</div><div class="ttdef"><b>Definition:</b> <a href="pci_8h_source.html#l00044">pci.h:44</a></div></div>
 </div><!-- fragment --> </div><h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="a9f72173fcd5be9bfef028415665efbe4"></a>
@@ -255,7 +284,44 @@ Future.set_future_finish() </dd>
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l00118">118</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l00319">319</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
+
+</div>
+</div>
+<a id="add2f32719a897ef408be1bd9e270b337"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add2f32719a897ef408be1bd9e270b337">&#9670;&nbsp;</a></span>FutureNotification</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="namespacefuture.html#add2f32719a897ef408be1bd9e270b337">future::FutureNotification</a> : uint8_t</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">strong</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Notification(s) dispatched by a <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a>. </p>
+<p>This is passed to <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a> constructor and detrmines whether the instantiated <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a> will dispatch of its own notification changes. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="add2f32719a897ef408be1bd9e270b337ab50339a10e1de285ac99d4c3990b8693"></a>NONE&#160;</td><td class="fielddoc"><p>No notification is dispatched by the <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a>. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="add2f32719a897ef408be1bd9e270b337a5f241c8c8f985b3c51e05d39cf030f4c"></a>STATUS&#160;</td><td class="fielddoc"><p>Notification is dispatched whenever the <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a> status changes. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="add2f32719a897ef408be1bd9e270b337a50a87f0d71f7221582dad4bf507a0f34"></a>OUTPUT&#160;</td><td class="fielddoc"><p>Notification is dispatched whenever the <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a> output buffer gets filled, even partly. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="add2f32719a897ef408be1bd9e270b337a6328e5e3186c227a021ef2ff77e40197"></a>BOTH&#160;</td><td class="fielddoc"><p>Notification is dispatched whenever the <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a> status changes or the <a class="el" href="classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future.">Future</a> output buffer gets filled, even partly. </p>
+</td></tr>
+</table>
+
+<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l00379">379</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
 
 </div>
 </div>

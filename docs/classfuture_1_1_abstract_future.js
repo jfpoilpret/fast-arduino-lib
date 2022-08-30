@@ -1,7 +1,5 @@
 var classfuture_1_1_abstract_future =
 [
-    [ "STATUS_LISTENER", "classfuture_1_1_abstract_future.html#a9a3608ffef01603fb24c061a00a7946b", null ],
-    [ "OUTPUT_LISTENER", "classfuture_1_1_abstract_future.html#a2d6b899764bc3cb28b6388ba3d741c4d", null ],
     [ "status", "classfuture_1_1_abstract_future.html#aab09c6c0c87be63329e1198c0e686069", null ],
     [ "await", "classfuture_1_1_abstract_future.html#ac03f7d9b43ce3b1ca91d9779c46994df", null ],
     [ "error", "classfuture_1_1_abstract_future.html#ac94c7bfb4759e737ff20afd848873964", null ],

@@ -37,7 +37,7 @@ var dir_1d3cf6e8c97b3f2b1f8c0275e9693908 =
     [ "i2c_debug.h", "i2c__debug_8h.html", "i2c__debug_8h" ],
     [ "i2c_device.h", "i2c__device_8h.html", "i2c__device_8h" ],
     [ "i2c_device_utilities.h", "i2c__device__utilities_8h.html", "i2c__device__utilities_8h" ],
-    [ "i2c_handler.h", "i2c__handler_8h.html", null ],
+    [ "i2c_handler.h", "i2c__handler_8h.html", "i2c__handler_8h" ],
     [ "i2c_handler_atmega.h", "i2c__handler__atmega_8h.html", "i2c__handler__atmega_8h" ],
     [ "i2c_handler_attiny.h", "i2c__handler__attiny_8h.html", "i2c__handler__attiny_8h" ],
     [ "i2c_handler_common.cpp", "i2c__handler__common_8cpp_source.html", null ],
@@ -92,8 +92,5 @@ var dir_1d3cf6e8c97b3f2b1f8c0275e9693908 =
     [ "uart.h", "uart_8h.html", "uart_8h" ],
     [ "uart_commons.h", "uart__commons_8h.html", "uart__commons_8h" ],
     [ "utilities.h", "utilities_8h.html", "utilities_8h" ],
-    [ "virtual.h", "virtual_8h.html", [
-      [ "VirtualMethod", "classvirtual__support_1_1_virtual_method.html", "classvirtual__support_1_1_virtual_method" ]
-    ] ],
     [ "watchdog.h", "watchdog_8h.html", "watchdog_8h" ]
 ];

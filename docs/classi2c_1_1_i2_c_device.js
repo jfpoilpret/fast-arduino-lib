@@ -1,7 +1,6 @@
 var classi2c_1_1_i2_c_device =
 [
     [ "MANAGER", "classi2c_1_1_i2_c_device.html#a7b3f6509519292904a636f4262b404ae", null ],
-    [ "PROXY", "classi2c_1_1_i2_c_device.html#aaa72ad76688bfbf7057b4fdfa426a95c", null ],
     [ "ABSTRACT_FUTURE", "classi2c_1_1_i2_c_device.html#ac2e7c57ed9de99169a280c189724af0a", null ],
     [ "FUTURE", "classi2c_1_1_i2_c_device.html#ad029f30f422ebd435b20e1d2138ff908", null ],
     [ "I2CDevice", "classi2c_1_1_i2_c_device.html#ac9dbb29fefbc1a66a6df687d9874fec4", null ],
@@ -10,14 +9,12 @@ var classi2c_1_1_i2_c_device =
     [ "set_device", "classi2c_1_1_i2_c_device.html#a1325f82f4aaf8290a2d4cc4c70dfe83b", null ],
     [ "read", "classi2c_1_1_i2_c_device.html#a75fe1fe6a563488eb06f86266e15c923", null ],
     [ "write", "classi2c_1_1_i2_c_device.html#a161423972dd35fbd4b32cd1e8048b5ad", null ],
-    [ "launch_commands", "classi2c_1_1_i2_c_device.html#af937a51b38ea97dee521319c1fc09f46", null ],
-    [ "async_read", "classi2c_1_1_i2_c_device.html#ac433c1975b0be78ce89071ac7ca7a538", null ],
+    [ "launch_commands", "classi2c_1_1_i2_c_device.html#acf582694ddcd91341e1a57379d42fe3a", null ],
+    [ "async_read", "classi2c_1_1_i2_c_device.html#aa1dcf668010bab5c73df29d80cad3063", null ],
     [ "sync_read", "classi2c_1_1_i2_c_device.html#a0dfdb3fb784b939e8140a1c900a8e64e", null ],
-    [ "async_write", "classi2c_1_1_i2_c_device.html#a877f1d20e75ed28de13314fc7d5a73f0", null ],
-    [ "async_multi_write", "classi2c_1_1_i2_c_device.html#a35f45f8b0a60893e99fc8266f834da5d", null ],
+    [ "async_write", "classi2c_1_1_i2_c_device.html#a3847f2712b7d623007e65dbfa5256428", null ],
+    [ "async_multi_write", "classi2c_1_1_i2_c_device.html#a468e871cf020c937f885ac68897563bb", null ],
     [ "sync_write", "classi2c_1_1_i2_c_device.html#a5733ebd749415b43fbfab76cf6cfc234", null ],
     [ "sync_write", "classi2c_1_1_i2_c_device.html#aad570da8ac6c407c7046b1f539fa5a8e", null ],
-    [ "resolve", "classi2c_1_1_i2_c_device.html#aaf6df66445e2f4c39501b5621191f51e", null ],
-    [ "make_proxy", "classi2c_1_1_i2_c_device.html#a358f5bdfc2a7f4cfbcca0e253f42d676", null ],
     [ "I2CFutureHelper< MANAGER >", "classi2c_1_1_i2_c_device.html#a6c0a6305a70d35be0c04ba98a616b91f", null ]
 ];

@@ -2,7 +2,6 @@ var classstreams_1_1ostream =
 [
     [ "MANIPULATOR", "classstreams_1_1ostream.html#ae7d6a7f02cc8a544b1dfc36beede06e0", null ],
     [ "ostream", "classstreams_1_1ostream.html#ac52818e51d0fd5e4156c9b5dd4ab59bc", null ],
-    [ "operator=", "classstreams_1_1ostream.html#a65ff162585aea4d98bf63c66619e92d6", null ],
     [ "rdbuf", "classstreams_1_1ostream.html#af874202c30293f8c8cd4ce05e17d477f", null ],
     [ "flush", "classstreams_1_1ostream.html#a00f6c7bdce1520b119c31cd7dde80ac2", null ],
     [ "put", "classstreams_1_1ostream.html#a93f18ac2cb7937882e5db54d719a108b", null ],
