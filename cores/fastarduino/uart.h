@@ -174,7 +174,7 @@ namespace serial::hard
 
 	protected:
 		template<uint8_t SIZE_TX> 
-		AbstractUATX(char (&output)[SIZE_TX]) : obuf_{output} {}
+		explicit AbstractUATX(char (&output)[SIZE_TX]) : obuf_{output} {}
 
 		streams::ostreambuf& out_()
 		{

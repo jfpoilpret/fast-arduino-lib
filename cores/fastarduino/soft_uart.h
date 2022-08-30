@@ -343,7 +343,7 @@ namespace serial::soft
 			// - (4N) + 4 in delay
 			// - 8 cycles until first bit sample read (sbis)
 			//		2 ldd + 3 ldi + 1 sbis => 4 + 3 + 1
-			start_bit_rx_time_ = compute_delay(3 * bit_time / 2, 3 + 2 + 4 + 48 + 2 + 4 + 8);
+			start_bit_rx_time_ = compute_delay((3 * bit_time) / 2, 3 + 2 + 4 + 48 + 2 + 4 + 8);
 
 			// Time to wait (_delay_loop_2) between sampling of 2 consecutive data bits
 			// This is also use between last bit and parity bit (if checked) or stop bit

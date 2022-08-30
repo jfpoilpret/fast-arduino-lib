@@ -990,7 +990,7 @@ namespace future
 		static constexpr uint8_t OUT_SIZE = sizeof(OUT);
 		static constexpr uint8_t IN_SIZE = 0;
 
-		Future(FutureNotification notifications = FutureNotification::NONE)
+		explicit Future(FutureNotification notifications = FutureNotification::NONE)
 		: AbstractFuture{output_buffer_, sizeof(OUT), nullptr, 0, notifications} {}
 		~Future() = default;
 
@@ -1637,8 +1637,10 @@ namespace future
 	template<typename F>
 	struct dispatch_handler_impl
 	{
-		template<bool DUMMY> static void future_on_status_change_helper(
-			const F&, FutureStatus) {}
+		template<bool DUMMY> static void future_on_status_change_helper(const F&, FutureStatus)
+		{
+			// Intentionally blank (last recursive call)
+		}
 
 		template<bool DUMMY, typename HANDLER1_, typename... HANDLERS_> 
 		static void future_on_status_change_helper(const F& future, FutureStatus status)
@@ -1657,7 +1659,10 @@ namespace future
 			future_on_status_change_helper<true, HANDLERS_...>(future, status);
 		}
 
-		template<bool DUMMY> static void future_on_output_change_helper(const F&) {}
+		template<bool DUMMY> static void future_on_output_change_helper(const F&)
+		{
+			// Intentionally blank (last recursive call)
+		}
 
 		template<bool DUMMY, typename HANDLER1_, typename... HANDLERS_> 
 		static void future_on_output_change_helper(const F& future)
@@ -1681,9 +1686,15 @@ namespace future
 	struct dispatch_handler
 	{
 		template<typename... HANDLERS_>
-		static void future_on_status_change(const F2&, FutureStatus) {}
+		static void future_on_status_change(const F2&, FutureStatus)
+		{
+			// Intentionally blank (tasks performed only on template specialization for actual futures)
+		}
 		template<typename... HANDLERS_>
-		static void future_on_output_change(const F2&) {}
+		static void future_on_output_change(const F2&)
+		{
+			// Intentionally blank (tasks performed only on template specialization for actual futures)
+		}
 	};
 
 	template<>
