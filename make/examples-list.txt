@@ -62,7 +62,6 @@ IOStreams2	Check real Vs. null ostream
 IOStreams3	Check ostream error handling (UART)
 ArrayCheck	Unit Tests for array container
 InitializerListCheck	Unit Tests for initializer_list
-LifecycleCheck	Unit Tests of lifecycle/proxy API
 FutureCheck	Unit Tests of future API
 QueueCheck	Unit Tests of queue container
 LinkedListCheck	Unit Tests of linked list container

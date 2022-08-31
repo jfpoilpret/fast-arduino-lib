@@ -61,8 +61,7 @@ In the current version, the project covers almost all features; a few missing, l
 What the library already has:
 
 - General utilities (queues, linked lists, busy loop delays)
-- LifeCycle management support to keep track of moving or destroyed objects
-- "Future" support for asynchronous computation
+- "Future" support for asynchronous computation (e.g. ISR-based)
 - Fast IO support: template-based, optimized for speed and size
 - Analog Digital Conversion support (in Single Conversion mode)
 - Analog Comparator support
