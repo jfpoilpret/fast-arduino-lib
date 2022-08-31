@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"classfunctor_1_1_identity.html#aad591660bcfeb58892874af5d648d140":[6,0,5,0,1],
 "classfuture_1_1_abstract_fake_future.html":[6,0,6,2],
 "classfuture_1_1_abstract_fake_future.html#aa8cda1a5f7355572937b55e49c7e3cae":[6,0,6,2,0],
 "classfuture_1_1_abstract_future.html":[6,0,6,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "classpower_1_1_power.html#a0b8a9b4738866a8c71d10d50f6668e3d":[6,0,10,0,0],
 "classpower_1_1_power.html#a0bfb70818b6e364f8e6e0d5745ba254b":[6,0,10,0,1],
 "classpower_1_1_power.html#a8380885011701d1936ea37b64a1e6b61":[6,0,10,0,2],
-"classserial_1_1_u_a_r_t_errors.html":[6,0,11,2],
-"classserial_1_1_u_a_r_t_errors.html#a1a5d69e593b1484a6196d16fbae83cc7":[6,0,11,2,2]
+"classserial_1_1_u_a_r_t_errors.html":[6,0,11,2]
 };

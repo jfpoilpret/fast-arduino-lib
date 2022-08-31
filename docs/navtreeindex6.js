@@ -1,5 +1,6 @@
 var NAVTREEINDEX6 =
 {
+"functions.html":[6,3,0],
 "functions.html":[6,3,0,0],
 "functions_b.html":[6,3,0,1],
 "functions_c.html":[6,3,0,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX6 =
 "ios_8h.html#aa57ff0ec726dc31ec8aa59884914450e":[7,0,0,35,20],
 "ios_8h.html#aadedfb04617e81c64e981930efa2fccd":[7,0,0,35,14],
 "ios_8h.html#ac2a0732c39795e5d74ab23613462ff97":[7,0,0,35,21],
-"ios_8h.html#ac788f1f84db5c6668545aece372cc8df":[7,0,0,35,13],
-"ios_8h.html#adaf650921b3a5d448f8aac51dba924d2":[7,0,0,35,6]
+"ios_8h.html#ac788f1f84db5c6668545aece372cc8df":[7,0,0,35,13]
 };

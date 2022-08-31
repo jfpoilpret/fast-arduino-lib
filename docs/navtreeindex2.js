@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"classdevices_1_1rtc_1_1_d_s1307.html#a9f624b52230050a011cd0526b0d97fce":[6,0,2,5,1,8],
 "classdevices_1_1rtc_1_1_d_s1307.html#aa77501ab764c7641ed021dd3d9b373bb":[6,0,2,5,1,25],
 "classdevices_1_1rtc_1_1_d_s1307.html#ac0b5253ef3dd6530ecd4f5c33ced1963":[6,0,2,5,1,18],
 "classdevices_1_1rtc_1_1_d_s1307.html#ae1fa374f9314e714b7cd0fa802ca4b39":[6,0,2,5,1,14],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "classfunctor_1_1_constant.html#a8acf0b79ddc608776d8d667e974119c2":[6,0,5,1,1],
 "classfunctor_1_1_identity.html":[6,0,5,0],
 "classfunctor_1_1_identity.html#a9159271028fd3f68720c966db00f5e15":[6,0,5,0,0],
-"classfunctor_1_1_identity.html#a922d0008fd587e9ecbaf106bbe76f1fd":[6,0,5,0,2],
-"classfunctor_1_1_identity.html#aad591660bcfeb58892874af5d648d140":[6,0,5,0,1]
+"classfunctor_1_1_identity.html#a922d0008fd587e9ecbaf106bbe76f1fd":[6,0,5,0,2]
 };

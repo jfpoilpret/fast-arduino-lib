@@ -1,5 +1,6 @@
 var NAVTREEINDEX5 =
 {
+"classtimer_1_1_square_wave.html#a5af097fb81eb221897b2311907459198":[6,0,16,4,8],
 "classtimer_1_1_square_wave.html#a5ffcf5a70f1b2e49f4c4b4422a8a5800":[6,0,16,4,13],
 "classtimer_1_1_square_wave.html#a660428b574371c6be4d97f13aace52c1":[6,0,16,4,2],
 "classtimer_1_1_square_wave.html#a6b7fcb97e7f94750f0829eb929d23250":[6,0,16,4,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX5 =
 "flash_8h.html#a3308e6ce737b046264e113ced6ba610f":[7,0,0,14,2],
 "flash_8h.html#aad20c401fce8e390b25dfcc30b85224d":[7,0,0,14,3],
 "flash_8h.html#afbcbab2afc140f933977403620337c7c":[7,0,0,14,1],
-"flash_8h_source.html":[7,0,0,14],
-"functions.html":[6,3,0]
+"flash_8h_source.html":[7,0,0,14]
 };

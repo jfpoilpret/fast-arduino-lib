@@ -96,7 +96,6 @@ All FastArduino source code is defined inside namespaces, in order to avoid name
 - [gpio](namespacegpio.html): that namespace deals with all API to manage digital input and outputs.
 - [i2c](namespacei2c.html): that namespace contains all API to deal with I2C (also known as *Two Wires Interface*), including a base class to help you define support for new devices based on I2C protocol.
 - [interrupt](namespaceinterrupt.html): this namespace implements the concepts of managing all interrupts within FastArduino; it also contains the API dedicated to handling AVR interrupt pins, either Pin Change Interrupt pins or External Interrupt pins.
-- [lifecycle](namespacelifecycle.html): this namespace provides mix-in classes to allow lifecycle management of instances; this is an orthogonal concept that may be used wherever needed.
 - [memory](namespacememory.html): provides a few utility to check available SRAM (useful for debugging).
 - [power](namespacepower.html): contains the API to handle AVR power modes.
 - [serial](namespaceserial.html): contains the API to handle serial communication; sub namespaces definespecific API for hardware or software based serial communication:

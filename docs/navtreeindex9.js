@@ -1,5 +1,6 @@
 var NAVTREEINDEX9 =
 {
+"namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eada9bb923acef0f04fbc0e7ded5358f5aae":[5,0,5,0,8,5],
 "namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eadaad772c40e87c4f01eec1e39727e96a69":[5,0,5,0,8,0],
 "namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eadab22bd4fad3d4313c5a652c7b2cca52e2":[5,0,5,0,8,3],
 "namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eadad17399392e4d861e340d0b04482687f7":[5,0,5,0,8,8],
@@ -248,6 +249,5 @@ var NAVTREEINDEX9 =
 "namespacedevices_1_1mcp3x0x.html#a9ac959352f715c81ecc2a4d2c991b99ca6c88494b48501a9de03abd4b7056cd33":[5,0,5,3,15,3],
 "namespacedevices_1_1mcp3x0x.html#a9ac959352f715c81ecc2a4d2c991b99ca746dd6747f6a06c355c0f3662e074818":[5,0,5,3,15,15],
 "namespacedevices_1_1mcp3x0x.html#a9ac959352f715c81ecc2a4d2c991b99ca79a66be7a0427b4ce07a201d58f80d0c":[5,0,5,3,15,2],
-"namespacedevices_1_1mcp3x0x.html#a9ac959352f715c81ecc2a4d2c991b99ca9906695eb33d2d71b9fcc9a693bc1c68":[5,0,5,3,15,5],
-"namespacedevices_1_1mcp3x0x.html#a9ac959352f715c81ecc2a4d2c991b99cacd6564a2b633e17e462478489b181492":[5,0,5,3,15,10]
+"namespacedevices_1_1mcp3x0x.html#a9ac959352f715c81ecc2a4d2c991b99ca9906695eb33d2d71b9fcc9a693bc1c68":[5,0,5,3,15,5]
 };
