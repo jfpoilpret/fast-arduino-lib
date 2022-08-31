@@ -339,7 +339,6 @@ var namespaces_dup =
     [ "gpio", "namespacegpio.html", "namespacegpio" ],
     [ "i2c", "namespacei2c.html", "namespacei2c" ],
     [ "interrupt", "namespaceinterrupt.html", "namespaceinterrupt" ],
-    [ "lifecycle", "namespacelifecycle.html", "namespacelifecycle" ],
     [ "memory", "namespacememory.html", [
       [ "free_mem", "namespacememory.html#a57314fc1095a7d8029772179e56d94aa", null ],
       [ "check_mem", "namespacememory.html#a3e19f39edddd754661788f67669c2485", null ],

@@ -58,12 +58,6 @@ var hierarchy =
     [ "i2c::AbstractI2CSyncManager< ATtinyI2CSyncHandler< MODE_, HAS_STATUS_, STATUS_HOOK_ >, MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_sync_manager.html", [
       [ "i2c::AbstractI2CSyncATtinyManager< MODE_, HAS_STATUS_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", null ]
     ] ],
-    [ "lifecycle::AbstractLifeCycle", "classlifecycle_1_1_abstract_life_cycle.html", [
-      [ "lifecycle::LifeCycle< T >", "classlifecycle_1_1_life_cycle.html", null ]
-    ] ],
-    [ "lifecycle::AbstractLifeCycleManager", "classlifecycle_1_1_abstract_life_cycle_manager.html", [
-      [ "lifecycle::LifeCycleManager< SIZE >", "classlifecycle_1_1_life_cycle_manager.html", null ]
-    ] ],
     [ "devices::sonar::AbstractSonar< NTIMER_ >", "classdevices_1_1sonar_1_1_abstract_sonar.html", [
       [ "devices::sonar::HCSR04< NTIMER_, TRIGGER_, ECHO_, SONAR_TYPE_ >", "classdevices_1_1sonar_1_1_h_c_s_r04.html", null ]
     ] ],
@@ -120,7 +114,6 @@ var hierarchy =
     [ "types_traits::derives_from< T, B >", "structtypes__traits_1_1derives__from.html", null ],
     [ "devices::WinBond< CS >::Device", "structdevices_1_1_win_bond_1_1_device.html", null ],
     [ "devices::vl53l0x::DeviceStatus", "classdevices_1_1vl53l0x_1_1_device_status.html", null ],
-    [ "lifecycle::DirectProxy< T >", "classlifecycle_1_1_direct_proxy.html", null ],
     [ "eeprom::EEPROM", "classeeprom_1_1_e_e_p_r_o_m.html", [
       [ "eeprom::QueuedWriter", "classeeprom_1_1_queued_writer.html", null ]
     ] ],
@@ -183,7 +176,6 @@ var hierarchy =
       [ "streams::istream", "classstreams_1_1istream.html", null ],
       [ "streams::ostream", "classstreams_1_1ostream.html", null ]
     ] ],
-    [ "lifecycle::LightProxy< T >", "classlifecycle_1_1_light_proxy.html", null ],
     [ "LinkedListImpl", null, [
       [ "containers::LinkedList< Job >", "classcontainers_1_1_linked_list.html", [
         [ "events::Scheduler< CLOCK_, EVENT_ >", "classevents_1_1_scheduler.html", null ]
@@ -213,7 +205,6 @@ var hierarchy =
     [ "interrupt::PCISignal< PCINT_ >", "classinterrupt_1_1_p_c_i_signal.html", null ],
     [ "interrupt::PCIType< PIN >", "structinterrupt_1_1_p_c_i_type.html", null ],
     [ "power::Power", "classpower_1_1_power.html", null ],
-    [ "lifecycle::Proxy< T >", "classlifecycle_1_1_proxy.html", null ],
     [ "analog::PWMOutput< PWMPIN_, PULSED_ >", "classanalog_1_1_p_w_m_output.html", null ],
     [ "analog::PWMOutput< OUTPUT >", "classanalog_1_1_p_w_m_output.html", null ],
     [ "analog::PWMOutput< PWMPIN, true >", "classanalog_1_1_p_w_m_output.html", null ],
@@ -244,9 +235,6 @@ var hierarchy =
     [ "devices::magneto::Status", "classdevices_1_1magneto_1_1_status.html", null ],
     [ "devices::WinBond< CS >::Status", "structdevices_1_1_win_bond_1_1_status.html", null ],
     [ "devices::rf::NRF24L01< CSN, CE >::status_t", "uniondevices_1_1rf_1_1_n_r_f24_l01_1_1status__t.html", null ],
-    [ "T", null, [
-      [ "lifecycle::LifeCycle< T >", "classlifecycle_1_1_life_cycle.html", null ]
-    ] ],
     [ "MANAGER::template FUTURE", null, [
       [ "i2c::ReadRegisterFuture< MANAGER, T, functor::Identity< T > >", "classi2c_1_1_read_register_future.html", [
         [ "i2c::TReadRegisterFuture< MANAGER, REGISTER, T, FUNCTOR >", "classi2c_1_1_t_read_register_future.html", null ]

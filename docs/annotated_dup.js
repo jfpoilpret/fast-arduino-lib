@@ -141,15 +141,6 @@ var annotated_dup =
       [ "PCISignal", "classinterrupt_1_1_p_c_i_signal.html", "classinterrupt_1_1_p_c_i_signal" ],
       [ "PCIType", "structinterrupt_1_1_p_c_i_type.html", "structinterrupt_1_1_p_c_i_type" ]
     ] ],
-    [ "lifecycle", "namespacelifecycle.html", [
-      [ "AbstractLifeCycle", "classlifecycle_1_1_abstract_life_cycle.html", "classlifecycle_1_1_abstract_life_cycle" ],
-      [ "AbstractLifeCycleManager", "classlifecycle_1_1_abstract_life_cycle_manager.html", "classlifecycle_1_1_abstract_life_cycle_manager" ],
-      [ "LifeCycleManager", "classlifecycle_1_1_life_cycle_manager.html", "classlifecycle_1_1_life_cycle_manager" ],
-      [ "LifeCycle", "classlifecycle_1_1_life_cycle.html", "classlifecycle_1_1_life_cycle" ],
-      [ "Proxy", "classlifecycle_1_1_proxy.html", "classlifecycle_1_1_proxy" ],
-      [ "LightProxy", "classlifecycle_1_1_light_proxy.html", "classlifecycle_1_1_light_proxy" ],
-      [ "DirectProxy", "classlifecycle_1_1_direct_proxy.html", "classlifecycle_1_1_direct_proxy" ]
-    ] ],
     [ "power", "namespacepower.html", [
       [ "Power", "classpower_1_1_power.html", "classpower_1_1_power" ]
     ] ],

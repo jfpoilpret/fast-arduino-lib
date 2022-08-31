@@ -51,8 +51,6 @@ var dir_1d3cf6e8c97b3f2b1f8c0275e9693908 =
     [ "iterator.h", "iterator_8h.html", [
       [ "range", "classutils_1_1range.html", null ]
     ] ],
-    [ "lifecycle.cpp", "lifecycle_8cpp_source.html", null ],
-    [ "lifecycle.h", "lifecycle_8h.html", "lifecycle_8h" ],
     [ "linked_list.cpp", "linked__list_8cpp_source.html", null ],
     [ "linked_list.h", "linked__list_8h.html", [
       [ "LinkedList", "classcontainers_1_1_linked_list.html", "classcontainers_1_1_linked_list" ],

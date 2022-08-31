@@ -344,7 +344,7 @@ $(document).ready(function(){initNavTree('soft__uart_8h_source.html',''); initRe
 <div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;            <span class="comment">// - (4N) + 4 in delay</span></div>
 <div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;            <span class="comment">// - 8 cycles until first bit sample read (sbis)</span></div>
 <div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;            <span class="comment">//      2 ldd + 3 ldi + 1 sbis =&gt; 4 + 3 + 1</span></div>
-<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;            start_bit_rx_time_ = compute_delay(3 * bit_time / 2, 3 + 2 + 4 + 48 + 2 + 4 + 8);</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160;            start_bit_rx_time_ = compute_delay((3 * bit_time) / 2, 3 + 2 + 4 + 48 + 2 + 4 + 8);</div>
 <div class="line"><a name="l00347"></a><span class="lineno">  347</span>&#160; </div>
 <div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;            <span class="comment">// Time to wait (_delay_loop_2) between sampling of 2 consecutive data bits</span></div>
 <div class="line"><a name="l00349"></a><span class="lineno">  349</span>&#160;            <span class="comment">// This is also use between last bit and parity bit (if checked) or stop bit</span></div>
