@@ -63,7 +63,6 @@ IOStreams2	Check real Vs. null ostream	5970	94	6054	94	6216	94	5888	94	5884	94	5
 IOStreams3	Check ostream error handling (UART)	3906	184												
 ArrayCheck	Unit Tests for array container	2750	170					2648	104						
 InitializerListCheck	Unit Tests for initializer_list	2832	170					2772	104						
-LifecycleCheck	Unit Tests of lifecycle/proxy API	8376	140					6600	74			8396	140	8424	140
 FutureCheck	Unit Tests of future API	10966	146									10986	146	11014	146
 QueueCheck	Unit Tests of queue container	4404	592												
 LinkedListCheck	Unit Tests of linked list container	5814	463												

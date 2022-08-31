@@ -54,7 +54,6 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						misc/ArrayCheck							\
 						misc/InitializerListCheck				\
 						misc/FutureCheck						\
-						misc/LifecycleCheck						\
 						misc/QueueCheck							\
 						misc/LinkedListCheck					\
 						misc/UtilsCheck							\
@@ -100,8 +99,7 @@ EXAMPLES_BREADBOARD_ATMEGAXX4P=	int/ExternalInterrupt3					\
 								uart/UartApp6							\
 								uart/UartApp9							\
 								uart/UartApp10							\
-								misc/FutureCheck						\
-								misc/LifecycleCheck						
+								misc/FutureCheck						
 
 EXAMPLES_ARDUINO_LEONARDO=	complete/Conway						\
 							int/ExternalInterrupt3				\
@@ -169,7 +167,6 @@ EXAMPLES_BREADBOARD_ATTINYX4=	complete/Conway					\
 								misc/IOStreams1					\
 								misc/ArrayCheck					\
 								misc/InitializerListCheck		\
-								misc/LifecycleCheck				\
 								analog/AnalogComparator1		\
 								analog/AnalogComparator2		\
 								analog/AnalogComparator3		\
