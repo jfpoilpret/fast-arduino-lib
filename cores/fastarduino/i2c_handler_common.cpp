@@ -17,19 +17,6 @@
 namespace i2c
 {
 	/// @cond notdocumented
-	streams::ostream& operator<<(streams::ostream& out, const I2CCommandType& t)
-	{
-		if (t.is_none()) return out << F("NONE") << streams::flush;
-		out << (t.is_write() ? F("WRITE") : F("READ"));
-		if (t.is_stop())
-			out << F("[STOP]");
-		if (t.is_finish())
-			out << F("[FINISH]");
-		if (t.is_end())
-			out << F("[END]");
-		return out << streams::flush;
-	}
-
 	bool operator==(const I2CCommandType& a, const I2CCommandType& b)
 	{
 		return	(a.value_ == b.value_);

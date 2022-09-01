@@ -17,54 +17,6 @@
 namespace i2c::debug
 {
 	/// @cond notdocumented
-	// Add utility ostream manipulator for FutureStatus
-	static const flash::FlashStorage* convert(i2c::DebugStatus s)
-	{
-		switch (s)
-		{
-			case i2c::DebugStatus::START:
-			return F("ST ");
-
-			case i2c::DebugStatus::REPEAT_START:
-			return F("RS ");
-
-			case i2c::DebugStatus::SLAW:
-			return F("AW ");
-
-			case i2c::DebugStatus::SLAR:
-			return F("AR ");
-
-			case i2c::DebugStatus::SEND:
-			return F("S ");
-
-			case i2c::DebugStatus::RECV:
-			return F("R ");
-
-			case i2c::DebugStatus::RECV_LAST:
-			return F("RL ");
-
-			case i2c::DebugStatus::STOP:
-			return F("SP ");
-
-			case i2c::DebugStatus::SEND_OK:
-			return F("So ");
-
-			case i2c::DebugStatus::SEND_ERROR:
-			return F("Se ");
-
-			case i2c::DebugStatus::RECV_OK:
-			return F("Ro ");
-
-			case i2c::DebugStatus::RECV_ERROR:
-			return F("Re ");
-		}
-	}
-
-	streams::ostream& operator<<(streams::ostream& out, i2c::DebugStatus s)
-	{
-		return out << convert(s);
-	}
-
 	DEBUG operator|(DEBUG a, DEBUG b)
 	{
 		return DEBUG(uint8_t(a) | uint8_t(b));
