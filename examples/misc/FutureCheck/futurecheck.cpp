@@ -21,7 +21,6 @@
  *   - D25 (PD1): TX output connected through USB Serial converter to console for display
  */
 
-#include <fastarduino/move.h>
 #include <fastarduino/flash.h>
 #include <fastarduino/future.h>
 #include <fastarduino/uart.h>
