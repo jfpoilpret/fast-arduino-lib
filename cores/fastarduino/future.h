@@ -24,9 +24,10 @@
 #define FUTURE_HH
 
 #include <string.h>
+#include "flash.h"
+#include "interrupts.h"
 #include "iterator.h"
 #include "errors.h"
-#include "streams.h"
 #include "time.h"
 
 /**
@@ -359,7 +360,31 @@ namespace future
 	};
 
 	/// @cond notdocumented
-	streams::ostream& operator<<(streams::ostream& out, future::FutureStatus s);
+	template<typename OSTREAM> OSTREAM& operator<<(OSTREAM& out, FutureStatus s)
+	{
+		// Conversion lambda for local usage
+		auto convert = [](FutureStatus s)
+		{
+			switch (s)
+			{
+				case FutureStatus::NOT_READY:
+				return F("NOT_READY");
+
+				case FutureStatus::READY:
+				return F("READY");
+
+				case FutureStatus::ERROR:
+				return F("ERROR");
+
+				case FutureStatus::INVALID:
+				return F("INVALID");
+
+				default:
+				return F("");
+			}
+		};
+		return out << convert(s);
+	}
 	/// @endcond
 
 	/// @cond notdocumented
@@ -1717,7 +1742,7 @@ namespace future
 	struct dispatch_handler<AbstractFakeFuture, AbstractFakeFuture>
 	{
 		template<typename... HANDLERS_>
-		static void future_on_status_change(const AbstractFuture& future, FutureStatus status)
+		static void future_on_status_change(const AbstractFakeFuture& future, FutureStatus status)
 		{
 			dispatch_handler_impl<AbstractFakeFuture>::future_on_status_change<HANDLERS_...>(
 				future, status);

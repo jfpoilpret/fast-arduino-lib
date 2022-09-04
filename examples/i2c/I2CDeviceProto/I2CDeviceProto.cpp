@@ -86,6 +86,7 @@ int main()
 	DEBUGGER debugger;
 	MANAGER manager{debugger, debugger};
 	manager.begin();
+	out << streams::boolalpha << streams::unitbuf;
 	out << F("I2C interface started") << endl;
 	
 	PublicDevice device{manager};

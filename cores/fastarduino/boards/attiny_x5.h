@@ -260,20 +260,20 @@ namespace board
 
 // Forward declare interrupt service routines to allow them as friends.
 extern "C" {
-	void ADC_vect(void) SIGNAL;
-	void ANALOG_COMP_vect(void) SIGNAL;
-	void INT0_vect(void) SIGNAL;
-	void PCINT0_vect(void) SIGNAL;
-	void TIMER0_COMPA_vect(void) SIGNAL;
-	void TIMER0_COMPB_vect(void) SIGNAL;
-	void TIMER0_OVF_vect(void) SIGNAL;
-	void TIMER1_COMPA_vect(void) SIGNAL;
-	void TIMER1_COMPB_vect(void) SIGNAL;
-	void TIMER1_OVF_vect(void) SIGNAL;
-	void WDT_vect(void) SIGNAL;
-	void USI_START_vect(void) SIGNAL;
-	void USI_OVF_vect(void) SIGNAL;
-	void EE_READY_vect(void) SIGNAL;
+	void ADC_vect(void) SIGNAL_HANDLER;
+	void ANALOG_COMP_vect(void) SIGNAL_HANDLER;
+	void INT0_vect(void) SIGNAL_HANDLER;
+	void PCINT0_vect(void) SIGNAL_HANDLER;
+	void TIMER0_COMPA_vect(void) SIGNAL_HANDLER;
+	void TIMER0_COMPB_vect(void) SIGNAL_HANDLER;
+	void TIMER0_OVF_vect(void) SIGNAL_HANDLER;
+	void TIMER1_COMPA_vect(void) SIGNAL_HANDLER;
+	void TIMER1_COMPB_vect(void) SIGNAL_HANDLER;
+	void TIMER1_OVF_vect(void) SIGNAL_HANDLER;
+	void WDT_vect(void) SIGNAL_HANDLER;
+	void USI_START_vect(void) SIGNAL_HANDLER;
+	void USI_OVF_vect(void) SIGNAL_HANDLER;
+	void EE_READY_vect(void) SIGNAL_HANDLER;
 }
 /// @endcond
 

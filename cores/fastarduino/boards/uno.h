@@ -410,30 +410,30 @@ namespace board
 /// @cond notdocumented
 // Forward declare interrupt service routines to allow them as friends
 extern "C" {
-	void ADC_vect(void) SIGNAL;
-	void ANALOG_COMP_vect(void) SIGNAL;
-	void INT0_vect(void) SIGNAL;
-	void INT1_vect(void) SIGNAL;
-	void PCINT0_vect(void) SIGNAL;
-	void PCINT1_vect(void) SIGNAL;
-	void PCINT2_vect(void) SIGNAL;
-	void SPI_STC_vect(void) SIGNAL;
-	void TIMER0_COMPA_vect(void) SIGNAL;
-	void TIMER0_COMPB_vect(void) SIGNAL;
-	void TIMER0_OVF_vect(void) SIGNAL;
-	void TIMER1_CAPT_vect(void)  SIGNAL;
-	void TIMER1_COMPA_vect(void) SIGNAL;
-	void TIMER1_COMPB_vect(void) SIGNAL;
-	void TIMER1_OVF_vect(void) SIGNAL;
-	void TIMER2_COMPA_vect(void) SIGNAL;
-	void TIMER2_COMPB_vect(void) SIGNAL;
-	void TIMER2_OVF_vect(void) SIGNAL;
-	void TWI_vect(void) SIGNAL;
-	void WDT_vect(void) SIGNAL;
-	void USART_RX_vect(void) SIGNAL;
-	void USART_TX_vect(void) SIGNAL;
-	void USART_UDRE_vect(void) SIGNAL;
-	void EE_READY_vect(void) SIGNAL;
+	void ADC_vect(void) SIGNAL_HANDLER;
+	void ANALOG_COMP_vect(void) SIGNAL_HANDLER;
+	void INT0_vect(void) SIGNAL_HANDLER;
+	void INT1_vect(void) SIGNAL_HANDLER;
+	void PCINT0_vect(void) SIGNAL_HANDLER;
+	void PCINT1_vect(void) SIGNAL_HANDLER;
+	void PCINT2_vect(void) SIGNAL_HANDLER;
+	void SPI_STC_vect(void) SIGNAL_HANDLER;
+	void TIMER0_COMPA_vect(void) SIGNAL_HANDLER;
+	void TIMER0_COMPB_vect(void) SIGNAL_HANDLER;
+	void TIMER0_OVF_vect(void) SIGNAL_HANDLER;
+	void TIMER1_CAPT_vect(void)  SIGNAL_HANDLER;
+	void TIMER1_COMPA_vect(void) SIGNAL_HANDLER;
+	void TIMER1_COMPB_vect(void) SIGNAL_HANDLER;
+	void TIMER1_OVF_vect(void) SIGNAL_HANDLER;
+	void TIMER2_COMPA_vect(void) SIGNAL_HANDLER;
+	void TIMER2_COMPB_vect(void) SIGNAL_HANDLER;
+	void TIMER2_OVF_vect(void) SIGNAL_HANDLER;
+	void TWI_vect(void) SIGNAL_HANDLER;
+	void WDT_vect(void) SIGNAL_HANDLER;
+	void USART_RX_vect(void) SIGNAL_HANDLER;
+	void USART_TX_vect(void) SIGNAL_HANDLER;
+	void USART_UDRE_vect(void) SIGNAL_HANDLER;
+	void EE_READY_vect(void) SIGNAL_HANDLER;
 }
 
 #define USART0_RX_vect USART_RX_vect

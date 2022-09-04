@@ -179,7 +179,7 @@ int main()
 	time::delay_ms(5000);
 	uart.begin(115200);
 	out.width(2);
-	out << streams::boolalpha;
+	out << streams::boolalpha << streams::unitbuf;
 	out << F("Start") << endl;
 
 	// Initialize I2C async handler

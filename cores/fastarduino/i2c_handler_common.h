@@ -26,7 +26,7 @@
 #include "boards/board_traits.h"
 #include "bits.h"
 #include "i2c.h"
-#include "streams.h"
+#include "ios.h"
 #include "future.h"
 #include "queue.h"
 #include "utilities.h"
@@ -230,7 +230,18 @@ namespace i2c
 		friend bool operator!=(const I2CCommandType&, const I2CCommandType&);
 	};
 
-	streams::ostream& operator<<(streams::ostream& out, const I2CCommandType& t);
+	template<typename OSTREAM> OSTREAM& operator<<(OSTREAM& out, const I2CCommandType& t)
+	{
+		if (t.is_none()) return out << F("NONE");
+		out << (t.is_write() ? F("WRITE") : F("READ"));
+		if (t.is_stop())
+			out << F("[STOP]");
+		if (t.is_finish())
+			out << F("[FINISH]");
+		if (t.is_end())
+			out << F("[END]");
+		return out;
+	}
 	bool operator==(const I2CCommandType& a, const I2CCommandType& b);
 	bool operator!=(const I2CCommandType& a, const I2CCommandType& b);
 	/// @endcond
@@ -337,11 +348,11 @@ namespace i2c
 	};
 
 	/// @cond notdocumented
-	template<typename T>
-	streams::ostream& operator<<(streams::ostream& out, const I2CCommand<T>& c)
+	template<typename OSTREAM, typename T> OSTREAM& operator<<(OSTREAM& out, const I2CCommand<T>& c)
 	{
-		out	<< '{' << c.type() << ',' 
-			<< streams::hex << c.target() << '}' << streams::flush;
+		out	<< '{' << c.type() << ',';
+		out.setf(streams::ios::hex, streams::ios::basefield);
+		out << streams::hex << c.target() << '}';
 		return out;
 	}
 	/// @endcond

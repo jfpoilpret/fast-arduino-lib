@@ -178,7 +178,7 @@ int main()
 	streams::ostream out = uart.out();
 	uart.begin(115200);
 	out.width(2);
-	out << streams::boolalpha;
+	out << streams::boolalpha << streams::unitbuf;
 	out << F("Start") << endl;
 
 	SwitchHandler handler{out};

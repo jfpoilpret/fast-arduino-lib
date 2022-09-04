@@ -22,7 +22,7 @@
 #define I2C_STATUS_HH
 
 #include "flash.h"
-#include "streams.h"
+#include "ios.h"
 #include "i2c_handler_common.h"
 
 namespace i2c
@@ -92,17 +92,22 @@ namespace i2c::status
 		 * hexadecimal, otherwise status name will be displayed 
 		 * @sa reset()
 		 */
-		void trace(streams::ostream& out, bool hex_status = true)
+		template<typename OSTREAM>
+		void trace(OSTREAM& out, bool hex_status = true)
 		{
 			if (hex_status)
 				for (uint8_t i = 0; i < index_; ++i)
-					out << streams::hex << uint8_t(expected_[i]) << ' ' 
-						<< streams::hex << uint8_t(actual_[i]) << streams::endl;
+				{
+					out.setf(streams::ios::hex, streams::ios::basefield);
+					out << uint8_t(expected_[i]) << ' ';
+					out.setf(streams::ios::hex, streams::ios::basefield);
+					out << uint8_t(actual_[i]) << '\n';
+				}
 			else
 				for (uint8_t i = 0; i < index_; ++i)
-					out << expected_[i] << ' ' << actual_[i] << streams::endl;
+					out << expected_[i] << ' ' << actual_[i] << '\n';
 			if (index_ >= SIZE)
-				out << F("# OVF #") << streams::endl;
+				out << F("# OVF #") << '\n';
 			index_ = 0;
 		}
 
@@ -132,6 +137,7 @@ namespace i2c::status
 	 * 
 	 * @sa I2CStatusRecorder
 	 */
+	template<typename OSTREAM>
 	class I2CStatusLiveLogger
 	{
 	public:
@@ -144,7 +150,7 @@ namespace i2c::status
 		 * @param hex_status if `true` (the default), status values will be displayed in 
 		 * hexadecimal, otherwise status name will be displayed 
 		 */
-		I2CStatusLiveLogger(streams::ostream& out, STATUS trace = STATUS::TRACE_ALL, bool hex_status = true)
+		I2CStatusLiveLogger(OSTREAM& out, STATUS trace = STATUS::TRACE_ALL, bool hex_status = true)
 		: out_{out}, trace_{trace}, hex_status_{hex_status} {}
 
 		/// @cond notdocumented
@@ -153,16 +159,20 @@ namespace i2c::status
 			if ((expected != actual) || (trace_ == STATUS::TRACE_ALL))
 			{
 				if (hex_status_)
-					out_ << streams::hex << uint8_t(expected) << ' ' 
-						<< streams::hex << uint8_t(actual) << streams::endl;
+				{
+					out_.setf(streams::ios::hex, streams::ios::basefield);
+					out_ << uint8_t(expected) << ' ';
+					out_.setf(streams::ios::hex, streams::ios::basefield);
+					out_ << uint8_t(actual) << '\n';
+				}
 				else
-					out_ << expected << ' ' << actual << streams::endl;
+					out_ << expected << ' ' << actual << '\n';
 			}
 		}
 		/// @endcond
 
 	private:
-		streams::ostream& out_;
+		OSTREAM& out_;
 		STATUS trace_;
 		bool hex_status_;
 	};

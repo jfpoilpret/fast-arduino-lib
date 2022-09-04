@@ -127,7 +127,7 @@ int main()
 	streams::ostream out = uart.out();
 	streams::istream in = uart.in();
 	uart.begin(115200);
-	out << streams::boolalpha;
+	out << streams::boolalpha << streams::unitbuf;
 
 	// Initialize I2C async handler
 #if I2C_TRUE_ASYNC and not defined(FORCE_SYNC)

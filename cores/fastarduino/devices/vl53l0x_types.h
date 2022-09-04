@@ -33,9 +33,8 @@
 #define VL53L0X_TYPES_H
 
 #include "../bits.h"
-//FIXME NEVER IMPORT streams.h IN ANY FASTARDUINO library source code file!
-// That will prevent using empty_streams.h in any program using VL53L0X!
-#include "../streams.h"
+#include "../flash.h"
+#include "../ios.h"
 #include "../utilities.h"
 #include "vl53l0x_registers.h"
 
@@ -175,8 +174,65 @@ namespace devices::vl53l0x
 		/** Unknown error. */
 		UNKNOWN                        = 15
 	};
+
 	/// @cond notdocumented
-	streams::ostream& operator<<(streams::ostream& out, DeviceError error);
+	template<typename OSTREAM> OSTREAM& operator<<(OSTREAM& out, DeviceError error)
+	{
+		auto convert = [](DeviceError error)
+		{
+			switch (error)
+			{
+				case DeviceError::NONE:
+				return F("NONE");
+
+				case DeviceError::VCSEL_CONTINUITY_TEST_FAILURE:
+				return F("VCSEL_CONTINUITY_TEST_FAILURE");
+
+				case DeviceError::VCSEL_WATCHDOG_TEST_FAILURE:
+				return F("VCSEL_WATCHDOG_TEST_FAILURE");
+
+				case DeviceError::NO_VHV_VALUE_FOUND:
+				return F("NO_VHV_VALUE_FOUND");
+
+				case DeviceError::MSRC_NO_TARGET:
+				return F("MSRC_NO_TARGET");
+
+				case DeviceError::SNR_CHECK:
+				return F("SNR_CHECK");
+
+				case DeviceError::RANGE_PHASE_CHECK:
+				return F("RANGE_PHASE_CHECK");
+
+				case DeviceError::SIGMA_THRESHOLD_CHECK:
+				return F("SIGMA_THRESHOLD_CHECK");
+
+				case DeviceError::TCC:
+				return F("TCC");
+
+				case DeviceError::PHASE_CONSISTENCY:
+				return F("PHASE_CONSISTENCY");
+
+				case DeviceError::MIN_CLIP:
+				return F("MIN_CLIP");
+
+				case DeviceError::RANGE_COMPLETE:
+				return F("RANGE_COMPLETE");
+
+				case DeviceError::ALGO_UNDERFLOW:
+				return F("ALGO_UNDERFLOW");
+
+				case DeviceError::ALGO_OVERFLOW:
+				return F("ALGO_OVERFLOW");
+
+				case DeviceError::RANGE_IGNORE_THRESHOLD:
+				return F("RANGE_IGNORE_THRESHOLD");
+
+				case DeviceError::UNKNOWN:
+				return F("UNKNOWN");
+			}
+		};
+		return out << convert(error);
+	}
 	/// @endcond
 
 	/**
@@ -214,8 +270,12 @@ namespace devices::vl53l0x
 		static constexpr uint8_t ERROR_SHIFT = 3;
 		static constexpr uint8_t ERROR_MASK = 0x0F;
 	};
+
 	/// @cond notdocumented
-	streams::ostream& operator<<(streams::ostream& out, DeviceStatus status);
+	template<typename OSTREAM> OSTREAM& operator<<(OSTREAM& out, DeviceStatus status)
+	{
+		return out << '(' << status.error() << ',' << status.data_ready() << ')';
+	}
 	/// @endcond
 
 	/**
@@ -227,8 +287,23 @@ namespace devices::vl53l0x
 		STANDBY = 0,
 		IDLE = 1
 	};
+
 	/// @cond notdocumented
-	streams::ostream& operator<<(streams::ostream& out, PowerMode mode);
+	template<typename OSTREAM> OSTREAM& operator<<(OSTREAM& out, PowerMode mode)
+	{
+		auto convert = [](PowerMode mode)
+		{
+			switch (mode)
+			{
+				case PowerMode::IDLE:
+				return F("IDLE");
+
+				case PowerMode::STANDBY:
+				return F("STANDBY");
+			}
+		};
+		return out << convert(mode);
+	}
 	/// @endcond
 
 	/**
@@ -250,8 +325,32 @@ namespace devices::vl53l0x
 		/** Interrupt triggered when a range is ready to read. */
 		SAMPLE_READY = 0x04
 	};
+
 	/// @cond notdocumented
-	streams::ostream& operator<<(streams::ostream& out, GPIOFunction function);
+	template<typename OSTREAM> OSTREAM& operator<<(OSTREAM& out, GPIOFunction function)
+	{
+		auto convert = [](GPIOFunction function)
+		{
+			switch (function)
+			{
+				case GPIOFunction::DISABLED: 
+				return F("DISABLED");
+
+				case GPIOFunction::LEVEL_LOW: 
+				return F("LEVEL_LOW");
+
+				case GPIOFunction::LEVEL_HIGH: 
+				return F("LEVEL_HIGH");
+
+				case GPIOFunction::OUT_OF_WINDOW: 
+				return F("OUT_OF_WINDOW");
+
+				case GPIOFunction::SAMPLE_READY: 
+				return F("SAMPLE_READY");
+			}
+		};
+		return out << convert(function);
+	}
 	/// @endcond
 
 	/**
@@ -358,8 +457,22 @@ namespace devices::vl53l0x
 		uint16_t low_threshold_ = 0;
 		uint16_t high_threshold_ = 0;
 	};
+
 	/// @cond notdocumented
-	streams::ostream& operator<<(streams::ostream& out, const GPIOSettings& settings);
+	template<typename OSTREAM> OSTREAM& operator<<(OSTREAM& out, const GPIOSettings& settings)
+	{
+		out << F("(GPIO function=");
+		out.setf(streams::ios::dec, streams::ios::basefield);
+		out	<< settings.function()
+			<< F(", ") << (settings.high_polarity() ? F("HIGH") : F("LOW")) << F(" polarity")
+			<< F(", low_threshold=");
+		out.setf(streams::ios::hex, streams::ios::basefield);
+		out << settings.low_threshold()
+			<< F(", high_threshold=");
+		out.setf(streams::ios::hex, streams::ios::basefield);
+		out << settings.high_threshold() << ')';
+		return out;
+	}
 	/// @endcond
 
 	/// @cond notdocumented
@@ -634,8 +747,29 @@ namespace devices::vl53l0x
 
 		template<typename MANAGER> friend class VL53L0X;
 	};
+
 	/// @cond notdocumented
-	streams::ostream& operator<<(streams::ostream& out, SequenceSteps steps);
+	template<typename OSTREAM> OSTREAM& operator<<(OSTREAM& out, SequenceSteps steps)
+	{
+		auto with_without = [](OSTREAM& out, bool with, const flash::FlashStorage* label)
+		{
+			if (!with)
+				out << F("no ");
+			out << label;
+		};
+		out << '(';
+		with_without(out, steps.is_tcc(), F("TCC"));
+		out << ',';
+		with_without(out, steps.is_dss(), F("DSS"));
+		out << ',';
+		with_without(out, steps.is_msrc(), F("MSRC"));
+		out << ',';
+		with_without(out, steps.is_pre_range(), F("PRE_RANGE"));
+		out << ',';
+		with_without(out, steps.is_final_range(), F("FINAL_RANGE"));
+		out << ')';
+		return out;
+	}
 	/// @endcond
 
 	/**
@@ -743,8 +877,33 @@ namespace devices::vl53l0x
 
 		template<typename MANAGER> friend class VL53L0X;
 	};
+
 	/// @cond notdocumented
-	streams::ostream& operator<<(streams::ostream& out, const SequenceStepsTimeout& timeouts);
+	template<typename OSTREAM> OSTREAM& operator<<(OSTREAM& out, const SequenceStepsTimeout& timeouts)
+	{
+		out	<< F("(pre_range_vcsel_period_pclks=");
+		out.setf(streams::ios::dec, streams::ios::basefield);
+		out	<< timeouts.pre_range_vcsel_period_pclks()
+			<< F(", final_range_vcsel_period_pclks=")
+			<< timeouts.final_range_vcsel_period_pclks()
+			<< F(", msrc_dss_tcc_mclks=")
+			<< timeouts.msrc_dss_tcc_mclks()
+			<< F(", pre_range_mclks=")
+			<< timeouts.pre_range_mclks()
+			<< F(", final_range_mclks(with pre-range)=")
+			<< timeouts.final_range_mclks(true) << ')'
+			<< F(", final_range_mclks(no pre-range)=")
+			<< timeouts.final_range_mclks(false) << ')'
+			<< F(", msrc_dss_tcc_us()=")
+			<< timeouts.msrc_dss_tcc_us() << F("us,")
+			<< F(", pre_range_us()=")
+			<< timeouts.pre_range_us() << F("us,")
+			<< F(", final_range_us(with pre-range)=")
+			<< timeouts.final_range_us(true) << F("us,")
+			<< F(", final_range_us(no pre-range)=")
+			<< timeouts.final_range_us(false) << F("us)");
+		return out;
+	}
 	/// @endcond
 
 	/**
@@ -787,8 +946,16 @@ namespace devices::vl53l0x
 	private:
 		uint8_t info_ = 0;
 	};
+
 	/// @cond notdocumented
-	streams::ostream& operator<<(streams::ostream& out, SPADInfo spad);
+	template<typename OSTREAM> OSTREAM& operator<<(OSTREAM& out, SPADInfo info)
+	{
+		out	<< F("(aperture=") << info.is_aperture()
+			<< F(", count=");
+		out.setf(streams::ios::dec, streams::ios::basefield);
+		out << info.count() << ')';
+		return out;
+	}
 	/// @endcond
 
 	/**

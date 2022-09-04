@@ -22,7 +22,6 @@
 #define I2C_DEBUG_HH
 
 #include "flash.h"
-#include "streams.h"
 #include "i2c_handler_common.h"
 #include "i2c_status.h"
 
@@ -42,7 +41,52 @@ namespace i2c::debug
 {
 	/// @cond notdocumented
 	// Add utility ostream insert operator for FutureStatus
-	streams::ostream& operator<<(streams::ostream& out, i2c::DebugStatus s);
+	template<typename OSTREAM> OSTREAM& operator<<(OSTREAM& out, i2c::DebugStatus s)
+	{
+		// Conversion lambda for local usage
+		auto convert = [](i2c::DebugStatus s)
+		{
+			switch (s)
+			{
+				case i2c::DebugStatus::START:
+				return F("ST ");
+
+				case i2c::DebugStatus::REPEAT_START:
+				return F("RS ");
+
+				case i2c::DebugStatus::SLAW:
+				return F("AW ");
+
+				case i2c::DebugStatus::SLAR:
+				return F("AR ");
+
+				case i2c::DebugStatus::SEND:
+				return F("S ");
+
+				case i2c::DebugStatus::RECV:
+				return F("R ");
+
+				case i2c::DebugStatus::RECV_LAST:
+				return F("RL ");
+
+				case i2c::DebugStatus::STOP:
+				return F("SP ");
+
+				case i2c::DebugStatus::SEND_OK:
+				return F("So ");
+
+				case i2c::DebugStatus::SEND_ERROR:
+				return F("Se ");
+
+				case i2c::DebugStatus::RECV_OK:
+				return F("Ro ");
+
+				case i2c::DebugStatus::RECV_ERROR:
+				return F("Re ");
+			}
+		};
+		return out << convert(s);
+	}
 	/// @endcond
 
 	/**
@@ -122,7 +166,8 @@ namespace i2c::debug
 		 * @param out the `streams::ostream` to output traces to
 		 * @sa reset()
 		 */
-		void trace(streams::ostream& out)
+		template<typename OSTREAM>
+		void trace(OSTREAM& out)
 		{
 			for (uint8_t i = 0; i < index_; ++i)
 			{
@@ -137,16 +182,18 @@ namespace i2c::debug
 					case i2c::DebugStatus::RECV_LAST:
 					case i2c::DebugStatus::SEND_ERROR:
 					case i2c::DebugStatus::SEND_OK:
-					out << status << streams::flush;
+					out << status;
 					break;
 
 					default:
-					out << status << streams::hex << data_[i] << ' ' << streams::flush;
+					out << status;
+					out.setf(streams::ios::hex, streams::ios::basefield);
+					out << data_[i] << ' ';
 				}
 			}
 			if (index_ >= SIZE)
 				out << F("# OVF #");
-			out << streams::endl;
+			out << '\n';
 			index_ = 0;
 		}
 
@@ -221,6 +268,7 @@ namespace i2c::debug
 	 * @sa i2c::DebugStatus
 	 * @sa I2CDebugRecorder
 	 */
+	template<typename OSTREAM>
 	class I2CDebugLiveLogger
 	{
 	public:
@@ -231,7 +279,7 @@ namespace i2c::debug
 		 * @param out the `streams::ostream` to output traces to
 		 * @param debug the list of notifications to trace
 		 */
-		I2CDebugLiveLogger(streams::ostream& out, DEBUG debug = DEBUG::DEBUG_ALL) : out_{out}, debug_{debug} {}
+		I2CDebugLiveLogger(OSTREAM& out, DEBUG debug = DEBUG::DEBUG_ALL) : out_{out}, debug_{debug} {}
 
 		/// @cond notdocumented
 		void operator()(i2c::DebugStatus status, uint8_t data)
@@ -279,18 +327,20 @@ namespace i2c::debug
 					case i2c::DebugStatus::RECV_LAST:
 					case i2c::DebugStatus::SEND_ERROR:
 					case i2c::DebugStatus::SEND_OK:
-					out_ << status << streams::flush;
+					out_ << status;
 					break;
 
 					default:
-					out_ << status << streams::hex << data << ' ' << streams::flush;
+					out_ << status;
+					out_.setf(streams::ios::hex, streams::ios::basefield);
+					out_ << data << ' ';
 				}
 			}
 		}
 		/// @endcond
 
 	private:
-		streams::ostream& out_;
+		OSTREAM& out_;
 		DEBUG debug_;
 	};
 
@@ -349,7 +399,8 @@ namespace i2c::debug
 		 * hexadecimal, otherwise status name will be displayed 
 		 * @sa reset()
 		 */
-		void trace(streams::ostream& out, bool hex_status = true)
+		template<typename OSTREAM>
+		void trace(OSTREAM& out, bool hex_status = true)
 		{
 			I2CDebugRecorder<SIZE_DEBUG>::trace(out);
 			i2c::status::I2CStatusRecorder<SIZE_STATUS>::trace(out, hex_status);
@@ -363,11 +414,13 @@ namespace i2c::debug
 	 * 
 	 * @sa I2CDebugStatusRecorder
 	 */
-	class I2CDebugStatusLiveLogger : public i2c::status::I2CStatusLiveLogger, public I2CDebugLiveLogger
+	template<typename OSTREAM>
+	class I2CDebugStatusLiveLogger : 
+		public i2c::status::I2CStatusLiveLogger<OSTREAM>, public I2CDebugLiveLogger<OSTREAM>
 	{
 	public:
-		using I2CDebugLiveLogger::operator();
-		using i2c::status::I2CStatusLiveLogger::operator();
+		using I2CDebugLiveLogger<OSTREAM>::operator();
+		using i2c::status::I2CStatusLiveLogger<OSTREAM>::operator();
 
 		/**
 		 * Create an I2CDebugLiveLogger that can trace live I2C notifications determined
@@ -382,11 +435,12 @@ namespace i2c::debug
 		 * @sa trace()
 		 * @sa reset()
 		 */
-		I2CDebugStatusLiveLogger(streams::ostream& out,
+		I2CDebugStatusLiveLogger(OSTREAM& out,
 			i2c::status::STATUS trace = i2c::status::STATUS::TRACE_ALL, 
 			DEBUG debug = DEBUG::DEBUG_ALL,
 			bool hex_status = true)
-		: i2c::status::I2CStatusLiveLogger{out, trace, hex_status}, I2CDebugLiveLogger{out, debug} {}
+			:	i2c::status::I2CStatusLiveLogger<OSTREAM>{out, trace, hex_status},
+				I2CDebugLiveLogger<OSTREAM>{out, debug} {}
 	};
 }
 

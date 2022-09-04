@@ -22,7 +22,8 @@
 #define I2C_HH
 
 #include <stdint.h>
-#include "streams.h"
+#include "flash.h"
+#include "ios.h"
 
 //NOTE only Master operation is supported for the moment
 /**
@@ -94,7 +95,66 @@ namespace i2c
 	};
 
 	/// @cond notdocumented
-	streams::ostream& operator<<(streams::ostream& out, Status s);
+	template<typename OSTREAM> OSTREAM& operator<<(OSTREAM& out, Status s)
+	{
+		switch (s)
+		{
+			case Status::OK:
+			out << F("OK");
+			break;
+			
+			case Status::START_TRANSMITTED:
+			out << F("START_TRANSMITTED");
+			break;
+			
+			case Status::REPEAT_START_TRANSMITTED:
+			out << F("REPEAT_START_TRANSMITTED");
+			break;
+			
+			case Status::SLA_W_TRANSMITTED_ACK:
+			out << F("SLA_W_TRANSMITTED_ACK");
+			break;
+			
+			case Status::SLA_W_TRANSMITTED_NACK:
+			out << F("SLA_W_TRANSMITTED_NACK");
+			break;
+			
+			case Status::DATA_TRANSMITTED_ACK:
+			out << F("DATA_TRANSMITTED_ACK");
+			break;
+			
+			case Status::DATA_TRANSMITTED_NACK:
+			out << F("DATA_TRANSMITTED_NACK");
+			break;
+			
+			case Status::ARBITRATION_LOST:
+			out << F("ARBITRATION_LOST");
+			break;
+			
+			case Status::SLA_R_TRANSMITTED_ACK:
+			out << F("SLA_R_TRANSMITTED_ACK");
+			break;
+			
+			case Status::SLA_R_TRANSMITTED_NACK:
+			out << F("SLA_R_TRANSMITTED_NACK");
+			break;
+			
+			case Status::DATA_RECEIVED_ACK:
+			out << F("DATA_RECEIVED_ACK");
+			break;
+			
+			case Status::DATA_RECEIVED_NACK:
+			out << F("DATA_RECEIVED_NACK");
+			break;
+			
+			default:
+			out << F("UNKNOWN[");
+			out.setf(streams::ios::hex, streams::ios::basefield);
+			out << uint8_t(s) << ']';
+			break;
+		}
+		return out;
+	}
 	/// @endcond
 
 	/**

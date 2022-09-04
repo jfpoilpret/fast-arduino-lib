@@ -190,6 +190,7 @@ int main()
 	ostream out = uart.out();
 	out.width(0);
 	out.setf(ios::hex, ios::basefield);
+	out << streams::boolalpha << streams::unitbuf;
 	out << "Start" << endl;
 	
 	// Start TWI interface

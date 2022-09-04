@@ -190,6 +190,7 @@ int main()
 #endif
 	uart.begin(115200);
 	ostream out = uart.out();
+	out << streams::boolalpha << streams::unitbuf;
 	out << F("Start") << endl;
 
 	// Start TWI interface

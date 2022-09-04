@@ -57,6 +57,8 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						misc/QueueCheck							\
 						misc/LinkedListCheck					\
 						misc/UtilsCheck							\
+						misc/StreamsDepsAsyncI2CCheck			\
+						misc/StreamsDepsSyncI2CCheck			\
 						future/improved_futures					\
 						future/improved_futures2				\
 						pci/PinChangeInterrupt4					\
