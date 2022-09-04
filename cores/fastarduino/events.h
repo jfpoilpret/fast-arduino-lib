@@ -296,8 +296,8 @@ namespace events
 		}
 
 	protected:
-		EventHandler(const EventHandler<EVENT>&) = default;
-		EventHandler<EVENT>& operator=(const EventHandler<EVENT>&) = default;
+		EventHandler(const EventHandler&) = default;
+		EventHandler& operator=(const EventHandler&) = default;
 		
 		/**
 		 * This pure virtual method is called by `Dispatcher::dispatch()` when

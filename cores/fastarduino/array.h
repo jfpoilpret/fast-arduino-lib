@@ -125,7 +125,7 @@ namespace containers
 		/**
 		 * Overwrite every element of this array with every element of @p that.
 		 */
-		array<T, N>& operator=(const array<T, N>& that)
+		array& operator=(const array& that)
 		{
 			T* dst = buffer_;
 			const T* src = that.buffer_;
