@@ -178,9 +178,9 @@ namespace devices::vl53l0x
 	/// @cond notdocumented
 	template<typename OSTREAM> OSTREAM& operator<<(OSTREAM& out, DeviceError error)
 	{
-		auto convert = [](DeviceError error)
+		auto convert = [](DeviceError e)
 		{
-			switch (error)
+			switch (e)
 			{
 				case DeviceError::NONE:
 				return F("NONE");
@@ -229,6 +229,9 @@ namespace devices::vl53l0x
 
 				case DeviceError::UNKNOWN:
 				return F("UNKNOWN");
+
+				default:
+				return F("");
 			}
 		};
 		return out << convert(error);
@@ -291,15 +294,18 @@ namespace devices::vl53l0x
 	/// @cond notdocumented
 	template<typename OSTREAM> OSTREAM& operator<<(OSTREAM& out, PowerMode mode)
 	{
-		auto convert = [](PowerMode mode)
+		auto convert = [](PowerMode m)
 		{
-			switch (mode)
+			switch (m)
 			{
 				case PowerMode::IDLE:
 				return F("IDLE");
 
 				case PowerMode::STANDBY:
 				return F("STANDBY");
+
+				default:
+				return F("");
 			}
 		};
 		return out << convert(mode);
@@ -329,9 +335,9 @@ namespace devices::vl53l0x
 	/// @cond notdocumented
 	template<typename OSTREAM> OSTREAM& operator<<(OSTREAM& out, GPIOFunction function)
 	{
-		auto convert = [](GPIOFunction function)
+		auto convert = [](GPIOFunction f)
 		{
-			switch (function)
+			switch (f)
 			{
 				case GPIOFunction::DISABLED: 
 				return F("DISABLED");
@@ -347,6 +353,9 @@ namespace devices::vl53l0x
 
 				case GPIOFunction::SAMPLE_READY: 
 				return F("SAMPLE_READY");
+
+				default:
+				return F("");
 			}
 		};
 		return out << convert(function);
@@ -751,11 +760,11 @@ namespace devices::vl53l0x
 	/// @cond notdocumented
 	template<typename OSTREAM> OSTREAM& operator<<(OSTREAM& out, SequenceSteps steps)
 	{
-		auto with_without = [](OSTREAM& out, bool with, const flash::FlashStorage* label)
+		auto with_without = [](OSTREAM& o, bool with, const flash::FlashStorage* label)
 		{
 			if (!with)
-				out << F("no ");
-			out << label;
+				o << F("no ");
+			o << label;
 		};
 		out << '(';
 		with_without(out, steps.is_tcc(), F("TCC"));

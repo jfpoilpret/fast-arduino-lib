@@ -360,7 +360,7 @@ namespace future
 	};
 
 	/// @cond notdocumented
-	template<typename OSTREAM> OSTREAM& operator<<(OSTREAM& out, FutureStatus s)
+	template<typename OSTREAM> OSTREAM& operator<<(OSTREAM& out, FutureStatus status)
 	{
 		// Conversion lambda for local usage
 		auto convert = [](FutureStatus s)
@@ -383,7 +383,7 @@ namespace future
 				return F("");
 			}
 		};
-		return out << convert(s);
+		return out << convert(status);
 	}
 	/// @endcond
 

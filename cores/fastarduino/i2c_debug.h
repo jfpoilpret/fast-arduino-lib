@@ -41,7 +41,7 @@ namespace i2c::debug
 {
 	/// @cond notdocumented
 	// Add utility ostream insert operator for FutureStatus
-	template<typename OSTREAM> OSTREAM& operator<<(OSTREAM& out, i2c::DebugStatus s)
+	template<typename OSTREAM> OSTREAM& operator<<(OSTREAM& out, i2c::DebugStatus status)
 	{
 		// Conversion lambda for local usage
 		auto convert = [](i2c::DebugStatus s)
@@ -83,9 +83,12 @@ namespace i2c::debug
 
 				case i2c::DebugStatus::RECV_ERROR:
 				return F("Re ");
+
+				default:
+				return F("");
 			}
 		};
-		return out << convert(s);
+		return out << convert(status);
 	}
 	/// @endcond
 
