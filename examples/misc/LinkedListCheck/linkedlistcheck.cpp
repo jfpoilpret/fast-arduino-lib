@@ -44,7 +44,7 @@ using namespace containers;
 
 // Generic assertion
 //===================
-template<typename T1, typename T2> void assert(ostream& out, const char* var, T1 expected, T2 actual)
+template<typename T1, typename T2> void assert(ostream& out, const char* var, const T1& expected, const T2& actual)
 {
 	out << "    Comparing " << var;
 	if (expected == actual)
@@ -61,9 +61,8 @@ public:
 	TraversalAssert(ostream& out)
 	: out{out}, index{}, expected{}, size{} {}
 
-	template<uint8_t SIZE>
-	TraversalAssert(ostream& out, ITEM (&expected)[SIZE])
-	: out{out}, index{}, expected{expected}, size{SIZE} {}
+	TraversalAssert(ostream& out, uint8_t size, ITEM** expected)
+	: out{out}, index{}, expected{expected}, size{size} {}
 
 	bool operator()(ITEM& item)
 	{
@@ -71,7 +70,7 @@ public:
 		{
 			char buf[] = "item[x]";
 			buf[5] = '0' + index;
-			assert(out, buf, expected[index], item);
+			assert(out, buf, *expected[index], item);
 		}
 		else
 		{
@@ -84,7 +83,7 @@ public:
 private:
 	ostream& out;
 	uint8_t index;
-	ITEM* expected;
+	ITEM** expected;
 	uint8_t size;
 };
 
@@ -151,46 +150,46 @@ static LINK3 links3[] = {'a', 'b', 'c', 'd', 'e'};
 
 // List-checking functions
 //=========================
-template<typename LINK> void check_link_list(ostream& out, LINK links[5])
+template<typename LINK> void check_link_list(ostream& out, LINK* links)
 {
 	LinkedList<LINK> list;
 	list.traverse(TraversalAssert<LINK>{out});
 
 	out << "after insert() #1" << endl;
 	list.insert(links[0]);
-	LINK expected1[] = {links[0]};
-	list.traverse(TraversalAssert<LINK>{out, expected1});
+	LINK* expected1[] = {&links[0]};
+	list.traverse(TraversalAssert<LINK>{out, 1, expected1});
 
 	out << "after insert() #2" << endl;
 	list.insert(links[1]);
-	LINK expected2[] = {links[1], links[0]};
-	list.traverse(TraversalAssert<LINK>{out, expected2});
+	LINK* expected2[] = {&links[1], &links[0]};
+	list.traverse(TraversalAssert<LINK>{out, 2, expected2});
 
 	out << "after insert() #3,4,5" << endl;
 	list.insert(links[2]);
 	list.insert(links[3]);
 	list.insert(links[4]);
-	LINK expected3[] = {links[4], links[3], links[2], links[1], links[0]};
-	list.traverse(TraversalAssert<LINK>{out, expected3});
+	LINK* expected3[] = {&links[4], &links[3], &links[2], &links[1], &links[0]};
+	list.traverse(TraversalAssert<LINK>{out, 5, expected3});
 
 	out << "after remove() #3" << endl;
 	list.remove(links[2]);
-	LINK expected4[] = {links[4], links[3], links[1], links[0]};
-	list.traverse(TraversalAssert<LINK>{out, expected4});
+	LINK* expected4[] = {&links[4], &links[3], &links[1], &links[0]};
+	list.traverse(TraversalAssert<LINK>{out, 4, expected4});
 
 	out << "after remove() #3 second time" << endl;
 	list.remove(links[2]);
-	list.traverse(TraversalAssert<LINK>{out, expected4});
+	list.traverse(TraversalAssert<LINK>{out, 4, expected4});
 
 	out << "after remove() #1" << endl;
 	list.remove(links[0]);
-	LINK expected5[] = {links[4], links[3], links[1]};
-	list.traverse(TraversalAssert<LINK>{out, expected5});
+	LINK* expected5[] = {&links[4], &links[3], &links[1]};
+	list.traverse(TraversalAssert<LINK>{out, 3, expected5});
 
 	out << "after remove() #5" << endl;
 	list.remove(links[4]);
-	LINK expected6[] = {links[3], links[1]};
-	list.traverse(TraversalAssert<LINK>{out, expected6});
+	LINK* expected6[] = {&links[3], &links[1]};
+	list.traverse(TraversalAssert<LINK>{out, 2, expected6});
 
 	out << "after remove all" << endl;
 	list.remove(links[1]);
