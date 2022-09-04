@@ -1,5 +1,5 @@
-<map id="i2c::debug::I2CDebugStatusLiveLogger" name="i2c::debug::I2CDebugStatusLiveLogger">
-<area shape="rect" id="node1" title="Class tracing I2C status and debug notifications live to out." alt="" coords="103,95,305,136"/>
+<map id="i2c::debug::I2CDebugStatusLiveLogger&lt; OSTREAM &gt;" name="i2c::debug::I2CDebugStatusLiveLogger&lt; OSTREAM &gt;">
+<area shape="rect" id="node1" title="Class tracing I2C status and debug notifications live to out." alt="" coords="240,39,441,80"/>
 <area shape="rect" id="node2" href="$classi2c_1_1status_1_1_i2_c_status_live_logger.html" title="Class tracing I2C status notifications live to out." alt="" coords="5,5,192,47"/>
-<area shape="rect" id="node3" href="$classi2c_1_1debug_1_1_i2_c_debug_live_logger.html" title="Class tracing I2C debug notifications live to out." alt="" coords="216,5,403,47"/>
+<area shape="rect" id="node3" href="$classi2c_1_1debug_1_1_i2_c_debug_live_logger.html" title="Class tracing I2C debug notifications live to out." alt="" coords="5,71,192,112"/>
 </map>

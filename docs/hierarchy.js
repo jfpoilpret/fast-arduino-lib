@@ -139,8 +139,8 @@ var hierarchy =
       [ "devices::rtc::DS1307< MANAGER >::SetRamFuture< SIZE_ >", "classdevices_1_1rtc_1_1_d_s1307_1_1_set_ram_future.html", null ]
     ] ],
     [ "devices::vl53l0x::GPIOSettings", "classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html", null ],
-    [ "i2c::debug::I2CDebugLiveLogger", "classi2c_1_1debug_1_1_i2_c_debug_live_logger.html", [
-      [ "i2c::debug::I2CDebugStatusLiveLogger", "classi2c_1_1debug_1_1_i2_c_debug_status_live_logger.html", null ]
+    [ "i2c::debug::I2CDebugLiveLogger< OSTREAM >", "classi2c_1_1debug_1_1_i2_c_debug_live_logger.html", [
+      [ "i2c::debug::I2CDebugStatusLiveLogger< OSTREAM >", "classi2c_1_1debug_1_1_i2_c_debug_status_live_logger.html", null ]
     ] ],
     [ "i2c::debug::I2CDebugRecorder< SIZE >", "classi2c_1_1debug_1_1_i2_c_debug_recorder.html", null ],
     [ "i2c::debug::I2CDebugRecorder< SIZE_DEBUG >", "classi2c_1_1debug_1_1_i2_c_debug_recorder.html", [
@@ -160,8 +160,8 @@ var hierarchy =
       [ "i2c::I2CCommand< ABSTRACT_FUTURE >", "classi2c_1_1_i2_c_command.html", null ],
       [ "i2c::I2CCommand< T >", "classi2c_1_1_i2_c_command.html", null ]
     ] ],
-    [ "i2c::status::I2CStatusLiveLogger", "classi2c_1_1status_1_1_i2_c_status_live_logger.html", [
-      [ "i2c::debug::I2CDebugStatusLiveLogger", "classi2c_1_1debug_1_1_i2_c_debug_status_live_logger.html", null ]
+    [ "i2c::status::I2CStatusLiveLogger< OSTREAM >", "classi2c_1_1status_1_1_i2_c_status_live_logger.html", [
+      [ "i2c::debug::I2CDebugStatusLiveLogger< OSTREAM >", "classi2c_1_1debug_1_1_i2_c_debug_status_live_logger.html", null ]
     ] ],
     [ "i2c::status::I2CStatusRecorder< SIZE >", "classi2c_1_1status_1_1_i2_c_status_recorder.html", null ],
     [ "i2c::status::I2CStatusRecorder< SIZE_STATUS >", "classi2c_1_1status_1_1_i2_c_status_recorder.html", [

@@ -304,30 +304,30 @@ $(function() {
 <div class="line"><a name="l00409"></a><span class="lineno">  409</span>&#160; </div>
 <div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;<span class="comment">// Forward declare interrupt service routines to allow them as friends</span></div>
 <div class="line"><a name="l00412"></a><span class="lineno">  412</span>&#160;<span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> {</div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;    <span class="keywordtype">void</span> ADC_vect(<span class="keywordtype">void</span>) SIGNAL;</div>
-<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;    <span class="keywordtype">void</span> ANALOG_COMP_vect(<span class="keywordtype">void</span>) SIGNAL;</div>
-<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;    <span class="keywordtype">void</span> INT0_vect(<span class="keywordtype">void</span>) SIGNAL;</div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;    <span class="keywordtype">void</span> INT1_vect(<span class="keywordtype">void</span>) SIGNAL;</div>
-<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;    <span class="keywordtype">void</span> PCINT0_vect(<span class="keywordtype">void</span>) SIGNAL;</div>
-<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;    <span class="keywordtype">void</span> PCINT1_vect(<span class="keywordtype">void</span>) SIGNAL;</div>
-<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;    <span class="keywordtype">void</span> PCINT2_vect(<span class="keywordtype">void</span>) SIGNAL;</div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;    <span class="keywordtype">void</span> SPI_STC_vect(<span class="keywordtype">void</span>) SIGNAL;</div>
-<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;    <span class="keywordtype">void</span> TIMER0_COMPA_vect(<span class="keywordtype">void</span>) SIGNAL;</div>
-<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;    <span class="keywordtype">void</span> TIMER0_COMPB_vect(<span class="keywordtype">void</span>) SIGNAL;</div>
-<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;    <span class="keywordtype">void</span> TIMER0_OVF_vect(<span class="keywordtype">void</span>) SIGNAL;</div>
-<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;    <span class="keywordtype">void</span> TIMER1_CAPT_vect(<span class="keywordtype">void</span>)  SIGNAL;</div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;    <span class="keywordtype">void</span> TIMER1_COMPA_vect(<span class="keywordtype">void</span>) SIGNAL;</div>
-<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;    <span class="keywordtype">void</span> TIMER1_COMPB_vect(<span class="keywordtype">void</span>) SIGNAL;</div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;    <span class="keywordtype">void</span> TIMER1_OVF_vect(<span class="keywordtype">void</span>) SIGNAL;</div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;    <span class="keywordtype">void</span> TIMER2_COMPA_vect(<span class="keywordtype">void</span>) SIGNAL;</div>
-<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;    <span class="keywordtype">void</span> TIMER2_COMPB_vect(<span class="keywordtype">void</span>) SIGNAL;</div>
-<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;    <span class="keywordtype">void</span> TIMER2_OVF_vect(<span class="keywordtype">void</span>) SIGNAL;</div>
-<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;    <span class="keywordtype">void</span> TWI_vect(<span class="keywordtype">void</span>) SIGNAL;</div>
-<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;    <span class="keywordtype">void</span> WDT_vect(<span class="keywordtype">void</span>) SIGNAL;</div>
-<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;    <span class="keywordtype">void</span> USART_RX_vect(<span class="keywordtype">void</span>) SIGNAL;</div>
-<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;    <span class="keywordtype">void</span> USART_TX_vect(<span class="keywordtype">void</span>) SIGNAL;</div>
-<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;    <span class="keywordtype">void</span> USART_UDRE_vect(<span class="keywordtype">void</span>) SIGNAL;</div>
-<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;    <span class="keywordtype">void</span> EE_READY_vect(<span class="keywordtype">void</span>) SIGNAL;</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;    <span class="keywordtype">void</span> ADC_vect(<span class="keywordtype">void</span>) SIGNAL_HANDLER;</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;    <span class="keywordtype">void</span> ANALOG_COMP_vect(<span class="keywordtype">void</span>) SIGNAL_HANDLER;</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160;    <span class="keywordtype">void</span> INT0_vect(<span class="keywordtype">void</span>) SIGNAL_HANDLER;</div>
+<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160;    <span class="keywordtype">void</span> INT1_vect(<span class="keywordtype">void</span>) SIGNAL_HANDLER;</div>
+<div class="line"><a name="l00417"></a><span class="lineno">  417</span>&#160;    <span class="keywordtype">void</span> PCINT0_vect(<span class="keywordtype">void</span>) SIGNAL_HANDLER;</div>
+<div class="line"><a name="l00418"></a><span class="lineno">  418</span>&#160;    <span class="keywordtype">void</span> PCINT1_vect(<span class="keywordtype">void</span>) SIGNAL_HANDLER;</div>
+<div class="line"><a name="l00419"></a><span class="lineno">  419</span>&#160;    <span class="keywordtype">void</span> PCINT2_vect(<span class="keywordtype">void</span>) SIGNAL_HANDLER;</div>
+<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160;    <span class="keywordtype">void</span> SPI_STC_vect(<span class="keywordtype">void</span>) SIGNAL_HANDLER;</div>
+<div class="line"><a name="l00421"></a><span class="lineno">  421</span>&#160;    <span class="keywordtype">void</span> TIMER0_COMPA_vect(<span class="keywordtype">void</span>) SIGNAL_HANDLER;</div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;    <span class="keywordtype">void</span> TIMER0_COMPB_vect(<span class="keywordtype">void</span>) SIGNAL_HANDLER;</div>
+<div class="line"><a name="l00423"></a><span class="lineno">  423</span>&#160;    <span class="keywordtype">void</span> TIMER0_OVF_vect(<span class="keywordtype">void</span>) SIGNAL_HANDLER;</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;    <span class="keywordtype">void</span> TIMER1_CAPT_vect(<span class="keywordtype">void</span>)  SIGNAL_HANDLER;</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;    <span class="keywordtype">void</span> TIMER1_COMPA_vect(<span class="keywordtype">void</span>) SIGNAL_HANDLER;</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;    <span class="keywordtype">void</span> TIMER1_COMPB_vect(<span class="keywordtype">void</span>) SIGNAL_HANDLER;</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;    <span class="keywordtype">void</span> TIMER1_OVF_vect(<span class="keywordtype">void</span>) SIGNAL_HANDLER;</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;    <span class="keywordtype">void</span> TIMER2_COMPA_vect(<span class="keywordtype">void</span>) SIGNAL_HANDLER;</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;    <span class="keywordtype">void</span> TIMER2_COMPB_vect(<span class="keywordtype">void</span>) SIGNAL_HANDLER;</div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;    <span class="keywordtype">void</span> TIMER2_OVF_vect(<span class="keywordtype">void</span>) SIGNAL_HANDLER;</div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160;    <span class="keywordtype">void</span> TWI_vect(<span class="keywordtype">void</span>) SIGNAL_HANDLER;</div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;    <span class="keywordtype">void</span> WDT_vect(<span class="keywordtype">void</span>) SIGNAL_HANDLER;</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;    <span class="keywordtype">void</span> USART_RX_vect(<span class="keywordtype">void</span>) SIGNAL_HANDLER;</div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160;    <span class="keywordtype">void</span> USART_TX_vect(<span class="keywordtype">void</span>) SIGNAL_HANDLER;</div>
+<div class="line"><a name="l00435"></a><span class="lineno">  435</span>&#160;    <span class="keywordtype">void</span> USART_UDRE_vect(<span class="keywordtype">void</span>) SIGNAL_HANDLER;</div>
+<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;    <span class="keywordtype">void</span> EE_READY_vect(<span class="keywordtype">void</span>) SIGNAL_HANDLER;</div>
 <div class="line"><a name="l00437"></a><span class="lineno">  437</span>&#160;}</div>
 <div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160; </div>
 <div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;<span class="preprocessor">#define USART0_RX_vect USART_RX_vect</span></div>

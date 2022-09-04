@@ -52,7 +52,6 @@ var dir_cda03c6db942645b63370975f85ebe42 =
     ] ],
     [ "vl53l0x_internals.h", "vl53l0x__internals_8h_source.html", null ],
     [ "vl53l0x_registers.h", "vl53l0x__registers_8h_source.html", null ],
-    [ "vl53l0x_types.cpp", "vl53l0x__types_8cpp_source.html", null ],
     [ "vl53l0x_types.h", "vl53l0x__types_8h.html", "vl53l0x__types_8h" ],
     [ "winbond.h", "winbond_8h.html", [
       [ "WinBond", "classdevices_1_1_win_bond.html", "classdevices_1_1_win_bond" ],

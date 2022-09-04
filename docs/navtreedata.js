@@ -65,20 +65,20 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"",
-"classdevices_1_1audio_1_1_q_tone_play.html#a17bfcc2c43ceafe338d5ed2f8a431be4",
-"classdevices_1_1rtc_1_1_d_s1307.html#a9f624b52230050a011cd0526b0d97fce",
-"classfunctor_1_1_identity.html#aad591660bcfeb58892874af5d648d140",
-"classserial_1_1_u_a_r_t_errors.html#a1a5d69e593b1484a6196d16fbae83cc7",
-"classtimer_1_1_square_wave.html#a5af097fb81eb221897b2311907459198",
+"abi_8cpp.html#a0055b650fe2a5c91dc80a467a0a516ea",
+"classdevices_1_1audio_1_1_q_tone_play.html#a4d7dd52f4c88f0954c0da42a70f99e08",
+"classdevices_1_1rtc_1_1_d_s1307.html#aa77501ab764c7641ed021dd3d9b373bb",
+"classfuture_1_1_abstract_fake_future.html",
+"classserial_1_1_u_a_r_t_errors.html#a7bcc441d2fa2cb73940e09bd635a3afa",
+"classtimer_1_1_square_wave.html#a5ffcf5a70f1b2e49f4c4b4422a8a5800",
 "functions.html",
-"ios_8h.html#adaf650921b3a5d448f8aac51dba924d2",
-"namespaceboard.html#a1283eb94244413c14c80cc2f3e8bcb3fab50339a10e1de285ac99d4c3990b8693",
-"namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eada9bb923acef0f04fbc0e7ded5358f5aae",
-"namespacedevices_1_1mcp3x0x.html#a9ac959352f715c81ecc2a4d2c991b99cacd6564a2b633e17e462478489b181492",
-"namespaceserial.html#a1cc0a59518594157f23ddf16842243b3abc21e6484530fc9d0313cb816b733396",
-"spi_8h.html#a030761907666e27c3a2236d68792a30bac289b09ef75c171a4748db722d584769",
-"tones_8h.html#ad5cef39b1f81f50bd23e0a4f4cf555aaab713e6323a68d3ddabf4855826c50148"
+"ios_8h.html#afb89b6e537b1e019ca94f5fcb6ce9993",
+"namespaceboard.html#a151323e5de5adf93f6bcdfdd64fa1eb1",
+"namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eadad17399392e4d861e340d0b04482687f7",
+"namespacedevices_1_1mcp3x0x.html#a9ac959352f715c81ecc2a4d2c991b99cae4e37d923a2294618136425a3e3408cd",
+"namespaceserial.html#a770c86bfde96ad529293b7b322422032a6634c67f28ba9a80efe941b9519aa106",
+"spi_8h.html#a4ef7145a7687905b0095d6a09b2bb12bae434209643a0d01f383a46eece525679",
+"tones_8h.html#ad5cef39b1f81f50bd23e0a4f4cf555aaabbd97b00c539801e32317ab550867ec4"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

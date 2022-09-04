@@ -169,10 +169,10 @@ class future::AbstractFuturesGroup&lt; F &gt;</h3>
 <div class="line">...</div>
 <div class="line"><span class="comment">// Register all future notification listeners</span></div>
 <div class="line">REGISTER_FUTURE_STATUS_LISTENERS(AbstractFuture, MyGroup)</div>
-<div class="ttc" id="aclassfuture_1_1_abstract_futures_group_html_a6913702db1fdd311459727cacacd4980"><div class="ttname"><a href="classfuture_1_1_abstract_futures_group.html#a6913702db1fdd311459727cacacd4980">future::AbstractFuturesGroup::on_status_change_pre_step</a></div><div class="ttdeci">void on_status_change_pre_step(const F &amp;future, FutureStatus status)</div><div class="ttdoc">This must be called by subclasses on_status_change() method, after checking that future is one of the...</div><div class="ttdef"><b>Definition:</b> <a href="future_8h_source.html#l01610">future.h:1610</a></div></div>
-<div class="ttc" id="aclassfuture_1_1_abstract_futures_group_html_a8aa5b49d3471f182e248515dba435cdc"><div class="ttname"><a href="classfuture_1_1_abstract_futures_group.html#a8aa5b49d3471f182e248515dba435cdc">future::AbstractFuturesGroup::AbstractFuturesGroup</a></div><div class="ttdeci">AbstractFuturesGroup(FutureNotification notifications=FutureNotification::NONE)</div><div class="ttdoc">Construct a new AbstractFuturesGroup.</div><div class="ttdef"><b>Definition:</b> <a href="future_8h_source.html#l01578">future.h:1578</a></div></div>
-<div class="ttc" id="anamespacefuture_html"><div class="ttname"><a href="namespacefuture.html">future</a></div><div class="ttdoc">Contains the API around Future implementation.</div><div class="ttdef"><b>Definition:</b> <a href="future_8cpp_source.html#l00017">future.cpp:18</a></div></div>
-<div class="ttc" id="anamespacefuture_html_a9f72173fcd5be9bfef028415665efbe4"><div class="ttname"><a href="namespacefuture.html#a9f72173fcd5be9bfef028415665efbe4">future::FutureStatus</a></div><div class="ttdeci">FutureStatus</div><div class="ttdoc">Status of a Future.</div><div class="ttdef"><b>Definition:</b> <a href="future_8h_source.html#l00319">future.h:320</a></div></div>
+<div class="ttc" id="aclassfuture_1_1_abstract_futures_group_html_a6913702db1fdd311459727cacacd4980"><div class="ttname"><a href="classfuture_1_1_abstract_futures_group.html#a6913702db1fdd311459727cacacd4980">future::AbstractFuturesGroup::on_status_change_pre_step</a></div><div class="ttdeci">void on_status_change_pre_step(const F &amp;future, FutureStatus status)</div><div class="ttdoc">This must be called by subclasses on_status_change() method, after checking that future is one of the...</div><div class="ttdef"><b>Definition:</b> <a href="future_8h_source.html#l01635">future.h:1635</a></div></div>
+<div class="ttc" id="aclassfuture_1_1_abstract_futures_group_html_a8aa5b49d3471f182e248515dba435cdc"><div class="ttname"><a href="classfuture_1_1_abstract_futures_group.html#a8aa5b49d3471f182e248515dba435cdc">future::AbstractFuturesGroup::AbstractFuturesGroup</a></div><div class="ttdeci">AbstractFuturesGroup(FutureNotification notifications=FutureNotification::NONE)</div><div class="ttdoc">Construct a new AbstractFuturesGroup.</div><div class="ttdef"><b>Definition:</b> <a href="future_8h_source.html#l01603">future.h:1603</a></div></div>
+<div class="ttc" id="anamespacefuture_html"><div class="ttname"><a href="namespacefuture.html">future</a></div><div class="ttdoc">Contains the API around Future implementation.</div><div class="ttdef"><b>Definition:</b> <a href="future_8h_source.html#l00311">future.h:312</a></div></div>
+<div class="ttc" id="anamespacefuture_html_a9f72173fcd5be9bfef028415665efbe4"><div class="ttname"><a href="namespacefuture.html#a9f72173fcd5be9bfef028415665efbe4">future::FutureStatus</a></div><div class="ttdeci">FutureStatus</div><div class="ttdoc">Status of a Future.</div><div class="ttdef"><b>Definition:</b> <a href="future_8h_source.html#l00320">future.h:321</a></div></div>
 <div class="ttc" id="anamespaceinterrupt_html_abfd5857208f49006bde8c472497273de"><div class="ttname"><a href="namespaceinterrupt.html#abfd5857208f49006bde8c472497273de">interrupt::register_handler</a></div><div class="ttdeci">void register_handler(Handler &amp;handler)</div><div class="ttdoc">Register a class instance containing methods that shall be called back by an ISR.</div><div class="ttdef"><b>Definition:</b> <a href="interrupts_8h_source.html#l00185">interrupts.h:185</a></div></div>
 <div class="ttc" id="anamespaceinterrupt_html_af1ddd2a9164979134cf71e9b692ec0e3"><div class="ttname"><a href="namespaceinterrupt.html#af1ddd2a9164979134cf71e9b692ec0e3">interrupt::unregister_handler</a></div><div class="ttdeci">void unregister_handler(Handler &amp;handler)</div><div class="ttdoc">Unregister a class instance that was previously registered with interrupt::register_handler.</div><div class="ttdef"><b>Definition:</b> <a href="interrupts_8h_source.html#l00207">interrupts.h:207</a></div></div>
 </div><!-- fragment --><p> In that snippet, <code>MyGroup</code> embeds 3 different futures, each of a different type; the 3 futures are constructed at <code>MyGroup</code> construction time, and their pointers passed to the parent <code>FuturesGroup</code>. Three getter methods allow the application to access individual futures.</p>
@@ -186,7 +186,7 @@ class future::AbstractFuturesGroup&lt; F &gt;</h3>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l01550">1550</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l01575">1575</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a8aa5b49d3471f182e248515dba435cdc"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8aa5b49d3471f182e248515dba435cdc">&#9670;&nbsp;</a></span>AbstractFuturesGroup()</h2>
@@ -228,7 +228,7 @@ template&lt;typename F &gt; </div>
 <dd>
 <a class="el" href="namespacefuture.html#a9f72173fcd5be9bfef028415665efbe4" title="Status of a Future.">FutureStatus</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l01578">1578</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l01603">1603</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
 
 </div>
 </div>
@@ -281,7 +281,7 @@ template&lt;typename F &gt; </div>
 <dd>
 Future::set_future_finish() </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l01595">1595</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l01620">1620</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
 
 </div>
 </div>
@@ -330,7 +330,7 @@ template&lt;typename F &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l01610">1610</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l01635">1635</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
 
 </div>
 </div>
@@ -360,7 +360,7 @@ template&lt;typename F &gt; </div>
 <p>Specific size value indicating this group has an unlimited (and unknown at construction time) number of futures to handle. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classfuture_1_1_abstract_futures_group.html#ad4662d690087c9bccd480a19b60ed50e" title="Called from constructors of subclasses, this method allows this group to listen for the status of all...">init()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l01561">1561</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="future_8h_source.html#l01586">1586</a> of file <a class="el" href="future_8h_source.html">future.h</a>.</p>
 
 </div>
 </div>

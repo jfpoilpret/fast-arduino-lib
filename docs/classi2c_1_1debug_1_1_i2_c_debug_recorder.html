@@ -104,9 +104,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a30f1a6d12afdbeb58804ec554b79a42f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1debug_1_1_i2_c_debug_recorder.html#a30f1a6d12afdbeb58804ec554b79a42f">reset</a> ()</td></tr>
 <tr class="memdesc:a30f1a6d12afdbeb58804ec554b79a42f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear all recorded notifications.  <a href="classi2c_1_1debug_1_1_i2_c_debug_recorder.html#a30f1a6d12afdbeb58804ec554b79a42f">More...</a><br /></td></tr>
 <tr class="separator:a30f1a6d12afdbeb58804ec554b79a42f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0444efdd483b9299840ef3d94780bf31"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1debug_1_1_i2_c_debug_recorder.html#a0444efdd483b9299840ef3d94780bf31">trace</a> (<a class="el" href="classstreams_1_1ostream.html">streams::ostream</a> &amp;out)</td></tr>
-<tr class="memdesc:a0444efdd483b9299840ef3d94780bf31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output all recorded I2C notifications to <code>out</code> then clear all records.  <a href="classi2c_1_1debug_1_1_i2_c_debug_recorder.html#a0444efdd483b9299840ef3d94780bf31">More...</a><br /></td></tr>
-<tr class="separator:a0444efdd483b9299840ef3d94780bf31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9e4d6bed562463a042cacd2c8b23b7b"><td class="memTemplParams" colspan="2">template&lt;typename OSTREAM &gt; </td></tr>
+<tr class="memitem:af9e4d6bed562463a042cacd2c8b23b7b"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classi2c_1_1debug_1_1_i2_c_debug_recorder.html#af9e4d6bed562463a042cacd2c8b23b7b">trace</a> (OSTREAM &amp;out)</td></tr>
+<tr class="memdesc:af9e4d6bed562463a042cacd2c8b23b7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output all recorded I2C notifications to <code>out</code> then clear all records.  <a href="classi2c_1_1debug_1_1_i2_c_debug_recorder.html#af9e4d6bed562463a042cacd2c8b23b7b">More...</a><br /></td></tr>
+<tr class="separator:af9e4d6bed562463a042cacd2c8b23b7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><h3>template&lt;uint8_t SIZE&gt;<br />
@@ -121,7 +122,7 @@ class i2c::debug::I2CDebugRecorder&lt; SIZE &gt;</h3>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="namespacei2c.html#a2572e0fde7ef325c8f5c1c974c2de720" title="List of debug states that are reported by the I2C Manager in debug mode.">i2c::DebugStatus</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__debug_8h_source.html#l00092">92</a> of file <a class="el" href="i2c__debug_8h_source.html">i2c_debug.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__debug_8h_source.html#l00136">136</a> of file <a class="el" href="i2c__debug_8h_source.html">i2c_debug.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac23789b6207d7dd74db0e64ca631c2af"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac23789b6207d7dd74db0e64ca631c2af">&#9670;&nbsp;</a></span>I2CDebugRecorder()</h2>
@@ -150,18 +151,18 @@ template&lt;uint8_t SIZE&gt; </div>
 </div><div class="memdoc">
 
 <p>Create an <a class="el" href="classi2c_1_1debug_1_1_i2_c_debug_recorder.html" title="Class recording I2C debug notifications for later output.">I2CDebugRecorder</a> that can record I2C notifications determined by <code>debug</code> list. </p>
-<p>The number of recorded notifications is limited by <code>SIZE</code>. Once <code>SIZE</code> notifications have been recorded by this <a class="el" href="classi2c_1_1debug_1_1_i2_c_debug_recorder.html" title="Class recording I2C debug notifications for later output.">I2CDebugRecorder</a>, any additional notification will be trashed. To be effective, this must be attached to an I2C Manager (at construction time). Recorded notifications can be output to a <code><a class="el" href="classstreams_1_1ostream.html" title="Output stream wrapper to provide formatted output API, a la C++.">streams::ostream</a></code> with <code><a class="el" href="classi2c_1_1debug_1_1_i2_c_debug_recorder.html#a0444efdd483b9299840ef3d94780bf31" title="Output all recorded I2C notifications to out then clear all records.">trace()</a></code>.</p>
+<p>The number of recorded notifications is limited by <code>SIZE</code>. Once <code>SIZE</code> notifications have been recorded by this <a class="el" href="classi2c_1_1debug_1_1_i2_c_debug_recorder.html" title="Class recording I2C debug notifications for later output.">I2CDebugRecorder</a>, any additional notification will be trashed. To be effective, this must be attached to an I2C Manager (at construction time). Recorded notifications can be output to a <code><a class="el" href="classstreams_1_1ostream.html" title="Output stream wrapper to provide formatted output API, a la C++.">streams::ostream</a></code> with <code><a class="el" href="classi2c_1_1debug_1_1_i2_c_debug_recorder.html#af9e4d6bed562463a042cacd2c8b23b7b" title="Output all recorded I2C notifications to out then clear all records.">trace()</a></code>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">debug</td><td>the list of notifications to be recorded</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1debug_1_1_i2_c_debug_recorder.html#a0444efdd483b9299840ef3d94780bf31" title="Output all recorded I2C notifications to out then clear all records.">trace()</a> </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1debug_1_1_i2_c_debug_recorder.html#af9e4d6bed562463a042cacd2c8b23b7b" title="Output all recorded I2C notifications to out then clear all records.">trace()</a> </dd>
 <dd>
 <a class="el" href="classi2c_1_1debug_1_1_i2_c_debug_recorder.html#a30f1a6d12afdbeb58804ec554b79a42f" title="Clear all recorded notifications.">reset()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__debug_8h_source.html#l00109">109</a> of file <a class="el" href="i2c__debug_8h_source.html">i2c_debug.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__debug_8h_source.html#l00153">153</a> of file <a class="el" href="i2c__debug_8h_source.html">i2c_debug.h</a>.</p>
 
 </div>
 </div>
@@ -192,19 +193,21 @@ template&lt;uint8_t SIZE&gt; </div>
 </div><div class="memdoc">
 
 <p>Clear all recorded notifications. </p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1debug_1_1_i2_c_debug_recorder.html#a0444efdd483b9299840ef3d94780bf31" title="Output all recorded I2C notifications to out then clear all records.">trace()</a> </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1debug_1_1_i2_c_debug_recorder.html#af9e4d6bed562463a042cacd2c8b23b7b" title="Output all recorded I2C notifications to out then clear all records.">trace()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__debug_8h_source.html#l00115">115</a> of file <a class="el" href="i2c__debug_8h_source.html">i2c_debug.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__debug_8h_source.html#l00159">159</a> of file <a class="el" href="i2c__debug_8h_source.html">i2c_debug.h</a>.</p>
 
 </div>
 </div>
-<a id="a0444efdd483b9299840ef3d94780bf31"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0444efdd483b9299840ef3d94780bf31">&#9670;&nbsp;</a></span>trace()</h2>
+<a id="af9e4d6bed562463a042cacd2c8b23b7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9e4d6bed562463a042cacd2c8b23b7b">&#9670;&nbsp;</a></span>trace()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
 template&lt;uint8_t SIZE&gt; </div>
+<div class="memtemplate">
+template&lt;typename OSTREAM &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
@@ -212,7 +215,7 @@ template&lt;uint8_t SIZE&gt; </div>
         <tr>
           <td class="memname">void <a class="el" href="classi2c_1_1debug_1_1_i2_c_debug_recorder.html">i2c::debug::I2CDebugRecorder</a>&lt; SIZE &gt;::trace </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classstreams_1_1ostream.html">streams::ostream</a> &amp;&#160;</td>
+          <td class="paramtype">OSTREAM &amp;&#160;</td>
           <td class="paramname"><em>out</em></td><td>)</td>
           <td></td>
         </tr>
@@ -233,7 +236,7 @@ template&lt;uint8_t SIZE&gt; </div>
 </dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classi2c_1_1debug_1_1_i2_c_debug_recorder.html#a30f1a6d12afdbeb58804ec554b79a42f" title="Clear all recorded notifications.">reset()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__debug_8h_source.html#l00125">125</a> of file <a class="el" href="i2c__debug_8h_source.html">i2c_debug.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__debug_8h_source.html#l00170">170</a> of file <a class="el" href="i2c__debug_8h_source.html">i2c_debug.h</a>.</p>
 
 </div>
 </div>

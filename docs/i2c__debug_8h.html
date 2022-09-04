@@ -95,7 +95,6 @@ $(document).ready(function(){initNavTree('i2c__debug_8h.html',''); initResizable
 <p>I2C debugging utilities (useful when implementing support for new devices).  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="flash_8h_source.html">flash.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="streams_8h_source.html">streams.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="i2c__status_8h_source.html">i2c_status.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
@@ -103,38 +102,36 @@ Include dependency graph for i2c_debug.h:</div>
 <div class="dyncontent">
 <div class="center"><img src="i2c__debug_8h__incl.png" border="0" usemap="#afastarduino_2i2c__debug_8h" alt=""/></div>
 <map name="afastarduino_2i2c__debug_8h" id="afastarduino_2i2c__debug_8h">
-<area shape="rect" title="I2C debugging utilities (useful when implementing support for new devices)." alt="" coords="320,5,499,32"/>
-<area shape="rect" href="flash_8h.html" title="Flash memory utilities." alt="" coords="124,528,191,555"/>
-<area shape="rect" href="streams_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="431,304,518,331"/>
-<area shape="rect" href="i2c__handler__common_8h.html" title="Common I2C Manager API." alt="" coords="679,155,852,181"/>
-<area shape="rect" href="i2c__status_8h.html" title="I2C status hook utilities." alt="" coords="423,80,523,107"/>
-<area shape="rect" href="io_8h_source.html" title=" " alt="" coords="287,677,382,704"/>
-<area shape="rect" title=" " alt="" coords="170,603,297,629"/>
-<area shape="rect" title=" " alt="" coords="299,752,370,779"/>
-<area shape="rect" title=" " alt="" coords="513,379,583,405"/>
-<area shape="rect" href="queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="805,528,880,555"/>
-<area shape="rect" href="time_8h.html" title="Simple time utilities." alt="" coords="704,603,768,629"/>
-<area shape="rect" href="ios_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="384,379,437,405"/>
-<area shape="rect" href="streambuf_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="246,453,346,480"/>
-<area shape="rect" href="utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="828,677,911,704"/>
-<area shape="rect" href="defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="943,752,1025,779"/>
-<area shape="rect" href="board_8h_source.html" title=" " alt="" coords="671,752,790,779"/>
-<area shape="rect" title=" " alt="" coords="815,752,919,779"/>
-<area shape="rect" title=" " alt="" coords="861,827,931,853"/>
-<area shape="rect" title=" " alt="" coords="668,677,804,704"/>
-<area shape="rect" title=" " alt="" coords="370,453,438,480"/>
-<area shape="rect" title=" " alt="" coords="805,453,880,480"/>
-<area shape="rect" title=" " alt="" coords="462,453,533,480"/>
-<area shape="rect" title=" " alt="" coords="659,453,730,480"/>
-<area shape="rect" href="interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="286,528,383,555"/>
-<area shape="rect" title=" " alt="" coords="372,603,487,629"/>
-<area shape="rect" title=" " alt="" coords="531,229,691,256"/>
-<area shape="rect" href="bits_8h.html" title="Useful bits manipulation utilities." alt="" coords="1160,304,1219,331"/>
-<area shape="rect" href="i2c_8h.html" title="I2C API common definitions." alt="" coords="403,229,456,256"/>
-<area shape="rect" href="future_8h.html" title="Utility API to handle the concept of futures." alt="" coords="766,229,839,256"/>
-<area shape="rect" href="iterator_8h.html" title="Utilities to convert arrays into an iterable (usable if for x: list construct)." alt="" coords="780,304,863,331"/>
-<area shape="rect" href="errors_8h.html" title="Common errors definition." alt="" coords="887,304,959,331"/>
-<area shape="rect" href="initializer__list_8h_source.html" title=" " alt="" coords="760,379,883,405"/>
+<area shape="rect" title="I2C debugging utilities (useful when implementing support for new devices)." alt="" coords="209,5,388,32"/>
+<area shape="rect" href="flash_8h.html" title="Flash memory utilities." alt="" coords="195,453,261,480"/>
+<area shape="rect" href="i2c__handler__common_8h.html" title="Common I2C Manager API." alt="" coords="479,155,652,181"/>
+<area shape="rect" href="i2c__status_8h.html" title="I2C status hook utilities." alt="" coords="249,80,349,107"/>
+<area shape="rect" href="io_8h_source.html" title=" " alt="" coords="259,603,354,629"/>
+<area shape="rect" title=" " alt="" coords="198,528,325,555"/>
+<area shape="rect" title=" " alt="" coords="271,677,342,704"/>
+<area shape="rect" title=" " alt="" coords="737,752,807,779"/>
+<area shape="rect" title=" " alt="" coords="336,229,496,256"/>
+<area shape="rect" href="bits_8h.html" title="Useful bits manipulation utilities." alt="" coords="5,304,64,331"/>
+<area shape="rect" href="i2c_8h.html" title="I2C API common definitions." alt="" coords="571,229,624,256"/>
+<area shape="rect" href="ios_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="501,304,555,331"/>
+<area shape="rect" href="queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="533,453,608,480"/>
+<area shape="rect" href="utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="599,603,681,629"/>
+<area shape="rect" href="future_8h.html" title="Utility API to handle the concept of futures." alt="" coords="705,379,778,405"/>
+<area shape="rect" title=" " alt="" coords="291,379,359,405"/>
+<area shape="rect" title=" " alt="" coords="984,603,1059,629"/>
+<area shape="rect" title=" " alt="" coords="383,379,454,405"/>
+<area shape="rect" title=" " alt="" coords="633,453,703,480"/>
+<area shape="rect" href="streambuf_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="478,379,578,405"/>
+<area shape="rect" href="interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="410,453,507,480"/>
+<area shape="rect" title=" " alt="" coords="400,528,515,555"/>
+<area shape="rect" href="time_8h.html" title="Simple time utilities." alt="" coords="539,528,603,555"/>
+<area shape="rect" href="defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="429,677,512,704"/>
+<area shape="rect" href="board_8h_source.html" title=" " alt="" coords="665,677,783,704"/>
+<area shape="rect" title=" " alt="" coords="536,677,640,704"/>
+<area shape="rect" title=" " alt="" coords="439,603,575,629"/>
+<area shape="rect" href="iterator_8h.html" title="Utilities to convert arrays into an iterable (usable if for x: list construct)." alt="" coords="904,453,987,480"/>
+<area shape="rect" href="errors_8h.html" title="Common errors definition." alt="" coords="1011,453,1083,480"/>
+<area shape="rect" href="initializer__list_8h_source.html" title=" " alt="" coords="960,528,1083,555"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -154,13 +151,13 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1debug_1_1_i2_c_debug_recorder.html">i2c::debug::I2CDebugRecorder&lt; SIZE &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class recording I2C debug notifications for later output.  <a href="classi2c_1_1debug_1_1_i2_c_debug_recorder.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1debug_1_1_i2_c_debug_live_logger.html">i2c::debug::I2CDebugLiveLogger</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1debug_1_1_i2_c_debug_live_logger.html">i2c::debug::I2CDebugLiveLogger&lt; OSTREAM &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class tracing I2C debug notifications live to <code>out</code>.  <a href="classi2c_1_1debug_1_1_i2_c_debug_live_logger.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1debug_1_1_i2_c_debug_status_recorder.html">i2c::debug::I2CDebugStatusRecorder&lt; SIZE_STATUS, SIZE_DEBUG &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class recording I2C debug and status notifications for later output.  <a href="classi2c_1_1debug_1_1_i2_c_debug_status_recorder.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1debug_1_1_i2_c_debug_status_live_logger.html">i2c::debug::I2CDebugStatusLiveLogger</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classi2c_1_1debug_1_1_i2_c_debug_status_live_logger.html">i2c::debug::I2CDebugStatusLiveLogger&lt; OSTREAM &gt;</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Class tracing I2C status and debug notifications live to <code>out</code>.  <a href="classi2c_1_1debug_1_1_i2_c_debug_status_live_logger.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">

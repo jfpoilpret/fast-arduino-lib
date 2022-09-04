@@ -1,6 +1,5 @@
 var NAVTREEINDEX0 =
 {
-"":[5,0,0],
 "abi_8cpp.html#a0055b650fe2a5c91dc80a467a0a516ea":[5,0,0,3],
 "abi_8cpp.html#a21d592b7dc6a72ac4fd119161d1a9343":[5,0,0,5],
 "abi_8cpp.html#a3b75ae3f765009f713b9c2d40dd06f2e":[5,0,0,4],
@@ -249,5 +248,6 @@ var NAVTREEINDEX0 =
 "classdevices_1_1audio_1_1_async_tone_player.html#aadcca6f8bf13f9a7c4cae454157330a7":[6,0,2,0,5,2],
 "classdevices_1_1audio_1_1_async_tone_player.html#adfb30cb51c01a95f794c3f1bcc9b01a6":[6,0,2,0,5,6],
 "classdevices_1_1audio_1_1_beat.html":[6,0,2,0,3],
-"classdevices_1_1audio_1_1_q_tone_play.html":[6,0,2,0,2]
+"classdevices_1_1audio_1_1_q_tone_play.html":[6,0,2,0,2],
+"classdevices_1_1audio_1_1_q_tone_play.html#a17bfcc2c43ceafe338d5ed2f8a431be4":[6,0,2,0,2,3]
 };

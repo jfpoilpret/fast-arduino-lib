@@ -111,18 +111,13 @@ $(document).ready(function(){initNavTree('defines_8h_source.html',''); initResiz
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
 <div class="line"><a name="l00057"></a><span class="lineno"><a class="line" href="defines_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">   57</a></span>&#160;<span class="preprocessor">#define INLINE __attribute__((always_inline))</span></div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="comment">//NOTE: SIGNAL is defined (but deprecated) in AVR interrupt.h</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;<span class="preprocessor">#ifdef SIGNAL</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;<span class="preprocessor">#undef SIGNAL</span></div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00078"></a><span class="lineno"><a class="line" href="defines_8h.html#a4688695205ef66fbf096f1b95a0d7fe9">   78</a></span>&#160;<span class="preprocessor">#define SIGNAL __attribute__ ((signal))</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="defines_8h.html#a330c425a6677b0f5b1d88f864161ff90">   96</a></span>&#160;<span class="preprocessor">#define NAKED_SIGNAL __attribute__((signal, naked, __INTR_ATTRS))</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
-<div class="line"><a name="l00118"></a><span class="lineno"><a class="line" href="defines_8h.html#ad1480e9557edcc543498ca259cee6c7d">  118</a></span>&#160;<span class="preprocessor">#define WEAK __attribute__((weak))</span></div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* DEFINES_HH */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00073"></a><span class="lineno"><a class="line" href="defines_8h.html#a5eb9b17926753993f1c9c08b660a7072">   73</a></span>&#160;<span class="preprocessor">#define SIGNAL_HANDLER __attribute__ ((signal))</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="defines_8h.html#a330c425a6677b0f5b1d88f864161ff90">   91</a></span>&#160;<span class="preprocessor">#define NAKED_SIGNAL __attribute__((signal, naked, __INTR_ATTRS))</span></div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno"><a class="line" href="defines_8h.html#ad1480e9557edcc543498ca259cee6c7d">  113</a></span>&#160;<span class="preprocessor">#define WEAK __attribute__((weak))</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* DEFINES_HH */</span><span class="preprocessor"></span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->

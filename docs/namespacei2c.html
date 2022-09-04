@@ -307,8 +307,8 @@ static constexpr Mode&#160;</td><td class="memItemRight" valign="bottom"><a clas
 <div class="line">    manager.<a class="code" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a2511a80e2ce5b2b6142922a306b4588e">end</a>();</div>
 <div class="line">}</div>
 <div class="ttc" id="aclassdevices_1_1rtc_1_1_d_s1307_html"><div class="ttname"><a href="classdevices_1_1rtc_1_1_d_s1307.html">devices::rtc::DS1307</a></div><div class="ttdoc">I2C device driver for the DS1307 RTC chip.</div><div class="ttdef"><b>Definition:</b> <a href="ds1307_8h_source.html#l00116">ds1307.h:117</a></div></div>
-<div class="ttc" id="aclassi2c_1_1_abstract_i2_c_sync_manager_html_a1d57efe73e4e8d75bf303f148be8fe1d"><div class="ttname"><a href="classi2c_1_1_abstract_i2_c_sync_manager.html#a1d57efe73e4e8d75bf303f148be8fe1d">i2c::AbstractI2CSyncManager::begin</a></div><div class="ttdeci">void begin()</div><div class="ttdoc">Prepare and enable the MCU for I2C transmission.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__common_8h_source.html#l00437">i2c_handler_common.h:437</a></div></div>
-<div class="ttc" id="aclassi2c_1_1_abstract_i2_c_sync_manager_html_a2511a80e2ce5b2b6142922a306b4588e"><div class="ttname"><a href="classi2c_1_1_abstract_i2_c_sync_manager.html#a2511a80e2ce5b2b6142922a306b4588e">i2c::AbstractI2CSyncManager::end</a></div><div class="ttdeci">void end()</div><div class="ttdoc">Disable MCU I2C transmission.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__common_8h_source.html#l00448">i2c_handler_common.h:448</a></div></div>
+<div class="ttc" id="aclassi2c_1_1_abstract_i2_c_sync_manager_html_a1d57efe73e4e8d75bf303f148be8fe1d"><div class="ttname"><a href="classi2c_1_1_abstract_i2_c_sync_manager.html#a1d57efe73e4e8d75bf303f148be8fe1d">i2c::AbstractI2CSyncManager::begin</a></div><div class="ttdeci">void begin()</div><div class="ttdoc">Prepare and enable the MCU for I2C transmission.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__common_8h_source.html#l00448">i2c_handler_common.h:448</a></div></div>
+<div class="ttc" id="aclassi2c_1_1_abstract_i2_c_sync_manager_html_a2511a80e2ce5b2b6142922a306b4588e"><div class="ttname"><a href="classi2c_1_1_abstract_i2_c_sync_manager.html#a2511a80e2ce5b2b6142922a306b4588e">i2c::AbstractI2CSyncManager::end</a></div><div class="ttdeci">void end()</div><div class="ttdoc">Disable MCU I2C transmission.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__common_8h_source.html#l00459">i2c_handler_common.h:459</a></div></div>
 <div class="ttc" id="aclassi2c_1_1_i2_c_sync_manager_html"><div class="ttname"><a href="classi2c_1_1_i2_c_sync_manager.html">i2c::I2CSyncManager</a></div><div class="ttdoc">Synchronous I2C Manager for ATmega architecture.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__atmega_8h_source.html#l00936">i2c_handler_atmega.h:938</a></div></div>
 <div class="ttc" id="astructdevices_1_1rtc_1_1tm_html"><div class="ttname"><a href="structdevices_1_1rtc_1_1tm.html">devices::rtc::tm</a></div><div class="ttdoc">The datetime structure used by the RTC API.</div><div class="ttdef"><b>Definition:</b> <a href="ds1307_8h_source.html#l00079">ds1307.h:80</a></div></div>
 </div><!-- fragment --><p>In FastArduino, I2C communication is centralized by an I2C Manager; there are several flavors of I2C Manager defined in FastArduino, with distinct characteristics such as:</p><ul>
@@ -381,7 +381,7 @@ static constexpr Mode&#160;</td><td class="memItemRight" valign="bottom"><a clas
 <div class="line"><span class="keywordtype">bool</span> ok = get_date_future.get(now);</div>
 <div class="ttc" id="aclassi2c_1_1_i2_c_async_manager_html"><div class="ttname"><a href="classi2c_1_1_i2_c_async_manager.html">i2c::I2CAsyncManager</a></div><div class="ttdoc">Asynchronous I2C Manager for ATmega architecture.</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__atmega_8h_source.html#l00765">i2c_handler_atmega.h:767</a></div></div>
 <div class="ttc" id="ai2c__handler__atmega_8h_html_a66b761ad07c3eb470ddf58fd6b58594e"><div class="ttname"><a href="i2c__handler__atmega_8h.html#a66b761ad07c3eb470ddf58fd6b58594e">REGISTER_I2C_ISR</a></div><div class="ttdeci">#define REGISTER_I2C_ISR(MANAGER)</div><div class="ttdoc">Register the necessary ISR (Interrupt Service Routine) for an asynchronous I2C Manager to work proper...</div><div class="ttdef"><b>Definition:</b> <a href="i2c__handler__atmega_8h_source.html#l00057">i2c_handler_atmega.h:57</a></div></div>
-<div class="ttc" id="anamespacefuture_html"><div class="ttname"><a href="namespacefuture.html">future</a></div><div class="ttdoc">Contains the API around Future implementation.</div><div class="ttdef"><b>Definition:</b> <a href="future_8cpp_source.html#l00017">future.cpp:18</a></div></div>
+<div class="ttc" id="anamespacefuture_html"><div class="ttname"><a href="namespacefuture.html">future</a></div><div class="ttdoc">Contains the API around Future implementation.</div><div class="ttdef"><b>Definition:</b> <a href="future_8h_source.html#l00311">future.h:312</a></div></div>
 </div><!-- fragment --><dl class="section see"><dt>See also</dt><dd><a class="el" href="i2c__handler__atmega_8h.html#a66b761ad07c3eb470ddf58fd6b58594e" title="Register the necessary ISR (Interrupt Service Routine) for an asynchronous I2C Manager to work proper...">REGISTER_I2C_ISR()</a> </dd>
 <dd>
 <a class="el" href="i2c__handler__atmega_8h.html#a95b6a87c9bbf73a703e8404b676b19e8" title="Register the necessary ISR (Interrupt Service Routine) for an asynchronous I2C Manager to work proper...">REGISTER_I2C_ISR_FUNCTION()</a> </dd>
@@ -498,7 +498,7 @@ static constexpr Mode&#160;</td><td class="memItemRight" valign="bottom"><a clas
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="i2c_8h_source.html#l00065">65</a> of file <a class="el" href="i2c_8h_source.html">i2c.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c_8h_source.html#l00066">66</a> of file <a class="el" href="i2c_8h_source.html">i2c.h</a>.</p>
 
 </div>
 </div>
@@ -534,7 +534,7 @@ static constexpr Mode&#160;</td><td class="memItemRight" valign="bottom"><a clas
 </td></tr>
 </table>
 
-<p class="definition">Definition at line <a class="el" href="i2c_8h_source.html#l00107">107</a> of file <a class="el" href="i2c_8h_source.html">i2c.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c_8h_source.html#l00167">167</a> of file <a class="el" href="i2c_8h_source.html">i2c.h</a>.</p>
 
 </div>
 </div>

@@ -164,9 +164,9 @@ Macros</h2></td></tr>
 <tr class="memitem:a2eb6f9e0395b47b8d5e3eeae4fe0c116"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="defines_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">INLINE</a>&#160;&#160;&#160;__attribute__((always_inline))</td></tr>
 <tr class="memdesc:a2eb6f9e0395b47b8d5e3eeae4fe0c116"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specific GCC attribute to force the compiler to always inline code of a given function.  <a href="defines_8h.html#a2eb6f9e0395b47b8d5e3eeae4fe0c116">More...</a><br /></td></tr>
 <tr class="separator:a2eb6f9e0395b47b8d5e3eeae4fe0c116"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4688695205ef66fbf096f1b95a0d7fe9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="defines_8h.html#a4688695205ef66fbf096f1b95a0d7fe9">SIGNAL</a>&#160;&#160;&#160;__attribute__ ((signal))</td></tr>
-<tr class="memdesc:a4688695205ef66fbf096f1b95a0d7fe9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specific GCC attribute for AVR target, declaring a function as a signal handler (aka ISR, or Interrupt Service Routine).  <a href="defines_8h.html#a4688695205ef66fbf096f1b95a0d7fe9">More...</a><br /></td></tr>
-<tr class="separator:a4688695205ef66fbf096f1b95a0d7fe9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5eb9b17926753993f1c9c08b660a7072"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="defines_8h.html#a5eb9b17926753993f1c9c08b660a7072">SIGNAL_HANDLER</a>&#160;&#160;&#160;__attribute__ ((signal))</td></tr>
+<tr class="memdesc:a5eb9b17926753993f1c9c08b660a7072"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specific GCC attribute for AVR target, declaring a function as a signal handler (aka ISR, or Interrupt Service Routine).  <a href="defines_8h.html#a5eb9b17926753993f1c9c08b660a7072">More...</a><br /></td></tr>
+<tr class="separator:a5eb9b17926753993f1c9c08b660a7072"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a330c425a6677b0f5b1d88f864161ff90"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="defines_8h.html#a330c425a6677b0f5b1d88f864161ff90">NAKED_SIGNAL</a>&#160;&#160;&#160;__attribute__((signal, naked, __INTR_ATTRS))</td></tr>
 <tr class="memdesc:a330c425a6677b0f5b1d88f864161ff90"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specific GCC attribute for AVR target, declaring a signal handler (aka ISR, or Interrupt Service Routine) as an empty function.  <a href="defines_8h.html#a330c425a6677b0f5b1d88f864161ff90">More...</a><br /></td></tr>
 <tr class="separator:a330c425a6677b0f5b1d88f864161ff90"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -229,14 +229,14 @@ Macros</h2></td></tr>
 
 </div>
 </div>
-<a id="a4688695205ef66fbf096f1b95a0d7fe9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4688695205ef66fbf096f1b95a0d7fe9">&#9670;&nbsp;</a></span>SIGNAL</h2>
+<a id="a5eb9b17926753993f1c9c08b660a7072"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5eb9b17926753993f1c9c08b660a7072">&#9670;&nbsp;</a></span>SIGNAL_HANDLER</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define SIGNAL&#160;&#160;&#160;__attribute__ ((signal))</td>
+          <td class="memname">#define SIGNAL_HANDLER&#160;&#160;&#160;__attribute__ ((signal))</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -244,11 +244,11 @@ Macros</h2></td></tr>
 <p>Specific GCC attribute for AVR target, declaring a function as a signal handler (aka ISR, or Interrupt Service Routine). </p>
 <p>You will never need to use it in your programs as all ISR for a target are declared by FastArduino in header files in <code>fastarduino/board</code> directory and get automatically included as soon as you use FastArduino in your project.</p>
 <div class="fragment"><div class="line"><span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> {</div>
-<div class="line">    <span class="keywordtype">void</span> INT0_vect(<span class="keywordtype">void</span>) <a class="code" href="defines_8h.html#a4688695205ef66fbf096f1b95a0d7fe9">SIGNAL</a>;</div>
+<div class="line">    <span class="keywordtype">void</span> INT0_vect(<span class="keywordtype">void</span>) <a class="code" href="defines_8h.html#a5eb9b17926753993f1c9c08b660a7072">SIGNAL_HANDLER</a>;</div>
 <div class="line">}</div>
-<div class="ttc" id="adefines_8h_html_a4688695205ef66fbf096f1b95a0d7fe9"><div class="ttname"><a href="defines_8h.html#a4688695205ef66fbf096f1b95a0d7fe9">SIGNAL</a></div><div class="ttdeci">#define SIGNAL</div><div class="ttdoc">Specific GCC attribute for AVR target, declaring a function as a signal handler (aka ISR,...</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00078">defines.h:78</a></div></div>
+<div class="ttc" id="adefines_8h_html_a5eb9b17926753993f1c9c08b660a7072"><div class="ttname"><a href="defines_8h.html#a5eb9b17926753993f1c9c08b660a7072">SIGNAL_HANDLER</a></div><div class="ttdeci">#define SIGNAL_HANDLER</div><div class="ttdoc">Specific GCC attribute for AVR target, declaring a function as a signal handler (aka ISR,...</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00073">defines.h:73</a></div></div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="defines_8h_source.html#l00078">78</a> of file <a class="el" href="defines_8h_source.html">defines.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defines_8h_source.html#l00073">73</a> of file <a class="el" href="defines_8h_source.html">defines.h</a>.</p>
 
 </div>
 </div>
@@ -277,7 +277,7 @@ Macros</h2></td></tr>
 <dd>
 <a class="el" href="timer_8h.html#a1dec37d0ac500f2d0dfc9b50fcf6e71f" title="Register an empty ISR (Interrupt Service Routine) for the Input Capture of a timer::Timer.">REGISTER_TIMER_CAPTURE_ISR_EMPTY(TIMER_NUM)</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="defines_8h_source.html#l00096">96</a> of file <a class="el" href="defines_8h_source.html">defines.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defines_8h_source.html#l00091">91</a> of file <a class="el" href="defines_8h_source.html">defines.h</a>.</p>
 
 </div>
 </div>
@@ -306,9 +306,9 @@ Macros</h2></td></tr>
 <div class="line">{</div>
 <div class="line">    <span class="comment">// Actual stuff...</span></div>
 <div class="line">}</div>
-<div class="ttc" id="adefines_8h_html_ad1480e9557edcc543498ca259cee6c7d"><div class="ttname"><a href="defines_8h.html#ad1480e9557edcc543498ca259cee6c7d">WEAK</a></div><div class="ttdeci">#define WEAK</div><div class="ttdoc">Specific GCC attribute to declare a function as weakly linked, which makes it a default implementatio...</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00118">defines.h:118</a></div></div>
+<div class="ttc" id="adefines_8h_html_ad1480e9557edcc543498ca259cee6c7d"><div class="ttname"><a href="defines_8h.html#ad1480e9557edcc543498ca259cee6c7d">WEAK</a></div><div class="ttdeci">#define WEAK</div><div class="ttdoc">Specific GCC attribute to declare a function as weakly linked, which makes it a default implementatio...</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00113">defines.h:113</a></div></div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="defines_8h_source.html#l00118">118</a> of file <a class="el" href="defines_8h_source.html">defines.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="defines_8h_source.html#l00113">113</a> of file <a class="el" href="defines_8h_source.html">defines.h</a>.</p>
 
 </div>
 </div>

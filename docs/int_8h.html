@@ -352,7 +352,7 @@ template&lt;ExternalInterruptPin EXT&gt; </td></tr>
 <div class="line">        interrupt::isr_handler_int::check_int_pin&lt;INT_NUM, PIN&gt;();  \</div>
 <div class="line">        __asm__ __volatile__(<span class="stringliteral">&quot;reti&quot;</span> ::);                            \</div>
 <div class="line">    }</div>
-<div class="ttc" id="adefines_8h_html_a330c425a6677b0f5b1d88f864161ff90"><div class="ttname"><a href="defines_8h.html#a330c425a6677b0f5b1d88f864161ff90">NAKED_SIGNAL</a></div><div class="ttdeci">#define NAKED_SIGNAL</div><div class="ttdoc">Specific GCC attribute for AVR target, declaring a signal handler (aka ISR, or Interrupt Service Rout...</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00096">defines.h:96</a></div></div>
+<div class="ttc" id="adefines_8h_html_a330c425a6677b0f5b1d88f864161ff90"><div class="ttname"><a href="defines_8h.html#a330c425a6677b0f5b1d88f864161ff90">NAKED_SIGNAL</a></div><div class="ttdeci">#define NAKED_SIGNAL</div><div class="ttdoc">Specific GCC attribute for AVR target, declaring a signal handler (aka ISR, or Interrupt Service Rout...</div><div class="ttdef"><b>Definition:</b> <a href="defines_8h_source.html#l00091">defines.h:91</a></div></div>
 </div><!-- fragment -->
 <p>Register an empty ISR (Interrupt Service Routine) for an External Interrupt pin. </p>
 <p>This can be useful if you just need to wake up the MCU from an external signal, but do not need to perform any sepcific stuff with a callback. </p><dl class="params"><dt>Parameters</dt><dd>
