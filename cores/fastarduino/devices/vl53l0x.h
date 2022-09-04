@@ -685,8 +685,6 @@ namespace devices::vl53l0x
 			{
 				interrupt::unregister_handler(*this);
 			}
-			SetGPIOSettingsFuture(SetGPIOSettingsFuture&&) = delete;
-			SetGPIOSettingsFuture& operator=(SetGPIOSettingsFuture&&) = delete;
 			/// @endcond
 
 		private:

@@ -228,10 +228,6 @@ namespace i2c
 			uint8_t reg, const ARG_TYPE& value, 
 			future::FutureNotification notification = future::FutureNotification::NONE)
 			:	PARENT{CONTENT{reg, value}, notification} {}
-		/// @cond notdocumented
-		WriteRegisterFuture(WriteRegisterFuture&&) = delete;
-		WriteRegisterFuture& operator=(WriteRegisterFuture&&) = delete;
-		/// @endcond
 	};
 
 	/**

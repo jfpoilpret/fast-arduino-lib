@@ -213,11 +213,6 @@ namespace watchdog
 			interrupt::register_handler(*this);
 		}
 
-		/// @cond notdocumented
-		WatchdogRTT(const WatchdogRTT&) = delete;
-		WatchdogRTT& operator=(const WatchdogRTT&) = delete;
-		/// @endcond
-
 		/**
 		 * Start the watchdog clock with the given @p timeout period.
 		 * From now on, watchdog interrupts get generated at @p timeout period,
@@ -322,11 +317,6 @@ namespace watchdog
 		{
 			interrupt::register_handler(*this);
 		}
-
-		/// @cond notdocumented
-		Watchdog(const Watchdog&) = delete;
-		Watchdog& operator=(const Watchdog&) = delete;
-		/// @endcond
 
 	private:
 		void on_tick()
