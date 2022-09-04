@@ -30,8 +30,9 @@ def fill_target(target):
         for line in handle:
             data = line.split('\t')
             example = data[0]
-            sizes = ALL_SIZES[example]['sizes']
-            sizes[target] = [data[1], data[2].rstrip()]
+            if example in ALL_EXAMPLES:
+                sizes = ALL_SIZES[example]['sizes']
+                sizes[target] = [data[1], data[2].rstrip()]
 
 def create_sheet(args):
     global ALL_EXAMPLES
