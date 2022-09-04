@@ -210,6 +210,7 @@ int main()
 	sei();
 
 	uart.begin(115200);
+	out << streams::boolalpha << streams::unitbuf;
 	out << F("Start") << endl;
 	
 	// Initialize I2C async handler

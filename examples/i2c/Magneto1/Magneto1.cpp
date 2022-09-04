@@ -164,6 +164,7 @@ int main()
 
 	uart.begin(115200);
 	out.width(2);
+	out << streams::boolalpha << streams::unitbuf;
 	out << F("Start\n") << flush;
 	
 	// Initialize I2C async handler

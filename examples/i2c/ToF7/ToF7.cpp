@@ -127,7 +127,7 @@ int main()
 	serial::hard::UATX<UART> uart{output_buffer};
 	streams::ostream out = uart.out();
 	uart.begin(115200);
-	out << streams::boolalpha;
+	out << streams::boolalpha << streams::unitbuf;
 
 	timer::RTT<board::Timer::TIMER0> rtt;
 	rtt.begin();
