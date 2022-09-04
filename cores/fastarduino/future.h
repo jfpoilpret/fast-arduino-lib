@@ -1742,7 +1742,7 @@ namespace future
 	struct dispatch_handler<AbstractFakeFuture, AbstractFakeFuture>
 	{
 		template<typename... HANDLERS_>
-		static void future_on_status_change(const AbstractFuture& future, FutureStatus status)
+		static void future_on_status_change(const AbstractFakeFuture& future, FutureStatus status)
 		{
 			dispatch_handler_impl<AbstractFakeFuture>::future_on_status_change<HANDLERS_...>(
 				future, status);
