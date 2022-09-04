@@ -212,9 +212,6 @@ namespace timer
 		using PRESCALER = typename Timer<NTIMER>::PRESCALER;
 
 	public:
-		RTT(const RTT&) = delete;
-		RTT& operator=(const RTT&) = delete;
-
 		/**
 		 * The adequate `RTTRawTime` type for this `RTT`.
 		 * @sa RTTRawTime
