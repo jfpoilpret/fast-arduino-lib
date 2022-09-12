@@ -171,6 +171,18 @@ namespace serial
 	private:
 		Errors errors_;
 	};
+
+	/// @cond notdocumented
+	// Useful traits for checking a provided type (in template) is an UART and what traits it supports
+	template<typename> struct UART_trait
+	{
+		static constexpr bool IS_UART = false;
+		static constexpr bool IS_HW_UART = false;
+		static constexpr bool IS_SW_UART = false;
+		static constexpr bool HAS_TX = false;
+		static constexpr bool HAS_RX = false;
+	};
+	/// @endcond
 };
 
 #endif /* UARTCOMMONS_HH */
