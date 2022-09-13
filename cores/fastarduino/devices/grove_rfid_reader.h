@@ -54,15 +54,17 @@ namespace devices::rfid
 	//TODO Implement basic API (UART-type -HW/SW- agnostic)
 	// Example sample read through serial <0x02> 0 F 0 0 2 4 A D C 4 4 2 <0x03>
 	// STX / ... / ETX
-	template<typename UART> class Grove125KHzRFIDReaderUART
+	template<typename UART_> class Grove125KHzRFIDReaderUART
 	{
 		static constexpr uint16_t UART_SPEED = 9600;
 
 		// Check that UART type is suitable
-		static_assert(serial::UART_trait<UART>::IS_UART, "UART template argument must be a serial device");
-		static_assert(serial::UART_trait<UART>::HAS_RX, "UART template argument must be a serial device with TX mode");
+		static_assert(serial::UART_trait<UART_>::IS_UART, "UART template argument must be a serial device");
+		static_assert(serial::UART_trait<UART_>::HAS_RX, "UART template argument must be a serial device with RX mode");
 
 	public:
+		using UART = UART_;
+
 		Grove125KHzRFIDReaderUART(UART& uart) : uart_{uart}, in_{uart_.in()}, buf_{in_.rdbuf()} {}
 
 		/// @cond notdocumented
