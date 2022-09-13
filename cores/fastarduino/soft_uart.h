@@ -902,16 +902,16 @@ namespace serial
 		static constexpr bool IS_UART = true;
 		static constexpr bool IS_HW_UART = false;
 		static constexpr bool IS_SW_UART = true;
-		static constexpr bool HAS_TX = true;
-		static constexpr bool HAS_RX = false;
+		static constexpr bool HAS_TX = false;
+		static constexpr bool HAS_RX = true;
 	};
 	template<board::ExternalInterruptPin RX> struct UART_trait<soft::UARX_EXT<RX>>
 	{
 		static constexpr bool IS_UART = true;
 		static constexpr bool IS_HW_UART = false;
 		static constexpr bool IS_SW_UART = true;
-		static constexpr bool HAS_TX = true;
-		static constexpr bool HAS_RX = false;
+		static constexpr bool HAS_TX = false;
+		static constexpr bool HAS_RX = true;
 	};
 	template<board::DigitalPin TX, board::InterruptPin RX> struct UART_trait<soft::UART_PCI<RX, TX>>
 	{
