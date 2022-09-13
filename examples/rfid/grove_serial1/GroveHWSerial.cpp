@@ -13,15 +13,14 @@
 //   limitations under the License.
 
 /*
- * TODO comments Simple LED chaser. Take #1
- * This program shows usage of FastArduino events support and GPIO port API.
- * The number of LED roundtrips is limited to one because all events are pushed 
- * at startup and not regenerated.
+ * RFID 125KHz Grove reader example, UART mode, using Hardware UART.
+ * This program shows usage of FastArduino Grove 125KHz RFID Reader support.
+ * It displays the ID of tags that are nearing the device coil.
  * 
- * Wiring: TODO
+ * Wiring:
  * - on Arduino UNO:
- *   - D0-D7 (port D) branch 8 LED (in series with 330 Ohm resistors to limit 
- *     current) connected to ground
+ *   - RX (D0): connect to Grove TX (yellow cable)
+ *   - D2: connect to serial USB converter, connected to a console
  */
 
 #include <fastarduino/uart.h>
@@ -76,7 +75,7 @@ int main()
 		{
 			char data[TAG_DATA_SIZE];
 			rfid.get_data(data, TAG_DATA_SIZE);
-			//TODO display data to SW serial
+			// display data to SW serial
 			out << data << endl;
 		}
 		time::delay_ms(100);
