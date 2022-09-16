@@ -49,9 +49,6 @@ static constexpr uint8_t BUFFER_SIZE = 64;
 static char input_buffer[BUFFER_SIZE];
 static char output_buffer[BUFFER_SIZE];
 
-static constexpr uint8_t TAG_DATA_SIZE = 16;
-
-int main() __attribute__((OS_main));
 int main()
 {
 	board::init();
