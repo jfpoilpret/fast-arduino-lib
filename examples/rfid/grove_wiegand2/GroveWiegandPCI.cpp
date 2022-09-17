@@ -19,8 +19,8 @@
  * 
  * Wiring: 
  * - on Arduino UNO:
- *   - D2 (EXT0): connect to Grove DATA0 (white cable)
- *   - D3 (EXT1): connect to Grove DATA1 (yellow cable)
+ *   - D2 (EXT0): connect to Grove DATA0 (yellow cable)
+ *   - D3 (EXT1): connect to Grove DATA1 (white cable)
  *   - USB: connect to a console
  */
 
@@ -36,19 +36,18 @@
 static constexpr board::USART USART = board::USART::USART0;
 using UATX = serial::hard::UATX<USART>;
 
-#define DATA0_INT 0
-static constexpr board::ExternalInterruptPin DATA0 = board::ExternalInterruptPin::D2_PD2_EXT0;
-#define DATA1_INT 1
-static constexpr board::ExternalInterruptPin DATA1 = board::ExternalInterruptPin::D3_PD3_EXT1;
+#define DATA01_PCI 2
+static constexpr board::InterruptPin DATA0 = board::InterruptPin::D2_PD2_PCI2;
+static constexpr board::InterruptPin DATA1 = board::InterruptPin::D3_PD3_PCI2;
 
-using GROVE = devices::rfid::Grove125KHzRFIDReaderWiegandEXT<DATA0, DATA1>;
+using GROVE = devices::rfid::Grove125KHzRFIDReaderWiegandPCI<DATA0, DATA1>;
 
 static constexpr uint8_t DEBUG_OUTPUT_BUFFER_SIZE = 64;
 static char output_buffer[DEBUG_OUTPUT_BUFFER_SIZE];
 
 REGISTER_UATX_ISR(USART_NUM)
 REGISTER_OSTREAMBUF_LISTENERS(UATX)
-REGISTER_GROVE_RFID_READER_INT(DATA0_INT, DATA0, DATA1_INT, DATA1)
+REGISTER_GROVE_RFID_READER_PCI(DATA01_PCI, DATA0, DATA1)
 
 using streams::endl;
 using streams::hex;
