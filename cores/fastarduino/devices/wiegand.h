@@ -37,8 +37,6 @@ namespace devices
 namespace devices::protocols
 {
 	//TODO DOCS
-	//TODO review synchronized usage and optimize!
-	//TODO improve performance, maybe by working on a byte-per-byte basis and with separate paroty data
 	//TODO study Wiegand protocol extensions and improve this class as a template (on enum defining all Wiegand protocols)
 	//TODO may need traits for generic use of extended protocols
 	class Wiegand
@@ -46,60 +44,113 @@ namespace devices::protocols
 	public:
 		using DATA_TYPE = uint32_t;
 		static constexpr uint8_t DATA_BITS = 24;
-		static constexpr DATA_TYPE DATA_MASK = 0x00FFFFFFUL;
 
-		Wiegand() = default;
+		Wiegand()
+		{
+			reset_();
+		}
 
 		void reset()
 		{
-			synchronized
-			{
-				buffer_ = 0UL;
-				mask_ = INITIAL_MASK;
-			}
+			synchronized reset_();
 		}
 
-		bool available() const
+		void reset_()
 		{
-			synchronized return (mask_ == 0UL);
+			for (uint8_t i = 0; i < DATA_BYTES; ++i)
+				data_[i] = 0;
+			count_ = 0;
+			current_ = data_;
+			mask_ = INITIAL_MASK;
 		}
 
-		bool valid() const
+		bool available_() const
 		{
-			uint32_t buffer = get_buffer();
+			return count_ == FRAME_BITS;
+		}
+
+		bool valid_() const
+		{
+			uint32_t data = convert(data_);
+
 			// 1. check parity on first 12 bits
-			bool even_bit = (buffer & (1UL << PARITY1_BIT));
-			if (even_bit != parity(24, buffer)) return false;
+			if (parity1_ != parity(PARITY1_HIGH_BIT_INDEX, data)) return false;
 
 			// 2. check parity on last 12 bits
-			bool odd_bit = (buffer & (1UL << PARITY2_BIT));
-			if (odd_bit == parity(12, buffer)) return false;
+			if (parity2_ == parity(PARITY2_HIGH_BIT_INDEX, data)) return false;
 
 			return true;
 		}
 
-		DATA_TYPE get_data() const
+		DATA_TYPE get_data_() const
 		{
-			return (get_buffer() >> 1UL) & DATA_MASK;
+			return convert(data_);
 		}
 
 		void on_falling_data0()
 		{
 			// This is a 0
+			// Check if frame is finished (do not add any bit)
+			if (available_()) return;
+			// check if parity1
+			if (count_ == PARITY1_BIT_FRAME_INDEX)
+				parity1_ = false;
+			else if (count_ == PARITY2_BIT_FRAME_INDEX)
+				parity2_ = false;
+			// Normal data bit, update bits count
+			++count_;
 			mask_ >>= 1;
+			if (mask_ == 0)
+			{
+				mask_ = INITIAL_MASK;
+				++current_;
+			}
 		}
 
 		void on_falling_data1()
 		{
 			// This is a 1
-			buffer_ |= mask_;
+			// Check if frame is finished (do not add any bit)
+			if (available_()) return;
+			// check if parity1
+			if (count_ == PARITY1_BIT_FRAME_INDEX)
+				parity1_ = true;
+			// check if parity2
+			else if (count_ == PARITY2_BIT_FRAME_INDEX)
+				parity2_ = true;
+			// Normal data bit (1 only), store it
+			else
+				*current_ |= mask_;
+			// Normal data bit, update bits count
+			++count_;
 			mask_ >>= 1;
+			if (mask_ == 0)
+			{
+				mask_ = INITIAL_MASK;
+				++current_;
+			}
 		}
 
 	private:
-		uint32_t get_buffer() const
+		// Positions in stream of parity bits
+		static constexpr uint8_t FRAME_BITS = 26;
+		static constexpr uint8_t PARITY1_BIT_FRAME_INDEX = 0;
+		static constexpr uint8_t PARITY2_BIT_FRAME_INDEX = 25;
+
+		static constexpr uint8_t PARITY_BITS_COUNT = 12;
+		static constexpr uint8_t PARITY1_HIGH_BIT_INDEX = 23;
+		static constexpr uint8_t PARITY2_HIGH_BIT_INDEX = 11;
+
+		static constexpr uint8_t INITIAL_MASK = 0x80;
+		static constexpr uint8_t DATA_BYTES = DATA_BITS / 8;
+
+		static uint32_t convert(const uint8_t* buffer)
 		{
-			synchronized return buffer_;
+			uint32_t value = 0UL;
+			uint8_t* byte = reinterpret_cast<uint8_t*>(&value);
+			for (uint8_t i = 0; i < DATA_BYTES; ++i)
+				byte[i] = buffer[i];
+			return value;
 		}
 
 		static bool parity(uint8_t start, uint32_t buffer)
@@ -115,15 +166,12 @@ namespace devices::protocols
 			return (count % 2);
 		}
 
-		// Positions in stream of parity bits
-		static constexpr uint8_t PARITY1_BIT = 25;
-		static constexpr uint8_t PARITY2_BIT = 0;
-		static constexpr uint8_t PARITY_BITS_COUNT = 12;
-
-		static constexpr uint32_t INITIAL_MASK = 1UL << 25;
-		
-		uint32_t buffer_ = 0UL;
-		uint32_t mask_ = INITIAL_MASK;
+		uint8_t data_[DATA_BYTES];
+		uint8_t count_;
+		uint8_t* current_;
+		uint8_t mask_;
+		bool parity1_;
+		bool parity2_;
 	};
 }
 

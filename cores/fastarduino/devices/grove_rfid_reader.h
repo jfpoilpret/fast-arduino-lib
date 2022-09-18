@@ -133,11 +133,6 @@ namespace devices::rfid
 		streams::istreambuf& buf_;
 	};
 
-	/// @cond notdocumented
-	// template<typename T, T DATA0, T DATA1> class Grove125KHzRFIDReaderWiegand {};
-	/// @endcond
-
-	//TODO Wiegand communication mode with either 2 INT or 2 PCI pins
 	/**
 	 * Support for seeedstudio Grove 125KHz RFID Reader in Wiegand mode.
 	 * 
@@ -160,7 +155,6 @@ namespace devices::rfid
 	public:
 		using DATA_TYPE = typename protocols::Wiegand::DATA_TYPE;
 		static constexpr uint8_t DATA_BITS = protocols::Wiegand::DATA_BITS;
-		static constexpr DATA_TYPE DATA_MASK = protocols::Wiegand::DATA_MASK;
 
 		Grove125KHzRFIDReaderWiegandEXT()
 		{
@@ -183,14 +177,14 @@ namespace devices::rfid
 
 		bool has_data()
 		{
-			return wiegand_.available() && wiegand_.valid();
+			synchronized return wiegand_.available_() && wiegand_.valid_();
 		}
 
 		void get_data(DATA_TYPE& data)
 		{
 			if (has_data())
 			{
-				data = wiegand_.get_data();
+				data = wiegand_.get_data_();
 				wiegand_.reset();
 			}
 			else
@@ -232,7 +226,6 @@ namespace devices::rfid
 	public:
 		using DATA_TYPE = typename protocols::Wiegand::DATA_TYPE;
 		static constexpr uint8_t DATA_BITS = protocols::Wiegand::DATA_BITS;
-		static constexpr DATA_TYPE DATA_MASK = protocols::Wiegand::DATA_MASK;
 
 		Grove125KHzRFIDReaderWiegandPCI()
 		{
@@ -254,14 +247,14 @@ namespace devices::rfid
 
 		bool has_data()
 		{
-			return wiegand_.available() && wiegand_.valid();
+			synchronized return wiegand_.available_() && wiegand_.valid_();
 		}
 
 		void get_data(DATA_TYPE& data)
 		{
 			if (has_data())
 			{
-				data = wiegand_.get_data();
+				data = wiegand_.get_data_();
 				wiegand_.reset();
 			}
 			else
