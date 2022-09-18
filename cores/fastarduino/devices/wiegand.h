@@ -57,9 +57,7 @@ namespace devices::protocols
 
 		void reset_()
 		{
-			for (uint8_t i = 0; i < DATA_BYTES; ++i)
-				data_[i] = 0;
-			count_ = 0;
+			buffer_ = 0UL;
 			current_ = &data_[DATA_BYTES - 1];
 			mask_ = INITIAL_MASK;
 		}
@@ -71,7 +69,7 @@ namespace devices::protocols
 
 		bool valid_() const
 		{
-			uint32_t data = convert(data_);
+			uint32_t data = convert(buffer_);
 
 			// 1. check parity on first 12 bits
 			if (parity1_ != parity(PARITY1_HIGH_BIT_INDEX, data)) return false;
@@ -84,7 +82,7 @@ namespace devices::protocols
 
 		DATA_TYPE get_data_() const
 		{
-			return convert(data_);
+			return convert(buffer_);
 		}
 
 		void on_falling_data0()
@@ -151,13 +149,9 @@ namespace devices::protocols
 		static constexpr uint8_t INITIAL_MASK = 0x80;
 		static constexpr uint8_t DATA_BYTES = DATA_BITS / 8;
 
-		static uint32_t convert(const uint8_t* buffer)
+		static uint32_t convert(uint32_t buffer)
 		{
-			uint32_t value = 0UL;
-			uint8_t* byte = reinterpret_cast<uint8_t*>(&value);
-			for (uint8_t i = 0; i < DATA_BYTES; ++i)
-				byte[i] = buffer[i];
-			return value;
+			return buffer & 0x00FFFFFFUL;
 		}
 
 		static bool parity(uint8_t start, uint32_t buffer)
@@ -173,8 +167,15 @@ namespace devices::protocols
 			return (count % 2);
 		}
 
-		uint8_t data_[DATA_BYTES];
-		uint8_t count_;
+		union
+		{
+			uint32_t buffer_;
+			struct
+			{
+				uint8_t data_[DATA_BYTES];
+				uint8_t count_;
+			};
+		};
 		uint8_t* current_;
 		uint8_t mask_;
 		bool parity1_;
