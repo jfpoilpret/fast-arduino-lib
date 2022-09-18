@@ -60,7 +60,7 @@ namespace devices::protocols
 			for (uint8_t i = 0; i < DATA_BYTES; ++i)
 				data_[i] = 0;
 			count_ = 0;
-			current_ = data_;
+			current_ = &data_[DATA_BYTES - 1];
 			mask_ = INITIAL_MASK;
 		}
 
@@ -97,14 +97,18 @@ namespace devices::protocols
 				parity1_ = false;
 			else if (count_ == PARITY2_BIT_FRAME_INDEX)
 				parity2_ = false;
-			// Normal data bit, update bits count
-			++count_;
-			mask_ >>= 1;
-			if (mask_ == 0)
+			else
 			{
-				mask_ = INITIAL_MASK;
-				++current_;
+				// Normal data bit, update mask and byte to write
+				mask_ >>= 1;
+				if (mask_ == 0)
+				{
+					mask_ = INITIAL_MASK;
+					--current_;
+				}
 			}
+			// Update bits count
+			++count_;
 		}
 
 		void on_falling_data1()
@@ -120,15 +124,18 @@ namespace devices::protocols
 				parity2_ = true;
 			// Normal data bit (1 only), store it
 			else
-				*current_ |= mask_;
-			// Normal data bit, update bits count
-			++count_;
-			mask_ >>= 1;
-			if (mask_ == 0)
 			{
-				mask_ = INITIAL_MASK;
-				++current_;
+				*current_ |= mask_;
+				// Update mask and byte to write
+				mask_ >>= 1;
+				if (mask_ == 0)
+				{
+					mask_ = INITIAL_MASK;
+					--current_;
+				}
 			}
+			// Update bits count
+			++count_;
 		}
 
 	private:
