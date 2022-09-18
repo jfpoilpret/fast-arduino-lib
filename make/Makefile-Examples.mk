@@ -84,7 +84,11 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						uart/UartApp10							\
 						uart/UartApp11							\
 						uart/UartApp12							\
-						uart/UartApp13							
+						uart/UartApp13							\
+						rfid/grove_serial1						\
+						rfid/grove_serial2						\
+						rfid/grove_wiegand1						\
+						rfid/grove_wiegand2						
 
 EXAMPLES_BREADBOARD_ATMEGAXX4P=	int/ExternalInterrupt3					\
 								analog/AnalogComparator1				\

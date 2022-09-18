@@ -100,6 +100,10 @@ Servo2	Servo controlled by a pot through 16bits pulse timer
 RF24App1	NRF24L01P ping-pong (UATX except ATtiny), no IRQ (spi)
 RF24App2	NRF24L01P ping-pong (UATX except ATtiny), IRQ (spi)
 WinBond	Trace (UATX) WinBond flash chip read/writes (spi)
+grove_serial1	Grove 125KHz RFID Reader in UART mode (hardware UART)
+grove_serial2	Grove 125KHz RFID Reader in UART mode (software UART)
+grove_wiegand1	Grove 125KHz RFID Reader in Wiegand mode (EXT pins)
+grove_wiegand2	Grove 125KHz RFID Reader in Wiegand mode (PCI pins)
 Sonar1	Display (UATX) sonar range meaures in blocking mode
 Sonar2	Display (UATX) sonar range meaures in INT mode
 Sonar3	Display (UATX) sonar range meaures in PCINT mode
