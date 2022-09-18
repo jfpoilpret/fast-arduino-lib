@@ -367,7 +367,7 @@ namespace utils
 
 	/**
 	 * Swap 2 bytes of a 2-bytes integer. Useful to convert from big-endian to 
-	 * small-endian (AVR).
+	 * little-endian (AVR).
 	 * @param value value to convert in place (reference)
 	 */
 	inline void swap_bytes(uint16_t& value)
@@ -377,7 +377,7 @@ namespace utils
 
 	/**
 	 * Swap 2 bytes of a 2-bytes integer. Useful to convert from big-endian to 
-	 * small-endian (AVR).
+	 * little-endian (AVR).
 	 * @param value value to convert in place (reference)
 	 */
 	inline void swap_bytes(int16_t& value)
@@ -387,7 +387,7 @@ namespace utils
 
 	/**
 	 * Reverse 4 bytes of a 4-bytes integer. Useful to convert from big-endian to 
-	 * small-endian (AVR).
+	 * little-endian (AVR).
 	 * @param value value to convert in place (reference)
 	 */
 	inline void swap_bytes(uint32_t& value)
@@ -401,7 +401,7 @@ namespace utils
 
 	/**
 	 * Reverse 4 bytes of a 4-bytes integer. Useful to convert from big-endian to 
-	 * small-endian (AVR).
+	 * little-endian (AVR).
 	 * @param value value to convert in place (reference)
 	 */
 	inline void swap_bytes(int32_t& value)
@@ -411,7 +411,7 @@ namespace utils
 
 	/**
 	 * Reverse 8 bytes of a 8-bytes integer. Useful to convert from big-endian to 
-	 * small-endian (AVR).
+	 * little-endian (AVR).
 	 * @param value value to convert in place (reference)
 	 */
 	inline void swap_bytes(uint64_t& value)
@@ -425,7 +425,7 @@ namespace utils
 
 	/**
 	 * Reverse 8 bytes of a 8-bytes integer. Useful to convert from big-endian to 
-	 * small-endian (AVR).
+	 * little-endian (AVR).
 	 * @param value value to convert in place (reference)
 	 */
 	inline void swap_bytes(int64_t& value)
