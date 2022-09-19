@@ -134,7 +134,7 @@ namespace devices::rfid
 		 * the caller shall just care about instantiation, this Grove125KHzRFIDReaderUART
 		 * instance will handle everything else on @p uart.
 		 */
-		Grove125KHzRFIDReaderUART(UART& uart) : uart_{uart}, in_{uart_.in()}, buf_{in_.rdbuf()} {}
+		explicit Grove125KHzRFIDReaderUART(UART& uart) : uart_{uart}, in_{uart_.in()}, buf_{in_.rdbuf()} {}
 
 		/// @cond notdocumented
 		Grove125KHzRFIDReaderUART(const Grove125KHzRFIDReaderUART&) = delete;
