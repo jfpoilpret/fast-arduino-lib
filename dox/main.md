@@ -71,6 +71,7 @@ FastArduino library is organized in a sinple directory structure:
 - **fastarduino**: contains "core" FastArduino source files, handling all AVR MCU internal parts: Digital Input/Output, Timers, Analog-Digital Converters, Interrupts, I2C, SPI, Watchdog, UART...
     - **boards**: contains MCU target specific files, defines as "traits"
     - **devices**: contains source code to implement support for various external devices, such as DS1307 RTC chip, HC-SR04 ultrasonic range sensor, NRF24L01+ Radio-frequency chip, Servomotor drives...
+    - **tests**: contains a few utilities only used for building examples to test new features.
 
 Most of the library's source code is inside `.h` header files, only a small part of it is in `.cpp` files. This is due to heavy C++ template usage which requires most source code to be present on header files.
 
@@ -79,7 +80,7 @@ All FastArduino source code is defined inside namespaces, in order to avoid name
 - [bits](namespacebits.html): provides a few utilities for bits manipulation.
 - [containers](namespacecontainers.html): utility API to handle useful containers such as linked lists and queues; those are internally used by some FastArduino API but you can use them in your own programs as well.
 - [devices](namespacedevices.html): this namespace is used for all devices external to the MCU itself; most devices API comes in a sub namespace:
-    - [protcols](namespacedevices_1_1protocols.html): utilities for protocols used by some devices, e.g. Wiegand
+    - [protocols](namespacedevices_1_1protocols.html): utilities for protocols used by some devices, e.g. Wiegand
     - [audio](namespacedevices_1_1audio.html): API for tone generation to buzzers or small audio amplifiers
     - [magneto](namespacedevices_1_1magneto.html): API for magnetometers, gyroscopes, accelerometers
     - [mcp230xx](namespacedevices_1_1mcp230xx.html): API for Microchip I/O expanders MCP23008 and MCP23017
