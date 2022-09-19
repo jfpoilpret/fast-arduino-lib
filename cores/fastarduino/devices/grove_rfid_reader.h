@@ -32,23 +32,21 @@
 #include "../uart_commons.h"
 #include "wiegand.h"
 
-//TODO simplify by changing DATA0, DATA1 with typename (GROVE template instance)
-#define REGISTER_GROVE_RFID_READER_INT(DATA0_INT, DATA0, DATA1_INT, DATA1)							\
-	ISR(CAT3(INT, DATA0_INT, _vect))																\
-	{																								\
-		devices::rfid::isr_handler_grove::callback_fall_0<DATA0_INT, DATA0, DATA1_INT, DATA1>();	\
-	}																								\
-	ISR(CAT3(INT, DATA1_INT, _vect))																\
-	{																								\
-		devices::rfid::isr_handler_grove::callback_fall_1<DATA0_INT, DATA0, DATA1_INT, DATA1>();	\
+#define REGISTER_GROVE_RFID_READER_INT_ISR(DATA0_INT, DATA1_INT, READER)					\
+	ISR(CAT3(INT, DATA0_INT, _vect))														\
+	{																						\
+		devices::rfid::isr_handler_grove::callback_fall_0<DATA0_INT, DATA1_INT, READER>();	\
+	}																						\
+	ISR(CAT3(INT, DATA1_INT, _vect))														\
+	{																						\
+		devices::rfid::isr_handler_grove::callback_fall_1<DATA0_INT, DATA1_INT, READER>();	\
 	}
 
-//TODO simplify by changing DATA0, DATA1 with typename (GROVE template instance)
-#define REGISTER_GROVE_RFID_READER_PCI(DATA01_PCI, DATA0, DATA1)									\
-	ISR(CAT3(PCINT, DATA01_PCI, _vect))																\
-	{																								\
-		devices::rfid::isr_handler_grove::callback_fall_0_or_1<DATA01_PCI, DATA0, DATA1>();			\
-	}																								\
+#define REGISTER_GROVE_RFID_READER_PCI_ISR(DATA01_PCI, READER)							\
+	ISR(CAT3(PCINT, DATA01_PCI, _vect))													\
+	{																					\
+		devices::rfid::isr_handler_grove::callback_fall_0_or_1<DATA01_PCI, READER>();	\
+	}																					\
 
 namespace devices
 {
@@ -147,9 +145,11 @@ namespace devices::rfid
 	 * 
 	 * @note Wiegand mode is activated with a jumper on the device.
 	 */
-	template<board::ExternalInterruptPin DATA0, board::ExternalInterruptPin DATA1>
+	template<board::ExternalInterruptPin DATA0_, board::ExternalInterruptPin DATA1_>
 	class Grove125KHzRFIDReaderWiegandEXT
 	{
+		static constexpr board::ExternalInterruptPin DATA0 = DATA0_;
+		static constexpr board::ExternalInterruptPin DATA1 = DATA1_;
 		static_assert(DATA0 != DATA1, "DATA0 and DATA1 must be two distinct pins");
 
 	public:
@@ -211,9 +211,12 @@ namespace devices::rfid
 		friend struct isr_handler_grove;
 	};
 
-	template<board::InterruptPin DATA0, board::InterruptPin DATA1>
+	template<board::InterruptPin DATA0_, board::InterruptPin DATA1_>
 	class Grove125KHzRFIDReaderWiegandPCI
 	{
+		static constexpr board::InterruptPin DATA0 = DATA0_;
+		static constexpr board::InterruptPin DATA1 = DATA1_;
+
 		static constexpr board::DigitalPin DATA0_PIN = board::PCI_PIN<DATA0>();
 		using DATA0_TRAIT = board_traits::DigitalPin_trait<DATA0_PIN>;
 		static constexpr board::DigitalPin DATA1_PIN = board::PCI_PIN<DATA1>();
@@ -281,43 +284,95 @@ namespace devices::rfid
 	};
 
 	/// @cond notdocumented
+	// Traits for Grove RFID Readers
+	template<typename READER> struct Grove125KHzRFIDReader_trait
+	{
+		static constexpr bool IS_GROVE_125_READER = false;
+		static constexpr bool IS_UART_MODE = false;
+		static constexpr bool IS_WIEGAND_MODE = false;
+		static constexpr bool IS_PCI = false;
+		static constexpr bool IS_EXT = false;
+		static constexpr bool USES_DISTINCT_PINS = false;
+	};
+	template<typename UART> struct Grove125KHzRFIDReader_trait<Grove125KHzRFIDReaderUART<UART>>
+	{
+		static constexpr bool IS_GROVE_125_READER = true;
+		static constexpr bool IS_UART_MODE = true;
+		static constexpr bool IS_WIEGAND_MODE = false;
+		static constexpr bool IS_PCI = false;
+		static constexpr bool IS_EXT = false;
+		static constexpr bool USES_DISTINCT_PINS = false;
+	};
+	template<board::ExternalInterruptPin DATA0, board::ExternalInterruptPin DATA1>
+	struct Grove125KHzRFIDReader_trait<Grove125KHzRFIDReaderWiegandEXT<DATA0, DATA1>>
+	{
+		static constexpr bool IS_GROVE_125_READER = true;
+		static constexpr bool IS_UART_MODE = false;
+		static constexpr bool IS_WIEGAND_MODE = true;
+		static constexpr bool IS_PCI = false;
+		static constexpr bool IS_EXT = true;
+		static constexpr bool USES_DISTINCT_PINS = (DATA0 != DATA1);
+	};
+	template<board::InterruptPin DATA0, board::InterruptPin DATA1>
+	struct Grove125KHzRFIDReader_trait<Grove125KHzRFIDReaderWiegandPCI<DATA0, DATA1>>
+	{
+		static constexpr bool IS_GROVE_125_READER = true;
+		static constexpr bool IS_UART_MODE = false;
+		static constexpr bool IS_WIEGAND_MODE = true;
+		static constexpr bool IS_PCI = true;
+		static constexpr bool IS_EXT = false;
+		static constexpr bool USES_DISTINCT_PINS = (DATA0 != DATA1);
+	};
+	/// @endcond
+
+	/// @cond notdocumented
 	struct isr_handler_grove
 	{
-		template<uint8_t DATA0_NUM, board::ExternalInterruptPin DATA0_PIN, 
-			uint8_t DATA1_NUM, board::ExternalInterruptPin DATA1_PIN> 
+		template<uint8_t DATA0_NUM, uint8_t DATA1_NUM, typename READER> 
 		static void callback_fall_0()
 		{
+			// Check READER is a proper type
+			using GROVE_TRAIT = Grove125KHzRFIDReader_trait<READER>;
+			static_assert(GROVE_TRAIT::IS_GROVE_125_READER, "READER must be a Grove125KHzRFIDReaderWiegandEXT type");
+			static_assert(GROVE_TRAIT::IS_WIEGAND_MODE, "READER must be a Grove125KHzRFIDReaderWiegandEXT type");
+			static_assert(GROVE_TRAIT::IS_EXT, "READER must be a Grove125KHzRFIDReaderWiegandEXT type");
 			// Check pins are compliant
-			interrupt::isr_handler_int::check_int_pin<DATA0_NUM, DATA0_PIN>();
-			interrupt::isr_handler_int::check_int_pin<DATA1_NUM, DATA1_PIN>();
+			interrupt::isr_handler_int::check_int_pin<DATA0_NUM, READER::DATA0>();
+			interrupt::isr_handler_int::check_int_pin<DATA1_NUM, READER::DATA1>();
 			static_assert(DATA0_NUM != DATA1_NUM, "DATA0 and DATA1 must be two distinct pins");
 			// Call Grove RFID handler
-			using GROVE = Grove125KHzRFIDReaderWiegandEXT<DATA0_PIN, DATA1_PIN>;
-			interrupt::CallbackHandler<void (GROVE::*)(), &GROVE::fall_0>::call();
+			interrupt::CallbackHandler<void (READER::*)(), &READER::fall_0>::call();
 		}
 
-		template<uint8_t DATA0_NUM, board::ExternalInterruptPin DATA0_PIN, 
-			uint8_t DATA1_NUM, board::ExternalInterruptPin DATA1_PIN> 
+		template<uint8_t DATA0_NUM, uint8_t DATA1_NUM, typename READER> 
 		static void callback_fall_1()
 		{
+			// Check READER is a proper type
+			using GROVE_TRAIT = Grove125KHzRFIDReader_trait<READER>;
+			static_assert(GROVE_TRAIT::IS_GROVE_125_READER, "READER must be a Grove125KHzRFIDReaderWiegandEXT type");
+			static_assert(GROVE_TRAIT::IS_WIEGAND_MODE, "READER must be a Grove125KHzRFIDReaderWiegandEXT type");
+			static_assert(GROVE_TRAIT::IS_EXT, "READER must be a Grove125KHzRFIDReaderWiegandEXT type");
 			// Check pins are compliant
-			interrupt::isr_handler_int::check_int_pin<DATA0_NUM, DATA0_PIN>();
-			interrupt::isr_handler_int::check_int_pin<DATA1_NUM, DATA1_PIN>();
+			interrupt::isr_handler_int::check_int_pin<DATA0_NUM, READER::DATA0>();
+			interrupt::isr_handler_int::check_int_pin<DATA1_NUM, READER::DATA1>();
 			static_assert(DATA0_NUM != DATA1_NUM, "DATA0 and DATA1 must be two distinct pins");
 			// Call Grove RFID handler
-			using GROVE = Grove125KHzRFIDReaderWiegandEXT<DATA0_PIN, DATA1_PIN>;
-			interrupt::CallbackHandler<void (GROVE::*)(), &GROVE::fall_1>::call();
+			interrupt::CallbackHandler<void (READER::*)(), &READER::fall_1>::call();
 		}
 
-		template<uint8_t DATA01_NUM, board::InterruptPin DATA0_PIN, board::InterruptPin DATA1_PIN> 
+		template<uint8_t DATA01_NUM, typename READER> 
 		static void callback_fall_0_or_1()
 		{
+			// Check READER is a proper type
+			using GROVE_TRAIT = Grove125KHzRFIDReader_trait<READER>;
+			static_assert(GROVE_TRAIT::IS_GROVE_125_READER, "READER must be a Grove125KHzRFIDReaderWiegandPCI type");
+			static_assert(GROVE_TRAIT::IS_WIEGAND_MODE, "READER must be a Grove125KHzRFIDReaderWiegandPCI type");
+			static_assert(GROVE_TRAIT::IS_PCI, "READER must be a Grove125KHzRFIDReaderWiegandPCI type");
 			// Check pins are compliant
-			static_assert(DATA0_PIN != DATA1_PIN, "DATA0 and DATA1 must be two distinct pins");
-			interrupt::isr_handler_pci::check_pci_pins<DATA01_NUM, DATA0_PIN, DATA1_PIN>();
+			static_assert(GROVE_TRAIT::USES_DISTINCT_PINS, "DATA0 and DATA1 must be two distinct pins");
+			interrupt::isr_handler_pci::check_pci_pins<DATA01_NUM, READER::DATA0, READER::DATA1>();
 			// Call Grove RFID handler
-			using GROVE = Grove125KHzRFIDReaderWiegandPCI<DATA0_PIN, DATA1_PIN>;
-			interrupt::CallbackHandler<void (GROVE::*)(), &GROVE::fall_0_or_1>::call();
+			interrupt::CallbackHandler<void (READER::*)(), &READER::fall_0_or_1>::call();
 		}
 	};
 	/// @endcond
