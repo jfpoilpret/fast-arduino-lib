@@ -79,6 +79,7 @@ All FastArduino source code is defined inside namespaces, in order to avoid name
 - [bits](namespacebits.html): provides a few utilities for bits manipulation.
 - [containers](namespacecontainers.html): utility API to handle useful containers such as linked lists and queues; those are internally used by some FastArduino API but you can use them in your own programs as well.
 - [devices](namespacedevices.html): this namespace is used for all devices external to the MCU itself; most devices API comes in a sub namespace:
+    - [protcols](namespacedevices_1_1protocols.html): utilities for protocols used by some devices, e.g. Wiegand
     - [audio](namespacedevices_1_1audio.html): API for tone generation to buzzers or small audio amplifiers
     - [magneto](namespacedevices_1_1magneto.html): API for magnetometers, gyroscopes, accelerometers
     - [mcp230xx](namespacedevices_1_1mcp230xx.html): API for Microchip I/O expanders MCP23008 and MCP23017

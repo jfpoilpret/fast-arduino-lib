@@ -41,7 +41,7 @@ namespace devices::protocols
 	 * 
 	 * To use Wiegand class, you just need to instantiate it in your own device class,
 	 * ensure you call `on_falling_data0()` and `on_falling_data1()` when you detect 
-	 * (ISR preeferred) that line DATA0 or DATA1 is falling to 0V.
+	 * (ISR preferred) that line DATA0 or DATA1 is falling to 0V.
 	 * 
 	 * Other API methods allow you to know the state of reading (finished, parity valid),
 	 * get the read data (if available and valid) and reset the reading.
