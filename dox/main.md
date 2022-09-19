@@ -84,6 +84,7 @@ All FastArduino source code is defined inside namespaces, in order to avoid name
     - [mcp230xx](namespacedevices_1_1mcp230xx.html): API for Microchip I/O expanders MCP23008 and MCP23017
     - [mcp3x0x](namespacedevices_1_1mcp3x0x.html): API for Microchip ADC chips family
     - [rf](namespacedevices_1_1rf.html): API for radio-frequency chips
+    - [rfid](namespacedevices_1_1rfid.html): API for RFID devices
     - [rtc](namespacedevices_1_1rtc.html): API for real time clock chips
     - [servo](namespacedevices_1_1servo.html): API to handle servomotors
     - [sonar](namespacedevices_1_1sonar.html): API to handle sonar range sensors

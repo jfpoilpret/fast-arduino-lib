@@ -27,9 +27,9 @@ Advanced:
 8. [software UART](@ref softuart)
 
 Supported devices (not yet documented):
-1. SPI
-2. I2C
-3. Other devices: sonar, servo, SIPO
+1. SPI: NRF24L01P (RF TX/RX), WinBond Flash, MCP3XXX (ADC)
+2. I2C: DS1307 (RTC), HMC5883L (Compass), MPU6050 (Accelerometer), MCP230XX (IO Mux), VL53L0X (ToF laser)
+3. Other devices: sonar, servo, SIPO, tones generator, RFID reader
 
 
 @anchor gpiotime Basics: gpio & time

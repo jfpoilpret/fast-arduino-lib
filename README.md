@@ -58,7 +58,7 @@ Latest FastArduino release [**v1.8**](https://github.com/jfpoilpret/fast-arduino
 
 In the current version, the project covers almost all features; a few missing, less important, features will be released in future versions (see roadmap below); the API of current features is deemed stable and should not change in the future.
 
-What the library already has:
+What the library has:
 
 - General utilities (queues, linked lists, busy loop delays)
 - "Future" support for asynchronous computation (e.g. ISR-based)
@@ -99,6 +99,7 @@ In addition, FastArduino brings support for the following devices:
 - MCP3008 8-channel Analog-Digital Converter (SPI-based) and other chips from the same family
 - HC-SR04 sonar device support in synchronous and asynchronous modes
 - VL53L0X laser distance sensor device (I2C-based)
+- Grove 125KHz RFID reader (version 1.9-alpha)
 
 As of now, the following platforms are supported (and tested):
 
@@ -153,6 +154,7 @@ The roadmap of next activities and new supported features is the following:
 - [Milestone v1.6](https://github.com/jfpoilpret/fast-arduino-lib/milestone/8?closed=1) (released on 22.11.2020)
 - [Milestone v1.7](https://github.com/jfpoilpret/fast-arduino-lib/milestone/9?closed=1) (released on 19.09.2021)
 - [Milestone v1.8](https://github.com/jfpoilpret/fast-arduino-lib/milestone/10?closed=1) (release on 10.10.2021)
+- [Milestone v1.9](https://github.com/jfpoilpret/fast-arduino-lib/milestone/11) (to be released on 30.09.2021)
 - [Milestone v2.0](https://github.com/jfpoilpret/fast-arduino-lib/milestone/3) (undefined date)
 - [Later](https://github.com/jfpoilpret/fast-arduino-lib/issues?q=is%3Aopen+is%3Aissue+no%3Amilestone)
 
