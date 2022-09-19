@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['power_1601',['power',['../namespacepower.html',1,'']]]
+  ['power_1605',['power',['../namespacepower.html',1,'']]]
 ];

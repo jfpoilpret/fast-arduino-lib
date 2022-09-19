@@ -201,7 +201,7 @@ template&lt;typename MANAGER , typename T , uint8_t... REGISTERS&gt; </div>
 <p>This future can then be used to write values to all registers for this instance. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">values</td><td>the values to write to the registers in the I2C device; all values must be the same type <code>T</code> and the list must contains the same number of values as there are registers for this instance. </td></tr>
-    <tr><td class="paramname">notifications</td><td>determines if and which notifications should be dispatched by this <a class="el" href="classi2c_1_1_t_write_multi_register_future.html" title="Generic Future that can be used to write to several I2C device registers.">TWriteMultiRegisterFuture</a>; default is none. </td></tr>
+    <tr><td class="paramname">notification</td><td>determines if and which notifications should be dispatched by this <a class="el" href="classi2c_1_1_t_write_multi_register_future.html" title="Generic Future that can be used to write to several I2C device registers.">TWriteMultiRegisterFuture</a>; default is none. </td></tr>
   </table>
   </dd>
 </dl>

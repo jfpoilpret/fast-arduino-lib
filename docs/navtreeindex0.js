@@ -246,8 +246,8 @@ var NAVTREEINDEX0 =
 "classdevices_1_1audio_1_1_async_tone_player.html#adfb30cb51c01a95f794c3f1bcc9b01a6":[6,0,2,0,5,6],
 "classdevices_1_1audio_1_1_beat.html":[6,0,2,0,3],
 "classdevices_1_1audio_1_1_q_tone_play.html":[6,0,2,0,2],
-"classdevices_1_1audio_1_1_q_tone_play.html#a17bfcc2c43ceafe338d5ed2f8a431be4":[6,0,2,0,2,3],
-"classdevices_1_1audio_1_1_q_tone_play.html#a4d7dd52f4c88f0954c0da42a70f99e08":[6,0,2,0,2,0],
-"classdevices_1_1audio_1_1_q_tone_play.html#a51811b41c2c4a9d7e2fa310025d50e85":[6,0,2,0,2,2],
-"classdevices_1_1audio_1_1_q_tone_play.html#a801dfc9f380c9486ec287c8493cfd19d":[6,0,2,0,2,5]
+"classdevices_1_1audio_1_1_q_tone_play.html#a17bfcc2c43ceafe338d5ed2f8a431be4":[6,0,2,0,2,2],
+"classdevices_1_1audio_1_1_q_tone_play.html#a51811b41c2c4a9d7e2fa310025d50e85":[6,0,2,0,2,1],
+"classdevices_1_1audio_1_1_q_tone_play.html#a801dfc9f380c9486ec287c8493cfd19d":[6,0,2,0,2,3],
+"classdevices_1_1audio_1_1_q_tone_play.html#a842c1f961e435a0295756a94a05ab715":[6,0,2,0,2,4]
 };

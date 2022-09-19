@@ -219,7 +219,7 @@ class devices::audio::TonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</h3>
 <dd>
 <a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations.">AsyncTonePlayer</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00708">708</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00712">712</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a32bb2fd479a64ba15a10bcf38b0588ce"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a32bb2fd479a64ba15a10bcf38b0588ce">&#9670;&nbsp;</a></span>TonePlayer()</h2>
@@ -255,7 +255,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00723">723</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00727">727</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
@@ -300,7 +300,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
 <p>This method is blocking: it will return only when the melody is finished playing. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">melody</td><td>a pointer, in SRAM, to the sequence of <code>TONE_PLAY</code> to be played; the sequence MUST finish with a <code><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a4221d7dbfd3adda995e653697bdf28a1" title="This special tone marks the end of a melody (as a sequence of Tones).">SpecialTone::END</a></code>. </td></tr>
-    <tr><td class="paramname">bpm</td><td>the tempo (beats per minute) at which the melody shall be played; one beat is the duration of a quarter note. </td></tr>
+    <tr><td class="paramname">beat</td><td>the tempo (beats per minute) at which the melody shall be played; one beat is the duration of a quarter note. </td></tr>
   </table>
   </dd>
 </dl>
@@ -310,7 +310,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
 <dd>
 <a class="el" href="classdevices_1_1audio_1_1_tone_player.html#a0db8d1577bdaa0bfe8b7dbb660e54b7c" title="Stop playing current melody (if any).">stop()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00737">737</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00741">741</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
@@ -354,7 +354,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
 <p>This method is blocking: it will return only when the melody is finished playing. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">melody</td><td>a pointer, in EEPROM, to the sequence of <code>TONE_PLAY</code> to be played; the sequence MUST finish with a <code><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a4221d7dbfd3adda995e653697bdf28a1" title="This special tone marks the end of a melody (as a sequence of Tones).">SpecialTone::END</a></code>. </td></tr>
-    <tr><td class="paramname">bpm</td><td>the tempo (beats per minute) at which the melody shall be played; one beat is the duration of a quarter note. </td></tr>
+    <tr><td class="paramname">beat</td><td>the tempo (beats per minute) at which the melody shall be played; one beat is the duration of a quarter note. </td></tr>
   </table>
   </dd>
 </dl>
@@ -364,7 +364,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
 <dd>
 <a class="el" href="classdevices_1_1audio_1_1_tone_player.html#a0db8d1577bdaa0bfe8b7dbb660e54b7c" title="Stop playing current melody (if any).">stop()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00756">756</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00760">760</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
@@ -408,7 +408,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
 <p>This method is blocking: it will return only when the melody is finished playing. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">melody</td><td>a pointer, in Flash, to the sequence of <code>TONE_PLAY</code> to be played; the sequence MUST finish with a <code><a class="el" href="namespacedevices_1_1audio_1_1_special_tone.html#a4221d7dbfd3adda995e653697bdf28a1" title="This special tone marks the end of a melody (as a sequence of Tones).">SpecialTone::END</a></code>. </td></tr>
-    <tr><td class="paramname">bpm</td><td>the tempo (beats per minute) at which the melody shall be played; one beat is the duration of a quarter note. </td></tr>
+    <tr><td class="paramname">beat</td><td>the tempo (beats per minute) at which the melody shall be played; one beat is the duration of a quarter note. </td></tr>
   </table>
   </dd>
 </dl>
@@ -418,7 +418,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
 <dd>
 <a class="el" href="classdevices_1_1audio_1_1_tone_player.html#a0db8d1577bdaa0bfe8b7dbb660e54b7c" title="Stop playing current melody (if any).">stop()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00775">775</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00779">779</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
@@ -450,7 +450,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
 <p>Stop playing current melody (if any). </p>
 <p>Effect is not immediate but will stop at the end of the current tone. </p>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00786">786</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00790">790</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>

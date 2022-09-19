@@ -89,12 +89,12 @@ var annotated_dup =
       [ "Job", "classevents_1_1_job.html", "classevents_1_1_job" ]
     ] ],
     [ "functor", "namespacefunctor.html", [
-      [ "Identity", "classfunctor_1_1_identity.html", "classfunctor_1_1_identity" ],
-      [ "Constant", "classfunctor_1_1_constant.html", "classfunctor_1_1_constant" ],
-      [ "Cast", "classfunctor_1_1_cast.html", "classfunctor_1_1_cast" ],
-      [ "Compose", "classfunctor_1_1_compose.html", "classfunctor_1_1_compose" ],
-      [ "ChangeEndianness", "classfunctor_1_1_change_endianness.html", "classfunctor_1_1_change_endianness" ],
-      [ "Functor", "structfunctor_1_1_functor.html", "structfunctor_1_1_functor" ]
+      [ "Identity", "classfunctor_1_1_identity.html", null ],
+      [ "Constant", "classfunctor_1_1_constant.html", null ],
+      [ "Cast", "classfunctor_1_1_cast.html", null ],
+      [ "Compose", "classfunctor_1_1_compose.html", null ],
+      [ "ChangeEndianness", "classfunctor_1_1_change_endianness.html", null ],
+      [ "Functor", "structfunctor_1_1_functor.html", null ]
     ] ],
     [ "future", "namespacefuture.html", [
       [ "AbstractFuture", "classfuture_1_1_abstract_future.html", "classfuture_1_1_abstract_future" ],
@@ -135,10 +135,10 @@ var annotated_dup =
       [ "I2CAsyncDebugManager", "classi2c_1_1_i2_c_async_debug_manager.html", "classi2c_1_1_i2_c_async_debug_manager" ],
       [ "I2CAsyncStatusManager", "classi2c_1_1_i2_c_async_status_manager.html", "classi2c_1_1_i2_c_async_status_manager" ],
       [ "I2CAsyncStatusDebugManager", "classi2c_1_1_i2_c_async_status_debug_manager.html", "classi2c_1_1_i2_c_async_status_debug_manager" ],
-      [ "I2CSyncManager", "classi2c_1_1_i2_c_sync_manager.html", "classi2c_1_1_i2_c_sync_manager" ],
-      [ "I2CSyncStatusManager", "classi2c_1_1_i2_c_sync_status_manager.html", "classi2c_1_1_i2_c_sync_status_manager" ],
-      [ "I2CSyncDebugManager", "classi2c_1_1_i2_c_sync_debug_manager.html", "classi2c_1_1_i2_c_sync_debug_manager" ],
-      [ "I2CSyncStatusDebugManager", "classi2c_1_1_i2_c_sync_status_debug_manager.html", "classi2c_1_1_i2_c_sync_status_debug_manager" ],
+      [ "I2CSyncManager", "classi2c_1_1_i2_c_sync_manager.html", null ],
+      [ "I2CSyncStatusManager", "classi2c_1_1_i2_c_sync_status_manager.html", null ],
+      [ "I2CSyncDebugManager", "classi2c_1_1_i2_c_sync_debug_manager.html", null ],
+      [ "I2CSyncStatusDebugManager", "classi2c_1_1_i2_c_sync_status_debug_manager.html", null ],
       [ "AbstractI2CSyncATtinyManager", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager" ],
       [ "I2CLightCommand", "classi2c_1_1_i2_c_light_command.html", "classi2c_1_1_i2_c_light_command" ],
       [ "I2CCommand", "classi2c_1_1_i2_c_command.html", "classi2c_1_1_i2_c_command" ],

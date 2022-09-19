@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['unitprefix_2510',['UnitPrefix',['../namespaceutils.html#a6ba012c3dd675cf1eabcf14e55cea0e0',1,'utils']]],
-  ['usart_2511',['USART',['../namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907',1,'board::USART()'],['../namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907',1,'board::USART()']]]
+  ['unitprefix_2522',['UnitPrefix',['../namespaceutils.html#a6ba012c3dd675cf1eabcf14e55cea0e0',1,'utils']]],
+  ['usart_2523',['USART',['../namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907',1,'board::USART()'],['../namespaceboard.html#a8541ca1f10a050c4356d6ccd76d9a907',1,'board::USART()']]]
 ];

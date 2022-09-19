@@ -173,7 +173,7 @@ class devices::audio::AbstractTonePlayer&lt; NTIMER, OUTPUT, TONEPLAY &gt;</h3>
 <dd>
 <a class="el" href="classdevices_1_1audio_1_1_async_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations.">AsyncTonePlayer</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00460">460</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00464">464</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="acc86fc481f1049eb4c6ba658ef62488a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acc86fc481f1049eb4c6ba658ef62488a">&#9670;&nbsp;</a></span>AbstractTonePlayer()</h2>
@@ -209,7 +209,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00478">478</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00482">482</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
@@ -245,7 +245,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
 <dd>
 <a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#a272068f53c5b9115df118cafd45a3b4c" title="Get the duration, in milliseconds, of a 32nd note.">get_min_duration()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00486">486</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00490">490</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
@@ -277,7 +277,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
 <p>Get the duration, in milliseconds, of a 32nd note. </p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#a2a03c6699c7a65f7d51dfe73d73bafd7" title="Set the duration, in milliseconds, of a 32nd note.">set_min_duration()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00495">495</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00499">499</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
@@ -310,7 +310,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
 <p>Prepare playing of <code>melody</code>, which should be stored in SRAM. </p>
 <p>Once preparation is done, actual melody playing is performed by sequenced calls to <code><a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#a860d7c19e21fba2f44555886fba995e8" title="Ask this player to start playing the next note of the melody.">start_next_note()</a></code> and <code><a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#a84ad6433837b9afca43c5811128b755b" title="Ask this player to stop playing the current note of the melody.">stop_current_note()</a></code>. </p>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00505">505</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00509">509</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
@@ -343,7 +343,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
 <p>Prepare playing of <code>melody</code>, which should be stored in EEPROM. </p>
 <p>Once preparation is done, actual melody playing is performed by sequenced calls to <code><a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#a860d7c19e21fba2f44555886fba995e8" title="Ask this player to start playing the next note of the melody.">start_next_note()</a></code> and <code><a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#a84ad6433837b9afca43c5811128b755b" title="Ask this player to stop playing the current note of the melody.">stop_current_note()</a></code>. </p>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00515">515</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00519">519</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
@@ -376,7 +376,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
 <p>Prepare playing of <code>melody</code>, which should be stored in Flash. </p>
 <p>Once preparation is done, actual melody playing is performed by sequenced calls to <code><a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#a860d7c19e21fba2f44555886fba995e8" title="Ask this player to start playing the next note of the melody.">start_next_note()</a></code> and <code><a class="el" href="classdevices_1_1audio_1_1_abstract_tone_player.html#a84ad6433837b9afca43c5811128b755b" title="Ask this player to stop playing the current note of the melody.">stop_current_note()</a></code>. </p>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00525">525</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00529">529</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
@@ -414,7 +414,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00540">540</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00544">544</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>
@@ -452,7 +452,7 @@ template&lt;board::Timer NTIMER, board::PWMPin OUTPUT, typename TONEPLAY  = QTon
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00554">554</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="tone__player_8h_source.html#l00558">558</a> of file <a class="el" href="tone__player_8h_source.html">tone_player.h</a>.</p>
 
 </div>
 </div>

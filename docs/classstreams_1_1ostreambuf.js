@@ -1,7 +1,6 @@
 var classstreams_1_1ostreambuf =
 [
     [ "ostreambuf", "classstreams_1_1ostreambuf.html#a96a8f9932f4c4900bb3b2d2579d912be", null ],
-    [ "ostreambuf", "classstreams_1_1ostreambuf.html#a6095fc818def8bb011cd1b18a342f6a9", null ],
     [ "operator=", "classstreams_1_1ostreambuf.html#a68fc716d31c9ad87640a01c3aa720ba1", null ],
     [ "pubsync", "classstreams_1_1ostreambuf.html#a2e65481b6a64791d5584818b687ddf7e", null ],
     [ "sputc", "classstreams_1_1ostreambuf.html#ad1fe405fcecf6e1d1bd97d7f14792438", null ],

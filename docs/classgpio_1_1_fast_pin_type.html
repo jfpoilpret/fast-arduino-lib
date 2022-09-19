@@ -169,7 +169,7 @@ class gpio::FastPinType&lt; DPIN_ &gt;</h3>
 <div class="line">    <a class="code" href="classgpio_1_1_fast_pin_type.html#aec745f596e959cb883f9ba66a526b1b6">gpio::FastPinType&lt;board::DigitalPin::LED&gt;::set_mode</a>(<a class="code" href="namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041aa84cc046d48610b05c21fd3670d0c829">gpio::PinMode::INPUT</a>);</div>
 <div class="line">    ...</div>
 <div class="line">}</div>
-<div class="ttc" id="aclassgpio_1_1_fast_pin_type_html_aec745f596e959cb883f9ba66a526b1b6"><div class="ttname"><a href="classgpio_1_1_fast_pin_type.html#aec745f596e959cb883f9ba66a526b1b6">gpio::FastPinType::set_mode</a></div><div class="ttdeci">static void set_mode(PinMode mode, bool value=false)</div><div class="ttdoc">Set mode (direction) and value (if output) of DPIN.</div><div class="ttdef"><b>Definition:</b> <a href="gpio_8h_source.html#l00574">gpio.h:574</a></div></div>
+<div class="ttc" id="aclassgpio_1_1_fast_pin_type_html_aec745f596e959cb883f9ba66a526b1b6"><div class="ttname"><a href="classgpio_1_1_fast_pin_type.html#aec745f596e959cb883f9ba66a526b1b6">gpio::FastPinType::set_mode</a></div><div class="ttdeci">static void set_mode(PinMode mode, bool value=false)</div><div class="ttdoc">Set mode (direction) and value (if output) of DPIN.</div><div class="ttdef"><b>Definition:</b> <a href="gpio_8h_source.html#l00580">gpio.h:580</a></div></div>
 <div class="ttc" id="anamespacegpio_html_ae18fafd08668ee17aa5dd415ee3b6041aa84cc046d48610b05c21fd3670d0c829"><div class="ttname"><a href="namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041aa84cc046d48610b05c21fd3670d0c829">gpio::PinMode::INPUT</a></div><div class="ttdeci">@ INPUT</div><div class="ttdoc">Digital pin is configured as high-impedance (open drain) input.</div></div>
 </div><!-- fragment --><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
@@ -183,7 +183,7 @@ class gpio::FastPinType&lt; DPIN_ &gt;</h3>
 <dd>
 <a class="el" href="namespacegpio.html#a3cbdad86ced6494ca615a425b433fd57" title="Useful alias type to the FastPin type matching a given board::DigitalPin.">FAST_PIN</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00544">544</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00550">550</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="aec745f596e959cb883f9ba66a526b1b6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aec745f596e959cb883f9ba66a526b1b6">&#9670;&nbsp;</a></span>set_mode()</h2>
@@ -230,7 +230,7 @@ template&lt;board::DigitalPin DPIN_&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00574">574</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00580">580</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -262,7 +262,7 @@ template&lt;board::DigitalPin DPIN_&gt; </div>
 <p>Set pin level to <code>HIGH</code> (i.e. </p>
 <p>Vcc). This method will generally use 1 single instruction in most cases. </p>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00590">590</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00596">596</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -294,7 +294,7 @@ template&lt;board::DigitalPin DPIN_&gt; </div>
 <p>Set pin level to <code>LOW</code> (i.e. </p>
 <p>GND). This method will generally use 1 single instruction in most cases. </p>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00599">599</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00605">605</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -326,7 +326,7 @@ template&lt;board::DigitalPin DPIN_&gt; </div>
 <p>Toggle pin level, i.e. </p>
 <p>set it to <code>LOW</code> if it was <code>HIGH</code>, and <code>HIGH</code> if it was <code>LOW</code>. This method will generally use 1 single instruction in most cases. </p>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00609">609</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00615">615</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>
@@ -364,7 +364,7 @@ template&lt;board::DigitalPin DPIN_&gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00619">619</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="gpio_8h_source.html#l00625">625</a> of file <a class="el" href="gpio_8h_source.html">gpio.h</a>.</p>
 
 </div>
 </div>

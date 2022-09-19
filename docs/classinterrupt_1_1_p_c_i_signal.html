@@ -170,7 +170,7 @@ static constexpr const uint8_t&#160;</td><td class="memItemRight" valign="bottom
 class interrupt::PCISignal&lt; PCINT_ &gt;</h3>
 
 <p>Handler of a Pin Change Interrupt vector. </p>
-<p>For each PCINT vector you need, you must create one instance of this handler. With one instance, you are then able to handle individually each pin which interrupt you want to enable or disable. If you need a function or method to be called back when a Pin Change Interrupt occurs for a PCINT vector, then you have to use <code>REGISTER_PCI_ISR_FUNCTION</code> or <code><a class="el" href="pci_8h.html#a64be10f04dd31643ee243b564a0d910c" title="Register the necessary ISR (Interrupt Service Routine) for a Pin Change Interrupt vector.">REGISTER_PCI_ISR_METHOD()</a></code> macros. If you don't then use <code><a class="el" href="pci_8h.html#ae3388141a0b77e8bb9c5ab66943e3998" title="Register an empty ISR (Interrupt Service Routine) for a Pin Change Interrupt vector.">REGISTER_PCI_ISR_EMPTY()</a></code> macro. If you don't know the PCINT you need to handle but only a pin, then you can use <code><a class="el" href="structinterrupt_1_1_p_c_i_type.html" title="Helper class that easily converts a PIN into the right PCISignal.">PCIType</a>&lt;PIN&gt;::TYPE</code>, or better <code>PCI_SIGNAL&lt;PIN&gt;</code>.</p>
+<p>For each PCINT vector you need, you must create one instance of this handler. With one instance, you are then able to handle individually each pin which interrupt you want to enable or disable. If you need a function or method to be called back when a Pin Change Interrupt occurs for a PCINT vector, then you have to use <code>REGISTER_PCI_ISR_FUNCTION</code> or <code><a class="el" href="pci_8h.html#a64be10f04dd31643ee243b564a0d910c" title="Register the necessary ISR (Interrupt Service Routine) for a Pin Change Interrupt vector.">REGISTER_PCI_ISR_METHOD()</a></code> macros. If you don't then use <code><a class="el" href="pci_8h.html#ae3388141a0b77e8bb9c5ab66943e3998" title="Register an empty ISR (Interrupt Service Routine) for a Pin Change Interrupt vector.">REGISTER_PCI_ISR_EMPTY()</a></code> macro. If you don't know the PCINT you need to handle but only a pin, then you can use <code>PCI_SIGNAL&lt;PIN&gt;</code>.</p>
 <dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
     <tr><td class="paramname">PCINT_</td><td>the PCINT vector you want to manage </td></tr>
@@ -183,9 +183,11 @@ class interrupt::PCISignal&lt; PCINT_ &gt;</h3>
 <dd>
 <a class="el" href="pci_8h.html#ae3388141a0b77e8bb9c5ab66943e3998" title="Register an empty ISR (Interrupt Service Routine) for a Pin Change Interrupt vector.">REGISTER_PCI_ISR_EMPTY</a> </dd>
 <dd>
-<a class="el" href="structinterrupt_1_1_p_c_i_type.html" title="Helper class that easily converts a PIN into the right PCISignal.">PCIType</a> </dd></dl>
+<a class="el" href="structinterrupt_1_1_p_c_i_type.html" title="Helper class that easily converts a PIN into the right PCISignal.">PCIType</a> </dd>
+<dd>
+<a class="el" href="namespaceinterrupt.html#a440f2d705bc60755a4f81a105caef15c" title="Useful alias type to the PCISignal type matching a given board::InterruptPin.">PCI_SIGNAL</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00175">175</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00176">176</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a1cbc89ca21a31546d8d52648bf5e6472"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1cbc89ca21a31546d8d52648bf5e6472">&#9670;&nbsp;</a></span>enable()</h2>
@@ -221,7 +223,7 @@ template&lt;uint8_t PCINT_&gt; </div>
 <dd>
 <a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a5f9a0d32e7e65d74cf923586acce1425" title="Enable pin change interrupts for several pins of this PCINT.">enable_pins()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00210">210</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00211">211</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
@@ -257,7 +259,7 @@ template&lt;uint8_t PCINT_&gt; </div>
 <dd>
 <a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ab6b9cc82dfb2a0732539247ce83657ac" title="Disable Pin Change Interrupts for PIN.">disable_pin()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00227">227</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00228">228</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
@@ -289,7 +291,7 @@ template&lt;uint8_t PCINT_&gt; </div>
 <p>Clear the interrupt flag for this pin change interrupt vector. </p>
 <p>Generally, you would not need this method as that interrupt flag automatically gets cleared when the matching ISR is executed. Note that this method is synchronized, i.e. it disables all interrupts during its call and restores interrupts on return. If you do not need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a5d0c4b84584df87d7405443cf93b61fc" title="Clear the interrupt flag for this pin change interrupt vector.">clear_()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a5d0c4b84584df87d7405443cf93b61fc" title="Clear the interrupt flag for this pin change interrupt vector.">clear_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00242">242</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00243">243</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
@@ -332,7 +334,7 @@ template&lt;uint8_t PCINT_&gt; </div>
 <dd>
 <a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a3506eb7f8c8791186a634116621a438f" title="Disable pin change interrupts for several pins of this PCINT.">disable_pins()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00261">261</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00262">262</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
@@ -377,7 +379,7 @@ template&lt;uint8_t PCINT_&gt; </div>
 <dd>
 <a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ab6b9cc82dfb2a0732539247ce83657ac" title="Disable Pin Change Interrupts for PIN.">disable_pin()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00285">285</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00286">286</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
@@ -422,7 +424,7 @@ template&lt;uint8_t PCINT_&gt; </div>
 <dd>
 <a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ab6b9cc82dfb2a0732539247ce83657ac" title="Disable Pin Change Interrupts for PIN.">disable_pin()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00309">309</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00310">310</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
@@ -466,7 +468,7 @@ template&lt;board::InterruptPin PIN&gt; </div>
 <dd>
 <a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a5f9a0d32e7e65d74cf923586acce1425" title="Enable pin change interrupts for several pins of this PCINT.">enable_pins()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00327">327</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00328">328</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
@@ -508,7 +510,7 @@ template&lt;board::InterruptPin PIN&gt; </div>
 <dd>
 <a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ac7026ca25a138371c6e16c2f17ffa867" title="Enable Pin Change Interrupts for PIN.">enable_pin()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00345">345</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00346">346</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
@@ -546,7 +548,7 @@ template&lt;uint8_t PCINT_&gt; </div>
 <dd>
 <a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a7a116409c3029a4d5b869bf68e1fde14" title="Enable pin change interrupts for several pins of this PCINT.">enable_pins_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00365">365</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00366">366</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
@@ -582,7 +584,7 @@ template&lt;uint8_t PCINT_&gt; </div>
 <dd>
 <a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a89fee5f5aac524d70b68968d57f1d98e" title="Disable Pin Change Interrupts for PIN.">disable_pin_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00382">382</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00383">383</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
@@ -614,7 +616,7 @@ template&lt;uint8_t PCINT_&gt; </div>
 <p>Clear the interrupt flag for this pin change interrupt vector. </p>
 <p>Generally, you would not need this method as that interrupt flag automatically gets cleared when the matching ISR is executed. Note that this method is not synchronized, hence you should ensure it is called only while global interrupts are not enabled. If you need synchronization, then you should better use <code><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#abea9f1b0e90228fe877ac0e491b477de" title="Clear the interrupt flag for this pin change interrupt vector.">clear()</a></code> instead. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classinterrupt_1_1_p_c_i_signal.html#abea9f1b0e90228fe877ac0e491b477de" title="Clear the interrupt flag for this pin change interrupt vector.">clear()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00397">397</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00398">398</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
@@ -657,7 +659,7 @@ template&lt;uint8_t PCINT_&gt; </div>
 <dd>
 <a class="el" href="classinterrupt_1_1_p_c_i_signal.html#af68e7e306ffd4488363745231585c3f5" title="Disable pin change interrupts for several pins of this PCINT.">disable_pins_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00416">416</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00417">417</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
@@ -702,7 +704,7 @@ template&lt;uint8_t PCINT_&gt; </div>
 <dd>
 <a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a89fee5f5aac524d70b68968d57f1d98e" title="Disable Pin Change Interrupts for PIN.">disable_pin_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00440">440</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00441">441</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
@@ -747,7 +749,7 @@ template&lt;uint8_t PCINT_&gt; </div>
 <dd>
 <a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a89fee5f5aac524d70b68968d57f1d98e" title="Disable Pin Change Interrupts for PIN.">disable_pin_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00464">464</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00465">465</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
@@ -791,7 +793,7 @@ template&lt;board::InterruptPin PIN&gt; </div>
 <dd>
 <a class="el" href="classinterrupt_1_1_p_c_i_signal.html#a7a116409c3029a4d5b869bf68e1fde14" title="Enable pin change interrupts for several pins of this PCINT.">enable_pins_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00482">482</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00483">483</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>
@@ -833,7 +835,7 @@ template&lt;board::InterruptPin PIN&gt; </div>
 <dd>
 <a class="el" href="classinterrupt_1_1_p_c_i_signal.html#ad29f240c090974ee06b02fe7838fb538" title="Enable Pin Change Interrupts for PIN.">enable_pin_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00500">500</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="pci_8h_source.html#l00501">501</a> of file <a class="el" href="pci_8h_source.html">pci.h</a>.</p>
 
 </div>
 </div>

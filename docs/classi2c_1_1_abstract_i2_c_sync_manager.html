@@ -86,7 +86,6 @@ $(document).ready(function(){initNavTree('classi2c_1_1_abstract_i2_c_sync_manage
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-types">Protected Types</a> &#124;
 <a href="#friends">Friends</a> &#124;
 <a href="classi2c_1_1_abstract_i2_c_sync_manager-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -144,24 +143,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:ad568177e9821c9b33bca622518e54581"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disable MCU I2C transmission.  <a href="classi2c_1_1_abstract_i2_c_sync_manager.html#ad568177e9821c9b33bca622518e54581">More...</a><br /></td></tr>
 <tr class="separator:ad568177e9821c9b33bca622518e54581"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
-Protected Types</h2></td></tr>
-<tr class="memitem:ac233f628727fed78482526fabafd006c"><td class="memItemLeft" align="right" valign="top"><a id="ac233f628727fed78482526fabafd006c"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>ARCH_HANDLER</b> = ARCH_HANDLER_</td></tr>
-<tr class="separator:ac233f628727fed78482526fabafd006c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aad0b7cb5ba65d6e4e5612a8a03e2f3a4"><td class="memItemLeft" align="right" valign="top"><a id="aad0b7cb5ba65d6e4e5612a8a03e2f3a4"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>MODE_TRAIT</b> = I2CMode_trait&lt; MODE_ &gt;</td></tr>
-<tr class="separator:aad0b7cb5ba65d6e4e5612a8a03e2f3a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f5256c789aa19fc696ae49075c66fbf"><td class="memItemLeft" align="right" valign="top"><a id="a7f5256c789aa19fc696ae49075c66fbf"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>I2C_TRAIT</b> = board_traits::TWI_trait</td></tr>
-<tr class="separator:a7f5256c789aa19fc696ae49075c66fbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4a08998b76952375f4b4148530a364f6"><td class="memItemLeft" align="right" valign="top"><a id="a4a08998b76952375f4b4148530a364f6"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>REG8</b> = board_traits::REG8</td></tr>
-<tr class="separator:a4a08998b76952375f4b4148530a364f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a018e64d86091cc70f750abe7404cd223"><td class="memItemLeft" align="right" valign="top"><a id="a018e64d86091cc70f750abe7404cd223"></a>
-using&#160;</td><td class="memItemRight" valign="bottom"><b>DEBUG</b> = I2CDebugSupport&lt; HAS_DEBUG_, DEBUG_HOOK_ &gt;</td></tr>
-<tr class="separator:a018e64d86091cc70f750abe7404cd223"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
 Friends</h2></td></tr>
 <tr class="memitem:a787499b46e8ad88439f896ceefe1da54"><td class="memTemplParams" colspan="2"><a id="a787499b46e8ad88439f896ceefe1da54"></a>
@@ -214,7 +195,7 @@ template&lt;typename ARCH_HANDLER_ , I2CMode MODE_, typename STATUS_HOOK_ , bool
 <p>The abstract base class of all futures to be defined for this I2C Manager. </p>
 <p>For a synchronous manager, it is always <code><a class="el" href="classfuture_1_1_abstract_fake_future.html" title="Base class for all FakeFutures.">future::AbstractFakeFuture</a></code>. </p>
 
-<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00433">433</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00435">435</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
 
 </div>
 </div>
@@ -237,7 +218,7 @@ template&lt;typename OUT , typename IN &gt; </div>
 <p>The template base class of all futures to be defined for this I2C Manager. </p>
 <p>For a synchronous manager, it is always <code><a class="el" href="classfuture_1_1_fake_future.html" title="Actual FakeFuture, it has the exact same API as Future and can be used in lieu of Future.">future::FakeFuture</a></code>. </p>
 
-<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00439">439</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00441">441</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
 
 </div>
 </div>
@@ -272,7 +253,7 @@ template&lt;typename ARCH_HANDLER_ , I2CMode MODE_, typename STATUS_HOOK_ , bool
 <dd>
 <a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#acbe7922dbd874a27497701245011fcf8" title="Prepare and enable the MCU for I2C transmission.">begin_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00448">448</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00450">450</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
 
 </div>
 </div>
@@ -306,7 +287,7 @@ template&lt;typename ARCH_HANDLER_ , I2CMode MODE_, typename STATUS_HOOK_ , bool
 <dd>
 <a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#ad568177e9821c9b33bca622518e54581" title="Disable MCU I2C transmission.">end_()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00459">459</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00461">461</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
 
 </div>
 </div>
@@ -340,7 +321,7 @@ template&lt;typename ARCH_HANDLER_ , I2CMode MODE_, typename STATUS_HOOK_ , bool
 <dd>
 <a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a1d57efe73e4e8d75bf303f148be8fe1d" title="Prepare and enable the MCU for I2C transmission.">begin()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00471">471</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00473">473</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
 
 </div>
 </div>
@@ -374,7 +355,7 @@ template&lt;typename ARCH_HANDLER_ , I2CMode MODE_, typename STATUS_HOOK_ , bool
 <dd>
 <a class="el" href="classi2c_1_1_abstract_i2_c_sync_manager.html#a2511a80e2ce5b2b6142922a306b4588e" title="Disable MCU I2C transmission.">end()</a> </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00482">482</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
+<p class="definition">Definition at line <a class="el" href="i2c__handler__common_8h_source.html#l00484">484</a> of file <a class="el" href="i2c__handler__common_8h_source.html">i2c_handler_common.h</a>.</p>
 
 </div>
 </div>

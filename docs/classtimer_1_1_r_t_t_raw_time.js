@@ -1,8 +1,6 @@
 var classtimer_1_1_r_t_t_raw_time =
 [
-    [ "RTTRawTime", "classtimer_1_1_r_t_t_raw_time.html#a7e2a22d4b04796b684b6cf0dcfe8b823", null ],
     [ "RTTRawTime", "classtimer_1_1_r_t_t_raw_time.html#a272a897e13e597aec2eb7da6f919943d", null ],
-    [ "operator=", "classtimer_1_1_r_t_t_raw_time.html#af8119524ecc5ee707f10d379fde2f9b4", null ],
     [ "as_real_time", "classtimer_1_1_r_t_t_raw_time.html#a18ed46ad3c990ff5f960720a1dca27e3", null ],
     [ "EMPTY_TIME", "classtimer_1_1_r_t_t_raw_time.html#ad2ff52140151062a1f93675fc028067c", null ],
     [ "millis_", "classtimer_1_1_r_t_t_raw_time.html#ae8debaf0ea3d8c3f53d9983c3ab38792", null ],
