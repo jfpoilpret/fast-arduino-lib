@@ -885,5 +885,52 @@ namespace serial::soft
 	/// @endcond
 }
 
+namespace serial
+{
+	/// @cond notdocumented
+	// Specific traits of HW UART classes
+	template<board::DigitalPin TX> struct UART_trait<soft::UATX<TX>>
+	{
+		static constexpr bool IS_UART = true;
+		static constexpr bool IS_HW_UART = false;
+		static constexpr bool IS_SW_UART = true;
+		static constexpr bool HAS_TX = true;
+		static constexpr bool HAS_RX = false;
+	};
+	template<board::InterruptPin RX> struct UART_trait<soft::UARX_PCI<RX>>
+	{
+		static constexpr bool IS_UART = true;
+		static constexpr bool IS_HW_UART = false;
+		static constexpr bool IS_SW_UART = true;
+		static constexpr bool HAS_TX = false;
+		static constexpr bool HAS_RX = true;
+	};
+	template<board::ExternalInterruptPin RX> struct UART_trait<soft::UARX_EXT<RX>>
+	{
+		static constexpr bool IS_UART = true;
+		static constexpr bool IS_HW_UART = false;
+		static constexpr bool IS_SW_UART = true;
+		static constexpr bool HAS_TX = false;
+		static constexpr bool HAS_RX = true;
+	};
+	template<board::DigitalPin TX, board::InterruptPin RX> struct UART_trait<soft::UART_PCI<RX, TX>>
+	{
+		static constexpr bool IS_UART = true;
+		static constexpr bool IS_HW_UART = false;
+		static constexpr bool IS_SW_UART = true;
+		static constexpr bool HAS_TX = true;
+		static constexpr bool HAS_RX = true;
+	};
+	template<board::DigitalPin TX, board::ExternalInterruptPin RX> struct UART_trait<soft::UART_EXT<RX, TX>>
+	{
+		static constexpr bool IS_UART = true;
+		static constexpr bool IS_HW_UART = false;
+		static constexpr bool IS_SW_UART = true;
+		static constexpr bool HAS_TX = true;
+		static constexpr bool HAS_RX = true;
+	};
+	/// @endcond
+}
+
 #endif /* SOFTUART_HH */
 /// @endcond

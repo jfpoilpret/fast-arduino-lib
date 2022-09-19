@@ -64,20 +64,20 @@ IOStreams2	Check real Vs. null ostream	5892	94	5976	94	6136	94	5810	94	5806	94	5
 IOStreams3	Check ostream error handling (UART)	3914	184												
 ArrayCheck	Unit Tests for array container	2744	170					2654	106						
 InitializerListCheck	Unit Tests for initializer_list	2796	170					2766	106						
-FutureCheck	Unit Tests of future API	7398	146									7418	146	7446	146
+FutureCheck	Unit Tests of future API	7406	146									7426	146	7454	146
 QueueCheck	Unit Tests of queue container	5784	202												
-LinkedListCheck	Unit Tests of linked list container	5806	463												
+LinkedListCheck	Unit Tests of linked list container	4706	463												
 UtilsCheck	Unit Tests of conversion utilities	3234	230												
-I2CFakeDevice	Example to check a fake I2C device does not get wrongly detected	3808	240					3302	78						
-AccelGyro0	Check of MPU6050 FIFO push/pop (i2c)	4278	265	4362	265	4448	265	3582	78			4298	265	4340	265
-AccelGyro1	Display (UATX) measures (gyro, accel) from MPU6050 (i2c)	3902	95	3986	95	4060	95	3828	70			3922	95	3956	95
-AccelGyro2	Display (UATX) continuous measures (gyro, accel) from MPU6050 FIFO (i2c)	4142	103	4226	103	4300	103	4066	110			4162	103	4196	103
-DS1307RTC1	Change RTC and display (UATX) date/time (i2c)	4848	322	4932	322	5004	322	4192	160	4188	160	4868	322	4910	322
-DS1307RTC2	Change RTC, display (UATX) date/time, use RAM and clock generation (i2c)	4752	98	4836	98	4892	98	4808	66	4804	66	4772	98	4800	98
-DS1307RTC3	Change RTC and display (UATX) date/time (i2c, asynchronous)	5184	268	5268	268	5344	268					5204	268	5246	268
-DS1307RTC4	Change RTC and display (UATX) date/time (i2c, asynchronous, with callback)	5116	270	5202	270	5278	270					5136	270	5180	270
-Magneto1	Display (UATX) measures (compass) from HMC5883L (i2c)	8132	236	8216	236	8396	236	3532	74			8152	236	8300	236
-Magneto2	Display (UATX) measures (compass) from HMC5883L (i2c, with DRDY interrupt)	3194	93	3278	93	3360	93	3224	100			3214	93	3256	93
+I2CFakeDevice	Example to check a fake I2C device does not get wrongly detected	3808	240					3292	78						
+AccelGyro0	Check of MPU6050 FIFO push/pop (i2c)	4296	265	4380	265	4466	265	3600	78			4316	265	4358	265
+AccelGyro1	Display (UATX) measures (gyro, accel) from MPU6050 (i2c)	3920	95	4004	95	4078	95	3846	70			3940	95	3974	95
+AccelGyro2	Display (UATX) continuous measures (gyro, accel) from MPU6050 FIFO (i2c)	4160	103	4244	103	4318	103	4084	110			4180	103	4214	103
+DS1307RTC1	Change RTC and display (UATX) date/time (i2c)	4866	322	4950	322	5022	322	4200	160	4196	160	4886	322	4928	322
+DS1307RTC2	Change RTC, display (UATX) date/time, use RAM and clock generation (i2c)	4688	98	4772	98	4828	98	4748	66	4744	66	4708	98	4736	98
+DS1307RTC3	Change RTC and display (UATX) date/time (i2c, asynchronous)	5208	268	5292	268	5368	268					5228	268	5270	268
+DS1307RTC4	Change RTC and display (UATX) date/time (i2c, asynchronous, with callback)	5152	270	5236	270	5312	270					5172	270	5214	270
+Magneto1	Display (UATX) measures (compass) from HMC5883L (i2c)	8142	236	8226	236	8406	236	3532	74			8162	236	8310	236
+Magneto2	Display (UATX) measures (compass) from HMC5883L (i2c, with DRDY interrupt)	3202	93	3286	93	3368	93	3250	100			3222	93	3264	93
 MultiADC00	Check MCP3x0x constexpr (compile only, does nothing)	132	0	200	0	260	0	62	0	58	0	152	0	168	0
 MultiADC01	MCP3008 pots reading and trace (UATX) (spi)	1998	74	2082	74	2172	74	1912	74	1908	74	2018	74	2046	74
 MultiADC02	MCP3X0X chips support compilation check (spi)	4394	74	4478	74	4614	74	4304	74	4300	74	4414	74	4442	74
@@ -86,22 +86,26 @@ MultiIO2	LED chaser with config buttons and LEDs on MCP23017 1 port (i2c)	1498	8
 MultiIO3	LED chaser with config buttons (callback function) and LEDs on MCP23017 2 ports (i2c)	1628	12												
 MultiIO4	LED chaser with config buttons (callback method) and LEDs on MCP23017 2 ports (i2c)	1640	10												
 MultiIO5	LED chaser with config buttons (callback method) and LEDs on MCP23008 (i2c)	1460	10					1402	10						
-MultiIO6	Multiple LED -switch mapper on MCP23008 (i2c)	4786	100												
+MultiIO6	Multiple LED -switch mapper on MCP23008 (i2c)	4762	100												
 MultiIO7	Simple LED chaser on MCP23008 (i2c)	1110	0												
-ToF1	VL53L0X example using only getters (i2c)	15596	350												
-ToF2	VL53L0X example using continuous ranging (i2c)	11404	342												
-ToF3	VL53L0X example using continuous ranging after settings input (i2c)	23338	390												
-ToF4	VL53L0X example using single ranging (i2c)	11790	348												
-ToF5	VL53L0X example using continuous ranging based on profile selection (i2c)	19736	378												
-ToF6	VL53L0X example using continuous ranging with GPIOs (i2c)	12644	336												
-ToF7	Double-VL53L0X example using continuous ranging (i2c)	11022	324												
+ToF1	VL53L0X example using only getters (i2c)	15600	350												
+ToF2	VL53L0X example using continuous ranging (i2c)	11460	342												
+ToF3	VL53L0X example using continuous ranging after settings input (i2c)	23174	390												
+ToF4	VL53L0X example using single ranging (i2c)	11766	348												
+ToF5	VL53L0X example using continuous ranging based on profile selection (i2c)	19548	378												
+ToF6	VL53L0X example using continuous ranging with GPIOs (i2c)	12656	336												
+ToF7	Double-VL53L0X example using continuous ranging (i2c)	11034	324												
 ToF8	VL53L0X example using continuous ranging based on profile selection and asynchronous I2C transactions (i2c)	9756	308												
-ToF9	VL53L0X example using continuous ranging with GPIOs and asynchronous I2C transactions (i2c)	10588	316												
+ToF9	VL53L0X example using continuous ranging with GPIOs and asynchronous I2C transactions (i2c)	10606	316												
 Servo1	Servo controlled by a pot through 8bits pulse timer	610	2	694	2	746	2	584	2			630	2	654	2
 Servo2	Servo controlled by a pot through 16bits pulse timer	562	0	646	0	690	0	508	0			582	0	598	0
 RF24App1	NRF24L01P ping-pong (UATX except ATtiny), no IRQ (spi)	4108	224	4204	224	4396	224	1680	8	1250	6	4126	224	4162	224
 RF24App2	NRF24L01P ping-pong (UATX except ATtiny), IRQ (spi)	4138	224	4234	224	4426	224	1724	8			4156	224	4192	224
 WinBond	Trace (UATX) WinBond flash chip read/writes (spi)	3354	330	3438	330	3550	330	3226	202	3222	202	3374	330	3402	330
+grove_serial1	Grove 125KHz RFID Reader in UART mode (hardware UART)	1570	132												
+grove_serial2	Grove 125KHz RFID Reader in UART mode (software UART)	1712	132												
+grove_wiegand1	Grove 125KHz RFID Reader in Wiegand mode (EXT pins)	2040	76												
+grove_wiegand2	Grove 125KHz RFID Reader in Wiegand mode (PCI pins)	1990	76												
 Sonar1	Display (UATX) sonar range meaures in blocking mode	2502	76	2586	76	2650	76	2486	76			2522	76	2558	76
 Sonar2	Display (UATX) sonar range meaures in INT mode	2630	78	2762	78	2834	78	2696	78			2650	78	2694	78
 Sonar3	Display (UATX) sonar range meaures in PCINT mode	2642	78	2774	78	2846	78	2700	78			2662	78	2706	78
@@ -121,6 +125,6 @@ tones5	Tone player from SRAM, playing asynchronously from ISR (QTonePlay)	1430	2
 tones6	Tone player from Flash, playing 2 channels asynchronously from RTT events (QTonePlay)	2270	60												
 tones7	Tone player from Flash, playing asynchronously from RTT events (QTonePlay)	1622	52												
 PCIFuture	Example of Future concept usage with PCI ISR	1840	76	1924	76	1940	76	1746	76	1744	76	1858	76	1894	76
-improved_futures	Example of FuturesGroup & status listener	4986	150									5006	150	5034	150
-improved_futures2	Example of output content listener	2804	148									2824	148	2852	148
+improved_futures	Example of FuturesGroup & status listener	4998	150									5018	150	5046	150
+improved_futures2	Example of output content listener	2822	148									2842	148	2870	148
 Conway	Game of Life (8x8 LED) 1KB Hackaday	2964	271	1202	10			1022	10						

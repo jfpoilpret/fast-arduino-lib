@@ -534,6 +534,37 @@ namespace serial::hard
 	/// @endcond
 }
 
+namespace serial
+{
+	/// @cond notdocumented
+	// Specific traits of HW UART classes
+	template<board::USART USART> struct UART_trait<hard::UATX<USART>>
+	{
+		static constexpr bool IS_UART = true;
+		static constexpr bool IS_HW_UART = true;
+		static constexpr bool IS_SW_UART = false;
+		static constexpr bool HAS_TX = true;
+		static constexpr bool HAS_RX = false;
+	};
+	template<board::USART USART> struct UART_trait<hard::UARX<USART>>
+	{
+		static constexpr bool IS_UART = true;
+		static constexpr bool IS_HW_UART = true;
+		static constexpr bool IS_SW_UART = false;
+		static constexpr bool HAS_TX = false;
+		static constexpr bool HAS_RX = true;
+	};
+	template<board::USART USART> struct UART_trait<hard::UART<USART>>
+	{
+		static constexpr bool IS_UART = true;
+		static constexpr bool IS_HW_UART = true;
+		static constexpr bool IS_SW_UART = false;
+		static constexpr bool HAS_TX = true;
+		static constexpr bool HAS_RX = true;
+	};
+	/// @endcond
+}
+
 #endif /* UCSR0A */
 #endif /* UART_HH */
 /// @endcond
