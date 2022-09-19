@@ -458,6 +458,11 @@ namespace devices::rf
 			uint8_t device;   //!< Device address (LSB).
 			uint16_t network; //!< Network address.
 
+			/** 
+			 * Create an `addr_t` from a netwrok and a device address
+			 * @param net network address
+			 * @param dev device address
+			 */
 			addr_t(uint16_t net, uint8_t dev) INLINE : device{dev}, network{net} {}
 		};
 

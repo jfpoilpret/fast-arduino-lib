@@ -200,8 +200,10 @@ namespace events
 		}
 
 	protected:
+		/// @cond notdocumented
 		Job(const Job&) =  default;
 		Job& operator=(const Job&) = default;
+		/// @endcond
 		
 		/**
 		 * This method is called by `Scheduler` whenever  current clock time is

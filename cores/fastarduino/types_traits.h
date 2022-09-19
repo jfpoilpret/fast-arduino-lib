@@ -105,11 +105,12 @@ namespace types_traits
 
 	/**
 	 * Remove a reference from the given type.
-	 * If @p T is a reference type (e.g. `int&` or `int&&`), then `remove_reference<T>::type`
+	 * If @p T is a reference type (e.g. `int&` or `int&&`), then "remove_reference<T>::type"
 	 * will be the type referred to by @p T (e.g. `int`).
 	 */
 	template<typename T> struct remove_reference
 	{
+		/** The type @p T without reference. */
 		using type = T;
 	};
 	/// @cond notdocumented

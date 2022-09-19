@@ -973,8 +973,10 @@ namespace devices::sonar
 	template<board::Timer NTIMER_> struct SonarEvent
 	{
 	public:
+		/// @cond notdocumented
 		SonarEvent(const SonarEvent&) = default;
 		SonarEvent& operator=(const SonarEvent&) = default;
+		/// @endcond
 
 		/** 
 		 * The type of `timer::RTT` used by the `MultiHCSR04` producing this `SonarEvent`. 

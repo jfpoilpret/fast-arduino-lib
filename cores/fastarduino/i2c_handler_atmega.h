@@ -308,8 +308,10 @@ namespace i2c
 			MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_>;
 
 	public:
+		/// @cond notdocumented
 		using ABSTRACT_FUTURE = typename PARENT::ABSTRACT_FUTURE;
 		template<typename OUT, typename IN> using FUTURE = typename PARENT::template FUTURE<OUT, IN>;
+		/// @endcond
 
 	protected:
 		/// @cond notdocumented
@@ -938,7 +940,9 @@ namespace i2c
 	{
 		using PARENT = AbstractI2CSyncATmegaManager<MODE_, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK>;
 	public:
+		/// @cond notdocumented
 		I2CSyncManager() : PARENT{} {}
+		/// @endcond
 	};
 
 	/**
@@ -959,7 +963,9 @@ namespace i2c
 	{
 		using PARENT = AbstractI2CSyncATmegaManager<MODE_, true, STATUS_HOOK_, false, I2C_DEBUG_HOOK>;
 	public:
+		/// @cond notdocumented
 		explicit I2CSyncStatusManager(STATUS_HOOK_ status_hook) : PARENT{status_hook} {}
+		/// @endcond
 	};
 
 	/**
@@ -979,7 +985,9 @@ namespace i2c
 	{
 		using PARENT = AbstractI2CSyncATmegaManager<MODE_, false, I2C_STATUS_HOOK, true, DEBUG_HOOK_>;
 	public:
+		/// @cond notdocumented
 		explicit I2CSyncDebugManager(DEBUG_HOOK_ debug_hook) : PARENT{nullptr, debug_hook} {}
+		/// @endcond
 	};
 
 	/**
@@ -1003,8 +1011,10 @@ namespace i2c
 	{
 		using PARENT = AbstractI2CSyncATmegaManager<MODE_, true, STATUS_HOOK_, true, DEBUG_HOOK_>;
 	public:
+		/// @cond notdocumented
 		explicit I2CSyncStatusDebugManager(STATUS_HOOK_ status_hook, DEBUG_HOOK_ debug_hook) 
 		: PARENT{status_hook, debug_hook} {}
+		/// @endcond
 	};
 
 	/// @cond notdocumented

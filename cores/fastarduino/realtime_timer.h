@@ -135,8 +135,10 @@ namespace timer
 	template<typename T> class RTTRawTime
 	{
 	public:
+		/// @cond notdocumented
 		RTTRawTime(const RTTRawTime&) = default;
 		RTTRawTime& operator=(const RTTRawTime&) = default;
+		/// @endcond
 
 		/**
 		 * Create a new `RTTRawTime` from @p millis milliseconds, and values

@@ -92,8 +92,10 @@ namespace gpio
 		using TRAIT = board_traits::Port_trait<PORT_>;
 
 	public:
+		/// @cond notdocumented
 		FastPin(const FastPin&) = default;
 		FastPin& operator=(const FastPin&) = default;
+		/// @endcond
 
 		/** The port to which this pin belongs. */
 		static constexpr const board::Port PORT = PORT_;
@@ -204,8 +206,10 @@ namespace gpio
 		using TRAIT = board_traits::Port_trait<PORT_>;
 
 	public:
+		/// @cond notdocumented
 		FastPort(const FastPort&) = default;
 		FastPort& operator=(const FastPort&) = default;
+		/// @endcond
 
 		/** The actual port in target MCU. */
 		static constexpr const board::Port PORT = PORT_;
@@ -378,8 +382,10 @@ namespace gpio
 		using TRAIT = board_traits::Port_trait<PORT_>;
 
 	public:
+		/// @cond notdocumented
 		FastMaskedPort(const FastMaskedPort&) = default;
 		FastMaskedPort& operator=(const FastMaskedPort&) = default;
+		/// @endcond
 
 		/** The actual port in target MCU. */
 		static constexpr const board::Port PORT = PORT_;

@@ -100,9 +100,11 @@ namespace streams
 	public:
 		ostreambuf(const ostreambuf&) = delete;
 		ostreambuf& operator=(const ostreambuf&) = delete;
-		
+
+		/// @cond notdocumented
 		template<uint8_t SIZE>
 		explicit ostreambuf(char (&buffer)[SIZE]) : QUEUE{buffer, true} {}
+		/// @endcond
 
 		/**
 		 * Wait until all buffer content has been pulled by a consumer.
@@ -265,7 +267,9 @@ namespace streams
 		 */
 		static const int EOF = -1;
 
+		/// @cond notdocumented
 		template<uint8_t SIZE> explicit istreambuf(char (&buffer)[SIZE]) : QUEUE{buffer, false} {}
+		/// @endcond
 
 		/**
 		 * @return number of available characters in buffer

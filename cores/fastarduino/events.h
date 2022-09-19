@@ -143,8 +143,10 @@ namespace events
 	template<typename T> class Event
 	{
 	public:
+		/// @cond notdocumented
 		Event(const Event&) = default;
 		Event& operator=(const Event&) = default;
+		/// @endcond
 
 		/**
 		 * The type of additional event value, as defined in template paraneter @p T.
@@ -296,8 +298,10 @@ namespace events
 		}
 
 	protected:
+		/// @cond notdocumented
 		EventHandler(const EventHandler&) = default;
 		EventHandler& operator=(const EventHandler&) = default;
+		/// @endcond
 		
 		/**
 		 * This pure virtual method is called by `Dispatcher::dispatch()` when

@@ -161,8 +161,10 @@ namespace devices::audio
 	class TonePlay
 	{
 	public:
+		/// @cond notdocumented
 		TonePlay(const TonePlay&) = default;
 		TonePlay& operator=(const TonePlay&) = default;
+		/// @endcond
 
 		/**
 		 * Default constructor, used only to declare an uninitialized
@@ -266,8 +268,10 @@ namespace devices::audio
 	template<board::Timer NTIMER, board::PWMPin OUTPUT> class QTonePlay
 	{
 	public:
+		/// @cond notdocumented
 		QTonePlay(const QTonePlay&) = default;
 		QTonePlay& operator=(const QTonePlay&) = default;
+		/// @endcond
 
 		/**
 		 * Default constructor, used only to declare an uninitialized
@@ -728,7 +732,7 @@ namespace devices::audio
 		 * finished playing.
 		 * @param melody a pointer, in SRAM, to the sequence of `TONE_PLAY` to be
 		 * played; the sequence MUST finish with a `SpecialTone::END`.
-		 * @param bpm the tempo (beats per minute) at which the melody shall be
+		 * @param beat the tempo (beats per minute) at which the melody shall be
 		 * played; one beat is the duration of a quarter note.
 		 * @sa play_eeprom()
 		 * @sa play_flash()
@@ -747,7 +751,7 @@ namespace devices::audio
 		 * finished playing.
 		 * @param melody a pointer, in EEPROM, to the sequence of `TONE_PLAY` to be
 		 * played; the sequence MUST finish with a `SpecialTone::END`.
-		 * @param bpm the tempo (beats per minute) at which the melody shall be
+		 * @param beat the tempo (beats per minute) at which the melody shall be
 		 * played; one beat is the duration of a quarter note.
 		 * @sa play_sram()
 		 * @sa play_flash()
@@ -766,7 +770,7 @@ namespace devices::audio
 		 * finished playing.
 		 * @param melody a pointer, in Flash, to the sequence of `TONE_PLAY` to be
 		 * played; the sequence MUST finish with a `SpecialTone::END`.
-		 * @param bpm the tempo (beats per minute) at which the melody shall be
+		 * @param beat the tempo (beats per minute) at which the melody shall be
 		 * played; one beat is the duration of a quarter note.
 		 * @sa play_eeprom()
 		 * @sa play_sram()
@@ -889,7 +893,7 @@ namespace devices::audio
 		 * Actual play is performed by frequent calls of `update()`.
 		 * @param melody a pointer, in SRAM, to the sequence of `TONE_PLAY` to be
 		 * played; the sequence MUST finish with a `SpecialTone::END`.
-		 * @param bpm the tempo (beats per minute) at which the melody shall be
+		 * @param beat the tempo (beats per minute) at which the melody shall be
 		 * played; one beat is the duration of a quarter note.
 		 * @sa play_eeprom()
 		 * @sa play_flash()
@@ -912,7 +916,7 @@ namespace devices::audio
 		 * Actual play is performed by frequent calls of `update()`.
 		 * @param melody a pointer, in EEPROM, to the sequence of `TONE_PLAY` to be
 		 * played; the sequence MUST finish with a `SpecialTone::END`.
-		 * @param bpm the tempo (beats per minute) at which the melody shall be
+		 * @param beat the tempo (beats per minute) at which the melody shall be
 		 * played; one beat is the duration of a quarter note.
 		 * @sa play_sram()
 		 * @sa play_flash()
@@ -935,7 +939,7 @@ namespace devices::audio
 		 * Actual play is performed by frequent calls of `update()`.
 		 * @param melody a pointer, in Flash, to the sequence of `TONE_PLAY` to be
 		 * played; the sequence MUST finish with a `SpecialTone::END`.
-		 * @param bpm the tempo (beats per minute) at which the melody shall be
+		 * @param beat the tempo (beats per minute) at which the melody shall be
 		 * played; one beat is the duration of a quarter note.
 		 * @sa play_eeprom()
 		 * @sa play_sram()

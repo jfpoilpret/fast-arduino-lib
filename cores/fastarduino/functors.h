@@ -90,12 +90,14 @@ namespace functor
 	template<typename T> class Identity
 	{
 	public:
+		/// @cond notdocumented
 		using ARG_TYPE = T;
 		using RES_TYPE = T;
 		RES_TYPE operator()(const ARG_TYPE& value) const
 		{
 			return value;
 		}
+		/// @endcond
 	};
 
 	/**
@@ -107,12 +109,14 @@ namespace functor
 	template<typename T, T VAL> class Constant
 	{
 	public:
+		/// @cond notdocumented
 		using ARG_TYPE = T;
 		using RES_TYPE = T;
 		RES_TYPE operator()(UNUSED const ARG_TYPE& value) const
 		{
 			return VAL;
 		}
+		/// @endcond
 	};
 
 	/**
@@ -124,12 +128,14 @@ namespace functor
 	template<typename ARG, typename RES> class Cast
 	{
 	public:
+		/// @cond notdocumented
 		using ARG_TYPE = ARG;
 		using RES_TYPE = RES;
 		RES_TYPE operator()(const ARG_TYPE& value) const
 		{
 			return (RES_TYPE) value;
 		}
+		/// @endcond
 	};
 
 	/**
@@ -140,6 +146,7 @@ namespace functor
 	template<typename F1, typename F2> class Compose
 	{
 	public:
+		/// @cond notdocumented
 		using ARG_TYPE = typename F2::ARG_TYPE;
 		using RES_TYPE = typename F1::RES_TYPE;
 		RES_TYPE operator()(const ARG_TYPE& value) const
@@ -148,6 +155,7 @@ namespace functor
 			F2 f2;
 			return f1(f2(value));
 		}
+		/// @endcond
 	};
 
 	/**
@@ -161,12 +169,14 @@ namespace functor
 	template<typename T, typename TT = T> class ChangeEndianness
 	{
 	public:
+		/// @cond notdocumented
 		using ARG_TYPE = T;
 		using RES_TYPE = T;
 		T operator()(const T& value) const
 		{
 			return value;
 		}
+		/// @endcond
 	};
 
 	/// @cond notdocumented
@@ -207,12 +217,14 @@ namespace functor
 	 */
 	template<typename FUNCTOR> struct Functor
 	{
+		/// @cond notdocumented
 		using ARG_TYPE = typename FUNCTOR::ARG_TYPE;
 		using RES_TYPE = typename FUNCTOR::RES_TYPE;
 		static RES_TYPE call(const ARG_TYPE& value)
 		{
 			return FUNCTOR{}(value);
 		}
+		/// @endcond
 	};
 }
 

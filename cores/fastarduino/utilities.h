@@ -491,6 +491,7 @@ namespace utils
 	 * Calculate the number of `1` bits in a byte. Calculation is performed at 
 	 * compile-time, provided that @p mask is a constant when the method is called.
 	 * @param mask the byte which you want to count the number of `1` bits
+	 * @param num used internally, always use default value for this argument!
 	 */
 	constexpr uint8_t num_bits(uint8_t mask, uint8_t num = 0)
 	{

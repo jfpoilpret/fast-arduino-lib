@@ -112,6 +112,7 @@ namespace devices
 		 */
 		struct Status
 		{
+			/// @cond notdocumented
 			bool busy() const
 			{
 				return value & bits::BV16(BUSY);
@@ -138,6 +139,7 @@ namespace devices
 			}
 
 			const uint16_t value;
+			/// @endcond
 
 		private:
 			Status(uint8_t sr1, uint8_t sr2) : value(utils::as_uint16_t(sr2, sr1)) {}
@@ -209,7 +211,9 @@ namespace devices
 		 */
 		struct Device
 		{
+			/** Manufacturer ID, always 0xEF. */
 			uint8_t manufacturer_ID;
+			/** Device ID */
 			uint8_t device_ID;
 		};
 

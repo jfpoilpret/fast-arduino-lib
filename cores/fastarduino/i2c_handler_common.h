@@ -419,11 +419,13 @@ namespace i2c
 	class AbstractI2CSyncManager
 	{
 	protected:
+		/// @cond notdocumented
 		using ARCH_HANDLER = ARCH_HANDLER_;
 		using MODE_TRAIT = I2CMode_trait<MODE_>;
 		using I2C_TRAIT = board_traits::TWI_trait;
 		using REG8 = board_traits::REG8;
 		using DEBUG = I2CDebugSupport<HAS_DEBUG_, DEBUG_HOOK_>;
+		/// @endcond
 
 	public:
 		/**

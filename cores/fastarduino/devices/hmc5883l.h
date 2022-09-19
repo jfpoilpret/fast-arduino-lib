@@ -111,10 +111,25 @@ namespace devices::magneto
 	{
 	public:
 		Status() = default;
+
+		/**
+		 * Readiness of device. 
+		 * 
+		 * @return true if full measure is ready to read
+		 * @return false if measure is not ready (currently being written to 
+		 * device registers)
+		 */
 		bool ready() const
 		{
 			return data_ & READY;
 		}
+
+		/**
+		 * Check datasheet p16 for further explanations.
+		 * 
+		 * @return true 
+		 * @return false 
+		 */
 		bool lock() const
 		{
 			return data_ & LOCK;

@@ -230,7 +230,7 @@ namespace timer
 	 * 
 	 * @tparam NTIMER_ the board::Timer to use for this PulseTimer
 	 * @tparam PRESCALER_ the prescaler value to use for this PulseTimer; it shall
-	 * be calculated with `timer::Calculator<NTIMER_>::PulseTimer_prescaler()`
+	 * be calculated with `timer::Calculator::PulseTimer_prescaler()`
 	 * @tparam T the type (`uint8_t` or `uint16_t`) of the Timer determined by @p NTIMER_;
 	 * you should not specify it yourself, as its default value alwayy matches @p NTIMER_.
 	 * 

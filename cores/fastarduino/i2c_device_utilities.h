@@ -99,7 +99,7 @@ namespace i2c
 		 * Create a ReadRegisterFuture future for a given device register @p reg.
 		 * This future can then be used to read the register value.
 		 * @param reg the address of the register to read from the I2C device
-		 * @param notifications determines if and which notifications should be
+		 * @param notification determines if and which notifications should be
 		 * dispatched by this ReadRegisterFuture; default is none.
 		 */
 		explicit ReadRegisterFuture(uint8_t reg,
@@ -158,7 +158,7 @@ namespace i2c
 		/**
 		 * Create a TReadRegisterFuture future.
 		 * This future can then be used to read the register value.
-		 * @param notifications determines if and which notifications should be
+		 * @param notification determines if and which notifications should be
 		 * dispatched by this TReadRegisterFuture; default is none.
 		 */
 		explicit TReadRegisterFuture(
@@ -221,7 +221,7 @@ namespace i2c
 		 * This future can then be used to write a value to the register.
 		 * @param reg the address of the register to write to in the I2C device
 		 * @param value the value to write to the register in the I2C device
-		 * @param notifications determines if and which notifications should be
+		 * @param notification determines if and which notifications should be
 		 * dispatched by this WriteRegisterFuture; default is none.
 		 */
 		explicit WriteRegisterFuture(
@@ -276,7 +276,7 @@ namespace i2c
 		 * Create a TWriteRegisterFuture future.
 		 * This future can then be used to write a value to the register.
 		 * @param value the value to write to the register in the I2C device
-		 * @param notifications determines if and which notifications should be
+		 * @param notification determines if and which notifications should be
 		 * dispatched by this TWriteRegisterFuture; default is none.
 		 */
 		explicit TWriteRegisterFuture(const ARG_TYPE& value = ARG_TYPE{},
@@ -386,7 +386,7 @@ namespace i2c
 		 * @param values the values to write to the registers in the I2C device;
 		 * all values must be the same type @p T and the list must contains the
 		 * same number of values as there are registers for this instance.
-		 * @param notifications determines if and which notifications should be
+		 * @param notification determines if and which notifications should be
 		 * dispatched by this TWriteMultiRegisterFuture; default is none.
 		 */
 		explicit TWriteMultiRegisterFuture(
@@ -562,7 +562,7 @@ namespace i2c
 		 * instance with the provided list of @p futures.
 		 * @param futures the array of futures to be handled by this group of futures
 		 * @param size the number of futures in @p futures
-		 * @param notifications determines if and which notifications should be
+		 * @param notification determines if and which notifications should be
 		 * dispatched by this I2CFuturesGroup; default is none.
 		 */
 		I2CFuturesGroup(ABSTRACT_FUTURE** futures, uint8_t size, 
@@ -702,7 +702,7 @@ namespace i2c
 		 * @param address address in flash space of the first byte to write to
 		 * the I2C device
 		 * @param size size in bytes of the array at @p address
-		 * @param notifications determines if and which notifications should be
+		 * @param notification determines if and which notifications should be
 		 * dispatched by this I2CSameFutureGroup; default is none.
 		 */
 		I2CSameFutureGroup(uint16_t address, uint8_t size, 

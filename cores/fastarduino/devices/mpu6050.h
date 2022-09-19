@@ -250,8 +250,11 @@ namespace devices::magneto
 	 */
 	struct AllSensors
 	{
+		/** 3 axis accelerometer measurements */
 		Sensor3D accel;
+		/** Temperature measurement */
 		int16_t temperature;
+		/** 3 axis gyroscope measurements */
 		Sensor3D gyro;
 	};
 

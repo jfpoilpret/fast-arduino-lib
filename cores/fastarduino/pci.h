@@ -164,13 +164,14 @@ namespace interrupt
 	 * `REGISTER_PCI_ISR_METHOD()` macros.
 	 * If you don't then use `REGISTER_PCI_ISR_EMPTY()` macro.
 	 * If you don't know the PCINT you need to handle but only a pin, then you can
-	 * use `PCIType<PIN>::TYPE`, or better `PCI_SIGNAL<PIN>`.
+	 * use `PCI_SIGNAL<PIN>`.
 	 * 
 	 * @tparam PCINT_ the PCINT vector you want to manage
 	 * @sa REGISTER_PCI_ISR_FUNCTION
 	 * @sa REGISTER_PCI_ISR_METHOD
 	 * @sa REGISTER_PCI_ISR_EMPTY
 	 * @sa PCIType
+	 * @sa PCI_SIGNAL
 	 */
 	template<uint8_t PCINT_> class PCISignal
 	{
