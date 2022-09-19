@@ -1,30 +1,31 @@
 <map id="fastarduino/pci.h" name="fastarduino/pci.h">
-<area shape="rect" id="node1" title="General API for handling Pin Change Interrupts." alt="" coords="573,5,692,32"/>
-<area shape="rect" id="node2" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04." alt="" coords="59,155,193,196"/>
-<area shape="rect" id="node3" href="$gpio_8h.html" title="General Purpose (digital) Input Output API." alt="" coords="570,80,695,107"/>
-<area shape="rect" id="node12" href="$soft__uart_8h.html" title="Software&#45;emulated serial API." alt="" coords="1038,162,1190,189"/>
-<area shape="rect" id="node4" href="$sipo_8h.html" title="API to handle &quot;SIPO&quot; (serial in parallel out) chips also known as &quot;shift registers&quot;,..." alt="" coords="217,155,352,196"/>
-<area shape="rect" id="node5" href="$memory_8h.html" title="Utilities to check memory usage." alt="" coords="376,162,524,189"/>
-<area shape="rect" id="node6" href="$pulse__timer_8h.html" title="PulseTimer API." alt="" coords="549,162,717,189"/>
-<area shape="rect" id="node8" href="$pwm_8h.html" title="PWM API." alt="" coords="741,162,871,189"/>
-<area shape="rect" id="node13" href="$spi_8h.html" title="SPI support for AVR MCU." alt="" coords="895,162,1013,189"/>
-<area shape="rect" id="node7" href="$servo_8h.html" title="API to handle servomotors." alt="" coords="565,244,700,285"/>
-<area shape="rect" id="node9" href="$square__wave_8h.html" title="SquareWave API, an API to generate square waves of any frequency." alt="" coords="724,244,853,285"/>
-<area shape="rect" id="node10" href="$tones_8h.html" title="API to handle tones (simple square waves) generation to a buzzer." alt="" coords="5,333,140,375"/>
-<area shape="rect" id="node11" href="$tone__player_8h.html" title="API to handle melody playing (tones as simple square waves) to a buzzer." alt="" coords="5,423,140,464"/>
-<area shape="rect" id="node14" href="$mcp3x0x_8h.html" title="API to handle SPI&#45;based MicroChip ADC chips family (MCP3001&#45;2&#45;4&#45;8, MCP3201&#45;2&#45;4&#45;8, MCP3301&#45;2&#45;4)." alt="" coords="877,244,1012,285"/>
-<area shape="rect" id="node26" href="$nrf24l01p_8h.html" title="API to handle &quot;nRF24L01+&quot; chip that allows bi&#45;directional wireless communication in the 2...." alt="" coords="1036,244,1171,285"/>
-<area shape="rect" id="node27" href="$winbond_8h.html" title="API to handle WinBond flash memory chips through SPI interface." alt="" coords="1195,244,1329,285"/>
-<area shape="rect" id="node28" href="$spi_8cpp_source.html" title=" " alt="" coords="1353,251,1485,278"/>
-<area shape="rect" id="node15" href="$mcp3001_8h.html" title="API to handle MicroChip ADC chip MCP3001." alt="" coords="164,333,299,375"/>
-<area shape="rect" id="node16" href="$mcp3002_8h.html" title="API to handle MicroChip ADC chip MCP3002." alt="" coords="323,333,457,375"/>
-<area shape="rect" id="node17" href="$mcp3004_8h.html" title="API to handle MicroChip ADC chip MCP3004." alt="" coords="481,333,616,375"/>
-<area shape="rect" id="node18" href="$mcp3008_8h.html" title="API to handle MicroChip ADC chip MCP3008." alt="" coords="640,333,775,375"/>
-<area shape="rect" id="node19" href="$mcp3201_8h.html" title="API to handle MicroChip ADC chip MCP3201." alt="" coords="799,333,933,375"/>
-<area shape="rect" id="node20" href="$mcp3202_8h.html" title="API to handle MicroChip ADC chip MCP3202." alt="" coords="957,333,1092,375"/>
-<area shape="rect" id="node21" href="$mcp3204_8h.html" title="API to handle MicroChip ADC chip MCP3204." alt="" coords="1116,333,1251,375"/>
-<area shape="rect" id="node22" href="$mcp3208_8h.html" title="API to handle MicroChip ADC chip MCP3208." alt="" coords="1275,333,1409,375"/>
-<area shape="rect" id="node23" href="$mcp3301_8h.html" title="API to handle MicroChip ADC chip MCP3301." alt="" coords="1433,333,1568,375"/>
-<area shape="rect" id="node24" href="$mcp3302_8h.html" title="API to handle MicroChip ADC chip MCP3302." alt="" coords="1592,333,1727,375"/>
-<area shape="rect" id="node25" href="$mcp3304_8h.html" title="API to handle MicroChip ADC chip MCP3304." alt="" coords="1751,333,1885,375"/>
+<area shape="rect" id="node1" title="General API for handling Pin Change Interrupts." alt="" coords="711,5,842,32"/>
+<area shape="rect" id="node2" href="$grove__rfid__reader_8h.html" title="API to handle Grove 125KHz RFID Reader." alt="" coords="259,155,412,196"/>
+<area shape="rect" id="node3" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04." alt="" coords="436,155,587,196"/>
+<area shape="rect" id="node4" href="$gpio_8h.html" title="General Purpose (digital) Input Output API." alt="" coords="796,80,936,107"/>
+<area shape="rect" id="node13" href="$soft__uart_8h.html" title="Software&#45;emulated serial API." alt="" coords="1513,162,1683,189"/>
+<area shape="rect" id="node5" href="$sipo_8h.html" title="API to handle &quot;SIPO&quot; (serial in parallel out) chips also known as &quot;shift registers&quot;,..." alt="" coords="1337,155,1488,196"/>
+<area shape="rect" id="node6" href="$memory_8h.html" title="Utilities to check memory usage." alt="" coords="611,162,777,189"/>
+<area shape="rect" id="node7" href="$pulse__timer_8h.html" title="PulseTimer API." alt="" coords="955,162,1145,189"/>
+<area shape="rect" id="node9" href="$pwm_8h.html" title="PWM API." alt="" coords="1169,162,1313,189"/>
+<area shape="rect" id="node14" href="$spi_8h.html" title="SPI support for AVR MCU." alt="" coords="801,162,931,189"/>
+<area shape="rect" id="node8" href="$servo_8h.html" title="API to handle servomotors." alt="" coords="1153,244,1304,285"/>
+<area shape="rect" id="node10" href="$square__wave_8h.html" title="SquareWave API, an API to generate square waves of any frequency." alt="" coords="1666,244,1810,285"/>
+<area shape="rect" id="node11" href="$tones_8h.html" title="API to handle tones (simple square waves) generation to a buzzer." alt="" coords="1927,333,2077,375"/>
+<area shape="rect" id="node12" href="$tone__player_8h.html" title="API to handle melody playing (tones as simple square waves) to a buzzer." alt="" coords="1927,423,2077,464"/>
+<area shape="rect" id="node15" href="$mcp3x0x_8h.html" title="API to handle SPI&#45;based MicroChip ADC chips family (MCP3001&#45;2&#45;4&#45;8, MCP3201&#45;2&#45;4&#45;8, MCP3301&#45;2&#45;4)." alt="" coords="965,244,1116,285"/>
+<area shape="rect" id="node27" href="$nrf24l01p_8h.html" title="API to handle &quot;nRF24L01+&quot; chip that allows bi&#45;directional wireless communication in the 2...." alt="" coords="791,244,941,285"/>
+<area shape="rect" id="node28" href="$winbond_8h.html" title="API to handle WinBond flash memory chips through SPI interface." alt="" coords="444,244,595,285"/>
+<area shape="rect" id="node29" href="$spi_8cpp_source.html" title=" " alt="" coords="619,251,766,278"/>
+<area shape="rect" id="node16" href="$mcp3001_8h.html" title="API to handle MicroChip ADC chip MCP3001." alt="" coords="1752,333,1903,375"/>
+<area shape="rect" id="node17" href="$mcp3002_8h.html" title="API to handle MicroChip ADC chip MCP3002." alt="" coords="5,333,156,375"/>
+<area shape="rect" id="node18" href="$mcp3004_8h.html" title="API to handle MicroChip ADC chip MCP3004." alt="" coords="180,333,331,375"/>
+<area shape="rect" id="node19" href="$mcp3008_8h.html" title="API to handle MicroChip ADC chip MCP3008." alt="" coords="355,333,505,375"/>
+<area shape="rect" id="node20" href="$mcp3201_8h.html" title="API to handle MicroChip ADC chip MCP3201." alt="" coords="529,333,680,375"/>
+<area shape="rect" id="node21" href="$mcp3202_8h.html" title="API to handle MicroChip ADC chip MCP3202." alt="" coords="704,333,855,375"/>
+<area shape="rect" id="node22" href="$mcp3204_8h.html" title="API to handle MicroChip ADC chip MCP3204." alt="" coords="879,333,1029,375"/>
+<area shape="rect" id="node23" href="$mcp3208_8h.html" title="API to handle MicroChip ADC chip MCP3208." alt="" coords="1053,333,1204,375"/>
+<area shape="rect" id="node24" href="$mcp3301_8h.html" title="API to handle MicroChip ADC chip MCP3301." alt="" coords="1228,333,1379,375"/>
+<area shape="rect" id="node25" href="$mcp3302_8h.html" title="API to handle MicroChip ADC chip MCP3302." alt="" coords="1403,333,1553,375"/>
+<area shape="rect" id="node26" href="$mcp3304_8h.html" title="API to handle MicroChip ADC chip MCP3304." alt="" coords="1577,333,1728,375"/>
 </map>

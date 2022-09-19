@@ -1,3 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html" title="Hold VL53L0X sequence steps timeouts and other related settings used for ranging." alt="" coords="5,5,204,47"/>
+<area shape="rect" id="node1" href="$classdevices_1_1vl53l0x_1_1_device_status.html" title="Status of device as retrieved by VL53L0X::get_range_status()." alt="" coords="5,5,187,47"/>
 </map>

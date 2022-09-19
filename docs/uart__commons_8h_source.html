@@ -189,9 +189,19 @@ $(document).ready(function(){initNavTree('uart__commons_8h_source.html',''); ini
 <div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    <span class="keyword">private</span>:</div>
 <div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        Errors errors_;</div>
 <div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    };</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;};</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160; </div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* UARTCOMMONS_HH */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160; </div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;    <span class="comment">// Useful traits for checking a provided type (in template) is an UART and what traits it supports</span></div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span>&gt; <span class="keyword">struct </span>UART_trait</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;    {</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> IS_UART = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> IS_HW_UART = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> IS_SW_UART = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> HAS_TX = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;        <span class="keyword">static</span> constexpr <span class="keywordtype">bool</span> HAS_RX = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;    };</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;};</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160; </div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* UARTCOMMONS_HH */</span><span class="preprocessor"></span></div>
 <div class="ttc" id="aclassserial_1_1_u_a_r_t_errors_html"><div class="ttname"><a href="classserial_1_1_u_a_r_t_errors.html">serial::UARTErrors</a></div><div class="ttdoc">Holder of latest UART errors.</div><div class="ttdef"><b>Definition:</b> <a href="uart__commons_8h_source.html#l00095">uart_commons.h:96</a></div></div>
 <div class="ttc" id="aclassserial_1_1_u_a_r_t_errors_html_a1a5d69e593b1484a6196d16fbae83cc7"><div class="ttname"><a href="classserial_1_1_u_a_r_t_errors.html#a1a5d69e593b1484a6196d16fbae83cc7">serial::UARTErrors::frame_error</a></div><div class="ttdeci">bool frame_error() const</div><div class="ttdoc">Indicate if a frame error has occurred.</div><div class="ttdef"><b>Definition:</b> <a href="uart__commons_8h_source.html#l00128">uart_commons.h:128</a></div></div>
 <div class="ttc" id="aclassserial_1_1_u_a_r_t_errors_html_a7bcc441d2fa2cb73940e09bd635a3afa"><div class="ttname"><a href="classserial_1_1_u_a_r_t_errors.html#a7bcc441d2fa2cb73940e09bd635a3afa">serial::UARTErrors::data_overrun</a></div><div class="ttdeci">bool data_overrun() const</div><div class="ttdoc">Indicate if a data overrun has occurred.</div><div class="ttdef"><b>Definition:</b> <a href="uart__commons_8h_source.html#l00138">uart_commons.h:138</a></div></div>

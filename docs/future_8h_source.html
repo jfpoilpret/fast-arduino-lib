@@ -170,7 +170,7 @@ $(document).ready(function(){initNavTree('future_8h_source.html',''); initResiza
 <div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;        <a class="code" href="namespacefuture.html#a9f72173fcd5be9bfef028415665efbe4accc0377a8afbf50e7094f5c23a8af223">INVALID</a></div>
 <div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160;    };</div>
 <div class="line"><a name="l00361"></a><span class="lineno">  361</span>&#160; </div>
-<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> OSTREAM&gt; OSTREAM&amp; operator&lt;&lt;(OSTREAM&amp; out, <a class="code" href="namespacefuture.html#a9f72173fcd5be9bfef028415665efbe4">FutureStatus</a> s)</div>
+<div class="line"><a name="l00363"></a><span class="lineno">  363</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> OSTREAM&gt; OSTREAM&amp; operator&lt;&lt;(OSTREAM&amp; out, <a class="code" href="namespacefuture.html#a9f72173fcd5be9bfef028415665efbe4">FutureStatus</a> status)</div>
 <div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;    {</div>
 <div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;        <span class="comment">// Conversion lambda for local usage</span></div>
 <div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;        <span class="keyword">auto</span> convert = [](<a class="code" href="namespacefuture.html#a9f72173fcd5be9bfef028415665efbe4">FutureStatus</a> s)</div>
@@ -193,7 +193,7 @@ $(document).ready(function(){initNavTree('future_8h_source.html',''); initResiza
 <div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;                <span class="keywordflow">return</span> <a class="code" href="flash_8h.html#a16c40764aaba0de309f5ff429c8bac15">F</a>(<span class="stringliteral">&quot;&quot;</span>);</div>
 <div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;            }</div>
 <div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;        };</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;        <span class="keywordflow">return</span> out &lt;&lt; convert(s);</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;        <span class="keywordflow">return</span> out &lt;&lt; convert(status);</div>
 <div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;    }</div>
 <div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160; </div>
 <div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160;    <span class="keyword">class </span>AbstractFuture;</div>

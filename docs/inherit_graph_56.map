@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classgpio_1_1_fast_masked_port.html" title="API that manipulates a part of a digital IO port." alt="" coords="5,5,167,47"/>
+<area shape="rect" id="node1" href="$classfuture_1_1_abstract_fake_future.html" title="Base class for all FakeFutures." alt="" coords="5,13,200,39"/>
+<area shape="rect" id="node2" href="$classfuture_1_1_fake_future.html" title="Actual FakeFuture, it has the exact same API as Future and can be used in lieu of Future." alt="" coords="248,5,388,47"/>
 </map>

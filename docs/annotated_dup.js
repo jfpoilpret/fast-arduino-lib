@@ -39,9 +39,17 @@ var annotated_dup =
       [ "mcp3x0x", "namespacedevices_1_1mcp3x0x.html", [
         [ "MCP3x0x", "classdevices_1_1mcp3x0x_1_1_m_c_p3x0x.html", "classdevices_1_1mcp3x0x_1_1_m_c_p3x0x" ]
       ] ],
+      [ "protocols", "namespacedevices_1_1protocols.html", [
+        [ "Wiegand", "classdevices_1_1protocols_1_1_wiegand.html", "classdevices_1_1protocols_1_1_wiegand" ]
+      ] ],
       [ "rf", "namespacedevices_1_1rf.html", [
         [ "NRF24L01", "classdevices_1_1rf_1_1_n_r_f24_l01.html", "classdevices_1_1rf_1_1_n_r_f24_l01" ],
         [ "IRQ_NRF24L01", "classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01.html", "classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01" ]
+      ] ],
+      [ "rfid", "namespacedevices_1_1rfid.html", [
+        [ "Grove125KHzRFIDReaderUART", "classdevices_1_1rfid_1_1_grove125_k_hz_r_f_i_d_reader_u_a_r_t.html", "classdevices_1_1rfid_1_1_grove125_k_hz_r_f_i_d_reader_u_a_r_t" ],
+        [ "Grove125KHzRFIDReaderWiegandEXT", "classdevices_1_1rfid_1_1_grove125_k_hz_r_f_i_d_reader_wiegand_e_x_t.html", "classdevices_1_1rfid_1_1_grove125_k_hz_r_f_i_d_reader_wiegand_e_x_t" ],
+        [ "Grove125KHzRFIDReaderWiegandPCI", "classdevices_1_1rfid_1_1_grove125_k_hz_r_f_i_d_reader_wiegand_p_c_i.html", "classdevices_1_1rfid_1_1_grove125_k_hz_r_f_i_d_reader_wiegand_p_c_i" ]
       ] ],
       [ "rtc", "namespacedevices_1_1rtc.html", [
         [ "tm", "structdevices_1_1rtc_1_1tm.html", "structdevices_1_1rtc_1_1tm" ],

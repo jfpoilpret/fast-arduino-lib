@@ -139,6 +139,9 @@ var hierarchy =
       [ "devices::rtc::DS1307< MANAGER >::SetRamFuture< SIZE_ >", "classdevices_1_1rtc_1_1_d_s1307_1_1_set_ram_future.html", null ]
     ] ],
     [ "devices::vl53l0x::GPIOSettings", "classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html", null ],
+    [ "devices::rfid::Grove125KHzRFIDReaderUART< UART_ >", "classdevices_1_1rfid_1_1_grove125_k_hz_r_f_i_d_reader_u_a_r_t.html", null ],
+    [ "devices::rfid::Grove125KHzRFIDReaderWiegandEXT< DATA0_, DATA1_ >", "classdevices_1_1rfid_1_1_grove125_k_hz_r_f_i_d_reader_wiegand_e_x_t.html", null ],
+    [ "devices::rfid::Grove125KHzRFIDReaderWiegandPCI< DATA0_, DATA1_ >", "classdevices_1_1rfid_1_1_grove125_k_hz_r_f_i_d_reader_wiegand_p_c_i.html", null ],
     [ "i2c::debug::I2CDebugLiveLogger< OSTREAM >", "classi2c_1_1debug_1_1_i2_c_debug_live_logger.html", [
       [ "i2c::debug::I2CDebugStatusLiveLogger< OSTREAM >", "classi2c_1_1debug_1_1_i2_c_debug_status_live_logger.html", null ]
     ] ],
@@ -170,6 +173,8 @@ var hierarchy =
     [ "functor::Identity< T >", "classfunctor_1_1_identity.html", null ],
     [ "std::initializer_list< T >", "classstd_1_1initializer__list.html", null ],
     [ "interrupt::INTSignal< EXTPIN_ >", "classinterrupt_1_1_i_n_t_signal.html", null ],
+    [ "interrupt::INTSignal< DATA0 >", "classinterrupt_1_1_i_n_t_signal.html", null ],
+    [ "interrupt::INTSignal< DATA1 >", "classinterrupt_1_1_i_n_t_signal.html", null ],
     [ "interrupt::INTSignal< IRQ >", "classinterrupt_1_1_i_n_t_signal.html", null ],
     [ "devices::magneto::INTStatus", "classdevices_1_1magneto_1_1_i_n_t_status.html", null ],
     [ "streams::ios_base", "classstreams_1_1ios__base.html", [
@@ -294,5 +299,6 @@ var hierarchy =
       [ "watchdog::WatchdogRTT", "classwatchdog_1_1_watchdog_r_t_t.html", [
         [ "watchdog::Watchdog< EVENT >", "classwatchdog_1_1_watchdog.html", null ]
       ] ]
-    ] ]
+    ] ],
+    [ "devices::protocols::Wiegand", "classdevices_1_1protocols_1_1_wiegand.html", null ]
 ];

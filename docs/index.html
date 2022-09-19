@@ -139,6 +139,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <li><b>fastarduino</b>: contains "core" FastArduino source files, handling all AVR MCU internal parts: Digital Input/Output, Timers, Analog-Digital Converters, Interrupts, I2C, SPI, Watchdog, UART...<ul>
 <li><b>boards</b>: contains MCU target specific files, defines as "traits"</li>
 <li><b>devices</b>: contains source code to implement support for various external devices, such as DS1307 RTC chip, HC-SR04 ultrasonic range sensor, NRF24L01+ Radio-frequency chip, Servomotor drives...</li>
+<li><b>tests</b>: contains a few utilities only used for building examples to test new features.</li>
 </ul>
 </li>
 </ul>
@@ -148,11 +149,13 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <li><a href="namespacebits.html">bits</a>: provides a few utilities for bits manipulation.</li>
 <li><a href="namespacecontainers.html">containers</a>: utility API to handle useful containers such as linked lists and queues; those are internally used by some FastArduino API but you can use them in your own programs as well.</li>
 <li><a href="namespacedevices.html">devices</a>: this namespace is used for all devices external to the MCU itself; most devices API comes in a sub namespace:<ul>
+<li><a href="namespacedevices_1_1protocols.html">protocols</a>: utilities for protocols used by some devices, e.g. Wiegand</li>
 <li><a href="namespacedevices_1_1audio.html">audio</a>: API for tone generation to buzzers or small audio amplifiers</li>
 <li><a href="namespacedevices_1_1magneto.html">magneto</a>: API for magnetometers, gyroscopes, accelerometers</li>
 <li><a href="namespacedevices_1_1mcp230xx.html">mcp230xx</a>: API for Microchip I/O expanders MCP23008 and MCP23017</li>
 <li><a href="namespacedevices_1_1mcp3x0x.html">mcp3x0x</a>: API for Microchip ADC chips family</li>
 <li><a href="namespacedevices_1_1rf.html">rf</a>: API for radio-frequency chips</li>
+<li><a href="namespacedevices_1_1rfid.html">rfid</a>: API for RFID devices</li>
 <li><a href="namespacedevices_1_1rtc.html">rtc</a>: API for real time clock chips</li>
 <li><a href="namespacedevices_1_1servo.html">servo</a>: API to handle servomotors</li>
 <li><a href="namespacedevices_1_1sonar.html">sonar</a>: API to handle sonar range sensors</li>
