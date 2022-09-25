@@ -1,6 +1,5 @@
 var NAVTREEINDEX1 =
 {
-"classdevices_1_1audio_1_1_q_tone_play.html#a9d1b852ce288ee22218017993b498c9c":[6,0,2,0,2,6],
 "classdevices_1_1audio_1_1_q_tone_play.html#aa6d258664103326801f379a2e2d52914":[6,0,2,0,2,5],
 "classdevices_1_1audio_1_1_q_tone_play.html#ae170c2aa17e5326e47c3932c46629c63":[6,0,2,0,2,0],
 "classdevices_1_1audio_1_1_tone_generator.html":[6,0,2,0,6],
@@ -249,5 +248,6 @@ var NAVTREEINDEX1 =
 "classdevices_1_1rfid_1_1_grove125_k_hz_r_f_i_d_reader_u_a_r_t.html#ad25b9e330e5cd589ac5aa326fa8d6991":[6,0,2,6,0,5],
 "classdevices_1_1rfid_1_1_grove125_k_hz_r_f_i_d_reader_u_a_r_t.html#ae41a0e291b11ab11dfd00a9c309c2330":[6,0,2,6,0,4],
 "classdevices_1_1rfid_1_1_grove125_k_hz_r_f_i_d_reader_wiegand_e_x_t.html":[6,0,2,6,1],
-"classdevices_1_1rfid_1_1_grove125_k_hz_r_f_i_d_reader_wiegand_e_x_t.html#a04da3eeb5598a0ecb0776887e78725a7":[6,0,2,6,1,3]
+"classdevices_1_1rfid_1_1_grove125_k_hz_r_f_i_d_reader_wiegand_e_x_t.html#a04da3eeb5598a0ecb0776887e78725a7":[6,0,2,6,1,3],
+"classdevices_1_1rfid_1_1_grove125_k_hz_r_f_i_d_reader_wiegand_e_x_t.html#a5c869fbf64b8c7d78ab3df920255bd8f":[6,0,2,6,1,0]
 };
