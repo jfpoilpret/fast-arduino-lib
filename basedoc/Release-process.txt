@@ -13,6 +13,45 @@ Release procedure
 9. Official release in github
 10. Close milestone in github
 
+FastArduino 1.9 release
+
+I am happy to announce the 10th major release of FastArduino platform.
+
+Since release 1.8 (October 2021), the main changes are listed [there](https://github.com/jfpoilpret/fast-arduino-lib/milestone/11?closed=1).
+
+This release brings the following improvements:
+- Support for Grove 125KHz RFID reader
+- Prevention of dynamic allocation (too dangerous on target AVR MCU)
+- Code and data size improvement by removing `virtual` methods in Futures, ostreambuf
+- API simplification by removing useless Lifecycle support
+- Improvement of `TonePlayer` API (new `Beat` type)
+- Improve I2C support utilities (e.g. with functors)
+- Add new bits utility functions
+- Add `swap_bytes()` functions for 64-bits words
+- Fix bad includes of "streams.h" in some API (preventing proper use of "empty_streams.h")
+- Fixing various issues in API documentation
+
+Note on upgrading to 1.9 version
+Several changes in 1.9 may break some existing programs.
+- dynamic allocation disabled: if your code is using `new` or `delete` it will not compile anymore; this decision was made to avoid dynamic allocation in AVR MCU programs, because dynamic allocation may fragment the heap which size is too limited on AVR.
+- ostreambuf `virtual` methods removed: if you use UART (hardware oor software) for serial reception, you will need to register the used UART type as an ostreambuf listener with `REGISTER_OSTREAMBUF_LISTENERS()`.
+- Future `virtual` methods removed: if you use I2C devices, you will need to call `REGISTER_FUTURE_STATUS_LISTENERS()`, `REGISTER_FUTURE_OUTPUT_LISTENERS()`, or their opposites `REGISTER_FUTURE_STATUS_NO_LISTENERS(), `REGISTER_FUTURE_OUTPUT_NO_LISTENERS()`.
+- if you use TonePlay or QTonePlay, you will need to Beat instances (instead of integral BPM) to `play_xxx()` methods.
+You may check updated examples for concrete code showing the new adaptations needed.
+
+Known bugs and requests for enhancements: https://github.com/jfpoilpret/fast-arduino-lib/issues
+
+The platform is well documented:
+
+- a [tutorial](http://jfpoilpret.github.io/fast-arduino-lib/tutorial.html) allows developers to discover and learn the platform step by step
+- FastArduino core API is documented through doxygen and documentation is published [here](http://jfpoilpret.github.io/fast-arduino-lib/)
+- FastArduino comes with many examples covering all supported features and devices
+
+I hope you'll enjoy playing with FastArduino platform; please submit enhancements you would like 
+to see in future versions or report issues you may discover.
+
+  
+
 FastArduino 1.8 release
 
 I am happy to announce the 9th major release of FastArduino platform.
