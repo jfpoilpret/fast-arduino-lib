@@ -161,14 +161,14 @@ The roadmap of next activities and new supported features is the following:
 - [Milestone v1.6](https://github.com/jfpoilpret/fast-arduino-lib/milestone/8?closed=1) (released on 22.11.2020)
 - [Milestone v1.7](https://github.com/jfpoilpret/fast-arduino-lib/milestone/9?closed=1) (released on 19.09.2021)
 - [Milestone v1.8](https://github.com/jfpoilpret/fast-arduino-lib/milestone/10?closed=1) (release on 10.10.2021)
-- [Milestone v1.9](https://github.com/jfpoilpret/fast-arduino-lib/milestone/11?closed=1) (release on 25.09.2021)
-- [Milestone v1.10](https://github.com/jfpoilpret/fast-arduino-lib/milestone/12) (to be released on 30.11.2021)
+- [Milestone v1.9](https://github.com/jfpoilpret/fast-arduino-lib/milestone/11?closed=1) (release on 25.09.2022)
+- [Milestone v1.10](https://github.com/jfpoilpret/fast-arduino-lib/milestone/12) (to be released on 30.12.2022)
 - [Milestone v2.0](https://github.com/jfpoilpret/fast-arduino-lib/milestone/3) (undefined date)
 - [Later](https://github.com/jfpoilpret/fast-arduino-lib/issues?q=is%3Aopen+is%3Aissue+no%3Amilestone)
 
 Documentation - no milestones
 -----------------------------
-- Document how to add support for other boards in Tutorial (1st half 2022)
+- Document how to add support for other boards in Tutorial (1st half 2023)
 
 Milestones dates are "best effort" and may change based on contributors' availability.
 
