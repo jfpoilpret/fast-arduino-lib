@@ -15,12 +15,14 @@
 /*
  * TODO
  * 
- * Wiring: TODO
+ * Wiring: 
  * - on ATmega328P based boards (including Arduino UNO):
- *   - D13 (SCK): connected to SPI device SCK pin
- *   - D12 (MISO): connected to SPI device MISO pin (sometimes called Dout)
- *   - D11 (MOSI): connected to SPI device MOSI pin (sometimes called Din)
- *   - D10 (SS): connected to SPI device CS pin
+ *   - D13 (SCK): connected to 5110 breakout SCLK pin (via level converter)
+ *   - D11 (MOSI): connected to 5110 breakout DN pin (via level converter)
+ *   - D10 (SS): connected to 5110 breakout SCE pin (via level converter)
+ *   - D9: connected to 5110 breakout D/C pin (via level converter)
+ *   - 5110 breakout RST pin connected to 3.3V via 10K resistor (pullup)
+ *   - 5110 breakout LED pin connected to 3.3V via 330 resistor
  *   - direct USB access (traces output)
  */
 
@@ -29,7 +31,9 @@
 #include <fastarduino/time.h>
 #include <fastarduino/uart.h>
 
-//TODO check board here
+#ifndef ARDUINO_UNO
+#error "Current target is not supported!"
+#endif
 
 using UART = serial::hard::UATX<board::USART::USART0>;
 
@@ -44,12 +48,15 @@ static char output_buffer[OUTPUT_BUFFER_SIZE];
 // For testing we use default SS pin as CS
 static constexpr const board::DigitalPin CS = board::DigitalPin::D10_PB2;
 static constexpr const board::DigitalPin DC = board::DigitalPin::D9_PB1;
+static constexpr const board::DigitalPin RES = board::DigitalPin::D8_PB0;
 
-using NOKIA = devices::display::LCD5110<CS, DC>;
+using NOKIA = devices::display::LCD5110<CS, DC, RES>;
 
 using streams::endl;
 using streams::dec;
 using streams::hex;
+
+static constexpr uint16_t DELAY_MS = 2000;
 
 int main()
 {
@@ -67,19 +74,19 @@ int main()
 	out << F("SPI initialized") << endl;
 	
 	// Start or init SPI device if needed
-	NOKIA nokia;
+	NOKIA nokia{false};
 	out << F("Nokia initialized") << endl;
 	nokia.set_font(devices::display::FONT1);
 	nokia.power_up();
 	out << F("Nokia powered up") << endl;
-	time::delay_ms(1000);
+	time::delay_ms(DELAY_MS);
 	nokia.erase();
 	out << F("Nokia erased") << endl;
-	time::delay_ms(1000);
+	time::delay_ms(DELAY_MS);
 	nokia.normal();
 	out << F("Nokia normal mode") << endl;
 
-	time::delay_ms(1000);
+	time::delay_ms(DELAY_MS);
 	nokia.write_char(0, 0, 'A');
 	nokia.write_char(0, 1, 'B');
 	nokia.write_char(0, 2, 'C');
@@ -88,7 +95,7 @@ int main()
 	nokia.write_char(0, 5, 'F');
 	out << F("Nokia ABCDEF") << endl;
 
-	time::delay_ms(1000);
+	time::delay_ms(DELAY_MS);
 	nokia.write_char(1, 0, 'a');
 	nokia.write_char(1, 1, 'b');
 	nokia.write_char(1, 2, 'c');
@@ -97,23 +104,26 @@ int main()
 	nokia.write_char(1, 5, 'f');
 	out << F("Nokia abcdef") << endl;
 
-	time::delay_ms(1000);
+	time::delay_ms(DELAY_MS);
 	nokia.invert();
 	out << F("Nokia invert") << endl;
 
-	time::delay_ms(1000);
+	time::delay_ms(DELAY_MS);
 	nokia.normal();
 	out << F("Nokia normal") << endl;
 
-	time::delay_ms(1000);
+	time::delay_ms(DELAY_MS);
+	nokia.write_string(2, 0, "Coucou!");
+
+	time::delay_ms(DELAY_MS);
 	nokia.blank();
 	out << F("Nokia blank") << endl;
 
-	time::delay_ms(1000);
+	time::delay_ms(DELAY_MS);
 	nokia.full();
 	out << F("Nokia full") << endl;
 
 	// Stop SPI device if needed
-	time::delay_ms(1000);
+	time::delay_ms(DELAY_MS);
 	out << F("End") << endl;
 }
