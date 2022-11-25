@@ -48,15 +48,27 @@
 #include "../time.h"
 #include "../utilities.h"
 
+//TODO ensure display_ is used wherever needed
+//		- write char/string
+//		- only update() should transfer pixels data to device!
+//TODO optimize update() to allow regions update and replace all calls!
+//TODO add graphics pixels API
+
+//TODO Add image API (pixmap)
+//		- format?
+//		- converters?
+
 //TODO better use of spi start/end transaction (do once only)
-//TODO infer generic font support
+
+//TODO infer generic font support: different widths, different characters sets (range)
+
+//TODO API DOC
+
+// Optional improvements:
 //TODO optimize function mode text-only / graphics
+//TODO define specific ostream for display (is that even possible)?
 namespace devices
 {
-	/**
-	 * TODO namespace doc
-	 * 
-	 */
 	namespace display
 	{
 	}
@@ -121,10 +133,30 @@ namespace devices::display
 			set_display_contrast(DEFAULT_VOP);
 		}
 
+		//TODO temp control API?
+		// void set_temperature_control();
+
+		void set_display_bias(uint8_t bias)
+		{
+			if (bias > MAX_BIAS) bias = MAX_BIAS;
+			send_command(FUNCTION_SET_MASK | FUNCTION_SET_EXTENDED);
+			send_command(EXTENDED_SET_BIAS | bias);
+			send_command(FUNCTION_SET_MASK);
+		}
+
+		void set_display_contrast(uint8_t contrast)
+		{
+			if (contrast > MAX_VOP) contrast = MAX_VOP;
+			send_command(FUNCTION_SET_MASK | FUNCTION_SET_EXTENDED);
+			send_command(EXTENDED_SET_VOP | contrast);
+			send_command(FUNCTION_SET_MASK);
+		}
+
 		void power_down()
 		{
 			send_command(FUNCTION_SET_MASK | FUNCTION_SET_POWER_DOWN);
 		}
+
 		void power_up()
 		{
 			send_command(FUNCTION_SET_MASK);
@@ -134,14 +166,17 @@ namespace devices::display
 		{
 			send_command(DISPLAY_CONTROL_MASK | DISPLAY_CONTROL_BLANK);
 		}
+
 		void full()
 		{
 			send_command(DISPLAY_CONTROL_MASK | DISPLAY_CONTROL_FULL);
 		}
+
 		void invert()
 		{
 			send_command(DISPLAY_CONTROL_MASK | DISPLAY_CONTROL_INVERSE);
 		}
+
 		void normal()
 		{
 			send_command(DISPLAY_CONTROL_MASK | DISPLAY_CONTROL_NORMAL);
@@ -159,37 +194,34 @@ namespace devices::display
 		// The API work directly on device
 		void write_char(uint8_t row, uint8_t column, char value)
 		{
-			//FIXME check that `value` is allowed => create a function for that!
-			// Find first byte (vertical) of character in font_
-			uint16_t index  = (uint8_t(value) - FONT_1ST_CHAR) * FONT_WIDTH;
-			const uint8_t* ptr = &font_[index];
-			uint8_t char_bytes[FONT_WIDTH];
-			//TODO find better API of read_flash()!
-			flash::read_flash(uint16_t(ptr), char_bytes, FONT_WIDTH);
-
+			//FIXME check column and row not out of range!
+			// Load pixmap for `value` character
+			uint8_t pixmap[FONT_WIDTH];
+			if (get_char_pixmap(value, pixmap) == nullptr)
+				return;
 			set_rc(row, column * (FONT_WIDTH + 1));
 			dc_.set();
 			this->start_transfer();
+			//TODO Array transfer faster?
 			for (uint8_t i = 0; i < FONT_WIDTH; ++i)
-				this->transfer(char_bytes[i]);
+				this->transfer(pixmap[i]);
 			// Add intercharacter space column
 			this->transfer(uint8_t(0));
 			this->end_transfer();
 		}
 
 		//NOTE: there is no auto LF in this function!
-		void write_string(uint8_t row, uint8_t column, const char* value)
+		void write_string(uint8_t row, uint8_t column, const char* content)
 		{
-			while (*value)
-			{
-				write_char(row, column++, *value);
-				++value;
-			}
+			while (*content)
+				write_char(row, column++, *content++);
 		}
 
-		void write_string(uint8_t row, uint8_t column, const flash::FlashStorage* value)
+		void write_string(uint8_t row, uint8_t column, const flash::FlashStorage* content)
 		{
-			//TODO
+			uint16_t address = (uint16_t) content;
+			while (char value = pgm_read_byte(address++))
+				write_char(row, column++, value);
 		}
 
 		void set_bitmap()
@@ -219,23 +251,6 @@ namespace devices::display
 				this->transfer(display_[i]);
 			}
 			this->end_transfer();
-		}
-
-		// Shouldn't these 3 functions be set together?
-		// void set_temperature_control();
-		void set_display_bias(uint8_t bias)
-		{
-			if (bias > MAX_BIAS) bias = MAX_BIAS;
-			send_command(FUNCTION_SET_MASK | FUNCTION_SET_EXTENDED);
-			send_command(EXTENDED_SET_BIAS | bias);
-			send_command(FUNCTION_SET_MASK);
-		}
-		void set_display_contrast(uint8_t contrast)
-		{
-			if (contrast > MAX_VOP) contrast = MAX_VOP;
-			send_command(FUNCTION_SET_MASK | FUNCTION_SET_EXTENDED);
-			send_command(EXTENDED_SET_VOP | contrast);
-			send_command(FUNCTION_SET_MASK);
 		}
 
 		// Drawing API?
@@ -273,6 +288,13 @@ namespace devices::display
 			this->end_transfer();
 		}
 
+		bool is_valid_rc(uint8_t row, uint8_t col) const
+		{
+			if (row > (ROWS / 8)) return false;
+			if (col > COLS) return false;
+			return true;
+		}
+
 		void set_rc(uint8_t row, uint8_t col)
 		{
 			if (row > (ROWS / 8)) row = 0;
@@ -282,6 +304,16 @@ namespace devices::display
 			this->transfer(row | SET_Y_ADDRESS);
 			this->transfer(col | SET_X_ADDRESS);
 			this->end_transfer();
+		}
+
+		uint8_t* get_char_pixmap(char value, uint8_t pixmap[FONT_WIDTH]) const
+		{
+			if ((value < FONT_1ST_CHAR) || (value >= FONT_1ST_CHAR + FONT_TOTAL_CHARS))
+				return nullptr;
+			// Find first byte (vertical) of character in font_
+			uint16_t index  = (uint8_t(value) - FONT_1ST_CHAR) * FONT_WIDTH;
+			const uint8_t* ptr = &font_[index];
+			return flash::read_flash(uint16_t(ptr), pixmap, FONT_WIDTH);
 		}
 
 		// Font used in characters display

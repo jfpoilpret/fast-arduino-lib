@@ -116,6 +116,9 @@ int main()
 	nokia.write_string(2, 0, "Coucou!");
 
 	time::delay_ms(DELAY_MS);
+	nokia.write_string(2, 0, F("Coucou!"));
+
+	time::delay_ms(DELAY_MS);
 	nokia.blank();
 	out << F("Nokia blank") << endl;
 
