@@ -85,7 +85,7 @@ namespace devices::display
 {
 	// Coordinates systems conventions (variable naming)
 	// - (x,y) coordinates of one pixel in the LCD matrix
-	// - (r,c) coordinates of 8-pixel vertical bar in the LCD matrix
+	// - (r,c) coordinates of an 8-pixel vertical bar in the LCD matrix
 	// - (row, column) coordinates of one character (8x5 pixels + 1 spacing) in the LCD matrix
 
 	// Screen update is not automatic! You must call update() once you have changed display bitmap content
@@ -418,14 +418,14 @@ namespace devices::display
 		}
 
 		//TODO review utility and possibly code and naming guidelines
-		void set_rc(uint8_t row, uint8_t col)
+		void set_rc(uint8_t r, uint8_t c)
 		{
-			if (row > (ROWS / ROW_HEIGHT)) row = 0;
-			if (col > COLS) col = 0;
+			if (r > (ROWS / ROW_HEIGHT)) r = 0;
+			if (c > COLS) c = 0;
 			dc_.clear();
 			this->start_transfer();
-			this->transfer(row | SET_ROW_ADDRESS);
-			this->transfer(col | SET_COL_ADDRESS);
+			this->transfer(r | SET_ROW_ADDRESS);
+			this->transfer(c | SET_COL_ADDRESS);
 			this->end_transfer();
 		}
 
