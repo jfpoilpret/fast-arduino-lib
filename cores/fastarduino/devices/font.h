@@ -62,7 +62,6 @@ namespace devices::display
 			if ((val < first_char_) || (val > last_char_))
 				return 0;
 			// Find first byte of character in glyphs_
-			//TODO the following LOC will draw multiply maths functions!
 			uint16_t index  = (val - first_char_) * glyph_size();
 			return uint16_t(&glyphs_[index]);
 		}

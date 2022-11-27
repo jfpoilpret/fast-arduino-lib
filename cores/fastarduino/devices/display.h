@@ -22,6 +22,7 @@
 #define DISPLAY_HH
 
 #include "../flash.h"
+#include "font.h"
 
 namespace devices
 {
@@ -93,6 +94,8 @@ namespace devices::display
 	// - expected API?
 	template<typename DisplayDevice> class Display: public DisplayDevice
 	{
+		static constexpr bool VERTICAL_FONT = DisplayDevice::VERTICAL_FONT;
+
 	public:
 		using COORDINATE = typename DisplayDevice::COORDINATE;
 		using INVALID_AREA = InvalidArea<COORDINATE>;
@@ -103,6 +106,11 @@ namespace devices::display
 
 		Display() = default;
 
+		void set_font(const Font<VERTICAL_FONT>& font)
+		{
+			font_ = &font;
+		}
+
 		void erase()
 		{
 			DisplayDevice::erase();
@@ -111,20 +119,21 @@ namespace devices::display
 
 		void write_char(COORDINATE x, COORDINATE y, char value)
 		{
+			if (font_ == nullptr) return;
 			if (!is_valid_xy(x, y)) return;
-			const INVALID_AREA invalid = DisplayDevice::write_char(x, y, value);
+			const INVALID_AREA invalid = DisplayDevice::write_char(*font_, x, y, value);
 			invalidate(invalid);
 		}
 
 		void write_string(COORDINATE x, COORDINATE y, const char* content)
 		{
+			if (font_ == nullptr) return;
 			if (!is_valid_xy(x, y)) return;
 			INVALID_AREA invalid = INVALID_AREA::EMPTY;
 			while (*content)
 			{
-				invalid += DisplayDevice::write_char(x, y, *content++);
-				//TODO should be a Font API!
-				x += DisplayDevice::font_width() + 1;
+				invalid += DisplayDevice::write_char(*font_, x, y, *content++);
+				x += font_->width() + 1;
 			}
 			// Invalidate if needed
 			invalidate(invalid);
@@ -132,13 +141,14 @@ namespace devices::display
 
 		void write_string(COORDINATE x, COORDINATE y, const flash::FlashStorage* content)
 		{
+			if (font_ == nullptr) return;
 			if (!is_valid_xy(x, y)) return;
 			INVALID_AREA invalid = INVALID_AREA::EMPTY;
 			uint16_t address = (uint16_t) content;
 			while (char value = pgm_read_byte(address++))
 			{
-				invalid += DisplayDevice::write_char(x, y, value);
-				x += DisplayDevice::font_width() + 1;
+				invalid += DisplayDevice::write_char(*font_, x, y, value);
+				x += font_->width() + 1;
 			}
 			// Invalidate if needed
 			invalidate(invalid);
@@ -212,6 +222,7 @@ namespace devices::display
 	private:
 		// Minimal rectangle to update
 		INVALID_AREA invalid_area_;
+		const Font<VERTICAL_FONT>* font_ = nullptr;
 	};
 }
 

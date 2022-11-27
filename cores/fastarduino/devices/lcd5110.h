@@ -124,6 +124,8 @@ namespace devices::display
 		static constexpr COORDINATE HEIGHT = 48;
 		static constexpr COORDINATE DEPTH = 1;
 
+		static constexpr bool VERTICAL_FONT = true;
+
 	public:
 		//TODO temp control API?
 		// void set_temperature_control();
@@ -182,13 +184,6 @@ namespace devices::display
 			send_command(DISPLAY_CONTROL_MASK | DISPLAY_CONTROL_NORMAL);
 		}
 
-		//TODO what if font_ is nullptr?
-		//TODO put to Display class?
-		void set_font(const Font<true>& font)
-		{
-			font_ = &font;
-		}
-
 	protected:
 		/**
 		 * Create a new device driver for a Nokia 5110 display chip.
@@ -209,11 +204,6 @@ namespace devices::display
 		void erase()
 		{
 			memset(display_, 0, sizeof(display_));
-		}
-
-		uint8_t font_width() const
-		{
-			return font_->width();
 		}
 
 		// NOTE Coordinates must have been first verified by caller
@@ -241,18 +231,18 @@ namespace devices::display
 		}
 
 		// NOTE Coordinates must have been first verified by caller
-		INVALID_AREA write_char(uint8_t x, uint8_t y, char value)
+		INVALID_AREA write_char(const Font<true>& font, uint8_t x, uint8_t y, char value)
 		{
 			if (y % ROW_HEIGHT != 0) return INVALID_AREA::EMPTY;
 
 			// Check column and row not out of range for characters!
-			const uint8_t width = font_->width();
+			const uint8_t width = font.width();
 			const uint8_t row = y / ROW_HEIGHT;
 			const uint8_t col = x;
 			if ((col + width) > WIDTH) return INVALID_AREA::EMPTY;
 
 			// Load pixmap for `value` character
-			uint16_t glyph_ref = font_->get_char_glyph_ref(value);
+			uint16_t glyph_ref = font.get_char_glyph_ref(value);
 			if (glyph_ref == 0)
 				return INVALID_AREA::EMPTY;
 
@@ -260,8 +250,8 @@ namespace devices::display
 			uint8_t* display_ptr = get_display(row, col);
 
 			for (uint8_t i = 0; i < width; ++i)
-				*display_ptr++ = font_->get_char_glyph_byte(glyph_ref, i);
-			return INVALID_AREA{x, y, COORDINATE(x + font_->width() + 1), y};
+				*display_ptr++ = font.get_char_glyph_byte(glyph_ref, i);
+			return INVALID_AREA{x, y, COORDINATE(x + width + 1), y};
 		}
 
 		void set_bitmap()
@@ -345,9 +335,6 @@ namespace devices::display
 		{
 			return &display_[r * WIDTH + c];
 		}
-
-		// Font used in characters display
-		const Font<true>* font_ = nullptr;
 
 		// Display map (copy of chip display map)
 		// Format:	R1C1 R1C2 ... R1Cn
