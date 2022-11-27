@@ -33,8 +33,6 @@
  * Vcc = 3.3V (not 5V), thus any inputs shall be limited to 3.3V.
  * The only safe ways to do that are to use level converters (MOSFET based) or 
  * possibly use the IC 74HC4050.
- * 
- * TODO explain extra pins not handled by this device
  */
 #ifndef LC5110_HH
 #define LC5110_HH
@@ -47,28 +45,24 @@
 #include "../spi.h"
 #include "../time.h"
 #include "../utilities.h"
+#include "display.h"
 
-//TODO Future design (V2 only, needed when support for other devices is implemented):
-// - GraphicsDrawing<LCDDevice> (or better name)
-//		- 2D draw API
-//		- Text API
-// - LCDDevice
-//		- basic primitives (pixel, char, bitmap) used by GraphicsDrawing
-//		- general primitives need for display (update, invalidate, erase...)
-//		- device-specific primitives
-// Use traits for devices specific constraints (size, color, coordinates)
-// Question:
-// - who shall hold the pixmap buffer?
+// General design rationale:
+// - Device class contains only hardware stuff
+// - no public drawing API in device class (even erase()?)
+// - Everything else is performed by Display (common stuff!)
 
-//TODO add graphics pixels API
+//TODO reorganize public/protected/private sections
+
+//TODO Future design:
+// - Generic font support: different widths, different characters sets (range)
+// - DisplayBuffer? width/height/depth (bits per pixel)/peculiarities (BW H/V byte) 
 
 //TODO Add image API (pixmap)
 //		- format?
 //		- converters?
 
 //TODO better use of spi start/end transaction (do once only)
-
-//TODO infer generic font support: different widths, different characters sets (range)
 
 //TODO API DOC
 
@@ -114,8 +108,8 @@ namespace devices::display
 	 * - pin 13 (PB5, SCK) --I>-- SCLK
 	 * - pin 10 (PB2, SS)  --I>-- SCE
 	 * - pin 9 (PB1)       --I>-- D/C
-	 * - pin 8 (PB0)       --I>-- RST (*)
-	 * - 3.3V         --[=330=]-- LED (**)
+	 * - pin 8 (PB0)       --I>-- RST
+	 * - 3.3V         --[=330=]-- LED
 	 * - 3.3V              ------ 3.3V
 	 * - GND               ------ GND
 	 * 
@@ -129,34 +123,33 @@ namespace devices::display
 	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST> class LCD5110 : 
 		public spi::SPIDevice<SCE, spi::ChipSelect::ACTIVE_LOW, spi::compute_clockrate(4'000'000UL)>
 	{
-	public:
+	protected:
+		using COORDINATE = uint8_t;
+		using INVALID_AREA = InvalidArea<COORDINATE>;
+
+		static constexpr COORDINATE WIDTH = 84;
+		static constexpr COORDINATE HEIGHT = 48;
+		static constexpr COORDINATE DEPTH = 1;
+
+		//TODO externalize to Font class
 		static constexpr uint8_t FONT_WIDTH = 5U;
 		static constexpr uint8_t FONT_HEIGHT = 8U;
 		static constexpr uint8_t FONT_1ST_CHAR = 0x20;
 		static constexpr uint8_t FONT_TOTAL_CHARS = 0x80 - FONT_1ST_CHAR;
 		
-		/**
-		 * Create a new device driver for a Nokia 5110 display chip.
-		 * TODO high_impedence_reset if no level converter available (pullup 3.3V instead)
-		 */
-		LCD5110(bool high_impedence_reset)
+	public:
+		//TODO temp control API?
+		// void set_temperature_control();
+
+		void reset()
 		{
 			// Reset device according to datasheet
 			gpio::FastPinType<RST>::set_mode(gpio::PinMode::OUTPUT, false);
 			time::delay_us(1);
-			if (high_impedence_reset)
-				gpio::FastPinType<RST>::set_mode(gpio::PinMode::INPUT);
-			else
-				gpio::FastPinType<RST>::set();
-			memset(display_, 0, sizeof(display_));
-			set_display_bias(DEFAULT_BIAS);
-			set_display_contrast(DEFAULT_VOP);
+			gpio::FastPinType<RST>::set();
 		}
 
-		//TODO temp control API?
-		// void set_temperature_control();
-
-		void set_display_bias(uint8_t bias)
+		void set_display_bias(uint8_t bias = DEFAULT_BIAS)
 		{
 			if (bias > MAX_BIAS) bias = MAX_BIAS;
 			send_command(FUNCTION_SET_MASK | FUNCTION_SET_EXTENDED);
@@ -164,7 +157,7 @@ namespace devices::display
 			send_command(FUNCTION_SET_MASK);
 		}
 
-		void set_display_contrast(uint8_t contrast)
+		void set_display_contrast(uint8_t contrast = DEFAULT_VOP)
 		{
 			if (contrast > MAX_VOP) contrast = MAX_VOP;
 			send_command(FUNCTION_SET_MASK | FUNCTION_SET_EXTENDED);
@@ -211,40 +204,73 @@ namespace devices::display
 			font_ = (const uint8_t*) font;
 		}
 
-		void write_char(uint8_t row, uint8_t column, char value)
+	protected:
+		/**
+		 * Create a new device driver for a Nokia 5110 display chip.
+		 * Before displaying anything, you should first:
+		 * 1. `reset()` device
+		 * 2. set mode to `normal()` (or `inverted()`)
+		 * 3. `set_display_bias()` to relevant value
+		 * 4. `set_display_contrast()` to relevant value
+		 * 5. `power_up()` device
+		 * 6. `set_font()` if you intend to display text
+		 */
+		//TODO make it protected!
+		LCD5110()
 		{
+			erase();
+		}
+
+		void erase()
+		{
+			memset(display_, 0, sizeof(display_));
+		}
+
+		// NOTE Coordinates must have been first verified by caller
+		INVALID_AREA set_pixel(uint8_t x, uint8_t y, bool pixel)
+		{
+			// Convert to (r,c)
+			const uint8_t c = x;
+			const uint8_t r = y / ROW_HEIGHT;
+			const uint8_t offset = y % ROW_HEIGHT;
+			uint8_t mask = bits::BV8(offset);
+			// Get pointer to pixel byte
+			uint8_t* pix_column = get_display(r, c);
+			// Check if pixel is already same as pixel, force pixel if needed
+			if (pixel)
+			{
+				if (*pix_column & mask) return INVALID_AREA{};
+				*pix_column |= mask;
+			}
+			else
+			{
+				if (!(*pix_column & mask)) return INVALID_AREA{};
+				*pix_column &= ~mask;
+			}
+			return INVALID_AREA{x, y, x, y};
+		}
+
+		// NOTE Coordinates must have been first verified by caller
+		INVALID_AREA write_char(uint8_t x, uint8_t y, char value)
+		{
+			if (y % ROW_HEIGHT != 0) return INVALID_AREA{};
+
 			// Check column and row not out of range for characters!
-			if (!is_valid_row_column(row, column)) return;
+			const uint8_t row = y / ROW_HEIGHT;
+			const uint8_t col = x;
+			if ((col + FONT_WIDTH) > WIDTH) return INVALID_AREA{};
 
 			// Load pixmap for `value` character
 			uint8_t pixmap[FONT_WIDTH];
 			if (get_char_pixmap(value, pixmap) == nullptr)
-				return;
+				return INVALID_AREA{};
 
-			// Convert coordinates for display matrix writing
-			uint8_t r, c;
-			convert_row(row, r);
-			convert_column(column, c);
-			uint8_t* display_ptr = get_display(r, c);
+			// Get pointer to first byte to write in display buffer
+			uint8_t* display_ptr = get_display(row, col);
 
 			for (uint8_t i = 0; i < FONT_WIDTH; ++i)
 				*display_ptr++ = pixmap[i];
-			invalidate(r, c, r, c + FONT_WIDTH + 1);
-		}
-
-		//TODO these functions could be externalized to a GraphicsDrawing class!
-		//NOTE: there is no auto LF in this function!
-		void write_string(uint8_t row, uint8_t column, const char* content)
-		{
-			while (*content)
-				write_char(row, column++, *content++);
-		}
-
-		void write_string(uint8_t row, uint8_t column, const flash::FlashStorage* content)
-		{
-			uint16_t address = (uint16_t) content;
-			while (char value = pgm_read_byte(address++))
-				write_char(row, column++, value);
+			return INVALID_AREA{x, y, COORDINATE(x + FONT_WIDTH + 1), y};
 		}
 
 		void set_bitmap()
@@ -252,71 +278,32 @@ namespace devices::display
 			//TODO
 		}
 
-		void erase()
-		{
-			memset(display_, 0, sizeof(display_));
-			invalidate_all();
-		}
-
-		void set_pixel(uint8_t x, uint8_t y)
-		{
-			set_pixel(x, y, true);
-		}
-
-		void clear_pixel(uint8_t x, uint8_t y)
-		{
-			set_pixel(x, y, false);
-		}
-
-		void set_pixel(uint8_t x, uint8_t y, bool pixel)
-		{
-			// Check coordinates are OK
-			if (!is_valid_xy(x, y)) return;
-			// Convert to (r,c)
-			uint8_t r, c, offset;
-			convert_x(x, c);
-			convert_y(y, r, offset);
-			uint8_t mask = bits::BV8(offset);
-			// Get pointer to pixel byte
-			uint8_t* pix_column = get_display(r, c);
-			// Check if pixel is already same as pixel, force pixel if needed
-			if (pixel)
-			{
-				if (*pix_column & mask) return;
-				*pix_column |= mask;
-			}
-			else
-			{
-				if (!(*pix_column & mask)) return;
-				*pix_column &= ~mask;
-			}
-			invalidate(r, c, r, c);
-		}
-
 		// Copy invalidated rectangle of display map onto the device
-		void update()
+		void update(const INVALID_AREA& area)
 		{
-			if (need_update_)
+			if (!area.empty)
 			{
-				const uint8_t size = (c2_ - c1_ + 1);
-				for (uint8_t r = r1_; r <= r2_; ++r)
+				const uint8_t size = (area.x2 - area.x1 + 1);
+				const uint8_t xmin = area.x1;
+				const uint8_t ymin = area.y1 / ROW_HEIGHT;
+				const uint8_t ymax = area.y2 / ROW_HEIGHT;
+				for (uint8_t y = ymin; y <= ymax; ++y)
 				{
-					set_rc(r, c1_);
+					set_rc(y, xmin);
 					dc_.set();
 					this->start_transfer();
-					const uint8_t* display = get_display(r, c1_);
+					const uint8_t* display = get_display(y, xmin);
 					this->transfer(display, size);
 					this->end_transfer();
 				}
-				need_update_ = false;
 			}
 		}
 
 	private:
-		static constexpr uint8_t ROWS = 48;
-		static constexpr uint8_t COLS = 84;
+		// Internal organization of Nokia pixmap buffer (1 byte = 8 vertical pixels)
 		static constexpr uint8_t ROW_HEIGHT = 8;
 
+		// Masks for Nokia commands
 		static constexpr uint8_t FUNCTION_SET_MASK = bits::BV8(5);
 		static constexpr uint8_t FUNCTION_SET_POWER_DOWN = bits::BV8(2);
 		static constexpr uint8_t FUNCTION_SET_EXTENDED = bits::BV8(0);
@@ -333,38 +320,11 @@ namespace devices::display
 		static constexpr uint8_t SET_ROW_ADDRESS = bits::BV8(6);
 		static constexpr uint8_t SET_COL_ADDRESS = bits::BV8(7);
 
+		// Masks for bias and operation voltage (i.e. contrast)
 		static constexpr uint8_t MAX_BIAS = 0x07;
 		static constexpr uint8_t DEFAULT_BIAS = 0x04;
 		static constexpr uint8_t MAX_VOP = 0x7F;
 		static constexpr uint8_t DEFAULT_VOP = 40;
-		
-		void invalidate(uint8_t r1, uint8_t c1, uint8_t r2, uint8_t c2)
-		{
-			if (!need_update_)
-			{
-				r1_ = r1;
-				c1_ = c1;
-				r2_ = r2;
-				c2_ = c2;
-				need_update_ = true;
-			}
-			else
-			{
-				if (r1 < r1_) r1_ = r1;
-				if (r2 > r2_) r2_ = r2;
-				if (c1 < c1_) c1_ = c1;
-				if (c2 > c2_) c2_ = c2;
-			}
-		}
-
-		void invalidate_all()
-		{
-			r1_ = 0;
-			c1_ = 0;
-			r2_ = ROWS / ROW_HEIGHT;
-			c2_ = COLS;
-			need_update_ = true;
-		}
 
 		void send_command(uint8_t command)
 		{
@@ -374,54 +334,8 @@ namespace devices::display
 			this->end_transfer();
 		}
 
-		// Functions to check and convert coordinates
-		// convert (x,y) -> (r,c,offset)
-		static void convert_x(uint8_t x, uint8_t& c)
-		{
-			c = x;
-		}
-		static void convert_y(uint8_t y, uint8_t& r, uint8_t& offset)
-		{
-			r = y / ROW_HEIGHT;
-			offset = y % ROW_HEIGHT;
-		}
-
-		// convert (row,column) -> (r,c)
-		void convert_row(uint8_t row, uint8_t& r) const
-		{
-			r = row * FONT_HEIGHT / ROW_HEIGHT;
-		}
-		void convert_column(uint8_t column, uint8_t& c) const
-		{
-			c = column * (FONT_WIDTH + 1);
-		}
-		
-		bool is_valid_row_column(uint8_t row, uint8_t col) const
-		{
-			if (row > (ROWS / FONT_HEIGHT)) return false;
-			if (col > (COLS / (FONT_WIDTH + 1))) return false;
-			return true;
-		}
-
-		static bool is_valid_rc(uint8_t r, uint8_t c)
-		{
-			if (r > (ROWS / ROW_HEIGHT)) return false;
-			if (c > COLS) return false;
-			return true;
-		}
-
-		static bool is_valid_xy(uint8_t x, uint8_t y)
-		{
-			if (x > COLS) return false;
-			if (y > ROWS) return false;
-			return true;
-		}
-
-		//TODO review utility and possibly code and naming guidelines
 		void set_rc(uint8_t r, uint8_t c)
 		{
-			if (r > (ROWS / ROW_HEIGHT)) r = 0;
-			if (c > COLS) c = 0;
 			dc_.clear();
 			this->start_transfer();
 			this->transfer(r | SET_ROW_ADDRESS);
@@ -429,6 +343,7 @@ namespace devices::display
 			this->end_transfer();
 		}
 
+		//TODO externalize to Font class
 		// Fill a pixmap array with a glyph for the requested character from current font
 		// Return poijter to the glyph or nulptr if required character does not exist in font
 		uint8_t* get_char_pixmap(char value, uint8_t pixmap[FONT_WIDTH]) const
@@ -441,18 +356,16 @@ namespace devices::display
 			return flash::read_flash(uint16_t(ptr), pixmap, FONT_WIDTH);
 		}
 
-		// Get a pointer to display byte at (r,c) coordinates, or nulptr if (r,c) is invalid
+		//TODO Externalize to Pixmap class?
+		// Get a pointer to display byte at (r,c) coordinates 
+		// (r,c) must be valid coordinates in pixmap
 		uint8_t* get_display(uint8_t r, uint8_t c)
 		{
-			if (r >= ROWS / 8) return nullptr;
-			if (c >= COLS) return nullptr;
-			return &display_[r * COLS + c];
+			return &display_[r * WIDTH + c];
 		}
 		const uint8_t* get_display(uint8_t r, uint8_t c) const
 		{
-			if (r >= ROWS / 8) return nullptr;
-			if (c >= COLS) return nullptr;
-			return &display_[r * COLS + c];
+			return &display_[r * WIDTH + c];
 		}
 
 		// Font used in characters display
@@ -463,11 +376,7 @@ namespace devices::display
 		//			R2C1 R2C2 ... R2Cn
 		//			...
 		//			RpC1 RpC2 ... RpCn
-		uint8_t display_[ROWS * COLS / ROW_HEIGHT];
-
-		// Minimal (r,c) rectangle to update
-		bool need_update_ = false;
-		uint8_t r1_, c1_, r2_, c2_;
+		uint8_t display_[HEIGHT * WIDTH / ROW_HEIGHT];
 
 		// Pin to control data Vs command sending through SPI
 		gpio::FAST_PIN<DC> dc_{gpio::PinMode::OUTPUT};

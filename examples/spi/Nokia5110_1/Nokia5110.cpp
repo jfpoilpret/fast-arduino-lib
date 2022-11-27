@@ -28,6 +28,7 @@
 
 #include <fastarduino/devices/lcd5110.h>
 #include <fastarduino/devices/lcd5110_font1.h>
+#include <fastarduino/devices/display.h>
 #include <fastarduino/time.h>
 
 #ifndef ARDUINO_UNO
@@ -40,6 +41,7 @@ static constexpr const board::DigitalPin DC = board::DigitalPin::D9_PB1;
 static constexpr const board::DigitalPin RES = board::DigitalPin::D8_PB0;
 
 using NOKIA = devices::display::LCD5110<CS, DC, RES>;
+using DISPLAY = devices::display::Display<NOKIA>;
 
 static constexpr uint16_t DELAY_MS = 2000;
 
@@ -52,44 +54,48 @@ int main()
 	spi::init();
 	
 	// Start or init SPI device if needed
-	NOKIA nokia{false};
+	DISPLAY nokia;
+	nokia.reset();
+	nokia.set_display_bias();
+	nokia.set_display_contrast();
+	nokia.normal();
 	nokia.set_font(devices::display::FONT1);
 	nokia.power_up();
+
 	nokia.erase();
-	nokia.normal();
 	nokia.update();
 
 	time::delay_ms(DELAY_MS);
 	nokia.write_char(0, 0, 'A');
 	nokia.update();
 	time::delay_ms(DELAY_MS);
-	nokia.write_char(0, 1, 'B');
+	nokia.write_char(8, 0, 'B');
 	nokia.update();
 	time::delay_ms(DELAY_MS);
-	nokia.write_char(0, 2, 'C');
+	nokia.write_char(16, 0, 'C');
 	nokia.update();
 	time::delay_ms(DELAY_MS);
-	nokia.write_char(0, 3, 'D');
+	nokia.write_char(24, 0, 'D');
 	nokia.update();
 	time::delay_ms(DELAY_MS);
-	nokia.write_char(0, 4, 'E');
+	nokia.write_char(32, 0, 'E');
 	nokia.update();
 	time::delay_ms(DELAY_MS);
-	nokia.write_char(0, 5, 'F');
+	nokia.write_char(40, 0, 'F');
 	nokia.update();
 	time::delay_ms(DELAY_MS);
 
-	nokia.write_char(1, 0, 'a');
+	nokia.write_char(0, 8, 'a');
 	nokia.update();
-	nokia.write_char(1, 1, 'b');
+	nokia.write_char(8, 8, 'b');
 	nokia.update();
-	nokia.write_char(1, 2, 'c');
+	nokia.write_char(16, 8, 'c');
 	nokia.update();
-	nokia.write_char(1, 3, 'd');
+	nokia.write_char(24, 8, 'd');
 	nokia.update();
-	nokia.write_char(1, 4, 'e');
+	nokia.write_char(32, 8, 'e');
 	nokia.update();
-	nokia.write_char(1, 5, 'f');
+	nokia.write_char(40, 8, 'f');
 	nokia.update();
 	time::delay_ms(DELAY_MS);
 
@@ -99,11 +105,11 @@ int main()
 	nokia.normal();
 	time::delay_ms(DELAY_MS);
 
-	nokia.write_string(2, 0, "Coucou!");
+	nokia.write_string(0, 16, "Coucou!");
 	nokia.update();
 	time::delay_ms(DELAY_MS);
 
-	nokia.write_string(3, 0, F("Coucou!"));
+	nokia.write_string(0, 24, F("Coucou!"));
 	nokia.update();
 	time::delay_ms(DELAY_MS);
 
