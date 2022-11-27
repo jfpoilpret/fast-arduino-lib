@@ -45,6 +45,7 @@
 #include "../spi.h"
 #include "../time.h"
 #include "display.h"
+#include "font.h"
 
 // General design rationale:
 // - Device class contains only hardware stuff
@@ -123,12 +124,6 @@ namespace devices::display
 		static constexpr COORDINATE HEIGHT = 48;
 		static constexpr COORDINATE DEPTH = 1;
 
-		//TODO externalize to Font class
-		static constexpr uint8_t FONT_WIDTH = 5U;
-		static constexpr uint8_t FONT_HEIGHT = 8U;
-		static constexpr uint8_t FONT_1ST_CHAR = 0x20;
-		static constexpr uint8_t FONT_TOTAL_CHARS = 0x80 - FONT_1ST_CHAR;
-		
 	public:
 		//TODO temp control API?
 		// void set_temperature_control();
@@ -187,13 +182,11 @@ namespace devices::display
 			send_command(DISPLAY_CONTROL_MASK | DISPLAY_CONTROL_NORMAL);
 		}
 
-		//TODO API
-		// Fonts must be 5x8 pixels and must be stored in Flash
-		//TODO define conditional fonts in optional fonts includes
-		//TODO maybe allow more than 96 characters in table?
-		void set_font(const uint8_t font[][FONT_WIDTH])
+		//TODO what if font_ is nullptr?
+		//TODO put to Display class?
+		void set_font(const Font<true>& font)
 		{
-			font_ = (const uint8_t*) font;
+			font_ = &font;
 		}
 
 	protected:
@@ -216,6 +209,11 @@ namespace devices::display
 		void erase()
 		{
 			memset(display_, 0, sizeof(display_));
+		}
+
+		uint8_t font_width() const
+		{
+			return font_->width();
 		}
 
 		// NOTE Coordinates must have been first verified by caller
@@ -248,21 +246,22 @@ namespace devices::display
 			if (y % ROW_HEIGHT != 0) return INVALID_AREA::EMPTY;
 
 			// Check column and row not out of range for characters!
+			const uint8_t width = font_->width();
 			const uint8_t row = y / ROW_HEIGHT;
 			const uint8_t col = x;
-			if ((col + FONT_WIDTH) > WIDTH) return INVALID_AREA::EMPTY;
+			if ((col + width) > WIDTH) return INVALID_AREA::EMPTY;
 
 			// Load pixmap for `value` character
-			uint8_t pixmap[FONT_WIDTH];
-			if (get_char_pixmap(value, pixmap) == nullptr)
+			uint16_t glyph_ref = font_->get_char_glyph_ref(value);
+			if (glyph_ref == 0)
 				return INVALID_AREA::EMPTY;
 
 			// Get pointer to first byte to write in display buffer
 			uint8_t* display_ptr = get_display(row, col);
 
-			for (uint8_t i = 0; i < FONT_WIDTH; ++i)
-				*display_ptr++ = pixmap[i];
-			return INVALID_AREA{x, y, COORDINATE(x + FONT_WIDTH + 1), y};
+			for (uint8_t i = 0; i < width; ++i)
+				*display_ptr++ = font_->get_char_glyph_byte(glyph_ref, i);
+			return INVALID_AREA{x, y, COORDINATE(x + font_->width() + 1), y};
 		}
 
 		void set_bitmap()
@@ -335,19 +334,6 @@ namespace devices::display
 			this->end_transfer();
 		}
 
-		//TODO externalize to Font class
-		// Fill a pixmap array with a glyph for the requested character from current font
-		// Return poijter to the glyph or nulptr if required character does not exist in font
-		uint8_t* get_char_pixmap(char value, uint8_t pixmap[FONT_WIDTH]) const
-		{
-			if ((value < FONT_1ST_CHAR) || (value >= FONT_1ST_CHAR + FONT_TOTAL_CHARS))
-				return nullptr;
-			// Find first byte (vertical) of character in font_
-			uint16_t index  = (uint8_t(value) - FONT_1ST_CHAR) * FONT_WIDTH;
-			const uint8_t* ptr = &font_[index];
-			return flash::read_flash(uint16_t(ptr), pixmap, FONT_WIDTH);
-		}
-
 		//TODO Externalize to Pixmap class?
 		// Get a pointer to display byte at (r,c) coordinates 
 		// (r,c) must be valid coordinates in pixmap
@@ -361,7 +347,7 @@ namespace devices::display
 		}
 
 		// Font used in characters display
-		const uint8_t* font_ = nullptr;
+		const Font<true>* font_ = nullptr;
 
 		// Display map (copy of chip display map)
 		// Format:	R1C1 R1C2 ... R1Cn

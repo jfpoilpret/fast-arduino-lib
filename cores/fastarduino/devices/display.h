@@ -124,7 +124,7 @@ namespace devices::display
 			{
 				invalid += DisplayDevice::write_char(x, y, *content++);
 				//TODO should be a Font API!
-				x += DisplayDevice::FONT_WIDTH + 1;
+				x += DisplayDevice::font_width() + 1;
 			}
 			// Invalidate if needed
 			invalidate(invalid);
@@ -138,7 +138,7 @@ namespace devices::display
 			while (char value = pgm_read_byte(address++))
 			{
 				invalid += DisplayDevice::write_char(x, y, value);
-				x += DisplayDevice::FONT_WIDTH + 1;
+				x += DisplayDevice::font_width() + 1;
 			}
 			// Invalidate if needed
 			invalidate(invalid);

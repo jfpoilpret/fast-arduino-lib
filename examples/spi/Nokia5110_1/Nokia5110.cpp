@@ -59,7 +59,8 @@ int main()
 	nokia.set_display_bias();
 	nokia.set_display_contrast();
 	nokia.normal();
-	nokia.set_font(devices::display::FONT1);
+	devices::display::Font7x5 font{};
+	nokia.set_font(font);
 	nokia.power_up();
 
 	nokia.erase();
