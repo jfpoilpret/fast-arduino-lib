@@ -53,7 +53,6 @@
 // - Everything else is performed by Display (common stuff!)
 
 //TODO Future design:
-// - Generic font support: different widths, different characters sets (range)
 // - DisplayBuffer? width/height/depth (bits per pixel)/peculiarities (BW H/V byte) 
 
 //TODO reorganize public/protected/private sections
@@ -122,7 +121,7 @@ namespace devices::display
 
 		static constexpr COORDINATE WIDTH = 84;
 		static constexpr COORDINATE HEIGHT = 48;
-		static constexpr COORDINATE DEPTH = 1;
+		static constexpr uint8_t DEPTH = 1;
 
 		static constexpr bool VERTICAL_FONT = true;
 

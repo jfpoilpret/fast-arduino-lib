@@ -122,4 +122,22 @@ int main()
 	for (uint8_t y = 40; y < 48; ++y)
 		nokia.set_pixel(42, y);
 	nokia.update();
+	time::delay_ms(DELAY_MS);
+
+	// Try drawing H line
+	nokia.draw_line(10, 40, 79, 40);
+	nokia.update();
+	time::delay_ms(DELAY_MS);
+
+	// Try drawing V line
+	nokia.draw_line(70, 0, 70, 45);
+	nokia.update();
+	time::delay_ms(DELAY_MS);
+
+	// Try drawing other lines
+	//TODO
+
+	// Try drawing rectangle
+	nokia.draw_rectangle(30, 35, 55, 45);
+	nokia.update();
 }

@@ -102,7 +102,9 @@ namespace devices::display
 
 		static constexpr COORDINATE WIDTH = DisplayDevice::WIDTH;
 		static constexpr COORDINATE HEIGHT = DisplayDevice::HEIGHT;
-		static constexpr COORDINATE DEPTH = DisplayDevice::DEPTH;
+		static constexpr uint8_t DEPTH = DisplayDevice::DEPTH;
+		//TODO Define COLOR type (bool, uint8_t, uint16_t, uint32_t or specific uint24_t)
+		//TODO API to handle colors
 
 		Display() = default;
 
@@ -174,15 +176,39 @@ namespace devices::display
 		{
 			if (!is_valid_xy(x1, y1)) return;
 			if (!is_valid_xy(x2, y2)) return;
-			//TODO use https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
-			// Specific lines: horizontal or vertical (straightforward)
+			
+			// Possibly swap x1-x2 and y1-2
+			swap(x1, x2);
+			swap(y1, y2);
+			// Check if specifc case (vertical or horizontal line)
+			if (x1 == x2)
+				draw_vline(x1, y1, y2);
+			else if (y1 == y2)
+				draw_hline(x1, y1, x2);
+			else
+			{
+				// Usual case, apply Bresenham's line algorithm
+				// https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+				//TODO
+			}
+			invalidate(INVALID_AREA{x1, y1, x2, y2});
 		}
 
 		void draw_rectangle(COORDINATE x1, COORDINATE y1, COORDINATE x2, COORDINATE y2)
 		{
 			if (!is_valid_xy(x1, y1)) return;
 			if (!is_valid_xy(x2, y2)) return;
-			//TODO simply draw 2 hoizontal and 2 vertical lines
+			if ((x1 == x2) || (y1 == y2)) return;
+
+			// Possibly swap x1-x2 and y1-2
+			swap(x1, x2);
+			swap(y1, y2);
+			// Simply draw 2 horizontal and 2 vertical lines
+			draw_hline(x1, y1, x2);
+			draw_hline(x1, y2, x2);
+			draw_vline(x1, y1, y2);
+			draw_vline(x2, y1, y2);
+			invalidate(INVALID_AREA{x1, y1, x2, y2});
 		}
 
 		void draw_circle(COORDINATE x, COORDINATE y, COORDINATE ray)
@@ -190,6 +216,9 @@ namespace devices::display
 			if (!is_valid_xy(x, y)) return;
 			//TODO
 		}
+
+		//TODO additional 2D primitives here? e.g. arc, fill
+		// void draw_arc()
 
 		void update()
 		{
@@ -219,6 +248,28 @@ namespace devices::display
 			return (x < WIDTH) && (y < HEIGHT);
 		}
 
+		void draw_vline(COORDINATE x1, COORDINATE y1, COORDINATE y2)
+		{
+			for (COORDINATE y = y1; y <= y2; ++y)
+				DisplayDevice::set_pixel(x1, y, true);
+		}
+		
+		void draw_hline(COORDINATE x1, COORDINATE y1, COORDINATE x2)
+		{
+			for (COORDINATE x = x1; x <= x2; ++x)
+				DisplayDevice::set_pixel(x, y1, true);
+		}
+
+		static void swap(COORDINATE& a1, COORDINATE& a2)
+		{
+			if (a1 > a2)
+			{
+				COORDINATE c = a1;
+				a1 = a2;
+				a2 = c;
+			}
+		}
+		
 	private:
 		// Minimal rectangle to update
 		INVALID_AREA invalid_area_;
