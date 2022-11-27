@@ -21,18 +21,22 @@
 #ifndef DISPLAY_HH
 #define DISPLAY_HH
 
-#include <string.h>
-
 #include "../flash.h"
-#include "../utilities.h"
+
+namespace devices
+{
+	//TODO APIDOC
+	namespace display
+	{
+	}
+}
 
 //TODO error handling? (e.g. out of range coordinate)
 namespace devices::display
 {
-	//TODO useful to create a static EMPTY instance (must be const)?
 	template<typename COORDINATE> struct InvalidArea
 	{
-		InvalidArea() : empty{true} {}
+		InvalidArea() = default;
 		InvalidArea(COORDINATE x1, COORDINATE y1, COORDINATE x2, COORDINATE y2)
 			: x1{x1}, y1{y1}, x2{x2}, y2{y2}, empty{false} {}
 
@@ -59,12 +63,16 @@ namespace devices::display
 			return *this;
 		}
 
-		COORDINATE x1;
-		COORDINATE y1;
-		COORDINATE x2;
-		COORDINATE y2;
-		bool empty;
+		static InvalidArea EMPTY;
+
+		COORDINATE x1 = 0;
+		COORDINATE y1 = 0;
+		COORDINATE x2 = 0;
+		COORDINATE y2 = 0;
+		bool empty = true;
 	};
+
+	template<typename COORDINATE> InvalidArea<COORDINATE> InvalidArea<COORDINATE>::EMPTY = InvalidArea{};
 
 	template<typename COORDINATE>
 	InvalidArea<COORDINATE> operator+(const InvalidArea<COORDINATE>& a1, const InvalidArea<COORDINATE>& a2)
@@ -111,7 +119,7 @@ namespace devices::display
 		void write_string(COORDINATE x, COORDINATE y, const char* content)
 		{
 			if (!is_valid_xy(x, y)) return;
-			INVALID_AREA invalid = INVALID_AREA{};
+			INVALID_AREA invalid = INVALID_AREA::EMPTY;
 			while (*content)
 			{
 				invalid += DisplayDevice::write_char(x, y, *content++);
@@ -125,7 +133,7 @@ namespace devices::display
 		void write_string(COORDINATE x, COORDINATE y, const flash::FlashStorage* content)
 		{
 			if (!is_valid_xy(x, y)) return;
-			INVALID_AREA invalid = INVALID_AREA{};
+			INVALID_AREA invalid = INVALID_AREA::EMPTY;
 			uint16_t address = (uint16_t) content;
 			while (char value = pgm_read_byte(address++))
 			{

@@ -44,7 +44,6 @@
 #include "../gpio.h"
 #include "../spi.h"
 #include "../time.h"
-#include "../utilities.h"
 #include "display.h"
 
 // General design rationale:
@@ -52,11 +51,11 @@
 // - no public drawing API in device class (even erase()?)
 // - Everything else is performed by Display (common stuff!)
 
-//TODO reorganize public/protected/private sections
-
 //TODO Future design:
 // - Generic font support: different widths, different characters sets (range)
 // - DisplayBuffer? width/height/depth (bits per pixel)/peculiarities (BW H/V byte) 
+
+//TODO reorganize public/protected/private sections
 
 //TODO Add image API (pixmap)
 //		- format?
@@ -68,13 +67,6 @@
 
 // Optional improvements:
 //TODO define specific ostream for display (is that even possible)?
-namespace devices
-{
-	namespace display
-	{
-	}
-}
-
 namespace devices::display
 {
 	// Coordinates systems conventions (variable naming)
@@ -239,12 +231,12 @@ namespace devices::display
 			// Check if pixel is already same as pixel, force pixel if needed
 			if (pixel)
 			{
-				if (*pix_column & mask) return INVALID_AREA{};
+				if (*pix_column & mask) return INVALID_AREA::EMPTY;
 				*pix_column |= mask;
 			}
 			else
 			{
-				if (!(*pix_column & mask)) return INVALID_AREA{};
+				if (!(*pix_column & mask)) return INVALID_AREA::EMPTY;
 				*pix_column &= ~mask;
 			}
 			return INVALID_AREA{x, y, x, y};
@@ -253,17 +245,17 @@ namespace devices::display
 		// NOTE Coordinates must have been first verified by caller
 		INVALID_AREA write_char(uint8_t x, uint8_t y, char value)
 		{
-			if (y % ROW_HEIGHT != 0) return INVALID_AREA{};
+			if (y % ROW_HEIGHT != 0) return INVALID_AREA::EMPTY;
 
 			// Check column and row not out of range for characters!
 			const uint8_t row = y / ROW_HEIGHT;
 			const uint8_t col = x;
-			if ((col + FONT_WIDTH) > WIDTH) return INVALID_AREA{};
+			if ((col + FONT_WIDTH) > WIDTH) return INVALID_AREA::EMPTY;
 
 			// Load pixmap for `value` character
 			uint8_t pixmap[FONT_WIDTH];
 			if (get_char_pixmap(value, pixmap) == nullptr)
-				return INVALID_AREA{};
+				return INVALID_AREA::EMPTY;
 
 			// Get pointer to first byte to write in display buffer
 			uint8_t* display_ptr = get_display(row, col);
