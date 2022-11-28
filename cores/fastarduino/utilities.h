@@ -433,6 +433,15 @@ namespace utils
 		swap_bytes((uint64_t&) value);
 	}
 
+	//TODO DOC
+	template<typename T>
+	void swap(T& a, T&b)
+	{
+		T c = a;
+		a = b;
+		b = c;
+	}
+
 	/// @cond notdocumented
 	template<typename T> union ToUint8
 	{
