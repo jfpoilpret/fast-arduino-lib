@@ -135,7 +135,13 @@ int main()
 	time::delay_ms(DELAY_MS);
 
 	// Try drawing other lines
-	//TODO
+	nokia.draw_line(0, 0, 83, 47);
+	nokia.update();
+	time::delay_ms(DELAY_MS);
+	nokia.draw_line(0, 47, 83, 0);
+	nokia.update();
+	time::delay_ms(DELAY_MS);
+	//TODO More cases (other octant)
 
 	// Try drawing rectangle
 	nokia.draw_rectangle(30, 35, 55, 45);

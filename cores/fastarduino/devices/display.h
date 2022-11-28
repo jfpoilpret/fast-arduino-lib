@@ -22,6 +22,7 @@
 #define DISPLAY_HH
 
 #include "../flash.h"
+#include "../utilities.h"
 #include "font.h"
 
 namespace devices
@@ -94,25 +95,31 @@ namespace devices::display
 	// - expected API?
 	template<typename DisplayDevice> class Display: public DisplayDevice
 	{
+	protected:
 		static constexpr bool VERTICAL_FONT = DisplayDevice::VERTICAL_FONT;
+		using SIGNED_COORDINATE = typename DisplayDevice::SIGNED_COORDINATE;
+		using INVALID_AREA = InvalidArea<typename DisplayDevice::COORDINATE>;
 
 	public:
 		using COORDINATE = typename DisplayDevice::COORDINATE;
-		using INVALID_AREA = InvalidArea<COORDINATE>;
 
 		static constexpr COORDINATE WIDTH = DisplayDevice::WIDTH;
 		static constexpr COORDINATE HEIGHT = DisplayDevice::HEIGHT;
+		//TODO does it need to be public?
 		static constexpr uint8_t DEPTH = DisplayDevice::DEPTH;
+
 		//TODO Define COLOR type (bool, uint8_t, uint16_t, uint32_t or specific uint24_t)
 		//TODO API to handle colors
 
 		Display() = default;
 
+		// Display drawing settings: font, color, mode
 		void set_font(const Font<VERTICAL_FONT>& font)
 		{
 			font_ = &font;
 		}
 
+		// Display drawing primitives
 		void erase()
 		{
 			DisplayDevice::erase();
@@ -176,20 +183,30 @@ namespace devices::display
 		{
 			if (!is_valid_xy(x1, y1)) return;
 			if (!is_valid_xy(x2, y2)) return;
-			
-			// Possibly swap x1-x2 and y1-2
-			swap(x1, x2);
-			swap(y1, y2);
+
 			// Check if specifc case (vertical or horizontal line)
 			if (x1 == x2)
+			{
+				// if 2 points are the same: nothing to do
+				if (y1 == y2) return;
+				// Ensure y1 < y2
+				swap_to_sort(y1, y2);
 				draw_vline(x1, y1, y2);
+			}
 			else if (y1 == y2)
+			{
+				// Ensure x1 < x2
+				swap_to_sort(x1, x2);
 				draw_hline(x1, y1, x2);
+			}
 			else
 			{
+				// Possibly swap x1-x2 and y1-y2 to ensure x1 < x2
+				if (swap_to_sort(x1, x2)) utils::swap(y1, y2);
 				// Usual case, apply Bresenham's line algorithm
-				// https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
-				//TODO
+				draw_line_bresenham(x1, y1, x2, y2);
+				// Ensure y1 < y2 for invalid region instantiation
+				swap_to_sort(y1, y2);
 			}
 			invalidate(INVALID_AREA{x1, y1, x2, y2});
 		}
@@ -201,8 +218,8 @@ namespace devices::display
 			if ((x1 == x2) || (y1 == y2)) return;
 
 			// Possibly swap x1-x2 and y1-2
-			swap(x1, x2);
-			swap(y1, y2);
+			swap_to_sort(x1, x2);
+			swap_to_sort(y1, y2);
 			// Simply draw 2 horizontal and 2 vertical lines
 			draw_hline(x1, y1, x2);
 			draw_hline(x1, y2, x2);
@@ -215,11 +232,13 @@ namespace devices::display
 		{
 			if (!is_valid_xy(x, y)) return;
 			//TODO
+			// Check https://lectureloops.com/circle-drawing-algorithms/
 		}
 
 		//TODO additional 2D primitives here? e.g. arc, fill
 		// void draw_arc()
 
+		// Display update (raster copy to device)
 		void update()
 		{
 			DisplayDevice::update(invalid_area_);
@@ -250,24 +269,118 @@ namespace devices::display
 
 		void draw_vline(COORDINATE x1, COORDINATE y1, COORDINATE y2)
 		{
+			swap_to_sort(y1, y2);
 			for (COORDINATE y = y1; y <= y2; ++y)
 				DisplayDevice::set_pixel(x1, y, true);
 		}
 		
 		void draw_hline(COORDINATE x1, COORDINATE y1, COORDINATE x2)
 		{
+			swap_to_sort(x1, x2);
 			for (COORDINATE x = x1; x <= x2; ++x)
 				DisplayDevice::set_pixel(x, y1, true);
 		}
 
-		static void swap(COORDINATE& a1, COORDINATE& a2)
+		// Draw a segment according to Bresenham algorithm
+		// https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+		void draw_line_bresenham(COORDINATE x1, COORDINATE y1, COORDINATE x2, COORDINATE y2)
+		{
+			// We are sure that x1 < x2 when calling this method
+			SIGNED_COORDINATE dx = SIGNED_COORDINATE(x2) - SIGNED_COORDINATE(x1);
+			SIGNED_COORDINATE dy = SIGNED_COORDINATE(y2) - SIGNED_COORDINATE(y1);
+
+			if (dy > 0)
+			{
+				// 1st quadrant
+				if (dx >= dy)
+				{
+					// 1st octant
+					SIGNED_COORDINATE e = dx;
+					dx *= 2;
+					dy *= 2;
+					while (true)
+					{
+						DisplayDevice::set_pixel(x1, y1, true);
+						if (++x1 > x2) break;
+						e -= dy;
+						if (e < 0)
+						{
+							++y1;
+							e += dx;
+						}
+					}
+				}
+				else
+				{
+					// 2nd octant
+					SIGNED_COORDINATE e = dy;
+					dx *= 2;
+					dy *= 2;
+					while (true)
+					{
+						DisplayDevice::set_pixel(x1, y1, true);
+						if (++y1 > y2) break;
+						e -= dx;
+						if (e < 0)
+						{
+							++x1;
+							e += dy;
+						}
+					}
+				}
+			}
+			else
+			{
+				// 4th quadrant
+				if (dx >= -dy)
+				{
+					// 8th octant
+					SIGNED_COORDINATE e = dx;
+					dx *= 2;
+					dy *= 2;
+					while (true)
+					{
+						DisplayDevice::set_pixel(x1, y1, true);
+						if (++x1 > x2) break;
+						e += dy;
+						if (e < 0)
+						{
+							--y1;
+							e += dx;
+						}
+					}
+				}
+				else
+				{
+					// 7th octant
+					SIGNED_COORDINATE e = dy;
+					dx *= 2;
+					dy *= 2;
+					while (true)
+					{
+						DisplayDevice::set_pixel(x1, y1, true);
+						//FIXME This skips the last point :-()
+						if (--y1 == y2) break;
+						e += dx;
+						if (e > 0)
+						{
+							++x1;
+							e += dy;
+						}
+					}
+				}
+			}
+		}
+
+		static bool swap_to_sort(COORDINATE& a1, COORDINATE& a2)
 		{
 			if (a1 > a2)
 			{
-				COORDINATE c = a1;
-				a1 = a2;
-				a2 = c;
+				utils::swap(a1, a2);
+				return true;
 			}
+			else
+				return false;
 		}
 		
 	private:

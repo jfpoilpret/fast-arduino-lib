@@ -117,6 +117,7 @@ namespace devices::display
 	{
 	protected:
 		using COORDINATE = uint8_t;
+		using SIGNED_COORDINATE = int8_t;
 		using INVALID_AREA = InvalidArea<COORDINATE>;
 
 		static constexpr COORDINATE WIDTH = 84;
