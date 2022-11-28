@@ -289,6 +289,7 @@ namespace devices::display
 			SIGNED_COORDINATE dx = SIGNED_COORDINATE(x2) - SIGNED_COORDINATE(x1);
 			SIGNED_COORDINATE dy = SIGNED_COORDINATE(y2) - SIGNED_COORDINATE(y1);
 
+			//TODO Find a way to factor code to get reduced code size
 			if (dy > 0)
 			{
 				// 1st quadrant
@@ -301,7 +302,8 @@ namespace devices::display
 					while (true)
 					{
 						DisplayDevice::set_pixel(x1, y1, true);
-						if (++x1 > x2) break;
+						if (x1 == x2) break;
+						++x1;
 						e -= dy;
 						if (e < 0)
 						{
@@ -319,7 +321,8 @@ namespace devices::display
 					while (true)
 					{
 						DisplayDevice::set_pixel(x1, y1, true);
-						if (++y1 > y2) break;
+						if (y1 == y2) break;
+						++y1;
 						e -= dx;
 						if (e < 0)
 						{
@@ -341,7 +344,8 @@ namespace devices::display
 					while (true)
 					{
 						DisplayDevice::set_pixel(x1, y1, true);
-						if (++x1 > x2) break;
+						if (x1 == x2) break;
+						++x1;
 						e += dy;
 						if (e < 0)
 						{
@@ -359,8 +363,8 @@ namespace devices::display
 					while (true)
 					{
 						DisplayDevice::set_pixel(x1, y1, true);
-						//FIXME This skips the last point :-()
-						if (--y1 == y2) break;
+						if (y1 == y2) break;
+						--y1;
 						e += dx;
 						if (e > 0)
 						{
