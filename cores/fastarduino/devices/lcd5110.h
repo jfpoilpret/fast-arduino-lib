@@ -53,7 +53,7 @@
 // - Everything else is performed by Display (common stuff!)
 
 //TODO Future design:
-// - DisplayBuffer? width/height/depth (bits per pixel)/peculiarities (BW H/V byte) 
+// - DisplayRaster? width/height/depth (bits per pixel)/peculiarities (BW H/V byte) 
 
 //TODO reorganize public/protected/private sections
 
@@ -195,7 +195,6 @@ namespace devices::display
 		 * 5. `power_up()` device
 		 * 6. `set_font()` if you intend to display text
 		 */
-		//TODO make it protected!
 		LCD5110()
 		{
 			erase();

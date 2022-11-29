@@ -217,7 +217,7 @@ namespace devices::display
 			if (!is_valid_xy(x2, y2)) return;
 			if ((x1 == x2) || (y1 == y2)) return;
 
-			// Possibly swap x1-x2 and y1-2
+			// Possibly swap x1-x2 and y1-y2
 			swap_to_sort(x1, x2);
 			swap_to_sort(y1, y2);
 			// Simply draw 2 horizontal and 2 vertical lines
@@ -228,11 +228,15 @@ namespace devices::display
 			invalidate(INVALID_AREA{x1, y1, x2, y2});
 		}
 
-		void draw_circle(COORDINATE x, COORDINATE y, COORDINATE ray)
+		void draw_circle(COORDINATE xc, COORDINATE yc, COORDINATE radius)
 		{
-			if (!is_valid_xy(x, y)) return;
-			//TODO
-			// Check https://lectureloops.com/circle-drawing-algorithms/
+			if (!is_valid_xy(xc, yc)) return;
+			if ((xc < radius) || (xc + radius > WIDTH)) return;
+			if ((yc < radius) || (yc + radius > HEIGHT)) return;
+			// Apply Bresenham's circle algorithm
+			draw_circle_bresenham(xc, yc, radius);
+			invalidate(INVALID_AREA{COORDINATE(xc - radius), COORDINATE(yc - radius), 
+				COORDINATE(xc + radius), COORDINATE(yc + radius)});
 		}
 
 		//TODO additional 2D primitives here? e.g. arc, fill
@@ -283,6 +287,7 @@ namespace devices::display
 
 		// Draw a segment according to Bresenham algorithm
 		// https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+		// https://fr.wikipedia.org/wiki/Algorithme_de_trac%C3%A9_de_segment_de_Bresenham
 		void draw_line_bresenham(COORDINATE x1, COORDINATE y1, COORDINATE x2, COORDINATE y2)
 		{
 			// We are sure that x1 < x2 when calling this method
@@ -373,6 +378,32 @@ namespace devices::display
 						}
 					}
 				}
+			}
+		}
+
+		// https://fr.wikipedia.org/wiki/Algorithme_de_trac%C3%A9_d%27arc_de_cercle_de_Bresenham
+		void draw_circle_bresenham(COORDINATE xc, COORDINATE yc, COORDINATE radius)
+		{
+			COORDINATE x = 0;
+			COORDINATE y = radius;
+			SIGNED_COORDINATE m = 5 - 4 * radius;
+			while (x <= y)
+			{
+				DisplayDevice::set_pixel(x +  xc, y + yc, true);
+				DisplayDevice::set_pixel(y +  xc, x + yc, true);
+				DisplayDevice::set_pixel(-x +  xc, y + yc, true);
+				DisplayDevice::set_pixel(-y +  xc, x + yc, true);
+				DisplayDevice::set_pixel(x +  xc, -y + yc, true);
+				DisplayDevice::set_pixel(y +  xc, -x + yc, true);
+				DisplayDevice::set_pixel(-x +  xc, -y + yc, true);
+				DisplayDevice::set_pixel(-y +  xc, -x + yc, true);
+				if (m > 0)
+				{
+					--y;
+					m -= 8 * y;
+				}
+				++x;
+				m += 8 * x + 4;
 			}
 		}
 

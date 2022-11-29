@@ -146,4 +146,9 @@ int main()
 	// Try drawing rectangle
 	nokia.draw_rectangle(30, 35, 55, 45);
 	nokia.update();
+	time::delay_ms(DELAY_MS);
+
+	// Try drawing circle
+	nokia.draw_circle(DISPLAY::WIDTH / 2, DISPLAY::HEIGHT / 2, 20);
+	nokia.update();
 }
