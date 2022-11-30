@@ -36,6 +36,7 @@ namespace devices
 //TODO error handling? (e.g. out of range coordinate)
 namespace devices::display
 {
+	// Shall we keep InvalidArea outside Nokia5110?
 	template<typename COORDINATE> struct InvalidArea
 	{
 		InvalidArea() = default;
@@ -93,6 +94,7 @@ namespace devices::display
 	//TODO what are the expectations on DisplayDevice type?
 	// - size constants?
 	// - expected API?
+	// Screen update is not automatic! You must call update() once you have changed display bitmap content
 	template<typename DisplayDevice> class Display: public DisplayDevice
 	{
 	protected:
@@ -105,11 +107,6 @@ namespace devices::display
 
 		static constexpr COORDINATE WIDTH = DisplayDevice::WIDTH;
 		static constexpr COORDINATE HEIGHT = DisplayDevice::HEIGHT;
-		//TODO does it need to be public?
-		static constexpr uint8_t DEPTH = DisplayDevice::DEPTH;
-
-		//TODO Define COLOR type (bool, uint8_t, uint16_t, uint32_t or specific uint24_t)
-		//TODO API to handle colors
 
 		Display() = default;
 
@@ -163,18 +160,10 @@ namespace devices::display
 			invalidate(invalid);
 		}
 
-		void set_pixel(COORDINATE x, COORDINATE y)
+		void draw_pixel(COORDINATE x, COORDINATE y)
 		{
 			if (!is_valid_xy(x, y)) return;
-			const INVALID_AREA invalid = DisplayDevice::set_pixel(x, y, true);
-			// Invalidate if needed
-			invalidate(invalid);
-		}
-
-		void clear_pixel(COORDINATE x, COORDINATE y)
-		{
-			if (!is_valid_xy(x, y)) return;
-			const INVALID_AREA invalid = DisplayDevice::set_pixel(x, y, false);
+			const INVALID_AREA invalid = DisplayDevice::set_pixel(x, y);
 			// Invalidate if needed
 			invalidate(invalid);
 		}
@@ -275,14 +264,14 @@ namespace devices::display
 		{
 			swap_to_sort(y1, y2);
 			for (COORDINATE y = y1; y <= y2; ++y)
-				DisplayDevice::set_pixel(x1, y, true);
+				DisplayDevice::set_pixel(x1, y);
 		}
 		
 		void draw_hline(COORDINATE x1, COORDINATE y1, COORDINATE x2)
 		{
 			swap_to_sort(x1, x2);
 			for (COORDINATE x = x1; x <= x2; ++x)
-				DisplayDevice::set_pixel(x, y1, true);
+				DisplayDevice::set_pixel(x, y1);
 		}
 
 		// Draw a segment according to Bresenham algorithm
@@ -306,7 +295,7 @@ namespace devices::display
 					dy *= 2;
 					while (true)
 					{
-						DisplayDevice::set_pixel(x1, y1, true);
+						DisplayDevice::set_pixel(x1, y1);
 						if (x1 == x2) break;
 						++x1;
 						e -= dy;
@@ -325,7 +314,7 @@ namespace devices::display
 					dy *= 2;
 					while (true)
 					{
-						DisplayDevice::set_pixel(x1, y1, true);
+						DisplayDevice::set_pixel(x1, y1);
 						if (y1 == y2) break;
 						++y1;
 						e -= dx;
@@ -348,7 +337,7 @@ namespace devices::display
 					dy *= 2;
 					while (true)
 					{
-						DisplayDevice::set_pixel(x1, y1, true);
+						DisplayDevice::set_pixel(x1, y1);
 						if (x1 == x2) break;
 						++x1;
 						e += dy;
@@ -367,7 +356,7 @@ namespace devices::display
 					dy *= 2;
 					while (true)
 					{
-						DisplayDevice::set_pixel(x1, y1, true);
+						DisplayDevice::set_pixel(x1, y1);
 						if (y1 == y2) break;
 						--y1;
 						e += dx;
@@ -389,14 +378,14 @@ namespace devices::display
 			SIGNED_COORDINATE m = 5 - 4 * radius;
 			while (x <= y)
 			{
-				DisplayDevice::set_pixel(x +  xc, y + yc, true);
-				DisplayDevice::set_pixel(y +  xc, x + yc, true);
-				DisplayDevice::set_pixel(-x +  xc, y + yc, true);
-				DisplayDevice::set_pixel(-y +  xc, x + yc, true);
-				DisplayDevice::set_pixel(x +  xc, -y + yc, true);
-				DisplayDevice::set_pixel(y +  xc, -x + yc, true);
-				DisplayDevice::set_pixel(-x +  xc, -y + yc, true);
-				DisplayDevice::set_pixel(-y +  xc, -x + yc, true);
+				DisplayDevice::set_pixel(x +  xc, y + yc);
+				DisplayDevice::set_pixel(y +  xc, x + yc);
+				DisplayDevice::set_pixel(-x +  xc, y + yc);
+				DisplayDevice::set_pixel(-y +  xc, x + yc);
+				DisplayDevice::set_pixel(x +  xc, -y + yc);
+				DisplayDevice::set_pixel(y +  xc, -x + yc);
+				DisplayDevice::set_pixel(-x +  xc, -y + yc);
+				DisplayDevice::set_pixel(-y +  xc, -x + yc);
 				if (m > 0)
 				{
 					--y;

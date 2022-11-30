@@ -47,16 +47,18 @@
 #include "display.h"
 #include "font.h"
 
+//TODO shall we keep InvalidArea and update()/invalidate() for other displays than Nokia5110?
+
+
 // General design rationale:
 // - Device class contains only hardware stuff
 // - no public drawing API in device class (even erase()?)
 // - Everything else is performed by Display (common stuff!)
 
-//TODO Future design:
-// - DisplayRaster? width/height/depth (bits per pixel)/peculiarities (BW H/V byte) 
-
+//TODO Add Color usage in all API
 //TODO reorganize public/protected/private sections
 
+//TODO add "screenshot" facility
 //TODO Add image API (pixmap)
 //		- format?
 //		- converters?
@@ -69,13 +71,6 @@
 //TODO define specific ostream for display (is that even possible)?
 namespace devices::display
 {
-	// Coordinates systems conventions (variable naming)
-	// - (x,y) coordinates of one pixel in the LCD matrix
-	// - (r,c) coordinates of an 8-pixel vertical bar in the LCD matrix
-	// - (row, column) coordinates of one character (8x5 pixels + 1 spacing) in the LCD matrix
-
-	// Screen update is not automatic! You must call update() once you have changed display bitmap content
-
 	/**
 	 * SPI device driver for Nokia 5110 display chip.
 	 * 
@@ -85,13 +80,31 @@ namespace devices::display
 	 * All drawing API work on a pixel buffer in memory, never directly on the LCD 
 	 * device. Buffer is copied to the LCD device through `update()` calls.
 	 * 
-	 * TODO
+	 * @warning This class shall be used along with `devices::display::Display` 
+	 * template class. It cannot be instantiated on its own.
+	 * 
+	 * All public API in LCD5110 is available through the encapsulating Display
+	 * instance.
+	 * 
+	 * Once Display has been instantiated for LCD5110 driver, you should call
+	 * the following API before it can be used to display anything:
+	 * 1. `reset()` device
+	 * 2. `set_display_bias()` to relevant value
+	 * 3. `set_display_contrast()` to relevant value
+	 * 4. `power_up()` device
+	 * 5. `set_color()` to define the pixel color (black or white) to use in all
+	 * subsequent drawing primitives
+	 * 6. `set_font()` if you intend to display text
+	 *
+	 * @warning For optimization reasons, text display can always occur at a `y`
+	 * position that must be a multiple of 8, otherwise nothing will get drawn.
+	 * 
 	 * Note that PCD8544 chip used in Nokia 5110 is powered at 3.3V and does not 
 	 * bear 5V voltage of pins in most Arduino. Hence, all signals from Arduino
 	 * output pins must be covnerted from 5V to 3.3V, for this you will need a level
 	 * converter:
 	 * - this may be 4050 chip (up to 6 pins)
-	 * - or you may use of those common MOSFET-based converters breakouts
+	 * - or you may use one of those common MOSFET-based converters breakouts
 	 * - or you may build your own
 	 * 
 	 * Example wiring for Arduino UNO:
@@ -105,12 +118,12 @@ namespace devices::display
 	 * - 3.3V              ------ 3.3V
 	 * - GND               ------ GND
 	 * 
-	 * TODO
-	 * 
 	 * @tparam SCE the output pin used for Chip Selection of the PCD8544 chip on
 	 * the SPI bus.
 	 * @tparam DC the output pin used to select Data (high) or Command (low) mode 
 	 * of PCD8544 chip.
+	 * 
+	 * @sa Display
 	 */
 	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST> class LCD5110 : 
 		public spi::SPIDevice<SCE, spi::ChipSelect::ACTIVE_LOW, spi::compute_clockrate(4'000'000UL)>
@@ -122,7 +135,6 @@ namespace devices::display
 
 		static constexpr COORDINATE WIDTH = 84;
 		static constexpr COORDINATE HEIGHT = 48;
-		static constexpr uint8_t DEPTH = 1;
 
 		static constexpr bool VERTICAL_FONT = true;
 
@@ -184,17 +196,12 @@ namespace devices::display
 			send_command(DISPLAY_CONTROL_MASK | DISPLAY_CONTROL_NORMAL);
 		}
 
+		void set_color(bool color)
+		{
+			color_ = color;
+		}
+
 	protected:
-		/**
-		 * Create a new device driver for a Nokia 5110 display chip.
-		 * Before displaying anything, you should first:
-		 * 1. `reset()` device
-		 * 2. set mode to `normal()` (or `inverted()`)
-		 * 3. `set_display_bias()` to relevant value
-		 * 4. `set_display_contrast()` to relevant value
-		 * 5. `power_up()` device
-		 * 6. `set_font()` if you intend to display text
-		 */
 		LCD5110()
 		{
 			erase();
@@ -206,7 +213,7 @@ namespace devices::display
 		}
 
 		// NOTE Coordinates must have been first verified by caller
-		INVALID_AREA set_pixel(uint8_t x, uint8_t y, bool pixel)
+		INVALID_AREA set_pixel(uint8_t x, uint8_t y)
 		{
 			// Convert to (r,c)
 			const uint8_t c = x;
@@ -216,7 +223,7 @@ namespace devices::display
 			// Get pointer to pixel byte
 			uint8_t* pix_column = get_display(r, c);
 			// Check if pixel is already same as pixel, force pixel if needed
-			if (pixel)
+			if (color_)
 			{
 				if (*pix_column & mask) return INVALID_AREA::EMPTY;
 				*pix_column |= mask;
@@ -249,7 +256,13 @@ namespace devices::display
 			uint8_t* display_ptr = get_display(row, col);
 
 			for (uint8_t i = 0; i < width; ++i)
-				*display_ptr++ = font.get_char_glyph_byte(glyph_ref, i);
+			{
+				uint8_t pixel_bar = font.get_char_glyph_byte(glyph_ref, i);
+				if (color_)
+					*display_ptr++ |= pixel_bar;
+				else
+					*display_ptr++ &= ~pixel_bar;
+			}
 			return INVALID_AREA{x, y, COORDINATE(x + width + 1), y};
 		}
 
@@ -323,7 +336,6 @@ namespace devices::display
 			this->end_transfer();
 		}
 
-		//TODO Externalize to Pixmap class?
 		// Get a pointer to display byte at (r,c) coordinates 
 		// (r,c) must be valid coordinates in pixmap
 		uint8_t* get_display(uint8_t r, uint8_t c)
@@ -344,6 +356,8 @@ namespace devices::display
 
 		// Pin to control data Vs command sending through SPI
 		gpio::FAST_PIN<DC> dc_{gpio::PinMode::OUTPUT};
+
+		bool color_;
 	};
 }
 

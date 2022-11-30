@@ -56,6 +56,7 @@ int main()
 	// Start or init SPI device if needed
 	DISPLAY nokia;
 	nokia.reset();
+	nokia.set_color(true);
 	nokia.set_display_bias();
 	nokia.set_display_contrast();
 	nokia.normal();
@@ -115,12 +116,14 @@ int main()
 	time::delay_ms(DELAY_MS);
 
 	// Try drawing pixels
-	nokia.clear_pixel(0, 1);
-	nokia.clear_pixel(0, 2);
+	nokia.set_color(false);
+	nokia.draw_pixel(0, 1);
+	nokia.draw_pixel(0, 2);
+	nokia.set_color(true);
 	for (uint8_t x = 0; x < 84; ++x)
-		nokia.set_pixel(x, 3);
+		nokia.draw_pixel(x, 3);
 	for (uint8_t y = 40; y < 48; ++y)
-		nokia.set_pixel(42, y);
+		nokia.draw_pixel(42, y);
 	nokia.update();
 	time::delay_ms(DELAY_MS);
 
