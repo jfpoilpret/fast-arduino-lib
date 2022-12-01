@@ -69,13 +69,13 @@ namespace devices::display
 		COLOR color_{};
 	};
 
-	template<typename COORDINATE, bool USED = true> struct InvalidArea
+	template<typename XCOORD, typename YCOORD, bool USED = true> struct InvalidArea
 	{
 		InvalidArea() = default;
-		InvalidArea(COORDINATE x1, COORDINATE y1, COORDINATE x2, COORDINATE y2)
+		InvalidArea(XCOORD x1, YCOORD y1, XCOORD x2, YCOORD y2)
 			: x1{x1}, y1{y1}, x2{x2}, y2{y2}, empty{false} {}
 
-		InvalidArea& operator+=(const InvalidArea<COORDINATE>& a)
+		InvalidArea& operator+=(const InvalidArea<XCOORD, YCOORD>& a)
 		{
 			if (!a.empty)
 			{
@@ -100,10 +100,10 @@ namespace devices::display
 
 		static InvalidArea EMPTY;
 
-		COORDINATE x1 = 0;
-		COORDINATE y1 = 0;
-		COORDINATE x2 = 0;
-		COORDINATE y2 = 0;
+		XCOORD x1 = 0;
+		YCOORD y1 = 0;
+		XCOORD x2 = 0;
+		YCOORD y2 = 0;
 		bool empty = true;
 	};
 
@@ -111,12 +111,13 @@ namespace devices::display
 	// so that we do not waste space and time with extra variables and calculations 
 	//TODO check that it works!
 	//TODO check that it generates no code!
-	template<typename COORDINATE> struct InvalidArea<COORDINATE, false>
+	/// @cond notdocumented
+	template<typename XCOORD, typename YCOORD> struct InvalidArea<XCOORD, YCOORD, false>
 	{
 		InvalidArea() = default;
-		InvalidArea(COORDINATE x1, COORDINATE y1, COORDINATE x2, COORDINATE y2) {}
+		InvalidArea(XCOORD x1, YCOORD y1, XCOORD x2, YCOORD y2) {}
 
-		InvalidArea& operator+=(const InvalidArea<COORDINATE, false>& a)
+		InvalidArea& operator+=(const InvalidArea<XCOORD, YCOORD, false>& a)
 		{
 			return *this;
 		}
@@ -126,40 +127,42 @@ namespace devices::display
 		const bool empty = true;
 	};
 
-	template<typename COORDINATE, bool USED>
-	InvalidArea<COORDINATE, USED> InvalidArea<COORDINATE, USED>::EMPTY = InvalidArea{};
+	template<typename XCOORD, typename YCOORD, bool USED>
+	InvalidArea<XCOORD, YCOORD, USED> InvalidArea<XCOORD, YCOORD, USED>::EMPTY = InvalidArea{};
 
-	template<typename COORDINATE, bool USED>
-	InvalidArea<COORDINATE, USED> operator+(
-		const InvalidArea<COORDINATE, USED>& a1, const InvalidArea<COORDINATE, USED>& a2)
+	template<typename XCOORD, typename YCOORD, bool USED>
+	InvalidArea<XCOORD, YCOORD, USED> operator+(
+		const InvalidArea<XCOORD, YCOORD, USED>& a1, const InvalidArea<XCOORD, YCOORD, USED>& a2)
 	{
-		if (a1.empty && a2.empty) return InvalidArea<COORDINATE, USED>{};
+		if (a1.empty && a2.empty) return InvalidArea<XCOORD, YCOORD, USED>{};
 		if (a1.empty) return a2;
 		if (a2.empty) return a1;
-		return InvalidArea<COORDINATE, USED>{
+		return InvalidArea<XCOORD, YCOORD, USED>{
 			(a1.x1 < a2.x1 ? a1.x1 : a2.x1),
 			(a1.y1 < a2.y1 ? a1.y1 : a2.y1),
 			(a1.x2 > a2.x2 ? a1.x2 : a2.x2),
 			(a1.y2 > a2.y2 ? a1.y2 : a2.y2)
 		};
 	}
+	/// @endcond
 
-	//TODO what are the expectations on DISPLAY_DEVICE type?
-	// - size constants?
-	// - expected API?
-	// Screen update is not automatic! You must call update() once you have changed display bitmap content
+	//TODO document constraints on DISPLAY_DEVICE
+	// Screen update is not always automatic! You must call update() once you have changed display bitmap content
 	template<typename DISPLAY_DEVICE> class Display: public DISPLAY_DEVICE
 	{
+	public:
+		using XCOORD = typename DISPLAY_DEVICE::XCOORD;
+		using YCOORD = typename DISPLAY_DEVICE::YCOORD;
+		using SCALAR = typename DISPLAY_DEVICE::SCALAR;
+
+		static constexpr XCOORD WIDTH = DISPLAY_DEVICE::WIDTH;
+		static constexpr YCOORD HEIGHT = DISPLAY_DEVICE::HEIGHT;
+
 	protected:
-		using SIGNED_COORDINATE = typename DISPLAY_DEVICE::SIGNED_COORDINATE;
-		using INVALID_AREA = InvalidArea<typename DISPLAY_DEVICE::COORDINATE>;
+		using SIGNED_SCALAR = typename DISPLAY_DEVICE::SIGNED_SCALAR;
+		using INVALID_AREA = typename DISPLAY_DEVICE::INVALID_AREA;
 
 	public:
-		using COORDINATE = typename DISPLAY_DEVICE::COORDINATE;
-
-		static constexpr COORDINATE WIDTH = DISPLAY_DEVICE::WIDTH;
-		static constexpr COORDINATE HEIGHT = DISPLAY_DEVICE::HEIGHT;
-
 		Display()
 		{
 			// Check at compile-time that DISPLAY_DEVICE is a subclass of AbstractDisplayDevice
@@ -173,7 +176,7 @@ namespace devices::display
 			invalidate();
 		}
 
-		void write_char(COORDINATE x, COORDINATE y, char value)
+		void write_char(XCOORD x, YCOORD y, char value)
 		{
 			if (this->font_ == nullptr) return;
 			if (!is_valid_xy(x, y)) return;
@@ -181,7 +184,7 @@ namespace devices::display
 			invalidate(invalid);
 		}
 
-		void write_string(COORDINATE x, COORDINATE y, const char* content)
+		void write_string(XCOORD x, YCOORD y, const char* content)
 		{
 			if (this->font_ == nullptr) return;
 			if (!is_valid_xy(x, y)) return;
@@ -195,7 +198,7 @@ namespace devices::display
 			invalidate(invalid);
 		}
 
-		void write_string(COORDINATE x, COORDINATE y, const flash::FlashStorage* content)
+		void write_string(XCOORD x, YCOORD y, const flash::FlashStorage* content)
 		{
 			if (this->font_ == nullptr) return;
 			if (!is_valid_xy(x, y)) return;
@@ -210,7 +213,7 @@ namespace devices::display
 			invalidate(invalid);
 		}
 
-		void draw_pixel(COORDINATE x, COORDINATE y)
+		void draw_pixel(XCOORD x, YCOORD y)
 		{
 			if (!is_valid_xy(x, y)) return;
 			const INVALID_AREA invalid = DISPLAY_DEVICE::set_pixel(x, y);
@@ -218,7 +221,8 @@ namespace devices::display
 			invalidate(invalid);
 		}
 
-		void draw_line(COORDINATE x1, COORDINATE y1, COORDINATE x2, COORDINATE y2)
+		//TODO rework if (x2, y2) should be included in the line or excluded
+		void draw_line(XCOORD x1, YCOORD y1, XCOORD x2, YCOORD y2)
 		{
 			if (!is_valid_xy(x1, y1)) return;
 			if (!is_valid_xy(x2, y2)) return;
@@ -250,7 +254,8 @@ namespace devices::display
 			invalidate(INVALID_AREA{x1, y1, x2, y2});
 		}
 
-		void draw_rectangle(COORDINATE x1, COORDINATE y1, COORDINATE x2, COORDINATE y2)
+		//TODO rework if (x2, y2) should be included in the rectangle or excluded
+		void draw_rectangle(XCOORD x1, YCOORD y1, XCOORD x2, YCOORD y2)
 		{
 			if (!is_valid_xy(x1, y1)) return;
 			if (!is_valid_xy(x2, y2)) return;
@@ -267,15 +272,15 @@ namespace devices::display
 			invalidate(INVALID_AREA{x1, y1, x2, y2});
 		}
 
-		void draw_circle(COORDINATE xc, COORDINATE yc, COORDINATE radius)
+		void draw_circle(XCOORD xc, YCOORD yc, SCALAR radius)
 		{
 			if (!is_valid_xy(xc, yc)) return;
 			if ((xc < radius) || (xc + radius > WIDTH)) return;
 			if ((yc < radius) || (yc + radius > HEIGHT)) return;
 			// Apply Bresenham's circle algorithm
 			draw_circle_bresenham(xc, yc, radius);
-			invalidate(INVALID_AREA{COORDINATE(xc - radius), COORDINATE(yc - radius), 
-				COORDINATE(xc + radius), COORDINATE(yc + radius)});
+			invalidate(INVALID_AREA{XCOORD(xc - radius), YCOORD(yc - radius), 
+				XCOORD(xc + radius), YCOORD(yc + radius)});
 		}
 
 		//TODO additional 2D primitives here? e.g. arc, fill
@@ -305,33 +310,33 @@ namespace devices::display
 			invalid_area_ = INVALID_AREA{0, 0, WIDTH - 1, HEIGHT - 1};
 		}
 
-		static bool is_valid_xy(COORDINATE x, COORDINATE y)
+		static bool is_valid_xy(XCOORD x, YCOORD y)
 		{
 			return (x < WIDTH) && (y < HEIGHT);
 		}
 
-		void draw_vline(COORDINATE x1, COORDINATE y1, COORDINATE y2)
+		void draw_vline(XCOORD x1, YCOORD y1, YCOORD y2)
 		{
 			swap_to_sort(y1, y2);
-			for (COORDINATE y = y1; y <= y2; ++y)
+			for (YCOORD y = y1; y <= y2; ++y)
 				DISPLAY_DEVICE::set_pixel(x1, y);
 		}
 		
-		void draw_hline(COORDINATE x1, COORDINATE y1, COORDINATE x2)
+		void draw_hline(XCOORD x1, YCOORD y1, XCOORD x2)
 		{
 			swap_to_sort(x1, x2);
-			for (COORDINATE x = x1; x <= x2; ++x)
+			for (XCOORD x = x1; x <= x2; ++x)
 				DISPLAY_DEVICE::set_pixel(x, y1);
 		}
 
 		// Draw a segment according to Bresenham algorithm
 		// https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
 		// https://fr.wikipedia.org/wiki/Algorithme_de_trac%C3%A9_de_segment_de_Bresenham
-		void draw_line_bresenham(COORDINATE x1, COORDINATE y1, COORDINATE x2, COORDINATE y2)
+		void draw_line_bresenham(XCOORD x1, YCOORD y1, XCOORD x2, YCOORD y2)
 		{
 			// We are sure that x1 < x2 when calling this method
-			SIGNED_COORDINATE dx = SIGNED_COORDINATE(x2) - SIGNED_COORDINATE(x1);
-			SIGNED_COORDINATE dy = SIGNED_COORDINATE(y2) - SIGNED_COORDINATE(y1);
+			SIGNED_SCALAR dx = SIGNED_SCALAR(x2) - SIGNED_SCALAR(x1);
+			SIGNED_SCALAR dy = SIGNED_SCALAR(y2) - SIGNED_SCALAR(y1);
 
 			//TODO Find a way to factor code to get reduced code size
 			if (dy > 0)
@@ -340,7 +345,7 @@ namespace devices::display
 				if (dx >= dy)
 				{
 					// 1st octant
-					SIGNED_COORDINATE e = dx;
+					SIGNED_SCALAR e = dx;
 					dx *= 2;
 					dy *= 2;
 					while (true)
@@ -359,7 +364,7 @@ namespace devices::display
 				else
 				{
 					// 2nd octant
-					SIGNED_COORDINATE e = dy;
+					SIGNED_SCALAR e = dy;
 					dx *= 2;
 					dy *= 2;
 					while (true)
@@ -382,7 +387,7 @@ namespace devices::display
 				if (dx >= -dy)
 				{
 					// 8th octant
-					SIGNED_COORDINATE e = dx;
+					SIGNED_SCALAR e = dx;
 					dx *= 2;
 					dy *= 2;
 					while (true)
@@ -401,7 +406,7 @@ namespace devices::display
 				else
 				{
 					// 7th octant
-					SIGNED_COORDINATE e = dy;
+					SIGNED_SCALAR e = dy;
 					dx *= 2;
 					dy *= 2;
 					while (true)
@@ -421,11 +426,11 @@ namespace devices::display
 		}
 
 		// https://fr.wikipedia.org/wiki/Algorithme_de_trac%C3%A9_d%27arc_de_cercle_de_Bresenham
-		void draw_circle_bresenham(COORDINATE xc, COORDINATE yc, COORDINATE radius)
+		void draw_circle_bresenham(XCOORD xc, YCOORD yc, SCALAR radius)
 		{
-			COORDINATE x = 0;
-			COORDINATE y = radius;
-			SIGNED_COORDINATE m = 5 - 4 * radius;
+			XCOORD x = 0;
+			YCOORD y = radius;
+			SIGNED_SCALAR m = 5 - 4 * radius;
 			while (x <= y)
 			{
 				DISPLAY_DEVICE::set_pixel(x +  xc, y + yc);
@@ -446,7 +451,8 @@ namespace devices::display
 			}
 		}
 
-		static bool swap_to_sort(COORDINATE& a1, COORDINATE& a2)
+		template<typename COORD>
+		static bool swap_to_sort(COORD& a1, COORD& a2)
 		{
 			if (a1 > a2)
 			{

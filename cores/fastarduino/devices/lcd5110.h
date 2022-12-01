@@ -127,12 +127,15 @@ namespace devices::display
 		public AbstractDisplayDevice<bool, true>
 	{
 	protected:
-		using COORDINATE = uint8_t;
-		using SIGNED_COORDINATE = int8_t;
-		using INVALID_AREA = InvalidArea<COORDINATE>;
+		using XCOORD = uint8_t;
+		using YCOORD = uint8_t;
+		using SCALAR = uint8_t;
+		// Must be large enough to store -4 * min(WIDTH,HEIGHT)
+		using SIGNED_SCALAR = int8_t;
+		using INVALID_AREA = InvalidArea<XCOORD, YCOORD>;
 
-		static constexpr COORDINATE WIDTH = 84;
-		static constexpr COORDINATE HEIGHT = 48;
+		static constexpr XCOORD WIDTH = 84;
+		static constexpr YCOORD HEIGHT = 48;
 
 	public:
 		//TODO temp control API?
@@ -191,6 +194,8 @@ namespace devices::display
 		{
 			send_command(DISPLAY_CONTROL_MASK | DISPLAY_CONTROL_NORMAL);
 		}
+
+		//TODO add set_mode()
 
 	protected:
 		LCD5110()
@@ -254,7 +259,7 @@ namespace devices::display
 				else
 					*display_ptr++ &= ~pixel_bar;
 			}
-			return INVALID_AREA{x, y, COORDINATE(x + width + 1), y};
+			return INVALID_AREA{x, y, XCOORD(x + width + 1), y};
 		}
 
 		void set_bitmap()
