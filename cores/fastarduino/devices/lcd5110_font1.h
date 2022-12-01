@@ -19,6 +19,8 @@
 
 #include "font.h"
 
+//TODO Better name for file (independent of Nokia?)
+//TODO Better name for class
 namespace devices::display
 {
 	//TODO move decl to Font subclass & def to cpp file?
