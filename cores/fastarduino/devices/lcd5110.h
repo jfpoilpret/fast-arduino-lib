@@ -47,19 +47,16 @@
 #include "display.h"
 #include "font.h"
 
-//TODO shall we keep InvalidArea and update()/invalidate() for other displays than Nokia5110?
-
-
 // General design rationale:
 // - Device class contains only hardware stuff
 // - no public drawing API in device class (even erase()?)
 // - Everything else is performed by Display (common stuff!)
 
-//TODO Add Color usage in all API
 //TODO reorganize public/protected/private sections
 
 //TODO add "screenshot" facility
-//TODO Add image API (pixmap)
+
+//TODO Add image API (pixmap): generic? usable with files (from flash disk)
 //		- format?
 //		- converters?
 
@@ -126,7 +123,8 @@ namespace devices::display
 	 * @sa Display
 	 */
 	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST> class LCD5110 : 
-		public spi::SPIDevice<SCE, spi::ChipSelect::ACTIVE_LOW, spi::compute_clockrate(4'000'000UL)>
+		public spi::SPIDevice<SCE, spi::ChipSelect::ACTIVE_LOW, spi::compute_clockrate(4'000'000UL)>,
+		public AbstractDisplayDevice<bool, true>
 	{
 	protected:
 		using COORDINATE = uint8_t;
@@ -135,8 +133,6 @@ namespace devices::display
 
 		static constexpr COORDINATE WIDTH = 84;
 		static constexpr COORDINATE HEIGHT = 48;
-
-		static constexpr bool VERTICAL_FONT = true;
 
 	public:
 		//TODO temp control API?
@@ -196,11 +192,6 @@ namespace devices::display
 			send_command(DISPLAY_CONTROL_MASK | DISPLAY_CONTROL_NORMAL);
 		}
 
-		void set_color(bool color)
-		{
-			color_ = color;
-		}
-
 	protected:
 		LCD5110()
 		{
@@ -237,18 +228,18 @@ namespace devices::display
 		}
 
 		// NOTE Coordinates must have been first verified by caller
-		INVALID_AREA write_char(const Font<true>& font, uint8_t x, uint8_t y, char value)
+		INVALID_AREA write_char(uint8_t x, uint8_t y, char value)
 		{
 			if (y % ROW_HEIGHT != 0) return INVALID_AREA::EMPTY;
 
 			// Check column and row not out of range for characters!
-			const uint8_t width = font.width();
+			const uint8_t width = font_->width();
 			const uint8_t row = y / ROW_HEIGHT;
 			const uint8_t col = x;
 			if ((col + width) > WIDTH) return INVALID_AREA::EMPTY;
 
 			// Load pixmap for `value` character
-			uint16_t glyph_ref = font.get_char_glyph_ref(value);
+			uint16_t glyph_ref = font_->get_char_glyph_ref(value);
 			if (glyph_ref == 0)
 				return INVALID_AREA::EMPTY;
 
@@ -257,7 +248,7 @@ namespace devices::display
 
 			for (uint8_t i = 0; i < width; ++i)
 			{
-				uint8_t pixel_bar = font.get_char_glyph_byte(glyph_ref, i);
+				uint8_t pixel_bar = font_->get_char_glyph_byte(glyph_ref, i);
 				if (color_)
 					*display_ptr++ |= pixel_bar;
 				else
@@ -356,8 +347,6 @@ namespace devices::display
 
 		// Pin to control data Vs command sending through SPI
 		gpio::FAST_PIN<DC> dc_{gpio::PinMode::OUTPUT};
-
-		bool color_;
 	};
 }
 

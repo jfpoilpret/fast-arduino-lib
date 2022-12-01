@@ -22,6 +22,7 @@
 #define DISPLAY_HH
 
 #include "../flash.h"
+#include "../types_traits.h"
 #include "../utilities.h"
 #include "font.h"
 
@@ -36,8 +37,39 @@ namespace devices
 //TODO error handling? (e.g. out of range coordinate)
 namespace devices::display
 {
-	// Shall we keep InvalidArea outside Nokia5110?
-	template<typename COORDINATE> struct InvalidArea
+	/// @cond notdocumented
+	// This class is here to simplify check, in Display ctor, that DISPLAY_DEVICE is a subclass
+	// of AbstractDisplayDevice
+	class AbstractDisplayDeviceGhost
+	{
+	private:
+		AbstractDisplayDeviceGhost() = default;
+		template<typename, bool>friend class AbstractDisplayDevice;
+	};
+	/// @endcond
+
+	// All display device implementation should derive from this class!
+	template<typename COLOR, bool VERTICAL_FONT> class AbstractDisplayDevice : public AbstractDisplayDeviceGhost
+	{
+	public:
+		//TODO also include invalid area here (as type and as variable)?
+		void set_color(COLOR color)
+		{
+			color_ = color;
+		}
+
+		// Display drawing settings: font, color, mode
+		void set_font(const Font<VERTICAL_FONT>& font)
+		{
+			font_ = &font;
+		}
+
+	protected:
+		const Font<VERTICAL_FONT>* font_ = nullptr;
+		COLOR color_{};
+	};
+
+	template<typename COORDINATE, bool USED = true> struct InvalidArea
 	{
 		InvalidArea() = default;
 		InvalidArea(COORDINATE x1, COORDINATE y1, COORDINATE x2, COORDINATE y2)
@@ -75,15 +107,36 @@ namespace devices::display
 		bool empty = true;
 	};
 
-	template<typename COORDINATE> InvalidArea<COORDINATE> InvalidArea<COORDINATE>::EMPTY = InvalidArea{};
-
-	template<typename COORDINATE>
-	InvalidArea<COORDINATE> operator+(const InvalidArea<COORDINATE>& a1, const InvalidArea<COORDINATE>& a2)
+	// Use for big displays (without raster), InvalidArea is reduced to `const bool empty = true;`
+	// so that we do not waste space and time with extra variables and calculations 
+	//TODO check that it works!
+	//TODO check that it generates no code!
+	template<typename COORDINATE> struct InvalidArea<COORDINATE, false>
 	{
-		if (a1.empty && a2.empty) return InvalidArea<COORDINATE>{};
+		InvalidArea() = default;
+		InvalidArea(COORDINATE x1, COORDINATE y1, COORDINATE x2, COORDINATE y2) {}
+
+		InvalidArea& operator+=(const InvalidArea<COORDINATE, false>& a)
+		{
+			return *this;
+		}
+
+		static InvalidArea EMPTY;
+
+		const bool empty = true;
+	};
+
+	template<typename COORDINATE, bool USED>
+	InvalidArea<COORDINATE, USED> InvalidArea<COORDINATE, USED>::EMPTY = InvalidArea{};
+
+	template<typename COORDINATE, bool USED>
+	InvalidArea<COORDINATE, USED> operator+(
+		const InvalidArea<COORDINATE, USED>& a1, const InvalidArea<COORDINATE, USED>& a2)
+	{
+		if (a1.empty && a2.empty) return InvalidArea<COORDINATE, USED>{};
 		if (a1.empty) return a2;
 		if (a2.empty) return a1;
-		return InvalidArea<COORDINATE>{
+		return InvalidArea<COORDINATE, USED>{
 			(a1.x1 < a2.x1 ? a1.x1 : a2.x1),
 			(a1.y1 < a2.y1 ? a1.y1 : a2.y1),
 			(a1.x2 > a2.x2 ? a1.x2 : a2.x2),
@@ -91,55 +144,52 @@ namespace devices::display
 		};
 	}
 
-	//TODO what are the expectations on DisplayDevice type?
+	//TODO what are the expectations on DISPLAY_DEVICE type?
 	// - size constants?
 	// - expected API?
 	// Screen update is not automatic! You must call update() once you have changed display bitmap content
-	template<typename DisplayDevice> class Display: public DisplayDevice
+	template<typename DISPLAY_DEVICE> class Display: public DISPLAY_DEVICE
 	{
 	protected:
-		static constexpr bool VERTICAL_FONT = DisplayDevice::VERTICAL_FONT;
-		using SIGNED_COORDINATE = typename DisplayDevice::SIGNED_COORDINATE;
-		using INVALID_AREA = InvalidArea<typename DisplayDevice::COORDINATE>;
+		using SIGNED_COORDINATE = typename DISPLAY_DEVICE::SIGNED_COORDINATE;
+		using INVALID_AREA = InvalidArea<typename DISPLAY_DEVICE::COORDINATE>;
 
 	public:
-		using COORDINATE = typename DisplayDevice::COORDINATE;
+		using COORDINATE = typename DISPLAY_DEVICE::COORDINATE;
 
-		static constexpr COORDINATE WIDTH = DisplayDevice::WIDTH;
-		static constexpr COORDINATE HEIGHT = DisplayDevice::HEIGHT;
+		static constexpr COORDINATE WIDTH = DISPLAY_DEVICE::WIDTH;
+		static constexpr COORDINATE HEIGHT = DISPLAY_DEVICE::HEIGHT;
 
-		Display() = default;
-
-		// Display drawing settings: font, color, mode
-		void set_font(const Font<VERTICAL_FONT>& font)
+		Display()
 		{
-			font_ = &font;
+			// Check at compile-time that DISPLAY_DEVICE is a subclass of AbstractDisplayDevice
+			types_traits::derives_from<DISPLAY_DEVICE, AbstractDisplayDeviceGhost>{};
 		}
 
 		// Display drawing primitives
 		void erase()
 		{
-			DisplayDevice::erase();
+			DISPLAY_DEVICE::erase();
 			invalidate();
 		}
 
 		void write_char(COORDINATE x, COORDINATE y, char value)
 		{
-			if (font_ == nullptr) return;
+			if (this->font_ == nullptr) return;
 			if (!is_valid_xy(x, y)) return;
-			const INVALID_AREA invalid = DisplayDevice::write_char(*font_, x, y, value);
+			const INVALID_AREA invalid = DISPLAY_DEVICE::write_char(x, y, value);
 			invalidate(invalid);
 		}
 
 		void write_string(COORDINATE x, COORDINATE y, const char* content)
 		{
-			if (font_ == nullptr) return;
+			if (this->font_ == nullptr) return;
 			if (!is_valid_xy(x, y)) return;
 			INVALID_AREA invalid = INVALID_AREA::EMPTY;
 			while (*content)
 			{
-				invalid += DisplayDevice::write_char(*font_, x, y, *content++);
-				x += font_->width() + 1;
+				invalid += DISPLAY_DEVICE::write_char(x, y, *content++);
+				x += this->font_->width() + 1;
 			}
 			// Invalidate if needed
 			invalidate(invalid);
@@ -147,14 +197,14 @@ namespace devices::display
 
 		void write_string(COORDINATE x, COORDINATE y, const flash::FlashStorage* content)
 		{
-			if (font_ == nullptr) return;
+			if (this->font_ == nullptr) return;
 			if (!is_valid_xy(x, y)) return;
 			INVALID_AREA invalid = INVALID_AREA::EMPTY;
 			uint16_t address = (uint16_t) content;
 			while (char value = pgm_read_byte(address++))
 			{
-				invalid += DisplayDevice::write_char(*font_, x, y, value);
-				x += font_->width() + 1;
+				invalid += DISPLAY_DEVICE::write_char(x, y, value);
+				x += this->font_->width() + 1;
 			}
 			// Invalidate if needed
 			invalidate(invalid);
@@ -163,7 +213,7 @@ namespace devices::display
 		void draw_pixel(COORDINATE x, COORDINATE y)
 		{
 			if (!is_valid_xy(x, y)) return;
-			const INVALID_AREA invalid = DisplayDevice::set_pixel(x, y);
+			const INVALID_AREA invalid = DISPLAY_DEVICE::set_pixel(x, y);
 			// Invalidate if needed
 			invalidate(invalid);
 		}
@@ -234,7 +284,7 @@ namespace devices::display
 		// Display update (raster copy to device)
 		void update()
 		{
-			DisplayDevice::update(invalid_area_);
+			DISPLAY_DEVICE::update(invalid_area_);
 			invalid_area_.empty = true;
 		}
 
@@ -264,14 +314,14 @@ namespace devices::display
 		{
 			swap_to_sort(y1, y2);
 			for (COORDINATE y = y1; y <= y2; ++y)
-				DisplayDevice::set_pixel(x1, y);
+				DISPLAY_DEVICE::set_pixel(x1, y);
 		}
 		
 		void draw_hline(COORDINATE x1, COORDINATE y1, COORDINATE x2)
 		{
 			swap_to_sort(x1, x2);
 			for (COORDINATE x = x1; x <= x2; ++x)
-				DisplayDevice::set_pixel(x, y1);
+				DISPLAY_DEVICE::set_pixel(x, y1);
 		}
 
 		// Draw a segment according to Bresenham algorithm
@@ -295,7 +345,7 @@ namespace devices::display
 					dy *= 2;
 					while (true)
 					{
-						DisplayDevice::set_pixel(x1, y1);
+						DISPLAY_DEVICE::set_pixel(x1, y1);
 						if (x1 == x2) break;
 						++x1;
 						e -= dy;
@@ -314,7 +364,7 @@ namespace devices::display
 					dy *= 2;
 					while (true)
 					{
-						DisplayDevice::set_pixel(x1, y1);
+						DISPLAY_DEVICE::set_pixel(x1, y1);
 						if (y1 == y2) break;
 						++y1;
 						e -= dx;
@@ -337,7 +387,7 @@ namespace devices::display
 					dy *= 2;
 					while (true)
 					{
-						DisplayDevice::set_pixel(x1, y1);
+						DISPLAY_DEVICE::set_pixel(x1, y1);
 						if (x1 == x2) break;
 						++x1;
 						e += dy;
@@ -356,7 +406,7 @@ namespace devices::display
 					dy *= 2;
 					while (true)
 					{
-						DisplayDevice::set_pixel(x1, y1);
+						DISPLAY_DEVICE::set_pixel(x1, y1);
 						if (y1 == y2) break;
 						--y1;
 						e += dx;
@@ -378,14 +428,14 @@ namespace devices::display
 			SIGNED_COORDINATE m = 5 - 4 * radius;
 			while (x <= y)
 			{
-				DisplayDevice::set_pixel(x +  xc, y + yc);
-				DisplayDevice::set_pixel(y +  xc, x + yc);
-				DisplayDevice::set_pixel(-x +  xc, y + yc);
-				DisplayDevice::set_pixel(-y +  xc, x + yc);
-				DisplayDevice::set_pixel(x +  xc, -y + yc);
-				DisplayDevice::set_pixel(y +  xc, -x + yc);
-				DisplayDevice::set_pixel(-x +  xc, -y + yc);
-				DisplayDevice::set_pixel(-y +  xc, -x + yc);
+				DISPLAY_DEVICE::set_pixel(x +  xc, y + yc);
+				DISPLAY_DEVICE::set_pixel(y +  xc, x + yc);
+				DISPLAY_DEVICE::set_pixel(-x +  xc, y + yc);
+				DISPLAY_DEVICE::set_pixel(-y +  xc, x + yc);
+				DISPLAY_DEVICE::set_pixel(x +  xc, -y + yc);
+				DISPLAY_DEVICE::set_pixel(y +  xc, -x + yc);
+				DISPLAY_DEVICE::set_pixel(-x +  xc, -y + yc);
+				DISPLAY_DEVICE::set_pixel(-y +  xc, -x + yc);
 				if (m > 0)
 				{
 					--y;
@@ -410,7 +460,6 @@ namespace devices::display
 	private:
 		// Minimal rectangle to update
 		INVALID_AREA invalid_area_;
-		const Font<VERTICAL_FONT>* font_ = nullptr;
 	};
 }
 
