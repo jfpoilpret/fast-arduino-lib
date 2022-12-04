@@ -208,8 +208,8 @@ namespace devices::display
 				break;
 
 				case Mode::OR:
-				bw_pixels_op_ = PIXEL_CALCULATOR::and_bw_pixels;
-				pixel_op_ = PIXEL_CALCULATOR::and_pixel;
+				bw_pixels_op_ = PIXEL_CALCULATOR::or_bw_pixels;
+				pixel_op_ = PIXEL_CALCULATOR::or_pixel;
 				break;
 			}
 		}

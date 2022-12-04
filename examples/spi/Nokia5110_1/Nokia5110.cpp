@@ -54,10 +54,63 @@ using NOKIA = devices::display::LCD5110<CS, DC, RES>;
 using DISPLAY = devices::display::Display<NOKIA>;
 using devices::display::Mode;
 
+static constexpr uint16_t TITLE_MS = 3000;
+static constexpr uint16_t SETTINGS_MS = 5000;
+static constexpr uint16_t CHAR_MS = 200;
+static constexpr uint16_t PIXEL_MS = 10;
 static constexpr uint16_t DELAY_MS = 2000;
 static constexpr uint16_t BLINK_MS = 500;
 
-//TODO rework to display titles for each test series and test!
+static void setup(DISPLAY& nokia, bool color, Mode mode)
+{
+	nokia.set_color(true);
+	nokia.set_mode(Mode::COPY);
+	nokia.erase();
+	nokia.write_string(0, 16, F("color:"));
+	if (color)
+		nokia.write_string(42, 16, F("BLACK"));
+	else
+		nokia.write_string(42, 16, F("WHITE"));
+
+	nokia.write_string(0, 32, F("mode:"));
+	switch (mode)
+	{
+		case Mode::COPY:
+		nokia.write_string(42, 32, F("COPY"));
+		break;
+		
+		case Mode::XOR:
+		nokia.write_string(42, 32, F("XOR"));
+		break;
+		
+		case Mode::AND:
+		nokia.write_string(42, 32, F("AND"));
+		break;
+		
+		case Mode::OR:
+		nokia.write_string(42, 32, F("OR"));
+		break;
+	}
+	nokia.update();
+	time::delay_ms(SETTINGS_MS);
+	nokia.erase();
+	nokia.update();
+	nokia.set_color(color);
+	nokia.set_mode(mode);
+}
+
+static void display_title(DISPLAY& nokia, const flash::FlashStorage* title)
+{
+	nokia.set_color(true);
+	nokia.set_mode(Mode::COPY);
+	nokia.erase();
+	nokia.write_string(0, 24, title);
+	nokia.update();
+	time::delay_ms(TITLE_MS);
+	nokia.erase();
+	nokia.update();
+}
+
 int main()
 {
 	board::init();
@@ -77,42 +130,29 @@ int main()
 	nokia.set_font(font);
 	nokia.power_up();
 
-	nokia.erase();
-	nokia.update();
+	display_title(nokia, F("===> CHAR <==="));
+	setup(nokia, true, Mode::COPY);
 
-	time::delay_ms(DELAY_MS);
-	nokia.write_char(0, 0, 'A');
-	nokia.update();
-	time::delay_ms(DELAY_MS);
-	nokia.write_char(8, 0, 'B');
-	nokia.update();
-	time::delay_ms(DELAY_MS);
-	nokia.write_char(16, 0, 'C');
-	nokia.update();
-	time::delay_ms(DELAY_MS);
-	nokia.write_char(24, 0, 'D');
-	nokia.update();
-	time::delay_ms(DELAY_MS);
-	nokia.write_char(32, 0, 'E');
-	nokia.update();
-	time::delay_ms(DELAY_MS);
-	nokia.write_char(40, 0, 'F');
-	nokia.update();
-	time::delay_ms(DELAY_MS);
-
-	nokia.write_char(0, 8, 'a');
-	nokia.update();
-	nokia.write_char(8, 8, 'b');
-	nokia.update();
-	nokia.write_char(16, 8, 'c');
-	nokia.update();
-	nokia.write_char(24, 8, 'd');
-	nokia.update();
-	nokia.write_char(32, 8, 'e');
-	nokia.update();
-	nokia.write_char(40, 8, 'f');
-	nokia.update();
-	time::delay_ms(DELAY_MS);
+	uint8_t x = 0, y = 0;
+	const uint8_t FONT_WIDTH = font.width() + 1;
+	const uint8_t FONT_HEIGHT = font.height() + 1;
+	for (uint8_t c = font.first_char(); c <= font.last_char(); ++c)
+	{
+		nokia.write_char(x, y, char(c));
+		nokia.update();
+		time::delay_ms(CHAR_MS);
+		x += FONT_WIDTH;
+		if (x > nokia.WIDTH - FONT_WIDTH)
+		{
+			x = 0;
+			y += FONT_HEIGHT;
+			if (y > nokia.HEIGHT - FONT_HEIGHT)
+			{
+				y = 0;
+				nokia.erase();
+			}
+		}
+	}
 
 	nokia.invert();
 	time::delay_ms(DELAY_MS);
@@ -120,26 +160,60 @@ int main()
 	nokia.normal();
 	time::delay_ms(DELAY_MS);
 
-	nokia.write_string(0, 16, "Coucou!");
+	setup(nokia, true, Mode::OR);
+	for (uint8_t c = font.first_char(); c <= font.last_char(); ++c)
+	{
+		nokia.write_char(40, 16, char(c));
+		nokia.update();
+		time::delay_ms(CHAR_MS);
+	}
+
+	setup(nokia, true, Mode::AND);
+	// first draw a black rectangle in the 7x5 location of the displayed character
+	nokia.set_mode(Mode::COPY);
+	for (uint8_t y = 8; y < 30; ++y)
+		for (uint8_t x = 35; x < 50; ++x)
+			nokia.draw_pixel(x, y);
+	nokia.update();
+	nokia.set_mode(Mode::AND);
+	for (uint8_t c = 'A'; c <= 'Z'; ++c)
+	{
+		nokia.write_char(40, 16, char(c));
+		nokia.update();
+		time::delay_ms(CHAR_MS);
+	}
+
+	display_title(nokia, F("===> STR <==="));
+	setup(nokia, true, Mode::COPY);
+	nokia.write_string(8, 16, "Coucou!");
 	nokia.update();
 	time::delay_ms(DELAY_MS);
 
-	nokia.write_string(0, 24, F("Coucou!"));
+	display_title(nokia, F("===> FSTR <==="));
+	setup(nokia, true, Mode::OR);
+	nokia.write_string(8, 16, F("Coucou!"));
+	nokia.update();
+	time::delay_ms(DELAY_MS);
+	nokia.write_string(9, 16, F("Coucou!"));
+	nokia.update();
+	time::delay_ms(DELAY_MS);
+	nokia.write_string(10, 16, F("Coucou!"));
 	nokia.update();
 	time::delay_ms(DELAY_MS);
 
 	// Try drawing pixels
-	nokia.set_color(false);
-	nokia.draw_pixel(0, 1);
-	nokia.draw_pixel(0, 2);
-	nokia.set_color(true);
-	for (uint8_t x = 0; x < 84; ++x)
-		nokia.draw_pixel(x, 3);
-	for (uint8_t y = 40; y < 48; ++y)
-		nokia.draw_pixel(42, y);
-	nokia.update();
-	time::delay_ms(DELAY_MS);
-
+	display_title(nokia, F("===> PIXL <==="));
+	setup(nokia, true, Mode::COPY);
+	for (uint8_t y = 0; y < nokia.HEIGHT; ++y)
+		for (uint8_t x = 0; x < nokia.WIDTH; ++x)
+		{
+			nokia.draw_pixel(x, y);
+			nokia.update();
+			time::delay_ms(PIXEL_MS);
+		}
+	
+	display_title(nokia, F("===> LINE <==="));
+	setup(nokia, true, Mode::COPY);
 	// Try drawing H line
 	nokia.draw_line(10, 40, 79, 40);
 	nokia.update();
@@ -157,31 +231,21 @@ int main()
 	nokia.draw_line(0, 47, 83, 0);
 	nokia.update();
 	time::delay_ms(DELAY_MS);
-	//TODO More cases (other octant)
+	nokia.draw_line(0, 0, 30, 47);
+	nokia.update();
+	time::delay_ms(DELAY_MS);
+	nokia.draw_line(0, 47, 30, 0);
+	nokia.update();
+	time::delay_ms(DELAY_MS);
 
 	// Try drawing rectangle
+	display_title(nokia, F("===> RECT <==="));
+	setup(nokia, true, Mode::COPY);
 	nokia.draw_rectangle(30, 35, 55, 45);
 	nokia.update();
 	time::delay_ms(DELAY_MS);
 
-	// Try drawing circle
-	nokia.draw_circle(DISPLAY::WIDTH / 2, DISPLAY::HEIGHT / 2, 20);
-	nokia.update();
-	time::delay_ms(DELAY_MS);
-
-	nokia.erase();
-	nokia.update();
-	time::delay_ms(DELAY_MS);
-
-	// Try modes
-	nokia.set_mode(Mode::COPY);
-	nokia.set_color(true);
-	nokia.draw_rectangle(30, 35, 55, 45);
-	nokia.update();
-	time::delay_ms(DELAY_MS);
-
-	nokia.set_mode(Mode::XOR);
-	nokia.set_color(true);
+	setup(nokia, true, Mode::XOR);
 	for (uint8_t i = 0; i < 10; ++i)
 	{
 		nokia.draw_rectangle(30, 35, 55, 45);
@@ -190,10 +254,10 @@ int main()
 	}
 	time::delay_ms(DELAY_MS);
 
-	//TODO Other modes
-	nokia.set_mode(Mode::AND);
-	nokia.set_color(true);
-	nokia.draw_rectangle(30, 35, 55, 45);
+	// Try drawing circle
+	display_title(nokia, F("===> CIRC <==="));
+	setup(nokia, true, Mode::COPY);
+	nokia.draw_circle(DISPLAY::WIDTH / 2, DISPLAY::HEIGHT / 2, 20);
 	nokia.update();
 	time::delay_ms(DELAY_MS);
 }

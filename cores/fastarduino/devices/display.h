@@ -373,7 +373,6 @@ namespace devices::display
 			invalidate(invalid);
 		}
 
-		//TODO rework if (x2, y2) should be included in the line or excluded
 		void draw_line(XCOORD x1, YCOORD y1, XCOORD x2, YCOORD y2)
 		{
 			if (!is_valid_xy(x1, y1)) return;
@@ -406,7 +405,6 @@ namespace devices::display
 			invalidate(INVALID_AREA{x1, y1, x2, y2});
 		}
 
-		//TODO rework if (x2, y2) should be included in the rectangle or excluded
 		void draw_rectangle(XCOORD x1, YCOORD y1, XCOORD x2, YCOORD y2)
 		{
 			if (!is_valid_xy(x1, y1)) return;
@@ -419,8 +417,10 @@ namespace devices::display
 			// Simply draw 2 horizontal and 2 vertical lines
 			draw_hline(x1, y1, x2);
 			draw_hline(x1, y2, x2);
-			draw_vline(x1, y1, y2);
-			draw_vline(x2, y1, y2);
+			// Note that we avoid drawing the same pixels (corners) twice 
+			// (due to a drawing mode that might potentially be XOR)
+			draw_vline(x1, y1 + 1, y2 - 1);
+			draw_vline(x2, y1 + 1, y2 - 1);
 			invalidate(INVALID_AREA{x1, y1, x2, y2});
 		}
 

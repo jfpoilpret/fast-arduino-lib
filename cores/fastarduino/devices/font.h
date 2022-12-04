@@ -46,6 +46,16 @@ namespace devices::display
 			return height_;
 		}
 
+		uint8_t first_char() const
+		{
+			return first_char_;
+		}
+
+		uint8_t last_char() const
+		{
+			return last_char_;
+		}
+
 		//TODO need to support width and height of more than 8 bits!
 		uint8_t glyph_size() const
 		{
