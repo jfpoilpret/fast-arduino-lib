@@ -13,7 +13,18 @@
 //   limitations under the License.
 
 /*
- * TODO
+ * Example program to check display to Nokia 5110 (driven by chip PCD8544).
+ * This tests almost all display fonctions (primitives) with different modes.
+ * 
+ * PCD8544 chip is using 3.3V levels max. Several breakouts exist (e.g. Adafruit), 
+ * but most of them (all?) do not include level converters.
+ * It is highly suggested to use level converters (5V->3.3V, no need for bidir)
+ * for all logical signals.
+ * 
+ * I generally use CD74HC4050 CMOS circuit which can be used to lower 6 digital 
+ * signals from 5V to 3.3V (PCD8544 needs 5 signals).
+ * Most breakouts also include backlighting LEDs which current must be restricted
+ * according to breakout datasheet.
  * 
  * Wiring: 
  * - on ATmega328P based boards (including Arduino UNO):
@@ -21,9 +32,8 @@
  *   - D11 (MOSI): connected to 5110 breakout DN pin (via level converter)
  *   - D10 (SS): connected to 5110 breakout SCE pin (via level converter)
  *   - D9: connected to 5110 breakout D/C pin (via level converter)
- *   - 5110 breakout RST pin connected to 3.3V via 10K resistor (pullup)
+ *   - D8: connected to 5110 breakout RST pin (via level converter)
  *   - 5110 breakout LED pin connected to 3.3V via 330 resistor
- *   - direct USB access (traces output)
  */
 
 #include <fastarduino/devices/lcd5110.h>

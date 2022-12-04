@@ -16,7 +16,7 @@
 
 /**
  * @file
- * TODO
+ * Generic API to handle any display device (e.g. Nokia5110, ILI9340 TFT...)
  */
 #ifndef DISPLAY_HH
 #define DISPLAY_HH
@@ -28,7 +28,39 @@
 
 namespace devices
 {
-	//TODO APIDOC
+	/**
+	 * Defines generic API for all display devices.
+	 * Any actual device class must:
+	 * - derive from `AbstractDisplayDevice` template class
+	 * - define XCOORD, YCOORD, SCALAR, SIGNED_SCALAR integral types 
+	 * - define INVALID_AREA type as an `InvalidArea` template instantiation
+	 * - define WIDTH and HEIGHT constants
+	 * - define a `protected` default constructor
+	 * - implement 3 `protected` drawing primitives
+	 * 		- `erase()`
+	 * 		- `set_pixel(x, y)`
+	 * 		- `write_char(x, y, value)`
+	 * - implement `protected` `update(area)` method
+	 * - implement any device-specific `public` API
+	 * 
+	 * A display device class becomes actually usable be defining a type as the
+	 * `Display` template class instantiation for the display device class itself.
+	 * The type such defined:
+	 * - inherits the display device class and thus provides all its specific `public` API
+	 * - provides additional 2D drawing primitives as `public` API
+	 * 
+	 * You can see a concrete example for `LCD5110` device:
+	 * TODO show example of Nokia classes inheritance picture
+	 * 
+	 * Display devices are:
+	 * - either based on a SRAM raster buffer they have to handle themselves (this
+	 * is applicable only to small resolution devices such as Nokia5110, as SRAM 
+	 * is a scarce resource on AVR MCU); this device needs to provide an implementation
+	 * of `update()` method that sends invalidated raster pixels to the device.
+	 * - or they directly draw evey pixel directly to the device because they cannot
+	 * possibly hold a raster buffer in SRAM (too large resolution, like ILI9340);
+	 * thsi device must implement an empty `update()` method.
+	 */
 	namespace display
 	{
 	}
@@ -54,13 +86,34 @@ namespace devices::display
 		OR
 	};
 
-	// This class provides methods to combien pixels in all modes
-	// This methods can used a PTMF in adisplay device class
+	/**
+	 * Class to be used by a display device class that can handle specific drawing 
+	 * modes.
+	 * 
+	 * @note Not all display devices can support all modes, as most modes (except 
+	 * `Mode::COPY`) require access to a raster buffer (either in SRAM or on the 
+	 * display chip itself).
+	 * 
+	 * For each supported mode, 2 methods are defined:
+	 * - `xxxx_bw_pixels()` can be used for B&W devices where one byte represents 
+	 * 8 pixels; the drawing mode will be applied to all pixels in the byte
+	 * - `xxxx_pixel()` is used on ONE pixel color (type defined by @p COLOR).
+	 * 
+	 * `LCD5110` class shows how this class can be used.
+	 * 
+	 * @tparam COLOR the type of one pixel color, as handled by the display device.
+	 * 
+	 * @sa Mode
+	 * @sa LCD5110
+	 */
 	template<typename COLOR> struct PixelCalculator
 	{
+		/** The type of a pointer function for `xxxx_bw_pixels()`. */
 		using COMPUTE_BW_PIXELS = uint8_t (*)(uint8_t, uint8_t);
+		/** The type of a pointer function for `xxxx_pixel()`. */
 		using COMPUTE_PIXEL = COLOR (*)(COLOR, COLOR);
 
+		/// @cond notdocumented
 		static uint8_t copy_bw_pixels(uint8_t source, UNUSED uint8_t dest)
 		{
 			return source;
@@ -96,6 +149,7 @@ namespace devices::display
 		{
 			return source | dest;
 		}
+		/// @endcond
 	};
 
 	/// @cond notdocumented
@@ -110,25 +164,67 @@ namespace devices::display
 	/// @endcond
 
 	// All display device implementation should derive from this class!
+	/**
+	 * Abstract base class for all display device classes.
+	 * This provides a few useful API that are needed by subclasses.
+	 * 
+	 * @tparam COLOR the type of one pixel color, as handled by the display device.
+	 * @tparam VERTICAL_FONT `true` if the device needs fonts where every byte maps
+	 * to a column of 8 pixels, rather than a row of 8 pixels. For instance,
+	 * `LCD5110` and its associated PCD8544 chip have such a vertical organization.
+	 */
 	template<typename COLOR, bool VERTICAL_FONT> class AbstractDisplayDevice : public AbstractDisplayDeviceGhost
 	{
 	public:
+		/**
+		 * Set color to use for next calls to drawing primitives.
+		 * The new color is simply available to subclasses in the `color_` field.
+		 * 
+		 * @param color the new color to use from now
+		 * @sa color_
+		 */
 		void set_color(COLOR color)
 		{
 			color_ = color;
 		}
 
-		// Display drawing settings: font, color, mode
+		/**
+		 * Set the new font to use for next calls to text drawing perimitives. 
+		 * A pointer to the new font is simply available to subclasses in the 
+		 * `font_` field.
+		 * 
+		 * @param font the new font to use from now
+		 * @sa Font
+		 * @sa font_
+		 */
 		void set_font(const Font<VERTICAL_FONT>& font)
 		{
 			font_ = &font;
 		}
 
 	protected:
+		/** 
+		 * Pointer to the current `Font` that shall be used by text drawing primitives.
+		 * @warning This can be `nullptr`!
+		 */
 		const Font<VERTICAL_FONT>* font_ = nullptr;
+
+		/** Current color that shall be used by drawing primitives. */
 		COLOR color_{};
 	};
 
+	/**
+	 * TODO DOCUMENT
+	 * 
+	 * InvalidArea can be summed together (union).
+	 * 
+	 * @tparam XCOORD the integral type for X coordinates
+	 * @tparam YCOORD the integral type for Y coordinates
+	 * @tparam USED `true` (default) if the display device is based on raster 
+	 * updates and thus needs invalid areas support, `false` otherwise, providing
+	 * an empty InvalidArea object, which will allow same API whatever the situation,
+	 * whilst increasing performance (time and size) when invalid areas are not used.
+	 */
 	template<typename XCOORD, typename YCOORD, bool USED = true> struct InvalidArea
 	{
 		InvalidArea() = default;
@@ -167,10 +263,7 @@ namespace devices::display
 		bool empty = true;
 	};
 
-	// Use for big displays (without raster), InvalidArea is reduced to `const bool empty = true;`
-	// so that we do not waste space and time with extra variables and calculations 
-	//TODO check that it works!
-	//TODO check that it generates no code!
+	//TODO check that it works and it generates no code!
 	/// @cond notdocumented
 	template<typename XCOORD, typename YCOORD> struct InvalidArea<XCOORD, YCOORD, false>
 	{
@@ -206,7 +299,6 @@ namespace devices::display
 	}
 	/// @endcond
 
-	//TODO document constraints on DISPLAY_DEVICE
 	// Screen update is not always automatic! You must call update() once you have changed display bitmap content
 	template<typename DISPLAY_DEVICE> class Display : public DISPLAY_DEVICE
 	{

@@ -19,20 +19,24 @@
  * API to handle Nokia 5110 display through SPI interface (actually not really SPI 
  * as only MOSI, not MISO, pin is used for data transfer).
  * 
- * Connection diagram:
- * TODO show 4050 usage
- *                 W25Q80BV
- *                +----U----+
- * (/CS)--------1-|/CS   VCC|-8---------(VCC)
- * (MISO)-------2-|DO  /HOLD|-7--VVVV---(VCC)
- *            --3-|/WP   CLK|-6---------(CLK)
- * (GND)--------4-|GND    DI|-5---------(MOSI)
- *                +---------+
+ * Note that PCD8544 chip used in Nokia 5110 is powered at 3.3V and does not 
+ * bear 5V voltage from pins of most Arduino. Hence, all signals from Arduino
+ * output pins must be converted from 5V to 3.3V, for this you will need a level
+ * converter:
+ * - this may be CD74HC4050 chip (up to 6 pins with level conversion)
+ * - or you may use one of those common MOSFET-based converters breakouts
+ * - or you may build your own
  * 
- * Note that the PCD8544 chip used for Nokia 5110 display is using CMOS and works on 
- * Vcc = 3.3V (not 5V), thus any inputs shall be limited to 3.3V.
- * The only safe ways to do that are to use level converters (MOSFET based) or 
- * possibly use the IC 74HC4050.
+ * Example wiring for Arduino UNO (with CD74HC4050):
+ * 
+ * - pin 11 (PB3,MOSI) --I>-- DN
+ * - pin 13 (PB5, SCK) --I>-- SCLK
+ * - pin 10 (PB2, SS)  --I>-- SCE
+ * - pin 9 (PB1)       --I>-- D/C
+ * - pin 8 (PB0)       --I>-- RST
+ * - 3.3V         --[=330=]-- LED
+ * - 3.3V              ------ 3.3V
+ * - GND               ------ GND
  */
 #ifndef LC5110_HH
 #define LC5110_HH
@@ -47,30 +51,26 @@
 #include "display.h"
 #include "font.h"
 
-// General design rationale:
-// - Device class contains only hardware stuff
-// - no public drawing API in device class (even erase()?)
-// - Everything else is performed by Display (common stuff!)
-
 //TODO reorganize public/protected/private sections
-
 //TODO Add image API (pixmap): generic? usable with files (from flash disk)
 //		- format?
 //		- converters?
-
 //TODO better use of spi start/end transaction (do once only)
-
 //TODO API DOC
-
 // Optional improvements:
 //TODO define specific ostream for display (is that even possible)?
 namespace devices::display
 {
+	/** Possible temperature coeeficient that can be set on Nokia5110 display. */
 	enum class TemperatureCoefficient : uint8_t
 	{
+		/** TC0 Temperature coefficient 1mV/K  */
 		TC0_1mV_K = 0x04,
+		/** TC0 Temperature coefficient 9mV/K  */
 		TC1_9mV_K = 0x05,
+		/** TC0 Temperature coefficient 17mV/K  */
 		TC2_17mV_K = 0x06,
+		/** TC0 Temperature coefficient 24mV/K  */
 		TC3_24mV_K = 0x07
 	};
 
@@ -97,29 +97,12 @@ namespace devices::display
 	 * 4. `power_up()` device
 	 * 5. `set_color()` to define the pixel color (black or white) to use in all
 	 * subsequent drawing primitives
-	 * 6. `set_font()` if you intend to display text
+	 * 6. `set_mode()` if you want to use a specific drawing mode, other than 
+	 * default `Mode::COPY`.
+	 * 7. `set_font()` if you intend to display text
 	 *
 	 * @warning For optimization reasons, text display can always occur at a `y`
 	 * position that must be a multiple of 8, otherwise nothing will get drawn.
-	 * 
-	 * Note that PCD8544 chip used in Nokia 5110 is powered at 3.3V and does not 
-	 * bear 5V voltage of pins in most Arduino. Hence, all signals from Arduino
-	 * output pins must be covnerted from 5V to 3.3V, for this you will need a level
-	 * converter:
-	 * - this may be 4050 chip (up to 6 pins)
-	 * - or you may use one of those common MOSFET-based converters breakouts
-	 * - or you may build your own
-	 * 
-	 * Example wiring for Arduino UNO:
-	 * 
-	 * - pin 11 (PB3,MOSI) --I>-- DN
-	 * - pin 13 (PB5, SCK) --I>-- SCLK
-	 * - pin 10 (PB2, SS)  --I>-- SCE
-	 * - pin 9 (PB1)       --I>-- D/C
-	 * - pin 8 (PB0)       --I>-- RST
-	 * - 3.3V         --[=330=]-- LED
-	 * - 3.3V              ------ 3.3V
-	 * - GND               ------ GND
 	 * 
 	 * @tparam SCE the output pin used for Chip Selection of the PCD8544 chip on
 	 * the SPI bus.
@@ -242,7 +225,6 @@ namespace devices::display
 			memset(display_, 0, sizeof(display_));
 		}
 
-		//TODO use mode_!
 		// NOTE Coordinates must have been first verified by caller
 		INVALID_AREA set_pixel(uint8_t x, uint8_t y)
 		{
