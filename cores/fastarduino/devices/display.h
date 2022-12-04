@@ -113,14 +113,21 @@ namespace devices::display
 		/** The type of a pointer function for `xxxx_pixel()`. */
 		using COMPUTE_PIXEL = COLOR (*)(COLOR, COLOR);
 
-		//TODO DOC
+		/// @cond notdocumented
 		struct Calculators
 		{
 			COMPUTE_BW_PIXELS bw_pixels_op;
 			COMPUTE_PIXEL pixel_op;
 		};
+		/// @endcond
 
-		//TODO DOC
+		/**
+		 * Return the proper drawing operations for the given drawing @p mode.
+		 * 
+		 * @param mode teh drawing mdoe for which you want the proper drawing
+		 * operations
+		 * @return Calculators a set of 2 drawing operation functions
+		 */
 		static Calculators get_calculators(Mode mode)
 		{
 			switch (mode)
