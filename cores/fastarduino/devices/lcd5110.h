@@ -51,13 +51,12 @@
 #include "display.h"
 #include "font.h"
 
-//TODO reorganize public/protected/private sections
-//TODO Add image API (pixmap): generic? usable with files (from flash disk)
-//		- format?
-//		- converters?
 //TODO better use of spi start/end transaction (do once only)
 //TODO API DOC
 // Optional improvements:
+//TODO Add image API (pixmap): generic? usable with files (from flash disk)
+//		- format?
+//		- converters?
 //TODO define specific ostream for display (is that even possible)?
 namespace devices::display
 {
@@ -260,11 +259,6 @@ namespace devices::display
 				++display_ptr;
 			}
 			return INVALID_AREA{x, y, XCOORD(x + width + 1), y};
-		}
-
-		void set_bitmap()
-		{
-			//TODO
 		}
 
 		// Copy invalidated rectangle of display map onto the device
