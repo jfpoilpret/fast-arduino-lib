@@ -54,8 +54,6 @@
 
 //TODO reorganize public/protected/private sections
 
-//TODO add "screenshot" facility
-
 //TODO Add image API (pixmap): generic? usable with files (from flash disk)
 //		- format?
 //		- converters?
@@ -68,6 +66,14 @@
 //TODO define specific ostream for display (is that even possible)?
 namespace devices::display
 {
+	enum class TemperatureCoefficient : uint8_t
+	{
+		TC0_1mV_K = 0x04,
+		TC1_9mV_K = 0x05,
+		TC2_17mV_K = 0x06,
+		TC3_24mV_K = 0x07
+	};
+
 	/**
 	 * SPI device driver for Nokia 5110 display chip.
 	 * 
@@ -138,9 +144,6 @@ namespace devices::display
 		static constexpr YCOORD HEIGHT = 48;
 
 	public:
-		//TODO temp control API?
-		// void set_temperature_control();
-
 		void reset()
 		{
 			// Reset device according to datasheet
@@ -162,6 +165,13 @@ namespace devices::display
 			if (contrast > MAX_VOP) contrast = MAX_VOP;
 			send_command(FUNCTION_SET_MASK | FUNCTION_SET_EXTENDED);
 			send_command(EXTENDED_SET_VOP | contrast);
+			send_command(FUNCTION_SET_MASK);
+		}
+
+		void set_temperature_control(TemperatureCoefficient coef)
+		{
+			send_command(FUNCTION_SET_MASK | FUNCTION_SET_EXTENDED);
+			send_command(EXTENDED_SET_BIAS | uint8_t(coef));
 			send_command(FUNCTION_SET_MASK);
 		}
 
@@ -195,7 +205,31 @@ namespace devices::display
 			send_command(DISPLAY_CONTROL_MASK | DISPLAY_CONTROL_NORMAL);
 		}
 
-		//TODO add set_mode()
+		void set_mode(Mode mode)
+		{
+			switch (mode)
+			{
+				case Mode::COPY:
+				bw_pixels_op_ = PIXEL_CALCULATOR::copy_bw_pixels;
+				pixel_op_ = PIXEL_CALCULATOR::copy_pixel;
+				break;
+
+				case Mode::XOR:
+				bw_pixels_op_ = PIXEL_CALCULATOR::xor_bw_pixels;
+				pixel_op_ = PIXEL_CALCULATOR::xor_pixel;
+				break;
+
+				case Mode::AND:
+				bw_pixels_op_ = PIXEL_CALCULATOR::and_bw_pixels;
+				pixel_op_ = PIXEL_CALCULATOR::and_pixel;
+				break;
+
+				case Mode::OR:
+				bw_pixels_op_ = PIXEL_CALCULATOR::and_bw_pixels;
+				pixel_op_ = PIXEL_CALCULATOR::and_pixel;
+				break;
+			}
+		}
 
 	protected:
 		LCD5110()
@@ -208,6 +242,7 @@ namespace devices::display
 			memset(display_, 0, sizeof(display_));
 		}
 
+		//TODO use mode_!
 		// NOTE Coordinates must have been first verified by caller
 		INVALID_AREA set_pixel(uint8_t x, uint8_t y)
 		{
@@ -218,8 +253,12 @@ namespace devices::display
 			uint8_t mask = bits::BV8(offset);
 			// Get pointer to pixel byte
 			uint8_t* pix_column = get_display(r, c);
-			// Check if pixel is already same as pixel, force pixel if needed
-			if (color_)
+			// Evaluate final pixel color based on color_ and mode_
+			const bool current = (*pix_column & mask);
+			const bool dest = pixel_op_(color_, current);
+
+			// Based on calculated color, set pixel
+			if (dest)
 			{
 				if (*pix_column & mask) return INVALID_AREA::EMPTY;
 				*pix_column |= mask;
@@ -254,10 +293,14 @@ namespace devices::display
 			for (uint8_t i = 0; i < width; ++i)
 			{
 				uint8_t pixel_bar = font_->get_char_glyph_byte(glyph_ref, i);
-				if (color_)
-					*display_ptr++ |= pixel_bar;
-				else
-					*display_ptr++ &= ~pixel_bar;
+				if (!color_)
+					pixel_bar = ~pixel_bar;
+				*display_ptr = bw_pixels_op_(pixel_bar, *display_ptr);
+				++display_ptr;
+				// if (color_)
+				// 	*display_ptr++ |= pixel_bar;
+				// else
+				// 	*display_ptr++ &= ~pixel_bar;
 			}
 			return INVALID_AREA{x, y, XCOORD(x + width + 1), y};
 		}
@@ -289,6 +332,10 @@ namespace devices::display
 		}
 
 	private:
+		using PIXEL_CALCULATOR = PixelCalculator<bool>;
+		using COMPUTE_BW_PIXELS = typename PIXEL_CALCULATOR::COMPUTE_BW_PIXELS;
+		using COMPUTE_PIXEL = typename PIXEL_CALCULATOR::COMPUTE_PIXEL;
+
 		// Internal organization of Nokia pixmap buffer (1 byte = 8 vertical pixels)
 		static constexpr uint8_t ROW_HEIGHT = 8;
 
@@ -349,6 +396,10 @@ namespace devices::display
 		//			...
 		//			RpC1 RpC2 ... RpCn
 		uint8_t display_[HEIGHT * WIDTH / ROW_HEIGHT];
+
+		// Current Mode for setting destination pixel value based on source color.
+		COMPUTE_BW_PIXELS bw_pixels_op_ = PIXEL_CALCULATOR::copy_bw_pixels;
+		COMPUTE_PIXEL pixel_op_ = PIXEL_CALCULATOR::copy_pixel;
 
 		// Pin to control data Vs command sending through SPI
 		gpio::FAST_PIN<DC> dc_{gpio::PinMode::OUTPUT};

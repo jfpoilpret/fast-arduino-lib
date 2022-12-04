@@ -42,9 +42,12 @@ static constexpr const board::DigitalPin RES = board::DigitalPin::D8_PB0;
 
 using NOKIA = devices::display::LCD5110<CS, DC, RES>;
 using DISPLAY = devices::display::Display<NOKIA>;
+using devices::display::Mode;
 
 static constexpr uint16_t DELAY_MS = 2000;
+static constexpr uint16_t BLINK_MS = 500;
 
+//TODO rework to display titles for each test series and test!
 int main()
 {
 	board::init();
@@ -154,4 +157,33 @@ int main()
 	// Try drawing circle
 	nokia.draw_circle(DISPLAY::WIDTH / 2, DISPLAY::HEIGHT / 2, 20);
 	nokia.update();
+	time::delay_ms(DELAY_MS);
+
+	nokia.erase();
+	nokia.update();
+	time::delay_ms(DELAY_MS);
+
+	// Try modes
+	nokia.set_mode(Mode::COPY);
+	nokia.set_color(true);
+	nokia.draw_rectangle(30, 35, 55, 45);
+	nokia.update();
+	time::delay_ms(DELAY_MS);
+
+	nokia.set_mode(Mode::XOR);
+	nokia.set_color(true);
+	for (uint8_t i = 0; i < 10; ++i)
+	{
+		nokia.draw_rectangle(30, 35, 55, 45);
+		nokia.update();
+		time::delay_ms(BLINK_MS);
+	}
+	time::delay_ms(DELAY_MS);
+
+	//TODO Other modes
+	nokia.set_mode(Mode::AND);
+	nokia.set_color(true);
+	nokia.draw_rectangle(30, 35, 55, 45);
+	nokia.update();
+	time::delay_ms(DELAY_MS);
 }

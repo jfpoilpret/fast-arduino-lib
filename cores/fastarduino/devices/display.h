@@ -37,6 +37,67 @@ namespace devices
 //TODO error handling? (e.g. out of range coordinate)
 namespace devices::display
 {
+	/**
+	 * Mode used when drawing pixels.
+	 * This determines how the destination pixel color is affected by the
+	 * source color.
+	 */
+	enum class Mode : uint8_t
+	{
+		/** Source color simply replaces destination pixel. */
+		COPY = 0,
+		/** Destination pixel is xor'ed with source color (inversion mode). */
+		XOR,
+		/** Destination pixel is and'ed with source color (clear mode). */
+		AND,
+		/** Destination pixel is or'ed with source color (set mode). */
+		OR
+	};
+
+	// This class provides methods to combien pixels in all modes
+	// This methods can used a PTMF in adisplay device class
+	template<typename COLOR> struct PixelCalculator
+	{
+		using COMPUTE_BW_PIXELS = uint8_t (*)(uint8_t, uint8_t);
+		using COMPUTE_PIXEL = COLOR (*)(COLOR, COLOR);
+
+		static uint8_t copy_bw_pixels(uint8_t source, UNUSED uint8_t dest)
+		{
+			return source;
+		}
+		static COLOR copy_pixel(COLOR source, UNUSED COLOR dest)
+		{
+			return source;
+		}
+
+		static uint8_t xor_bw_pixels(uint8_t source, uint8_t dest)
+		{
+			return source ^ dest;
+		}
+		static COLOR xor_pixel(COLOR source, COLOR dest)
+		{
+			return source ^ dest;
+		}
+
+		static uint8_t and_bw_pixels(uint8_t source, uint8_t dest)
+		{
+			return source & dest;
+		}
+		static COLOR and_pixel(COLOR source, COLOR dest)
+		{
+			return source & dest;
+		}
+
+		static uint8_t or_bw_pixels(uint8_t source, uint8_t dest)
+		{
+			return source | dest;
+		}
+		static COLOR or_pixel(COLOR source, COLOR dest)
+		{
+			return source | dest;
+		}
+	};
+
 	/// @cond notdocumented
 	// This class is here to simplify check, in Display ctor, that DISPLAY_DEVICE is a subclass
 	// of AbstractDisplayDevice
@@ -52,7 +113,6 @@ namespace devices::display
 	template<typename COLOR, bool VERTICAL_FONT> class AbstractDisplayDevice : public AbstractDisplayDeviceGhost
 	{
 	public:
-		//TODO also include invalid area here (as type and as variable)?
 		void set_color(COLOR color)
 		{
 			color_ = color;
@@ -148,7 +208,7 @@ namespace devices::display
 
 	//TODO document constraints on DISPLAY_DEVICE
 	// Screen update is not always automatic! You must call update() once you have changed display bitmap content
-	template<typename DISPLAY_DEVICE> class Display: public DISPLAY_DEVICE
+	template<typename DISPLAY_DEVICE> class Display : public DISPLAY_DEVICE
 	{
 	public:
 		using XCOORD = typename DISPLAY_DEVICE::XCOORD;
