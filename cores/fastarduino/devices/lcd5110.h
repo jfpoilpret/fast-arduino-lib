@@ -190,28 +190,7 @@ namespace devices::display
 
 		void set_mode(Mode mode)
 		{
-			switch (mode)
-			{
-				case Mode::COPY:
-				bw_pixels_op_ = PIXEL_CALCULATOR::copy_bw_pixels;
-				pixel_op_ = PIXEL_CALCULATOR::copy_pixel;
-				break;
-
-				case Mode::XOR:
-				bw_pixels_op_ = PIXEL_CALCULATOR::xor_bw_pixels;
-				pixel_op_ = PIXEL_CALCULATOR::xor_pixel;
-				break;
-
-				case Mode::AND:
-				bw_pixels_op_ = PIXEL_CALCULATOR::and_bw_pixels;
-				pixel_op_ = PIXEL_CALCULATOR::and_pixel;
-				break;
-
-				case Mode::OR:
-				bw_pixels_op_ = PIXEL_CALCULATOR::or_bw_pixels;
-				pixel_op_ = PIXEL_CALCULATOR::or_pixel;
-				break;
-			}
+			mode_op_ = PIXEL_CALCULATOR::get_calculators(mode);
 		}
 
 	protected:
@@ -237,7 +216,7 @@ namespace devices::display
 			uint8_t* pix_column = get_display(r, c);
 			// Evaluate final pixel color based on color_ and mode_
 			const bool current = (*pix_column & mask);
-			const bool dest = pixel_op_(color_, current);
+			const bool dest = mode_op_.pixel_op(color_, current);
 
 			// Based on calculated color, set pixel
 			if (dest)
@@ -277,12 +256,8 @@ namespace devices::display
 				uint8_t pixel_bar = font_->get_char_glyph_byte(glyph_ref, i);
 				if (!color_)
 					pixel_bar = ~pixel_bar;
-				*display_ptr = bw_pixels_op_(pixel_bar, *display_ptr);
+				*display_ptr = mode_op_.bw_pixels_op(pixel_bar, *display_ptr);
 				++display_ptr;
-				// if (color_)
-				// 	*display_ptr++ |= pixel_bar;
-				// else
-				// 	*display_ptr++ &= ~pixel_bar;
 			}
 			return INVALID_AREA{x, y, XCOORD(x + width + 1), y};
 		}
@@ -315,8 +290,7 @@ namespace devices::display
 
 	private:
 		using PIXEL_CALCULATOR = PixelCalculator<bool>;
-		using COMPUTE_BW_PIXELS = typename PIXEL_CALCULATOR::COMPUTE_BW_PIXELS;
-		using COMPUTE_PIXEL = typename PIXEL_CALCULATOR::COMPUTE_PIXEL;
+		using CALCULATORS = typename PIXEL_CALCULATOR::Calculators;
 
 		// Internal organization of Nokia pixmap buffer (1 byte = 8 vertical pixels)
 		static constexpr uint8_t ROW_HEIGHT = 8;
@@ -380,8 +354,7 @@ namespace devices::display
 		uint8_t display_[HEIGHT * WIDTH / ROW_HEIGHT];
 
 		// Current Mode for setting destination pixel value based on source color.
-		COMPUTE_BW_PIXELS bw_pixels_op_ = PIXEL_CALCULATOR::copy_bw_pixels;
-		COMPUTE_PIXEL pixel_op_ = PIXEL_CALCULATOR::copy_pixel;
+		CALCULATORS mode_op_ = PIXEL_CALCULATOR::get_calculators(Mode::COPY);
 
 		// Pin to control data Vs command sending through SPI
 		gpio::FAST_PIN<DC> dc_{gpio::PinMode::OUTPUT};

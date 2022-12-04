@@ -113,6 +113,33 @@ namespace devices::display
 		/** The type of a pointer function for `xxxx_pixel()`. */
 		using COMPUTE_PIXEL = COLOR (*)(COLOR, COLOR);
 
+		//TODO DOC
+		struct Calculators
+		{
+			COMPUTE_BW_PIXELS bw_pixels_op;
+			COMPUTE_PIXEL pixel_op;
+		};
+
+		//TODO DOC
+		static Calculators get_calculators(Mode mode)
+		{
+			switch (mode)
+			{
+				case Mode::COPY:
+				default:
+				return {copy_bw_pixels, copy_pixel};
+
+				case Mode::XOR:
+				return {xor_bw_pixels, xor_pixel};
+
+				case Mode::AND:
+				return {and_bw_pixels, and_pixel};
+
+				case Mode::OR:
+				return {or_bw_pixels, or_pixel};
+			}
+		}
+
 		/// @cond notdocumented
 		static uint8_t copy_bw_pixels(uint8_t source, UNUSED uint8_t dest)
 		{
