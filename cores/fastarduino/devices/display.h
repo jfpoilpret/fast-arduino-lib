@@ -67,6 +67,10 @@ namespace devices
 }
 
 //TODO error handling? (e.g. out of range coordinate)
+// - enum class Error : uint8_t {...}
+// - Error last_error_ field in Display
+// - Error last_error() const
+// - reset_error()
 namespace devices::display
 {
 	/**
@@ -651,7 +655,7 @@ namespace devices::display
 		
 	private:
 		// Minimal rectangle to update
-		INVALID_AREA invalid_area_;
+		INVALID_AREA invalid_area_ = INVALID_AREA::EMPTY;
 	};
 }
 

@@ -103,9 +103,10 @@ static void display_title(DISPLAY& nokia, const flash::FlashStorage* title)
 {
 	nokia.set_color(true);
 	nokia.set_mode(Mode::COPY);
-	//FIXME Following lines seems faulty (3 pixels appear on first column 0C0)
 	nokia.erase();
-	nokia.write_string(0, 24, title);
+	//FIXME without the following line, display is bugged (3 pixels appear on first column 0C0)
+	// nokia.update();
+	nokia.write_string(0, 16, title);
 	nokia.update();
 	time::delay_ms(TITLE_MS);
 	nokia.erase();

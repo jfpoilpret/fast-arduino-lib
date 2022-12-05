@@ -51,7 +51,6 @@
 #include "display.h"
 #include "font.h"
 
-//TODO better use of spi start/end transaction (do once only)
 //TODO API DOC
 // Optional improvements:
 //TODO Add image API (pixmap): generic? usable with files (from flash disk)
@@ -137,24 +136,30 @@ namespace devices::display
 		void set_display_bias(uint8_t bias = DEFAULT_BIAS)
 		{
 			if (bias > MAX_BIAS) bias = MAX_BIAS;
-			send_command(FUNCTION_SET_MASK | FUNCTION_SET_EXTENDED);
-			send_command(EXTENDED_SET_BIAS | bias);
-			send_command(FUNCTION_SET_MASK);
+			this->start_transfer();
+			send_command_(FUNCTION_SET_MASK | FUNCTION_SET_EXTENDED);
+			send_command_(EXTENDED_SET_BIAS | bias);
+			send_command_(FUNCTION_SET_MASK);
+			this->end_transfer();
 		}
 
 		void set_display_contrast(uint8_t contrast = DEFAULT_VOP)
 		{
 			if (contrast > MAX_VOP) contrast = MAX_VOP;
-			send_command(FUNCTION_SET_MASK | FUNCTION_SET_EXTENDED);
-			send_command(EXTENDED_SET_VOP | contrast);
-			send_command(FUNCTION_SET_MASK);
+			this->start_transfer();
+			send_command_(FUNCTION_SET_MASK | FUNCTION_SET_EXTENDED);
+			send_command_(EXTENDED_SET_VOP | contrast);
+			send_command_(FUNCTION_SET_MASK);
+			this->end_transfer();
 		}
 
 		void set_temperature_control(TemperatureCoefficient coef)
 		{
-			send_command(FUNCTION_SET_MASK | FUNCTION_SET_EXTENDED);
-			send_command(EXTENDED_SET_BIAS | uint8_t(coef));
-			send_command(FUNCTION_SET_MASK);
+			this->start_transfer();
+			send_command_(FUNCTION_SET_MASK | FUNCTION_SET_EXTENDED);
+			send_command_(EXTENDED_SET_BIAS | uint8_t(coef));
+			send_command_(FUNCTION_SET_MASK);
+			this->end_transfer();
 		}
 
 		void power_down()
@@ -220,12 +225,12 @@ namespace devices::display
 			// Based on calculated color, set pixel
 			if (dest)
 			{
-				if (*pix_column & mask) return INVALID_AREA::EMPTY;
+				if (current) return INVALID_AREA::EMPTY;
 				*pix_column |= mask;
 			}
 			else
 			{
-				if (!(*pix_column & mask)) return INVALID_AREA::EMPTY;
+				if (!current) return INVALID_AREA::EMPTY;
 				*pix_column &= ~mask;
 			}
 			return INVALID_AREA{x, y, x, y};
@@ -270,15 +275,15 @@ namespace devices::display
 				const uint8_t xmin = area.x1;
 				const uint8_t ymin = area.y1 / ROW_HEIGHT;
 				const uint8_t ymax = area.y2 / ROW_HEIGHT;
+				this->start_transfer();
 				for (uint8_t y = ymin; y <= ymax; ++y)
 				{
-					set_rc(y, xmin);
+					set_rc_(y, xmin);
 					dc_.set();
-					this->start_transfer();
 					const uint8_t* display = get_display(y, xmin);
 					this->transfer(display, size);
-					this->end_transfer();
 				}
+				this->end_transfer();
 			}
 		}
 
@@ -312,21 +317,24 @@ namespace devices::display
 		static constexpr uint8_t MAX_VOP = 0x7F;
 		static constexpr uint8_t DEFAULT_VOP = 40;
 
-		void send_command(uint8_t command)
+		void send_command_(uint8_t command)
 		{
 			dc_.clear();
-			this->start_transfer();
 			this->transfer(command);
+		}
+
+		void send_command(uint8_t command)
+		{
+			this->start_transfer();
+			send_command_(command);
 			this->end_transfer();
 		}
 
-		void set_rc(uint8_t r, uint8_t c)
+		void set_rc_(uint8_t r, uint8_t c)
 		{
 			dc_.clear();
-			this->start_transfer();
 			this->transfer(r | SET_ROW_ADDRESS);
 			this->transfer(c | SET_COL_ADDRESS);
-			this->end_transfer();
 		}
 
 		// Get a pointer to display byte at (r,c) coordinates 
