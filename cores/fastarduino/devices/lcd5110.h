@@ -255,15 +255,26 @@ namespace devices::display
 			// Get pointer to first byte to write in display buffer
 			uint8_t* display_ptr = get_display(row, col);
 
-			for (uint8_t i = 0; i < width; ++i)
+			bool add_interchar_space = ((col + width + 1) < WIDTH);
+
+			for (uint8_t i = 0; i <= width; ++i)
 			{
-				uint8_t pixel_bar = font_->get_char_glyph_byte(glyph_ref, i);
+				const bool space_column = (i == width);
+				uint8_t pixel_bar = 0x00;
+				if (!space_column)
+					pixel_bar = font_->get_char_glyph_byte(glyph_ref, i);
 				if (!color_)
 					pixel_bar = ~pixel_bar;
-				*display_ptr = mode_op_.bw_pixels_op(pixel_bar, *display_ptr);
+				if ((!space_column) || add_interchar_space)
+					*display_ptr = mode_op_.bw_pixels_op(pixel_bar, *display_ptr);
 				++display_ptr;
 			}
-			return INVALID_AREA{x, y, XCOORD(x + width + 1), y};
+
+			// Optionaly account for extra space on right of drawn character
+			uint8_t xmax = uint8_t(x + width);
+			if (add_interchar_space)
+				++xmax;
+			return INVALID_AREA{x, y, xmax, y};
 		}
 
 		// Copy invalidated rectangle of display map onto the device
