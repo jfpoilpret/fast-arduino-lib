@@ -239,18 +239,29 @@ namespace devices::display
 		// NOTE Coordinates must have been first verified by caller
 		INVALID_AREA write_char(uint8_t x, uint8_t y, char value)
 		{
-			if (y % ROW_HEIGHT != 0) return INVALID_AREA::EMPTY;
+			if (y % ROW_HEIGHT != 0)
+			{
+				last_error_ = Error::COORDS_INVALID;
+				return INVALID_AREA::EMPTY;
+			}
 
 			// Check column and row not out of range for characters!
 			const uint8_t width = font_->width();
 			const uint8_t row = y / ROW_HEIGHT;
 			const uint8_t col = x;
-			if ((col + width) > WIDTH) return INVALID_AREA::EMPTY;
+			if ((col + width) > WIDTH)
+			{
+				last_error_ = Error::SHAPE_OUT_OF_DISPLAY;
+				return INVALID_AREA::EMPTY;
+			}
 
 			// Load pixmap for `value` character
 			uint16_t glyph_ref = font_->get_char_glyph_ref(value);
 			if (glyph_ref == 0)
+			{
+				last_error_ = Error::NO_GLYPH_FOUND;
 				return INVALID_AREA::EMPTY;
+			}
 
 			// Get pointer to first byte to write in display buffer
 			uint8_t* display_ptr = get_display(row, col);

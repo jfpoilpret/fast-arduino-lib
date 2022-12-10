@@ -201,7 +201,39 @@ namespace devices::display
 	};
 	/// @endcond
 
-	// All display device implementation should derive from this class!
+	/**
+	 * Types of errors that can occur on `Display` instances.
+	 * @sa AbstractDisplayDevice.last_error()
+	 */
+	enum class Error : uint8_t
+	{
+		//TODO simplify list (redundant codes)
+		/** No error occurred. */
+		NO_ERROR = 0,
+		/** A text drawing primitive has been called but no font has been set yet. */
+		NO_FONT_SET,
+		/** A text drawing primitive has been called with a character value which has no glyph in current font. */
+		NO_GLYPH_FOUND,
+		/** A drawing primitive has been called with (x,y) coordinates out of display range. */
+		COORDS_OUT_OF_RANGE,
+		/** 
+		 * A drawing primitive has been called with invalid (x,y) coordinates; this
+		 * is different to `COORDS_OUT_OF_RANGE` in the sens that actual display devices 
+		 * may impose specific constraint on x or y coordinates (e.g. being a multiple of 8).
+		 */
+		COORDS_INVALID,
+		/**
+		 * A drawing primitive with valid (x,y) coordinates would draw its shape
+		 * outside the display estate, which is forbidden. 
+		 * This may be due to extra arguments (e.g. circle radius).
+		 */
+		SHAPE_OUT_OF_DISPLAY,
+		/** A drawing primitive (line) was called with coordinates of 2 identical points. */
+		POINTS_NOT_SEPARATE,
+		/** Trying to draw a rectangle that would be only a simple line. */
+		FLAT_RECTANGLE
+	};
+
 	/**
 	 * Abstract base class for all display device classes.
 	 * This provides a few useful API that are needed by subclasses.
@@ -240,7 +272,28 @@ namespace devices::display
 			font_ = &font;
 		}
 
+		/**
+		 * Error code of latest called drawing primitive.
+		 * Automatically erased (set to `Error::NO_ERROR`) by a successful call to
+		 * a drawing primitive.
+		 * If the latest drawing primitive set an error, this means nothing was 
+		 * drawn at all.
+		 * 
+		 * @return Error `Error::NO_ERROR` if last drawing primitive ran successfully.
+		 */
+		Error last_error() const
+		{
+			return last_error_;
+		}
+
 	protected:
+		bool check_font()
+		{
+			if (font_ != nullptr) return true;
+			last_error_ = Error::NO_FONT_SET;
+			return false;
+		}
+
 		/** 
 		 * Pointer to the current `Font` that shall be used by text drawing primitives.
 		 * @warning This can be `nullptr`!
@@ -249,6 +302,12 @@ namespace devices::display
 
 		/** Current color that shall be used by drawing primitives. */
 		COLOR color_{};
+
+		/** 
+		 * The result status of the last drawing primitive called.
+		 * @sa last_error()
+		 */
+		Error last_error_ = Error::NO_ERROR;
 	};
 
 	/**
@@ -368,7 +427,7 @@ namespace devices::display
 
 		void write_char(XCOORD x, YCOORD y, char value)
 		{
-			if (this->font_ == nullptr) return;
+			if (!DISPLAY_DEVICE::check_font()) return;
 			if (!is_valid_xy(x, y)) return;
 			const INVALID_AREA invalid = DISPLAY_DEVICE::write_char(x, y, value);
 			invalidate(invalid);
@@ -376,7 +435,7 @@ namespace devices::display
 
 		void write_string(XCOORD x, YCOORD y, const char* content)
 		{
-			if (this->font_ == nullptr) return;
+			if (!DISPLAY_DEVICE::check_font()) return;
 			if (!is_valid_xy(x, y)) return;
 			INVALID_AREA invalid = INVALID_AREA::EMPTY;
 			while (*content)
@@ -390,7 +449,7 @@ namespace devices::display
 
 		void write_string(XCOORD x, YCOORD y, const flash::FlashStorage* content)
 		{
-			if (this->font_ == nullptr) return;
+			if (!DISPLAY_DEVICE::check_font()) return;
 			if (!is_valid_xy(x, y)) return;
 			INVALID_AREA invalid = INVALID_AREA::EMPTY;
 			uint16_t address = (uint16_t) content;
@@ -420,7 +479,11 @@ namespace devices::display
 			if (x1 == x2)
 			{
 				// if 2 points are the same: nothing to do
-				if (y1 == y2) return;
+				if (y1 == y2)
+				{
+					DISPLAY_DEVICE::last_error_ = Error::POINTS_NOT_SEPARATE;
+					return;
+				}
 				// Ensure y1 < y2
 				swap_to_sort(y1, y2);
 				draw_vline(x1, y1, y2);
@@ -447,8 +510,11 @@ namespace devices::display
 		{
 			if (!is_valid_xy(x1, y1)) return;
 			if (!is_valid_xy(x2, y2)) return;
-			if ((x1 == x2) || (y1 == y2)) return;
-
+			if ((x1 == x2) || (y1 == y2))
+			{
+				DISPLAY_DEVICE::last_error_ = Error::FLAT_RECTANGLE;
+				return;
+			}
 			// Possibly swap x1-x2 and y1-y2
 			swap_to_sort(x1, x2);
 			swap_to_sort(y1, y2);
@@ -465,8 +531,13 @@ namespace devices::display
 		void draw_circle(XCOORD xc, YCOORD yc, SCALAR radius)
 		{
 			if (!is_valid_xy(xc, yc)) return;
-			if ((xc < radius) || (xc + radius > WIDTH)) return;
-			if ((yc < radius) || (yc + radius > HEIGHT)) return;
+			//FIXME also check radius != 0 (radius == 0 crashes MCU!)
+			if (	(xc < radius) || (xc + radius > WIDTH)
+				||	(yc < radius) || (yc + radius > HEIGHT))
+			{
+				DISPLAY_DEVICE::last_error_ = Error::SHAPE_OUT_OF_DISPLAY;
+				return;
+			}
 			// Apply Bresenham's circle algorithm
 			draw_circle_bresenham(xc, yc, radius);
 			invalidate(INVALID_AREA{XCOORD(xc - radius), YCOORD(yc - radius), 
@@ -493,16 +564,20 @@ namespace devices::display
 		void invalidate(const INVALID_AREA& area)
 		{
 			invalid_area_ += area;
+			DISPLAY_DEVICE::last_error_ = Error::NO_ERROR;
 		}
 
 		void invalidate()
 		{
 			invalid_area_ = INVALID_AREA{0, 0, WIDTH - 1, HEIGHT - 1};
+			DISPLAY_DEVICE::last_error_ = Error::NO_ERROR;
 		}
 
-		static bool is_valid_xy(XCOORD x, YCOORD y)
+		bool is_valid_xy(XCOORD x, YCOORD y)
 		{
-			return (x < WIDTH) && (y < HEIGHT);
+			if ((x < WIDTH) && (y < HEIGHT)) return true;
+			DISPLAY_DEVICE::last_error_ = Error::COORDS_OUT_OF_RANGE;
+			return false;
 		}
 
 		void draw_vline(XCOORD x1, YCOORD y1, YCOORD y2)
