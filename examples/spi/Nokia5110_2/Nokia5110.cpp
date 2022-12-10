@@ -186,7 +186,17 @@ int main()
 	nokia.draw_circle(42, 24, 0);
 	tests::assert_equals(out, F("last_error() after draw_circle of radius 0"), Error::INVALID_GEOMETRY, nokia.last_error());
 
-	//TODO draw_rectangle
+	nokia.draw_rectangle(10, 10, 10, 40);
+	tests::assert_equals(out, F("last_error() after draw_rectangle on flat vertical rectangle"), Error::INVALID_GEOMETRY, nokia.last_error());
+
+	nokia.draw_rectangle(10, 10, 60, 10);
+	tests::assert_equals(out, F("last_error() after draw_rectangle on flat horizontal rectangle"), Error::INVALID_GEOMETRY, nokia.last_error());
+
+	nokia.draw_rectangle(10, 10, 60, 40);
+	tests::assert_equals(out, F("last_error() after draw_rectangle on normal rectangle"), Error::NO_ERROR, nokia.last_error());
+
+	nokia.draw_rectangle(60, 40, 10, 10);
+	tests::assert_equals(out, F("last_error() after draw_rectangle on normal rectangle"), Error::NO_ERROR, nokia.last_error());
 
 	nokia.update();
 	out << F("Finished") << endl;
