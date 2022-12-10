@@ -119,7 +119,7 @@ namespace devices::display
 		using SCALAR = uint8_t;
 		// Must be large enough to store -4 * min(WIDTH,HEIGHT)
 		using SIGNED_SCALAR = int8_t;
-		using INVALID_AREA = InvalidArea<XCOORD, YCOORD>;
+		static constexpr bool HAS_RASTER = true;
 
 		static constexpr XCOORD WIDTH = 84;
 		static constexpr YCOORD HEIGHT = 48;
@@ -272,24 +272,21 @@ namespace devices::display
 		}
 
 		// Copy invalidated rectangle of display map onto the device
-		void update(const INVALID_AREA& area)
+		void update(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2)
 		{
-			if (!area.empty)
+			const uint8_t size = (x2 - x1 + 1);
+			const uint8_t xmin = x1;
+			const uint8_t ymin = y1 / ROW_HEIGHT;
+			const uint8_t ymax = y2 / ROW_HEIGHT;
+			this->start_transfer();
+			for (uint8_t y = ymin; y <= ymax; ++y)
 			{
-				const uint8_t size = (area.x2 - area.x1 + 1);
-				const uint8_t xmin = area.x1;
-				const uint8_t ymin = area.y1 / ROW_HEIGHT;
-				const uint8_t ymax = area.y2 / ROW_HEIGHT;
-				this->start_transfer();
-				for (uint8_t y = ymin; y <= ymax; ++y)
-				{
-					set_rc_(y, xmin);
-					dc_.set();
-					const uint8_t* display = get_display(y, xmin);
-					this->transfer(display, size);
-				}
-				this->end_transfer();
+				set_rc_(y, xmin);
+				dc_.set();
+				const uint8_t* display = get_display(y, xmin);
+				this->transfer(display, size);
 			}
+			this->end_transfer();
 		}
 
 	private:

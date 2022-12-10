@@ -315,12 +315,8 @@ namespace devices::display
 	 * 
 	 * @tparam XCOORD the integral type for X coordinates
 	 * @tparam YCOORD the integral type for Y coordinates
-	 * @tparam USED `true` (default) if the display device is based on raster 
-	 * updates and thus needs invalid areas support, `false` otherwise, providing
-	 * an empty InvalidArea object, which will allow same API whatever the situation,
-	 * whilst increasing performance (time and size) when invalid areas are not used.
 	 */
-	template<typename XCOORD, typename YCOORD, bool USED = true> struct InvalidArea
+	template<typename XCOORD, typename YCOORD> struct InvalidArea
 	{
 		InvalidArea() = default;
 		InvalidArea(XCOORD x1, YCOORD y1, XCOORD x2, YCOORD y2)
@@ -358,34 +354,18 @@ namespace devices::display
 		bool empty = true;
 	};
 
-	//TODO check that it works and it generates no code!
 	/// @cond notdocumented
-	template<typename XCOORD, typename YCOORD> struct InvalidArea<XCOORD, YCOORD, false>
+	template<typename XCOORD, typename YCOORD>
+	InvalidArea<XCOORD, YCOORD> InvalidArea<XCOORD, YCOORD>::EMPTY = InvalidArea{};
+
+	template<typename XCOORD, typename YCOORD>
+	InvalidArea<XCOORD, YCOORD> operator+(
+		const InvalidArea<XCOORD, YCOORD>& a1, const InvalidArea<XCOORD, YCOORD>& a2)
 	{
-		InvalidArea() = default;
-		InvalidArea(XCOORD x1, YCOORD y1, XCOORD x2, YCOORD y2) {}
-
-		InvalidArea& operator+=(const InvalidArea<XCOORD, YCOORD, false>& a)
-		{
-			return *this;
-		}
-
-		static InvalidArea EMPTY;
-
-		const bool empty = true;
-	};
-
-	template<typename XCOORD, typename YCOORD, bool USED>
-	InvalidArea<XCOORD, YCOORD, USED> InvalidArea<XCOORD, YCOORD, USED>::EMPTY = InvalidArea{};
-
-	template<typename XCOORD, typename YCOORD, bool USED>
-	InvalidArea<XCOORD, YCOORD, USED> operator+(
-		const InvalidArea<XCOORD, YCOORD, USED>& a1, const InvalidArea<XCOORD, YCOORD, USED>& a2)
-	{
-		if (a1.empty && a2.empty) return InvalidArea<XCOORD, YCOORD, USED>{};
+		if (a1.empty && a2.empty) return InvalidArea<XCOORD, YCOORD>{};
 		if (a1.empty) return a2;
 		if (a2.empty) return a1;
-		return InvalidArea<XCOORD, YCOORD, USED>{
+		return InvalidArea<XCOORD, YCOORD>{
 			(a1.x1 < a2.x1 ? a1.x1 : a2.x1),
 			(a1.y1 < a2.y1 ? a1.y1 : a2.y1),
 			(a1.x2 > a2.x2 ? a1.x2 : a2.x2),
@@ -407,7 +387,7 @@ namespace devices::display
 
 	protected:
 		using SIGNED_SCALAR = typename DISPLAY_DEVICE::SIGNED_SCALAR;
-		using INVALID_AREA = typename DISPLAY_DEVICE::INVALID_AREA;
+		using INVALID_AREA = InvalidArea<XCOORD, YCOORD>;
 
 	public:
 		Display()
@@ -436,7 +416,7 @@ namespace devices::display
 			if (glyph_ref == 0) return;
 			// Delegate glyph display to actual device
 			uint8_t displayed_width = DISPLAY_DEVICE::write_char(x, y, glyph_ref);
-			invalidate(INVALID_AREA{x, y, XCOORD(x + displayed_width), YCOORD(y + this->font_->height() - 1)});
+			invalidate(x, y, XCOORD(x + displayed_width), YCOORD(y + this->font_->height() - 1));
 		}
 
 		void write_string(XCOORD x, YCOORD y, const char* content)
@@ -460,7 +440,7 @@ namespace devices::display
 			}
 			// Invalidate if needed
 			if (xcurrent > x)
-				invalidate(INVALID_AREA{x, y, XCOORD(xcurrent - 1), YCOORD(y + this->font_->height() - 1)});
+				invalidate(x, y, XCOORD(xcurrent - 1), YCOORD(y + this->font_->height() - 1));
 		}
 
 		void write_string(XCOORD x, YCOORD y, const flash::FlashStorage* content)
@@ -485,14 +465,14 @@ namespace devices::display
 			}
 			// Invalidate if needed
 			if (xcurrent > x)
-				invalidate(INVALID_AREA{x, y, XCOORD(xcurrent -1), YCOORD(y + this->font_->height() - 1)});
+				invalidate(x, y, XCOORD(xcurrent -1), YCOORD(y + this->font_->height() - 1));
 		}
 
 		void draw_pixel(XCOORD x, YCOORD y)
 		{
 			if (!is_valid_xy(x, y)) return;
 			if (DISPLAY_DEVICE::set_pixel(x, y))
-				invalidate(INVALID_AREA{x, y, x, y});
+				invalidate(x, y, x, y);
 		}
 
 		void draw_line(XCOORD x1, YCOORD y1, XCOORD x2, YCOORD y2)
@@ -528,7 +508,7 @@ namespace devices::display
 				// Ensure y1 < y2 for invalid region instantiation
 				swap_to_sort(y1, y2);
 			}
-			invalidate(INVALID_AREA{x1, y1, x2, y2});
+			invalidate(x1, y1, x2, y2);
 		}
 
 		void draw_rectangle(XCOORD x1, YCOORD y1, XCOORD x2, YCOORD y2)
@@ -550,7 +530,7 @@ namespace devices::display
 			// (due to a drawing mode that might potentially be XOR)
 			draw_vline(x1, y1 + 1, y2 - 1);
 			draw_vline(x2, y1 + 1, y2 - 1);
-			invalidate(INVALID_AREA{x1, y1, x2, y2});
+			invalidate(x1, y1, x2, y2);
 		}
 
 		void draw_circle(XCOORD xc, YCOORD yc, SCALAR radius)
@@ -569,8 +549,7 @@ namespace devices::display
 			}
 			// Apply Bresenham's circle algorithm
 			draw_circle_bresenham(xc, yc, radius);
-			invalidate(INVALID_AREA{XCOORD(xc - radius), YCOORD(yc - radius), 
-				XCOORD(xc + radius), YCOORD(yc + radius)});
+			invalidate(XCOORD(xc - radius), YCOORD(yc - radius), XCOORD(xc + radius), YCOORD(yc + radius));
 		}
 
 		//TODO additional 2D primitives here? e.g. arc, fill
@@ -579,8 +558,11 @@ namespace devices::display
 		// Display update (raster copy to device)
 		void update()
 		{
-			DISPLAY_DEVICE::update(invalid_area_);
-			invalid_area_.empty = true;
+			if (DISPLAY_DEVICE::HAS_RASTER && !invalid_area_.empty)
+			{
+				DISPLAY_DEVICE::update(invalid_area_.x1, invalid_area_.y1, invalid_area_.x2, invalid_area_.y2);
+				invalid_area_.empty = true;
+			}
 		}
 
 		void force_update()
@@ -590,15 +572,17 @@ namespace devices::display
 		}
 
 	protected:
-		void invalidate(const INVALID_AREA& area)
+		void invalidate(XCOORD x1, XCOORD y1,XCOORD x2, YCOORD y2)
 		{
-			invalid_area_ += area;
+			if (DISPLAY_DEVICE::HAS_RASTER)
+				invalid_area_ += INVALID_AREA{x1, y1, x2, y2};
 			DISPLAY_DEVICE::last_error_ = Error::NO_ERROR;
 		}
 
 		void invalidate()
 		{
-			invalid_area_ = INVALID_AREA{0, 0, WIDTH - 1, HEIGHT - 1};
+			if (DISPLAY_DEVICE::HAS_RASTER)
+				invalid_area_ = INVALID_AREA{0, 0, WIDTH - 1, HEIGHT - 1};
 			DISPLAY_DEVICE::last_error_ = Error::NO_ERROR;
 		}
 
