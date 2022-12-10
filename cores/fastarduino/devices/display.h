@@ -66,11 +66,6 @@ namespace devices
 	}
 }
 
-//TODO error handling? (e.g. out of range coordinate)
-// - enum class Error : uint8_t {...}
-// - Error last_error_ field in Display
-// - Error last_error() const
-// - reset_error()
 namespace devices::display
 {
 	/**
@@ -207,15 +202,19 @@ namespace devices::display
 	 */
 	enum class Error : uint8_t
 	{
-		//TODO simplify list (redundant codes)
 		/** No error occurred. */
 		NO_ERROR = 0,
 		/** A text drawing primitive has been called but no font has been set yet. */
 		NO_FONT_SET,
 		/** A text drawing primitive has been called with a character value which has no glyph in current font. */
 		NO_GLYPH_FOUND,
-		/** A drawing primitive has been called with (x,y) coordinates out of display range. */
-		COORDS_OUT_OF_RANGE,
+		/**
+		 * A drawing primitive would draw its shape outside the display estate, 
+		 * which is forbidden. 
+		 * This may be due to out of range (x,y) coordinates, or extra arguments 
+		 * (e.g. too large circle radius).
+		 */
+		OUT_OF_DISPLAY,
 		/** 
 		 * A drawing primitive has been called with invalid (x,y) coordinates; this
 		 * is different to `COORDS_OUT_OF_RANGE` in the sens that actual display devices 
@@ -223,15 +222,14 @@ namespace devices::display
 		 */
 		COORDS_INVALID,
 		/**
-		 * A drawing primitive with valid (x,y) coordinates would draw its shape
-		 * outside the display estate, which is forbidden. 
-		 * This may be due to extra arguments (e.g. circle radius).
+		 * A drawing primitive would lead to incorrect geometry due to invalid 
+		 * arguments.
+		 * This may be due to various factors such as:
+		 * - trying to draw a line between A and B where A == B
+		 * - trying to draw a flat rectangle
+		 * - trying to draw a circle with a `0` radius
 		 */
-		SHAPE_OUT_OF_DISPLAY,
-		/** A drawing primitive (line) was called with coordinates of 2 identical points. */
-		POINTS_NOT_SEPARATE,
-		/** Trying to draw a rectangle that would be only a simple line. */
-		FLAT_RECTANGLE
+		INVALID_GEOMETRY
 	};
 
 	/**
@@ -425,49 +423,76 @@ namespace devices::display
 			invalidate();
 		}
 
+		//TODO replace write_ with draw_ 
 		void write_char(XCOORD x, YCOORD y, char value)
 		{
+			// Check one font is currently selected
 			if (!DISPLAY_DEVICE::check_font()) return;
-			if (!is_valid_xy(x, y)) return;
-			const INVALID_AREA invalid = DISPLAY_DEVICE::write_char(x, y, value);
-			invalidate(invalid);
+			// Check coordinates are suitable for character display
+			const uint8_t width = this->font_->width();
+			if (!is_valid_char_xy(x, y, width)) return;
+			// Check glyph exists for current character
+			uint16_t glyph_ref = get_glyph(value);
+			if (glyph_ref == 0) return;
+			// Delegate glyph display to actual device
+			uint8_t displayed_width = DISPLAY_DEVICE::write_char(x, y, glyph_ref);
+			invalidate(INVALID_AREA{x, y, XCOORD(x + displayed_width), YCOORD(y + this->font_->height() - 1)});
 		}
 
 		void write_string(XCOORD x, YCOORD y, const char* content)
 		{
+			// Check one font is currently selected
 			if (!DISPLAY_DEVICE::check_font()) return;
-			if (!is_valid_xy(x, y)) return;
-			INVALID_AREA invalid = INVALID_AREA::EMPTY;
+			const uint8_t width = this->font_->width();
+
+			XCOORD xcurrent = x;
 			while (*content)
 			{
-				invalid += DISPLAY_DEVICE::write_char(x, y, *content++);
-				x += this->font_->width() + 1;
+				// Check coordinates are suitable for character display
+				if (!is_valid_char_xy(xcurrent, y, width)) break;
+				// Check glyph exists for current character
+				uint16_t glyph_ref = get_glyph(*content);
+				if (glyph_ref == 0) break;
+				// Delegate glyph display to actual device
+				const uint8_t displayed_width = DISPLAY_DEVICE::write_char(xcurrent, y, glyph_ref);
+				xcurrent += displayed_width;
+				++content;
 			}
 			// Invalidate if needed
-			invalidate(invalid);
+			if (xcurrent > x)
+				invalidate(INVALID_AREA{x, y, XCOORD(xcurrent - 1), YCOORD(y + this->font_->height() - 1)});
 		}
 
 		void write_string(XCOORD x, YCOORD y, const flash::FlashStorage* content)
 		{
+			// Check one font is currently selected
 			if (!DISPLAY_DEVICE::check_font()) return;
-			if (!is_valid_xy(x, y)) return;
-			INVALID_AREA invalid = INVALID_AREA::EMPTY;
+			const uint8_t width = this->font_->width();
+
+			XCOORD xcurrent = x;
 			uint16_t address = (uint16_t) content;
-			while (char value = pgm_read_byte(address++))
+			while (char value = pgm_read_byte(address))
 			{
-				invalid += DISPLAY_DEVICE::write_char(x, y, value);
-				x += this->font_->width() + 1;
+				// Check coordinates are suitable for character display
+				if (!is_valid_char_xy(xcurrent, y, width)) break;
+				// Check glyph exists for current character
+				uint16_t glyph_ref = get_glyph(value);
+				if (glyph_ref == 0) break;
+				// Delegate glyph display to actual device
+				const uint8_t displayed_width = DISPLAY_DEVICE::write_char(xcurrent, y, glyph_ref);
+				xcurrent += displayed_width;
+				++address;
 			}
 			// Invalidate if needed
-			invalidate(invalid);
+			if (xcurrent > x)
+				invalidate(INVALID_AREA{x, y, XCOORD(xcurrent -1), YCOORD(y + this->font_->height() - 1)});
 		}
 
 		void draw_pixel(XCOORD x, YCOORD y)
 		{
 			if (!is_valid_xy(x, y)) return;
-			const INVALID_AREA invalid = DISPLAY_DEVICE::set_pixel(x, y);
-			// Invalidate if needed
-			invalidate(invalid);
+			if (DISPLAY_DEVICE::set_pixel(x, y))
+				invalidate(INVALID_AREA{x, y, x, y});
 		}
 
 		void draw_line(XCOORD x1, YCOORD y1, XCOORD x2, YCOORD y2)
@@ -481,7 +506,7 @@ namespace devices::display
 				// if 2 points are the same: nothing to do
 				if (y1 == y2)
 				{
-					DISPLAY_DEVICE::last_error_ = Error::POINTS_NOT_SEPARATE;
+					DISPLAY_DEVICE::last_error_ = Error::INVALID_GEOMETRY;
 					return;
 				}
 				// Ensure y1 < y2
@@ -512,7 +537,7 @@ namespace devices::display
 			if (!is_valid_xy(x2, y2)) return;
 			if ((x1 == x2) || (y1 == y2))
 			{
-				DISPLAY_DEVICE::last_error_ = Error::FLAT_RECTANGLE;
+				DISPLAY_DEVICE::last_error_ = Error::INVALID_GEOMETRY;
 				return;
 			}
 			// Possibly swap x1-x2 and y1-y2
@@ -531,11 +556,15 @@ namespace devices::display
 		void draw_circle(XCOORD xc, YCOORD yc, SCALAR radius)
 		{
 			if (!is_valid_xy(xc, yc)) return;
-			//FIXME also check radius != 0 (radius == 0 crashes MCU!)
-			if (	(xc < radius) || (xc + radius > WIDTH)
-				||	(yc < radius) || (yc + radius > HEIGHT))
+			if (radius == 0)
 			{
-				DISPLAY_DEVICE::last_error_ = Error::SHAPE_OUT_OF_DISPLAY;
+				DISPLAY_DEVICE::last_error_ = Error::INVALID_GEOMETRY;
+				return;
+			}
+			if (	(xc < radius) || (xc + radius >= WIDTH)
+				||	(yc < radius) || (yc + radius >= HEIGHT))
+			{
+				DISPLAY_DEVICE::last_error_ = Error::OUT_OF_DISPLAY;
 				return;
 			}
 			// Apply Bresenham's circle algorithm
@@ -576,8 +605,29 @@ namespace devices::display
 		bool is_valid_xy(XCOORD x, YCOORD y)
 		{
 			if ((x < WIDTH) && (y < HEIGHT)) return true;
-			DISPLAY_DEVICE::last_error_ = Error::COORDS_OUT_OF_RANGE;
+			DISPLAY_DEVICE::last_error_ = Error::OUT_OF_DISPLAY;
 			return false;
+		}
+
+		bool is_valid_char_xy(XCOORD x, YCOORD y, uint8_t width)
+		{
+			if ((x + width > WIDTH) || (y >= HEIGHT))
+			{
+				DISPLAY_DEVICE::last_error_ = Error::OUT_OF_DISPLAY;
+				return false;
+			}
+			if (DISPLAY_DEVICE::is_valid_char_xy(x, y)) return true;
+			DISPLAY_DEVICE::last_error_ = Error::COORDS_INVALID;
+			return false;
+		}
+
+		uint16_t get_glyph(char value)
+		{
+			// Load pixmap for current character
+			uint16_t glyph_ref = this->font_->get_char_glyph_ref(value);
+			if (glyph_ref != 0) return glyph_ref;
+			DISPLAY_DEVICE::last_error_ = Error::NO_GLYPH_FOUND;
+			return 0;
 		}
 
 		void draw_vline(XCOORD x1, YCOORD y1, YCOORD y2)

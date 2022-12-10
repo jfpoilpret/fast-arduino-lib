@@ -209,7 +209,7 @@ namespace devices::display
 		}
 
 		// NOTE Coordinates must have been first verified by caller
-		INVALID_AREA set_pixel(uint8_t x, uint8_t y)
+		bool set_pixel(uint8_t x, uint8_t y)
 		{
 			// Convert to (r,c)
 			const uint8_t c = x;
@@ -225,43 +225,29 @@ namespace devices::display
 			// Based on calculated color, set pixel
 			if (dest)
 			{
-				if (current) return INVALID_AREA::EMPTY;
+				if (current) return false;
 				*pix_column |= mask;
 			}
 			else
 			{
-				if (!current) return INVALID_AREA::EMPTY;
+				if (!current) return false;
 				*pix_column &= ~mask;
 			}
-			return INVALID_AREA{x, y, x, y};
+			return true;
+		}
+
+		bool is_valid_char_xy(UNUSED uint8_t x, uint8_t y)
+		{
+			return (y % ROW_HEIGHT) == 0;
 		}
 
 		// NOTE Coordinates must have been first verified by caller
-		INVALID_AREA write_char(uint8_t x, uint8_t y, char value)
+		uint8_t write_char(uint8_t x, uint8_t y, uint16_t glyph_ref)
 		{
-			if (y % ROW_HEIGHT != 0)
-			{
-				last_error_ = Error::COORDS_INVALID;
-				return INVALID_AREA::EMPTY;
-			}
-
 			// Check column and row not out of range for characters!
 			const uint8_t width = font_->width();
 			const uint8_t row = y / ROW_HEIGHT;
 			const uint8_t col = x;
-			if ((col + width) > WIDTH)
-			{
-				last_error_ = Error::SHAPE_OUT_OF_DISPLAY;
-				return INVALID_AREA::EMPTY;
-			}
-
-			// Load pixmap for `value` character
-			uint16_t glyph_ref = font_->get_char_glyph_ref(value);
-			if (glyph_ref == 0)
-			{
-				last_error_ = Error::NO_GLYPH_FOUND;
-				return INVALID_AREA::EMPTY;
-			}
 
 			// Get pointer to first byte to write in display buffer
 			uint8_t* display_ptr = get_display(row, col);
@@ -281,11 +267,8 @@ namespace devices::display
 				++display_ptr;
 			}
 
-			// Optionaly account for extra space on right of drawn character
-			uint8_t xmax = uint8_t(x + width);
-			if (add_interchar_space)
-				++xmax;
-			return INVALID_AREA{x, y, xmax, y};
+			// Return actual width writtent to display
+			return width + (add_interchar_space ? 1 : 0);
 		}
 
 		// Copy invalidated rectangle of display map onto the device

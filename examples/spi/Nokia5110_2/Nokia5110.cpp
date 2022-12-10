@@ -83,20 +83,14 @@ ostream& operator<<(ostream& out, Error error)
 		case Error::NO_GLYPH_FOUND:
 		return out << F("NO_GLYPH_FOUND");
 		
-		case Error::COORDS_OUT_OF_RANGE:
-		return out << F("COORDS_OUT_OF_RANGE");
+		case Error::OUT_OF_DISPLAY:
+		return out << F("OUT_OF_DISPLAY");
 		
 		case Error::COORDS_INVALID:
 		return out << F("COORDS_INVALID");
 		
-		case Error::SHAPE_OUT_OF_DISPLAY:
-		return out << F("SHAPE_OUT_OF_DISPLAY");
-		
-		case Error::FLAT_RECTANGLE:
-		return out << F("FLAT_RECTANGLE");
-		
-		case Error::POINTS_NOT_SEPARATE:
-		return out << F("POINTS_NOT_SEPARATE");
+		case Error::INVALID_GEOMETRY:
+		return out << F("INVALID_GEOMETRY");
 	}
 }
 
@@ -142,57 +136,58 @@ int main()
 	tests::assert_equals(out, F("last_error() after write_char at bad y"), Error::COORDS_INVALID, nokia.last_error());
 
 	nokia.write_char(84, 0, 'A');
-	tests::assert_equals(out, F("last_error() after write_char at too big x"), Error::COORDS_OUT_OF_RANGE, nokia.last_error());
+	tests::assert_equals(out, F("last_error() after write_char at too big x"), Error::OUT_OF_DISPLAY, nokia.last_error());
 
 	nokia.write_char(0, 48, 'A');
-	tests::assert_equals(out, F("last_error() after write_char at too big y"), Error::COORDS_OUT_OF_RANGE, nokia.last_error());
+	tests::assert_equals(out, F("last_error() after write_char at too big y"), Error::OUT_OF_DISPLAY, nokia.last_error());
 
 	nokia.write_char(80, 20, 'A');
-	tests::assert_equals(out, F("last_error() after write_char out of bounds"), Error::SHAPE_OUT_OF_DISPLAY, nokia.last_error());
+	tests::assert_equals(out, F("last_error() after write_char out of bounds"), Error::OUT_OF_DISPLAY, nokia.last_error());
 
-	nokia.write_char(79, 20, 'A');
+	nokia.write_char(79, 16, 'A');
 	tests::assert_equals(out, F("last_error() after write_char just in bounds"), Error::NO_ERROR, nokia.last_error());
 
 	nokia.draw_pixel(84, 0);
-	tests::assert_equals(out, F("last_error() after draw_pixel at too big x"), Error::COORDS_OUT_OF_RANGE, nokia.last_error());
+	tests::assert_equals(out, F("last_error() after draw_pixel at too big x"), Error::OUT_OF_DISPLAY, nokia.last_error());
 
 	nokia.draw_pixel(0, 48);
-	tests::assert_equals(out, F("last_error() after draw_pixel at too big y"), Error::COORDS_OUT_OF_RANGE, nokia.last_error());
+	tests::assert_equals(out, F("last_error() after draw_pixel at too big y"), Error::OUT_OF_DISPLAY, nokia.last_error());
 
 	nokia.draw_pixel(42, 24);
 	tests::assert_equals(out, F("last_error() after draw_pixel at center"), Error::NO_ERROR, nokia.last_error());
 
 	nokia.draw_line(0, 0, 84, 0);
-	tests::assert_equals(out, F("last_error() after draw_line at too big x"), Error::COORDS_OUT_OF_RANGE, nokia.last_error());
+	tests::assert_equals(out, F("last_error() after draw_line at too big x"), Error::OUT_OF_DISPLAY, nokia.last_error());
 
 	nokia.draw_line(0, 0, 0, 48);
-	tests::assert_equals(out, F("last_error() after draw_line at too big y"), Error::COORDS_OUT_OF_RANGE, nokia.last_error());
+	tests::assert_equals(out, F("last_error() after draw_line at too big y"), Error::OUT_OF_DISPLAY, nokia.last_error());
 
 	nokia.draw_line(0, 0, 83, 47);
 	tests::assert_equals(out, F("last_error() after draw_line in bounds"), Error::NO_ERROR, nokia.last_error());
 
 	nokia.draw_line(0, 0, 0, 0);
-	tests::assert_equals(out, F("last_error() after draw_line on same point"), Error::POINTS_NOT_SEPARATE, nokia.last_error());
+	tests::assert_equals(out, F("last_error() after draw_line on same point"), Error::INVALID_GEOMETRY, nokia.last_error());
 
 	nokia.draw_circle(84, 0, 1);
-	tests::assert_equals(out, F("last_error() after draw_circle at too big x"), Error::COORDS_OUT_OF_RANGE, nokia.last_error());
+	tests::assert_equals(out, F("last_error() after draw_circle at too big x"), Error::OUT_OF_DISPLAY, nokia.last_error());
 
 	nokia.draw_circle(0, 48, 1);
-	tests::assert_equals(out, F("last_error() after draw_circle at too big y"), Error::COORDS_OUT_OF_RANGE, nokia.last_error());
+	tests::assert_equals(out, F("last_error() after draw_circle at too big y"), Error::OUT_OF_DISPLAY, nokia.last_error());
 
-	nokia.draw_circle(24, 42, 10);
+	nokia.draw_circle(42, 24, 10);
 	tests::assert_equals(out, F("last_error() after draw_circle in bounds"), Error::NO_ERROR, nokia.last_error());
 
-	nokia.draw_circle(24, 42, 23);
+	nokia.draw_circle(42, 24, 23);
 	tests::assert_equals(out, F("last_error() after draw_circle just in bounds"), Error::NO_ERROR, nokia.last_error());
 
-	nokia.draw_circle(24, 42, 24);
-	tests::assert_equals(out, F("last_error() after draw_circle just out bounds"), Error::SHAPE_OUT_OF_DISPLAY, nokia.last_error());
+	nokia.draw_circle(42, 24, 24);
+	tests::assert_equals(out, F("last_error() after draw_circle just out bounds"), Error::OUT_OF_DISPLAY, nokia.last_error());
 
-	// nokia.draw_circle(24, 42, 0);
-	// tests::assert_equals(out, F("last_error() after draw_circle of radius 0"), Error::NO_ERROR, nokia.last_error());
+	nokia.draw_circle(42, 24, 0);
+	tests::assert_equals(out, F("last_error() after draw_circle of radius 0"), Error::INVALID_GEOMETRY, nokia.last_error());
 
 	//TODO draw_rectangle
 
 	nokia.update();
+	out << F("Finished") << endl;
 }
