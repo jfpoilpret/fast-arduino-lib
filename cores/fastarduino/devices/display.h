@@ -317,80 +317,75 @@ namespace devices::display
 		Error last_error_ = Error::NO_ERROR;
 	};
 
-	//TODO define as embedded class of Display!
-	template<typename XCOORD, typename YCOORD> struct InvalidArea
-	{
-		InvalidArea() = default;
-		InvalidArea(XCOORD x1, YCOORD y1, XCOORD x2, YCOORD y2)
-			: x1{x1}, y1{y1}, x2{x2}, y2{y2}, empty{false} {}
-
-		InvalidArea& operator+=(const InvalidArea<XCOORD, YCOORD>& a)
-		{
-			if (!a.empty)
-			{
-				if (empty)
-				{
-					x1 = a.x1;
-					y1 = a.y1;
-					x2 = a.x2;
-					y2 = a.y2;
-					empty = false;
-				}
-				else
-				{
-					if (a.x1 < x1) x1 = a.x1;
-					if (a.y1 < y1) y1 = a.y1;
-					if (a.x2 > x2) x2 = a.x2;
-					if (a.y2 > y2) y2 = a.y2;
-				}
-			}
-			return *this;
-		}
-
-		static InvalidArea EMPTY;
-
-		XCOORD x1 = 0;
-		YCOORD y1 = 0;
-		XCOORD x2 = 0;
-		YCOORD y2 = 0;
-		bool empty = true;
-	};
-
-	/// @cond notdocumented
-	template<typename XCOORD, typename YCOORD>
-	InvalidArea<XCOORD, YCOORD> InvalidArea<XCOORD, YCOORD>::EMPTY = InvalidArea{};
-	/// @endcond
-
-	//TODO DOC API
-	// Screen update is not always automatic! You must call update() once you have changed display bitmap content
+	/**
+	 * Class handling drawing primitives on any display device.
+	 * Tha driver for the actual display device is provided by the template
+	 * argument @p DISPLAY_DEVICE.
+	 * `Display` supports devices with or without a raster buffer.
+	 * 
+	 * @warning if @p DISPLAY_DEVICE uses a raster buffer, then drawing primitives
+	 * never display anything until you call `update()`.
+	 * 
+	 * Drawing primitives calls may generate various errors and possibly have
+	 * no impact on display.
+	 * Errors may be checked after each drawing primitive call, through `last_error()` 
+	 * call.
+	 * 
+	 * @tparam DISPLAY_DEVICE real display device class, must subclass `AbstractDisplay`
+	 */
 	template<typename DISPLAY_DEVICE> class Display : public DISPLAY_DEVICE
 	{
 	public:
+		/** Integral type of X coordinate. */
 		using XCOORD = typename DISPLAY_DEVICE::XCOORD;
+		/** Integral type of Y coordinate. */
 		using YCOORD = typename DISPLAY_DEVICE::YCOORD;
+		/** 
+		 * Integral type used in various calculations based on coordinates.
+		 * Typically the smallest of `XCOORD` and `YCOORD`.
+		 */
 		using SCALAR = typename DISPLAY_DEVICE::SCALAR;
 
+		/** Display width. Maximum X coordinate on display is `WIDTH - 1`. */
 		static constexpr XCOORD WIDTH = DISPLAY_DEVICE::WIDTH;
+		/** Display height. Maximum Y coordinate on display is `HEIGHT - 1`. */
 		static constexpr YCOORD HEIGHT = DISPLAY_DEVICE::HEIGHT;
 
 	protected:
+		/**
+		 * Integral signed type used in calculations of some drawing primitives.
+		 * This must be larger or equal to `XCOORD` and `YCOORD`.
+		 * It mst be large enough to store `-4 * min(WIDTH, HEIGHT)`.
+		 */
 		using SIGNED_SCALAR = typename DISPLAY_DEVICE::SIGNED_SCALAR;
-		using INVALID_AREA = InvalidArea<XCOORD, YCOORD>;
 
 	public:
+		/** Comstruct a display instance. */
 		Display()
 		{
 			// Check at compile-time that DISPLAY_DEVICE is a subclass of AbstractDisplayDevice
 			types_traits::derives_from<DISPLAY_DEVICE, AbstractDisplayDeviceGhost>{};
 		}
 
-		// Display drawing primitives
+		/**
+		 * Erase complete display.
+		 */
 		void erase()
 		{
 			DISPLAY_DEVICE::erase();
 			invalidate();
 		}
 
+		/**
+		 * Draw one character at the given display location.
+		 * 
+		 * @param x x coordinate of top left character pixel
+		 * @param y y coordinate of top left character pixel
+		 * @param value code of character to write; this must be available in
+		 * the current loaded `Font`.
+		 * 
+		 * @sa AbstractDisplayDevice::set_font()
+		 */
 		void draw_char(XCOORD x, YCOORD y, char value)
 		{
 			// Check one font is currently selected
@@ -406,6 +401,16 @@ namespace devices::display
 			invalidate(x, y, XCOORD(x + displayed_width), YCOORD(y + this->font_->height() - 1));
 		}
 
+		/**
+		 * Draw a string of characters at the given display location.
+		 * 
+		 * @param x x coordinate of 1st top left character pixel
+		 * @param y y coordinate of 1st top left character pixel
+		 * @param content C-string of characters to write; all charcaters must be
+		 * available in the current loaded `Font`.
+		 * 
+		 * @sa AbstractDisplayDevice::set_font()
+		 */
 		void draw_string(XCOORD x, YCOORD y, const char* content)
 		{
 			// Check one font is currently selected
@@ -413,6 +418,8 @@ namespace devices::display
 			const uint8_t width = this->font_->width();
 
 			XCOORD xcurrent = x;
+			//FIXME if is_valid_char_xy() or get_glyph() fails then final invalidate()
+			// will erase error!
 			while (*content)
 			{
 				// Check coordinates are suitable for character display
@@ -430,6 +437,16 @@ namespace devices::display
 				invalidate(x, y, XCOORD(xcurrent - 1), YCOORD(y + this->font_->height() - 1));
 		}
 
+		/**
+		 * Draw a string of characters at the given display location.
+		 * 
+		 * @param x x coordinate of 1st top left character pixel
+		 * @param y y coordinate of 1st top left character pixel
+		 * @param content C-string of characters, stored in MCU Flash, to write;
+		 * all charcaters must be available in the current loaded `Font`.
+		 * 
+		 * @sa AbstractDisplayDevice::set_font()
+		 */
 		void draw_string(XCOORD x, YCOORD y, const flash::FlashStorage* content)
 		{
 			// Check one font is currently selected
@@ -438,6 +455,8 @@ namespace devices::display
 
 			XCOORD xcurrent = x;
 			uint16_t address = (uint16_t) content;
+			//FIXME if is_valid_char_xy() or get_glyph() fails then final invalidate()
+			// will erase error!
 			while (char value = pgm_read_byte(address))
 			{
 				// Check coordinates are suitable for character display
@@ -455,13 +474,29 @@ namespace devices::display
 				invalidate(x, y, XCOORD(xcurrent -1), YCOORD(y + this->font_->height() - 1));
 		}
 
+		/**
+		 * Draw a pixel at given coordinate.
+		 * 
+		 * @param x x coordinate of pixel to draw
+		 * @param y y coordinate of pixel to draw
+		 */
 		void draw_pixel(XCOORD x, YCOORD y)
 		{
 			if (!is_valid_xy(x, y)) return;
+			//FIXME if set_pixel() returns false (not an error) then last_error_ 
+			// is not cleared!
 			if (DISPLAY_DEVICE::set_pixel(x, y))
 				invalidate(x, y, x, y);
 		}
 
+		/**
+		 * Draw a line between 2 points, at given coordinates.
+		 * 
+		 * @param x1 x coordinate of 1st line point
+		 * @param y1 y coordinate of 1st line point
+		 * @param x2 x coordinate of 2nd line point
+		 * @param y2 y coordinate of 2nd line point
+		 */
 		void draw_line(XCOORD x1, YCOORD y1, XCOORD x2, YCOORD y2)
 		{
 			if (!is_valid_xy(x1, y1)) return;
@@ -498,6 +533,14 @@ namespace devices::display
 			invalidate(x1, y1, x2, y2);
 		}
 
+		/**
+		 * Draw a rectangle defined by 2 corner points, at given coordinates.
+		 * 
+		 * @param x1 x coordinate of 1st rectangle corner
+		 * @param y1 y coordinate of 1st rectangle corner
+		 * @param x2 x coordinate of 2nd rectangle corner
+		 * @param y2 y coordinate of 2nd rectangle corner
+		 */
 		void draw_rectangle(XCOORD x1, YCOORD y1, XCOORD x2, YCOORD y2)
 		{
 			if (!is_valid_xy(x1, y1)) return;
@@ -520,6 +563,13 @@ namespace devices::display
 			invalidate(x1, y1, x2, y2);
 		}
 
+		/**
+		 * Draw a circle defined by its center, at given coordinates, and its radius.
+		 * 
+		 * @param xc x coordinate of circle center
+		 * @param yc y coordinate of circle center
+		 * @param radius circle radius
+		 */
 		void draw_circle(XCOORD xc, YCOORD yc, SCALAR radius)
 		{
 			if (!is_valid_xy(xc, yc)) return;
@@ -542,7 +592,13 @@ namespace devices::display
 		//TODO additional 2D primitives here? e.g. arc, fill
 		// void draw_arc()
 
-		// Display update (raster copy to device)
+		/**
+		 * For display devices having a raster buffer, this method copies invalid
+		 * (modified) parts of the raster buffer to the device.
+		 * For such devices, nothing will get actually drawn until `update()` is called.
+		 * 
+		 * This is useless for devices with direct draw to device (no raster buffer).
+		 */
 		void update()
 		{
 			if (DISPLAY_DEVICE::HAS_RASTER && !invalid_area_.empty)
@@ -552,6 +608,12 @@ namespace devices::display
 			}
 		}
 
+		/**
+		 * For display devices having a raster buffer, this method copies the whole
+		 * raster buffer to the device.
+		 * 
+		 * This is useless for devices with direct draw to device (no raster buffer).
+		 */
 		void force_update()
 		{
 			invalidate();
@@ -559,6 +621,47 @@ namespace devices::display
 		}
 
 	protected:
+		/// @cond notdocumented
+		struct InvalidArea
+		{
+			InvalidArea() = default;
+			InvalidArea(XCOORD x1, YCOORD y1, XCOORD x2, YCOORD y2)
+				: x1{x1}, y1{y1}, x2{x2}, y2{y2}, empty{false} {}
+
+			InvalidArea& operator+=(const InvalidArea& a)
+			{
+				if (!a.empty)
+				{
+					if (empty)
+					{
+						x1 = a.x1;
+						y1 = a.y1;
+						x2 = a.x2;
+						y2 = a.y2;
+						empty = false;
+					}
+					else
+					{
+						if (a.x1 < x1) x1 = a.x1;
+						if (a.y1 < y1) y1 = a.y1;
+						if (a.x2 > x2) x2 = a.x2;
+						if (a.y2 > y2) y2 = a.y2;
+					}
+				}
+				return *this;
+			}
+
+			static InvalidArea EMPTY;
+
+			XCOORD x1 = 0;
+			YCOORD y1 = 0;
+			XCOORD x2 = 0;
+			YCOORD y2 = 0;
+			bool empty = true;
+		};
+
+		using INVALID_AREA = InvalidArea;
+
 		void invalidate(XCOORD x1, XCOORD y1,XCOORD x2, YCOORD y2)
 		{
 			if (DISPLAY_DEVICE::HAS_RASTER)
@@ -748,11 +851,17 @@ namespace devices::display
 			else
 				return false;
 		}
+		/// @cond notdocumented
 		
 	private:
 		// Minimal rectangle to update
 		INVALID_AREA invalid_area_ = INVALID_AREA::EMPTY;
 	};
+
+	/// @cond notdocumented
+	template<typename DISPLAY_DEVICE>
+	typename Display<DISPLAY_DEVICE>::InvalidArea Display<DISPLAY_DEVICE>::InvalidArea::EMPTY = InvalidArea{};
+	/// @endcond
 }
 
 #endif /* DISPLAY_HH */
