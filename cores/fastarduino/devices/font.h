@@ -26,6 +26,7 @@
 namespace devices::display
 {
 	//TODO also allow reading fonts from files/stream?
+	//TODO DOC API
 	template<bool VERTICAL_> class Font
 	{
 	public:

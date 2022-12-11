@@ -66,29 +66,29 @@ static void setup(DISPLAY& nokia, bool color, Mode mode)
 	nokia.set_color(true);
 	nokia.set_mode(Mode::COPY);
 	nokia.erase();
-	nokia.write_string(0, 16, F("color:"));
+	nokia.draw_string(0, 16, F("color:"));
 	if (color)
-		nokia.write_string(42, 16, F("BLACK"));
+		nokia.draw_string(42, 16, F("BLACK"));
 	else
-		nokia.write_string(42, 16, F("WHITE"));
+		nokia.draw_string(42, 16, F("WHITE"));
 
-	nokia.write_string(0, 32, F("mode:"));
+	nokia.draw_string(0, 32, F("mode:"));
 	switch (mode)
 	{
 		case Mode::COPY:
-		nokia.write_string(42, 32, F("COPY"));
+		nokia.draw_string(42, 32, F("COPY"));
 		break;
 		
 		case Mode::XOR:
-		nokia.write_string(42, 32, F("XOR"));
+		nokia.draw_string(42, 32, F("XOR"));
 		break;
 		
 		case Mode::AND:
-		nokia.write_string(42, 32, F("AND"));
+		nokia.draw_string(42, 32, F("AND"));
 		break;
 		
 		case Mode::OR:
-		nokia.write_string(42, 32, F("OR"));
+		nokia.draw_string(42, 32, F("OR"));
 		break;
 	}
 	nokia.update();
@@ -104,7 +104,7 @@ static void display_title(DISPLAY& nokia, const flash::FlashStorage* title)
 	nokia.set_color(true);
 	nokia.set_mode(Mode::COPY);
 	nokia.erase();
-	nokia.write_string(0, 16, title);
+	nokia.draw_string(0, 16, title);
 	nokia.update();
 	time::delay_ms(TITLE_MS);
 	nokia.erase();
@@ -138,7 +138,7 @@ int main()
 	const uint8_t FONT_HEIGHT = font.height() + 1;
 	for (uint8_t c = font.first_char(); c <= font.last_char(); ++c)
 	{
-		nokia.write_char(x, y, char(c));
+		nokia.draw_char(x, y, char(c));
 		nokia.update();
 		time::delay_ms(CHAR_MS);
 		x += FONT_WIDTH;
@@ -163,7 +163,7 @@ int main()
 	setup(nokia, true, Mode::OR);
 	for (uint8_t c = font.first_char(); c <= font.last_char(); ++c)
 	{
-		nokia.write_char(40, 16, char(c));
+		nokia.draw_char(40, 16, char(c));
 		nokia.update();
 		time::delay_ms(CHAR_MS);
 	}
@@ -178,26 +178,26 @@ int main()
 	nokia.set_mode(Mode::AND);
 	for (uint8_t c = 'A'; c <= 'Z'; ++c)
 	{
-		nokia.write_char(40, 16, char(c));
+		nokia.draw_char(40, 16, char(c));
 		nokia.update();
 		time::delay_ms(CHAR_MS);
 	}
 
 	display_title(nokia, F("===> STR <==="));
 	setup(nokia, true, Mode::COPY);
-	nokia.write_string(8, 16, "Coucou!");
+	nokia.draw_string(8, 16, "Coucou!");
 	nokia.update();
 	time::delay_ms(DELAY_MS);
 
 	display_title(nokia, F("===> FSTR <==="));
 	setup(nokia, true, Mode::OR);
-	nokia.write_string(8, 16, F("Coucou!"));
+	nokia.draw_string(8, 16, F("Coucou!"));
 	nokia.update();
 	time::delay_ms(DELAY_MS);
-	nokia.write_string(9, 16, F("Coucou!"));
+	nokia.draw_string(9, 16, F("Coucou!"));
 	nokia.update();
 	time::delay_ms(DELAY_MS);
-	nokia.write_string(10, 16, F("Coucou!"));
+	nokia.draw_string(10, 16, F("Coucou!"));
 	nokia.update();
 	time::delay_ms(DELAY_MS);
 

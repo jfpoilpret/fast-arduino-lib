@@ -51,12 +51,6 @@
 #include "display.h"
 #include "font.h"
 
-//TODO API DOC
-// Optional improvements:
-//TODO Add image API (pixmap): generic? usable with files (from flash disk)
-//		- format?
-//		- converters?
-//TODO define specific ostream for display (is that even possible)?
 namespace devices::display
 {
 	/** Possible temperature coeeficient that can be set on Nokia5110 display. */
@@ -114,6 +108,7 @@ namespace devices::display
 		public AbstractDisplayDevice<bool, true>
 	{
 	protected:
+		/// @cond notdocumented
 		using XCOORD = uint8_t;
 		using YCOORD = uint8_t;
 		using SCALAR = uint8_t;
@@ -123,8 +118,13 @@ namespace devices::display
 
 		static constexpr XCOORD WIDTH = 84;
 		static constexpr YCOORD HEIGHT = 48;
+		/// @endcond
 
 	public:
+		/**
+		 * Reset PCD8544 chip and Nokia 5110 display.
+		 * This shall be called at launch time.
+		 */
 		void reset()
 		{
 			// Reset device according to datasheet
@@ -133,6 +133,12 @@ namespace devices::display
 			gpio::FastPinType<RST>::set();
 		}
 
+		/**
+		 * Set bias for Nokia5110 LCD display. Must be called before first use.
+		 * 
+		 * @param bias new bias value for the display, must be between `0` and `7` 
+		 * included.
+		 */
 		void set_display_bias(uint8_t bias = DEFAULT_BIAS)
 		{
 			if (bias > MAX_BIAS) bias = MAX_BIAS;
@@ -143,6 +149,12 @@ namespace devices::display
 			this->end_transfer();
 		}
 
+		/**
+		 * Set contrast for Nokia5110 LCD display. Must be called before first use.
+		 * 
+		 * @param contrast new contrast value for the display, must be between `0`
+		 * and `127` included.
+		 */
 		void set_display_contrast(uint8_t contrast = DEFAULT_VOP)
 		{
 			if (contrast > MAX_VOP) contrast = MAX_VOP;
@@ -153,6 +165,13 @@ namespace devices::display
 			this->end_transfer();
 		}
 
+		/**
+		 * Set temperature coefficient for Nokia5110 display.
+		 * 
+		 * @param coef new temperature coefficent for the display
+		 * 
+		 * @sa TemperatureCoefficient
+		 */
 		void set_temperature_control(TemperatureCoefficient coef)
 		{
 			this->start_transfer();
@@ -162,42 +181,75 @@ namespace devices::display
 			this->end_transfer();
 		}
 
+		/**
+		 * Set Nokia5110 display to power down mode.
+		 */
 		void power_down()
 		{
 			send_command(FUNCTION_SET_MASK | FUNCTION_SET_POWER_DOWN);
 		}
 
+		/**
+		 * Set Nokia5110 display to power up mode.
+		 * This must be called before first display use.
+		 */
 		void power_up()
 		{
 			send_command(FUNCTION_SET_MASK);
 		}
 
+		/**
+		 * Blank Nokia5110 LCD display.
+		 * @sa normal()
+		 * @sa full()
+		 */
 		void blank()
 		{
 			send_command(DISPLAY_CONTROL_MASK | DISPLAY_CONTROL_BLANK);
 		}
 
+		/**
+		 * Blacken Nokia5110 LCD display.
+		 * @sa normal()
+		 * @sa blank()
+		 */
 		void full()
 		{
 			send_command(DISPLAY_CONTROL_MASK | DISPLAY_CONTROL_FULL);
 		}
 
+		/**
+		 * Invert Nokia5110 LCD display.
+		 * @sa normal()
+		 */
 		void invert()
 		{
 			send_command(DISPLAY_CONTROL_MASK | DISPLAY_CONTROL_INVERSE);
 		}
 
+		/**
+		 * Set Nokia5110 LCD display to normal mode.
+		 * This must be called before first display use.
+		 * @sa blank()
+		 */
 		void normal()
 		{
 			send_command(DISPLAY_CONTROL_MASK | DISPLAY_CONTROL_NORMAL);
 		}
 
+		/**
+		 * Set pixel operations mode for next display primitives.
+		 * 
+		 * @param mode the new pixel operation mode
+		 * @sa Mode
+		 */
 		void set_mode(Mode mode)
 		{
-			mode_op_ = PIXEL_CALCULATOR::get_calculators(mode);
+			mode_op_ = PIXEL_OPERATOR::get_operators(mode);
 		}
 
 	protected:
+		/// @cond notdocumented
 		LCD5110()
 		{
 			erase();
@@ -288,10 +340,11 @@ namespace devices::display
 			}
 			this->end_transfer();
 		}
+		/// @endcond
 
 	private:
-		using PIXEL_CALCULATOR = PixelCalculator<bool>;
-		using CALCULATORS = typename PIXEL_CALCULATOR::Calculators;
+		using PIXEL_OPERATOR = PixelOperator<bool>;
+		using OPERATORS = typename PIXEL_OPERATOR::Operators;
 
 		// Internal organization of Nokia pixmap buffer (1 byte = 8 vertical pixels)
 		static constexpr uint8_t ROW_HEIGHT = 8;
@@ -358,7 +411,7 @@ namespace devices::display
 		uint8_t display_[HEIGHT * WIDTH / ROW_HEIGHT];
 
 		// Current Mode for setting destination pixel value based on source color.
-		CALCULATORS mode_op_ = PIXEL_CALCULATOR::get_calculators(Mode::COPY);
+		OPERATORS mode_op_ = PIXEL_OPERATOR::get_operators(Mode::COPY);
 
 		// Pin to control data Vs command sending through SPI
 		gpio::FAST_PIN<DC> dc_{gpio::PinMode::OUTPUT};

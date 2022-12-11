@@ -33,14 +33,15 @@ namespace devices
 	 * Any actual device class must:
 	 * - derive from `AbstractDisplayDevice` template class
 	 * - define XCOORD, YCOORD, SCALAR, SIGNED_SCALAR integral types 
-	 * - define INVALID_AREA type as an `InvalidArea` template instantiation
+	 * - define HAS_RASTER bool constant indicating if the device uses a raster buffer
 	 * - define WIDTH and HEIGHT constants
 	 * - define a `protected` default constructor
-	 * - implement 3 `protected` drawing primitives
+	 * - implement 4 `protected` drawing primitives
 	 * 		- `erase()`
 	 * 		- `set_pixel(x, y)`
-	 * 		- `write_char(x, y, value)`
-	 * - implement `protected` `update(area)` method
+	 * 		- `is_valid_char_xy(x, y)`
+	 * 		- `write_char(x, y, glyph_ref)`
+	 * - implement `protected` `update(x1, y1, x2, y2)` method
 	 * - implement any device-specific `public` API
 	 * 
 	 * A display device class becomes actually usable be defining a type as the
@@ -105,7 +106,7 @@ namespace devices::display
 	 * @sa Mode
 	 * @sa LCD5110
 	 */
-	template<typename COLOR> struct PixelCalculator
+	template<typename COLOR> struct PixelOperator
 	{
 		/** The type of a pointer function for `xxxx_bw_pixels()`. */
 		using COMPUTE_BW_PIXELS = uint8_t (*)(uint8_t, uint8_t);
@@ -113,7 +114,7 @@ namespace devices::display
 		using COMPUTE_PIXEL = COLOR (*)(COLOR, COLOR);
 
 		/// @cond notdocumented
-		struct Calculators
+		struct Operators
 		{
 			COMPUTE_BW_PIXELS bw_pixels_op;
 			COMPUTE_PIXEL pixel_op;
@@ -127,7 +128,7 @@ namespace devices::display
 		 * operations
 		 * @return Calculators a set of 2 drawing operation functions
 		 */
-		static Calculators get_calculators(Mode mode)
+		static Operators get_operators(Mode mode)
 		{
 			switch (mode)
 			{
@@ -285,6 +286,14 @@ namespace devices::display
 		}
 
 	protected:
+		/**
+		 * Check if a font is currently defined on the display.
+		 * This is called by text drawing primitives to ensure drawing can be performed.
+		 * If not font is defined, then `last_error_` will be set.
+		 * 
+		 * @return true if a font has been defined on the display
+		 * @return false if no font is defined for the display
+		 */
 		bool check_font()
 		{
 			if (font_ != nullptr) return true;
@@ -308,14 +317,7 @@ namespace devices::display
 		Error last_error_ = Error::NO_ERROR;
 	};
 
-	/**
-	 * TODO DOCUMENT
-	 * 
-	 * InvalidArea can be summed together (union).
-	 * 
-	 * @tparam XCOORD the integral type for X coordinates
-	 * @tparam YCOORD the integral type for Y coordinates
-	 */
+	//TODO define as embedded class of Display!
 	template<typename XCOORD, typename YCOORD> struct InvalidArea
 	{
 		InvalidArea() = default;
@@ -357,23 +359,9 @@ namespace devices::display
 	/// @cond notdocumented
 	template<typename XCOORD, typename YCOORD>
 	InvalidArea<XCOORD, YCOORD> InvalidArea<XCOORD, YCOORD>::EMPTY = InvalidArea{};
-
-	template<typename XCOORD, typename YCOORD>
-	InvalidArea<XCOORD, YCOORD> operator+(
-		const InvalidArea<XCOORD, YCOORD>& a1, const InvalidArea<XCOORD, YCOORD>& a2)
-	{
-		if (a1.empty && a2.empty) return InvalidArea<XCOORD, YCOORD>{};
-		if (a1.empty) return a2;
-		if (a2.empty) return a1;
-		return InvalidArea<XCOORD, YCOORD>{
-			(a1.x1 < a2.x1 ? a1.x1 : a2.x1),
-			(a1.y1 < a2.y1 ? a1.y1 : a2.y1),
-			(a1.x2 > a2.x2 ? a1.x2 : a2.x2),
-			(a1.y2 > a2.y2 ? a1.y2 : a2.y2)
-		};
-	}
 	/// @endcond
 
+	//TODO DOC API
 	// Screen update is not always automatic! You must call update() once you have changed display bitmap content
 	template<typename DISPLAY_DEVICE> class Display : public DISPLAY_DEVICE
 	{
@@ -403,8 +391,7 @@ namespace devices::display
 			invalidate();
 		}
 
-		//TODO replace write_ with draw_ 
-		void write_char(XCOORD x, YCOORD y, char value)
+		void draw_char(XCOORD x, YCOORD y, char value)
 		{
 			// Check one font is currently selected
 			if (!DISPLAY_DEVICE::check_font()) return;
@@ -419,7 +406,7 @@ namespace devices::display
 			invalidate(x, y, XCOORD(x + displayed_width), YCOORD(y + this->font_->height() - 1));
 		}
 
-		void write_string(XCOORD x, YCOORD y, const char* content)
+		void draw_string(XCOORD x, YCOORD y, const char* content)
 		{
 			// Check one font is currently selected
 			if (!DISPLAY_DEVICE::check_font()) return;
@@ -443,7 +430,7 @@ namespace devices::display
 				invalidate(x, y, XCOORD(xcurrent - 1), YCOORD(y + this->font_->height() - 1));
 		}
 
-		void write_string(XCOORD x, YCOORD y, const flash::FlashStorage* content)
+		void draw_string(XCOORD x, YCOORD y, const flash::FlashStorage* content)
 		{
 			// Check one font is currently selected
 			if (!DISPLAY_DEVICE::check_font()) return;
