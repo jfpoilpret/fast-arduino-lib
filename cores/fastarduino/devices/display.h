@@ -418,8 +418,6 @@ namespace devices::display
 			const uint8_t width = this->font_->width();
 
 			XCOORD xcurrent = x;
-			//FIXME if is_valid_char_xy() or get_glyph() fails then final invalidate()
-			// will erase error!
 			while (*content)
 			{
 				// Check coordinates are suitable for character display
@@ -434,7 +432,11 @@ namespace devices::display
 			}
 			// Invalidate if needed
 			if (xcurrent > x)
-				invalidate(x, y, XCOORD(xcurrent - 1), YCOORD(y + this->font_->height() - 1));
+			{
+				// Clear error only if all content was displayed without issue
+				bool clear_error = (*content == 0); 
+				invalidate(x, y, XCOORD(xcurrent - 1), YCOORD(y + this->font_->height() - 1), clear_error);
+			}
 		}
 
 		/**
@@ -455,9 +457,8 @@ namespace devices::display
 
 			XCOORD xcurrent = x;
 			uint16_t address = (uint16_t) content;
-			//FIXME if is_valid_char_xy() or get_glyph() fails then final invalidate()
-			// will erase error!
-			while (char value = pgm_read_byte(address))
+			char value;
+			while ((value = pgm_read_byte(address)) != 0)
 			{
 				// Check coordinates are suitable for character display
 				if (!is_valid_char_xy(xcurrent, y, width)) break;
@@ -471,7 +472,11 @@ namespace devices::display
 			}
 			// Invalidate if needed
 			if (xcurrent > x)
-				invalidate(x, y, XCOORD(xcurrent -1), YCOORD(y + this->font_->height() - 1));
+			{
+				// Clear error only if all content was displayed without issue
+				bool clear_error = (value == 0);
+				invalidate(x, y, XCOORD(xcurrent -1), YCOORD(y + this->font_->height() - 1), clear_error);
+			}
 		}
 
 		/**
@@ -483,10 +488,11 @@ namespace devices::display
 		void draw_pixel(XCOORD x, YCOORD y)
 		{
 			if (!is_valid_xy(x, y)) return;
-			//FIXME if set_pixel() returns false (not an error) then last_error_ 
-			// is not cleared!
 			if (DISPLAY_DEVICE::set_pixel(x, y))
 				invalidate(x, y, x, y);
+			else
+				// Even when set_pixel() returns false, this is not an error!
+				DISPLAY_DEVICE::last_error_ = Error::NO_ERROR;
 		}
 
 		/**
@@ -662,11 +668,12 @@ namespace devices::display
 
 		using INVALID_AREA = InvalidArea;
 
-		void invalidate(XCOORD x1, XCOORD y1,XCOORD x2, YCOORD y2)
+		void invalidate(XCOORD x1, XCOORD y1,XCOORD x2, YCOORD y2, bool clear_error = true)
 		{
 			if (DISPLAY_DEVICE::HAS_RASTER)
 				invalid_area_ += INVALID_AREA{x1, y1, x2, y2};
-			DISPLAY_DEVICE::last_error_ = Error::NO_ERROR;
+			if (clear_error)
+				DISPLAY_DEVICE::last_error_ = Error::NO_ERROR;
 		}
 
 		void invalidate()
