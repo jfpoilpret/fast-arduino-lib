@@ -37,7 +37,7 @@
  */
 
 #include <fastarduino/devices/lcd5110.h>
-#include <fastarduino/devices/lcd5110_font1.h>
+#include <fastarduino/devices/font_v5x7_default.h>
 #include <fastarduino/devices/display.h>
 #include <fastarduino/time.h>
 
@@ -126,7 +126,7 @@ int main()
 	nokia.set_display_bias();
 	nokia.set_display_contrast();
 	nokia.normal();
-	devices::display::Font7x5 font{};
+	devices::display::DefaultVerticalFont7x5 font{};
 	nokia.set_font(font);
 	nokia.power_up();
 

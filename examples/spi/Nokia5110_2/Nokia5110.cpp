@@ -37,7 +37,7 @@
  */
 
 #include <fastarduino/devices/lcd5110.h>
-#include <fastarduino/devices/lcd5110_font1.h>
+#include <fastarduino/devices/font_v5x7_default.h>
 #include <fastarduino/devices/display.h>
 #include <fastarduino/time.h>
 #include <fastarduino/uart.h>
@@ -124,7 +124,7 @@ int main()
 	nokia.write_char(0, 0, 'A');
 	tests::assert_equals(out, F("last_error() after write_char without font"), Error::NO_FONT_SET, nokia.last_error());
 
-	devices::display::Font7x5 font{};
+	devices::display::DefaultVerticalFont7x5 font{};
 	nokia.set_font(font);
 	nokia.write_char(0, 0, 'A');
 	tests::assert_equals(out, F("last_error() after write_char with font"), Error::NO_ERROR, nokia.last_error());

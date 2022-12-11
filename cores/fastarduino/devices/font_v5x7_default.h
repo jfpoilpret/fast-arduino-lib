@@ -14,12 +14,11 @@
 
 /// @cond api
 
-#ifndef LC5110_FONT1_HH
-#define LC5110_FONT1_HH
+#ifndef FONT_V5X7_DEFAULT_HH
+#define FONT_V5X7_DEFAULT_HH
 
 #include "font.h"
 
-//TODO Better name for file (independent of Nokia?)
 //TODO Better name for class
 namespace devices::display
 {
@@ -132,12 +131,12 @@ namespace devices::display
 		0x78, 0x46, 0x41, 0x46, 0x78  // 0x7f DEL
 	};
 
-	class Font7x5 : public Font<true>
+	class DefaultVerticalFont7x5 : public Font<true>
 	{
 	public:
-		Font7x5() : Font{0x20, 0x7f, 5, 7, FONT1} {}
+		DefaultVerticalFont7x5() : Font{0x20, 0x7f, 5, 7, FONT1} {}
 	};
 }
 
-#endif /* LC5110_FONT1_HH */
+#endif /* FONT_V5X7_DEFAULT_HH */
 /// @endcond
