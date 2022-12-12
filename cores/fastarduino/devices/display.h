@@ -734,88 +734,99 @@ namespace devices::display
 			SIGNED_SCALAR dx = SIGNED_SCALAR(x2) - SIGNED_SCALAR(x1);
 			SIGNED_SCALAR dy = SIGNED_SCALAR(y2) - SIGNED_SCALAR(y1);
 
-			//TODO Find a way to factor code to get reduced code size
 			if (dy > 0)
 			{
 				// 1st quadrant
-				if (dx >= dy)
+				draw_line_bresenham_1st_quadrant(x1, y1, x2, y2, dx, dy);
+			}
+			else
+			{
+				// 4th quadrant
+				draw_line_bresenham_4th_quadrant(x1, y1, x2, y2, dx, dy);
+			}
+		}
+
+		void draw_line_bresenham_1st_quadrant(XCOORD x1, YCOORD y1, XCOORD x2, YCOORD y2, 
+			SIGNED_SCALAR dx, SIGNED_SCALAR dy)
+		{
+			if (dx >= dy)
+			{
+				// 1st octant
+				SIGNED_SCALAR e = dx;
+				dx *= 2;
+				dy *= 2;
+				while (true)
 				{
-					// 1st octant
-					SIGNED_SCALAR e = dx;
-					dx *= 2;
-					dy *= 2;
-					while (true)
+					DISPLAY_DEVICE::set_pixel(x1, y1);
+					if (x1 == x2) break;
+					++x1;
+					e -= dy;
+					if (e < 0)
 					{
-						DISPLAY_DEVICE::set_pixel(x1, y1);
-						if (x1 == x2) break;
-						++x1;
-						e -= dy;
-						if (e < 0)
-						{
-							++y1;
-							e += dx;
-						}
-					}
-				}
-				else
-				{
-					// 2nd octant
-					SIGNED_SCALAR e = dy;
-					dx *= 2;
-					dy *= 2;
-					while (true)
-					{
-						DISPLAY_DEVICE::set_pixel(x1, y1);
-						if (y1 == y2) break;
 						++y1;
-						e -= dx;
-						if (e < 0)
-						{
-							++x1;
-							e += dy;
-						}
+						e += dx;
 					}
 				}
 			}
 			else
 			{
-				// 4th quadrant
-				if (dx >= -dy)
+				// 2nd octant
+				SIGNED_SCALAR e = dy;
+				dx *= 2;
+				dy *= 2;
+				while (true)
 				{
-					// 8th octant
-					SIGNED_SCALAR e = dx;
-					dx *= 2;
-					dy *= 2;
-					while (true)
+					DISPLAY_DEVICE::set_pixel(x1, y1);
+					if (y1 == y2) break;
+					++y1;
+					e -= dx;
+					if (e < 0)
 					{
-						DISPLAY_DEVICE::set_pixel(x1, y1);
-						if (x1 == x2) break;
 						++x1;
 						e += dy;
-						if (e < 0)
-						{
-							--y1;
-							e += dx;
-						}
 					}
 				}
-				else
+			}
+		}
+
+		void draw_line_bresenham_4th_quadrant(XCOORD x1, YCOORD y1, XCOORD x2, YCOORD y2, 
+			SIGNED_SCALAR dx, SIGNED_SCALAR dy)
+		{
+			if (dx >= -dy)
+			{
+				// 8th octant
+				SIGNED_SCALAR e = dx;
+				dx *= 2;
+				dy *= 2;
+				while (true)
 				{
-					// 7th octant
-					SIGNED_SCALAR e = dy;
-					dx *= 2;
-					dy *= 2;
-					while (true)
+					DISPLAY_DEVICE::set_pixel(x1, y1);
+					if (x1 == x2) break;
+					++x1;
+					e += dy;
+					if (e < 0)
 					{
-						DISPLAY_DEVICE::set_pixel(x1, y1);
-						if (y1 == y2) break;
 						--y1;
 						e += dx;
-						if (e > 0)
-						{
-							++x1;
-							e += dy;
-						}
+					}
+				}
+			}
+			else
+			{
+				// 7th octant
+				SIGNED_SCALAR e = dy;
+				dx *= 2;
+				dy *= 2;
+				while (true)
+				{
+					DISPLAY_DEVICE::set_pixel(x1, y1);
+					if (y1 == y2) break;
+					--y1;
+					e += dx;
+					if (e > 0)
+					{
+						++x1;
+						e += dy;
 					}
 				}
 			}
