@@ -54,6 +54,7 @@ namespace devices::display
 		Font(char first_char, char last_char, uint8_t width, uint8_t height, const uint8_t* glyphs)
 			:	first_char_{uint8_t(first_char)}, last_char_{uint8_t(last_char)},
 				width_{width}, height_{height}, 
+				glyph_size_{uint8_t(VERTICAL ? width_ * ((height_ - 1) / 8 + 1) : height_ * ((width_ - 1) / 8 + 1))},
 				glyphs_{glyphs} {}
 
 		/** Width of font glyphs in pixels. */
@@ -83,11 +84,7 @@ namespace devices::display
 		/** Glyph size in bytes. */
 		uint8_t glyph_size() const
 		{
-			//TODO need to support width and height of more than 8 bits!
-			if (VERTICAL)
-				return width_;
-			else
-				return height_;
+			return glyph_size_;
 		}
 
 		/**
@@ -137,6 +134,7 @@ namespace devices::display
 		// Font size
 		const uint8_t width_;
 		const uint8_t height_;
+		const uint8_t glyph_size_;
 
 		// Font used in characters display
 		// const uint8_t glyph_size_;
