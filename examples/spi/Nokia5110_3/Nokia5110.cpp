@@ -57,22 +57,22 @@ using devices::display::Mode;
 static constexpr uint16_t CHAR_MS = 200;
 static constexpr uint16_t DELAY_MS = 2000;
 
-//TODO define font 8x16 with only "A"
-// class VerticalFont15x7 : public devices::display::Font<true>
-// {
-// public:
-// 	VerticalFont15x7() : Font{0x41, 0x41, 7, 15, FONT} {}
+// define font 8x16 with only "A"
+class VerticalFont15x7 : public devices::display::Font<true>
+{
+public:
+	VerticalFont15x7() : Font{0x41, 0x41, 7, 15, FONT} {}
 
-// private:
-// 	static const uint8_t FONT[] PROGMEM;
-// };
+private:
+	static const uint8_t FONT[] PROGMEM;
+};
 
-// const uint8_t VerticalFont15x7::FONT[] PROGMEM =
-// {
-// 	// Bytes are always row after row, with columns inside each row first
-// 	0x7e, 0x11, 0x11, 0x11, 0x7e, // 0x41 A
-
-// };
+const uint8_t VerticalFont15x7::FONT[] PROGMEM =
+{
+	//TODO glyph for A
+	// Bytes are always row after row, with columns inside each row first
+	0x7e, 0x11, 0x11, 0x11, 0x7e, // 0x41 A
+};
 
 // define font 16x8 with only "A"
 class VerticalFont7x15 : public devices::display::Font<true>
@@ -136,8 +136,5 @@ int main()
 	nokia.erase();
 	nokia.update();
 
-	// VerticalFont7x15 font7x15{};
-	// check_font(nokia, font7x15);
-	// VerticalFont7x15 font7x15{};
 	check_font(nokia, VerticalFont7x15{});
 }

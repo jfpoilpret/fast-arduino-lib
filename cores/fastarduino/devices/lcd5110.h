@@ -298,25 +298,30 @@ namespace devices::display
 		{
 			// Check column and row not out of range for characters!
 			const uint8_t width = font_->width();
-			const uint8_t row = y / ROW_HEIGHT;
+			uint8_t row = y / ROW_HEIGHT;
 			const uint8_t col = x;
-
-			// Get pointer to first byte to write in display buffer
-			uint8_t* display_ptr = get_display(row, col);
-
 			bool add_interchar_space = ((col + width + 1) < WIDTH);
 
-			for (uint8_t i = 0; i <= width; ++i)
+			uint8_t glyph_index  = 0;
+			for (uint8_t glyph_row = 0; glyph_row < font_->glyph_rows(); ++glyph_row)
 			{
-				const bool space_column = (i == width);
-				uint8_t pixel_bar = 0x00;
-				if (!space_column)
-					pixel_bar = font_->get_char_glyph_byte(glyph_ref, i);
-				if (!color_)
-					pixel_bar = ~pixel_bar;
-				if ((!space_column) || add_interchar_space)
-					*display_ptr = mode_op_.bw_pixels_op(pixel_bar, *display_ptr);
-				++display_ptr;
+				// Get pointer to first byte in row to write in display buffer
+				uint8_t* display_ptr = get_display(row, col);
+
+				for (uint8_t i = 0; i <= width; ++i)
+				{
+					const bool space_column = (i == width);
+					uint8_t pixel_bar = 0x00;
+					if (!space_column)
+						pixel_bar = font_->get_char_glyph_byte(glyph_ref, glyph_index);
+					if (!color_)
+						pixel_bar = ~pixel_bar;
+					if ((!space_column) || add_interchar_space)
+						*display_ptr = mode_op_.bw_pixels_op(pixel_bar, *display_ptr);
+					++display_ptr;
+					++glyph_index;
+				}
+				++row;
 			}
 
 			// Return actual width writtent to display

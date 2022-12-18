@@ -22,6 +22,7 @@
 
 #include <avr/pgmspace.h>
 
+//TODO explain how glyph bytes are must be ordered in glyph array! 
 namespace devices::display
 {
 	/**
@@ -40,6 +41,7 @@ namespace devices::display
 		/** `true` if font is vertical, `false` if horizontal */
 		static constexpr bool VERTICAL = VERTICAL_;
 
+		//TODO potential optimization by using template for all args except glyphs ptr
 		/**
 		 * Construct a new Font.
 		 * 
@@ -54,7 +56,9 @@ namespace devices::display
 		Font(char first_char, char last_char, uint8_t width, uint8_t height, const uint8_t* glyphs)
 			:	first_char_{uint8_t(first_char)}, last_char_{uint8_t(last_char)},
 				width_{width}, height_{height}, 
-				glyph_size_{uint8_t(VERTICAL ? width_ * ((height_ - 1) / 8 + 1) : height_ * ((width_ - 1) / 8 + 1))},
+				glyph_rows_{uint8_t(VERTICAL ? (height_ - 1) / 8 + 1 : height_)},
+				glyph_cols_{uint8_t(VERTICAL ? width_ : (width_ - 1) / 8 + 1)},
+				glyph_size_{uint8_t(glyph_rows_ * glyph_cols_)},
 				glyphs_{glyphs} {}
 
 		/** Width of font glyphs in pixels. */
@@ -79,6 +83,16 @@ namespace devices::display
 		uint8_t last_char() const
 		{
 			return last_char_;
+		}
+
+		uint8_t glyph_rows() const
+		{
+			return glyph_rows_;
+		}
+
+		uint8_t glyph_cols() const
+		{
+			return glyph_cols_;
 		}
 
 		/** Glyph size in bytes. */
@@ -120,6 +134,7 @@ namespace devices::display
 		 * @sa glyph_size()
 		 * @sa VERTICAL
 		 */
+		//TODO rather have row and col as args no?
 		uint8_t get_char_glyph_byte(uint16_t glyph_ref, uint8_t index) const
 		{
 			if (index >= glyph_size()) return 0;
@@ -134,6 +149,9 @@ namespace devices::display
 		// Font size
 		const uint8_t width_;
 		const uint8_t height_;
+		// Glyph size in bytes: how many bytes for a row, how many bytes for a column
+		const uint8_t glyph_rows_;
+		const uint8_t glyph_cols_;
 		const uint8_t glyph_size_;
 
 		// Font used in characters display
