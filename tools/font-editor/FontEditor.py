@@ -19,6 +19,9 @@
 # This python mini-application allows creation of display fonts and creates CPP files
 # (header & source) from created fonts.
 
+#TODO why name is not used in FontPersistence?
+# - should use for persitent storage name!
+# - should use for code generation!
 from argparse import *
 import io
 from os import system
@@ -28,6 +31,8 @@ import sys
 
 from tkinter import *
 from tkinter import ttk
+
+from FontExport import generate_header, generate_source
 
 class FontPersistence:
 	def __init__(self, name:str, width: int, height: int, first: int, last: int):
@@ -69,8 +74,6 @@ class FontEditor(ttk.Frame):
 		char_selector = ttk.Combobox(self, state = 'readonly', values = all_characters, textvariable = self.current_char)
 		char_selector.grid(row = 1, column = 2, padx = 3, pady = 3)
 		char_selector.bind('<<ComboboxSelected>>', self.on_char_select)
-		# select first character
-		char_selector.set(chr(font_state.first))
 		ttk.Button(self, text = 'Save', command = self.on_save).grid(row = 1, column = 3, padx = 3, pady = 3)
 		
 		#TODO thumbnail somehow
@@ -82,6 +85,8 @@ class FontEditor(ttk.Frame):
 		self.pixmap_editor = ttk.Frame(self)
 		self.pixmap_editor.grid(row = 2, column = 1, columnspan = 3)
 		self.pixmap_editor.configure(width = size * self.font_state.width, height = size * self.font_state.height)
+		self.pixmap_editor.bind('<Button-1>', self.on_pixel_click, )
+		self.pixmap_editor.bind('<B1-Motion>', self.on_pixel_move)
 		self.pixels = []
 		# Initialize all image labels
 		for y in range(self.font_state.height):
@@ -89,7 +94,12 @@ class FontEditor(ttk.Frame):
 			for x in range(self.font_state.width):
 				pixel = Pixel(self.pixmap_editor, value = False, borderwidth = 1)
 				pixel.place(x = x * size, y = y * size)
-				pixel.bind('<Button-1>', self.on_pixel_click)
+				# Trick to ensure events pass through from Pixel instacnes to parent Frame
+				bindtags = list(pixel.bindtags())
+				bindtags.insert(1, self.pixmap_editor)
+				pixel.bindtags(tuple(bindtags))
+				pixel.bind('<Button-1>', lambda e: None)
+				pixel.bind('<B1-Motion>', lambda e: None)
 				row.append(pixel)
 			self.pixels.append(row)
 
@@ -117,6 +127,16 @@ class FontEditor(ttk.Frame):
 			for x in range(self.font_state.width):
 				pixel: Pixel = pixels_row[x]
 				pixel.set_value(False)
+	
+	def find_pixel(self, x: int, y: int) -> Pixel:
+		size = Pixel.WHITE.width() + 1
+		row = int(y / size)
+		col = int(x / size)
+		# row or col may be out of range when dragging ouside the pane
+		if 0 <= row < self.font_state.height and 0 <= col < self.font_state.width:
+			return self.pixels[row][col]
+		else:
+			return None
 
 	def on_char_select(self, event: Event):
 		# Update font_state with previous character
@@ -133,20 +153,26 @@ class FontEditor(ttk.Frame):
 			# no glyph yet, set all white pixels
 			self.clear_pixels()
 
-	#TODO allow dragging over pixels
 	def on_pixel_click(self, event: Event):
+		# print(f'on_pixel_click ({event.x},{event.y})')
 		pixel: Pixel = event.widget
-		# How to invert image W->B, B->W
+		pixel = self.find_pixel(event.x + pixel.winfo_x(), event.y + pixel.winfo_y())
+		# Invert image W->B, B->W
 		self.default_pixel_value = not pixel.get_value()
 		pixel.set_value(self.default_pixel_value)
+
+	def on_pixel_move(self, event: Event):
+		# print(f'on_pixel_move ({event.x},{event.y})')
+		pixel: Pixel = event.widget
+		pixel = self.find_pixel(event.x + pixel.winfo_x(), event.y + pixel.winfo_y())
+		if pixel:
+			pixel.set_value(self.default_pixel_value)
 
 	def on_save(self):
 		# Update glyph of current character
 		if self.previous_char:
 			glyph = self.get_glyph_from_pixels()
 			self.font_state.glyphs[self.previous_char] = glyph
-		#FIXME First clear storage before writing
-
 		# Save font state to storage
 		pickle.dump(self.font_state, file = self.storage)
 
@@ -176,7 +202,18 @@ def export(storage: io.BufferedReader, vertical: bool, namespace: str, fastardui
 		if not glyph:
 			print(f"Glyph for character '{c}' is undefined!")
 			sys.exit(1)
-	#TODO Generate header file content from template
+	# Generate header file content
+	header = generate_header(filename, font_state.name, namespace, 
+		font_state.width, font_state.height,
+		font_state.first, font_state.last, vertical, fastarduino)
+	with open(filename + '.h', 'wt') as output:
+		output.write(header)
+	# Generate source file content
+	source = generate_source(filename, font_state.name, namespace,
+		font_state.width, font_state.height, font_state.first, font_state.last,
+		vertical, font_state.glyphs, fastarduino)
+	with open(filename + '.cpp', 'wt') as output:
+		output.write(source)
 
 class FontSizeAction(Action):
 	def __init__(self, **kwargs):
@@ -191,6 +228,8 @@ class FontSizeAction(Action):
 		setattr(namespace, 'font_height', int(match.group(2)))
 
 if __name__ == '__main__':
+	#TODO replace storage with name everywhere and use it to name storage file!
+	#TODO improve templates FastArduino vs others
 	# --name NAME --font-size WxH --vertical --first A --last Z --storage PICKEL_FILE
 	parser = ArgumentParser(description = 'Font editor for FastArduino Font subclasses')
 	group = parser.add_subparsers(dest = 'action', required = True)

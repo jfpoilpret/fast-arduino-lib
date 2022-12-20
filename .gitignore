@@ -8,6 +8,7 @@ apidoc/**
 **/build
 **/*BAK
 **/*.OLD
+**/__pycache__/**
 tuto-samples/tables.txt
 tuto-samples/*/sizes.txt
 tuto-samples/fastarduino/errors
