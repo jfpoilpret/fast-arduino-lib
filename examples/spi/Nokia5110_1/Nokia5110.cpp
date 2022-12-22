@@ -37,7 +37,7 @@
  */
 
 #include <fastarduino/devices/lcd5110.h>
-#include <fastarduino/devices/font_v5x7_default.h>
+#include <fastarduino/devices/fonts/font_v5x7_default.h>
 #include <fastarduino/devices/display.h>
 #include <fastarduino/time.h>
 

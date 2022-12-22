@@ -37,7 +37,7 @@
  */
 
 #include <fastarduino/devices/lcd5110.h>
-#include <fastarduino/devices/font_v5x7_default.h>
+#include <fastarduino/devices/fonts/font_v5x7_default.h>
 #include <fastarduino/devices/display.h>
 #include <fastarduino/time.h>
 #include <fastarduino/uart.h>
@@ -121,31 +121,31 @@ int main()
 	nokia.erase();
 	nokia.update();
 
-	nokia.write_char(0, 0, 'A');
-	tests::assert_equals(out, F("last_error() after write_char without font"), Error::NO_FONT_SET, nokia.last_error());
+	nokia.draw_char(0, 0, 'A');
+	tests::assert_equals(out, F("last_error() after draw_char without font"), Error::NO_FONT_SET, nokia.last_error());
 
 	devices::display::DefaultVerticalFont7x5 font{};
 	nokia.set_font(font);
-	nokia.write_char(0, 0, 'A');
-	tests::assert_equals(out, F("last_error() after write_char with font"), Error::NO_ERROR, nokia.last_error());
+	nokia.draw_char(0, 0, 'A');
+	tests::assert_equals(out, F("last_error() after draw_char with font"), Error::NO_ERROR, nokia.last_error());
 
-	nokia.write_char(0, 0, char(0));
-	tests::assert_equals(out, F("last_error() after write_char without glyph"), Error::NO_GLYPH_FOUND, nokia.last_error());
+	nokia.draw_char(0, 0, char(0));
+	tests::assert_equals(out, F("last_error() after draw_char without glyph"), Error::NO_GLYPH_FOUND, nokia.last_error());
 
-	nokia.write_char(0, 20, 'A');
-	tests::assert_equals(out, F("last_error() after write_char at bad y"), Error::COORDS_INVALID, nokia.last_error());
+	nokia.draw_char(0, 20, 'A');
+	tests::assert_equals(out, F("last_error() after draw_char at bad y"), Error::COORDS_INVALID, nokia.last_error());
 
-	nokia.write_char(84, 0, 'A');
-	tests::assert_equals(out, F("last_error() after write_char at too big x"), Error::OUT_OF_DISPLAY, nokia.last_error());
+	nokia.draw_char(84, 0, 'A');
+	tests::assert_equals(out, F("last_error() after draw_char at too big x"), Error::OUT_OF_DISPLAY, nokia.last_error());
 
-	nokia.write_char(0, 48, 'A');
-	tests::assert_equals(out, F("last_error() after write_char at too big y"), Error::OUT_OF_DISPLAY, nokia.last_error());
+	nokia.draw_char(0, 48, 'A');
+	tests::assert_equals(out, F("last_error() after draw_char at too big y"), Error::OUT_OF_DISPLAY, nokia.last_error());
 
-	nokia.write_char(80, 20, 'A');
-	tests::assert_equals(out, F("last_error() after write_char out of bounds"), Error::OUT_OF_DISPLAY, nokia.last_error());
+	nokia.draw_char(80, 20, 'A');
+	tests::assert_equals(out, F("last_error() after draw_char out of bounds"), Error::OUT_OF_DISPLAY, nokia.last_error());
 
-	nokia.write_char(79, 16, 'A');
-	tests::assert_equals(out, F("last_error() after write_char just in bounds"), Error::NO_ERROR, nokia.last_error());
+	nokia.draw_char(79, 16, 'A');
+	tests::assert_equals(out, F("last_error() after draw_char just in bounds"), Error::NO_ERROR, nokia.last_error());
 
 	nokia.draw_pixel(84, 0);
 	tests::assert_equals(out, F("last_error() after draw_pixel at too big x"), Error::OUT_OF_DISPLAY, nokia.last_error());

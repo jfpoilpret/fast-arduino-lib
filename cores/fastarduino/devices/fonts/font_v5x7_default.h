@@ -17,7 +17,7 @@
 #ifndef FONT_V5X7_DEFAULT_HH
 #define FONT_V5X7_DEFAULT_HH
 
-#include "font.h"
+#include "../font.h"
 
 namespace devices::display
 {
