@@ -19,9 +19,6 @@
 # This python mini-application allows creation of display fonts and creates CPP files
 # (header & source) from created fonts.
 
-#TODO why name is not used in FontPersistence?
-# - should use for persitent storage name!
-# - should use for code generation!
 from argparse import *
 import io
 from os import system
@@ -32,7 +29,7 @@ import sys
 from tkinter import *
 from tkinter import ttk
 
-from FontExport import generate_header, generate_source
+from font_export import generate_fastarduino_header, generate_fastarduino_source, generate_regular_code
 
 class FontPersistence:
 	def __init__(self, name:str, width: int, height: int, first: int, last: int):
@@ -59,10 +56,9 @@ class Pixel(ttk.Label):
 			self.configure(image = Pixel.WHITE)
 
 class FontEditor(ttk.Frame):
-	def __init__(self, master: Misc, font_state: FontPersistence, storage: io.BufferedWriter):
+	def __init__(self, master: Misc, font_state: FontPersistence):
 		super().__init__(master, padding = (4, 4, 4, 4))
 		self.font_state = font_state
-		self.storage = storage
 		self.previous_char = None
 		self.current_char = StringVar()
 		self.grid(column = 0, row = 0, sticky = (N))
@@ -174,46 +170,54 @@ class FontEditor(ttk.Frame):
 			glyph = self.get_glyph_from_pixels()
 			self.font_state.glyphs[self.previous_char] = glyph
 		# Save font state to storage
-		pickle.dump(self.font_state, file = self.storage)
+		pickle.dump(self.font_state, file = self.name + '.font')
 
-def create(name: str, font_width: int, font_height: int, first_char: str, last_char: str, storage: io.BufferedWriter):
+def create(name: str, font_width: int, font_height: int, first_char: str, last_char: str):
 	# Create FontPersistence
 	font_state = FontPersistence(name, font_width, font_height, ord(first_char), ord(last_char))
 	# Create Window
 	root = Tk()
 	root.wm_title(f'Editor for font `{font_state.name}` ({font_state.width}x{font_state.height})')
-	app = FontEditor(root, font_state, storage)
+	app = FontEditor(root, font_state)
 	root.mainloop()
 
-def update(storage: io.BufferedRandom):
+def update(name: str):
 	# Read FontPersistence from storage
-	font_state: FontPersistence = pickle.load(storage)
+	font_state: FontPersistence = pickle.load(name + '.font')
 	# Create Window
 	root = Tk()
 	root.wm_title(f'Editor for font `{font_state.name}` ({font_state.width}x{font_state.height})')
-	app = FontEditor(root, font_state, storage)
+	app = FontEditor(root, font_state)
 	root.mainloop()
 
-def export(storage: io.BufferedReader, vertical: bool, namespace: str, fastarduino: bool, filename: str):
+def export(name: str, vertical: bool, fastarduino: bool, filename: str):
 	# Read FontPersistence from storage
-	font_state: FontPersistence = pickle.load(storage)
+	font_state: FontPersistence = pickle.load(name + '.font')
 	# Check all characters have been defined in font state
 	for c, glyph in font_state.glyphs.items():
 		if not glyph:
 			print(f"Glyph for character '{c}' is undefined!")
 			sys.exit(1)
-	# Generate header file content
-	header = generate_header(filename, font_state.name, namespace, 
-		font_state.width, font_state.height,
-		font_state.first, font_state.last, vertical, fastarduino)
-	with open(filename + '.h', 'wt') as output:
-		output.write(header)
-	# Generate source file content
-	source = generate_source(filename, font_state.name, namespace,
+	if fastarduino:
+		# Generate header file content
+		header = generate_fastarduino_header(filename, font_state.name, 
+			font_state.width, font_state.height,
+			font_state.first, font_state.last, vertical)
+		with open(filename + '.h', 'wt') as output:
+			output.write(header)
+		# Generate source file content
+		source = generate_fastarduino_source(filename, font_state.name,
+			font_state.width, font_state.height, font_state.first, font_state.last,
+			vertical, font_state.glyphs)
+		with open(filename + '.cpp', 'wt') as output:
+			output.write(source)
+	else:
+		# Generate regular source code (for specific program use)
+		source = generate_regular_code(filename, font_state.name,
 		font_state.width, font_state.height, font_state.first, font_state.last,
-		vertical, font_state.glyphs, fastarduino)
-	with open(filename + '.cpp', 'wt') as output:
-		output.write(source)
+		vertical, font_state.glyphs)
+		with open(filename + '.h', 'wt') as output:
+			output.write(source)
 
 class FontSizeAction(Action):
 	def __init__(self, **kwargs):
@@ -228,9 +232,7 @@ class FontSizeAction(Action):
 		setattr(namespace, 'font_height', int(match.group(2)))
 
 if __name__ == '__main__':
-	#TODO replace storage with name everywhere and use it to name storage file!
-	#TODO improve templates FastArduino vs others
-	# --name NAME --font-size WxH --vertical --first A --last Z --storage PICKEL_FILE
+	# --name NAME --font-size WxH --vertical --first A --last Z
 	parser = ArgumentParser(description = 'Font editor for FastArduino Font subclasses')
 	group = parser.add_subparsers(dest = 'action', required = True)
 	group_create = group.add_parser('create', help = 'create help')
@@ -238,23 +240,21 @@ if __name__ == '__main__':
 	group_create.add_argument('--font-size', type = str, action = FontSizeAction, required = True, help = 'Font size in pixels, represented as WxH')
 	group_create.add_argument('--first-char', type = lambda x: x if x.isalpha() and len(x) == 1 else False, required = True, help = 'Font first supported character')
 	group_create.add_argument('--last-char', type = lambda x: x if x.isalpha() and len(x) == 1 else False, required = True, help = 'Font last supported character')
-	group_create.add_argument('--storage', type = FileType('w+b'), required = True, help = 'Internal font storage')
 	group_work = group.add_parser('update', help = 'update help')
-	group_work.add_argument('--storage', type = FileType('r+b'), required = True, help = 'Internal font storage')
+	group_create.add_argument('--name', type = str, required = True, help = 'Font name (Font subclass name)')
 	group_export = group.add_parser('export', help = 'export help')
-	group_export.add_argument('--storage', type = FileType('rb'), required = True, help = 'Internal font storage')
+	group_create.add_argument('--name', type = str, required = True, help = 'Font name (Font subclass name)')
 	group_export.add_argument('--vertical', action = 'store_true', help = 'Produce vertical font')
-	group_export.add_argument('--namespace', type = str, default = '', help = 'C++ namespace for Font definition')
 	group_export.add_argument('--fastarduino', action = 'store_true', help = 'Generated files are for inclusion to FastArduino library')
 	group_export.add_argument('--filename', type = str, required = True, help = 'Root name fo C++ header and source files to generate for the font')
 	args = parser.parse_args()
 	
 	if args.action == 'create':
-		create(args.name, args.font_width, args.font_height, args.first_char, args.last_char, args.storage)
+		create(args.name, args.font_width, args.font_height, args.first_char, args.last_char)
 	elif args.action == 'update':
-		update(args.storage)
+		update(args.name)
 	elif args.action == 'export':
-		export(args.storage, args.vertical, args.namespace, args.fastarduino, args.filename)
+		export(args.name, args.vertical, args.namespace, args.fastarduino, args.filename)
 	else:
 		pass	#TODO can this happen?
 

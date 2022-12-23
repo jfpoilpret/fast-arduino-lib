@@ -19,7 +19,7 @@
 # This python module is used by the font creation mini-application; it performs 
 # actual C++ header and source files generation
 
-COPYRIGHT_HEADER = """//   Copyright 2016-2022 Jean-Francois Poilpret
+FASTARDUINO_HEADER_TEMPLATE = """//   Copyright 2016-2022 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -32,18 +32,15 @@ COPYRIGHT_HEADER = """//   Copyright 2016-2022 Jean-Francois Poilpret
 //   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
-"""
-
-HEADER_TEMPLATE = """{header}
 
 /// @cond api
 
-#ifndef {font_namespace}
-#define {font_namespace}
+#ifndef {font_header_define}
+#define {font_header_define}
 
-#include {include_fastarduino_font_header}
+#include "../font.h"
 
-namespace {namespace}
+namespace devices::display
 {{
 	class {font_name} : public Font<{vertical}>
 	{{
@@ -54,16 +51,45 @@ namespace {namespace}
 		static const uint8_t FONT[] PROGMEM;
 	}};
 }}
-#endif /* {font_namespace} */
+#endif /* {font_header_define} */
 
 /// @endcond
 """
 
-SOURCE_TEMPLATE = """{header}
+FASTARDUINO_SOURCE_TEMPLATE = """//   Copyright 2016-2022 Jean-Francois Poilpret
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
 
 #include "{font_header}"
 
-const uint8_t {namespace}::{font_name}::FONT[] PROGMEM =
+const uint8_t devices::display::{font_name}::FONT[] PROGMEM =
+{{
+{font_glyphs}}};
+"""
+
+REGULAR_CODE_TEMPLATE = """
+#include "../font.h"
+
+class {font_name} : public Font<{vertical}>
+{{
+public:
+	{font_name}() : Font{{0x{first_char:02x}, 0x{last_char:02x}, {font_width}, {font_height}, FONT}} {{}}
+
+private:
+	static const uint8_t FONT[] PROGMEM;
+}};
+
+const uint8_t {font_name}::FONT[] PROGMEM =
 {{
 {font_glyphs}}};
 """
@@ -71,15 +97,12 @@ const uint8_t {namespace}::{font_name}::FONT[] PROGMEM =
 GLYPH_TEMPLATE = """	{glyph_row}	// 0x{glyph_code:02x} {glyph_char}
 """
 
-def generate_header(filename: str, font_name: str, namespace: str, 
+def generate_fastarduino_header(filename: str, font_name: str, namespace: str, 
 	width: int, height: int, first_char: int, last_char: int, 
-	vertical: bool, fastarduino: bool) -> str:
+	vertical: bool) -> str:
 	# generate header as string
-	return HEADER_TEMPLATE.format(
-		header = HEADER_TEMPLATE if fastarduino else '',
-		font_namespace = filename.upper() + '_HH',
-		include_fastarduino_font_header = 'font.h' if fastarduino else '<fastarduino/devices/font.h>',
-		namespace = namespace,
+	return FASTARDUINO_HEADER_TEMPLATE.format(
+		font_header_define = filename.upper() + '_HH',
 		font_name = font_name,
 		vertical = 'true' if vertical else 'false',
 		first_char = first_char,
@@ -109,17 +132,34 @@ def generate_glyph_rows(c: int, width: int, height: int, vertical: bool, glyph):
 		pass
 	return glyph_rows
 
-def generate_source(filename: str, font_name: str, namespace: str, 
-	width: int, height: int, first_char: int, last_char: int, vertical: bool, 
-	glyphs, fastarduino: bool) -> str:
+def generate_all_glyphs(width: int, height: int, first_char: int, last_char: int, 
+	vertical: bool, glyphs) -> str:
 	# First generate all rows for glyphs definition
 	all_glyphs = ''
 	for c in range(first_char, last_char + 1):
 		glyph = glyphs[chr(c)]
 		all_glyphs += generate_glyph_rows(c, width, height, vertical, glyph)
-	return SOURCE_TEMPLATE.format(
-		header = HEADER_TEMPLATE if fastarduino else '',
+	return all_glyphs
+
+def generate_fastarduino_source(filename: str, font_name: str, 
+	width: int, height: int, first_char: int, last_char: int, vertical: bool, glyphs) -> str:
+	# First generate all rows for glyphs definition
+	all_glyphs = generate_all_glyphs(width, height, first_char, last_char, vertical, glyphs)
+	return FASTARDUINO_SOURCE_TEMPLATE.format(
 		font_header = filename + '.h',
-		namespace = namespace,
 		font_name = font_name,
+		font_glyphs = all_glyphs)
+
+def generate_regular_code(filename: str, font_name: str, 
+	width: int, height: int, first_char: int, last_char: int, 
+	vertical: bool, glyphs) -> str:
+	# First generate all rows for glyphs definition
+	all_glyphs = generate_all_glyphs(width, height, first_char, last_char, vertical, glyphs)
+	return REGULAR_CODE_TEMPLATE.format(
+		font_name = font_name,
+		vertical = 'true' if vertical else 'false',
+		first_char = first_char,
+		last_char = last_char,
+		font_width = width,
+		font_height =  height,
 		font_glyphs = all_glyphs)
