@@ -19,6 +19,11 @@
 # This python mini-application allows creation of display fonts and creates CPP files
 # (header & source) from created fonts.
 
+#TODO function to convert glyphs to XBM? Then use tkinter.BitmapImage
+#TODO add panel to display all characters from font: expected vs actual?
+#TODO use characters panel to select one character (remove combo)
+#TODO Generate horizontal fonts too
+
 from argparse import *
 import io
 from os import system
@@ -54,6 +59,27 @@ class Pixel(ttk.Label):
 			self.configure(image = Pixel.BLACK)
 		else:
 			self.configure(image = Pixel.WHITE)
+
+#TODO Most efficient way to draw thumbnail fo glyphs?
+# class CharacterThumbnail(Canvas):
+# 	PIX_SIZE = 4
+
+# 	def __init__(self, master: Misc, width: int, height: int) -> None:
+# 		super().__init__(master, 
+# 			width = CharacterThumbnail.PIX_SIZE * width, 
+# 			height = CharacterThumbnail.PIX_SIZE * height,
+# 			background = 'white')
+# 		# Use BitmapImage()?
+# 		image = BitmapImage()
+	
+# 	def set_character(self, glyph):
+# 		self.create_rectangle(0, 0, self.winfo_width, self.winfo_height, activefill = 'white')
+# 		for r, row in enumerate(glyph):
+# 			for c, col in enumerate(row):
+# 				if col:
+# 					self.create_rectangle(
+# 						c * CharacterThumbnail.PIX_SIZE, r * CharacterThumbnail.PIX_SIZE, 
+# 						activefill = 'black')
 
 class FontEditor(ttk.Frame):
 	def __init__(self, master: Misc, font_state: FontPersistence):
@@ -107,6 +133,10 @@ class FontEditor(ttk.Frame):
 				row.append(pixel.get_value())
 			glyph.append(row)
 		return glyph
+
+	def get_xbm_from_glyph(self, glyph):
+		#TODO
+		pass
 	
 	def update_pixels_from_glyph(self, glyph):
 		for y in range(self.font_state.height):
@@ -256,5 +286,4 @@ if __name__ == '__main__':
 	elif args.action == 'export':
 		export(args.name, args.vertical, args.namespace, args.fastarduino, args.filename)
 	else:
-		pass	#TODO can this happen?
-
+		print("Impossible arguments situation! You must select create, update or export commands!")
