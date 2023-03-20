@@ -41,7 +41,6 @@
 #include <fastarduino/devices/display.h>
 #include <fastarduino/time.h>
 #include <fastarduino/uart.h>
-#include <fastarduino/tests/assertions.h>
 
 #ifndef ARDUINO_UNO
 #error "Current target is not supported!"
@@ -93,6 +92,9 @@ ostream& operator<<(ostream& out, Error error)
 		return out << F("INVALID_GEOMETRY");
 	}
 }
+
+// NOTE with avr-gcc 11.2 templates dependencies requires this include after ostream& operator<<(ostream&, Error)
+#include <fastarduino/tests/assertions.h>
 
 int main()
 {
