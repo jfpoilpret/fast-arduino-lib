@@ -24,6 +24,11 @@
 #TODO use characters panel to select one character (remove combo)
 #TODO Generate horizontal fonts too
 
+#TODO add menu/buttons for actions (replace CLI args)
+# - new font with dialog (first & last char, size, name)
+# - open font (for update) dialog to find in directory
+# - export font: dialog options (vertical), directory save
+
 from argparse import *
 import io
 from os import system
@@ -200,7 +205,8 @@ class FontEditor(ttk.Frame):
 			glyph = self.get_glyph_from_pixels()
 			self.font_state.glyphs[self.previous_char] = glyph
 		# Save font state to storage
-		pickle.dump(self.font_state, file = self.name + '.font')
+		with open(self.font_state.name + '.font', 'wb') as output:
+			pickle.dump(self.font_state, file = output)
 
 def create(name: str, font_width: int, font_height: int, first_char: str, last_char: str):
 	# Create FontPersistence
@@ -213,7 +219,8 @@ def create(name: str, font_width: int, font_height: int, first_char: str, last_c
 
 def update(name: str):
 	# Read FontPersistence from storage
-	font_state: FontPersistence = pickle.load(name + '.font')
+	with open(name + '.font', 'rb') as input:
+		font_state: FontPersistence = pickle.load(input)
 	# Create Window
 	root = Tk()
 	root.wm_title(f'Editor for font `{font_state.name}` ({font_state.width}x{font_state.height})')
@@ -222,7 +229,8 @@ def update(name: str):
 
 def export(name: str, vertical: bool, fastarduino: bool, filename: str):
 	# Read FontPersistence from storage
-	font_state: FontPersistence = pickle.load(name + '.font')
+	with open(name + '.font', 'rb') as input:
+		font_state: FontPersistence = pickle.load(input)
 	# Check all characters have been defined in font state
 	for c, glyph in font_state.glyphs.items():
 		if not glyph:
@@ -265,25 +273,28 @@ if __name__ == '__main__':
 	# --name NAME --font-size WxH --vertical --first A --last Z
 	parser = ArgumentParser(description = 'Font editor for FastArduino Font subclasses')
 	group = parser.add_subparsers(dest = 'action', required = True)
+
 	group_create = group.add_parser('create', help = 'create help')
 	group_create.add_argument('--name', type = str, required = True, help = 'Font name (Font subclass name)')
 	group_create.add_argument('--font-size', type = str, action = FontSizeAction, required = True, help = 'Font size in pixels, represented as WxH')
 	group_create.add_argument('--first-char', type = lambda x: x if x.isalpha() and len(x) == 1 else False, required = True, help = 'Font first supported character')
 	group_create.add_argument('--last-char', type = lambda x: x if x.isalpha() and len(x) == 1 else False, required = True, help = 'Font last supported character')
+	
 	group_work = group.add_parser('update', help = 'update help')
-	group_create.add_argument('--name', type = str, required = True, help = 'Font name (Font subclass name)')
+	group_work.add_argument('--name', type = str, required = True, help = 'Font name (Font subclass name)')
+	
 	group_export = group.add_parser('export', help = 'export help')
-	group_create.add_argument('--name', type = str, required = True, help = 'Font name (Font subclass name)')
+	group_export.add_argument('--name', type = str, required = True, help = 'Font name (Font subclass name)')
 	group_export.add_argument('--vertical', action = 'store_true', help = 'Produce vertical font')
 	group_export.add_argument('--fastarduino', action = 'store_true', help = 'Generated files are for inclusion to FastArduino library')
 	group_export.add_argument('--filename', type = str, required = True, help = 'Root name fo C++ header and source files to generate for the font')
-	args = parser.parse_args()
 	
+	args = parser.parse_args()
 	if args.action == 'create':
 		create(args.name, args.font_width, args.font_height, args.first_char, args.last_char)
 	elif args.action == 'update':
 		update(args.name)
 	elif args.action == 'export':
-		export(args.name, args.vertical, args.namespace, args.fastarduino, args.filename)
+		export(args.name, args.vertical, args.fastarduino, args.filename)
 	else:
 		print("Impossible arguments situation! You must select create, update or export commands!")

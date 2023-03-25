@@ -78,9 +78,9 @@ const uint8_t devices::display::{font_name}::FONT[] PROGMEM =
 """
 
 REGULAR_CODE_TEMPLATE = """
-#include "../font.h"
+#include <fastarduino/devices/font.h>
 
-class {font_name} : public Font<{vertical}>
+class {font_name} : public devices::display::Font<{vertical}>
 {{
 public:
 	{font_name}() : Font{{0x{first_char:02x}, 0x{last_char:02x}, {font_width}, {font_height}, FONT}} {{}}
@@ -97,7 +97,7 @@ const uint8_t {font_name}::FONT[] PROGMEM =
 GLYPH_TEMPLATE = """	{glyph_row}	// 0x{glyph_code:02x} {glyph_char}
 """
 
-def generate_fastarduino_header(filename: str, font_name: str, namespace: str, 
+def generate_fastarduino_header(filename: str, font_name: str, 
 	width: int, height: int, first_char: int, last_char: int, 
 	vertical: bool) -> str:
 	# generate header as string
