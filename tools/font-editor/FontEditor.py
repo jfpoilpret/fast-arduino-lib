@@ -20,6 +20,7 @@
 # (header & source) from created fonts.
 
 #TODO function to convert glyphs to XBM? Then use tkinter.BitmapImage
+#	-> https://stackoverflow.com/a/12287117 to use BitmapImage and set individual pixels!
 #TODO add panel to display all characters from font: expected vs actual?
 #TODO use characters panel to select one character (remove combo)
 #TODO Generate horizontal fonts too
@@ -66,25 +67,50 @@ class Pixel(ttk.Label):
 			self.configure(image = Pixel.WHITE)
 
 #TODO Most efficient way to draw thumbnail fo glyphs?
-# class CharacterThumbnail(Canvas):
-# 	PIX_SIZE = 4
+class CharacterThumbnail(ttk.Frame):
+	PIX_SIZE = 2
 
-# 	def __init__(self, master: Misc, width: int, height: int) -> None:
-# 		super().__init__(master, 
-# 			width = CharacterThumbnail.PIX_SIZE * width, 
-# 			height = CharacterThumbnail.PIX_SIZE * height,
-# 			background = 'white')
-# 		# Use BitmapImage()?
-# 		image = BitmapImage()
+	def __init__(self, master: Misc, width: int, height: int) -> None:
+		super().__init__(master, padding=1, border=1)
+		self.glyph_height = height
+		self.glyph_width = width
+		self.letter_label = ttk.Label(self)
+		self.letter_label.grid(row=0, column=0)
+		self.glyph_label = ttk.Label(self)
+		self.glyph_label.grid(row=1, column=0)
+		self.glyph_image = PhotoImage(master=self, 
+			width=width*CharacterThumbnail.PIX_SIZE, height=height*CharacterThumbnail.PIX_SIZE)
+		self.glyph_label.config(image=self.glyph_image)
 	
-# 	def set_character(self, glyph):
-# 		self.create_rectangle(0, 0, self.winfo_width, self.winfo_height, activefill = 'white')
-# 		for r, row in enumerate(glyph):
-# 			for c, col in enumerate(row):
-# 				if col:
-# 					self.create_rectangle(
-# 						c * CharacterThumbnail.PIX_SIZE, r * CharacterThumbnail.PIX_SIZE, 
-# 						activefill = 'black')
+	def set_character(self, char):
+		self.letter_label.config(text=f"{ord(char):02x} ({char})")
+	
+	def clear_glyph(self):
+		data: list[list[str]] = []
+		for r in range(self.glyph_height * CharacterThumbnail.PIX_SIZE):
+			row = []
+			for c in range(self.glyph_width * CharacterThumbnail.PIX_SIZE):
+				row.append("white")
+			data.append(row)
+		self.glyph_image.put(data=data)
+	
+	def set_glyph(self, glyph: list[list[bool]]):
+		data: list[list[str]] = []
+		for r in range(self.glyph_height * CharacterThumbnail.PIX_SIZE):
+			row = []
+			for c in range(self.glyph_width * CharacterThumbnail.PIX_SIZE):
+				row.append("white")
+			data.append(row)
+			
+		for r, row in enumerate(glyph):
+			for c, col in enumerate(row):
+				if col:
+					c1 = c * CharacterThumbnail.PIX_SIZE
+					for x in range(c1, c1 + CharacterThumbnail.PIX_SIZE):
+						r1 = r * CharacterThumbnail.PIX_SIZE
+						for y in range(r1, r1 + CharacterThumbnail.PIX_SIZE):
+							data[y][x] = "black"
+		self.glyph_image.put(data=data)
 
 class FontEditor(ttk.Frame):
 	def __init__(self, master: Misc, font_state: FontPersistence):
@@ -104,13 +130,19 @@ class FontEditor(ttk.Frame):
 		ttk.Button(self, text = 'Save', command = self.on_save).grid(row = 1, column = 3, padx = 3, pady = 3)
 		
 		#TODO thumbnail somehow
+		# At first, just create one thumbnail (for testing)
+		self.thumbnail = CharacterThumbnail(master=self, width=font_state.width, height=font_state.height)
+		self.thumbnail.grid(row=2, column=3)
+
+		#TODO need a grid to show all BPM: determine rows and cols first
+		#TODO need a widget combining font char expected (standard font) Vs actual (updated font)
 
 		# Panel for pixmap editing
 		Pixel.WHITE = PhotoImage(file = 'white.png')
 		Pixel.BLACK = PhotoImage(file = 'black.png')
 		size = Pixel.WHITE.width() + 1
 		self.pixmap_editor = ttk.Frame(self)
-		self.pixmap_editor.grid(row = 2, column = 1, columnspan = 3)
+		self.pixmap_editor.grid(row = 2, column = 1, columnspan = 2)
 		self.pixmap_editor.configure(width = size * self.font_state.width, height = size * self.font_state.height)
 		self.pixmap_editor.bind('<Button-1>', self.on_pixel_click, )
 		self.pixmap_editor.bind('<B1-Motion>', self.on_pixel_move)
@@ -177,12 +209,15 @@ class FontEditor(ttk.Frame):
 
 		# Load pixmap of new current character from font_state
 		self.previous_char = self.current_char.get()
+		self.thumbnail.set_character(self.previous_char)
 		glyph = self.font_state.glyphs[self.previous_char]
 		if glyph:
 			self.update_pixels_from_glyph(glyph)
+			self.thumbnail.set_glyph(glyph=glyph)
 		else:
 			# no glyph yet, set all white pixels
 			self.clear_pixels()
+			self.thumbnail.clear_glyph()
 
 	def on_pixel_click(self, event: Event):
 		# print(f'on_pixel_click ({event.x},{event.y})')
