@@ -66,17 +66,16 @@ class Pixel(ttk.Label):
 		else:
 			self.configure(image = Pixel.WHITE)
 
-#TODO Most efficient way to draw thumbnail fo glyphs?
-class CharacterThumbnail(ttk.Frame):
+class CharacterThumbnail(Frame):
 	PIX_SIZE = 2
 
 	def __init__(self, master: Misc, width: int, height: int) -> None:
-		super().__init__(master, padding=1, border=1)
+		super().__init__(master, padx=1, pady=1, border=1, background="white")
 		self.glyph_height = height
 		self.glyph_width = width
-		self.letter_label = ttk.Label(self)
+		self.letter_label = Label(self, background="white")
 		self.letter_label.grid(row=0, column=0)
-		self.glyph_label = ttk.Label(self)
+		self.glyph_label = Label(self, background="white")
 		self.glyph_label.grid(row=1, column=0)
 		self.glyph_image = PhotoImage(master=self, 
 			width=width*CharacterThumbnail.PIX_SIZE, height=height*CharacterThumbnail.PIX_SIZE)
