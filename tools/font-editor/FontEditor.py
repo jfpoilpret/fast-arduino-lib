@@ -19,9 +19,6 @@
 # This python mini-application allows creation of display fonts and creates CPP files
 # (header & source) from created fonts.
 
-#TODO function to convert glyphs to XBM? Then use tkinter.BitmapImage
-#	-> https://stackoverflow.com/a/12287117 to use BitmapImage and set individual pixels!
-#TODO add panel to display all characters from font: expected vs actual?
 #TODO use characters panel to select one character (remove combo)
 #TODO Generate horizontal fonts too
 
@@ -81,8 +78,18 @@ class CharacterThumbnail(Frame):
 			width=width*CharacterThumbnail.PIX_SIZE, height=height*CharacterThumbnail.PIX_SIZE)
 		self.glyph_label.config(image=self.glyph_image)
 	
+	def set_highlight(self, highlight: bool):
+		if highlight:
+			self.configure(background="yellow")
+			self.letter_label.configure(background="yellow")
+			self.glyph_label.configure(background="yellow")
+		else:
+			self.configure(background="white")
+			self.letter_label.configure(background="white")
+			self.glyph_label.configure(background="white")
+	
 	def set_character(self, char):
-		self.letter_label.config(text=f"{ord(char):02x} ({char})")
+		self.letter_label.config(text=f"{ord(char):02x}-{char}")
 	
 	def clear_glyph(self):
 		data: list[list[str]] = []
@@ -111,6 +118,44 @@ class CharacterThumbnail(Frame):
 							data[y][x] = "black"
 		self.glyph_image.put(data=data)
 
+# Panel containing all thumbnails for the current font
+#TODO allow thumbnail click to select
+#TODO limit grid of thumbnails and add vertical scrollbar
+class ThumbnailPanel(Frame):
+	MAX_GRIDX = 8
+
+	def __init__(self, master: Misc, font_state: FontPersistence) -> None:
+		super().__init__(master, padx=1, pady=1, border=1, background="white")
+		# create CharacterThumbnail for each character in the font
+		self.thumbnails: dict[chr, CharacterThumbnail] = {}
+		self.selected_thumbnail: CharacterThumbnail = None
+		gridx = 1
+		gridy = 1
+		for c in range(font_state.first, font_state.last + 1):
+			thumb = CharacterThumbnail(master=self, width=font_state.width, height=font_state.height)
+			thumb.set_character(char=chr(c))
+			thumb.set_glyph(glyph=font_state.glyphs[chr(c)])
+			self.thumbnails[chr(c)] = thumb
+			# Add thumbnail to the grid
+			thumb.grid(row=gridy, column=gridx)
+			gridx += 1
+			if gridx > ThumbnailPanel.MAX_GRIDX:
+				gridx = 1
+				gridy += 1
+	
+	def select_character(self, c: chr) -> None:
+		if self.selected_thumbnail:
+			self.selected_thumbnail.set_highlight(highlight=False)
+		self.selected_thumbnail = self.thumbnails[c]
+		self.selected_thumbnail.set_highlight(highlight=True)
+	
+	def update_character(self, c: chr, glyph: list[list[bool]]) -> None:
+		self.thumbnails[c].set_glyph(glyph=glyph)
+	
+	def update_all(self, font_state: FontPersistence) -> None:
+		for c, glyph in font_state.glyphs.items():
+			self.thumbnails[c].set_glyph(glyph=glyph)
+
 class FontEditor(ttk.Frame):
 	def __init__(self, master: Misc, font_state: FontPersistence):
 		super().__init__(master, padding = (4, 4, 4, 4))
@@ -128,13 +173,9 @@ class FontEditor(ttk.Frame):
 		char_selector.bind('<<ComboboxSelected>>', self.on_char_select)
 		ttk.Button(self, text = 'Save', command = self.on_save).grid(row = 1, column = 3, padx = 3, pady = 3)
 		
-		#TODO thumbnail somehow
-		# At first, just create one thumbnail (for testing)
-		self.thumbnail = CharacterThumbnail(master=self, width=font_state.width, height=font_state.height)
-		self.thumbnail.grid(row=2, column=3)
-
-		#TODO need a grid to show all BPM: determine rows and cols first
-		#TODO need a widget combining font char expected (standard font) Vs actual (updated font)
+		# Add  thumbnail pane
+		self.thumbnails = ThumbnailPanel(master=self, font_state=font_state)
+		self.thumbnails.grid(row=2, column=3)
 
 		# Panel for pixmap editing
 		Pixel.WHITE = PhotoImage(file = 'white.png')
@@ -170,10 +211,6 @@ class FontEditor(ttk.Frame):
 			glyph.append(row)
 		return glyph
 
-	def get_xbm_from_glyph(self, glyph):
-		#TODO
-		pass
-	
 	def update_pixels_from_glyph(self, glyph):
 		for y in range(self.font_state.height):
 			glyph_row = glyph[y]
@@ -208,15 +245,13 @@ class FontEditor(ttk.Frame):
 
 		# Load pixmap of new current character from font_state
 		self.previous_char = self.current_char.get()
-		self.thumbnail.set_character(self.previous_char)
+		self.thumbnails.select_character(self.previous_char)
 		glyph = self.font_state.glyphs[self.previous_char]
 		if glyph:
 			self.update_pixels_from_glyph(glyph)
-			self.thumbnail.set_glyph(glyph=glyph)
 		else:
 			# no glyph yet, set all white pixels
 			self.clear_pixels()
-			self.thumbnail.clear_glyph()
 
 	def on_pixel_click(self, event: Event):
 		# print(f'on_pixel_click ({event.x},{event.y})')
@@ -238,6 +273,7 @@ class FontEditor(ttk.Frame):
 		if self.previous_char:
 			glyph = self.get_glyph_from_pixels()
 			self.font_state.glyphs[self.previous_char] = glyph
+		self.thumbnails.update_all(font_state=self.font_state)
 		# Save font state to storage
 		with open(self.font_state.name + '.font', 'wb') as output:
 			pickle.dump(self.font_state, file = output)
