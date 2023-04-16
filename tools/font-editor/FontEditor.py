@@ -19,8 +19,6 @@
 # This python mini-application allows creation of display fonts and creates CPP files
 # (header & source) from created fonts.
 
-#TODO select 1st char by default
-
 #TODO add menu/buttons for actions (replace CLI args)
 # - new font with dialog (first & last char, size, name)
 # - open font (for update) dialog to find in directory
@@ -185,7 +183,6 @@ class FontEditor(ttk.Frame):
 		master.columnconfigure(0, weight=1)
 		master.rowconfigure(0, weight=1)
 		ttk.Button(self, text='Save', command=self.on_save).grid(row=1, column=1, padx=3, pady=3)
-		
 		# Add  thumbnail pane
 		self.thumbnails = ThumbnailPanel(master=self, font_state=font_state)
 		self.thumbnails.grid(row=2, column=1, padx=3, pady=3)
@@ -211,6 +208,13 @@ class FontEditor(ttk.Frame):
 				pass_events_to_parent(pixel, self.pixmap_editor, ["<Button-1>", "<B1-Motion>"])
 				row.append(pixel)
 			self.pixels.append(row)
+		
+		# select 1st thumbnail
+		self.select_first()
+
+	def select_first(self):
+		# select 1st thumbnail
+		self.click_thumbnail(self.thumbnails.thumbnails[chr(self.font_state.first)])
 
 	def get_glyph_from_pixels(self):
 		glyph = []
@@ -247,18 +251,11 @@ class FontEditor(ttk.Frame):
 		else:
 			return None
 
-	def on_thumbnail_click(self, event: Event) -> None:
+	def click_thumbnail(self, thumbnail: CharacterThumbnail) -> None:
 		# Update font_state with previous character
 		if self.previous_char:
 			glyph = self.get_glyph_from_pixels()
 			self.font_state.glyphs[self.previous_char] = glyph
-		# Find clicked thumbnail
-		thumbnail: CharacterThumbnail = None
-		if isinstance(event.widget, CharacterThumbnail):
-			thumbnail = event.widget
-		else:
-			target: Widget = event.widget
-			thumbnail = target.master
 		# Highlight clicked thumbnail
 		self.previous_char = thumbnail.get_character()
 		self.thumbnails.select_character(self.previous_char)
@@ -269,6 +266,16 @@ class FontEditor(ttk.Frame):
 		else:
 			# no glyph yet, set all white pixels
 			self.clear_pixels()
+
+	def on_thumbnail_click(self, event: Event) -> None:
+		# Find clicked thumbnail
+		thumbnail: CharacterThumbnail = None
+		if isinstance(event.widget, CharacterThumbnail):
+			thumbnail = event.widget
+		else:
+			target: Widget = event.widget
+			thumbnail = target.master
+		self.click_thumbnail(thumbnail=thumbnail)
 
 	def on_pixel_click(self, event: Event):
 		# print(f'on_pixel_click ({event.x},{event.y})')
