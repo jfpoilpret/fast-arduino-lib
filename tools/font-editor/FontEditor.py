@@ -19,16 +19,17 @@
 # This python mini-application allows creation of display fonts and creates CPP files
 # (header & source) from created fonts.
 
-#TODO use characters panel to select one character (remove combo)
-#TODO Generate horizontal fonts too
+#TODO select 1st char by default
 
 #TODO add menu/buttons for actions (replace CLI args)
 # - new font with dialog (first & last char, size, name)
 # - open font (for update) dialog to find in directory
 # - export font: dialog options (vertical), directory save
 
+#TODO Generate horizontal fonts too
+#TODO Refactoring to make code better and easier to read and maintain
+
 from argparse import *
-import io
 from os import system
 import pickle
 import re
@@ -39,6 +40,15 @@ from tkinter import ttk
 
 from font_export import generate_fastarduino_header, generate_fastarduino_source, generate_regular_code
 
+# Utility to trick events handling so that events pass through from a widget to a parent widget
+def pass_events_to_parent(widget: Widget, parent: Widget, events: list[str]):
+	bindtags = list(widget.bindtags())
+	bindtags.insert(1, parent)
+	widget.bindtags(tuple(bindtags))
+	for event in events:
+		widget.bind(event, lambda e: None)
+
+# Class embedding font state for persistence
 class FontPersistence:
 	def __init__(self, name:str, width: int, height: int, first: int, last: int):
 		self.name = name
@@ -48,6 +58,7 @@ class FontPersistence:
 		self.last = last
 		self.glyphs = {chr(c): [] for c in range(first, last + 1)}
 
+# Pixel widget (just black or white rectangle)
 class Pixel(ttk.Label):
 	def __init__(self, master: Misc, value: bool, **kwargs):
 		super().__init__(master, **kwargs)
@@ -59,25 +70,30 @@ class Pixel(ttk.Label):
 	def set_value(self, value: bool):
 		self.value = value
 		if self.value:
-			self.configure(image = Pixel.BLACK)
+			self.configure(image=Pixel.BLACK)
 		else:
-			self.configure(image = Pixel.WHITE)
+			self.configure(image=Pixel.WHITE)
 
+# Widget reprenting the thumbnail for a given font character
 class CharacterThumbnail(Frame):
 	PIX_SIZE = 2
 
 	def __init__(self, master: Misc, width: int, height: int) -> None:
-		super().__init__(master, padx=1, pady=1, border=1, background="white")
+		super().__init__(master, padx=1, pady=1, border=1, background="white", borderwidth=2, relief='solid')
+		self.char: str = None
 		self.glyph_height = height
 		self.glyph_width = width
-		self.letter_label = Label(self, background="white")
+		self.letter_label = Label(self, background="white", font="TkFixedFont")
 		self.letter_label.grid(row=0, column=0)
 		self.glyph_label = Label(self, background="white")
 		self.glyph_label.grid(row=1, column=0)
 		self.glyph_image = PhotoImage(master=self, 
 			width=width*CharacterThumbnail.PIX_SIZE, height=height*CharacterThumbnail.PIX_SIZE)
 		self.glyph_label.config(image=self.glyph_image)
-	
+		# Ensure events pass through from labels to parent Frame (self)
+		pass_events_to_parent(self.letter_label, self, ["<Button-1>"])
+		pass_events_to_parent(self.glyph_label, self, ["<Button-1>"])
+
 	def set_highlight(self, highlight: bool):
 		if highlight:
 			self.configure(background="yellow")
@@ -88,7 +104,11 @@ class CharacterThumbnail(Frame):
 			self.letter_label.configure(background="white")
 			self.glyph_label.configure(background="white")
 	
-	def set_character(self, char):
+	def get_character(self) -> str:
+		return self.char
+	
+	def set_character(self, char: str):
+		self.char = char
 		self.letter_label.config(text=f"{ord(char):02x}-{char}")
 	
 	def clear_glyph(self):
@@ -119,20 +139,20 @@ class CharacterThumbnail(Frame):
 		self.glyph_image.put(data=data)
 
 # Panel containing all thumbnails for the current font
-#TODO allow thumbnail click to select
 #TODO limit grid of thumbnails and add vertical scrollbar
 class ThumbnailPanel(Frame):
 	MAX_GRIDX = 8
 
 	def __init__(self, master: Misc, font_state: FontPersistence) -> None:
-		super().__init__(master, padx=1, pady=1, border=1, background="white")
+		super().__init__(master, background="white")
 		# create CharacterThumbnail for each character in the font
-		self.thumbnails: dict[chr, CharacterThumbnail] = {}
+		self.thumbnails: dict[str, CharacterThumbnail] = {}
 		self.selected_thumbnail: CharacterThumbnail = None
 		gridx = 1
 		gridy = 1
 		for c in range(font_state.first, font_state.last + 1):
 			thumb = CharacterThumbnail(master=self, width=font_state.width, height=font_state.height)
+			thumb.bind(sequence="<Button-1>", func=master.on_thumbnail_click)
 			thumb.set_character(char=chr(c))
 			thumb.set_glyph(glyph=font_state.glyphs[chr(c)])
 			self.thumbnails[chr(c)] = thumb
@@ -143,13 +163,13 @@ class ThumbnailPanel(Frame):
 				gridx = 1
 				gridy += 1
 	
-	def select_character(self, c: chr) -> None:
+	def select_character(self, c: str) -> None:
 		if self.selected_thumbnail:
 			self.selected_thumbnail.set_highlight(highlight=False)
 		self.selected_thumbnail = self.thumbnails[c]
 		self.selected_thumbnail.set_highlight(highlight=True)
 	
-	def update_character(self, c: chr, glyph: list[list[bool]]) -> None:
+	def update_character(self, c: str, glyph: list[list[bool]]) -> None:
 		self.thumbnails[c].set_glyph(glyph=glyph)
 	
 	def update_all(self, font_state: FontPersistence) -> None:
@@ -158,47 +178,37 @@ class ThumbnailPanel(Frame):
 
 class FontEditor(ttk.Frame):
 	def __init__(self, master: Misc, font_state: FontPersistence):
-		super().__init__(master, padding = (4, 4, 4, 4))
+		super().__init__(master, padding=(4, 4, 4, 4))
 		self.font_state = font_state
 		self.previous_char = None
-		self.current_char = StringVar()
-		self.grid(column = 0, row = 0, sticky = (N))
-		master.columnconfigure(0, weight = 1)
-		master.rowconfigure(0, weight = 1)
-		# create widgets
-		ttk.Label(self, text = 'Character:').grid(row = 1, column = 1, padx = 3, pady = 3)
-		all_characters = [chr(c) for c in range(font_state.first, font_state.last + 1)]
-		char_selector = ttk.Combobox(self, state = 'readonly', values = all_characters, textvariable = self.current_char)
-		char_selector.grid(row = 1, column = 2, padx = 3, pady = 3)
-		char_selector.bind('<<ComboboxSelected>>', self.on_char_select)
-		ttk.Button(self, text = 'Save', command = self.on_save).grid(row = 1, column = 3, padx = 3, pady = 3)
+		self.grid(column=0, row=0, sticky=(N))
+		master.columnconfigure(0, weight=1)
+		master.rowconfigure(0, weight=1)
+		ttk.Button(self, text='Save', command=self.on_save).grid(row=1, column=1, padx=3, pady=3)
 		
 		# Add  thumbnail pane
 		self.thumbnails = ThumbnailPanel(master=self, font_state=font_state)
-		self.thumbnails.grid(row=2, column=3)
+		self.thumbnails.grid(row=2, column=1, padx=3, pady=3)
 
 		# Panel for pixmap editing
-		Pixel.WHITE = PhotoImage(file = 'white.png')
-		Pixel.BLACK = PhotoImage(file = 'black.png')
+		#TODO refactor to its own class, much cleaner
+		Pixel.WHITE = PhotoImage(file='white.png')
+		Pixel.BLACK = PhotoImage(file='black.png')
 		size = Pixel.WHITE.width() + 1
 		self.pixmap_editor = ttk.Frame(self)
-		self.pixmap_editor.grid(row = 2, column = 1, columnspan = 2)
-		self.pixmap_editor.configure(width = size * self.font_state.width, height = size * self.font_state.height)
-		self.pixmap_editor.bind('<Button-1>', self.on_pixel_click, )
+		self.pixmap_editor.grid(row=2, column=2, padx=3, pady=3)
+		self.pixmap_editor.configure(width=size * self.font_state.width, height=size * self.font_state.height)
+		self.pixmap_editor.bind('<Button-1>', self.on_pixel_click)
 		self.pixmap_editor.bind('<B1-Motion>', self.on_pixel_move)
 		self.pixels = []
 		# Initialize all image labels
 		for y in range(self.font_state.height):
 			row = []
 			for x in range(self.font_state.width):
-				pixel = Pixel(self.pixmap_editor, value = False, borderwidth = 1)
-				pixel.place(x = x * size, y = y * size)
-				# Trick to ensure events pass through from Pixel instacnes to parent Frame
-				bindtags = list(pixel.bindtags())
-				bindtags.insert(1, self.pixmap_editor)
-				pixel.bindtags(tuple(bindtags))
-				pixel.bind('<Button-1>', lambda e: None)
-				pixel.bind('<B1-Motion>', lambda e: None)
+				pixel = Pixel(self.pixmap_editor, value=False, borderwidth=1)
+				pixel.place(x=x * size, y=y * size)
+				# Ensure events pass through from Pixel instances to parent Frame
+				pass_events_to_parent(pixel, self.pixmap_editor, ["<Button-1>", "<B1-Motion>"])
 				row.append(pixel)
 			self.pixels.append(row)
 
@@ -237,15 +247,22 @@ class FontEditor(ttk.Frame):
 		else:
 			return None
 
-	def on_char_select(self, event: Event):
+	def on_thumbnail_click(self, event: Event) -> None:
 		# Update font_state with previous character
 		if self.previous_char:
 			glyph = self.get_glyph_from_pixels()
 			self.font_state.glyphs[self.previous_char] = glyph
-
-		# Load pixmap of new current character from font_state
-		self.previous_char = self.current_char.get()
+		# Find clicked thumbnail
+		thumbnail: CharacterThumbnail = None
+		if isinstance(event.widget, CharacterThumbnail):
+			thumbnail = event.widget
+		else:
+			target: Widget = event.widget
+			thumbnail = target.master
+		# Highlight clicked thumbnail
+		self.previous_char = thumbnail.get_character()
 		self.thumbnails.select_character(self.previous_char)
+		# Load pixmap of new current character from font_state
 		glyph = self.font_state.glyphs[self.previous_char]
 		if glyph:
 			self.update_pixels_from_glyph(glyph)
@@ -322,7 +339,7 @@ def export(name: str, vertical: bool, fastarduino: bool, filename: str):
 	else:
 		# Generate regular source code (for specific program use)
 		source = generate_regular_code(filename, font_state.name,
-		font_state.width, font_state.height, font_state.first, font_state.last,
+			font_state.width, font_state.height, font_state.first, font_state.last,
 		vertical, font_state.glyphs)
 		with open(filename + '.h', 'wt') as output:
 			output.write(source)
@@ -341,23 +358,23 @@ class FontSizeAction(Action):
 
 if __name__ == '__main__':
 	# --name NAME --font-size WxH --vertical --first A --last Z
-	parser = ArgumentParser(description = 'Font editor for FastArduino Font subclasses')
-	group = parser.add_subparsers(dest = 'action', required = True)
+	parser = ArgumentParser(description='Font editor for FastArduino Font subclasses')
+	group = parser.add_subparsers(dest='action', required=True)
 
-	group_create = group.add_parser('create', help = 'create help')
-	group_create.add_argument('--name', type = str, required = True, help = 'Font name (Font subclass name)')
-	group_create.add_argument('--font-size', type = str, action = FontSizeAction, required = True, help = 'Font size in pixels, represented as WxH')
-	group_create.add_argument('--first-char', type = lambda x: x if x.isalpha() and len(x) == 1 else False, required = True, help = 'Font first supported character')
-	group_create.add_argument('--last-char', type = lambda x: x if x.isalpha() and len(x) == 1 else False, required = True, help = 'Font last supported character')
+	group_create = group.add_parser('create', help='create help')
+	group_create.add_argument('--name', type=str, required=True, help='Font name (Font subclass name)')
+	group_create.add_argument('--font-size', type=str, action=FontSizeAction, required=True, help='Font size in pixels, represented as WxH')
+	group_create.add_argument('--first-char', type=lambda x: x if x.isalpha() and len(x) == 1 else False, required=True, help='Font first supported character')
+	group_create.add_argument('--last-char', type=lambda x: x if x.isalpha() and len(x) == 1 else False, required=True, help='Font last supported character')
 	
-	group_work = group.add_parser('update', help = 'update help')
-	group_work.add_argument('--name', type = str, required = True, help = 'Font name (Font subclass name)')
+	group_work = group.add_parser('update', help='update help')
+	group_work.add_argument('--name', type=str, required=True, help='Font name (Font subclass name)')
 	
-	group_export = group.add_parser('export', help = 'export help')
-	group_export.add_argument('--name', type = str, required = True, help = 'Font name (Font subclass name)')
-	group_export.add_argument('--vertical', action = 'store_true', help = 'Produce vertical font')
-	group_export.add_argument('--fastarduino', action = 'store_true', help = 'Generated files are for inclusion to FastArduino library')
-	group_export.add_argument('--filename', type = str, required = True, help = 'Root name fo C++ header and source files to generate for the font')
+	group_export = group.add_parser('export', help='export help')
+	group_export.add_argument('--name', type=str, required=True, help='Font name (Font subclass name)')
+	group_export.add_argument('--vertical', action='store_true', help='Produce vertical font')
+	group_export.add_argument('--fastarduino', action='store_true', help='Generated files are for inclusion to FastArduino library')
+	group_export.add_argument('--filename', type=str, required=True, help='Root name fo C++ header and source files to generate for the font')
 	
 	args = parser.parse_args()
 	if args.action == 'create':
