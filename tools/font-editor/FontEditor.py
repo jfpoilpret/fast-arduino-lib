@@ -255,6 +255,11 @@ class FontEditor(ttk.Frame):
 	def __init__(self, master: Misc, font_state: FontPersistence):
 		super().__init__(master, padding=(4, 4, 4, 4))
 
+		self.font_state: FontPersistence = None
+		self.previous_char: str = None
+		self.thumbnails: ThumbnailPanel = None
+		self.glyph_editor: GlyphEditor = None
+
 		# Add menu bar here
 		#TODO Add accelerators and underlines
 		menubar = Menu(master)
@@ -281,25 +286,31 @@ class FontEditor(ttk.Frame):
 		menu_edit.add_separator()
 		menu_edit.add_command(label="Change Font Range...", command=self.on_change_font_range)
 
-		# Add UI elements here
 		self.grid(column=0, row=0, sticky=(N))
 		master.columnconfigure(0, weight=1)
 		master.rowconfigure(0, weight=1)
 
+		# Add UI elements here
 		self.set_font(font_state=font_state)
 
 	def set_font(self, font_state: FontPersistence):
 		self.font_state = font_state
-		self.previous_char = None
+		self.previous_char: str = None
 
-		# Add thumbnail pane TODO rework (use update UI method somehow)
+		# Remove thumbnails and glyph editor panes if they already exist
+		if self.thumbnails:
+			self.thumbnails.grid_remove()
+		if self.glyph_editor:
+			self.glyph_editor.grid_remove()
+
+		# Add new thumbnail pane
 		self.thumbnails = ThumbnailPanel(master=self, font_state=font_state)
 		self.thumbnails.grid(row=1, column=1, padx=3, pady=3)
 
-		# Panel for pixmap editing
-		self.pixmap_editor = GlyphEditor(
+		# Add new panel for glyph editing
+		self.glyph_editor = GlyphEditor(
 			master=self, width=self.font_state.width, height=self.font_state.height)
-		self.pixmap_editor.grid(row=1, column=2, padx=3, pady=3)
+		self.glyph_editor.grid(row=1, column=2, padx=3, pady=3)
 
 		# select 1st thumbnail
 		self.select_first()
@@ -311,7 +322,7 @@ class FontEditor(ttk.Frame):
 	def click_thumbnail(self, thumbnail: CharacterThumbnail) -> None:
 		# Update font_state with previous character
 		if self.previous_char:
-			glyph = self.pixmap_editor.get_glyph_from_pixels()
+			glyph = self.glyph_editor.get_glyph_from_pixels()
 			self.font_state.glyphs[self.previous_char] = glyph
 		# Highlight clicked thumbnail
 		self.previous_char = thumbnail.get_character()
@@ -319,10 +330,10 @@ class FontEditor(ttk.Frame):
 		# Load pixmap of new current character from font_state
 		glyph = self.font_state.glyphs[self.previous_char]
 		if glyph:
-			self.pixmap_editor.update_pixels_from_glyph(glyph)
+			self.glyph_editor.update_pixels_from_glyph(glyph)
 		else:
 			# no glyph yet, set all white pixels
-			self.pixmap_editor.clear_pixels()
+			self.glyph_editor.clear_pixels()
 
 	def on_thumbnail_click(self, event: Event) -> None:
 		# Find clicked thumbnail
@@ -353,7 +364,7 @@ class FontEditor(ttk.Frame):
 		#TOD improve if no name for font?
 		# Update glyph of current character
 		if self.previous_char:
-			glyph = self.pixmap_editor.get_glyph_from_pixels()
+			glyph = self.glyph_editor.get_glyph_from_pixels()
 			self.font_state.glyphs[self.previous_char] = glyph
 		self.thumbnails.update_all(font_state=self.font_state)
 		# Save font state to storage
