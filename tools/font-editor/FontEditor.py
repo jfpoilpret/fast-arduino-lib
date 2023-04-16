@@ -19,9 +19,7 @@
 # This python mini-application allows creation of display fonts and creates CPP files
 # (header & source) from created fonts.
 
-#TODO add menu/buttons for actions (replace CLI args)
-# - new font with dialog (first & last char, size, name)
-# - export font: dialog options (vertical), directory save
+#TODO implement menu items
 # - copy/paste character glyph
 # - undo glyph change (before save)
 # - extend/reduce font range
@@ -31,8 +29,7 @@
 #TODO Generate horizontal fonts too
 #TODO Refactoring to make code better and easier to read and maintain (use Tk vars?)
 
-from argparse import *
-from os import system
+from dataclasses import dataclass
 import pickle
 import re
 import sys
@@ -51,6 +48,7 @@ def pass_events_to_parent(widget: Widget, parent: Widget, events: list[str]):
 	for event in events:
 		widget.bind(event, lambda e: None)
 
+#TODO use dataclass if possible
 # Class embedding font state for persistence
 class FontPersistence:
 	def __init__(self, name:str, width: int, height: int, first: int, last: int):
@@ -102,6 +100,59 @@ class NewFontDialog(Toplevel):
 		self.grab_release()
 		self.destroy()
 
+	def on_cancel(self):
+		self.grab_release()
+		self.destroy()
+
+@dataclass(kw_only=True)
+class ExportConfig:
+	fastarduino: bool = False
+	vertical: bool = False
+	directory: str
+
+# Dialog displayed at export of current font
+class ExportDialog(Toplevel):
+	def __init__(self, master: Misc):
+		super().__init__(master=master)
+		self.result: ExportConfig | None = None
+		# These variables will get user input
+		self.fastarduino = BooleanVar()
+		self.vertical = BooleanVar()
+		self.directory = StringVar()
+		# Add UI: font width and height, 1st char, last char
+		ttk.Checkbutton(master=self, text="FastArduino Font", variable=self.fastarduino).grid(
+			row=1, column=1, columnspan=2, padx=2, pady=2, sticky="W")
+		ttk.Checkbutton(master=self, text="Vertical Font", variable=self.vertical).grid(
+			row=2, column=1, columnspan=2, padx=2, pady=2, sticky="W")
+		ttk.Button(master=self, text="Code Files Directory...", command=self.on_select_dir).grid(
+			row=3, column=1, padx=2, pady=2)
+		ttk.Label(master=self, textvariable=self.directory).grid(row=3, column=2, padx=2, pady=2)
+		buttons = ttk.Frame(master=self)
+		ttk.Button(master=buttons, text="Cancel", command=self.on_cancel).grid(row=1, column=1, padx=2, pady=2)
+		ttk.Button(master=buttons, text="OK", command=self.on_ok).grid(row=1, column=2, padx=2, pady=2)
+		buttons.grid(row=4, column=1, columnspan=2)
+
+		self.protocol(name="WM_DELETE_WINDOW", func=self.on_cancel)
+		self.transient(master=master)
+		self.wait_visibility()
+		self.grab_set()
+		self.wait_window()
+
+	def get_export_config(self):
+		return self.result
+	
+	def on_select_dir(self):
+		directory = filedialog.askdirectory(title="Select directory to save source code files")
+		if directory:
+			self.directory.set(directory)
+	
+	def on_ok(self):
+		#TODO check that directory is selected
+		self.result = ExportConfig(fastarduino=self.fastarduino.get(), vertical=self.vertical.get(),
+			directory=self.directory.get())
+		self.grab_release()
+		self.destroy()
+	
 	def on_cancel(self):
 		self.grab_release()
 		self.destroy()
@@ -400,6 +451,7 @@ class FontEditor(ttk.Frame):
 		# Get new font info (or None if dialog cancelled)
 		font_state = dialog.get_font_state()
 		if font_state:
+			self.filename = None
 			self.set_font(font_state)
 	
 	def on_open(self):
@@ -444,8 +496,39 @@ class FontEditor(ttk.Frame):
 			pickle.dump(self.font_state, file = output)
 
 	def on_export(self):
-		#TODO second
-		pass
+		# Check all characters have been defined in font state
+		for c, glyph in self.font_state.glyphs.items():
+			if not glyph:
+				#TODO show message instead of exiting!!!
+				print(f"Glyph for character '{c}' is undefined!")
+				sys.exit(1)
+		dialog = ExportDialog(master=self.master)
+		export_config = dialog.get_export_config()
+		if export_config:
+			print(f"export_config={export_config}")
+			# Perform export
+			directory = export_config.directory
+			filename = f"{directory}/{self.font_state.name}"
+			if export_config.fastarduino:
+				# Generate header file content
+				header = generate_fastarduino_header(self.font_state.name, self.font_state.name, 
+					self.font_state.width, self.font_state.height,
+					self.font_state.first, self.font_state.last, export_config.vertical)
+				with open(filename + '.h', 'wt') as output:
+					output.write(header)
+				# Generate source file content
+				source = generate_fastarduino_source(self.font_state.name, self.font_state.name,
+					self.font_state.width, self.font_state.height, self.font_state.first, self.font_state.last,
+					export_config.vertical, self.font_state.glyphs)
+				with open(filename + '.cpp', 'wt') as output:
+					output.write(source)
+			else:
+				# Generate regular source code (for specific program use)
+				source = generate_regular_code(filename, self.font_state.name,
+					self.font_state.width, self.font_state.height, self.font_state.first, self.font_state.last,
+					export_config.vertical, self.font_state.glyphs)
+				with open(filename + '.h', 'wt') as output:
+					output.write(source)
 	
 	def on_quit(self):
 		#TODO first check if save needed!
@@ -468,90 +551,8 @@ class FontEditor(ttk.Frame):
 		#TODO fifth
 		pass
 
-#TODO remove all CLI args when UI finished	
-def create(name: str, font_width: int, font_height: int, first_char: str, last_char: str):
-	# Create FontPersistence
-	font_state = FontPersistence(name, font_width, font_height, ord(first_char), ord(last_char))
+if __name__ == '__main__':
 	# Create Window
 	root = Tk()
-	# root.wm_title(f'Editor for font `{font_state.name}` ({font_state.width}x{font_state.height})')
-	app = FontEditor(root, font_state)
-	root.mainloop()
-
-def update():
-	# Create Window
-	root = Tk()
-	# root.wm_title(f'Editor for font `{font_state.name}` ({font_state.width}x{font_state.height})')
 	app = FontEditor(root)
 	root.mainloop()
-
-def export(name: str, vertical: bool, fastarduino: bool, filename: str):
-	# Read FontPersistence from storage
-	with open(name + '.font', 'rb') as input:
-		font_state: FontPersistence = pickle.load(input)
-	# Check all characters have been defined in font state
-	for c, glyph in font_state.glyphs.items():
-		if not glyph:
-			print(f"Glyph for character '{c}' is undefined!")
-			sys.exit(1)
-	if fastarduino:
-		# Generate header file content
-		header = generate_fastarduino_header(filename, font_state.name, 
-			font_state.width, font_state.height,
-			font_state.first, font_state.last, vertical)
-		with open(filename + '.h', 'wt') as output:
-			output.write(header)
-		# Generate source file content
-		source = generate_fastarduino_source(filename, font_state.name,
-			font_state.width, font_state.height, font_state.first, font_state.last,
-			vertical, font_state.glyphs)
-		with open(filename + '.cpp', 'wt') as output:
-			output.write(source)
-	else:
-		# Generate regular source code (for specific program use)
-		source = generate_regular_code(filename, font_state.name,
-			font_state.width, font_state.height, font_state.first, font_state.last,
-		vertical, font_state.glyphs)
-		with open(filename + '.h', 'wt') as output:
-			output.write(source)
-
-class FontSizeAction(Action):
-	def __init__(self, **kwargs):
-		super().__init__(**kwargs)
-		self.matcher = re.compile('([1-9][0-9]*)x([1-9][0-9]*)')
-	
-	def __call__(self, parser: ArgumentParser, namespace: Namespace, values: str, option_string = None):
-		match = self.matcher.match(values)
-		if not match:
-			parser.error('--font-size must have format WxH with both W and H integral values')
-		setattr(namespace, 'font_width', int(match.group(1)))
-		setattr(namespace, 'font_height', int(match.group(2)))
-
-if __name__ == '__main__':
-	# --name NAME --font-size WxH --vertical --first A --last Z
-	parser = ArgumentParser(description='Font editor for FastArduino Font subclasses')
-	group = parser.add_subparsers(dest='action', required=True)
-
-	group_create = group.add_parser('create', help='create help')
-	group_create.add_argument('--name', type=str, required=True, help='Font name (Font subclass name)')
-	group_create.add_argument('--font-size', type=str, action=FontSizeAction, required=True, help='Font size in pixels, represented as WxH')
-	group_create.add_argument('--first-char', type=lambda x: x if x.isalpha() and len(x) == 1 else False, required=True, help='Font first supported character')
-	group_create.add_argument('--last-char', type=lambda x: x if x.isalpha() and len(x) == 1 else False, required=True, help='Font last supported character')
-	
-	group_work = group.add_parser('update', help='update help')
-	
-	group_export = group.add_parser('export', help='export help')
-	group_export.add_argument('--name', type=str, required=True, help='Font name (Font subclass name)')
-	group_export.add_argument('--vertical', action='store_true', help='Produce vertical font')
-	group_export.add_argument('--fastarduino', action='store_true', help='Generated files are for inclusion to FastArduino library')
-	group_export.add_argument('--filename', type=str, required=True, help='Root name fo C++ header and source files to generate for the font')
-	
-	args = parser.parse_args()
-	if args.action == 'create':
-		create(args.name, args.font_width, args.font_height, args.first_char, args.last_char)
-	elif args.action == 'update':
-		update()
-	elif args.action == 'export':
-		export(args.name, args.vertical, args.fastarduino, args.filename)
-	else:
-		print("Impossible arguments situation! You must select create, update or export commands!")
