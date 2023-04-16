@@ -48,7 +48,6 @@ def pass_events_to_parent(widget: Widget, parent: Widget, events: list[str]):
 	for event in events:
 		widget.bind(event, lambda e: None)
 
-#TODO use dataclass if possible
 # Class embedding font state for persistence
 class FontPersistence:
 	def __init__(self, name:str, width: int, height: int, first: int, last: int):
@@ -63,6 +62,7 @@ class FontPersistence:
 class NewFontDialog(Toplevel):
 	def __init__(self, master: Misc):
 		super().__init__(master=master)
+		self.title("Font Settings")
 		self.result: FontPersistence | None = None
 		# These variables will get user input
 		self.width = IntVar()
@@ -114,6 +114,7 @@ class ExportConfig:
 class ExportDialog(Toplevel):
 	def __init__(self, master: Misc):
 		super().__init__(master=master)
+		self.title("Export Settings")
 		self.result: ExportConfig | None = None
 		# These variables will get user input
 		self.fastarduino = BooleanVar()
@@ -147,7 +148,11 @@ class ExportDialog(Toplevel):
 			self.directory.set(directory)
 	
 	def on_ok(self):
-		#TODO check that directory is selected
+		# Check that directory is selected
+		if not self.directory.get():
+			messagebox.showwarning(title="Warning", 
+				message="Please choose a directory to which source code files will be saved.")
+			return
 		self.result = ExportConfig(fastarduino=self.fastarduino.get(), vertical=self.vertical.get(),
 			directory=self.directory.get())
 		self.grab_release()
