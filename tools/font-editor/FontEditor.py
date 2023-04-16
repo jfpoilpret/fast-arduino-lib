@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 #
-#   Copyright 2016-2022 Jean-Francois Poilpret
+#   Copyright 2016-2023 Jean-Francois Poilpret
 #
 #   Licensed under the Apache License, Version 2.0 (the "License");
 #   you may not use this file except in compliance with the License.
@@ -21,14 +21,15 @@
 
 #TODO add menu/buttons for actions (replace CLI args)
 # - new font with dialog (first & last char, size, name)
-# - open font (for update) dialog to find in directory
 # - export font: dialog options (vertical), directory save
 # - copy/paste character glyph
 # - undo glyph change (before save)
 # - extend/reduce font range
 
+#TODO keep "dirty" status fo font at all times
+
 #TODO Generate horizontal fonts too
-#TODO Refactoring to make code better and easier to read and maintain
+#TODO Refactoring to make code better and easier to read and maintain (use Tk vars?)
 
 from argparse import *
 from os import system
@@ -37,7 +38,7 @@ import re
 import sys
 
 from tkinter import *
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 from tkinter import ttk
 
 from font_export import generate_fastarduino_header, generate_fastarduino_source, generate_regular_code
@@ -59,6 +60,51 @@ class FontPersistence:
 		self.first = first
 		self.last = last
 		self.glyphs = {chr(c): [] for c in range(first, last + 1)}
+
+# Dialog displayed at creation fo a new font
+class NewFontDialog(Toplevel):
+	def __init__(self, master: Misc):
+		super().__init__(master=master)
+		self.result: FontPersistence | None = None
+		# These variables will get user input
+		self.width = IntVar()
+		self.height = IntVar()
+		self.first = StringVar()
+		self.last = StringVar()
+		# Add UI: font width and height, 1st char, last char
+		#TODO add validation on each entry widget!
+		ttk.Label(master=self, text="Width:").grid(row=1, column=1, padx=2, pady=2, sticky="W")
+		ttk.Entry(master=self, textvariable=self.width).grid(row=1, column=2, padx=2, pady=2)
+		ttk.Label(master=self, text="Height:").grid(row=2, column=1, padx=2, pady=2, sticky="W")
+		ttk.Entry(master=self, textvariable=self.height).grid(row=2, column=2, padx=2, pady=2)
+		ttk.Label(master=self, text="First letter:").grid(row=3, column=1, padx=2, pady=2, sticky="W")
+		ttk.Entry(master=self, textvariable=self.first).grid(row=3, column=2, padx=2, pady=2)
+		ttk.Label(master=self, text="Last letter:").grid(row=4, column=1, padx=2, pady=2, sticky="W")
+		ttk.Entry(master=self, textvariable=self.last).grid(row=4, column=2, padx=2, pady=2)
+		buttons = ttk.Frame(master=self)
+		ttk.Button(master=buttons, text="Cancel", command=self.on_cancel).grid(row=5, column=1, padx=2, pady=2)
+		ttk.Button(master=buttons, text="OK", command=self.on_ok).grid(row=5, column=2, padx=2, pady=2)
+		buttons.grid(row=5, column=1, columnspan=2)
+
+		self.protocol(name="WM_DELETE_WINDOW", func=self.on_cancel)
+		self.transient(master=master)
+		self.wait_visibility()
+		self.grab_set()
+		self.wait_window()
+
+	def get_font_state(self) -> FontPersistence | None:
+		return self.result
+	
+	def on_ok(self):
+		#TODO check input
+		self.result = FontPersistence(name=None, width=self.width.get(), height=self.height.get(),
+			first=ord(self.first.get()), last=ord(self.last.get()))
+		self.grab_release()
+		self.destroy()
+
+	def on_cancel(self):
+		self.grab_release()
+		self.destroy()
 
 # Pixel widget (just black or white rectangle)
 class Pixel(ttk.Label):
@@ -143,7 +189,6 @@ class GlyphEditor(ttk.Frame):
 		pixel.set_value(self.default_pixel_value)
 
 	def on_pixel_move(self, event: Event):
-		# print(f'on_pixel_move ({event.x},{event.y})')
 		pixel: Pixel = event.widget
 		pixel = self.find_pixel(event.x + pixel.winfo_x(), event.y + pixel.winfo_y())
 		if pixel:
@@ -252,9 +297,13 @@ class ThumbnailPanel(Frame):
 			self.thumbnails[c].set_glyph(glyph=glyph)
 
 class FontEditor(ttk.Frame):
-	def __init__(self, master: Misc, font_state: FontPersistence):
+	def __init__(self, master: Tk):
 		super().__init__(master, padding=(4, 4, 4, 4))
+		master.option_add("*tearOff", False)
+		master.title("Editor for FastArduino fonts")
+		master.minsize(width=300, height=200)
 
+		self.filename: str = None
 		self.font_state: FontPersistence = None
 		self.previous_char: str = None
 		self.thumbnails: ThumbnailPanel = None
@@ -290,10 +339,9 @@ class FontEditor(ttk.Frame):
 		master.columnconfigure(0, weight=1)
 		master.rowconfigure(0, weight=1)
 
-		# Add UI elements here
-		self.set_font(font_state=font_state)
-
 	def set_font(self, font_state: FontPersistence):
+		self.master.title(f'Editor for font `{font_state.name}` ({font_state.width}x{font_state.height})')
+		# self.master.wm_title(f'Editor for font `{font_state.name}` ({font_state.width}x{font_state.height})')
 		self.font_state = font_state
 		self.previous_char: str = None
 
@@ -346,32 +394,57 @@ class FontEditor(ttk.Frame):
 		self.click_thumbnail(thumbnail=thumbnail)
 
 	def on_new(self):
-		pass
+		#TODO check if save needed!
+		# Open dialog to select font size and font range
+		dialog = NewFontDialog(master=self.master)
+		# Get new font info (or None if dialog cancelled)
+		font_state = dialog.get_font_state()
+		if font_state:
+			self.set_font(font_state)
 	
 	def on_open(self):
-		#TODO first check if save needed!
+		#TODO check if save needed!
 		filename = filedialog.askopenfilename(
-			title="Selct Font File to Open" ,filetypes=[("Font files", "*.font")])
-		print(f"filename={filename}")
+			title="Select Font File to Open" ,filetypes=[("Font files", "*.font")])
 		if filename:
-			#TODO load file and update UI
-			pass
+			self.filename = filename
+			# Read FontPersistence from storage and update UI
+			with open(filename, 'rb') as input:
+				font_state: FontPersistence = pickle.load(input)
+				self.set_font(font_state)
 	
 	def on_close(self):
+		#TODO check if save needed!
+		self.filename = None
 		pass
 	
 	def on_save(self):
-		#TOD improve if no name for font?
+		# Check if this is a new font (need to use save dialog)
+		if not self.filename:
+			# Open save file dialog
+			filename = filedialog.asksaveasfilename(
+				title="Save Font as", filetypes=[("Font files", "*.font")])
+			# Update font_state name according to selected filename
+			if not filename:
+				#FIXME what to do here?
+				return
+			matcher = re.search(r"([^/\\]*)\.font$", filename)
+			if not matcher:
+				#FIXME what to do here?
+				return
+			self.filename = filename
+			self.font_state.name = matcher.group(1)
 		# Update glyph of current character
 		if self.previous_char:
 			glyph = self.glyph_editor.get_glyph_from_pixels()
 			self.font_state.glyphs[self.previous_char] = glyph
 		self.thumbnails.update_all(font_state=self.font_state)
 		# Save font state to storage
-		with open(self.font_state.name + '.font', 'wb') as output:
+		with open(self.filename, 'wb') as output:
 			pickle.dump(self.font_state, file = output)
 
 	def on_export(self):
+		#TODO second
 		pass
 	
 	def on_quit(self):
@@ -380,39 +453,36 @@ class FontEditor(ttk.Frame):
 		pass
 	
 	def on_copy(self):
-		#TODO second
+		#TODO third
 		pass
 	
 	def on_paste(self):
-		#TODO second
+		#TODO third
 		pass
 	
 	def on_undo(self):
-		#TODO second
+		#TODO fourth
 		pass
 
 	def on_change_font_range(self):
+		#TODO fifth
 		pass
-	
+
+#TODO remove all CLI args when UI finished	
 def create(name: str, font_width: int, font_height: int, first_char: str, last_char: str):
 	# Create FontPersistence
 	font_state = FontPersistence(name, font_width, font_height, ord(first_char), ord(last_char))
 	# Create Window
 	root = Tk()
-	root.wm_title(f'Editor for font `{font_state.name}` ({font_state.width}x{font_state.height})')
-	root.option_add("*tearOff", False)
+	# root.wm_title(f'Editor for font `{font_state.name}` ({font_state.width}x{font_state.height})')
 	app = FontEditor(root, font_state)
 	root.mainloop()
 
-def update(name: str):
-	# Read FontPersistence from storage
-	with open(name + '.font', 'rb') as input:
-		font_state: FontPersistence = pickle.load(input)
+def update():
 	# Create Window
 	root = Tk()
-	root.wm_title(f'Editor for font `{font_state.name}` ({font_state.width}x{font_state.height})')
-	root.option_add("*tearOff", False)
-	app = FontEditor(root, font_state)
+	# root.wm_title(f'Editor for font `{font_state.name}` ({font_state.width}x{font_state.height})')
+	app = FontEditor(root)
 	root.mainloop()
 
 def export(name: str, vertical: bool, fastarduino: bool, filename: str):
@@ -447,8 +517,8 @@ def export(name: str, vertical: bool, fastarduino: bool, filename: str):
 
 class FontSizeAction(Action):
 	def __init__(self, **kwargs):
-		self.matcher = re.compile('([1-9][0-9]*)x([1-9][0-9]*)')
 		super().__init__(**kwargs)
+		self.matcher = re.compile('([1-9][0-9]*)x([1-9][0-9]*)')
 	
 	def __call__(self, parser: ArgumentParser, namespace: Namespace, values: str, option_string = None):
 		match = self.matcher.match(values)
@@ -469,7 +539,6 @@ if __name__ == '__main__':
 	group_create.add_argument('--last-char', type=lambda x: x if x.isalpha() and len(x) == 1 else False, required=True, help='Font last supported character')
 	
 	group_work = group.add_parser('update', help='update help')
-	group_work.add_argument('--name', type=str, required=True, help='Font name (Font subclass name)')
 	
 	group_export = group.add_parser('export', help='export help')
 	group_export.add_argument('--name', type=str, required=True, help='Font name (Font subclass name)')
@@ -481,7 +550,7 @@ if __name__ == '__main__':
 	if args.action == 'create':
 		create(args.name, args.font_width, args.font_height, args.first_char, args.last_char)
 	elif args.action == 'update':
-		update(args.name)
+		update()
 	elif args.action == 'export':
 		export(args.name, args.vertical, args.fastarduino, args.filename)
 	else:
