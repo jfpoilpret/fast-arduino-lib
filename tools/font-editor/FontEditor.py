@@ -37,6 +37,7 @@ import re
 import sys
 
 from tkinter import *
+from tkinter import filedialog
 from tkinter import ttk
 
 from font_export import generate_fastarduino_header, generate_fastarduino_source, generate_regular_code
@@ -180,8 +181,6 @@ class ThumbnailPanel(Frame):
 class FontEditor(ttk.Frame):
 	def __init__(self, master: Misc, font_state: FontPersistence):
 		super().__init__(master, padding=(4, 4, 4, 4))
-		self.font_state = font_state
-		self.previous_char = None
 
 		# Add menu bar here
 		#TODO Add accelerators and underlines
@@ -213,7 +212,14 @@ class FontEditor(ttk.Frame):
 		self.grid(column=0, row=0, sticky=(N))
 		master.columnconfigure(0, weight=1)
 		master.rowconfigure(0, weight=1)
-		# Add  thumbnail pane
+
+		self.set_font(font_state=font_state)
+
+	def set_font(self, font_state: FontPersistence):
+		self.font_state = font_state
+		self.previous_char = None
+
+		# Add thumbnail pane TODO rework (use update UI method somehow)
 		self.thumbnails = ThumbnailPanel(master=self, font_state=font_state)
 		self.thumbnails.grid(row=1, column=1, padx=3, pady=3)
 
@@ -238,7 +244,6 @@ class FontEditor(ttk.Frame):
 				pass_events_to_parent(pixel, self.pixmap_editor, ["<Button-1>", "<B1-Motion>"])
 				row.append(pixel)
 			self.pixels.append(row)
-		
 		# select 1st thumbnail
 		self.select_first()
 
@@ -326,8 +331,13 @@ class FontEditor(ttk.Frame):
 		pass
 	
 	def on_open(self):
-		#TODO first
-		pass
+		#TODO first check if save needed!
+		filename = filedialog.askopenfilename(
+			title="Selct Font File to Open" ,filetypes=[("Font files", "*.font")])
+		print(f"filename={filename}")
+		if filename:
+			#TODO load file and update UI
+			pass
 	
 	def on_close(self):
 		pass
@@ -347,7 +357,8 @@ class FontEditor(ttk.Frame):
 		pass
 	
 	def on_quit(self):
-		#TODO second
+		#TODO first check if save needed!
+		self.master.destroy()
 		pass
 	
 	def on_copy(self):
