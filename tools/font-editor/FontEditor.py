@@ -23,6 +23,9 @@
 # - new font with dialog (first & last char, size, name)
 # - open font (for update) dialog to find in directory
 # - export font: dialog options (vertical), directory save
+# - copy/paste character glyph
+# - undo glyph change (before save)
+# - extend/reduce font range
 
 #TODO Generate horizontal fonts too
 #TODO Refactoring to make code better and easier to read and maintain
@@ -179,13 +182,40 @@ class FontEditor(ttk.Frame):
 		super().__init__(master, padding=(4, 4, 4, 4))
 		self.font_state = font_state
 		self.previous_char = None
+
+		# Add menu bar here
+		#TODO Add accelerators and underlines
+		menubar = Menu(master)
+		master['menu'] = menubar
+		menu_file = Menu(menubar)
+		menu_edit = Menu(menubar)
+		menubar.add_cascade(menu=menu_file, label="File")
+		menubar.add_cascade(menu=menu_edit, label="Edit")
+
+		menu_file.add_command(label="New Font...", command=self.on_new)
+		menu_file.add_command(label="Open Font...", command=self.on_open)
+		menu_file.add_separator()
+		menu_file.add_command(label="Save", command=self.on_save)
+		menu_file.add_command(label="Export...", command=self.on_export)
+		menu_file.add_separator()
+		menu_file.add_command(label="Close Font", command=self.on_close)
+		menu_file.add_separator()
+		menu_file.add_command(label="Quit", command=self.on_quit)
+
+		menu_edit.add_command(label="Undo", command=self.on_undo)
+		menu_edit.add_separator()
+		menu_edit.add_command(label="Copy", command=self.on_copy)
+		menu_edit.add_command(label="Paste", command=self.on_paste)
+		menu_edit.add_separator()
+		menu_edit.add_command(label="Change Font Range...", command=self.on_change_font_range)
+
+		# Add UI elements here
 		self.grid(column=0, row=0, sticky=(N))
 		master.columnconfigure(0, weight=1)
 		master.rowconfigure(0, weight=1)
-		ttk.Button(self, text='Save', command=self.on_save).grid(row=1, column=1, padx=3, pady=3)
 		# Add  thumbnail pane
 		self.thumbnails = ThumbnailPanel(master=self, font_state=font_state)
-		self.thumbnails.grid(row=2, column=1, padx=3, pady=3)
+		self.thumbnails.grid(row=1, column=1, padx=3, pady=3)
 
 		# Panel for pixmap editing
 		#TODO refactor to its own class, much cleaner
@@ -193,7 +223,7 @@ class FontEditor(ttk.Frame):
 		Pixel.BLACK = PhotoImage(file='black.png')
 		size = Pixel.WHITE.width() + 1
 		self.pixmap_editor = ttk.Frame(self)
-		self.pixmap_editor.grid(row=2, column=2, padx=3, pady=3)
+		self.pixmap_editor.grid(row=1, column=2, padx=3, pady=3)
 		self.pixmap_editor.configure(width=size * self.font_state.width, height=size * self.font_state.height)
 		self.pixmap_editor.bind('<Button-1>', self.on_pixel_click)
 		self.pixmap_editor.bind('<B1-Motion>', self.on_pixel_move)
@@ -292,7 +322,18 @@ class FontEditor(ttk.Frame):
 		if pixel:
 			pixel.set_value(self.default_pixel_value)
 
+	def on_new(self):
+		pass
+	
+	def on_open(self):
+		#TODO first
+		pass
+	
+	def on_close(self):
+		pass
+	
 	def on_save(self):
+		#TOD improve if no name for font?
 		# Update glyph of current character
 		if self.previous_char:
 			glyph = self.get_glyph_from_pixels()
@@ -302,12 +343,35 @@ class FontEditor(ttk.Frame):
 		with open(self.font_state.name + '.font', 'wb') as output:
 			pickle.dump(self.font_state, file = output)
 
+	def on_export(self):
+		pass
+	
+	def on_quit(self):
+		#TODO second
+		pass
+	
+	def on_copy(self):
+		#TODO second
+		pass
+	
+	def on_paste(self):
+		#TODO second
+		pass
+	
+	def on_undo(self):
+		#TODO second
+		pass
+
+	def on_change_font_range(self):
+		pass
+	
 def create(name: str, font_width: int, font_height: int, first_char: str, last_char: str):
 	# Create FontPersistence
 	font_state = FontPersistence(name, font_width, font_height, ord(first_char), ord(last_char))
 	# Create Window
 	root = Tk()
 	root.wm_title(f'Editor for font `{font_state.name}` ({font_state.width}x{font_state.height})')
+	root.option_add("*tearOff", False)
 	app = FontEditor(root, font_state)
 	root.mainloop()
 
@@ -318,6 +382,7 @@ def update(name: str):
 	# Create Window
 	root = Tk()
 	root.wm_title(f'Editor for font `{font_state.name}` ({font_state.width}x{font_state.height})')
+	root.option_add("*tearOff", False)
 	app = FontEditor(root, font_state)
 	root.mainloop()
 
