@@ -76,6 +76,79 @@ class Pixel(ttk.Label):
 		else:
 			self.configure(image=Pixel.WHITE)
 
+# Pane for editing one glyph
+class GlyphEditor(ttk.Frame):
+	def __init__(self, master: Misc, width: int, height: int) -> None:
+		super().__init__(master=master)
+		self.width = width
+		self.height = height
+		Pixel.WHITE = PhotoImage(file='white.png')
+		Pixel.BLACK = PhotoImage(file='black.png')
+		size = Pixel.WHITE.width() + 1
+		self.configure(width=size * width, height=size * height)
+		self.bind('<Button-1>', self.on_pixel_click)
+		self.bind('<B1-Motion>', self.on_pixel_move)
+		self.pixels: list[list[Pixel]] = []
+		# Initialize all image labels
+		for y in range(height):
+			row = []
+			for x in range(width):
+				pixel = Pixel(self, value=False, borderwidth=1)
+				pixel.place(x=x * size, y=y * size)
+				# Ensure events pass through from Pixel instances to parent Frame
+				pass_events_to_parent(pixel, self, ["<Button-1>", "<B1-Motion>"])
+				row.append(pixel)
+			self.pixels.append(row)
+
+	def get_glyph_from_pixels(self):
+		glyph = []
+		for pixels_row in self.pixels:
+			row = []
+			for pixel in pixels_row:
+				row.append(pixel.get_value())
+			glyph.append(row)
+		return glyph
+
+	def update_pixels_from_glyph(self, glyph):
+		for y in range(self.height):
+			glyph_row = glyph[y]
+			pixels_row = self.pixels[y]
+			for x in range(self.width):
+				glyph_pixel: bool = glyph_row[x]
+				pixel: Pixel = pixels_row[x]
+				pixel.set_value(glyph_pixel)
+
+	def clear_pixels(self):
+		for y in range(self.height):
+			pixels_row = self.pixels[y]
+			for x in range(self.width):
+				pixel: Pixel = pixels_row[x]
+				pixel.set_value(False)
+	
+	def find_pixel(self, x: int, y: int) -> Pixel:
+		size = Pixel.WHITE.width() + 1
+		row = int(y / size)
+		col = int(x / size)
+		# row or col may be out of range when dragging ouside the pane
+		if 0 <= row < self.height and 0 <= col < self.width:
+			return self.pixels[row][col]
+		else:
+			return None
+
+	def on_pixel_click(self, event: Event):
+		pixel: Pixel = event.widget
+		pixel = self.find_pixel(event.x + pixel.winfo_x(), event.y + pixel.winfo_y())
+		# Invert image W->B, B->W
+		self.default_pixel_value = not pixel.get_value()
+		pixel.set_value(self.default_pixel_value)
+
+	def on_pixel_move(self, event: Event):
+		# print(f'on_pixel_move ({event.x},{event.y})')
+		pixel: Pixel = event.widget
+		pixel = self.find_pixel(event.x + pixel.winfo_x(), event.y + pixel.winfo_y())
+		if pixel:
+			pixel.set_value(self.default_pixel_value)
+
 # Widget reprenting the thumbnail for a given font character
 class CharacterThumbnail(Frame):
 	PIX_SIZE = 2
@@ -224,26 +297,10 @@ class FontEditor(ttk.Frame):
 		self.thumbnails.grid(row=1, column=1, padx=3, pady=3)
 
 		# Panel for pixmap editing
-		#TODO refactor to its own class, much cleaner
-		Pixel.WHITE = PhotoImage(file='white.png')
-		Pixel.BLACK = PhotoImage(file='black.png')
-		size = Pixel.WHITE.width() + 1
-		self.pixmap_editor = ttk.Frame(self)
+		self.pixmap_editor = GlyphEditor(
+			master=self, width=self.font_state.width, height=self.font_state.height)
 		self.pixmap_editor.grid(row=1, column=2, padx=3, pady=3)
-		self.pixmap_editor.configure(width=size * self.font_state.width, height=size * self.font_state.height)
-		self.pixmap_editor.bind('<Button-1>', self.on_pixel_click)
-		self.pixmap_editor.bind('<B1-Motion>', self.on_pixel_move)
-		self.pixels = []
-		# Initialize all image labels
-		for y in range(self.font_state.height):
-			row = []
-			for x in range(self.font_state.width):
-				pixel = Pixel(self.pixmap_editor, value=False, borderwidth=1)
-				pixel.place(x=x * size, y=y * size)
-				# Ensure events pass through from Pixel instances to parent Frame
-				pass_events_to_parent(pixel, self.pixmap_editor, ["<Button-1>", "<B1-Motion>"])
-				row.append(pixel)
-			self.pixels.append(row)
+
 		# select 1st thumbnail
 		self.select_first()
 
@@ -251,45 +308,10 @@ class FontEditor(ttk.Frame):
 		# select 1st thumbnail
 		self.click_thumbnail(self.thumbnails.thumbnails[chr(self.font_state.first)])
 
-	def get_glyph_from_pixels(self):
-		glyph = []
-		for pixels_row in self.pixels:
-			row = []
-			for pixel in pixels_row:
-				row.append(pixel.get_value())
-			glyph.append(row)
-		return glyph
-
-	def update_pixels_from_glyph(self, glyph):
-		for y in range(self.font_state.height):
-			glyph_row = glyph[y]
-			pixels_row = self.pixels[y]
-			for x in range(self.font_state.width):
-				glyph_pixel: bool = glyph_row[x]
-				pixel: Pixel = pixels_row[x]
-				pixel.set_value(glyph_pixel)
-
-	def clear_pixels(self):
-		for y in range(self.font_state.height):
-			pixels_row = self.pixels[y]
-			for x in range(self.font_state.width):
-				pixel: Pixel = pixels_row[x]
-				pixel.set_value(False)
-	
-	def find_pixel(self, x: int, y: int) -> Pixel:
-		size = Pixel.WHITE.width() + 1
-		row = int(y / size)
-		col = int(x / size)
-		# row or col may be out of range when dragging ouside the pane
-		if 0 <= row < self.font_state.height and 0 <= col < self.font_state.width:
-			return self.pixels[row][col]
-		else:
-			return None
-
 	def click_thumbnail(self, thumbnail: CharacterThumbnail) -> None:
 		# Update font_state with previous character
 		if self.previous_char:
-			glyph = self.get_glyph_from_pixels()
+			glyph = self.pixmap_editor.get_glyph_from_pixels()
 			self.font_state.glyphs[self.previous_char] = glyph
 		# Highlight clicked thumbnail
 		self.previous_char = thumbnail.get_character()
@@ -297,10 +319,10 @@ class FontEditor(ttk.Frame):
 		# Load pixmap of new current character from font_state
 		glyph = self.font_state.glyphs[self.previous_char]
 		if glyph:
-			self.update_pixels_from_glyph(glyph)
+			self.pixmap_editor.update_pixels_from_glyph(glyph)
 		else:
 			# no glyph yet, set all white pixels
-			self.clear_pixels()
+			self.pixmap_editor.clear_pixels()
 
 	def on_thumbnail_click(self, event: Event) -> None:
 		# Find clicked thumbnail
@@ -311,21 +333,6 @@ class FontEditor(ttk.Frame):
 			target: Widget = event.widget
 			thumbnail = target.master
 		self.click_thumbnail(thumbnail=thumbnail)
-
-	def on_pixel_click(self, event: Event):
-		# print(f'on_pixel_click ({event.x},{event.y})')
-		pixel: Pixel = event.widget
-		pixel = self.find_pixel(event.x + pixel.winfo_x(), event.y + pixel.winfo_y())
-		# Invert image W->B, B->W
-		self.default_pixel_value = not pixel.get_value()
-		pixel.set_value(self.default_pixel_value)
-
-	def on_pixel_move(self, event: Event):
-		# print(f'on_pixel_move ({event.x},{event.y})')
-		pixel: Pixel = event.widget
-		pixel = self.find_pixel(event.x + pixel.winfo_x(), event.y + pixel.winfo_y())
-		if pixel:
-			pixel.set_value(self.default_pixel_value)
 
 	def on_new(self):
 		pass
@@ -346,7 +353,7 @@ class FontEditor(ttk.Frame):
 		#TOD improve if no name for font?
 		# Update glyph of current character
 		if self.previous_char:
-			glyph = self.get_glyph_from_pixels()
+			glyph = self.pixmap_editor.get_glyph_from_pixels()
 			self.font_state.glyphs[self.previous_char] = glyph
 		self.thumbnails.update_all(font_state=self.font_state)
 		# Save font state to storage
