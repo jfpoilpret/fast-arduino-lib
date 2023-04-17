@@ -19,12 +19,12 @@
 # This python mini-application allows creation of display fonts and creates CPP files
 # (header & source) from created fonts.
 
+#TODO auto update thumbnails when changing to another thumbnail
+
 #TODO implement menu items
 # - copy/paste character glyph
-# - undo glyph change (before save)
+# - revert glyph change (before save)
 # - extend/reduce font range
-
-#TODO keep "dirty" status fo font at all times
 
 #TODO Generate horizontal fonts too
 #TODO Refactoring to make code better and easier to read and maintain (use Tk vars?)
@@ -65,20 +65,24 @@ class NewFontDialog(Toplevel):
 		self.title("Font Settings")
 		self.result: FontPersistence | None = None
 		# These variables will get user input
-		self.width = IntVar()
-		self.height = IntVar()
+		self.width = IntVar(value=8)
+		self.height = IntVar(value=8)
 		self.first = StringVar()
 		self.last = StringVar()
 		# Add UI: font width and height, 1st char, last char
-		#TODO add validation on each entry widget!
 		ttk.Label(master=self, text="Width:").grid(row=1, column=1, padx=2, pady=2, sticky="W")
-		ttk.Entry(master=self, textvariable=self.width).grid(row=1, column=2, padx=2, pady=2)
+		focus_entry = ttk.Spinbox(master=self, from_=4, to=64, increment=1, textvariable=self.width)
+		focus_entry.grid(row=1, column=2, padx=2, pady=2)
+		focus_entry.focus()
 		ttk.Label(master=self, text="Height:").grid(row=2, column=1, padx=2, pady=2, sticky="W")
-		ttk.Entry(master=self, textvariable=self.height).grid(row=2, column=2, padx=2, pady=2)
+		ttk.Spinbox(master=self, from_=4, to=64, increment=1, textvariable=self.height).grid(
+			row=2, column=2, padx=2, pady=2)
 		ttk.Label(master=self, text="First letter:").grid(row=3, column=1, padx=2, pady=2, sticky="W")
-		ttk.Entry(master=self, textvariable=self.first).grid(row=3, column=2, padx=2, pady=2)
+		ttk.Spinbox(master=self, values=[chr(c) for c in range(32, 127)], textvariable=self.first).grid(
+			row=3, column=2, padx=2, pady=2)
 		ttk.Label(master=self, text="Last letter:").grid(row=4, column=1, padx=2, pady=2, sticky="W")
-		ttk.Entry(master=self, textvariable=self.last).grid(row=4, column=2, padx=2, pady=2)
+		ttk.Spinbox(master=self, values=[chr(c) for c in range(32, 127)], textvariable=self.last).grid(
+			row=4, column=2, padx=2, pady=2)
 		buttons = ttk.Frame(master=self)
 		ttk.Button(master=buttons, text="Cancel", command=self.on_cancel).grid(row=5, column=1, padx=2, pady=2)
 		ttk.Button(master=buttons, text="OK", command=self.on_ok).grid(row=5, column=2, padx=2, pady=2)
@@ -94,9 +98,14 @@ class NewFontDialog(Toplevel):
 		return self.result
 	
 	def on_ok(self):
-		#TODO check input
+		first = ord(self.first.get())
+		last = ord(self.last.get())
+		if last < first:
+			temp = first
+			first = last
+			last = temp
 		self.result = FontPersistence(name=None, width=self.width.get(), height=self.height.get(),
-			first=ord(self.first.get()), last=ord(self.last.get()))
+			first=first, last=last)
 		self.grab_release()
 		self.destroy()
 
@@ -315,7 +324,6 @@ class CharacterThumbnail(Frame):
 		self.glyph_image.put(data=data)
 
 # Panel containing all thumbnails for the current font
-#TODO limit grid of thumbnails and add vertical scrollbar
 class ThumbnailPanel(Frame):
 	MAX_GRIDX = 8
 
@@ -364,6 +372,7 @@ class FontEditor(ttk.Frame):
 		self.previous_char: str = None
 		self.thumbnails: ThumbnailPanel = None
 		self.glyph_editor: GlyphEditor = None
+		self.is_dirty: bool = False
 
 		# Add menu bar here
 		#TODO Add accelerators and underlines
@@ -423,11 +432,34 @@ class FontEditor(ttk.Frame):
 		# select 1st thumbnail
 		self.click_thumbnail(self.thumbnails.thumbnails[chr(self.font_state.first)])
 
+	def update_is_dirty(self, update_glyph: bool):
+		glyph = self.glyph_editor.get_glyph_from_pixels()
+		if glyph != self.font_state.glyphs[self.previous_char]:
+			self.is_dirty = True
+			#TODO show font is dirty (in title?)
+			if update_glyph:
+				self.font_state.glyphs[self.previous_char] = glyph
+	
+	def check_dirty(self) -> bool:
+		if not self.is_dirty:
+			return True
+		result = messagebox.askyesnocancel(title="", 
+			message=f"Font `{self.font_state.name}` has changed.\nDo you want to save it before proceeding?")
+		if result == True:
+			# Save font
+			self.on_save()
+			# Continue normally with calling action
+			return True
+		if result == False:
+			# Do not save font & continue normally with calling action
+			return True
+		# result == None: user cancelled action
+		return False
+	
 	def click_thumbnail(self, thumbnail: CharacterThumbnail) -> None:
 		# Update font_state with previous character
 		if self.previous_char:
-			glyph = self.glyph_editor.get_glyph_from_pixels()
-			self.font_state.glyphs[self.previous_char] = glyph
+			self.update_is_dirty(update_glyph=True)
 		# Highlight clicked thumbnail
 		self.previous_char = thumbnail.get_character()
 		self.thumbnails.select_character(self.previous_char)
@@ -450,7 +482,8 @@ class FontEditor(ttk.Frame):
 		self.click_thumbnail(thumbnail=thumbnail)
 
 	def on_new(self):
-		#TODO check if save needed!
+		# Check if save needed
+		if not self.check_dirty(): return
 		# Open dialog to select font size and font range
 		dialog = NewFontDialog(master=self.master)
 		# Get new font info (or None if dialog cancelled)
@@ -460,7 +493,8 @@ class FontEditor(ttk.Frame):
 			self.set_font(font_state)
 	
 	def on_open(self):
-		#TODO check if save needed!
+		# Check if save needed
+		if not self.check_dirty(): return
 		filename = filedialog.askopenfilename(
 			title="Select Font File to Open" ,filetypes=[("Font files", "*.font")])
 		if filename:
@@ -471,7 +505,8 @@ class FontEditor(ttk.Frame):
 				self.set_font(font_state)
 	
 	def on_close(self):
-		#TODO check if save needed!
+		# Check if save needed
+		if not self.check_dirty(): return
 		self.filename = None
 		pass
 	
@@ -536,7 +571,8 @@ class FontEditor(ttk.Frame):
 					output.write(source)
 	
 	def on_quit(self):
-		#TODO first check if save needed!
+		# Check if save needed
+		if not self.check_dirty(): return
 		self.master.destroy()
 		pass
 	
