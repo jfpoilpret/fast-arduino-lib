@@ -19,15 +19,15 @@
 # This python mini-application allows creation of display fonts and creates CPP files
 # (header & source) from created fonts.
 
-#TODO auto update thumbnails when changing to another thumbnail
-
 #TODO implement menu items
-# - copy/paste character glyph
-# - revert glyph change (before save)
-# - extend/reduce font range
+# 30'	- copy/paste character glyph
+# 1h	- revert glyph change (before save)
+# 2h+	- extend/reduce font range
 
-#TODO Generate horizontal fonts too
-#TODO Refactoring to make code better and easier to read and maintain (use Tk vars?)
+#TODO 2h	UI fine-tune (menu accelerators...)
+#TODO 4h	Generate horizontal fonts too
+#TODO 2h	Refactoring to make code better and easier to read and maintain (use Tk vars?)
+#TODO 30'	Refactor to put exporting functions here too (only one source code file)
 
 from dataclasses import dataclass
 import pickle
@@ -364,7 +364,6 @@ class FontEditor(ttk.Frame):
 	def __init__(self, master: Tk):
 		super().__init__(master, padding=(4, 4, 4, 4))
 		master.option_add("*tearOff", False)
-		master.title("Editor for FastArduino fonts")
 		master.minsize(width=300, height=200)
 
 		self.filename: str = None
@@ -404,9 +403,19 @@ class FontEditor(ttk.Frame):
 		master.columnconfigure(0, weight=1)
 		master.rowconfigure(0, weight=1)
 
+		self.update_title()
+
+	def update_title(self):
+		state = self.font_state
+		if state:
+			title = f"Editor for font `{state.name}` ({state.width}x{state.height})"
+			if self.is_dirty:
+				title += " *"
+			self.master.title(title)
+		else:
+			self.master.title("Editor for FastArduino fonts")
+	
 	def set_font(self, font_state: FontPersistence):
-		self.master.title(f'Editor for font `{font_state.name}` ({font_state.width}x{font_state.height})')
-		# self.master.wm_title(f'Editor for font `{font_state.name}` ({font_state.width}x{font_state.height})')
 		self.font_state = font_state
 		self.previous_char: str = None
 
@@ -428,17 +437,19 @@ class FontEditor(ttk.Frame):
 		# select 1st thumbnail
 		self.select_first()
 
+		self.update_title()
+
 	def select_first(self):
 		# select 1st thumbnail
 		self.click_thumbnail(self.thumbnails.thumbnails[chr(self.font_state.first)])
 
-	def update_is_dirty(self, update_glyph: bool):
+	def update_is_dirty(self):
 		glyph = self.glyph_editor.get_glyph_from_pixels()
 		if glyph != self.font_state.glyphs[self.previous_char]:
 			self.is_dirty = True
-			#TODO show font is dirty (in title?)
-			if update_glyph:
-				self.font_state.glyphs[self.previous_char] = glyph
+			self.thumbnails.update_character(self.previous_char, glyph)
+			self.font_state.glyphs[self.previous_char] = glyph
+			self.update_title()
 	
 	def check_dirty(self) -> bool:
 		if not self.is_dirty:
@@ -459,7 +470,7 @@ class FontEditor(ttk.Frame):
 	def click_thumbnail(self, thumbnail: CharacterThumbnail) -> None:
 		# Update font_state with previous character
 		if self.previous_char:
-			self.update_is_dirty(update_glyph=True)
+			self.update_is_dirty()
 		# Highlight clicked thumbnail
 		self.previous_char = thumbnail.get_character()
 		self.thumbnails.select_character(self.previous_char)
