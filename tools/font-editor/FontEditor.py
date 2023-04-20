@@ -20,9 +20,8 @@
 # (header & source) from created fonts.
 
 #TODO implement menu items
-# 30'	- copy/paste character glyph
-# 1h	- revert glyph change (before save)
-# 2h+	- extend/reduce font range
+# 1h	- revert current glyph change (before save)
+# 2h	- extend/reduce font range
 
 #TODO 2h	UI fine-tune (menu accelerators...)
 #TODO 4h	Generate horizontal fonts too
@@ -211,7 +210,7 @@ class GlyphEditor(ttk.Frame):
 				row.append(pixel)
 			self.pixels.append(row)
 
-	def get_glyph_from_pixels(self):
+	def get_glyph_from_pixels(self) -> list[list[bool]]:
 		glyph = []
 		for pixels_row in self.pixels:
 			row = []
@@ -220,7 +219,7 @@ class GlyphEditor(ttk.Frame):
 			glyph.append(row)
 		return glyph
 
-	def update_pixels_from_glyph(self, glyph):
+	def update_pixels_from_glyph(self, glyph: list[list[bool]]):
 		for y in range(self.height):
 			glyph_row = glyph[y]
 			pixels_row = self.pixels[y]
@@ -372,6 +371,7 @@ class FontEditor(ttk.Frame):
 		self.thumbnails: ThumbnailPanel = None
 		self.glyph_editor: GlyphEditor = None
 		self.is_dirty: bool = False
+		self.clipboard: list[list[bool]] = None
 
 		# Add menu bar here
 		#TODO Add accelerators and underlines
@@ -588,19 +588,22 @@ class FontEditor(ttk.Frame):
 		pass
 	
 	def on_copy(self):
-		#TODO third
+		# Get current character glyph and copy it to self.clipboard (deep copy)
+		self.clipboard = self.glyph_editor.get_glyph_from_pixels()
 		pass
 	
 	def on_paste(self):
-		#TODO third
-		pass
+		if self.clipboard:
+			# Deep copy clipboard content to current character glyph
+			self.glyph_editor.update_pixels_from_glyph(self.clipboard)
+			pass
 	
 	def on_undo(self):
-		#TODO fourth
+		#TODO fourth better revert than undo (easier), all changes or only current glyph?
 		pass
 
 	def on_change_font_range(self):
-		#TODO fifth
+		#TODO fifth need dialog (looks like NewFontDialog without font size and default values)
 		pass
 
 if __name__ == '__main__':
