@@ -20,10 +20,11 @@
 # (header & source) from created fonts.
 
 #TODO implement menu items
-# 1h	- revert current glyph change (before save)
 # 2h	- extend/reduce font range
 
-#TODO 2h	UI fine-tune (menu accelerators...)
+#TODO 1h	UI fine-tune (escape key in dialog, ENTER also?...)
+#TODO 1h	Direct window close shall be equivalent to Quit menu
+
 #TODO 4h	Generate horizontal fonts too
 #TODO 2h	Refactoring to make code better and easier to read and maintain (use Tk vars?)
 #TODO 30'	Refactor to put exporting functions here too (only one source code file)
@@ -55,7 +56,7 @@ class FontPersistence:
 		self.height = height
 		self.first = first
 		self.last = last
-		self.glyphs = {chr(c): [] for c in range(first, last + 1)}
+		self.glyphs: dict[str, list[list[bool]]] = {chr(c): [] for c in range(first, last + 1)}
 
 # Dialog displayed at creation fo a new font
 class NewFontDialog(Toplevel):
@@ -158,7 +159,7 @@ class ExportDialog(Toplevel):
 	def on_ok(self):
 		# Check that directory is selected
 		if not self.directory.get():
-			messagebox.showwarning(title="Warning", 
+			messagebox.showwarning(title="Warning TODO", 
 				message="Please choose a directory to which source code files will be saved.")
 			return
 		self.result = ExportConfig(fastarduino=self.fastarduino.get(), vertical=self.vertical.get(),
@@ -374,30 +375,36 @@ class FontEditor(ttk.Frame):
 		self.clipboard: list[list[bool]] = None
 
 		# Add menu bar here
-		#TODO Add accelerators and underlines
 		menubar = Menu(master)
 		master['menu'] = menubar
 		menu_file = Menu(menubar)
 		menu_edit = Menu(menubar)
-		menubar.add_cascade(menu=menu_file, label="File")
-		menubar.add_cascade(menu=menu_edit, label="Edit")
+		menubar.add_cascade(menu=menu_file, label="File", underline=0)
+		menubar.add_cascade(menu=menu_edit, label="Edit", underline=0)
 
-		menu_file.add_command(label="New Font...", command=self.on_new)
-		menu_file.add_command(label="Open Font...", command=self.on_open)
+		menu_file.add_command(label="New Font...", command=self.on_new, underline=0, accelerator="Ctrl+N")
+		master.bind('<Control-n>', self.on_new)
+		menu_file.add_command(label="Open Font...", command=self.on_open, underline=0, accelerator="Ctrl+O")
+		master.bind('<Control-o>', self.on_open)
 		menu_file.add_separator()
-		menu_file.add_command(label="Save", command=self.on_save)
-		menu_file.add_command(label="Export...", command=self.on_export)
+		menu_file.add_command(label="Save", command=self.on_save, underline=0, accelerator="Ctrl+S")
+		master.bind('<Control-s>', self.on_save)
+		menu_file.add_command(label="Export...", command=self.on_export, underline=1)
+		menu_file.add_command(label="Revert Font", command=self.on_revert_font, underline=0)
 		menu_file.add_separator()
-		menu_file.add_command(label="Close Font", command=self.on_close)
+		menu_file.add_command(label="Close Font", command=self.on_close, underline=0)
 		menu_file.add_separator()
-		menu_file.add_command(label="Quit", command=self.on_quit)
+		menu_file.add_command(label="Quit", command=self.on_quit, underline=0, accelerator="Ctrl+Q")
+		master.bind('<Control-q>', self.on_quit)
 
-		menu_edit.add_command(label="Undo", command=self.on_undo)
+		menu_edit.add_command(label="Revert Glyph", command=self.on_revert_glyph, underline=0)
 		menu_edit.add_separator()
-		menu_edit.add_command(label="Copy", command=self.on_copy)
-		menu_edit.add_command(label="Paste", command=self.on_paste)
+		menu_edit.add_command(label="Copy", command=self.on_copy, underline=0, accelerator="Ctrl+C")
+		master.bind('<Control-c>', self.on_copy)
+		menu_edit.add_command(label="Paste", command=self.on_paste, underline=0, accelerator="Ctrl+V")
+		master.bind('<Control-v>', self.on_paste)
 		menu_edit.add_separator()
-		menu_edit.add_command(label="Change Font Range...", command=self.on_change_font_range)
+		menu_edit.add_command(label="Change Font Range...", command=self.on_change_font_range, underline=15)
 
 		self.grid(column=0, row=0, sticky=(N))
 		master.columnconfigure(0, weight=1)
@@ -418,6 +425,7 @@ class FontEditor(ttk.Frame):
 	def set_font(self, font_state: FontPersistence):
 		self.font_state = font_state
 		self.previous_char: str = None
+		self.is_dirty = False
 
 		# Remove thumbnails and glyph editor panes if they already exist
 		if self.thumbnails:
@@ -454,7 +462,7 @@ class FontEditor(ttk.Frame):
 	def check_dirty(self) -> bool:
 		if not self.is_dirty:
 			return True
-		result = messagebox.askyesnocancel(title="", 
+		result = messagebox.askyesnocancel(title="TODO", 
 			message=f"Font `{self.font_state.name}` has changed.\nDo you want to save it before proceeding?")
 		if result == True:
 			# Save font
@@ -492,7 +500,7 @@ class FontEditor(ttk.Frame):
 			thumbnail = target.master
 		self.click_thumbnail(thumbnail=thumbnail)
 
-	def on_new(self):
+	def on_new(self, event = None):
 		# Check if save needed
 		if not self.check_dirty(): return
 		# Open dialog to select font size and font range
@@ -503,7 +511,7 @@ class FontEditor(ttk.Frame):
 			self.filename = None
 			self.set_font(font_state)
 	
-	def on_open(self):
+	def on_open(self, event = None):
 		# Check if save needed
 		if not self.check_dirty(): return
 		filename = filedialog.askopenfilename(
@@ -521,7 +529,7 @@ class FontEditor(ttk.Frame):
 		self.filename = None
 		pass
 	
-	def on_save(self):
+	def on_save(self, event = None):
 		# Check if this is a new font (need to use save dialog)
 		if not self.filename:
 			# Open save file dialog
@@ -545,6 +553,16 @@ class FontEditor(ttk.Frame):
 		# Save font state to storage
 		with open(self.filename, 'wb') as output:
 			pickle.dump(self.font_state, file = output)
+
+	def on_revert_font(self):
+		#TODO
+		if not self.filename:
+			messagebox.showinfo(title="TODO", message="Impossible to revert until font has been saved once.")
+			return
+		# Read FontPersistence from storage and update UI
+		with open(self.filename, 'rb') as input:
+			font_state: FontPersistence = pickle.load(input)
+			self.set_font(font_state)
 
 	def on_export(self):
 		# Check all characters have been defined in font state
@@ -581,26 +599,35 @@ class FontEditor(ttk.Frame):
 				with open(filename + '.h', 'wt') as output:
 					output.write(source)
 	
-	def on_quit(self):
+	def on_quit(self, event = None):
 		# Check if save needed
 		if not self.check_dirty(): return
 		self.master.destroy()
 		pass
 	
-	def on_copy(self):
+	def on_copy(self, event = None):
 		# Get current character glyph and copy it to self.clipboard (deep copy)
 		self.clipboard = self.glyph_editor.get_glyph_from_pixels()
-		pass
 	
-	def on_paste(self):
+	def on_paste(self, event = None):
 		if self.clipboard:
 			# Deep copy clipboard content to current character glyph
 			self.glyph_editor.update_pixels_from_glyph(self.clipboard)
-			pass
+			# Update thumbnail
+			self.thumbnails.update_character(self.previous_char, self.clipboard)
 	
-	def on_undo(self):
-		#TODO fourth better revert than undo (easier), all changes or only current glyph?
-		pass
+	def on_revert_glyph(self):
+		# We must read previuous glyph from font file
+		if not self.filename:
+			messagebox.showinfo(title="TODO", message="Impossible to revert until font has been saved once.")
+			return
+		with open(self.filename, "rb") as input:
+			font_state: FontPersistence = pickle.load(input)
+			c: str = self.previous_char
+			glyph = font_state.glyphs[c]
+			if self.glyph_editor.get_glyph_from_pixels() != glyph:
+				self.glyph_editor.update_pixels_from_glyph(glyph=glyph)
+				self.update_is_dirty()
 
 	def on_change_font_range(self):
 		#TODO fifth need dialog (looks like NewFontDialog without font size and default values)
