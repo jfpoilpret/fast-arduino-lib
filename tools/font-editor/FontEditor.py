@@ -19,10 +19,9 @@
 # This python mini-application allows creation of display fonts and creates CPP files
 # (header & source) from created fonts.
 
-#TODO implement menu items
-# 2h	- extend/reduce font range
+#TODO 2h	Extend/reduce font range
 
-#TODO 1h	UI fine-tune (escape key in dialog, ENTER also?...)
+#TODO 1h	UI fine-tune (ENTER key in dialog?)
 #TODO 1h	Direct window close shall be equivalent to Quit menu
 
 #TODO 4h	Generate horizontal fonts too
@@ -89,6 +88,7 @@ class NewFontDialog(Toplevel):
 		buttons.grid(row=5, column=1, columnspan=2)
 
 		self.protocol(name="WM_DELETE_WINDOW", func=self.on_cancel)
+		self.bind('<Escape>', self.on_cancel)
 		self.transient(master=master)
 		self.wait_visibility()
 		self.grab_set()
@@ -109,7 +109,7 @@ class NewFontDialog(Toplevel):
 		self.grab_release()
 		self.destroy()
 
-	def on_cancel(self):
+	def on_cancel(self, event = None):
 		self.grab_release()
 		self.destroy()
 
@@ -143,6 +143,7 @@ class ExportDialog(Toplevel):
 		buttons.grid(row=4, column=1, columnspan=2)
 
 		self.protocol(name="WM_DELETE_WINDOW", func=self.on_cancel)
+		self.bind('<Escape>', self.on_cancel)
 		self.transient(master=master)
 		self.wait_visibility()
 		self.grab_set()
@@ -167,7 +168,7 @@ class ExportDialog(Toplevel):
 		self.grab_release()
 		self.destroy()
 	
-	def on_cancel(self):
+	def on_cancel(self, event = None):
 		self.grab_release()
 		self.destroy()
 
@@ -555,7 +556,6 @@ class FontEditor(ttk.Frame):
 			pickle.dump(self.font_state, file = output)
 
 	def on_revert_font(self):
-		#TODO
 		if not self.filename:
 			messagebox.showinfo(title="TODO", message="Impossible to revert until font has been saved once.")
 			return
