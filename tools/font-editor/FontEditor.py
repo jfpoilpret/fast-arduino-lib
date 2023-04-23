@@ -20,12 +20,13 @@
 # (header & source) from created fonts.
 
 #TODO 2h	Extend/reduce font range
+#TODO 2h+	Extend/reduce font size? could be useful!
 
 #TODO 1h	UI fine-tune (ENTER key in dialog?)
-#TODO 1h	Direct window close shall be equivalent to Quit menu
 
 #TODO 4h	Generate horizontal fonts too
 #TODO 2h	Refactoring to make code better and easier to read and maintain (use Tk vars?)
+#TODO 2h	Refactor common code in dialogs (e.g buttons pane)
 #TODO 30'	Refactor to put exporting functions here too (only one source code file)
 
 from dataclasses import dataclass
@@ -48,21 +49,24 @@ def pass_events_to_parent(widget: Widget, parent: Widget, events: list[str]):
 		widget.bind(event, lambda e: None)
 
 # Class embedding font state for persistence
-class FontPersistence:
-	def __init__(self, name:str, width: int, height: int, first: int, last: int):
-		self.name = name
-		self.width = width
-		self.height = height
-		self.first = first
-		self.last = last
-		self.glyphs: dict[str, list[list[bool]]] = {chr(c): [] for c in range(first, last + 1)}
+@dataclass(kw_only=True)
+class FontState:
+	name: str
+	width: int
+	height: int
+	first: str
+	last: str
+	glyphs: dict[str, list[list[bool]]] = None
+
+	def __post_init__(self):
+		self.glyphs: dict[str, list[list[bool]]] = {chr(c): [] for c in range(self.first, self.last + 1)}
 
 # Dialog displayed at creation fo a new font
 class NewFontDialog(Toplevel):
 	def __init__(self, master: Misc):
 		super().__init__(master=master)
 		self.title("Font Settings")
-		self.result: FontPersistence | None = None
+		self.result: FontState | None = None
 		# These variables will get user input
 		self.width = IntVar(value=8)
 		self.height = IntVar(value=8)
@@ -94,7 +98,7 @@ class NewFontDialog(Toplevel):
 		self.grab_set()
 		self.wait_window()
 
-	def get_font_state(self) -> FontPersistence | None:
+	def get_font_state(self) -> FontState | None:
 		return self.result
 	
 	def on_ok(self):
@@ -104,7 +108,7 @@ class NewFontDialog(Toplevel):
 			temp = first
 			first = last
 			last = temp
-		self.result = FontPersistence(name=None, width=self.width.get(), height=self.height.get(),
+		self.result = FontState(name=None, width=self.width.get(), height=self.height.get(),
 			first=first, last=last)
 		self.grab_release()
 		self.destroy()
@@ -165,6 +169,45 @@ class ExportDialog(Toplevel):
 			return
 		self.result = ExportConfig(fastarduino=self.fastarduino.get(), vertical=self.vertical.get(),
 			directory=self.directory.get())
+		self.grab_release()
+		self.destroy()
+	
+	def on_cancel(self, event = None):
+		self.grab_release()
+		self.destroy()
+
+# Dialog displayed when changing current font range
+class ChangeFontRangeDialog(Toplevel):
+	def __init__(self, master: Misc, first: str, last: str):
+		super().__init__(master=master)
+		self.title("Change Font Range")
+		self.result: tuple[str, str] = None
+		self.first = StringVar(value=first)
+		self.last = StringVar(value=last)
+		# Add UI: 1st char, last char
+		ttk.Label(master=self, text="First letter:").grid(row=1, column=1, padx=2, pady=2, sticky="W")
+		ttk.Spinbox(master=self, values=[chr(c) for c in range(32, 127)], textvariable=self.first).grid(
+			row=1, column=2, padx=2, pady=2)
+		ttk.Label(master=self, text="Last letter:").grid(row=2, column=1, padx=2, pady=2, sticky="W")
+		ttk.Spinbox(master=self, values=[chr(c) for c in range(32, 127)], textvariable=self.last).grid(
+			row=2, column=2, padx=2, pady=2)
+		buttons = ttk.Frame(master=self)
+		ttk.Button(master=buttons, text="Cancel", command=self.on_cancel).grid(row=5, column=1, padx=2, pady=2)
+		ttk.Button(master=buttons, text="OK", command=self.on_ok).grid(row=5, column=2, padx=2, pady=2)
+		buttons.grid(row=3, column=1, columnspan=2)
+
+		self.protocol(name="WM_DELETE_WINDOW", func=self.on_cancel)
+		self.bind('<Escape>', self.on_cancel)
+		self.transient(master=master)
+		self.wait_visibility()
+		self.grab_set()
+		self.wait_window()
+
+	def get_new_range(self):
+		return self.result
+
+	def on_ok(self):
+		self.result = (self.first.get(), self.last.get())
 		self.grab_release()
 		self.destroy()
 	
@@ -328,7 +371,7 @@ class CharacterThumbnail(Frame):
 class ThumbnailPanel(Frame):
 	MAX_GRIDX = 8
 
-	def __init__(self, master: Misc, font_state: FontPersistence) -> None:
+	def __init__(self, master: Misc, font_state: FontState) -> None:
 		super().__init__(master, background="white")
 		# create CharacterThumbnail for each character in the font
 		self.thumbnails: dict[str, CharacterThumbnail] = {}
@@ -357,7 +400,7 @@ class ThumbnailPanel(Frame):
 	def update_character(self, c: str, glyph: list[list[bool]]) -> None:
 		self.thumbnails[c].set_glyph(glyph=glyph)
 	
-	def update_all(self, font_state: FontPersistence) -> None:
+	def update_all(self, font_state: FontState) -> None:
 		for c, glyph in font_state.glyphs.items():
 			self.thumbnails[c].set_glyph(glyph=glyph)
 
@@ -368,7 +411,7 @@ class FontEditor(ttk.Frame):
 		master.minsize(width=300, height=200)
 
 		self.filename: str = None
-		self.font_state: FontPersistence = None
+		self.font_state: FontState = None
 		self.previous_char: str = None
 		self.thumbnails: ThumbnailPanel = None
 		self.glyph_editor: GlyphEditor = None
@@ -412,6 +455,7 @@ class FontEditor(ttk.Frame):
 		master.rowconfigure(0, weight=1)
 
 		self.update_title()
+		master.protocol(name="WM_DELETE_WINDOW", func=self.on_quit)
 
 	def update_title(self):
 		state = self.font_state
@@ -423,7 +467,7 @@ class FontEditor(ttk.Frame):
 		else:
 			self.master.title("Editor for FastArduino fonts")
 	
-	def set_font(self, font_state: FontPersistence):
+	def set_font(self, font_state: FontState):
 		self.font_state = font_state
 		self.previous_char: str = None
 		self.is_dirty = False
@@ -519,16 +563,15 @@ class FontEditor(ttk.Frame):
 			title="Select Font File to Open" ,filetypes=[("Font files", "*.font")])
 		if filename:
 			self.filename = filename
-			# Read FontPersistence from storage and update UI
+			# Read FontState from storage and update UI
 			with open(filename, 'rb') as input:
-				font_state: FontPersistence = pickle.load(input)
+				font_state: FontState = pickle.load(input)
 				self.set_font(font_state)
 	
 	def on_close(self):
 		# Check if save needed
 		if not self.check_dirty(): return
 		self.filename = None
-		pass
 	
 	def on_save(self, event = None):
 		# Check if this is a new font (need to use save dialog)
@@ -554,14 +597,15 @@ class FontEditor(ttk.Frame):
 		# Save font state to storage
 		with open(self.filename, 'wb') as output:
 			pickle.dump(self.font_state, file = output)
+		self.is_dirty = False
 
 	def on_revert_font(self):
 		if not self.filename:
 			messagebox.showinfo(title="TODO", message="Impossible to revert until font has been saved once.")
 			return
-		# Read FontPersistence from storage and update UI
+		# Read FontState from storage and update UI
 		with open(self.filename, 'rb') as input:
-			font_state: FontPersistence = pickle.load(input)
+			font_state: FontState = pickle.load(input)
 			self.set_font(font_state)
 
 	def on_export(self):
@@ -574,7 +618,6 @@ class FontEditor(ttk.Frame):
 		dialog = ExportDialog(master=self.master)
 		export_config = dialog.get_export_config()
 		if export_config:
-			print(f"export_config={export_config}")
 			# Perform export
 			directory = export_config.directory
 			filename = f"{directory}/{self.font_state.name}"
@@ -603,7 +646,6 @@ class FontEditor(ttk.Frame):
 		# Check if save needed
 		if not self.check_dirty(): return
 		self.master.destroy()
-		pass
 	
 	def on_copy(self, event = None):
 		# Get current character glyph and copy it to self.clipboard (deep copy)
@@ -622,7 +664,7 @@ class FontEditor(ttk.Frame):
 			messagebox.showinfo(title="TODO", message="Impossible to revert until font has been saved once.")
 			return
 		with open(self.filename, "rb") as input:
-			font_state: FontPersistence = pickle.load(input)
+			font_state: FontState = pickle.load(input)
 			c: str = self.previous_char
 			glyph = font_state.glyphs[c]
 			if self.glyph_editor.get_glyph_from_pixels() != glyph:
@@ -630,8 +672,16 @@ class FontEditor(ttk.Frame):
 				self.update_is_dirty()
 
 	def on_change_font_range(self):
-		#TODO fifth need dialog (looks like NewFontDialog without font size and default values)
-		pass
+		if not self.filename:
+			return
+		first = chr(self.font_state.first)
+		last = chr(self.font_state.last)
+		dialog = ChangeFontRangeDialog(master=self.master, first=first, last=last)
+		range = dialog.get_new_range()
+		if range != (first, last):
+			#TODO Range as changed => modify font_state and reinit UI
+			print(f"New range {range[0]} - {range[1]}")
+			pass
 
 if __name__ == '__main__':
 	# Create Window
