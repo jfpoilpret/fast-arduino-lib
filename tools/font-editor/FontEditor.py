@@ -19,14 +19,13 @@
 # This python mini-application allows creation of display fonts and creates CPP files
 # (header & source) from created fonts.
 
-#TODO 2h	Extend/reduce font range
 #TODO 2h+	Extend/reduce font size? could be useful!
 
-#TODO 1h	UI fine-tune (ENTER key in dialog?)
-
-#TODO 4h	Generate horizontal fonts too
+#TODO 1h+	improve UI refresh (set_font()) to avoid blinking...
 #TODO 2h	Refactoring to make code better and easier to read and maintain (use Tk vars?)
 #TODO 2h	Refactor common code in dialogs (e.g buttons pane)
+
+#TODO 4h	Generate horizontal fonts too
 #TODO 30'	Refactor to put exporting functions here too (only one source code file)
 
 from dataclasses import dataclass
@@ -58,12 +57,26 @@ class FontState:
 	name: str
 	width: int
 	height: int
-	first: str
-	last: str
-	glyphs: dict[str, list[list[bool]]] = None
+	first: int
+	last: int
+	glyphs: dict[int, list[list[bool]]] = None
 
 	def __post_init__(self):
-		self.glyphs: dict[str, list[list[bool]]] = {chr(c): [] for c in range(self.first, self.last + 1)}
+		self.glyphs: dict[int, list[list[bool]]] = {c: [] for c in range(self.first, self.last + 1)}
+	
+	def update_range(self, first: int, last: int):
+		if first < self.first:
+			self.glyphs.update({c: [] for c in range(first, self.first)})
+		elif first > self.first:
+			for c in range(self.first, first):
+				del self.glyphs[c]
+		if last > self.last:
+			self.glyphs.update({c: [] for c in range(self.last + 1, last + 1)})
+		elif last < self.last:
+			for c in range(last + 1, self.last + 1):
+				del self.glyphs[c]
+		self.first = first
+		self.last = last
 
 # Dialog displayed at creation fo a new font
 class NewFontDialog(Toplevel):
@@ -88,7 +101,7 @@ class NewFontDialog(Toplevel):
 		ttk.Spinbox(master=self, values=CHAR_VALUES, textvariable=self.first).grid(
 			row=3, column=2, padx=2, pady=2)
 		ttk.Label(master=self, text="Last letter:").grid(row=4, column=1, padx=2, pady=2, sticky="W")
-		ttk.Spinbox(master=self, values=[chr(c) for c in range(MIN_CHAR_CODE, MAX_CHAR_CODE)], textvariable=self.last).grid(
+		ttk.Spinbox(master=self, values=CHAR_VALUES, textvariable=self.last).grid(
 			row=4, column=2, padx=2, pady=2)
 		buttons = ttk.Frame(master=self)
 		ttk.Button(master=buttons, text="Cancel", command=self.on_cancel).grid(row=1, column=1, padx=2, pady=2)
@@ -170,7 +183,7 @@ class ExportDialog(Toplevel):
 	def on_ok(self, event = None):
 		# Check that directory is selected
 		if not self.directory.get():
-			messagebox.showwarning(title="Warning TODO", 
+			messagebox.showwarning(title="Warning", 
 				message="Please choose a directory to which source code files will be saved.")
 			return
 		self.result = ExportConfig(fastarduino=self.fastarduino.get(), vertical=self.vertical.get(),
@@ -184,12 +197,12 @@ class ExportDialog(Toplevel):
 
 # Dialog displayed when changing current font range
 class ChangeFontRangeDialog(Toplevel):
-	def __init__(self, master: Misc, first: str, last: str):
+	def __init__(self, master: Misc, first: int, last: int):
 		super().__init__(master=master)
 		self.title("Change Font Range")
-		self.result: tuple[str, str] = None
-		self.first = StringVar(value=first)
-		self.last = StringVar(value=last)
+		self.result: tuple[int, int] = None
+		self.first = StringVar(value=chr(first))
+		self.last = StringVar(value=chr(last))
 		# Add UI: 1st char, last char
 		ttk.Label(master=self, text="First letter:").grid(row=1, column=1, padx=2, pady=2, sticky="W")
 		ttk.Spinbox(master=self, values=CHAR_VALUES, textvariable=self.first).grid(
@@ -214,7 +227,13 @@ class ChangeFontRangeDialog(Toplevel):
 		return self.result
 
 	def on_ok(self, event = None):
-		self.result = (self.first.get(), self.last.get())
+		first = ord(self.first.get())
+		last = ord(self.last.get())
+		if last < first:
+			temp = first
+			first = last
+			last = temp
+		self.result = (first, last)
 		self.grab_release()
 		self.destroy()
 	
@@ -316,7 +335,7 @@ class CharacterThumbnail(Frame):
 
 	def __init__(self, master: Misc, width: int, height: int) -> None:
 		super().__init__(master, padx=1, pady=1, border=1, background="white", borderwidth=2, relief='solid')
-		self.char: str = None
+		self.char: int = None
 		self.glyph_height = height
 		self.glyph_width = width
 		self.letter_label = Label(self, background="white", font="TkFixedFont")
@@ -340,12 +359,12 @@ class CharacterThumbnail(Frame):
 			self.letter_label.configure(background="white")
 			self.glyph_label.configure(background="white")
 	
-	def get_character(self) -> str:
+	def get_character(self) -> int:
 		return self.char
 	
-	def set_character(self, char: str):
+	def set_character(self, char: int):
 		self.char = char
-		self.letter_label.config(text=f"{ord(char):02x}-{char}")
+		self.letter_label.config(text=f"{char:02x}-{chr(char)}")
 	
 	def clear_glyph(self):
 		data: list[list[str]] = []
@@ -381,16 +400,16 @@ class ThumbnailPanel(Frame):
 	def __init__(self, master: Misc, font_state: FontState) -> None:
 		super().__init__(master, background="white")
 		# create CharacterThumbnail for each character in the font
-		self.thumbnails: dict[str, CharacterThumbnail] = {}
+		self.thumbnails: dict[int, CharacterThumbnail] = {}
 		self.selected_thumbnail: CharacterThumbnail = None
 		gridx = 1
 		gridy = 1
 		for c in range(font_state.first, font_state.last + 1):
 			thumb = CharacterThumbnail(master=self, width=font_state.width, height=font_state.height)
 			thumb.bind(sequence="<Button-1>", func=master.on_thumbnail_click)
-			thumb.set_character(char=chr(c))
-			thumb.set_glyph(glyph=font_state.glyphs[chr(c)])
-			self.thumbnails[chr(c)] = thumb
+			thumb.set_character(char=c)
+			thumb.set_glyph(glyph=font_state.glyphs[c])
+			self.thumbnails[c] = thumb
 			# Add thumbnail to the grid
 			thumb.grid(row=gridy, column=gridx)
 			gridx += 1
@@ -398,13 +417,13 @@ class ThumbnailPanel(Frame):
 				gridx = 1
 				gridy += 1
 	
-	def select_character(self, c: str) -> None:
+	def select_character(self, c: int) -> None:
 		if self.selected_thumbnail:
 			self.selected_thumbnail.set_highlight(highlight=False)
 		self.selected_thumbnail = self.thumbnails[c]
 		self.selected_thumbnail.set_highlight(highlight=True)
 	
-	def update_character(self, c: str, glyph: list[list[bool]]) -> None:
+	def update_character(self, c: int, glyph: list[list[bool]]) -> None:
 		self.thumbnails[c].set_glyph(glyph=glyph)
 	
 	def update_all(self, font_state: FontState) -> None:
@@ -419,7 +438,7 @@ class FontEditor(ttk.Frame):
 
 		self.filename: str = None
 		self.font_state: FontState = None
-		self.previous_char: str = None
+		self.previous_char: int = None
 		self.thumbnails: ThumbnailPanel = None
 		self.glyph_editor: GlyphEditor = None
 		self.is_dirty: bool = False
@@ -476,7 +495,7 @@ class FontEditor(ttk.Frame):
 	
 	def set_font(self, font_state: FontState):
 		self.font_state = font_state
-		self.previous_char: str = None
+		self.previous_char: int = None
 		self.is_dirty = False
 
 		# Remove thumbnails and glyph editor panes if they already exist
@@ -501,7 +520,7 @@ class FontEditor(ttk.Frame):
 
 	def select_first(self):
 		# select 1st thumbnail
-		self.click_thumbnail(self.thumbnails.thumbnails[chr(self.font_state.first)])
+		self.click_thumbnail(self.thumbnails.thumbnails[self.font_state.first])
 
 	def update_is_dirty(self):
 		glyph = self.glyph_editor.get_glyph_from_pixels()
@@ -514,7 +533,7 @@ class FontEditor(ttk.Frame):
 	def check_dirty(self) -> bool:
 		if not self.is_dirty:
 			return True
-		result = messagebox.askyesnocancel(title="TODO", 
+		result = messagebox.askyesnocancel(title="Question", 
 			message=f"Font `{self.font_state.name}` has changed.\nDo you want to save it before proceeding?")
 		if result == True:
 			# Save font
@@ -608,7 +627,8 @@ class FontEditor(ttk.Frame):
 
 	def on_revert_font(self):
 		if not self.filename:
-			messagebox.showinfo(title="TODO", message="Impossible to revert until font has been saved once.")
+			messagebox.showinfo(title="Operation Impossible", 
+		    	message="Impossible to revert until font has been saved once.")
 			return
 		# Read FontState from storage and update UI
 		with open(self.filename, 'rb') as input:
@@ -620,7 +640,7 @@ class FontEditor(ttk.Frame):
 		for c, glyph in self.font_state.glyphs.items():
 			if not glyph:
 				#TODO show message instead of exiting!!!
-				print(f"Glyph for character '{c}' is undefined!")
+				print(f"Glyph for character '{chr(c)}' is undefined!")
 				sys.exit(1)
 		dialog = ExportDialog(master=self.master)
 		export_config = dialog.get_export_config()
@@ -668,11 +688,12 @@ class FontEditor(ttk.Frame):
 	def on_revert_glyph(self):
 		# We must read previuous glyph from font file
 		if not self.filename:
-			messagebox.showinfo(title="TODO", message="Impossible to revert until font open and saved once.")
+			messagebox.showinfo(title="Operation Impossible", 
+		    	message="Impossible to revert until font open and saved once.")
 			return
 		with open(self.filename, "rb") as input:
 			font_state: FontState = pickle.load(input)
-			c: str = self.previous_char
+			c: int = self.previous_char
 			glyph = font_state.glyphs[c]
 			if self.glyph_editor.get_glyph_from_pixels() != glyph:
 				self.glyph_editor.update_pixels_from_glyph(glyph=glyph)
@@ -680,16 +701,21 @@ class FontEditor(ttk.Frame):
 
 	def on_change_font_range(self):
 		if not self.filename:
-			messagebox.showinfo(title="TODO", message="Impossible change range until font open and saved once.")
+			messagebox.showinfo(title="Operation Impossible",
+		    	message="Impossible change range until font open and saved once.")
 			return
-		first = chr(self.font_state.first)
-		last = chr(self.font_state.last)
+		first = self.font_state.first
+		last = self.font_state.last
 		dialog = ChangeFontRangeDialog(master=self.master, first=first, last=last)
 		range = dialog.get_new_range()
-		if range != (first, last):
-			#TODO Range as changed => modify font_state and reinit UI
-			print(f"New range {range[0]} - {range[1]}")
-			pass
+		if range and range != (first, last):
+			# Range has changed => modify font_state and reinit UI
+			self.font_state.update_range(range[0], range[1])
+			if self.previous_char < first:
+				self.previous_char = first
+			elif self.previous_char > last:
+				self.previous_char = last
+			self.set_font(font_state=self.font_state)
 
 if __name__ == '__main__':
 	# Create Window

@@ -94,12 +94,12 @@ const uint8_t {font_name}::FONT[] PROGMEM =
 {font_glyphs}}};
 """
 
+#FIXME if glyph_car is \ then it shall be escaped!
 GLYPH_TEMPLATE = """	{glyph_row}	// 0x{glyph_code:02x} {glyph_char}
 """
 
-def generate_fastarduino_header(filename: str, font_name: str, 
-	width: int, height: int, first_char: int, last_char: int, 
-	vertical: bool) -> str:
+def generate_fastarduino_header(filename: str, font_name: str, width: int, height: int, 
+	first_char: int, last_char: int, vertical: bool) -> str:
 	# generate header as string
 	return FASTARDUINO_HEADER_TEMPLATE.format(
 		font_header_define = filename.upper() + '_HH',
@@ -110,7 +110,7 @@ def generate_fastarduino_header(filename: str, font_name: str,
 		font_width = width,
 		font_height =  height)
 
-def generate_glyph_rows(c: int, width: int, height: int, vertical: bool, glyph):
+def generate_glyph_rows(c: int, width: int, height: int, vertical: bool, glyph: list[list[bool]]):
 	glyph_rows = ''
 	if vertical:
 		for row in range(int((height - 1) / 8 + 1)):
@@ -133,16 +133,16 @@ def generate_glyph_rows(c: int, width: int, height: int, vertical: bool, glyph):
 	return glyph_rows
 
 def generate_all_glyphs(width: int, height: int, first_char: int, last_char: int, 
-	vertical: bool, glyphs) -> str:
+	vertical: bool, glyphs: dict[int, list[list[bool]]]) -> str:
 	# First generate all rows for glyphs definition
 	all_glyphs = ''
 	for c in range(first_char, last_char + 1):
-		glyph = glyphs[chr(c)]
+		glyph = glyphs[c]
 		all_glyphs += generate_glyph_rows(c, width, height, vertical, glyph)
 	return all_glyphs
 
-def generate_fastarduino_source(filename: str, font_name: str, 
-	width: int, height: int, first_char: int, last_char: int, vertical: bool, glyphs) -> str:
+def generate_fastarduino_source(filename: str, font_name: str, width: int, height: int, 
+	first_char: int, last_char: int, vertical: bool, glyphs: dict[int, list[list[bool]]]) -> str:
 	# First generate all rows for glyphs definition
 	all_glyphs = generate_all_glyphs(width, height, first_char, last_char, vertical, glyphs)
 	return FASTARDUINO_SOURCE_TEMPLATE.format(
@@ -150,9 +150,8 @@ def generate_fastarduino_source(filename: str, font_name: str,
 		font_name = font_name,
 		font_glyphs = all_glyphs)
 
-def generate_regular_code(filename: str, font_name: str, 
-	width: int, height: int, first_char: int, last_char: int, 
-	vertical: bool, glyphs) -> str:
+def generate_regular_code(filename: str, font_name: str, width: int, height: int, 
+	first_char: int, last_char: int, vertical: bool, glyphs: dict[int, list[list[bool]]]) -> str:
 	# First generate all rows for glyphs definition
 	all_glyphs = generate_all_glyphs(width, height, first_char, last_char, vertical, glyphs)
 	return REGULAR_CODE_TEMPLATE.format(
