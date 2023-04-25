@@ -20,10 +20,6 @@
 # (header & source) from created fonts.
 
 #TODO 2h+	Extend/reduce font size? could be useful!
-
-#TODO 1h+	improve UI refresh (set_font()) to avoid blinking...
-#TODO 2h	Refactoring to make code better and easier to read and maintain (use Tk vars?)
-
 #TODO 4h	Generate horizontal fonts too
 #TODO 30'	Refactor to put exporting functions here too (only one source code file)
 
@@ -487,24 +483,27 @@ class FontEditor(ttk.Frame):
 		self.previous_char: int = None
 		self.is_dirty = False
 
-		# Remove thumbnails and glyph editor panes if they already exist
-		if self.thumbnails:
-			self.thumbnails.grid_remove()
-		if self.glyph_editor:
-			self.glyph_editor.grid_remove()
+		thumbnails = self.thumbnails
+		glyph_editor = self.glyph_editor
 
 		# Add new thumbnail pane
 		self.thumbnails = ThumbnailPanel(master=self, font_state=font_state)
-		self.thumbnails.grid(row=1, column=1, padx=3, pady=3)
-
 		# Add new panel for glyph editing
 		self.glyph_editor = GlyphEditor(
 			master=self, width=self.font_state.width, height=self.font_state.height)
+
+		# Replace existing panes
+		if thumbnails:
+			thumbnails.grid_forget()
+			thumbnails.destroy()
+		self.thumbnails.grid(row=1, column=1, padx=3, pady=3)
+		if glyph_editor:
+			glyph_editor.grid_forget()
+			glyph_editor.destroy()
 		self.glyph_editor.grid(row=1, column=2, padx=3, pady=3)
 
-		# select 1st thumbnail
+		# select 1st thumbnail & update title
 		self.select_first()
-
 		self.update_title()
 
 	def select_first(self):
