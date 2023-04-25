@@ -22,8 +22,8 @@
 #TODO 2h+	Extend/reduce font size? could be useful!
 
 #TODO 1h+	improve UI refresh (set_font()) to avoid blinking...
-#TODO 2h	Refactoring to make code better and easier to read and maintain (use Tk vars?)
 #TODO 2h	Refactor common code in dialogs (e.g buttons pane)
+#TODO 2h	Refactoring to make code better and easier to read and maintain (use Tk vars?)
 
 #TODO 4h	Generate horizontal fonts too
 #TODO 30'	Refactor to put exporting functions here too (only one source code file)
@@ -31,7 +31,6 @@
 from dataclasses import dataclass
 import pickle
 import re
-import sys
 
 from tkinter import *
 from tkinter import filedialog, messagebox
@@ -637,11 +636,20 @@ class FontEditor(ttk.Frame):
 
 	def on_export(self):
 		# Check all characters have been defined in font state
+		undefined_glyphs: list[int] = []
 		for c, glyph in self.font_state.glyphs.items():
 			if not glyph:
-				#TODO show message instead of exiting!!!
-				print(f"Glyph for character '{chr(c)}' is undefined!")
-				sys.exit(1)
+				print(f"Glyph for character '{chr(c)}' (0x{c:02x}) is undefined!")
+				undefined_glyphs.append(c)
+		if len(undefined_glyphs) > 1:
+			messagebox.showerror(title="Operation Impossible", 
+				message=f"Glyphs for {len(undefined_glyphs)} are undefined!")
+			return
+		if len(undefined_glyphs) > 0:
+			c = undefined_glyphs[0]
+			messagebox.showerror(title="Operation Impossible", 
+				message=f"Glyph for character '{chr(c)}' (0x{c:02x}) is undefined!")
+			return
 		dialog = ExportDialog(master=self.master)
 		export_config = dialog.get_export_config()
 		if export_config:
