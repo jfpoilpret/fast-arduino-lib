@@ -77,10 +77,36 @@ class FontState:
 		self.first = first
 		self.last = last
 
-# Dialog displayed at creation fo a new font
-class NewFontDialog(Toplevel):
-	def __init__(self, master: Misc):
+class AbstractDialog(Toplevel):
+	def __init__(self, master: Misc, buttons_row: int, buttons_columnspan: int):
 		super().__init__(master=master)
+		# Add OK/Cancel buttons
+		buttons = ttk.Frame(master=self)
+		ttk.Button(master=buttons, text="Cancel", command=self.on_cancel).grid(row=1, column=1, padx=2, pady=2)
+		ttk.Button(master=buttons, text="OK", command=self.on_ok).grid(row=1, column=2, padx=2, pady=2)
+		buttons.grid(row=buttons_row, column=1, columnspan=buttons_columnspan)
+
+	def show_modal(self):
+		self.protocol(name="WM_DELETE_WINDOW", func=self.on_cancel)
+		self.bind('<Escape>', self.on_cancel)
+		self.bind('<Return>', self.on_ok)
+		self.transient(master=self.master)
+		self.wait_visibility()
+		self.grab_set()
+		self.wait_window()
+
+	def on_ok(self, event = None):
+		self.grab_release()
+		self.destroy()
+
+	def on_cancel(self, event = None):
+		self.grab_release()
+		self.destroy()
+
+# Dialog displayed at creation fo a new font
+class NewFontDialog(AbstractDialog):
+	def __init__(self, master: Misc):
+		super().__init__(master=master, buttons_row=5, buttons_columnspan=2)
 		self.title("Font Settings")
 		self.result: FontState | None = None
 		# These variables will get user input
@@ -102,18 +128,8 @@ class NewFontDialog(Toplevel):
 		ttk.Label(master=self, text="Last letter:").grid(row=4, column=1, padx=2, pady=2, sticky="W")
 		ttk.Spinbox(master=self, values=CHAR_VALUES, textvariable=self.last).grid(
 			row=4, column=2, padx=2, pady=2)
-		buttons = ttk.Frame(master=self)
-		ttk.Button(master=buttons, text="Cancel", command=self.on_cancel).grid(row=1, column=1, padx=2, pady=2)
-		ttk.Button(master=buttons, text="OK", command=self.on_ok).grid(row=1, column=2, padx=2, pady=2)
-		buttons.grid(row=5, column=1, columnspan=2)
 
-		self.protocol(name="WM_DELETE_WINDOW", func=self.on_cancel)
-		self.bind('<Escape>', self.on_cancel)
-		self.bind('<Return>', self.on_ok)
-		self.transient(master=master)
-		self.wait_visibility()
-		self.grab_set()
-		self.wait_window()
+		self.show_modal()
 
 	def get_font_state(self) -> FontState | None:
 		return self.result
@@ -127,12 +143,7 @@ class NewFontDialog(Toplevel):
 			last = temp
 		self.result = FontState(name=None, width=self.width.get(), height=self.height.get(),
 			first=first, last=last)
-		self.grab_release()
-		self.destroy()
-
-	def on_cancel(self, event = None):
-		self.grab_release()
-		self.destroy()
+		super().on_ok()
 
 @dataclass(kw_only=True)
 class ExportConfig:
@@ -580,6 +591,7 @@ class FontEditor(ttk.Frame):
 		if font_state:
 			self.filename = None
 			self.set_font(font_state)
+			self.is_dirty = True
 	
 	def on_open(self, event = None):
 		# Check if save needed
