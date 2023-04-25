@@ -22,7 +22,6 @@
 #TODO 2h+	Extend/reduce font size? could be useful!
 
 #TODO 1h+	improve UI refresh (set_font()) to avoid blinking...
-#TODO 2h	Refactor common code in dialogs (e.g buttons pane)
 #TODO 2h	Refactoring to make code better and easier to read and maintain (use Tk vars?)
 
 #TODO 4h	Generate horizontal fonts too
@@ -41,6 +40,10 @@ from font_export import generate_fastarduino_header, generate_fastarduino_source
 MIN_CHAR_CODE = 32
 MAX_CHAR_CODE = 127
 CHAR_VALUES = [chr(c) for c in range(MIN_CHAR_CODE, MAX_CHAR_CODE)]
+
+MIN_SIZE = 4
+DEFAULT_SIZE = 8
+MAX_SIZE = 64
 
 # Utility to trick events handling so that events pass through from a widget to a parent widget
 def pass_events_to_parent(widget: Widget, parent: Widget, events: list[str]):
@@ -86,6 +89,36 @@ class AbstractDialog(Toplevel):
 		ttk.Button(master=buttons, text="OK", command=self.on_ok).grid(row=1, column=2, padx=2, pady=2)
 		buttons.grid(row=buttons_row, column=1, columnspan=buttons_columnspan)
 
+	def add_size_inputs(self, row: int, focus: bool, width: int = DEFAULT_SIZE, height: int = DEFAULT_SIZE):
+		# These variables will get user input
+		self.width = IntVar(value=width)
+		self.height = IntVar(value=height)
+		# Add UI: font width and height, 1st char, last char
+		ttk.Label(master=self, text="Width:").grid(row=row, column=1, padx=2, pady=2, sticky="W")
+		focus_entry = ttk.Spinbox(master=self, from_=MIN_SIZE, to=MAX_SIZE, increment=1, textvariable=self.width)
+		focus_entry.grid(row=row, column=2, padx=2, pady=2)
+		if focus:
+			focus_entry.focus()
+			row += 1
+		ttk.Label(master=self, text="Height:").grid(row=row, column=1, padx=2, pady=2, sticky="W")
+		ttk.Spinbox(master=self, from_=MIN_SIZE, to=MAX_SIZE, increment=1, textvariable=self.height).grid(
+			row=row, column=2, padx=2, pady=2)
+
+	def add_range_inputs(self, row: int, focus: bool, first: int = MIN_CHAR_CODE, last: int = MAX_CHAR_CODE - 1):
+		# These variables will get user input
+		self.first = StringVar(value=chr(first))
+		self.last = StringVar(value=chr(last))
+		# Add UI: 1st char, last char
+		ttk.Label(master=self, text="First letter:").grid(row=row, column=1, padx=2, pady=2, sticky="W")
+		focus_entry = ttk.Spinbox(master=self, values=CHAR_VALUES, textvariable=self.first)
+		focus_entry.grid(row=row, column=2, padx=2, pady=2)
+		if focus:
+			focus_entry.focus()
+		row += 1
+		ttk.Label(master=self, text="Last letter:").grid(row=row, column=1, padx=2, pady=2, sticky="W")
+		ttk.Spinbox(master=self, values=CHAR_VALUES, textvariable=self.last).grid(
+			row=row, column=2, padx=2, pady=2)
+
 	def show_modal(self):
 		self.protocol(name="WM_DELETE_WINDOW", func=self.on_cancel)
 		self.bind('<Escape>', self.on_cancel)
@@ -109,26 +142,9 @@ class NewFontDialog(AbstractDialog):
 		super().__init__(master=master, buttons_row=5, buttons_columnspan=2)
 		self.title("Font Settings")
 		self.result: FontState | None = None
-		# These variables will get user input
-		self.width = IntVar(value=8)
-		self.height = IntVar(value=8)
-		self.first = StringVar(value=chr(MIN_CHAR_CODE))
-		self.last = StringVar(value=chr(MAX_CHAR_CODE - 1))
 		# Add UI: font width and height, 1st char, last char
-		ttk.Label(master=self, text="Width:").grid(row=1, column=1, padx=2, pady=2, sticky="W")
-		focus_entry = ttk.Spinbox(master=self, from_=4, to=64, increment=1, textvariable=self.width)
-		focus_entry.grid(row=1, column=2, padx=2, pady=2)
-		focus_entry.focus()
-		ttk.Label(master=self, text="Height:").grid(row=2, column=1, padx=2, pady=2, sticky="W")
-		ttk.Spinbox(master=self, from_=4, to=64, increment=1, textvariable=self.height).grid(
-			row=2, column=2, padx=2, pady=2)
-		ttk.Label(master=self, text="First letter:").grid(row=3, column=1, padx=2, pady=2, sticky="W")
-		ttk.Spinbox(master=self, values=CHAR_VALUES, textvariable=self.first).grid(
-			row=3, column=2, padx=2, pady=2)
-		ttk.Label(master=self, text="Last letter:").grid(row=4, column=1, padx=2, pady=2, sticky="W")
-		ttk.Spinbox(master=self, values=CHAR_VALUES, textvariable=self.last).grid(
-			row=4, column=2, padx=2, pady=2)
-
+		self.add_size_inputs(row=1, focus=True)
+		self.add_range_inputs(row=3, focus=False)
 		self.show_modal()
 
 	def get_font_state(self) -> FontState | None:
@@ -152,9 +168,9 @@ class ExportConfig:
 	directory: str
 
 # Dialog displayed at export of current font
-class ExportDialog(Toplevel):
+class ExportDialog(AbstractDialog):
 	def __init__(self, master: Misc):
-		super().__init__(master=master)
+		super().__init__(master=master, buttons_row=4, buttons_columnspan=2)
 		self.title("Export Settings")
 		self.result: ExportConfig | None = None
 		# These variables will get user input
@@ -162,25 +178,16 @@ class ExportDialog(Toplevel):
 		self.vertical = BooleanVar()
 		self.directory = StringVar()
 		# Add UI: font width and height, 1st char, last char
-		ttk.Checkbutton(master=self, text="FastArduino Font", variable=self.fastarduino).grid(
-			row=1, column=1, columnspan=2, padx=2, pady=2, sticky="W")
+		focus_entry = ttk.Checkbutton(master=self, text="FastArduino Font", variable=self.fastarduino)
+		focus_entry.grid(row=1, column=1, columnspan=2, padx=2, pady=2, sticky="W")
+		focus_entry.focus()
 		ttk.Checkbutton(master=self, text="Vertical Font", variable=self.vertical).grid(
 			row=2, column=1, columnspan=2, padx=2, pady=2, sticky="W")
 		ttk.Button(master=self, text="Code Files Directory...", command=self.on_select_dir).grid(
 			row=3, column=1, padx=2, pady=2)
 		ttk.Label(master=self, textvariable=self.directory).grid(row=3, column=2, padx=2, pady=2)
-		buttons = ttk.Frame(master=self)
-		ttk.Button(master=buttons, text="Cancel", command=self.on_cancel).grid(row=1, column=1, padx=2, pady=2)
-		ttk.Button(master=buttons, text="OK", command=self.on_ok).grid(row=1, column=2, padx=2, pady=2)
-		buttons.grid(row=4, column=1, columnspan=2)
 
-		self.protocol(name="WM_DELETE_WINDOW", func=self.on_cancel)
-		self.bind('<Escape>', self.on_cancel)
-		self.bind('<Return>', self.on_ok)
-		self.transient(master=master)
-		self.wait_visibility()
-		self.grab_set()
-		self.wait_window()
+		self.show_modal()
 
 	def get_export_config(self):
 		return self.result
@@ -198,40 +205,17 @@ class ExportDialog(Toplevel):
 			return
 		self.result = ExportConfig(fastarduino=self.fastarduino.get(), vertical=self.vertical.get(),
 			directory=self.directory.get())
-		self.grab_release()
-		self.destroy()
-	
-	def on_cancel(self, event = None):
-		self.grab_release()
-		self.destroy()
+		super().on_ok()
 
 # Dialog displayed when changing current font range
-class ChangeFontRangeDialog(Toplevel):
+class ChangeFontRangeDialog(AbstractDialog):
 	def __init__(self, master: Misc, first: int, last: int):
-		super().__init__(master=master)
+		super().__init__(master=master, buttons_row=3, buttons_columnspan=2)
 		self.title("Change Font Range")
 		self.result: tuple[int, int] = None
-		self.first = StringVar(value=chr(first))
-		self.last = StringVar(value=chr(last))
 		# Add UI: 1st char, last char
-		ttk.Label(master=self, text="First letter:").grid(row=1, column=1, padx=2, pady=2, sticky="W")
-		ttk.Spinbox(master=self, values=CHAR_VALUES, textvariable=self.first).grid(
-			row=1, column=2, padx=2, pady=2)
-		ttk.Label(master=self, text="Last letter:").grid(row=2, column=1, padx=2, pady=2, sticky="W")
-		ttk.Spinbox(master=self, values=CHAR_VALUES, textvariable=self.last).grid(
-			row=2, column=2, padx=2, pady=2)
-		buttons = ttk.Frame(master=self)
-		ttk.Button(master=buttons, text="Cancel", command=self.on_cancel).grid(row=1, column=1, padx=2, pady=2)
-		ttk.Button(master=buttons, text="OK", command=self.on_ok).grid(row=1, column=2, padx=2, pady=2)
-		buttons.grid(row=3, column=1, columnspan=2)
-
-		self.protocol(name="WM_DELETE_WINDOW", func=self.on_cancel)
-		self.bind('<Escape>', self.on_cancel)
-		self.bind('<Return>', self.on_ok)
-		self.transient(master=master)
-		self.wait_visibility()
-		self.grab_set()
-		self.wait_window()
+		self.add_range_inputs(row=1, focus=True, first=first, last=last)
+		self.show_modal()
 
 	def get_new_range(self):
 		return self.result
@@ -244,12 +228,7 @@ class ChangeFontRangeDialog(Toplevel):
 			first = last
 			last = temp
 		self.result = (first, last)
-		self.grab_release()
-		self.destroy()
-	
-	def on_cancel(self, event = None):
-		self.grab_release()
-		self.destroy()
+		super().on_ok()
 
 # Pixel widget (just black or white rectangle)
 class Pixel(ttk.Label):
@@ -618,14 +597,14 @@ class FontEditor(ttk.Frame):
 				title="Save Font as", filetypes=[("Font files", "*.font")])
 			# Update font_state name according to selected filename
 			if not filename:
-				#FIXME what to do here?
 				return
 			matcher = re.search(r"([^/\\]*)\.font$", filename)
 			if not matcher:
-				#FIXME what to do here?
+				print(f"{filename} does not match regex pattern (.font extension)")
 				return
 			self.filename = filename
 			self.font_state.name = matcher.group(1)
+			
 		# Update glyph of current character
 		if self.previous_char:
 			glyph = self.glyph_editor.get_glyph_from_pixels()
@@ -635,6 +614,7 @@ class FontEditor(ttk.Frame):
 		with open(self.filename, 'wb') as output:
 			pickle.dump(self.font_state, file = output)
 		self.is_dirty = False
+		self.update_title()
 
 	def on_revert_font(self):
 		if not self.filename:
@@ -655,7 +635,7 @@ class FontEditor(ttk.Frame):
 				undefined_glyphs.append(c)
 		if len(undefined_glyphs) > 1:
 			messagebox.showerror(title="Operation Impossible", 
-				message=f"Glyphs for {len(undefined_glyphs)} are undefined!")
+				message=f"Glyphs for {len(undefined_glyphs)} characters are undefined!")
 			return
 		if len(undefined_glyphs) > 0:
 			c = undefined_glyphs[0]
@@ -736,6 +716,7 @@ class FontEditor(ttk.Frame):
 			elif self.previous_char > last:
 				self.previous_char = last
 			self.set_font(font_state=self.font_state)
+			self.is_dirty = True
 
 if __name__ == '__main__':
 	# Create Window
