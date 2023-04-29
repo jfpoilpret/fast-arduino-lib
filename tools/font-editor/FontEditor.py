@@ -19,7 +19,7 @@
 # This python mini-application allows creation of display fonts and creates CPP files
 # (header & source) from created fonts.
 
-#TODO 2h+	Extend/reduce font size? could be useful!
+#TODO 1h+	Move edited glyph (up/down/left/right)
 #TODO 4h	Generate horizontal fonts too
 #TODO 30'	Refactor to put exporting functions here too (only one source code file)
 
@@ -60,21 +60,47 @@ class FontState:
 	glyphs: dict[int, list[list[bool]]] = None
 
 	def __post_init__(self):
-		self.glyphs: dict[int, list[list[bool]]] = {c: [] for c in range(self.first, self.last + 1)}
+		self.glyphs: dict[int, list[list[bool]]] = {
+			c: self.new_empty_glyph() for c in range(self.first, self.last + 1)}
 	
+	def new_empty_row(self) ->list[bool]:
+		return [False for i in range(self.width)]
+
+	def new_empty_glyph(self) -> list[list[bool]]:
+		return [self.new_empty_row() for i in range(self.height)]
+
 	def update_range(self, first: int, last: int):
 		if first < self.first:
-			self.glyphs.update({c: [] for c in range(first, self.first)})
+			self.glyphs.update({c: self.new_empty_glyph() for c in range(first, self.first)})
 		elif first > self.first:
 			for c in range(self.first, first):
 				del self.glyphs[c]
 		if last > self.last:
-			self.glyphs.update({c: [] for c in range(self.last + 1, last + 1)})
+			self.glyphs.update({c: self.new_empty_glyph() for c in range(self.last + 1, last + 1)})
 		elif last < self.last:
 			for c in range(last + 1, self.last + 1):
 				del self.glyphs[c]
 		self.first = first
 		self.last = last
+	
+	def update_size(self, width: int, height: int):
+		delta_height = height - self.height
+		delta_width = width - self.width
+		self.width = width
+		self.height = height
+		extra_width = [False for i in range(delta_width)] if delta_width > 0 else []
+		for glyph in self.glyphs.values():
+			# Handle width change
+			for row in glyph:
+				if delta_width < 0:
+					del row[delta_width:]
+				else:
+					row.extend(extra_width.copy())
+			# Handle height change
+			if delta_height < 0:
+				del glyph[delta_height:]
+			else:
+				glyph.extend([self.new_empty_row() for i in range(delta_height)])
 
 class AbstractDialog(Toplevel):
 	def __init__(self, master: Misc, buttons_row: int, buttons_columnspan: int):
@@ -226,6 +252,25 @@ class ChangeFontRangeDialog(AbstractDialog):
 		self.result = (first, last)
 		super().on_ok()
 
+# Dialog displayed when changing current font size
+class ChangeFontSizeDialog(AbstractDialog):
+	def __init__(self, master: Misc, width: int, height: int):
+		super().__init__(master=master, buttons_row=3, buttons_columnspan=2)
+		self.title("Change Font Size")
+		self.result: tuple[int, int] = None
+		# Add UI: 1st char, last char
+		self.add_size_inputs(row=1, focus=True, width=width, height=height)
+		self.show_modal()
+
+	def get_new_size(self):
+		return self.result
+
+	def on_ok(self, event = None):
+		width = self.width.get()
+		height = self.height.get()
+		self.result = (width, height)
+		super().on_ok()
+
 # Pixel widget (just black or white rectangle)
 class Pixel(ttk.Label):
 	def __init__(self, master: Misc, value: bool, **kwargs):
@@ -267,6 +312,7 @@ class GlyphEditor(ttk.Frame):
 			self.pixels.append(row)
 
 	def get_glyph_from_pixels(self) -> list[list[bool]]:
+		#TODO python idiom to iterate list[list] in one for loop?
 		glyph = []
 		for pixels_row in self.pixels:
 			row = []
@@ -276,6 +322,7 @@ class GlyphEditor(ttk.Frame):
 		return glyph
 
 	def update_pixels_from_glyph(self, glyph: list[list[bool]]):
+		#TODO python idiom to iterate list[list] in one for loop?
 		for y in range(self.height):
 			glyph_row = glyph[y]
 			pixels_row = self.pixels[y]
@@ -285,6 +332,7 @@ class GlyphEditor(ttk.Frame):
 				pixel.set_value(glyph_pixel)
 
 	def clear_pixels(self):
+		#TODO python idiom to iterate list[list] in one for loop?
 		for y in range(self.height):
 			pixels_row = self.pixels[y]
 			for x in range(self.width):
@@ -361,9 +409,10 @@ class CharacterThumbnail(Frame):
 		self.glyph_image.put(data=data)
 	
 	def set_glyph(self, glyph: list[list[bool]]):
+		#TODO refactor with clear_glyph() common code!
 		data: list[list[str]] = []
 		for r in range(self.glyph_height * CharacterThumbnail.PIX_SIZE):
-			row = []
+			row: list[str] = []
 			for c in range(self.glyph_width * CharacterThumbnail.PIX_SIZE):
 				row.append("white")
 			data.append(row)
@@ -375,6 +424,7 @@ class CharacterThumbnail(Frame):
 					for x in range(c1, c1 + CharacterThumbnail.PIX_SIZE):
 						r1 = r * CharacterThumbnail.PIX_SIZE
 						for y in range(r1, r1 + CharacterThumbnail.PIX_SIZE):
+							# print(f"set_glyph() data[{y}][{x}] = 'black'")
 							data[y][x] = "black"
 		self.glyph_image.put(data=data)
 
@@ -460,6 +510,7 @@ class FontEditor(ttk.Frame):
 		master.bind('<Control-v>', self.on_paste)
 		menu_edit.add_separator()
 		menu_edit.add_command(label="Change Font Range...", command=self.on_change_font_range, underline=15)
+		menu_edit.add_command(label="Change Font Size...", command=self.on_change_font_size, underline=13)
 
 		self.grid(column=0, row=0, sticky=(N))
 		master.columnconfigure(0, weight=1)
@@ -709,11 +760,26 @@ class FontEditor(ttk.Frame):
 		range = dialog.get_new_range()
 		if range and range != (first, last):
 			# Range has changed => modify font_state and reinit UI
-			self.font_state.update_range(range[0], range[1])
+			self.font_state.update_range(first=range[0], last=range[1])
 			if self.previous_char < first:
 				self.previous_char = first
 			elif self.previous_char > last:
 				self.previous_char = last
+			self.set_font(font_state=self.font_state)
+			self.is_dirty = True
+
+	def on_change_font_size(self):
+		if not self.filename:
+			messagebox.showinfo(title="Operation Impossible",
+		    	message="Impossible change size until font open and saved once.")
+			return
+		width = self.font_state.width
+		height = self.font_state.height
+		dialog = ChangeFontSizeDialog(master=self.master, width=width, height=height)
+		size = dialog.get_new_size()
+		if size and size != (width, height):
+			# Size has changed => modify font_state and reinit UI
+			self.font_state.update_size(width=size[0], height=size[1])
 			self.set_font(font_state=self.font_state)
 			self.is_dirty = True
 
