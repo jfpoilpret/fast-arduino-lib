@@ -19,7 +19,7 @@
 # This python mini-application allows creation of display fonts and creates CPP files
 # (header & source) from created fonts.
 
-#TODO 1h+	Move edited glyph (up/down/left/right)
+#TODO 1h+	Move edited glyph (up/down/left/right) -> difficulty will be UNDO
 #TODO 4h	Generate horizontal fonts too
 #TODO 30'	Refactor to put exporting functions here too (only one source code file)
 
@@ -102,6 +102,7 @@ class FontState:
 			else:
 				glyph.extend([self.new_empty_row() for i in range(delta_height)])
 
+# Common code for all dialogs
 class AbstractDialog(Toplevel):
 	def __init__(self, master: Misc, buttons_row: int, buttons_columnspan: int):
 		super().__init__(master=master)
@@ -312,31 +313,16 @@ class GlyphEditor(ttk.Frame):
 			self.pixels.append(row)
 
 	def get_glyph_from_pixels(self) -> list[list[bool]]:
-		#TODO python idiom to iterate list[list] in one for loop?
-		glyph = []
-		for pixels_row in self.pixels:
-			row = []
-			for pixel in pixels_row:
-				row.append(pixel.get_value())
-			glyph.append(row)
-		return glyph
+		return [[pixel.get_value() for pixel in pixels_row] for pixels_row in self.pixels]
 
 	def update_pixels_from_glyph(self, glyph: list[list[bool]]):
-		#TODO python idiom to iterate list[list] in one for loop?
-		for y in range(self.height):
-			glyph_row = glyph[y]
-			pixels_row = self.pixels[y]
-			for x in range(self.width):
-				glyph_pixel: bool = glyph_row[x]
-				pixel: Pixel = pixels_row[x]
+		for glyph_row, pixels_row in zip(glyph, self.pixels):
+			for glyph_pixel, pixel in zip(glyph_row, pixels_row):
 				pixel.set_value(glyph_pixel)
 
 	def clear_pixels(self):
-		#TODO python idiom to iterate list[list] in one for loop?
-		for y in range(self.height):
-			pixels_row = self.pixels[y]
-			for x in range(self.width):
-				pixel: Pixel = pixels_row[x]
+		for pixels_row in self.pixels:
+			for pixel in pixels_row:
 				pixel.set_value(False)
 	
 	def find_pixel(self, x: int, y: int) -> Pixel:
@@ -399,24 +385,20 @@ class CharacterThumbnail(Frame):
 		self.char = char
 		self.letter_label.config(text=f"{char:02x}-{chr(char)}")
 	
-	def clear_glyph(self):
+	def empty_glyph(self) -> list[list[str]]:
 		data: list[list[str]] = []
 		for r in range(self.glyph_height * CharacterThumbnail.PIX_SIZE):
 			row = []
 			for c in range(self.glyph_width * CharacterThumbnail.PIX_SIZE):
 				row.append("white")
 			data.append(row)
-		self.glyph_image.put(data=data)
+		return data
+
+	def clear_glyph(self):
+		self.glyph_image.put(data=self.empty_glyph())
 	
 	def set_glyph(self, glyph: list[list[bool]]):
-		#TODO refactor with clear_glyph() common code!
-		data: list[list[str]] = []
-		for r in range(self.glyph_height * CharacterThumbnail.PIX_SIZE):
-			row: list[str] = []
-			for c in range(self.glyph_width * CharacterThumbnail.PIX_SIZE):
-				row.append("white")
-			data.append(row)
-			
+		data = self.empty_glyph()
 		for r, row in enumerate(glyph):
 			for c, col in enumerate(row):
 				if col:
@@ -424,7 +406,6 @@ class CharacterThumbnail(Frame):
 					for x in range(c1, c1 + CharacterThumbnail.PIX_SIZE):
 						r1 = r * CharacterThumbnail.PIX_SIZE
 						for y in range(r1, r1 + CharacterThumbnail.PIX_SIZE):
-							# print(f"set_glyph() data[{y}][{x}] = 'black'")
 							data[y][x] = "black"
 		self.glyph_image.put(data=data)
 
