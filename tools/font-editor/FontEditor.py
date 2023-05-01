@@ -858,7 +858,7 @@ def generate_glyph_rows(c: int, width: int, height: int, vertical: bool, glyph: 
 					mask *= 2
 				glyph_row += f'0x{byte:02x}, '
 			# Ensure '\' character is not mis-interpreted by C pre-processor by adding a space afterneath
-			glyph_char = '\\ ' if chr(c) == '\\' else chr(c)
+			glyph_char = '\\ (backslash)' if chr(c) == '\\' else chr(c)
 			glyph_rows += GLYPH_TEMPLATE.format(glyph_row = glyph_row, glyph_code = c, glyph_char = glyph_char)
 	else:
 		#TODO
