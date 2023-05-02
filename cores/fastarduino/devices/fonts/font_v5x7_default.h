@@ -1,4 +1,4 @@
-//   Copyright 2016-2022 Jean-Francois Poilpret
+//   Copyright 2016-2023 Jean-Francois Poilpret
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -24,12 +24,12 @@ namespace devices::display
 	class DefaultVerticalFont7x5 : public Font<true>
 	{
 	public:
-		DefaultVerticalFont7x5() : Font{0x20, 0x7f, 5, 7, FONT} {}
-	
+		DefaultVerticalFont7x5() : Font{0x20, 0x7e, 5, 7, FONT} {}
+
 	private:
 		static const uint8_t FONT[] PROGMEM;
 	};
 }
-
 #endif /* FONT_V5X7_DEFAULT_HH */
+
 /// @endcond
