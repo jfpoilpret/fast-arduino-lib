@@ -124,6 +124,8 @@ tones6	Tone player from Flash, playing 2 channels asynchronously from RTT events
 tones7	Tone player from Flash, playing asynchronously from RTT events (QTonePlay)
 Nokia5110_1	Display example of all drawing primitives on a Nokia5110 display
 Nokia5110_2	Display example of all drawing primitives errors on a Nokia5110 display
+Nokia5110_3	Display example of font capabilities on a Nokia5110 display
+Nokia5110_4	Display example of default font on a Nokia5110 display
 PCIFuture	Example of Future concept usage with PCI ISR
 improved_futures	Example of FuturesGroup & status listener
 improved_futures2	Example of output content listener

@@ -90,7 +90,9 @@ EXAMPLES_ARDUINO_UNO=	complete/Conway							\
 						rfid/grove_wiegand1						\
 						rfid/grove_wiegand2						\
 						spi/Nokia5110_1							\
-						spi/Nokia5110_2							
+						spi/Nokia5110_2							\
+						spi/Nokia5110_3							\
+						spi/Nokia5110_4							
 
 EXAMPLES_BREADBOARD_ATMEGAXX4P=	int/ExternalInterrupt3					\
 								analog/AnalogComparator1				\
