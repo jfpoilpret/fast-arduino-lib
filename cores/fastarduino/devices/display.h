@@ -60,7 +60,7 @@ namespace devices
 	 * of `update()` method that sends invalidated raster pixels to the device.
 	 * - or they directly draw evey pixel directly to the device because they cannot
 	 * possibly hold a raster buffer in SRAM (too large resolution, like ILI9340);
-	 * thsi device must implement an empty `update()` method.
+	 * this device must implement an empty `update()` method.
 	 */
 	namespace display
 	{
@@ -69,6 +69,16 @@ namespace devices
 
 namespace devices::display
 {
+	/// @cond notdocumented
+	template<typename XCOORD, typename YCOORD>
+	struct Point
+	{
+		Point(XCOORD x, YCOORD y) : x{x}, y{y} {}
+		const XCOORD x;
+		const YCOORD y;
+	};
+	/// @endcond
+
 	/**
 	 * Mode used when drawing pixels.
 	 * This determines how the destination pixel color is affected by the
@@ -340,6 +350,10 @@ namespace devices::display
 		using XCOORD = typename DISPLAY_DEVICE::XCOORD;
 		/** Integral type of Y coordinate. */
 		using YCOORD = typename DISPLAY_DEVICE::YCOORD;
+
+		/** Coordinates of a point in the display. */
+		using POINT = Point<XCOORD, YCOORD>;
+
 		/** 
 		 * Integral type used in various calculations based on coordinates.
 		 * Typically the smallest of `XCOORD` and `YCOORD`.
@@ -379,19 +393,20 @@ namespace devices::display
 		/**
 		 * Draw one character at the given display location.
 		 * 
-		 * @param x x coordinate of top left character pixel
-		 * @param y y coordinate of top left character pixel
+		 * @param point coordinates of top left character pixel
 		 * @param value code of character to write; this must be available in
 		 * the current loaded `Font`.
 		 * 
 		 * @sa AbstractDisplayDevice::set_font()
 		 */
-		void draw_char(XCOORD x, YCOORD y, char value)
+		void draw_char(POINT point, char value)
 		{
 			// Check one font is currently selected
 			if (!DISPLAY_DEVICE::check_font()) return;
 			// Check coordinates are suitable for character display
 			const uint8_t width = this->font_->width();
+			XCOORD x = point.x;
+			YCOORD y = point.y;
 			if (!is_valid_char_xy(x, y, width)) return;
 			// Check glyph exists for current character
 			uint16_t glyph_ref = get_glyph(value);
@@ -404,19 +419,20 @@ namespace devices::display
 		/**
 		 * Draw a string of characters at the given display location.
 		 * 
-		 * @param x x coordinate of 1st top left character pixel
-		 * @param y y coordinate of 1st top left character pixel
+		 * @param point coordinates of 1st top left character pixel
 		 * @param content C-string of characters to write; all charcaters must be
 		 * available in the current loaded `Font`.
 		 * 
 		 * @sa AbstractDisplayDevice::set_font()
 		 */
-		void draw_string(XCOORD x, YCOORD y, const char* content)
+		void draw_string(POINT point, const char* content)
 		{
 			// Check one font is currently selected
 			if (!DISPLAY_DEVICE::check_font()) return;
 			const uint8_t width = this->font_->width();
 
+			XCOORD x = point.x;
+			YCOORD y = point.y;
 			XCOORD xcurrent = x;
 			while (*content)
 			{
@@ -442,19 +458,20 @@ namespace devices::display
 		/**
 		 * Draw a string of characters at the given display location.
 		 * 
-		 * @param x x coordinate of 1st top left character pixel
-		 * @param y y coordinate of 1st top left character pixel
+		 * @param point coordinates of 1st top left character pixel
 		 * @param content C-string of characters, stored in MCU Flash, to write;
 		 * all charcaters must be available in the current loaded `Font`.
 		 * 
 		 * @sa AbstractDisplayDevice::set_font()
 		 */
-		void draw_string(XCOORD x, YCOORD y, const flash::FlashStorage* content)
+		void draw_string(POINT point, const flash::FlashStorage* content)
 		{
 			// Check one font is currently selected
 			if (!DISPLAY_DEVICE::check_font()) return;
 			const uint8_t width = this->font_->width();
 
+			XCOORD x = point.x;
+			YCOORD y = point.y;
 			XCOORD xcurrent = x;
 			uint16_t address = (uint16_t) content;
 			char value;
@@ -482,11 +499,12 @@ namespace devices::display
 		/**
 		 * Draw a pixel at given coordinate.
 		 * 
-		 * @param x x coordinate of pixel to draw
-		 * @param y y coordinate of pixel to draw
+		 * @param point coordinates of pixel to draw
 		 */
-		void draw_pixel(XCOORD x, YCOORD y)
+		void draw_point(POINT point)
 		{
+			XCOORD x = point.x;
+			YCOORD y = point.y;
 			if (!is_valid_xy(x, y)) return;
 			if (DISPLAY_DEVICE::set_pixel(x, y))
 				invalidate(x, y, x, y);
@@ -498,13 +516,15 @@ namespace devices::display
 		/**
 		 * Draw a line between 2 points, at given coordinates.
 		 * 
-		 * @param x1 x coordinate of 1st line point
-		 * @param y1 y coordinate of 1st line point
-		 * @param x2 x coordinate of 2nd line point
-		 * @param y2 y coordinate of 2nd line point
+		 * @param point1 coordinates of line 1st point
+		 * @param point2 coordinates of line 2nd point
 		 */
-		void draw_line(XCOORD x1, YCOORD y1, XCOORD x2, YCOORD y2)
+		void draw_line(POINT point1, POINT point2)
 		{
+			XCOORD x1 = point1.x;
+			YCOORD y1 = point1.y;
+			XCOORD x2 = point2.x;
+			YCOORD y2 = point2.y;
 			if (!is_valid_xy(x1, y1)) return;
 			if (!is_valid_xy(x2, y2)) return;
 
@@ -542,13 +562,15 @@ namespace devices::display
 		/**
 		 * Draw a rectangle defined by 2 corner points, at given coordinates.
 		 * 
-		 * @param x1 x coordinate of 1st rectangle corner
-		 * @param y1 y coordinate of 1st rectangle corner
-		 * @param x2 x coordinate of 2nd rectangle corner
-		 * @param y2 y coordinate of 2nd rectangle corner
+		 * @param point1 coordinates of rectangle 1st corner
+		 * @param point2 coordinates of rectangle 2nd corner
 		 */
-		void draw_rectangle(XCOORD x1, YCOORD y1, XCOORD x2, YCOORD y2)
+		void draw_rectangle(POINT point1, POINT point2)
 		{
+			XCOORD x1 = point1.x;
+			YCOORD y1 = point1.y;
+			XCOORD x2 = point2.x;
+			YCOORD y2 = point2.y;
 			if (!is_valid_xy(x1, y1)) return;
 			if (!is_valid_xy(x2, y2)) return;
 			if ((x1 == x2) || (y1 == y2))
@@ -572,12 +594,13 @@ namespace devices::display
 		/**
 		 * Draw a circle defined by its center, at given coordinates, and its radius.
 		 * 
-		 * @param xc x coordinate of circle center
-		 * @param yc y coordinate of circle center
+		 * @param center coordinates of circle center
 		 * @param radius circle radius
 		 */
-		void draw_circle(XCOORD xc, YCOORD yc, SCALAR radius)
+		void draw_circle(POINT center, SCALAR radius)
 		{
+			XCOORD xc = center.x;
+			YCOORD yc = center.y;
 			if (!is_valid_xy(xc, yc)) return;
 			if (radius == 0)
 			{
@@ -595,7 +618,7 @@ namespace devices::display
 			invalidate(XCOORD(xc - radius), YCOORD(yc - radius), XCOORD(xc + radius), YCOORD(yc + radius));
 		}
 
-		//TODO additional 2D primitives here? e.g. arc, fill
+		//TODO additional 2D primitives here? e.g. polyline, polygon, arc, region fill
 		// void draw_arc()
 
 		/**

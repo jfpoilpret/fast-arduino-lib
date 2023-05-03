@@ -99,7 +99,7 @@ static void check_font(DISPLAY& nokia, const devices::display::Font<true>& font)
 	const uint8_t FONT_WIDTH = font.width() + 1;
 	for (uint8_t i = 0; i < 10; ++i)
 	{
-		nokia.draw_char(x, 0, 'A');
+		nokia.draw_char({x, 0}, 'A');
 		nokia.update();
 		time::delay_ms(CHAR_MS);
 		x += FONT_WIDTH;
@@ -107,12 +107,12 @@ static void check_font(DISPLAY& nokia, const devices::display::Font<true>& font)
 
 	time::delay_ms(DELAY_MS);
 	nokia.erase();
-	nokia.draw_string(8, 8, "AAAAAAAA");
+	nokia.draw_string({8, 8}, "AAAAAAAA");
 	nokia.update();
 
 	time::delay_ms(DELAY_MS);
 	nokia.erase();
-	nokia.draw_string(8, 24, F("AAAAAAAA"));
+	nokia.draw_string({8, 24}, F("AAAAAAAA"));
 	nokia.update();
 }
 

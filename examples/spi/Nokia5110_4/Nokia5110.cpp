@@ -90,7 +90,7 @@ int main()
 		uint8_t x = 0, y = 0;
 		for (uint8_t c = font.first_char(); c <= font.last_char(); ++c)
 		{
-			nokia.draw_char(x, y, char(c));
+			nokia.draw_char({x, y}, char(c));
 			x += FONT_WIDTH;
 			if (x > nokia.WIDTH - FONT_WIDTH)
 			{

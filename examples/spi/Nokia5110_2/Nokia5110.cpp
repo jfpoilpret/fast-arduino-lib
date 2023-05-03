@@ -123,81 +123,81 @@ int main()
 	nokia.erase();
 	nokia.update();
 
-	nokia.draw_char(0, 0, 'A');
+	nokia.draw_char({0, 0}, 'A');
 	tests::assert_equals(out, F("last_error() after draw_char without font"), Error::NO_FONT_SET, nokia.last_error());
 
 	devices::display::DefaultVerticalFont7x5 font{};
 	nokia.set_font(font);
-	nokia.draw_char(0, 0, 'A');
+	nokia.draw_char({0, 0}, 'A');
 	tests::assert_equals(out, F("last_error() after draw_char with font"), Error::NO_ERROR, nokia.last_error());
 
-	nokia.draw_char(0, 0, char(0));
+	nokia.draw_char({0, 0}, char(0));
 	tests::assert_equals(out, F("last_error() after draw_char without glyph"), Error::NO_GLYPH_FOUND, nokia.last_error());
 
-	nokia.draw_char(0, 20, 'A');
+	nokia.draw_char({0, 20}, 'A');
 	tests::assert_equals(out, F("last_error() after draw_char at bad y"), Error::COORDS_INVALID, nokia.last_error());
 
-	nokia.draw_char(84, 0, 'A');
+	nokia.draw_char({84, 0}, 'A');
 	tests::assert_equals(out, F("last_error() after draw_char at too big x"), Error::OUT_OF_DISPLAY, nokia.last_error());
 
-	nokia.draw_char(0, 48, 'A');
+	nokia.draw_char({0, 48}, 'A');
 	tests::assert_equals(out, F("last_error() after draw_char at too big y"), Error::OUT_OF_DISPLAY, nokia.last_error());
 
-	nokia.draw_char(80, 20, 'A');
+	nokia.draw_char({80, 20}, 'A');
 	tests::assert_equals(out, F("last_error() after draw_char out of bounds"), Error::OUT_OF_DISPLAY, nokia.last_error());
 
-	nokia.draw_char(79, 16, 'A');
+	nokia.draw_char({79, 16}, 'A');
 	tests::assert_equals(out, F("last_error() after draw_char just in bounds"), Error::NO_ERROR, nokia.last_error());
 
-	nokia.draw_pixel(84, 0);
+	nokia.draw_point({84, 0});
 	tests::assert_equals(out, F("last_error() after draw_pixel at too big x"), Error::OUT_OF_DISPLAY, nokia.last_error());
 
-	nokia.draw_pixel(0, 48);
+	nokia.draw_point({0, 48});
 	tests::assert_equals(out, F("last_error() after draw_pixel at too big y"), Error::OUT_OF_DISPLAY, nokia.last_error());
 
-	nokia.draw_pixel(42, 24);
+	nokia.draw_point({42, 24});
 	tests::assert_equals(out, F("last_error() after draw_pixel at center"), Error::NO_ERROR, nokia.last_error());
 
-	nokia.draw_line(0, 0, 84, 0);
+	nokia.draw_line({0, 0}, {84, 0});
 	tests::assert_equals(out, F("last_error() after draw_line at too big x"), Error::OUT_OF_DISPLAY, nokia.last_error());
 
-	nokia.draw_line(0, 0, 0, 48);
+	nokia.draw_line({0, 0}, {0, 48});
 	tests::assert_equals(out, F("last_error() after draw_line at too big y"), Error::OUT_OF_DISPLAY, nokia.last_error());
 
-	nokia.draw_line(0, 0, 83, 47);
+	nokia.draw_line({0, 0}, {83, 47});
 	tests::assert_equals(out, F("last_error() after draw_line in bounds"), Error::NO_ERROR, nokia.last_error());
 
-	nokia.draw_line(0, 0, 0, 0);
+	nokia.draw_line({0, 0}, {0, 0});
 	tests::assert_equals(out, F("last_error() after draw_line on same point"), Error::INVALID_GEOMETRY, nokia.last_error());
 
-	nokia.draw_circle(84, 0, 1);
+	nokia.draw_circle({84, 0}, 1);
 	tests::assert_equals(out, F("last_error() after draw_circle at too big x"), Error::OUT_OF_DISPLAY, nokia.last_error());
 
-	nokia.draw_circle(0, 48, 1);
+	nokia.draw_circle({0, 48}, 1);
 	tests::assert_equals(out, F("last_error() after draw_circle at too big y"), Error::OUT_OF_DISPLAY, nokia.last_error());
 
-	nokia.draw_circle(42, 24, 10);
+	nokia.draw_circle({42, 24}, 10);
 	tests::assert_equals(out, F("last_error() after draw_circle in bounds"), Error::NO_ERROR, nokia.last_error());
 
-	nokia.draw_circle(42, 24, 23);
+	nokia.draw_circle({42, 24}, 23);
 	tests::assert_equals(out, F("last_error() after draw_circle just in bounds"), Error::NO_ERROR, nokia.last_error());
 
-	nokia.draw_circle(42, 24, 24);
+	nokia.draw_circle({42, 24}, 24);
 	tests::assert_equals(out, F("last_error() after draw_circle just out bounds"), Error::OUT_OF_DISPLAY, nokia.last_error());
 
-	nokia.draw_circle(42, 24, 0);
+	nokia.draw_circle({42, 24}, 0);
 	tests::assert_equals(out, F("last_error() after draw_circle of radius 0"), Error::INVALID_GEOMETRY, nokia.last_error());
 
-	nokia.draw_rectangle(10, 10, 10, 40);
+	nokia.draw_rectangle({10, 10}, {10, 40});
 	tests::assert_equals(out, F("last_error() after draw_rectangle on flat vertical rectangle"), Error::INVALID_GEOMETRY, nokia.last_error());
 
-	nokia.draw_rectangle(10, 10, 60, 10);
+	nokia.draw_rectangle({10, 10}, {60, 10});
 	tests::assert_equals(out, F("last_error() after draw_rectangle on flat horizontal rectangle"), Error::INVALID_GEOMETRY, nokia.last_error());
 
-	nokia.draw_rectangle(10, 10, 60, 40);
+	nokia.draw_rectangle({10, 10}, {60, 40});
 	tests::assert_equals(out, F("last_error() after draw_rectangle on normal rectangle"), Error::NO_ERROR, nokia.last_error());
 
-	nokia.draw_rectangle(60, 40, 10, 10);
+	nokia.draw_rectangle({60, 40}, {10, 10});
 	tests::assert_equals(out, F("last_error() after draw_rectangle on normal rectangle"), Error::NO_ERROR, nokia.last_error());
 
 	nokia.update();
