@@ -260,4 +260,19 @@ int main()
 	nokia.draw_circle({DISPLAY::WIDTH / 2, DISPLAY::HEIGHT / 2}, 20);
 	nokia.update();
 	time::delay_ms(DELAY_MS);
+
+	// Try drawing polyline
+	display_title(nokia, F("=> POLYLINE <="));
+	setup(nokia, true, Mode::COPY);
+	nokia.draw_polyline({{10, 10}, {15, 25}, {50, 40}, {60, 45}, {12, 40}});
+	nokia.update();
+	time::delay_ms(DELAY_MS);
+	
+	//TODO Try drawing polygon
+	display_title(nokia, F("==> POLYGON <="));
+	setup(nokia, true, Mode::COPY);
+	nokia.draw_polygon({{10, 10}, {15, 25}, {50, 40}, {60, 45}, {12, 40}});
+	nokia.update();
+	time::delay_ms(DELAY_MS);
+	
 }

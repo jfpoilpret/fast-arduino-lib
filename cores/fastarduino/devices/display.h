@@ -22,6 +22,7 @@
 #define DISPLAY_HH
 
 #include "../flash.h"
+#include "../initializer_list.h"
 #include "../types_traits.h"
 #include "../utilities.h"
 #include "font.h"
@@ -74,8 +75,8 @@ namespace devices::display
 	struct Point
 	{
 		Point(XCOORD x, YCOORD y) : x{x}, y{y} {}
-		const XCOORD x;
-		const YCOORD y;
+		XCOORD x;
+		YCOORD y;
 	};
 	/// @endcond
 
@@ -618,7 +619,17 @@ namespace devices::display
 			invalidate(XCOORD(xc - radius), YCOORD(yc - radius), XCOORD(xc + radius), YCOORD(yc + radius));
 		}
 
-		//TODO additional 2D primitives here? e.g. polyline, polygon, arc, region fill
+		void draw_polyline(std::initializer_list<POINT> points)
+		{
+			draw_lines(points, false);
+		}
+
+		void draw_polygon(std::initializer_list<POINT> points)
+		{
+			draw_lines(points, true);
+		}
+
+		//TODO additional 2D primitives here? e.g. arc, region fill
 		// void draw_arc()
 
 		/**
@@ -732,6 +743,25 @@ namespace devices::display
 			if (glyph_ref != 0) return glyph_ref;
 			DISPLAY_DEVICE::last_error_ = Error::NO_GLYPH_FOUND;
 			return 0;
+		}
+
+		void draw_lines(std::initializer_list<POINT> points, bool polygon)
+		{
+			if (points.size() < 2)
+			{
+				DISPLAY_DEVICE::last_error_ = Error::INVALID_GEOMETRY;
+				return;
+			}
+			const POINT* next = points.begin();
+			POINT current = *next;
+			POINT first = current;
+			while (++next != points.end())
+			{
+				draw_line(current, *next);
+				current = *next;
+			}
+			if (polygon)
+				draw_line(current, first);
 		}
 
 		void draw_vline(XCOORD x1, YCOORD y1, YCOORD y2)
