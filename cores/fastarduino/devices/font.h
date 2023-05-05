@@ -42,6 +42,7 @@ namespace devices::display
 		static constexpr bool VERTICAL = VERTICAL_;
 
 		//TODO potential optimization by using template for all args except glyphs ptr
+		//TODO this will require update of FontEditor C++ code generation!
 		/**
 		 * Construct a new Font.
 		 * 
