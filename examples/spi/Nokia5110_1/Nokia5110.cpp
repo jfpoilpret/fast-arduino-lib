@@ -264,14 +264,14 @@ int main()
 	// Try drawing polyline
 	display_title(nokia, F("=> POLYLINE <="));
 	setup(nokia, true, Mode::COPY);
-	nokia.draw_polyline({{10, 10}, {15, 25}, {50, 40}, {60, 45}, {12, 40}});
+	nokia.draw_polyline({{10, 10}, {15, 25}, {50, 30}, {70, 45}, {12, 40}});
 	nokia.update();
 	time::delay_ms(DELAY_MS);
 	
-	//TODO Try drawing polygon
+	// Try drawing polygon
 	display_title(nokia, F("==> POLYGON <="));
 	setup(nokia, true, Mode::COPY);
-	nokia.draw_polygon({{10, 10}, {15, 25}, {50, 40}, {60, 45}, {12, 40}});
+	nokia.draw_polygon({{10, 10}, {15, 25}, {50, 30}, {70, 45}, {12, 40}});
 	nokia.update();
 	time::delay_ms(DELAY_MS);
 	
