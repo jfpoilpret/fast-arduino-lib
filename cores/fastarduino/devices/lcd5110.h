@@ -237,17 +237,6 @@ namespace devices::display
 			send_command(DISPLAY_CONTROL_MASK | DISPLAY_CONTROL_NORMAL);
 		}
 
-		/**
-		 * Set pixel operations mode for next display primitives.
-		 * 
-		 * @param mode the new pixel operation mode
-		 * @sa Mode
-		 */
-		void set_mode(Mode mode)
-		{
-			mode_op_ = PIXEL_OPERATOR::get_operators(mode);
-		}
-
 	protected:
 		/// @cond notdocumented
 		LCD5110()
@@ -272,7 +261,7 @@ namespace devices::display
 			uint8_t* pix_column = get_display(r, c);
 			// Evaluate final pixel color based on color_ and mode_
 			const bool current = (*pix_column & mask);
-			const bool dest = mode_op_.pixel_op(color_, current);
+			const bool dest = draw_op_.pixel_op(draw_color_, current);
 
 			// Based on calculated color, set pixel
 			if (dest)
@@ -314,10 +303,10 @@ namespace devices::display
 					uint8_t pixel_bar = 0x00;
 					if (!space_column)
 						pixel_bar = font_->get_char_glyph_byte(glyph_ref, glyph_index);
-					if (!color_)
+					if (!draw_color_)
 						pixel_bar = ~pixel_bar;
 					if ((!space_column) || add_interchar_space)
-						*display_ptr = mode_op_.bw_pixels_op(pixel_bar, *display_ptr);
+						*display_ptr = draw_op_.bw_pixels_op(pixel_bar, *display_ptr);
 					++display_ptr;
 					++glyph_index;
 				}
@@ -348,9 +337,6 @@ namespace devices::display
 		/// @endcond
 
 	private:
-		using PIXEL_OPERATOR = PixelOperator<bool>;
-		using OPERATORS = typename PIXEL_OPERATOR::Operators;
-
 		// Internal organization of Nokia pixmap buffer (1 byte = 8 vertical pixels)
 		static constexpr uint8_t ROW_HEIGHT = 8;
 
@@ -414,9 +400,6 @@ namespace devices::display
 		//			...
 		//			RpC1 RpC2 ... RpCn
 		uint8_t display_[HEIGHT * WIDTH / ROW_HEIGHT];
-
-		// Current Mode for setting destination pixel value based on source color.
-		OPERATORS mode_op_ = PIXEL_OPERATOR::get_operators(Mode::COPY);
 
 		// Pin to control data Vs command sending through SPI
 		gpio::FAST_PIN<DC> dc_{gpio::PinMode::OUTPUT};

@@ -63,8 +63,7 @@ static constexpr uint16_t BLINK_MS = 500;
 
 static void setup(DISPLAY& nokia, bool color, Mode mode)
 {
-	nokia.set_color(true);
-	nokia.set_mode(Mode::COPY);
+	nokia.set_draw_mode({Mode::COPY, true});
 	nokia.erase();
 	nokia.draw_string({0, 16}, F("color:"));
 	if (color)
@@ -90,19 +89,21 @@ static void setup(DISPLAY& nokia, bool color, Mode mode)
 		case Mode::OR:
 		nokia.draw_string({42, 32}, F("OR"));
 		break;
+		
+		case Mode::NO_CHANGE:
+		nokia.draw_string({42, 32}, F("NONE"));
+		break;
 	}
 	nokia.update();
 	time::delay_ms(SETTINGS_MS);
 	nokia.erase();
 	nokia.update();
-	nokia.set_color(color);
-	nokia.set_mode(mode);
+	nokia.set_draw_mode({mode, color});
 }
 
 static void display_title(DISPLAY& nokia, const flash::FlashStorage* title)
 {
-	nokia.set_color(true);
-	nokia.set_mode(Mode::COPY);
+	nokia.set_draw_mode({Mode::COPY, true});
 	nokia.erase();
 	nokia.draw_string({0, 16}, title);
 	nokia.update();
@@ -122,7 +123,7 @@ int main()
 	// Start or init SPI device if needed
 	DISPLAY nokia;
 	nokia.reset();
-	nokia.set_color(true);
+	nokia.set_draw_mode({Mode::COPY, true});
 	nokia.set_display_bias();
 	nokia.set_display_contrast();
 	nokia.normal();
@@ -170,12 +171,12 @@ int main()
 
 	setup(nokia, true, Mode::AND);
 	// first draw a black rectangle in the 7x5 location of the displayed character
-	nokia.set_mode(Mode::COPY);
+	nokia.set_draw_mode({Mode::COPY, true});
 	for (uint8_t y = 8; y < 30; ++y)
 		for (uint8_t x = 35; x < 50; ++x)
 			nokia.draw_point({x, y});
 	nokia.update();
-	nokia.set_mode(Mode::AND);
+	nokia.set_draw_mode({Mode::AND, true});
 	for (uint8_t c = 'A'; c <= 'Z'; ++c)
 	{
 		nokia.draw_char({40, 16}, char(c));

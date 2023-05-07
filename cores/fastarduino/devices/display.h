@@ -27,6 +27,7 @@
 #include "../utilities.h"
 #include "font.h"
 
+//TODO add set_fill_mode()
 namespace devices
 {
 	/**
@@ -80,6 +81,7 @@ namespace devices::display
 	};
 	/// @endcond
 
+	//TODO use device traits to determine what modes a device can handle!
 	/**
 	 * Mode used when drawing pixels.
 	 * This determines how the destination pixel color is affected by the
@@ -94,7 +96,9 @@ namespace devices::display
 		/** Destination pixel is and'ed with source color (clear mode). */
 		AND,
 		/** Destination pixel is or'ed with source color (set mode). */
-		OR
+		OR,
+		/** In this mode, the destination pixel never changes, whatever the source color. */
+		NO_CHANGE = 0xFF
 	};
 
 	/**
@@ -135,9 +139,9 @@ namespace devices::display
 		/**
 		 * Return the proper drawing operations for the given drawing @p mode.
 		 * 
-		 * @param mode teh drawing mdoe for which you want the proper drawing
+		 * @param mode the drawing mode for which you want the proper drawing
 		 * operations
-		 * @return Calculators a set of 2 drawing operation functions
+		 * @return Operators a set of 2 drawing operation functions
 		 */
 		static Operators get_operators(Mode mode)
 		{
@@ -155,10 +159,22 @@ namespace devices::display
 
 				case Mode::OR:
 				return {or_bw_pixels, or_pixel};
+
+				case Mode::NO_CHANGE:
+				return {no_change_bw_pixels, no_change_pixel};
 			}
 		}
 
-		/// @cond notdocumented
+	private:
+		static uint8_t no_change_bw_pixels(UNUSED uint8_t source, uint8_t dest)
+		{
+			return dest;
+		}
+		static COLOR no_change_pixel(UNUSED COLOR source, COLOR dest)
+		{
+			return dest;
+		}
+
 		static uint8_t copy_bw_pixels(uint8_t source, UNUSED uint8_t dest)
 		{
 			return source;
@@ -194,7 +210,29 @@ namespace devices::display
 		{
 			return source | dest;
 		}
-		/// @endcond
+	};
+
+	//TODO DOC
+	//TODO Add pattern
+	template<typename COLOR> class DrawMode
+	{
+	public:
+		DrawMode() = default;
+		DrawMode(Mode mode, COLOR color) : mode_{mode}, color_{color} {}
+
+		Mode mode() const
+		{
+			return mode_;
+		}
+
+		COLOR color() const
+		{
+			return color_;
+		}
+
+	private:
+		Mode mode_ = Mode::NO_CHANGE;
+		COLOR color_{};
 	};
 
 	/// @cond notdocumented
@@ -256,16 +294,26 @@ namespace devices::display
 	template<typename COLOR, bool VERTICAL_FONT> class AbstractDisplayDevice : public AbstractDisplayDeviceGhost
 	{
 	public:
+		//TODO DOC
+		using DRAW_MODE = DrawMode<COLOR>;
+
+		//TODO DOC
+		void set_fill_mode(const DRAW_MODE& mode)
+		{
+			fill_color_ = mode.color();
+			fill_op_ = PIXEL_OPERATOR::get_operators(mode.mode());
+		}
+
 		/**
-		 * Set color to use for next calls to drawing primitives.
+		 * Set draw mode (color, pixel op) to use for next calls to drawing primitives.
 		 * The new color is simply available to subclasses in the `color_` field.
 		 * 
-		 * @param color the new color to use from now
-		 * @sa color_
+		 * @param mode the new `DRAW_MODE` to use from now
 		 */
-		void set_color(COLOR color)
+		void set_draw_mode(const DRAW_MODE& mode)
 		{
-			color_ = color;
+			draw_color_ = mode.color();
+			draw_op_ = PIXEL_OPERATOR::get_operators(mode.mode());
 		}
 
 		/**
@@ -296,6 +344,10 @@ namespace devices::display
 			return last_error_;
 		}
 
+	private:
+		using PIXEL_OPERATOR = PixelOperator<COLOR>;
+		using OPERATORS = typename PIXEL_OPERATOR::Operators;
+
 	protected:
 		/**
 		 * Check if a font is currently defined on the display.
@@ -318,8 +370,14 @@ namespace devices::display
 		 */
 		const Font<VERTICAL_FONT>* font_ = nullptr;
 
-		/** Current color that shall be used by drawing primitives. */
-		COLOR color_{};
+		/** Current color that shall to fill closed surfaces. */
+		COLOR fill_color_{};
+		/** Current draw mode (pixel op) that shall to fill closed surfaces. */
+		OPERATORS fill_op_ = PIXEL_OPERATOR::get_operators(Mode::NO_CHANGE);
+
+		/** Current draw mode (color, pixel op) that shall be used by drawing primitives. */
+		COLOR draw_color_ {};
+		OPERATORS draw_op_ = PIXEL_OPERATOR::get_operators(Mode::COPY);
 
 		/** 
 		 * The result status of the last drawing primitive called.
@@ -568,6 +626,7 @@ namespace devices::display
 		 */
 		void draw_rectangle(POINT point1, POINT point2)
 		{
+			//TODO use filler_ !
 			XCOORD x1 = point1.x;
 			YCOORD y1 = point1.y;
 			XCOORD x2 = point2.x;
@@ -600,6 +659,7 @@ namespace devices::display
 		 */
 		void draw_circle(POINT center, SCALAR radius)
 		{
+			//TODO use filler_ !
 			XCOORD xc = center.x;
 			YCOORD yc = center.y;
 			if (!is_valid_xy(xc, yc)) return;
@@ -626,6 +686,7 @@ namespace devices::display
 
 		void draw_polygon(std::initializer_list<POINT> points)
 		{
+			//TODO use filler_ !
 			draw_lines(points, true);
 		}
 
