@@ -261,7 +261,7 @@ namespace devices::display
 			uint8_t* pix_column = get_display(r, c);
 			// Evaluate final pixel color based on color_ and mode_
 			const bool current = (*pix_column & mask);
-			const bool dest = draw_op_.pixel_op(draw_color_, current);
+			const bool dest = draw_mode_.pixel_op(current);
 
 			// Based on calculated color, set pixel
 			if (dest)
@@ -303,10 +303,8 @@ namespace devices::display
 					uint8_t pixel_bar = 0x00;
 					if (!space_column)
 						pixel_bar = font_->get_char_glyph_byte(glyph_ref, glyph_index);
-					if (!draw_color_)
-						pixel_bar = ~pixel_bar;
 					if ((!space_column) || add_interchar_space)
-						*display_ptr = draw_op_.bw_pixels_op(pixel_bar, *display_ptr);
+						*display_ptr = draw_mode_.bw_pixels_op(pixel_bar, *display_ptr);
 					++display_ptr;
 					++glyph_index;
 				}

@@ -27,7 +27,6 @@
 #include "../utilities.h"
 #include "font.h"
 
-//TODO add set_fill_mode()
 namespace devices
 {
 	/**
@@ -86,6 +85,10 @@ namespace devices::display
 	 * Mode used when drawing pixels.
 	 * This determines how the destination pixel color is affected by the
 	 * source color.
+	 * 
+	 * @note Not all display devices can support all modes, as most modes (except 
+	 * `Mode::COPY`) require access to a raster buffer (either in SRAM or on the 
+	 * display chip itself).
 	 */
 	enum class Mode : uint8_t
 	{
@@ -101,15 +104,11 @@ namespace devices::display
 		NO_CHANGE = 0xFF
 	};
 
+	//TODO Add pattern
 	/**
-	 * Class to be used by a display device class that can handle specific drawing 
-	 * modes.
+	 * Drawing Mode to use for `Display` drawing primitives.
+	 * This encapsulates a pixel operation `Mode` and a color to use.
 	 * 
-	 * @note Not all display devices can support all modes, as most modes (except 
-	 * `Mode::COPY`) require access to a raster buffer (either in SRAM or on the 
-	 * display chip itself).
-	 * 
-	 * For each supported mode, 2 methods are defined:
 	 * - `xxxx_bw_pixels()` can be used for B&W devices where one byte represents 
 	 * 8 pixels; the drawing mode will be applied to all pixels in the byte
 	 * - `xxxx_pixel()` is used on ONE pixel color (type defined by @p COLOR).
@@ -121,120 +120,88 @@ namespace devices::display
 	 * @sa Mode
 	 * @sa LCD5110
 	 */
-	template<typename COLOR> struct PixelOperator
+	template<typename COLOR> class DrawMode
 	{
-		/** The type of a pointer function for `xxxx_bw_pixels()`. */
-		using COMPUTE_BW_PIXELS = uint8_t (*)(uint8_t, uint8_t);
-		/** The type of a pointer function for `xxxx_pixel()`. */
-		using COMPUTE_PIXEL = COLOR (*)(COLOR, COLOR);
-
-		/// @cond notdocumented
-		struct Operators
-		{
-			COMPUTE_BW_PIXELS bw_pixels_op;
-			COMPUTE_PIXEL pixel_op;
-		};
-		/// @endcond
+	public:
+		DrawMode(Mode mode = Mode::NO_CHANGE, COLOR color = COLOR{})
+			: mode_{mode}, color_{color} {}
 
 		/**
-		 * Return the proper drawing operations for the given drawing @p mode.
-		 * 
-		 * @param mode the drawing mode for which you want the proper drawing
-		 * operations
-		 * @return Operators a set of 2 drawing operation functions
+		 * Test if this `DrawMode` can change display or not, ie if its mode
+		 * is not `Mode::NO_CHANGE`.
+		 * This is useful in order to avoid complex primitive functions that will
+		 * waste CPU with no effect.
 		 */
-		static Operators get_operators(Mode mode)
+		operator bool() const
 		{
-			switch (mode)
+			return mode_ != Mode::NO_CHANGE;
+		}
+
+		/**
+		 * Combine 8 source B&W pixels and 8 destination B&W pixels, all gathered
+		 * in a byte, according to the `Mode` set at construction time.
+		 * 
+		 * @param source the 8 B&W pixels we want to apply onto @p dest
+		 * @param dest the current 8 B&W pixels present on display, with which 
+		 * @p source pixels shall be combined according to `Mode`
+		 * @return uint8_t the resulting 8 B&W pixels to display
+		 */
+		uint8_t bw_pixels_op(uint8_t source, uint8_t dest) const
+		{
+			// Invert source if colow is black
+			if (!color_)
+				source = ~source;
+			switch (mode_)
 			{
 				case Mode::COPY:
 				default:
-				return {copy_bw_pixels, copy_pixel};
+				return source;
 
 				case Mode::XOR:
-				return {xor_bw_pixels, xor_pixel};
+				return source ^ dest;
 
 				case Mode::AND:
-				return {and_bw_pixels, and_pixel};
+				return source & dest;
 
 				case Mode::OR:
-				return {or_bw_pixels, or_pixel};
+				return source | dest;
+			}
+		}
 
-				case Mode::NO_CHANGE:
-				return {no_change_bw_pixels, no_change_pixel};
+		/**
+		 * Combine the predefined color (defined at construction time) with one
+		 * destination pixel, according to the `Mode` also set at construction time.
+		 * 
+		 * @param dest the current pixel color present on display, with which 
+		 * color shall be combined according to `Mode`
+		 * @return COLOR the resulting color to display
+		 */
+		COLOR pixel_op(COLOR dest) const
+		{
+			switch (mode_)
+			{
+				case Mode::COPY:
+				default:
+				return color_;
+
+				case Mode::XOR:
+				return color_ ^ dest;
+
+				case Mode::AND:
+				return color_ & dest;
+
+				case Mode::OR:
+				return color_ | dest;
 			}
 		}
 
 	private:
-		static uint8_t no_change_bw_pixels(UNUSED uint8_t source, uint8_t dest)
-		{
-			return dest;
-		}
-		static COLOR no_change_pixel(UNUSED COLOR source, COLOR dest)
-		{
-			return dest;
-		}
-
-		static uint8_t copy_bw_pixels(uint8_t source, UNUSED uint8_t dest)
-		{
-			return source;
-		}
-		static COLOR copy_pixel(COLOR source, UNUSED COLOR dest)
-		{
-			return source;
-		}
-
-		static uint8_t xor_bw_pixels(uint8_t source, uint8_t dest)
-		{
-			return source ^ dest;
-		}
-		static COLOR xor_pixel(COLOR source, COLOR dest)
-		{
-			return source ^ dest;
-		}
-
-		static uint8_t and_bw_pixels(uint8_t source, uint8_t dest)
-		{
-			return source & dest;
-		}
-		static COLOR and_pixel(COLOR source, COLOR dest)
-		{
-			return source & dest;
-		}
-
-		static uint8_t or_bw_pixels(uint8_t source, uint8_t dest)
-		{
-			return source | dest;
-		}
-		static COLOR or_pixel(COLOR source, COLOR dest)
-		{
-			return source | dest;
-		}
+		Mode mode_;
+		COLOR color_;
 	};
 
-	//TODO DOC
-	//TODO Add pattern
-	template<typename COLOR> class DrawMode
-	{
-	public:
-		DrawMode() = default;
-		DrawMode(Mode mode, COLOR color) : mode_{mode}, color_{color} {}
-
-		Mode mode() const
-		{
-			return mode_;
-		}
-
-		COLOR color() const
-		{
-			return color_;
-		}
-
-	private:
-		Mode mode_ = Mode::NO_CHANGE;
-		COLOR color_{};
-	};
-
+	//TODO redesign to avoid this complex hierarchy
+	//TODO only use Display template on actual device, and pass info (font, draw mode...) to drawing methods
 	/// @cond notdocumented
 	// This class is here to simplify check, in Display ctor, that DISPLAY_DEVICE is a subclass
 	// of AbstractDisplayDevice
@@ -300,8 +267,7 @@ namespace devices::display
 		//TODO DOC
 		void set_fill_mode(const DRAW_MODE& mode)
 		{
-			fill_color_ = mode.color();
-			fill_op_ = PIXEL_OPERATOR::get_operators(mode.mode());
+			fill_mode_ = mode;
 		}
 
 		/**
@@ -312,8 +278,7 @@ namespace devices::display
 		 */
 		void set_draw_mode(const DRAW_MODE& mode)
 		{
-			draw_color_ = mode.color();
-			draw_op_ = PIXEL_OPERATOR::get_operators(mode.mode());
+			draw_mode_ = mode;
 		}
 
 		/**
@@ -344,10 +309,6 @@ namespace devices::display
 			return last_error_;
 		}
 
-	private:
-		using PIXEL_OPERATOR = PixelOperator<COLOR>;
-		using OPERATORS = typename PIXEL_OPERATOR::Operators;
-
 	protected:
 		/**
 		 * Check if a font is currently defined on the display.
@@ -370,14 +331,11 @@ namespace devices::display
 		 */
 		const Font<VERTICAL_FONT>* font_ = nullptr;
 
-		/** Current color that shall to fill closed surfaces. */
-		COLOR fill_color_{};
-		/** Current draw mode (pixel op) that shall to fill closed surfaces. */
-		OPERATORS fill_op_ = PIXEL_OPERATOR::get_operators(Mode::NO_CHANGE);
+		/** Current draw mode that shall to fill closed surfaces. */
+		DRAW_MODE fill_mode_{};
 
 		/** Current draw mode (color, pixel op) that shall be used by drawing primitives. */
-		COLOR draw_color_ {};
-		OPERATORS draw_op_ = PIXEL_OPERATOR::get_operators(Mode::COPY);
+		DRAW_MODE draw_mode_{};
 
 		/** 
 		 * The result status of the last drawing primitive called.
@@ -626,7 +584,6 @@ namespace devices::display
 		 */
 		void draw_rectangle(POINT point1, POINT point2)
 		{
-			//TODO use filler_ !
 			XCOORD x1 = point1.x;
 			YCOORD y1 = point1.y;
 			XCOORD x2 = point2.x;
@@ -641,13 +598,27 @@ namespace devices::display
 			// Possibly swap x1-x2 and y1-y2
 			swap_to_sort(x1, x2);
 			swap_to_sort(y1, y2);
-			// Simply draw 2 horizontal and 2 vertical lines
-			draw_hline(x1, y1, x2);
-			draw_hline(x1, y2, x2);
-			// Note that we avoid drawing the same pixels (corners) twice 
-			// (due to a drawing mode that might potentially be XOR)
-			draw_vline(x1, y1 + 1, y2 - 1);
-			draw_vline(x2, y1 + 1, y2 - 1);
+
+			// Draw edges
+			if (DISPLAY_DEVICE::draw_mode_)
+			{
+				// Simply draw 2 horizontal and 2 vertical lines
+				draw_hline(x1, y1, x2);
+				draw_hline(x1, y2, x2);
+				// Note that we avoid drawing the same pixels (corners) twice 
+				// (due to a drawing mode that might potentially be XOR)
+				draw_vline(x1, y1 + 1, y2 - 1);
+				draw_vline(x2, y1 + 1, y2 - 1);
+			}
+
+			//TODO Fill rectangle inside
+			if (DISPLAY_DEVICE::fill_mode_)
+			{
+				// Simply draw enough horizontal lines
+				for (YCOORD y = y1 + 1; y < y2; ++y)
+					draw_hline(x1 + 1, y, x2 - 1);
+			}
+
 			invalidate(x1, y1, x2, y2);
 		}
 
