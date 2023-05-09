@@ -250,7 +250,7 @@ namespace devices::display
 		}
 
 		// NOTE Coordinates must have been first verified by caller
-		bool set_pixel(uint8_t x, uint8_t y)
+		bool set_pixel(uint8_t x, uint8_t y, const DRAW_MODE& draw_mode)
 		{
 			// Convert to (r,c)
 			const uint8_t c = x;
@@ -261,7 +261,7 @@ namespace devices::display
 			uint8_t* pix_column = get_display(r, c);
 			// Evaluate final pixel color based on color_ and mode_
 			const bool current = (*pix_column & mask);
-			const bool dest = draw_mode_.pixel_op(current);
+			const bool dest = draw_mode.pixel_op(current);
 
 			// Based on calculated color, set pixel
 			if (dest)
@@ -283,16 +283,17 @@ namespace devices::display
 		}
 
 		// NOTE Coordinates must have been first verified by caller
-		uint8_t write_char(uint8_t x, uint8_t y, uint16_t glyph_ref)
+		uint8_t write_char(uint8_t x, uint8_t y, uint16_t glyph_ref, 
+			const Font<true>& font, const DRAW_MODE& draw_mode)
 		{
 			// Check column and row not out of range for characters!
-			const uint8_t width = font_->width();
+			const uint8_t width = font.width();
 			uint8_t row = y / ROW_HEIGHT;
 			const uint8_t col = x;
 			bool add_interchar_space = ((col + width + 1) < WIDTH);
 
 			uint8_t glyph_index  = 0;
-			for (uint8_t glyph_row = 0; glyph_row < font_->glyph_rows(); ++glyph_row)
+			for (uint8_t glyph_row = 0; glyph_row < font.glyph_rows(); ++glyph_row)
 			{
 				// Get pointer to first byte in row to write in display buffer
 				uint8_t* display_ptr = get_display(row, col);
@@ -302,9 +303,9 @@ namespace devices::display
 					const bool space_column = (i == width);
 					uint8_t pixel_bar = 0x00;
 					if (!space_column)
-						pixel_bar = font_->get_char_glyph_byte(glyph_ref, glyph_index);
+						pixel_bar = font.get_char_glyph_byte(glyph_ref, glyph_index);
 					if ((!space_column) || add_interchar_space)
-						*display_ptr = draw_mode_.bw_pixels_op(pixel_bar, *display_ptr);
+						*display_ptr = draw_mode.bw_pixels_op(pixel_bar, *display_ptr);
 					++display_ptr;
 					++glyph_index;
 				}

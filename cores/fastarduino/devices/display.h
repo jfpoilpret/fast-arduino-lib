@@ -429,7 +429,8 @@ namespace devices::display
 			uint16_t glyph_ref = get_glyph(value);
 			if (glyph_ref == 0) return;
 			// Delegate glyph display to actual device
-			uint8_t displayed_width = DISPLAY_DEVICE::write_char(x, y, glyph_ref);
+			uint8_t displayed_width = DISPLAY_DEVICE::write_char(x, y, glyph_ref,
+				*DISPLAY_DEVICE::font_, DISPLAY_DEVICE::draw_mode_);
 			invalidate(x, y, XCOORD(x + displayed_width), YCOORD(y + this->font_->height() - 1));
 		}
 
@@ -459,7 +460,8 @@ namespace devices::display
 				uint16_t glyph_ref = get_glyph(*content);
 				if (glyph_ref == 0) break;
 				// Delegate glyph display to actual device
-				const uint8_t displayed_width = DISPLAY_DEVICE::write_char(xcurrent, y, glyph_ref);
+				const uint8_t displayed_width = DISPLAY_DEVICE::write_char(xcurrent, y, glyph_ref,
+					*DISPLAY_DEVICE::font_, DISPLAY_DEVICE::draw_mode_);
 				xcurrent += displayed_width;
 				++content;
 			}
@@ -500,7 +502,8 @@ namespace devices::display
 				uint16_t glyph_ref = get_glyph(value);
 				if (glyph_ref == 0) break;
 				// Delegate glyph display to actual device
-				const uint8_t displayed_width = DISPLAY_DEVICE::write_char(xcurrent, y, glyph_ref);
+				const uint8_t displayed_width = DISPLAY_DEVICE::write_char(xcurrent, y, glyph_ref, 
+					*DISPLAY_DEVICE::font_, DISPLAY_DEVICE::draw_mode_);
 				xcurrent += displayed_width;
 				++address;
 			}
@@ -523,7 +526,7 @@ namespace devices::display
 			XCOORD x = point.x;
 			YCOORD y = point.y;
 			if (!is_valid_xy(x, y)) return;
-			if (DISPLAY_DEVICE::set_pixel(x, y))
+			if (DISPLAY_DEVICE::set_pixel(x, y, DISPLAY_DEVICE::draw_mode_))
 				invalidate(x, y, x, y);
 			else
 				// Even when set_pixel() returns false, this is not an error!
@@ -800,14 +803,14 @@ namespace devices::display
 		{
 			swap_to_sort(y1, y2);
 			for (YCOORD y = y1; y <= y2; ++y)
-				DISPLAY_DEVICE::set_pixel(x1, y);
+				DISPLAY_DEVICE::set_pixel(x1, y, DISPLAY_DEVICE::draw_mode_);
 		}
 		
 		void draw_hline(XCOORD x1, YCOORD y1, XCOORD x2)
 		{
 			swap_to_sort(x1, x2);
 			for (XCOORD x = x1; x <= x2; ++x)
-				DISPLAY_DEVICE::set_pixel(x, y1);
+				DISPLAY_DEVICE::set_pixel(x, y1, DISPLAY_DEVICE::draw_mode_);
 		}
 
 		// Draw a segment according to Bresenham algorithm
@@ -842,7 +845,7 @@ namespace devices::display
 				dy *= 2;
 				while (true)
 				{
-					DISPLAY_DEVICE::set_pixel(x1, y1);
+					DISPLAY_DEVICE::set_pixel(x1, y1, DISPLAY_DEVICE::draw_mode_);
 					if (x1 == x2) break;
 					++x1;
 					e -= dy;
@@ -861,7 +864,7 @@ namespace devices::display
 				dy *= 2;
 				while (true)
 				{
-					DISPLAY_DEVICE::set_pixel(x1, y1);
+					DISPLAY_DEVICE::set_pixel(x1, y1, DISPLAY_DEVICE::draw_mode_);
 					if (y1 == y2) break;
 					++y1;
 					e -= dx;
@@ -885,7 +888,7 @@ namespace devices::display
 				dy *= 2;
 				while (true)
 				{
-					DISPLAY_DEVICE::set_pixel(x1, y1);
+					DISPLAY_DEVICE::set_pixel(x1, y1, DISPLAY_DEVICE::draw_mode_);
 					if (x1 == x2) break;
 					++x1;
 					e += dy;
@@ -904,7 +907,7 @@ namespace devices::display
 				dy *= 2;
 				while (true)
 				{
-					DISPLAY_DEVICE::set_pixel(x1, y1);
+					DISPLAY_DEVICE::set_pixel(x1, y1, DISPLAY_DEVICE::draw_mode_);
 					if (y1 == y2) break;
 					--y1;
 					e += dx;
@@ -925,14 +928,14 @@ namespace devices::display
 			SIGNED_SCALAR m = 5 - 4 * radius;
 			while (x <= y)
 			{
-				DISPLAY_DEVICE::set_pixel(x +  xc, y + yc);
-				DISPLAY_DEVICE::set_pixel(y +  xc, x + yc);
-				DISPLAY_DEVICE::set_pixel(-x +  xc, y + yc);
-				DISPLAY_DEVICE::set_pixel(-y +  xc, x + yc);
-				DISPLAY_DEVICE::set_pixel(x +  xc, -y + yc);
-				DISPLAY_DEVICE::set_pixel(y +  xc, -x + yc);
-				DISPLAY_DEVICE::set_pixel(-x +  xc, -y + yc);
-				DISPLAY_DEVICE::set_pixel(-y +  xc, -x + yc);
+				DISPLAY_DEVICE::set_pixel(x +  xc, y + yc, DISPLAY_DEVICE::draw_mode_);
+				DISPLAY_DEVICE::set_pixel(y +  xc, x + yc, DISPLAY_DEVICE::draw_mode_);
+				DISPLAY_DEVICE::set_pixel(-x +  xc, y + yc, DISPLAY_DEVICE::draw_mode_);
+				DISPLAY_DEVICE::set_pixel(-y +  xc, x + yc, DISPLAY_DEVICE::draw_mode_);
+				DISPLAY_DEVICE::set_pixel(x +  xc, -y + yc, DISPLAY_DEVICE::draw_mode_);
+				DISPLAY_DEVICE::set_pixel(y +  xc, -x + yc, DISPLAY_DEVICE::draw_mode_);
+				DISPLAY_DEVICE::set_pixel(-x +  xc, -y + yc, DISPLAY_DEVICE::draw_mode_);
+				DISPLAY_DEVICE::set_pixel(-y +  xc, -x + yc, DISPLAY_DEVICE::draw_mode_);
 				if (m > 0)
 				{
 					--y;
