@@ -104,11 +104,13 @@ namespace devices::display
 	 * @sa Display
 	 */
 	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST> class LCD5110 : 
-		public spi::SPIDevice<SCE, spi::ChipSelect::ACTIVE_LOW, spi::compute_clockrate(4'000'000UL)>,
-		public AbstractDisplayDevice<bool, true>
+		public spi::SPIDevice<SCE, spi::ChipSelect::ACTIVE_LOW, spi::compute_clockrate(4'000'000UL)>
 	{
 	protected:
 		/// @cond notdocumented
+		using COLOR = bool;
+		using DRAW_MODE = DrawMode<bool>;
+		static constexpr bool VERTICAL_FONT = true;
 		using XCOORD = uint8_t;
 		using YCOORD = uint8_t;
 		using SCALAR = uint8_t;
