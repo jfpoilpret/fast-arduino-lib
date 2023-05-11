@@ -114,6 +114,38 @@ namespace utils
 	};
 
 	/**
+	 * Compute the min of 2 integral values.
+	 * Computations done by this method will be performed at compile-time as long
+	 * as all provided arguments are constants; this is important as this will
+	 * help optimize code size and execution time.
+	 * 
+	 * @tparam T the type of values to be compared
+	 * @param a first value
+	 * @param b second value
+	 * @return constexpr T the minimum of @p a and @p b
+	 */
+	template<typename T> constexpr T min(T a, T b)
+	{
+		return (a < b ? a : b);
+	}
+
+	/**
+	 * Compute the max of 2 integral values.
+	 * Computations done by this method will be performed at compile-time as long
+	 * as all provided arguments are constants; this is important as this will
+	 * help optimize code size and execution time.
+	 * 
+	 * @tparam T the type of values to be compared
+	 * @param a first value
+	 * @param b second value
+	 * @return constexpr T the maximum of @p a and @p b
+	 */
+	template<typename T> constexpr T max(T a, T b)
+	{
+		return (a > b ? a : b);
+	}
+
+	/**
 	 * Calculate a power of 10 at compile-time, provided that @p n is a constant
 	 * at call time. This is to avoid dragging huge mathematics libraries if 
 	 * this can be avoided.
@@ -433,9 +465,14 @@ namespace utils
 		swap_bytes((uint64_t&) value);
 	}
 
-	//TODO DOC
-	template<typename T>
-	void swap(T& a, T&b)
+	/**
+	 * Swap the values of 2 variables passed by reference.
+	 * 
+	 * @tparam T the type of variables to swap
+	 * @param a reference to the first variable
+	 * @param b reference to the second variable
+	 */
+	template<typename T> void swap(T& a, T&b)
 	{
 		T c = a;
 		a = b;
