@@ -66,6 +66,32 @@ namespace devices::display
 		TC3_24mV_K = 0x07
 	};
 
+	/// @cond notdocumented
+	// Forward declaration to allow traits definition
+	template<board::DigitalPin, board::DigitalPin, board::DigitalPin> class LCD5110; 
+	// Traits for Nokia displays
+	// template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST>
+	// struct DisplayDeviceTrait<LCD5110<SCE, DC, RST>>
+	// {
+	// 	static constexpr bool IS_DISPLAY = true;
+	// 	using COLOR = bool;
+	// 	using XCOORD = uint8_t;
+	// 	using YCOORD = uint8_t;
+	// 	static constexpr uint16_t WIDTH = 84;
+	// 	static constexpr uint16_t HEIGHT = 48;
+	// 	static constexpr uint8_t MAX_X = WIDTH - 1;
+	// 	static constexpr uint8_t MAX_Y = HEIGHT - 1;
+	// 	using SCALAR = uint8_t;
+	// 	// Must be large enough to store -4 * min(WIDTH,HEIGHT)
+	// 	using SIGNED_SCALAR = int8_t;
+	// 	static constexpr bool VERTICAL_FONT = true;
+	// 	static constexpr bool HAS_RASTER = true;
+	// };
+	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST>
+	struct DisplayDeviceTrait<LCD5110<SCE, DC, RST>> : 
+		DisplayDeviceTrait_impl<bool, 84, 48, true, true> {};
+	/// @endcond
+
 	/**
 	 * SPI device driver for Nokia 5110 display chip.
 	 * 
@@ -108,18 +134,19 @@ namespace devices::display
 	{
 	protected:
 		/// @cond notdocumented
-		using COLOR = bool;
+		// using COLOR = bool;
 		using DRAW_MODE = DrawMode<bool>;
-		static constexpr bool VERTICAL_FONT = true;
-		using XCOORD = uint8_t;
-		using YCOORD = uint8_t;
-		using SCALAR = uint8_t;
-		// Must be large enough to store -4 * min(WIDTH,HEIGHT)
-		using SIGNED_SCALAR = int8_t;
-		static constexpr bool HAS_RASTER = true;
+		// static constexpr bool VERTICAL_FONT = true;
+		// using XCOORD = uint8_t;
+		// using YCOORD = uint8_t;
+		// using SCALAR = uint8_t;
+		// // Must be large enough to store -4 * min(WIDTH,HEIGHT)
+		// using SIGNED_SCALAR = int8_t;
+		// static constexpr bool HAS_RASTER = true;
 
-		static constexpr XCOORD WIDTH = 84;
-		static constexpr YCOORD HEIGHT = 48;
+		// Find these values from TRAITS?
+		static constexpr uint8_t WIDTH = 84;
+		static constexpr uint8_t HEIGHT = 48;
 		/// @endcond
 
 	public:

@@ -229,6 +229,50 @@ namespace devices::display
 		INVALID_GEOMETRY
 	};
 
+	//TODO shall we document it?
+	/// @cond notdocumented
+	template<typename DEVICE> struct DisplayDeviceTrait
+	{
+		static constexpr bool IS_DISPLAY = false;
+		using COLOR = void;
+		using XCOORD = uint8_t;
+		using YCOORD = uint8_t;
+		static constexpr XCOORD MAX_X = 0;
+		static constexpr YCOORD MAX_Y = 0;
+		static constexpr uint8_t WIDTH = 0;
+		static constexpr uint8_t HEIGHT = 0;
+		using SCALAR = uint8_t;
+		using SIGNED_SCALAR = int8_t;
+		static constexpr bool VERTICAL_FONT = false;
+		static constexpr bool HAS_RASTER = false;
+	};
+
+	template<typename COLOR_, uint16_t WIDTH_, uint16_t HEIGHT_, 
+		bool HAS_RASTER_ = false, bool VERTICAL_FONT_ = false>
+		struct DisplayDeviceTrait_impl
+	{
+		static constexpr bool IS_DISPLAY = true;
+		using COLOR = COLOR_;
+
+		using XCOORD = typename types_traits::SmallestInt<WIDTH_ - 1>::UNSIGNED_TYPE;
+		using YCOORD = typename types_traits::SmallestInt<HEIGHT_ - 1>::UNSIGNED_TYPE;
+
+		static constexpr XCOORD MAX_X = WIDTH_ - 1;
+		static constexpr YCOORD MAX_Y = HEIGHT_ - 1;
+
+		static constexpr uint16_t WIDTH = WIDTH_;
+		static constexpr uint16_t HEIGHT = HEIGHT_;
+
+		// SCALAR is the biggest of XCOORD and YCOORD types
+		using SCALAR = typename types_traits::SmallestInt<utils::max(WIDTH, HEIGHT)>::UNSIGNED_TYPE;
+		// SIGNED_SCALAR must be large enough to store -4 * min(WIDTH,HEIGHT)
+		using SIGNED_SCALAR = typename types_traits::SmallestInt<utils::min(WIDTH, HEIGHT) * 4 + 1>::SIGNED_TYPE;
+
+		static constexpr bool VERTICAL_FONT = VERTICAL_FONT_;
+		static constexpr bool HAS_RASTER = HAS_RASTER_;
+	};
+	/// @endcond
+
 	/**
 	 * Class handling drawing primitives on any display device.
 	 * Tha driver for the actual display device is provided by the template
@@ -247,16 +291,21 @@ namespace devices::display
 	 */
 	template<typename DISPLAY_DEVICE> class Display : public DISPLAY_DEVICE
 	{
+		using DISPLAY_TRAITS = DisplayDeviceTrait<DISPLAY_DEVICE>;
+		// Check at compile-time that DISPLAY_DEVICE is really a Display Device
+		static_assert(DISPLAY_TRAITS::IS_DISPLAY, 
+			"DISPLAY_DEVICE must be a Display Device (a DisplayDeviceTrait must exist for it)!");
+
 	public:
 		/** The type of one pixel color. */
-		using COLOR = typename DISPLAY_DEVICE::COLOR;
-		static constexpr bool VERTICAL_FONT = DISPLAY_DEVICE::VERTICAL_FONT;
+		using COLOR = typename DISPLAY_TRAITS::COLOR;
+		static constexpr bool VERTICAL_FONT = DISPLAY_TRAITS::VERTICAL_FONT;
 		//TODO DOC
 		using DRAW_MODE = DrawMode<COLOR>;
 		/** Integral type of X coordinate. */
-		using XCOORD = typename DISPLAY_DEVICE::XCOORD;
+		using XCOORD = typename DISPLAY_TRAITS::XCOORD;
 		/** Integral type of Y coordinate. */
-		using YCOORD = typename DISPLAY_DEVICE::YCOORD;
+		using YCOORD = typename DISPLAY_TRAITS::YCOORD;
 
 		/** Coordinates of a point in the display. */
 		using POINT = Point<XCOORD, YCOORD>;
@@ -265,12 +314,12 @@ namespace devices::display
 		 * Integral type used in various calculations based on coordinates.
 		 * Typically the smallest of `XCOORD` and `YCOORD`.
 		 */
-		using SCALAR = typename DISPLAY_DEVICE::SCALAR;
+		using SCALAR = typename DISPLAY_TRAITS::SCALAR;
 
 		/** Display width. Maximum X coordinate on display is `WIDTH - 1`. */
-		static constexpr XCOORD WIDTH = DISPLAY_DEVICE::WIDTH;
+		static constexpr XCOORD WIDTH = DISPLAY_TRAITS::WIDTH;
 		/** Display height. Maximum Y coordinate on display is `HEIGHT - 1`. */
-		static constexpr YCOORD HEIGHT = DISPLAY_DEVICE::HEIGHT;
+		static constexpr YCOORD HEIGHT = DISPLAY_TRAITS::HEIGHT;
 
 	protected:
 		/**
@@ -278,14 +327,11 @@ namespace devices::display
 		 * This must be larger or equal to `XCOORD` and `YCOORD`.
 		 * It mst be large enough to store `-4 * min(WIDTH, HEIGHT)`.
 		 */
-		using SIGNED_SCALAR = typename DISPLAY_DEVICE::SIGNED_SCALAR;
+		using SIGNED_SCALAR = typename DISPLAY_TRAITS::SIGNED_SCALAR;
 
 	public:
 		/** Comstruct a display instance. */
-		Display()
-		{
-			//TODO Check at compile-time that DISPLAY_DEVICE is a proper device (use traits)
-		}
+		Display() = default;
 
 		/**
 		 * Set draw mode (color, pixel op) to use for next calls to drawing primitives.
@@ -610,7 +656,7 @@ namespace devices::display
 		 */
 		void update()
 		{
-			if (DISPLAY_DEVICE::HAS_RASTER && !invalid_area_.empty)
+			if (DISPLAY_TRAITS::HAS_RASTER && !invalid_area_.empty)
 			{
 				DISPLAY_DEVICE::update(invalid_area_.x1, invalid_area_.y1, invalid_area_.x2, invalid_area_.y2);
 				invalid_area_.empty = true;
@@ -673,7 +719,7 @@ namespace devices::display
 
 		void invalidate(XCOORD x1, XCOORD y1,XCOORD x2, YCOORD y2, bool clear_error = true)
 		{
-			if (DISPLAY_DEVICE::HAS_RASTER)
+			if (DISPLAY_TRAITS::HAS_RASTER)
 				invalid_area_ += INVALID_AREA{x1, y1, x2, y2};
 			if (clear_error)
 				last_error_ = Error::NO_ERROR;
@@ -681,7 +727,7 @@ namespace devices::display
 
 		void invalidate()
 		{
-			if (DISPLAY_DEVICE::HAS_RASTER)
+			if (DISPLAY_TRAITS::HAS_RASTER)
 				invalid_area_ = INVALID_AREA{0, 0, WIDTH - 1, HEIGHT - 1};
 			last_error_ = Error::NO_ERROR;
 		}
