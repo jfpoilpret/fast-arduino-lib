@@ -193,6 +193,31 @@ namespace devices::display
 		COLOR color_;
 	};
 
+	//TODO DOC
+	template<typename COLOR, bool VERTICAL_FONT> class DrawContext
+	{
+	public:
+		DrawContext() = default;
+
+		DrawMode<COLOR> draw_mode() const
+		{
+			return (is_fill_ ? fill_ : draw_);
+		}
+		
+		const Font<VERTICAL_FONT>& font() const
+		{
+			return *font_;
+		}
+		
+	private:
+		bool is_fill_ = false;
+		DrawMode<COLOR> draw_{};
+		DrawMode<COLOR> fill_{};
+		const Font<VERTICAL_FONT>* font_ = nullptr;
+
+		template<typename> friend class Display;
+	};
+
 	/**
 	 * Types of errors that can occur on `Display` instances.
 	 * @sa AbstractDisplayDevice.last_error()
@@ -295,13 +320,17 @@ namespace devices::display
 		// Check at compile-time that DISPLAY_DEVICE is really a Display Device
 		static_assert(DISPLAY_TRAITS::IS_DISPLAY, 
 			"DISPLAY_DEVICE must be a Display Device (a DisplayDeviceTrait must exist for it)!");
+		static constexpr bool VERTICAL_FONT = DISPLAY_TRAITS::VERTICAL_FONT;
 
 	public:
 		/** The type of one pixel color. */
 		using COLOR = typename DISPLAY_TRAITS::COLOR;
-		static constexpr bool VERTICAL_FONT = DISPLAY_TRAITS::VERTICAL_FONT;
+		//TODO DOC
+		using FONT = Font<VERTICAL_FONT>;
 		//TODO DOC
 		using DRAW_MODE = DrawMode<COLOR>;
+		//TODO DOC
+		using DRAW_CONTEXT = DrawContext<COLOR, VERTICAL_FONT>;
 		/** Integral type of X coordinate. */
 		using XCOORD = typename DISPLAY_TRAITS::XCOORD;
 		/** Integral type of Y coordinate. */
@@ -341,7 +370,7 @@ namespace devices::display
 		 */
 		void set_draw_mode(const DRAW_MODE& mode)
 		{
-			draw_mode_ = mode;
+			context_.draw_ = mode;
 		}
 
 		/**
@@ -353,15 +382,15 @@ namespace devices::display
 		 * @sa Font
 		 * @sa font_
 		 */
-		void set_font(const Font<VERTICAL_FONT>& font)
+		void set_font(const FONT& font)
 		{
-			font_ = &font;
+			context_.font_ = &font;
 		}
 
 		//TODO DOC
 		void set_fill_mode(const DRAW_MODE& mode)
 		{
-			fill_mode_ = mode;
+			context_.fill_ = mode;
 		}
 
 		/**
@@ -401,7 +430,7 @@ namespace devices::display
 			// Check one font is currently selected
 			if (!check_font()) return;
 			// Check coordinates are suitable for character display
-			const uint8_t width = this->font_->width();
+			const uint8_t width = context_.font_->width();
 			XCOORD x = point.x;
 			YCOORD y = point.y;
 			if (!is_valid_char_xy(x, y, width)) return;
@@ -409,9 +438,8 @@ namespace devices::display
 			uint16_t glyph_ref = get_glyph(value);
 			if (glyph_ref == 0) return;
 			// Delegate glyph display to actual device
-			uint8_t displayed_width = DISPLAY_DEVICE::write_char(x, y, glyph_ref,
-				*font_, draw_mode_);
-			invalidate(x, y, XCOORD(x + displayed_width), YCOORD(y + this->font_->height() - 1));
+			uint8_t displayed_width = DISPLAY_DEVICE::write_char(x, y, glyph_ref, context_);
+			invalidate(x, y, XCOORD(x + displayed_width), YCOORD(y + context_.font_->height() - 1));
 		}
 
 		/**
@@ -427,7 +455,7 @@ namespace devices::display
 		{
 			// Check one font is currently selected
 			if (!check_font()) return;
-			const uint8_t width = this->font_->width();
+			const uint8_t width = context_.font_->width();
 
 			XCOORD x = point.x;
 			YCOORD y = point.y;
@@ -440,8 +468,7 @@ namespace devices::display
 				uint16_t glyph_ref = get_glyph(*content);
 				if (glyph_ref == 0) break;
 				// Delegate glyph display to actual device
-				const uint8_t displayed_width = DISPLAY_DEVICE::write_char(xcurrent, y, glyph_ref,
-					*font_, draw_mode_);
+				const uint8_t displayed_width = DISPLAY_DEVICE::write_char(xcurrent, y, glyph_ref, context_);
 				xcurrent += displayed_width;
 				++content;
 			}
@@ -450,7 +477,7 @@ namespace devices::display
 			{
 				// Clear error only if all content was displayed without issue
 				bool clear_error = (*content == 0); 
-				invalidate(x, y, XCOORD(xcurrent - 1), YCOORD(y + this->font_->height() - 1), clear_error);
+				invalidate(x, y, XCOORD(xcurrent - 1), YCOORD(y + context_.font_->height() - 1), clear_error);
 			}
 		}
 
@@ -467,7 +494,7 @@ namespace devices::display
 		{
 			// Check one font is currently selected
 			if (!check_font()) return;
-			const uint8_t width = this->font_->width();
+			const uint8_t width = context_.font_->width();
 
 			XCOORD x = point.x;
 			YCOORD y = point.y;
@@ -482,8 +509,7 @@ namespace devices::display
 				uint16_t glyph_ref = get_glyph(value);
 				if (glyph_ref == 0) break;
 				// Delegate glyph display to actual device
-				const uint8_t displayed_width = DISPLAY_DEVICE::write_char(xcurrent, y, glyph_ref, 
-					*font_, draw_mode_);
+				const uint8_t displayed_width = DISPLAY_DEVICE::write_char(xcurrent, y, glyph_ref, context_);
 				xcurrent += displayed_width;
 				++address;
 			}
@@ -492,7 +518,7 @@ namespace devices::display
 			{
 				// Clear error only if all content was displayed without issue
 				bool clear_error = (value == 0);
-				invalidate(x, y, XCOORD(xcurrent -1), YCOORD(y + this->font_->height() - 1), clear_error);
+				invalidate(x, y, XCOORD(xcurrent -1), YCOORD(y + context_.font_->height() - 1), clear_error);
 			}
 		}
 
@@ -506,7 +532,7 @@ namespace devices::display
 			XCOORD x = point.x;
 			YCOORD y = point.y;
 			if (!is_valid_xy(x, y)) return;
-			if (DISPLAY_DEVICE::set_pixel(x, y, draw_mode_))
+			if (DISPLAY_DEVICE::set_pixel(x, y, context_))
 				invalidate(x, y, x, y);
 			else
 				// Even when set_pixel() returns false, this is not an error!
@@ -583,7 +609,7 @@ namespace devices::display
 			swap_to_sort(y1, y2);
 
 			// Draw edges
-			if (draw_mode_)
+			if (context_.draw_)
 			{
 				// Simply draw 2 horizontal and 2 vertical lines
 				draw_hline(x1, y1, x2);
@@ -595,11 +621,13 @@ namespace devices::display
 			}
 
 			//TODO Fill rectangle inside
-			if (fill_mode_)
+			if (context_.fill_)
 			{
+				context_.is_fill_ = true;
 				// Simply draw enough horizontal lines
 				for (YCOORD y = y1 + 1; y < y2; ++y)
 					draw_hline(x1 + 1, y, x2 - 1);
+				context_.is_fill_ = false;
 			}
 
 			invalidate(x1, y1, x2, y2);
@@ -734,7 +762,7 @@ namespace devices::display
 
 		bool check_font()
 		{
-			if (font_ != nullptr) return true;
+			if (context_.font_ != nullptr) return true;
 			last_error_ = Error::NO_FONT_SET;
 			return false;
 		}
@@ -761,7 +789,7 @@ namespace devices::display
 		uint16_t get_glyph(char value)
 		{
 			// Load pixmap for current character
-			uint16_t glyph_ref = this->font_->get_char_glyph_ref(value);
+			uint16_t glyph_ref = context_.font_->get_char_glyph_ref(value);
 			if (glyph_ref != 0) return glyph_ref;
 			last_error_ = Error::NO_GLYPH_FOUND;
 			return 0;
@@ -790,14 +818,14 @@ namespace devices::display
 		{
 			swap_to_sort(y1, y2);
 			for (YCOORD y = y1; y <= y2; ++y)
-				DISPLAY_DEVICE::set_pixel(x1, y, draw_mode_);
+				DISPLAY_DEVICE::set_pixel(x1, y, context_);
 		}
 		
 		void draw_hline(XCOORD x1, YCOORD y1, XCOORD x2)
 		{
 			swap_to_sort(x1, x2);
 			for (XCOORD x = x1; x <= x2; ++x)
-				DISPLAY_DEVICE::set_pixel(x, y1, draw_mode_);
+				DISPLAY_DEVICE::set_pixel(x, y1, context_);
 		}
 
 		// Draw a segment according to Bresenham algorithm
@@ -832,7 +860,7 @@ namespace devices::display
 				dy *= 2;
 				while (true)
 				{
-					DISPLAY_DEVICE::set_pixel(x1, y1, draw_mode_);
+					DISPLAY_DEVICE::set_pixel(x1, y1, context_);
 					if (x1 == x2) break;
 					++x1;
 					e -= dy;
@@ -851,7 +879,7 @@ namespace devices::display
 				dy *= 2;
 				while (true)
 				{
-					DISPLAY_DEVICE::set_pixel(x1, y1, draw_mode_);
+					DISPLAY_DEVICE::set_pixel(x1, y1, context_);
 					if (y1 == y2) break;
 					++y1;
 					e -= dx;
@@ -875,7 +903,7 @@ namespace devices::display
 				dy *= 2;
 				while (true)
 				{
-					DISPLAY_DEVICE::set_pixel(x1, y1, draw_mode_);
+					DISPLAY_DEVICE::set_pixel(x1, y1, context_);
 					if (x1 == x2) break;
 					++x1;
 					e += dy;
@@ -894,7 +922,7 @@ namespace devices::display
 				dy *= 2;
 				while (true)
 				{
-					DISPLAY_DEVICE::set_pixel(x1, y1, draw_mode_);
+					DISPLAY_DEVICE::set_pixel(x1, y1, context_);
 					if (y1 == y2) break;
 					--y1;
 					e += dx;
@@ -915,14 +943,14 @@ namespace devices::display
 			SIGNED_SCALAR m = 5 - 4 * radius;
 			while (x <= y)
 			{
-				DISPLAY_DEVICE::set_pixel(x +  xc, y + yc, draw_mode_);
-				DISPLAY_DEVICE::set_pixel(y +  xc, x + yc, draw_mode_);
-				DISPLAY_DEVICE::set_pixel(-x +  xc, y + yc, draw_mode_);
-				DISPLAY_DEVICE::set_pixel(-y +  xc, x + yc, draw_mode_);
-				DISPLAY_DEVICE::set_pixel(x +  xc, -y + yc, draw_mode_);
-				DISPLAY_DEVICE::set_pixel(y +  xc, -x + yc, draw_mode_);
-				DISPLAY_DEVICE::set_pixel(-x +  xc, -y + yc, draw_mode_);
-				DISPLAY_DEVICE::set_pixel(-y +  xc, -x + yc, draw_mode_);
+				DISPLAY_DEVICE::set_pixel(x +  xc, y + yc, context_);
+				DISPLAY_DEVICE::set_pixel(y +  xc, x + yc, context_);
+				DISPLAY_DEVICE::set_pixel(-x +  xc, y + yc, context_);
+				DISPLAY_DEVICE::set_pixel(-y +  xc, x + yc, context_);
+				DISPLAY_DEVICE::set_pixel(x +  xc, -y + yc, context_);
+				DISPLAY_DEVICE::set_pixel(y +  xc, -x + yc, context_);
+				DISPLAY_DEVICE::set_pixel(-x +  xc, -y + yc, context_);
+				DISPLAY_DEVICE::set_pixel(-y +  xc, -x + yc, context_);
 				if (m > 0)
 				{
 					--y;
@@ -947,14 +975,8 @@ namespace devices::display
 		/// @cond notdocumented
 		
 	private:
-		// Pointer to the current `Font` that shall be used by text drawing primitives
-		const Font<VERTICAL_FONT>* font_ = nullptr;
-
-		// Current draw mode that shall to fill closed surfaces
-		DRAW_MODE fill_mode_{};
-
-		// Current draw mode (color, pixel op) that shall be used by drawing primitives
-		DRAW_MODE draw_mode_{};
+		// Draw Context that will be passed to actual device low-level drawing primitives
+		DRAW_CONTEXT context_{};
 
 		// The result status of the last drawing primitive called
 		Error last_error_ = Error::NO_ERROR;

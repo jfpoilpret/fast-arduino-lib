@@ -70,23 +70,6 @@ namespace devices::display
 	// Forward declaration to allow traits definition
 	template<board::DigitalPin, board::DigitalPin, board::DigitalPin> class LCD5110; 
 	// Traits for Nokia displays
-	// template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST>
-	// struct DisplayDeviceTrait<LCD5110<SCE, DC, RST>>
-	// {
-	// 	static constexpr bool IS_DISPLAY = true;
-	// 	using COLOR = bool;
-	// 	using XCOORD = uint8_t;
-	// 	using YCOORD = uint8_t;
-	// 	static constexpr uint16_t WIDTH = 84;
-	// 	static constexpr uint16_t HEIGHT = 48;
-	// 	static constexpr uint8_t MAX_X = WIDTH - 1;
-	// 	static constexpr uint8_t MAX_Y = HEIGHT - 1;
-	// 	using SCALAR = uint8_t;
-	// 	// Must be large enough to store -4 * min(WIDTH,HEIGHT)
-	// 	using SIGNED_SCALAR = int8_t;
-	// 	static constexpr bool VERTICAL_FONT = true;
-	// 	static constexpr bool HAS_RASTER = true;
-	// };
 	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST>
 	struct DisplayDeviceTrait<LCD5110<SCE, DC, RST>> : 
 		DisplayDeviceTrait_impl<bool, 84, 48, true, true> {};
@@ -132,22 +115,11 @@ namespace devices::display
 	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST> class LCD5110 : 
 		public spi::SPIDevice<SCE, spi::ChipSelect::ACTIVE_LOW, spi::compute_clockrate(4'000'000UL)>
 	{
-	protected:
-		/// @cond notdocumented
-		// using COLOR = bool;
-		using DRAW_MODE = DrawMode<bool>;
-		// static constexpr bool VERTICAL_FONT = true;
-		// using XCOORD = uint8_t;
-		// using YCOORD = uint8_t;
-		// using SCALAR = uint8_t;
-		// // Must be large enough to store -4 * min(WIDTH,HEIGHT)
-		// using SIGNED_SCALAR = int8_t;
-		// static constexpr bool HAS_RASTER = true;
-
-		// Find these values from TRAITS?
-		static constexpr uint8_t WIDTH = 84;
-		static constexpr uint8_t HEIGHT = 48;
-		/// @endcond
+	private:
+		using TRAITS = DisplayDeviceTrait<LCD5110<SCE, DC, RST>>;
+		static constexpr uint8_t WIDTH = TRAITS::WIDTH;
+		static constexpr uint8_t HEIGHT = TRAITS::HEIGHT;
+		using DRAW_CONTEXT = DrawContext<bool, true>;
 
 	public:
 		/**
@@ -279,7 +251,7 @@ namespace devices::display
 		}
 
 		// NOTE Coordinates must have been first verified by caller
-		bool set_pixel(uint8_t x, uint8_t y, const DRAW_MODE& draw_mode)
+		bool set_pixel(uint8_t x, uint8_t y, const DRAW_CONTEXT& context)
 		{
 			// Convert to (r,c)
 			const uint8_t c = x;
@@ -290,7 +262,7 @@ namespace devices::display
 			uint8_t* pix_column = get_display(r, c);
 			// Evaluate final pixel color based on color_ and mode_
 			const bool current = (*pix_column & mask);
-			const bool dest = draw_mode.pixel_op(current);
+			const bool dest = context.draw_mode().pixel_op(current);
 
 			// Based on calculated color, set pixel
 			if (dest)
@@ -312,17 +284,16 @@ namespace devices::display
 		}
 
 		// NOTE Coordinates must have been first verified by caller
-		uint8_t write_char(uint8_t x, uint8_t y, uint16_t glyph_ref, 
-			const Font<true>& font, const DRAW_MODE& draw_mode)
+		uint8_t write_char(uint8_t x, uint8_t y, uint16_t glyph_ref, const DRAW_CONTEXT& context)
 		{
 			// Check column and row not out of range for characters!
-			const uint8_t width = font.width();
+			const uint8_t width = context.font().width();
 			uint8_t row = y / ROW_HEIGHT;
 			const uint8_t col = x;
 			bool add_interchar_space = ((col + width + 1) < WIDTH);
 
 			uint8_t glyph_index  = 0;
-			for (uint8_t glyph_row = 0; glyph_row < font.glyph_rows(); ++glyph_row)
+			for (uint8_t glyph_row = 0; glyph_row < context.font().glyph_rows(); ++glyph_row)
 			{
 				// Get pointer to first byte in row to write in display buffer
 				uint8_t* display_ptr = get_display(row, col);
@@ -332,9 +303,9 @@ namespace devices::display
 					const bool space_column = (i == width);
 					uint8_t pixel_bar = 0x00;
 					if (!space_column)
-						pixel_bar = font.get_char_glyph_byte(glyph_ref, glyph_index);
+						pixel_bar = context.font().get_char_glyph_byte(glyph_ref, glyph_index);
 					if ((!space_column) || add_interchar_space)
-						*display_ptr = draw_mode.bw_pixels_op(pixel_bar, *display_ptr);
+						*display_ptr = context.draw_mode().bw_pixels_op(pixel_bar, *display_ptr);
 					++display_ptr;
 					++glyph_index;
 				}
