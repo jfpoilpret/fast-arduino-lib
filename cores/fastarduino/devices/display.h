@@ -320,17 +320,15 @@ namespace devices::display
 		// Check at compile-time that DISPLAY_DEVICE is really a Display Device
 		static_assert(DISPLAY_TRAITS::IS_DISPLAY, 
 			"DISPLAY_DEVICE must be a Display Device (a DisplayDeviceTrait must exist for it)!");
-		static constexpr bool VERTICAL_FONT = DISPLAY_TRAITS::VERTICAL_FONT;
+		using DRAW_CONTEXT = DrawContext<typename DISPLAY_TRAITS::COLOR, DISPLAY_TRAITS::VERTICAL_FONT>;
 
 	public:
 		/** The type of one pixel color. */
 		using COLOR = typename DISPLAY_TRAITS::COLOR;
-		//TODO DOC
-		using FONT = Font<VERTICAL_FONT>;
-		//TODO DOC
+		/** The type of Fonts for this display device. */
+		using FONT = Font<DISPLAY_TRAITS::VERTICAL_FONT>;
+		/** The type of DrawMode for this display device. */
 		using DRAW_MODE = DrawMode<COLOR>;
-		//TODO DOC
-		using DRAW_CONTEXT = DrawContext<COLOR, VERTICAL_FONT>;
 		/** Integral type of X coordinate. */
 		using XCOORD = typename DISPLAY_TRAITS::XCOORD;
 		/** Integral type of Y coordinate. */
@@ -364,7 +362,6 @@ namespace devices::display
 
 		/**
 		 * Set draw mode (color, pixel op) to use for next calls to drawing primitives.
-		 * The new color is simply available to subclasses in the `color_` field.
 		 * 
 		 * @param mode the new `DRAW_MODE` to use from now
 		 */
@@ -374,23 +371,25 @@ namespace devices::display
 		}
 
 		/**
+		 * Set fill mode (color, pixel op) to use for next calls to drawing primitives
+		 * (for closed surfaces only).
+		 * 
+		 * @param mode the new `DRAW_MODE` to use from now for filling areas
+		 */
+		void set_fill_mode(const DRAW_MODE& mode)
+		{
+			context_.fill_ = mode;
+		}
+
+		/**
 		 * Set the new font to use for next calls to text drawing perimitives. 
-		 * A pointer to the new font is simply available to subclasses in the 
-		 * `font_` field.
 		 * 
 		 * @param font the new font to use from now
 		 * @sa Font
-		 * @sa font_
 		 */
 		void set_font(const FONT& font)
 		{
 			context_.font_ = &font;
-		}
-
-		//TODO DOC
-		void set_fill_mode(const DRAW_MODE& mode)
-		{
-			context_.fill_ = mode;
 		}
 
 		/**
@@ -620,7 +619,7 @@ namespace devices::display
 				draw_vline(x2, y1 + 1, y2 - 1);
 			}
 
-			//TODO Fill rectangle inside
+			// Fill rectangle inside
 			if (context_.fill_)
 			{
 				context_.is_fill_ = true;
