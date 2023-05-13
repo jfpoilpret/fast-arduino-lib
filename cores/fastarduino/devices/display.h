@@ -640,7 +640,6 @@ namespace devices::display
 		 */
 		void draw_circle(POINT center, SCALAR radius)
 		{
-			//TODO use filler_ !
 			XCOORD xc = center.x;
 			YCOORD yc = center.y;
 			if (!is_valid_xy(xc, yc)) return;
@@ -808,9 +807,16 @@ namespace devices::display
 			{
 				draw_line(current, *next);
 				current = *next;
+				// Revert double end point drawing (in case of XOR mode)!
+				if (!polygon || (next + 1) != points.end())
+					draw_point(current);
 			}
 			if (polygon)
+			{
 				draw_line(current, first);
+				// Revert double end point drawing (in case of XOR mode)!
+				draw_point(first);
+			}
 		}
 
 		void draw_vline(XCOORD x1, YCOORD y1, YCOORD y2)
@@ -934,28 +940,64 @@ namespace devices::display
 			}
 		}
 
+		void draw_pixels(XCOORD x, YCOORD y1, YCOORD y2)
+		{
+			DISPLAY_DEVICE::set_pixel(x, y1, context_);
+			if (y1 != y2)
+				DISPLAY_DEVICE::set_pixel(x, y2, context_);
+		}
+
 		// https://fr.wikipedia.org/wiki/Algorithme_de_trac%C3%A9_d%27arc_de_cercle_de_Bresenham
 		void draw_circle_bresenham(XCOORD xc, YCOORD yc, SCALAR radius)
 		{
 			XCOORD x = 0;
 			YCOORD y = radius;
 			SIGNED_SCALAR m = 5 - 4 * radius;
+			// Ensure filler lines in octants 3 & 4 do net get drawn twice (partly)
+			XCOORD delta_x = 0;
 			while (x <= y)
 			{
-				DISPLAY_DEVICE::set_pixel(x +  xc, y + yc, context_);
-				DISPLAY_DEVICE::set_pixel(y +  xc, x + yc, context_);
-				DISPLAY_DEVICE::set_pixel(-x +  xc, y + yc, context_);
-				DISPLAY_DEVICE::set_pixel(-y +  xc, x + yc, context_);
-				DISPLAY_DEVICE::set_pixel(x +  xc, -y + yc, context_);
-				DISPLAY_DEVICE::set_pixel(y +  xc, -x + yc, context_);
-				DISPLAY_DEVICE::set_pixel(-x +  xc, -y + yc, context_);
-				DISPLAY_DEVICE::set_pixel(-y +  xc, -x + yc, context_);
+				if (context_.draw_)
+				{
+					// All these conditions are necessary to avoid drawing the same point twice
+					// which would fail in XOR Mode
+					draw_pixels(x + xc, y + yc, -y + yc);
+					if (x != 0)
+						draw_pixels(-x + xc, y + yc, -y + yc);
+					if (x != y)
+					{
+						draw_pixels(y + xc, x + yc, -x + yc);
+						if (y != 0)
+							draw_pixels(-y + xc, x + yc, -x + yc);
+					}
+				}
+				// Draw filler lines for octants 1&4, 5&8 if needed
+				// If y == x, fill lines are already drawn afterwards
+				if (context_.fill_ && x != y)
+				{
+					context_.is_fill_ = true;
+					draw_hline(y + xc - 1, x + yc, -y + xc + 1);
+					// If x==0, fill line has just been drawn above
+					if (x != 0)
+						draw_hline(y + xc - 1, -x + yc, -y + xc + 1);
+					context_.is_fill_ = false;
+				}
 				if (m > 0)
 				{
+					// Draw filler lines for octants 2&3, 6&7 if needed
+					if (context_.fill_ && y != radius)
+					{
+						context_.is_fill_ = true;
+						draw_hline(xc + x - delta_x, yc - y, xc - x + delta_x);
+						draw_hline(xc + x - delta_x, yc + y, xc - x + delta_x);
+						context_.is_fill_ = false;
+					}
+					delta_x = 0;
 					--y;
 					m -= 8 * y;
 				}
 				++x;
+				++delta_x;
 				m += 8 * x + 4;
 			}
 		}
