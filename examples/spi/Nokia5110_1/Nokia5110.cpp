@@ -57,7 +57,7 @@ using devices::display::Mode;
 
 static constexpr uint16_t TITLE_MS = 2000;
 static constexpr uint16_t SETTINGS_MS = 3000;
-static constexpr uint16_t CHAR_MS = 150;
+static constexpr uint16_t CHAR_MS = 100;
 static constexpr uint16_t PIXEL_MS = 5;
 static constexpr uint16_t DELAY_MS = 1000;
 static constexpr uint16_t BLINK_MS = 250;
@@ -91,7 +91,6 @@ static const flash::FlashStorage* mode(Mode mode)
 	}
 }
 
-//TODO flag to indicate if modes shall be actually setup or not (for some situations)
 static void setup(DISPLAY& nokia, DRAW_MODE draw, DRAW_MODE fill, bool skip_setup = false)
 {
 	nokia.set_fill_mode({Mode::NO_CHANGE, true});
@@ -104,14 +103,20 @@ static void setup(DISPLAY& nokia, DRAW_MODE draw, DRAW_MODE fill, bool skip_setu
 	nokia.draw_string({0, 16}, F(" mode:"));
 	nokia.draw_string({42, 16}, mode(draw.mode()));
 
-	nokia.draw_string({0, 24}, F("FILL:"));
-	nokia.draw_string({0, 32}, F(" color:"));
-	nokia.draw_string({42, 32}, color(fill.color()));
-	nokia.draw_string({0, 40}, F(" mode:"));
-	nokia.draw_string({42, 40}, mode(fill.mode()));
+	if (fill)
+	{
+		nokia.draw_string({0, 24}, F("FILL:"));
+		nokia.draw_string({0, 32}, F(" color:"));
+		nokia.draw_string({42, 32}, color(fill.color()));
+		nokia.draw_string({0, 40}, F(" mode:"));
+		nokia.draw_string({42, 40}, mode(fill.mode()));
+	}
 
 	nokia.update();
 	time::delay_ms(SETTINGS_MS);
+	// Extra wait time if fill mode active so we can read it
+	if (fill)
+		time::delay_ms(SETTINGS_MS);
 
 	nokia.erase();
 	nokia.update();
@@ -350,4 +355,7 @@ int main()
 		time::delay_ms(BLINK_MS);
 	}
 	time::delay_ms(DELAY_MS);
+
+	nokia.erase();
+	nokia.update();
 }
