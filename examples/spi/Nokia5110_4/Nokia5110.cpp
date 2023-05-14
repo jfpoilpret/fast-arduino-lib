@@ -71,8 +71,7 @@ int main()
 	// Start or init SPI device if needed
 	DISPLAY nokia;
 	nokia.reset();
-	nokia.set_color(true);
-	nokia.set_mode(Mode::COPY);
+	nokia.set_draw_mode({Mode::COPY, true});
 	nokia.set_display_bias();
 	nokia.set_display_contrast();
 	nokia.normal();
