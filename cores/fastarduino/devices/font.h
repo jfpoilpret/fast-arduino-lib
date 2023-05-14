@@ -86,11 +86,36 @@ namespace devices::display
 			return last_char_;
 		}
 
+		/**
+		 * Determine the number of rows this font uses for each of its glyphs.
+		 * Result depends on:
+		 * - vertical or horizontal font
+		 * - font height
+		 * 
+		 * For a vertical font, one row is already composed of 8 pixels, hence the
+		 * result will be 1 for fonts which height is 8 or less.
+		 * For a horizontal font, the result will be exactly the font height.
+		 * 
+		 * @return uint8_t the number of rows used by glyph of this Font
+		 */
 		uint8_t glyph_rows() const
 		{
 			return glyph_rows_;
 		}
 
+		/**
+		 * Determine the number of columns this font uses for each of its glyphs.
+		 * Result depends on:
+		 * - vertical or horizontal font
+		 * - font width
+		 * 
+		 * For a vertical font, one column is one pixel, hence the result will be
+		 * exactly the font width.
+		 * For a horizontal font, one column is 8 pixels (one byte), hence the
+		 * result will be 1 for fonts which width is 8 or less.
+		 * 
+		 * @return uint8_t the number of columns used by glyph of this Font
+		 */
 		uint8_t glyph_cols() const
 		{
 			return glyph_cols_;

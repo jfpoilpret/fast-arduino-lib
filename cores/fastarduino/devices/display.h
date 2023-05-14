@@ -762,11 +762,23 @@ namespace devices::display
 			invalidate(XCOORD(xc - radius), YCOORD(yc - radius), XCOORD(xc + radius), YCOORD(yc + radius));
 		}
 
+		/**
+		 * Draw lines between consecutive points in the provided list.
+		 * 
+		 * @param points list of coordinates of consecutive points to join with lines
+		 */
 		void draw_polyline(std::initializer_list<POINT> points)
 		{
 			draw_lines(points, false);
 		}
 
+		/**
+		 * Draw a polygon (closed surface) with lines between consecutive points
+		 * in the provided list.
+		 * A line is added to connect the last point of the list to the first point.
+		 * 
+		 * @param points list of coordinates of consecutive points to join with lines
+		 */
 		void draw_polygon(std::initializer_list<POINT> points)
 		{
 			draw_lines(points, true);
@@ -1112,7 +1124,7 @@ namespace devices::display
 			else
 				return false;
 		}
-		/// @cond notdocumented
+		/// @endcond
 		
 	private:
 		// Draw Context that will be passed to actual device low-level drawing primitives
