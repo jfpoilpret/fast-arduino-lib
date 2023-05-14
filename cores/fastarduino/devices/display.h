@@ -130,6 +130,18 @@ namespace devices::display
 			return mode_ != Mode::NO_CHANGE;
 		}
 
+		//TODO DOC
+		Mode mode() const
+		{
+			return mode_;
+		}
+
+		//TODO DOC
+		COLOR color() const
+		{
+			return color_;
+		}
+
 		/**
 		 * Combine 8 source B&W pixels and 8 destination B&W pixels, all gathered
 		 * in a byte, according to the `Mode` set at construction time.
