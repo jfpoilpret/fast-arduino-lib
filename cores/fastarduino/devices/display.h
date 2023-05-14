@@ -130,13 +130,21 @@ namespace devices::display
 			return mode_ != Mode::NO_CHANGE;
 		}
 
-		//TODO DOC
+		/**
+		 * Return the current `Mode` for this `DrawMode`.
+		 * 
+		 * @return Mode current pixel operation mode
+		 */
 		Mode mode() const
 		{
 			return mode_;
 		}
 
-		//TODO DOC
+		/**
+		 * Return the current color for this `DrawMode`.
+		 * 
+		 * @return COLOR current color
+		 */
 		COLOR color() const
 		{
 			return color_;
@@ -205,23 +213,53 @@ namespace devices::display
 		COLOR color_;
 	};
 
-	//TODO DOC
+	/**
+	 * Drawing Context passed to display devices low-level primitives `set_pixel()`
+	 * and `write_char()`.
+	 * Conext includes:
+	 * - current font
+	 * - current drawing mode for outlines
+	 * - current drawing mode for areas filling
+	 * 
+	 * Display devices can only use the context passed by `Display` high level
+	 * primitives. They cannot create such contexts.
+	 * 
+	 * @tparam COLOR the color type associated with the display device
+	 * @tparam VERTICAL_FONT `true` if the display device supports vertical fonts,
+	 * `false` otherwise
+	 */
 	template<typename COLOR, bool VERTICAL_FONT> class DrawContext
 	{
 	public:
+		/// @cond notdocumented
 		DrawContext() = default;
+		/// @endcond
 
+		/**
+		 * Return the current `DrawMode` to use in the called primitive.
+		 * This might be the mode for outline drawing or areas filling, based on
+		 * the `Display` calling primitive.
+		 * 
+		 * @return DrawMode<COLOR> teh draw mode to use fro drwaing pixels or characters
+		 */
 		DrawMode<COLOR> draw_mode() const
 		{
 			return (is_fill_ ? fill_ : draw_);
 		}
 		
+		/**
+		 * Return the current `Font` to use in the called primitive `draw_char()`
+		 * 
+		 * @return const Font<VERTICAL_FONT>& the font to use for drawing a character
+		 */
 		const Font<VERTICAL_FONT>& font() const
 		{
 			return *font_;
 		}
 		
 	private:
+		// These variables are set by `Display` (which is a friend) before calling
+		// a display device low-level primitive
 		bool is_fill_ = false;
 		DrawMode<COLOR> draw_{};
 		DrawMode<COLOR> fill_{};
@@ -678,12 +716,10 @@ namespace devices::display
 
 		void draw_polygon(std::initializer_list<POINT> points)
 		{
-			//TODO use filler_ !
 			draw_lines(points, true);
 		}
 
-		//TODO additional 2D primitives here? e.g. arc, region fill
-		// void draw_arc()
+		//TODO additional 2D primitives here? e.g. round rectangle, bitmaps and pixmaps
 
 		/**
 		 * For display devices having a raster buffer, this method copies invalid
