@@ -68,6 +68,10 @@ namespace devices
 	}
 }
 
+//TODO Add pattern to DrawMode (to allow dotted lines or pseudo-grey)?
+//TODO Use device traits to also determine what modes a device can handle!
+//TODO Add new 2D primitives e.g. round rectangle, bitmaps
+
 namespace devices::display
 {
 	/// @cond notdocumented
@@ -80,7 +84,6 @@ namespace devices::display
 	};
 	/// @endcond
 
-	//TODO use device traits to determine what modes a device can handle!
 	/**
 	 * Mode used when drawing pixels.
 	 * This determines how the destination pixel color is affected by the
@@ -104,7 +107,6 @@ namespace devices::display
 		NO_CHANGE = 0xFF
 	};
 
-	//TODO Add pattern
 	/**
 	 * Drawing Mode to use for `Display` drawing primitives.
 	 * This encapsulates a pixel operation `Mode` and a color to use.
@@ -240,7 +242,7 @@ namespace devices::display
 		 * This might be the mode for outline drawing or areas filling, based on
 		 * the `Display` calling primitive.
 		 * 
-		 * @return DrawMode<COLOR> teh draw mode to use fro drwaing pixels or characters
+		 * @return DrawMode<COLOR> the draw mode to use fro drwaing pixels or characters
 		 */
 		DrawMode<COLOR> draw_mode() const
 		{
@@ -270,7 +272,7 @@ namespace devices::display
 
 	/**
 	 * Types of errors that can occur on `Display` instances.
-	 * @sa AbstractDisplayDevice.last_error()
+	 * @sa Display.last_error()
 	 */
 	enum class Error : uint8_t
 	{
@@ -304,28 +306,79 @@ namespace devices::display
 		INVALID_GEOMETRY
 	};
 
-	//TODO shall we document it?
-	/// @cond notdocumented
+	/**
+	 * Traits for display devices.
+	 * Each display device must define a `DisplayDeviceTrait<MyDevice>` struct
+	 * with its characteristics.
+	 * 
+	 * The simplest way to do that is to use `DisplayDeviceTrait_impl` as a base
+	 * class for each device trait class:
+	 * 
+	 * @code {.cpp}
+	 * template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST>
+	 * struct DisplayDeviceTrait<LCD5110<SCE, DC, RST>> : 
+	 *     DisplayDeviceTrait_impl<bool, 84, 48, true, true> {};
+	 * @endcode
+	 * 
+	 * @tparam DEVICE the actual display device class for which to define traits
+	 * 
+	 * @sa DisplayDeviceTrait_impl
+	 */
 	template<typename DEVICE> struct DisplayDeviceTrait
 	{
+		/** Marker of display devices. Must be `true` when @p DEVICE is a display device. */
 		static constexpr bool IS_DISPLAY = false;
+		/** 
+		 * The type of a pixel for @p DEVICE. 
+		 * May be `bool` for B&W displays, or any more complex type (eg bitfields struct)
+		 * for displays with large range of colors (on 1 or more bytes).
+		 */
 		using COLOR = void;
+		/** The shortest integral type that can hold X coordinates for @p DEVICE. */
 		using XCOORD = uint8_t;
+		/** The shortest integral type that can hold Y coordinates for @p DEVICE. */
 		using YCOORD = uint8_t;
+		/** The maximum X coordinate for @p DEVICE. */
 		static constexpr XCOORD MAX_X = 0;
+		/** The maximum Y coordinate for @p DEVICE. */
 		static constexpr YCOORD MAX_Y = 0;
+		/** The width in pixels of @p DEVICE. */
 		static constexpr uint8_t WIDTH = 0;
+		/** The height in pixels of @p DEVICE. */
 		static constexpr uint8_t HEIGHT = 0;
+		/** 
+		 * The longest type of `XCOORD` and `YCOORD`, used to hold scalar on some
+		 * drawing primitives, eg for radius in `Display::draw_circle()`.
+		 */
 		using SCALAR = uint8_t;
+		/**
+		 * The signed integral type used by `Display` algorithms in some drawing 
+		 * primitives, like `Display::draw_line()` or `Display::draw_circle()`.
+		 * This must be large enough to store `-4 * min(WIDTH,HEIGHT)`.
+		 */
 		using SIGNED_SCALAR = int8_t;
+		/** Tells if @p DEVICE uses vertical fonts (e.g. Nokia 5110 display). */
 		static constexpr bool VERTICAL_FONT = false;
+		/** Tells if @p DEVICE implements a bitmap raster in SRAM (e.g. Nokia 5110 display). */
 		static constexpr bool HAS_RASTER = false;
 	};
 
+	/**
+	 * Default base class for all `DisplayDeviceTrait`.
+	 * That class eases definition of traits for a new device.
+	 * Indeed, it will compute most traits from a restricted set of template arguments.
+	 * 
+	 * @tparam COLOR_ Type of a pixel for the device
+	 * @tparam WIDTH_ The width in pixels of the device
+	 * @tparam HEIGHT_ The height in pixels of the device
+	 * @tparam HAS_RASTER_ Tells if the device implements a bitmap raster in SRAM
+	 * @tparam VERTICAL_FONT_ Tells if the device uses vertical fonts
+	 */
 	template<typename COLOR_, uint16_t WIDTH_, uint16_t HEIGHT_, 
 		bool HAS_RASTER_ = false, bool VERTICAL_FONT_ = false>
 		struct DisplayDeviceTrait_impl
 	{
+		/// @cond notdocumented
 		static constexpr bool IS_DISPLAY = true;
 		using COLOR = COLOR_;
 
@@ -345,8 +398,8 @@ namespace devices::display
 
 		static constexpr bool VERTICAL_FONT = VERTICAL_FONT_;
 		static constexpr bool HAS_RASTER = HAS_RASTER_;
+		/// @endcond
 	};
-	/// @endcond
 
 	/**
 	 * Class handling drawing primitives on any display device.
@@ -718,8 +771,6 @@ namespace devices::display
 		{
 			draw_lines(points, true);
 		}
-
-		//TODO additional 2D primitives here? e.g. round rectangle, bitmaps and pixmaps
 
 		/**
 		 * For display devices having a raster buffer, this method copies invalid
