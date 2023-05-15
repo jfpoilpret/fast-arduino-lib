@@ -821,11 +821,11 @@ namespace devices::display
 		void draw_bitmap(POINT origin, POINT size, const uint8_t* bitmap)
 		{
 			// Check origin and size are compatible with display device resolution
-			XCOORD xorg = origin.x;
-			YCOORD yorg = origin.y;
+			const XCOORD xorg = origin.x;
+			const YCOORD yorg = origin.y;
 			if (!is_valid_xy(xorg, yorg)) return;
-			XCOORD w = size.x;
-			YCOORD h = size.y;
+			const XCOORD w = size.x;
+			const YCOORD h = size.y;
 			if (!is_valid_xy(w, h)) return;
 			if (!is_valid_xy(xorg + w, yorg + h)) return;
 			//TODO refactor to have 2 loops, one for Black and one for White, with common method
@@ -841,7 +841,6 @@ namespace devices::display
 					for (XCOORD col = 0; col < cols; ++col)
 					{
 						uint8_t value = pgm_read_byte(address++);
-						//TODO
 						// Draw each pixel with draw or fill mode
 						for (uint8_t i = 0; i < 8; ++i)
 						{

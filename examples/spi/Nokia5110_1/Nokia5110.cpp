@@ -411,13 +411,28 @@ int main()
 	// }
 	// time::delay_ms(DELAY_MS);
 
-	//TODO Bitmap with different modes
+	// Try Bitmap
 	display_title(nokia, F("==> BITMAP <=="));
 	setup(nokia, {Mode::COPY, true}, {Mode::COPY, false});
 	nokia.draw_bitmap({36, 18}, {16, 12}, BITMAP);
 	nokia.update();
 	time::delay_ms(DELAY_MS);
 
-	// nokia.erase();
-	// nokia.update();
+	setup(nokia, {Mode::XOR, true}, {Mode::XOR, true}, true);
+	nokia.set_draw_mode({Mode::COPY, true});
+	nokia.set_fill_mode({Mode::COPY, false});
+	nokia.draw_bitmap({36, 18}, {16, 12}, BITMAP);
+	nokia.update();
+	nokia.set_draw_mode({Mode::XOR, true});
+	nokia.set_fill_mode({Mode::XOR, true});
+	for (uint8_t i = 0; i < 10; ++i)
+	{
+		nokia.draw_bitmap({36, 18}, {16, 12}, BITMAP);
+		nokia.update();
+		time::delay_ms(BLINK_MS);
+	}
+	time::delay_ms(DELAY_MS);
+
+	nokia.erase();
+	nokia.update();
 }
