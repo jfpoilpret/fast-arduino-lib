@@ -68,9 +68,10 @@ namespace devices
 	}
 }
 
+//TODO Add new 2D primitives e.g. bitmaps
 //TODO Add pattern to DrawMode (to allow dotted lines or pseudo-grey)?
+//TODO Add thickness to DrawMode (to allow thick lines)?
 //TODO Use device traits to also determine what modes a device can handle!
-//TODO Add new 2D primitives e.g. round rectangle, bitmaps
 
 namespace devices::display
 {
@@ -695,6 +696,19 @@ namespace devices::display
 		 */
 		void draw_rectangle(POINT point1, POINT point2)
 		{
+			draw_rounded_rectangle(point1, point2, 0);
+		}
+
+		/**
+		 * Draw a rounded rectangle defined by 2 corner points, at given coordinates,
+		 * and the radius of circle arcs drawn at each corner.
+		 * 
+		 * @param point1 coordinates of rectangle 1st corner
+		 * @param point2 coordinates of rectangle 2nd corner
+		 * @param radius radius of circle arcs to draw at corners
+		 */
+		void draw_rounded_rectangle(POINT point1, POINT point2, SCALAR radius)
+		{
 			XCOORD x1 = point1.x;
 			YCOORD y1 = point1.y;
 			XCOORD x2 = point2.x;
@@ -709,17 +723,30 @@ namespace devices::display
 			// Possibly swap x1-x2 and y1-y2
 			swap_to_sort(x1, x2);
 			swap_to_sort(y1, y2);
+			if ((radius * 2 > x2 - x1) || (radius * 2 > y2 - y1))
+			{
+				last_error_ = Error::INVALID_GEOMETRY;
+				return;
+			}
 
 			// Draw edges
 			if (context_.draw_)
 			{
+				// For rounded rectangles we need to draw one less pixel on the right (in XOR mode)
+				SCALAR delta = (radius ? radius + 1 : 0);
 				// Simply draw 2 horizontal and 2 vertical lines
-				draw_hline(x1, y1, x2);
-				draw_hline(x1, y2, x2);
+				draw_hline(x1 + radius, y1, x2 - delta);
+				draw_hline(x1 + radius, y2, x2 - delta);
 				// Note that we avoid drawing the same pixels (corners) twice 
 				// (due to a drawing mode that might potentially be XOR)
-				draw_vline(x1, y1 + 1, y2 - 1);
-				draw_vline(x2, y1 + 1, y2 - 1);
+				draw_vline(x1, y1 + radius + 1, y2 - radius - 1);
+				draw_vline(x2, y1 + radius + 1, y2 - radius - 1);
+			}
+
+			if (radius && (context_.draw_ || context_.fill_))
+			{
+				// Draw 4 quarter-circles & fill with horizontal lines
+				draw_circle_bresenham(x1 + radius, y1 + radius, x2 - radius, y2 - radius, radius);
 			}
 
 			// Fill rectangle inside
@@ -727,7 +754,9 @@ namespace devices::display
 			{
 				context_.is_fill_ = true;
 				// Simply draw enough horizontal lines
-				for (YCOORD y = y1 + 1; y < y2; ++y)
+				// For rounded rectangles we need to draw one more line on the top
+				SCALAR delta = (radius ? radius : 1);
+				for (YCOORD y = y1 + delta; y < y2 - radius; ++y)
 					draw_hline(x1 + 1, y, x2 - 1);
 				context_.is_fill_ = false;
 			}
@@ -758,7 +787,7 @@ namespace devices::display
 				return;
 			}
 			// Apply Bresenham's circle algorithm
-			draw_circle_bresenham(xc, yc, radius);
+			draw_circle_bresenham(xc, yc, xc, yc, radius);
 			invalidate(XCOORD(xc - radius), YCOORD(yc - radius), XCOORD(xc + radius), YCOORD(yc + radius));
 		}
 
@@ -1059,7 +1088,7 @@ namespace devices::display
 		}
 
 		// https://fr.wikipedia.org/wiki/Algorithme_de_trac%C3%A9_d%27arc_de_cercle_de_Bresenham
-		void draw_circle_bresenham(XCOORD xc, YCOORD yc, SCALAR radius)
+		void draw_circle_bresenham(XCOORD xc1, YCOORD yc1, XCOORD xc2, YCOORD yc2, SCALAR radius)
 		{
 			XCOORD x = 0;
 			YCOORD y = radius;
@@ -1072,14 +1101,14 @@ namespace devices::display
 				{
 					// All these conditions are necessary to avoid drawing the same point twice
 					// which would fail in XOR Mode
-					draw_pixels(x + xc, y + yc, -y + yc);
+					draw_pixels(x + xc2, y + yc2, -y + yc1);					// octants 2 & 7
 					if (x != 0)
-						draw_pixels(-x + xc, y + yc, -y + yc);
+						draw_pixels(-x + xc1, y + yc2, -y + yc1);				// octants 3 & 6
 					if (x != y)
 					{
-						draw_pixels(y + xc, x + yc, -x + yc);
+						draw_pixels(y + xc2, x + yc2, -x + yc1);				// octants 1 & 8 
 						if (y != 0)
-							draw_pixels(-y + xc, x + yc, -x + yc);
+							draw_pixels(-y + xc1, x + yc2, -x + yc1);			// octants 4 & 5
 					}
 				}
 				// Draw filler lines for octants 1&4, 5&8 if needed
@@ -1087,10 +1116,10 @@ namespace devices::display
 				if (context_.fill_ && x != y)
 				{
 					context_.is_fill_ = true;
-					draw_hline(y + xc - 1, x + yc, -y + xc + 1);
+					draw_hline(y + xc2 - 1, x + yc2, -y + xc1 + 1);				// octants 1 & 8
 					// If x==0, fill line has just been drawn above
 					if (x != 0)
-						draw_hline(y + xc - 1, -x + yc, -y + xc + 1);
+						draw_hline(y + xc2 - 1, -x + yc1, -y + xc1 + 1);		// octants 4 & 5
 					context_.is_fill_ = false;
 				}
 				if (m > 0)
@@ -1099,8 +1128,8 @@ namespace devices::display
 					if (context_.fill_ && y != radius)
 					{
 						context_.is_fill_ = true;
-						draw_hline(xc + x - delta_x, yc - y, xc - x + delta_x);
-						draw_hline(xc + x - delta_x, yc + y, xc - x + delta_x);
+						draw_hline(xc2 + x - delta_x, yc1 - y, xc1 - x + delta_x);	// octants 2 & 3
+						draw_hline(xc2 + x - delta_x, yc2 + y, xc1 - x + delta_x);	// octants 6 & 7
 						context_.is_fill_ = false;
 					}
 					delta_x = 0;

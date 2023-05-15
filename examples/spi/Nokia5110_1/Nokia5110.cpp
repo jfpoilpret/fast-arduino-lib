@@ -299,6 +299,23 @@ int main()
 	}
 	time::delay_ms(DELAY_MS);
 
+	// Try drawing rounded rectangle
+	display_title(nokia, F("=> RND RECT <="));
+	setup(nokia, {Mode::COPY, true}, {Mode::NO_CHANGE, false});
+	nokia.draw_rounded_rectangle({5, 5}, {78, 42}, 8);
+	nokia.update();
+	time::delay_ms(DELAY_MS);
+
+	// Check XOR mode for roundes rectangle boundaries
+	setup(nokia, {Mode::XOR, true}, {Mode::NO_CHANGE, false});
+	for (uint8_t i = 0; i < 10; ++i)
+	{
+		nokia.draw_rounded_rectangle({5, 5}, {78, 42}, 8);
+		nokia.update();
+		time::delay_ms(BLINK_MS);
+	}
+	time::delay_ms(DELAY_MS);
+
 	// Try drawing polyline
 	display_title(nokia, F("=> POLYLINE <="));
 	setup(nokia, {Mode::COPY, true}, {Mode::NO_CHANGE, false});
@@ -330,6 +347,28 @@ int main()
 	for (uint8_t i = 0; i < 10; ++i)
 	{
 		nokia.draw_rectangle({30, 35}, {55, 45});
+		nokia.update();
+		time::delay_ms(BLINK_MS);
+	}
+	time::delay_ms(DELAY_MS);
+
+	// Try fillers on rounded rectangles
+	display_title(nokia, F("=> FIL RREC <="));
+	setup(nokia, {Mode::COPY, true}, {Mode::COPY, true});
+	nokia.draw_rounded_rectangle({5, 5}, {78, 42}, 8);
+	nokia.update();
+	time::delay_ms(DELAY_MS);
+
+	setup(nokia, {Mode::NO_CHANGE, true}, {Mode::XOR, true}, true);
+	nokia.set_fill_mode({Mode::NO_CHANGE, false});
+	nokia.set_draw_mode({Mode::COPY, true});
+	nokia.draw_rounded_rectangle({5, 5}, {78, 42}, 8);
+	nokia.update();
+	nokia.set_draw_mode({Mode::NO_CHANGE, true});
+	nokia.set_fill_mode({Mode::XOR, true});
+	for (uint8_t i = 0; i < 10; ++i)
+	{
+		nokia.draw_rounded_rectangle({5, 5}, {78, 42}, 8);
 		nokia.update();
 		time::delay_ms(BLINK_MS);
 	}
