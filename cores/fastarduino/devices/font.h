@@ -41,8 +41,6 @@ namespace devices::display
 		/** `true` if font is vertical, `false` if horizontal */
 		static constexpr bool VERTICAL = VERTICAL_;
 
-		//TODO potential optimization by using template for all args except glyphs ptr
-		//TODO this will require update of FontEditor C++ code generation!
 		/**
 		 * Construct a new Font.
 		 * 
