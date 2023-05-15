@@ -54,11 +54,11 @@ namespace devices::display
 		 * @p first_char and @p last_char; this array must be stored in MCU flash
 		 * memory.
 		 */
-		Font(char first_char, char last_char, uint8_t width, uint8_t height, const uint8_t* glyphs)
+		constexpr Font(char first_char, char last_char, uint8_t width, uint8_t height, const uint8_t* glyphs)
 			:	first_char_{uint8_t(first_char)}, last_char_{uint8_t(last_char)},
 				width_{width}, height_{height}, 
-				glyph_rows_{uint8_t(VERTICAL ? (height_ - 1) / 8 + 1 : height_)},
-				glyph_cols_{uint8_t(VERTICAL ? width_ : (width_ - 1) / 8 + 1)},
+				glyph_rows_{uint8_t(VERTICAL ? (height - 1) / 8 + 1 : height)},
+				glyph_cols_{uint8_t(VERTICAL ? width : (width - 1) / 8 + 1)},
 				glyph_size_{uint8_t(glyph_rows_ * glyph_cols_)},
 				glyphs_{glyphs} {}
 
