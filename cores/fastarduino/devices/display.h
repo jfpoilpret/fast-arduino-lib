@@ -595,6 +595,8 @@ namespace devices::display
 		 */
 		void draw_string(POINT point, const flash::FlashStorage* content)
 		{
+			//TODO draw_bitmap
+			//TODO factor out common code with 1st draw_string() [only 2 lines different!]
 			// Check one font is currently selected
 			if (!check_font()) return;
 			const uint8_t width = context_.font_->width();
@@ -811,6 +813,56 @@ namespace devices::display
 		void draw_polygon(std::initializer_list<POINT> points)
 		{
 			draw_lines(points, true);
+		}
+
+		//TODO DOC bitmap is BW (2 colors: draw and fill)
+		//TODO use functor for input streaming and define default functors (PROGMEM and others)
+		//TOD optimize according to vertical display (Nokia5110)?
+		void draw_bitmap(POINT origin, POINT size, const uint8_t* bitmap)
+		{
+			// Check origin and size are compatible with display device resolution
+			XCOORD xorg = origin.x;
+			YCOORD yorg = origin.y;
+			if (!is_valid_xy(xorg, yorg)) return;
+			XCOORD w = size.x;
+			YCOORD h = size.y;
+			if (!is_valid_xy(w, h)) return;
+			if (!is_valid_xy(xorg + w, yorg + h)) return;
+			//TODO refactor to have 2 loops, one for Black and one for White, with common method
+			if (context_.draw_ || context_.fill_)
+			{
+				uint16_t address = (uint16_t) bitmap;
+				const XCOORD cols = (w / 8) + (w % 8 ? 1 : 0);
+				XCOORD xcurrent;
+				YCOORD ycurrent;
+				for (ycurrent = yorg; ycurrent < yorg + h; ++ycurrent)
+				{
+					xcurrent = xorg;
+					for (XCOORD col = 0; col < cols; ++col)
+					{
+						uint8_t value = pgm_read_byte(address++);
+						//TODO
+						// Draw each pixel with draw or fill mode
+						for (uint8_t i = 0; i < 8; ++i)
+						{
+							if (value & 0x80)
+							{
+								DISPLAY_DEVICE::set_pixel(xcurrent, ycurrent, context_);
+							}
+							else
+							{
+								context_.is_fill_ = true;
+								DISPLAY_DEVICE::set_pixel(xcurrent, ycurrent, context_);
+								context_.is_fill_ = false;
+							}
+							++xcurrent;
+							value <<= 1;
+						}
+					}
+				}
+				// Invalidate
+				invalidate(xorg, yorg, XCOORD(xcurrent - 1), YCOORD(ycurrent - 1));
+			}
 		}
 
 		/**
