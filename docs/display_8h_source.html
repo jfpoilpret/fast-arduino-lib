@@ -93,7 +93,7 @@ $(document).ready(function(){initNavTree('display_8h_source.html',''); initResiz
   <div class="headertitle"><div class="title">display.h</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="display_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//   Copyright 2016-2022 Jean-Francois Poilpret</span></div>
+<a href="display_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//   Copyright 2016-2023 Jean-Francois Poilpret</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">//</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">//   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">//   you may not use this file except in compliance with the License.</span></div>
@@ -519,7 +519,7 @@ $(document).ready(function(){initNavTree('display_8h_source.html',''); initResiz
 <div class="line"><a id="l00757" name="l00757"></a><span class="lineno">  757</span>                draw_vline(x2, y1 + radius + 1, y2 - radius - 1);</div>
 <div class="line"><a id="l00758" name="l00758"></a><span class="lineno">  758</span>            }</div>
 <div class="line"><a id="l00759" name="l00759"></a><span class="lineno">  759</span> </div>
-<div class="line"><a id="l00760" name="l00760"></a><span class="lineno">  760</span>            <span class="keywordflow">if</span> (radius &amp;&amp; (context_.draw_ || context_.fill_))</div>
+<div class="line"><a id="l00760" name="l00760"></a><span class="lineno">  760</span>            <span class="keywordflow">if</span> ((radius != 0) &amp;&amp; (context_.draw_ || context_.fill_))</div>
 <div class="line"><a id="l00761" name="l00761"></a><span class="lineno">  761</span>            {</div>
 <div class="line"><a id="l00762" name="l00762"></a><span class="lineno">  762</span>                <span class="comment">// Draw 4 quarter-circles &amp; fill with horizontal lines</span></div>
 <div class="line"><a id="l00763" name="l00763"></a><span class="lineno">  763</span>                draw_circle_bresenham(x1 + radius, y1 + radius, x2 - radius, y2 - radius, radius);</div>

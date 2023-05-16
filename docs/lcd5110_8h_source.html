@@ -93,7 +93,7 @@ $(document).ready(function(){initNavTree('lcd5110_8h_source.html',''); initResiz
   <div class="headertitle"><div class="title">lcd5110.h</div></div>
 </div><!--header-->
 <div class="contents">
-<a href="lcd5110_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//   Copyright 2016-2022 Jean-Francois Poilpret</span></div>
+<a href="lcd5110_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">//   Copyright 2016-2023 Jean-Francois Poilpret</span></div>
 <div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="comment">//</span></div>
 <div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="comment">//   Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></div>
 <div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="comment">//   you may not use this file except in compliance with the License.</span></div>
@@ -249,7 +249,7 @@ $(document).ready(function(){initNavTree('lcd5110_8h_source.html',''); initResiz
 <div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span>            <span class="keywordflow">else</span></div>
 <div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span>            {</div>
 <div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span>                <span class="keywordflow">if</span> (!current) <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>                *pix_column &amp;= ~mask;</div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span>                *pix_column &amp;= uint8_t(~mask);</div>
 <div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>            }</div>
 <div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span>            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>        }</div>
