@@ -852,7 +852,7 @@ namespace devices::display
 			if (context_.draw_ || context_.fill_)
 			{
 				const XCOORD cols = (w / 8) + (w % 8 ? 1 : 0);
-				XCOORD xcurrent;
+				XCOORD xcurrent = 0;
 				YCOORD ycurrent;
 				for (ycurrent = yorg; ycurrent < yorg + h; ++ycurrent)
 				{
