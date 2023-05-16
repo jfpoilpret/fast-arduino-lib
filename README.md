@@ -170,7 +170,7 @@ The roadmap of next activities and new supported features is the following:
 
 Documentation - no milestones
 -----------------------------
-- Document how to add support for other boards in Tutorial (1st half 2022)
+- Document how to add support for other boards in Tutorial (1st half 2023)
 
 Milestones dates are "best effort" and may change based on contributors' availability.
 
