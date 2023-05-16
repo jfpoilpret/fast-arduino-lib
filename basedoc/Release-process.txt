@@ -17,7 +17,7 @@ FastArduino 1.10 release
 
 I am happy to announce the 11th major release of **FastArduino** platform.
 
-Since release 1.9 (September 2021), the main changes are listed [there](https://github.com/jfpoilpret/fast-arduino-lib/milestone/12?closed=1).
+Since release 1.9 (September 2022), the main changes are listed [there](https://github.com/jfpoilpret/fast-arduino-lib/milestone/12?closed=1).
 
 This release brings the following changes and improvements:
 - Generic display API on which LCD devices support can be easily added:
