@@ -115,7 +115,7 @@ namespace flash
 		 * 
 		 * @param flash_buffer a pointer to the first item in Flash memory
 		 */
-		FlashReader(const T* flash_buffer) : address_{uint16_t(flash_buffer)} {}
+		explicit FlashReader(const T* flash_buffer) : address_{uint16_t(flash_buffer)} {}
 
 		/**
 		 * Get the enxt item read from memory.

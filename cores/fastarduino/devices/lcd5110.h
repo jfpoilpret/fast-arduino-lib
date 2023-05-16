@@ -273,7 +273,7 @@ namespace devices::display
 			else
 			{
 				if (!current) return false;
-				*pix_column &= ~mask;
+				*pix_column &= uint8_t(~mask);
 			}
 			return true;
 		}

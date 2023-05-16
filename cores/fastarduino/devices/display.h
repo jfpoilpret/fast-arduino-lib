@@ -757,7 +757,7 @@ namespace devices::display
 				draw_vline(x2, y1 + radius + 1, y2 - radius - 1);
 			}
 
-			if (radius && (context_.draw_ || context_.fill_))
+			if ((radius != 0) && (context_.draw_ || context_.fill_))
 			{
 				// Draw 4 quarter-circles & fill with horizontal lines
 				draw_circle_bresenham(x1 + radius, y1 + radius, x2 - radius, y2 - radius, radius);

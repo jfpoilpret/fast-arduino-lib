@@ -127,6 +127,7 @@ namespace containers
 		 */
 		array& operator=(const array& that)
 		{
+			if (this == &that) return *this;
 			T* dst = buffer_;
 			const T* src = that.buffer_;
 			for (uint8_t i = 0; i < N; ++i)
