@@ -175,242 +175,242 @@ int main()
 	nokia.set_font(font);
 	nokia.power_up();
 
-	// display_title(nokia, F("===> CHAR <==="));
-	// setup(nokia, {Mode::COPY, true}, {Mode::NO_CHANGE, false});
+	display_title(nokia, F("===> CHAR <==="));
+	setup(nokia, {Mode::COPY, true}, {Mode::NO_CHANGE, false});
 
-	// uint8_t x = 0, y = 0;
-	// const uint8_t FONT_WIDTH = font.width() + 1;
-	// const uint8_t FONT_HEIGHT = font.height() + 1;
-	// for (uint8_t c = font.first_char(); c <= font.last_char(); ++c)
-	// {
-	// 	nokia.draw_char({x, y}, char(c));
-	// 	nokia.update();
-	// 	time::delay_ms(CHAR_MS);
-	// 	x += FONT_WIDTH;
-	// 	if (x > nokia.WIDTH - FONT_WIDTH)
-	// 	{
-	// 		x = 0;
-	// 		y += FONT_HEIGHT;
-	// 		if (y > nokia.HEIGHT - FONT_HEIGHT)
-	// 		{
-	// 			y = 0;
-	// 			nokia.erase();
-	// 		}
-	// 	}
-	// }
+	uint8_t x = 0, y = 0;
+	const uint8_t FONT_WIDTH = font.width() + 1;
+	const uint8_t FONT_HEIGHT = font.height() + 1;
+	for (uint8_t c = font.first_char(); c <= font.last_char(); ++c)
+	{
+		nokia.draw_char({x, y}, char(c));
+		nokia.update();
+		time::delay_ms(CHAR_MS);
+		x += FONT_WIDTH;
+		if (x > nokia.WIDTH - FONT_WIDTH)
+		{
+			x = 0;
+			y += FONT_HEIGHT;
+			if (y > nokia.HEIGHT - FONT_HEIGHT)
+			{
+				y = 0;
+				nokia.erase();
+			}
+		}
+	}
 
-	// nokia.invert();
-	// time::delay_ms(DELAY_MS);
+	nokia.invert();
+	time::delay_ms(DELAY_MS);
 
-	// nokia.normal();
-	// time::delay_ms(DELAY_MS);
+	nokia.normal();
+	time::delay_ms(DELAY_MS);
 
-	// setup(nokia, {Mode::OR, true}, {Mode::NO_CHANGE, false});
-	// for (uint8_t c = font.first_char(); c <= font.last_char(); ++c)
-	// {
-	// 	nokia.draw_char({40, 16}, char(c));
-	// 	nokia.update();
-	// 	time::delay_ms(CHAR_MS);
-	// }
+	setup(nokia, {Mode::OR, true}, {Mode::NO_CHANGE, false});
+	for (uint8_t c = font.first_char(); c <= font.last_char(); ++c)
+	{
+		nokia.draw_char({40, 16}, char(c));
+		nokia.update();
+		time::delay_ms(CHAR_MS);
+	}
 
-	// setup(nokia, {Mode::AND, true}, {Mode::NO_CHANGE, false}, true);
-	// // first draw a black rectangle in the 7x5 location of the displayed character
-	// nokia.set_draw_mode({Mode::COPY, true});
-	// for (uint8_t y = 8; y < 30; ++y)
-	// 	for (uint8_t x = 35; x < 50; ++x)
-	// 		nokia.draw_point({x, y});
-	// nokia.update();
-	// nokia.set_draw_mode({Mode::AND, true});
-	// for (uint8_t c = 'A'; c <= 'Z'; ++c)
-	// {
-	// 	nokia.draw_char({40, 16}, char(c));
-	// 	nokia.update();
-	// 	time::delay_ms(CHAR_MS);
-	// }
+	setup(nokia, {Mode::AND, true}, {Mode::NO_CHANGE, false}, true);
+	// first draw a black rectangle in the 7x5 location of the displayed character
+	nokia.set_draw_mode({Mode::COPY, true});
+	for (uint8_t y = 8; y < 30; ++y)
+		for (uint8_t x = 35; x < 50; ++x)
+			nokia.draw_point({x, y});
+	nokia.update();
+	nokia.set_draw_mode({Mode::AND, true});
+	for (uint8_t c = 'A'; c <= 'Z'; ++c)
+	{
+		nokia.draw_char({40, 16}, char(c));
+		nokia.update();
+		time::delay_ms(CHAR_MS);
+	}
 
-	// display_title(nokia, F("===> STR <==="));
-	// setup(nokia, {Mode::COPY, true}, {Mode::NO_CHANGE, false});
-	// nokia.draw_string({8, 16}, "Coucou!");
-	// nokia.update();
-	// time::delay_ms(DELAY_MS);
+	display_title(nokia, F("===> STR <==="));
+	setup(nokia, {Mode::COPY, true}, {Mode::NO_CHANGE, false});
+	nokia.draw_string({8, 16}, "Coucou!");
+	nokia.update();
+	time::delay_ms(DELAY_MS);
 
-	// display_title(nokia, F("===> FSTR <==="));
-	// setup(nokia, {Mode::OR, true}, {Mode::NO_CHANGE, false});
-	// nokia.draw_string({8, 16}, F("Coucou!"));
-	// nokia.update();
-	// time::delay_ms(DELAY_MS);
-	// nokia.draw_string({9, 16}, F("Coucou!"));
-	// nokia.update();
-	// time::delay_ms(DELAY_MS);
-	// nokia.draw_string({10, 16}, F("Coucou!"));
-	// nokia.update();
-	// time::delay_ms(DELAY_MS);
+	display_title(nokia, F("===> FSTR <==="));
+	setup(nokia, {Mode::OR, true}, {Mode::NO_CHANGE, false});
+	nokia.draw_string({8, 16}, F("Coucou!"));
+	nokia.update();
+	time::delay_ms(DELAY_MS);
+	nokia.draw_string({9, 16}, F("Coucou!"));
+	nokia.update();
+	time::delay_ms(DELAY_MS);
+	nokia.draw_string({10, 16}, F("Coucou!"));
+	nokia.update();
+	time::delay_ms(DELAY_MS);
 
-	// // Try drawing pixels
-	// display_title(nokia, F("===> PIXL <==="));
-	// setup(nokia, {Mode::COPY, true}, {Mode::NO_CHANGE, false});
-	// for (uint8_t y = 0; y < nokia.HEIGHT; ++y)
-	// 	for (uint8_t x = 0; x < nokia.WIDTH; ++x)
-	// 	{
-	// 		nokia.draw_point({x, y});
-	// 		nokia.update();
-	// 		time::delay_ms(PIXEL_MS);
-	// 	}
+	// Try drawing pixels
+	display_title(nokia, F("===> PIXL <==="));
+	setup(nokia, {Mode::COPY, true}, {Mode::NO_CHANGE, false});
+	for (uint8_t y = 0; y < nokia.HEIGHT; ++y)
+		for (uint8_t x = 0; x < nokia.WIDTH; ++x)
+		{
+			nokia.draw_point({x, y});
+			nokia.update();
+			time::delay_ms(PIXEL_MS);
+		}
 	
-	// display_title(nokia, F("===> LINE <==="));
-	// setup(nokia, {Mode::COPY, true}, {Mode::NO_CHANGE, false});
-	// // Try drawing H line
-	// nokia.draw_line({10, 40}, {79, 40});
-	// nokia.update();
-	// time::delay_ms(DELAY_MS);
+	display_title(nokia, F("===> LINE <==="));
+	setup(nokia, {Mode::COPY, true}, {Mode::NO_CHANGE, false});
+	// Try drawing H line
+	nokia.draw_line({10, 40}, {79, 40});
+	nokia.update();
+	time::delay_ms(DELAY_MS);
 
-	// // Try drawing V line
-	// nokia.draw_line({70, 0}, {70, 45});
-	// nokia.update();
-	// time::delay_ms(DELAY_MS);
+	// Try drawing V line
+	nokia.draw_line({70, 0}, {70, 45});
+	nokia.update();
+	time::delay_ms(DELAY_MS);
 
-	// // Try drawing other lines
-	// nokia.draw_line({0, 0}, {83, 47});
-	// nokia.update();
-	// time::delay_ms(DELAY_MS);
-	// nokia.draw_line({0, 47}, {83, 0});
-	// nokia.update();
-	// time::delay_ms(DELAY_MS);
-	// nokia.draw_line({0, 0}, {30, 47});
-	// nokia.update();
-	// time::delay_ms(DELAY_MS);
-	// nokia.draw_line({0, 47}, {30, 0});
-	// nokia.update();
-	// time::delay_ms(DELAY_MS);
+	// Try drawing other lines
+	nokia.draw_line({0, 0}, {83, 47});
+	nokia.update();
+	time::delay_ms(DELAY_MS);
+	nokia.draw_line({0, 47}, {83, 0});
+	nokia.update();
+	time::delay_ms(DELAY_MS);
+	nokia.draw_line({0, 0}, {30, 47});
+	nokia.update();
+	time::delay_ms(DELAY_MS);
+	nokia.draw_line({0, 47}, {30, 0});
+	nokia.update();
+	time::delay_ms(DELAY_MS);
 
-	// // Try drawing rectangle
-	// display_title(nokia, F("===> RECT <==="));
-	// setup(nokia, {Mode::COPY, true}, {Mode::NO_CHANGE, false});
-	// nokia.draw_rectangle({30, 35}, {55, 45});
-	// nokia.update();
-	// time::delay_ms(DELAY_MS);
+	// Try drawing rectangle
+	display_title(nokia, F("===> RECT <==="));
+	setup(nokia, {Mode::COPY, true}, {Mode::NO_CHANGE, false});
+	nokia.draw_rectangle({30, 35}, {55, 45});
+	nokia.update();
+	time::delay_ms(DELAY_MS);
 
-	// setup(nokia, {Mode::XOR, true}, {Mode::NO_CHANGE, false});
-	// for (uint8_t i = 0; i < 10; ++i)
-	// {
-	// 	nokia.draw_rectangle({30, 35}, {55, 45});
-	// 	nokia.update();
-	// 	time::delay_ms(BLINK_MS);
-	// }
-	// time::delay_ms(DELAY_MS);
+	setup(nokia, {Mode::XOR, true}, {Mode::NO_CHANGE, false});
+	for (uint8_t i = 0; i < 10; ++i)
+	{
+		nokia.draw_rectangle({30, 35}, {55, 45});
+		nokia.update();
+		time::delay_ms(BLINK_MS);
+	}
+	time::delay_ms(DELAY_MS);
 
-	// // Try drawing circle
-	// display_title(nokia, F("===> CIRC <==="));
-	// setup(nokia, {Mode::COPY, true}, {Mode::NO_CHANGE, false});
-	// nokia.draw_circle({DISPLAY::WIDTH / 2, DISPLAY::HEIGHT / 2}, 20);
-	// nokia.update();
-	// time::delay_ms(DELAY_MS);
+	// Try drawing circle
+	display_title(nokia, F("===> CIRC <==="));
+	setup(nokia, {Mode::COPY, true}, {Mode::NO_CHANGE, false});
+	nokia.draw_circle({DISPLAY::WIDTH / 2, DISPLAY::HEIGHT / 2}, 20);
+	nokia.update();
+	time::delay_ms(DELAY_MS);
 
-	// // Check XOR mode for circle boundaries
-	// setup(nokia, {Mode::XOR, true}, {Mode::NO_CHANGE, false});
-	// for (uint8_t i = 0; i < 10; ++i)
-	// {
-	// 	nokia.draw_circle({42, 24}, 20);
-	// 	nokia.update();
-	// 	time::delay_ms(BLINK_MS);
-	// }
-	// time::delay_ms(DELAY_MS);
+	// Check XOR mode for circle boundaries
+	setup(nokia, {Mode::XOR, true}, {Mode::NO_CHANGE, false});
+	for (uint8_t i = 0; i < 10; ++i)
+	{
+		nokia.draw_circle({42, 24}, 20);
+		nokia.update();
+		time::delay_ms(BLINK_MS);
+	}
+	time::delay_ms(DELAY_MS);
 
-	// // Try drawing rounded rectangle
-	// display_title(nokia, F("=> RND RECT <="));
-	// setup(nokia, {Mode::COPY, true}, {Mode::NO_CHANGE, false});
-	// nokia.draw_rounded_rectangle({5, 5}, {78, 42}, 8);
-	// nokia.update();
-	// time::delay_ms(DELAY_MS);
+	// Try drawing rounded rectangle
+	display_title(nokia, F("=> RND RECT <="));
+	setup(nokia, {Mode::COPY, true}, {Mode::NO_CHANGE, false});
+	nokia.draw_rounded_rectangle({5, 5}, {78, 42}, 8);
+	nokia.update();
+	time::delay_ms(DELAY_MS);
 
-	// // Check XOR mode for roundes rectangle boundaries
-	// setup(nokia, {Mode::XOR, true}, {Mode::NO_CHANGE, false});
-	// for (uint8_t i = 0; i < 10; ++i)
-	// {
-	// 	nokia.draw_rounded_rectangle({5, 5}, {78, 42}, 8);
-	// 	nokia.update();
-	// 	time::delay_ms(BLINK_MS);
-	// }
-	// time::delay_ms(DELAY_MS);
+	// Check XOR mode for roundes rectangle boundaries
+	setup(nokia, {Mode::XOR, true}, {Mode::NO_CHANGE, false});
+	for (uint8_t i = 0; i < 10; ++i)
+	{
+		nokia.draw_rounded_rectangle({5, 5}, {78, 42}, 8);
+		nokia.update();
+		time::delay_ms(BLINK_MS);
+	}
+	time::delay_ms(DELAY_MS);
 
-	// // Try drawing polyline
-	// display_title(nokia, F("=> POLYLINE <="));
-	// setup(nokia, {Mode::COPY, true}, {Mode::NO_CHANGE, false});
-	// nokia.draw_polyline({{10, 10}, {15, 25}, {50, 30}, {70, 45}, {12, 40}});
-	// nokia.update();
-	// time::delay_ms(DELAY_MS);
+	// Try drawing polyline
+	display_title(nokia, F("=> POLYLINE <="));
+	setup(nokia, {Mode::COPY, true}, {Mode::NO_CHANGE, false});
+	nokia.draw_polyline({{10, 10}, {15, 25}, {50, 30}, {70, 45}, {12, 40}});
+	nokia.update();
+	time::delay_ms(DELAY_MS);
 	
-	// // Try drawing polygon
-	// display_title(nokia, F("=> POLYGON <="));
-	// setup(nokia, {Mode::COPY, true}, {Mode::NO_CHANGE, false});
-	// nokia.draw_polygon({{10, 10}, {15, 25}, {50, 30}, {70, 45}, {12, 40}});
-	// nokia.update();
-	// time::delay_ms(DELAY_MS);
+	// Try drawing polygon
+	display_title(nokia, F("=> POLYGON <="));
+	setup(nokia, {Mode::COPY, true}, {Mode::NO_CHANGE, false});
+	nokia.draw_polygon({{10, 10}, {15, 25}, {50, 30}, {70, 45}, {12, 40}});
+	nokia.update();
+	time::delay_ms(DELAY_MS);
 	
-	// // Try fillers
-	// display_title(nokia, F("=> FIL RECT <="));
-	// setup(nokia, {Mode::COPY, true}, {Mode::COPY, true});
-	// nokia.draw_rectangle({30, 35}, {55, 45});
-	// nokia.update();
-	// time::delay_ms(DELAY_MS);
+	// Try fillers
+	display_title(nokia, F("=> FIL RECT <="));
+	setup(nokia, {Mode::COPY, true}, {Mode::COPY, true});
+	nokia.draw_rectangle({30, 35}, {55, 45});
+	nokia.update();
+	time::delay_ms(DELAY_MS);
 
-	// setup(nokia, {Mode::NO_CHANGE, true}, {Mode::XOR, true}, true);
-	// nokia.set_fill_mode({Mode::NO_CHANGE, false});
-	// nokia.set_draw_mode({Mode::COPY, true});
-	// nokia.draw_rectangle({30, 35}, {55, 45});
-	// nokia.update();
-	// nokia.set_draw_mode({Mode::NO_CHANGE, true});
-	// nokia.set_fill_mode({Mode::XOR, true});
-	// for (uint8_t i = 0; i < 10; ++i)
-	// {
-	// 	nokia.draw_rectangle({30, 35}, {55, 45});
-	// 	nokia.update();
-	// 	time::delay_ms(BLINK_MS);
-	// }
-	// time::delay_ms(DELAY_MS);
+	setup(nokia, {Mode::NO_CHANGE, true}, {Mode::XOR, true}, true);
+	nokia.set_fill_mode({Mode::NO_CHANGE, false});
+	nokia.set_draw_mode({Mode::COPY, true});
+	nokia.draw_rectangle({30, 35}, {55, 45});
+	nokia.update();
+	nokia.set_draw_mode({Mode::NO_CHANGE, true});
+	nokia.set_fill_mode({Mode::XOR, true});
+	for (uint8_t i = 0; i < 10; ++i)
+	{
+		nokia.draw_rectangle({30, 35}, {55, 45});
+		nokia.update();
+		time::delay_ms(BLINK_MS);
+	}
+	time::delay_ms(DELAY_MS);
 
-	// // Try fillers on rounded rectangles
-	// display_title(nokia, F("=> FIL RREC <="));
-	// setup(nokia, {Mode::COPY, true}, {Mode::COPY, true});
-	// nokia.draw_rounded_rectangle({5, 5}, {78, 42}, 8);
-	// nokia.update();
-	// time::delay_ms(DELAY_MS);
+	// Try fillers on rounded rectangles
+	display_title(nokia, F("=> FIL RREC <="));
+	setup(nokia, {Mode::COPY, true}, {Mode::COPY, true});
+	nokia.draw_rounded_rectangle({5, 5}, {78, 42}, 8);
+	nokia.update();
+	time::delay_ms(DELAY_MS);
 
-	// setup(nokia, {Mode::NO_CHANGE, true}, {Mode::XOR, true}, true);
-	// nokia.set_fill_mode({Mode::NO_CHANGE, false});
-	// nokia.set_draw_mode({Mode::COPY, true});
-	// nokia.draw_rounded_rectangle({5, 5}, {78, 42}, 8);
-	// nokia.update();
-	// nokia.set_draw_mode({Mode::NO_CHANGE, true});
-	// nokia.set_fill_mode({Mode::XOR, true});
-	// for (uint8_t i = 0; i < 10; ++i)
-	// {
-	// 	nokia.draw_rounded_rectangle({5, 5}, {78, 42}, 8);
-	// 	nokia.update();
-	// 	time::delay_ms(BLINK_MS);
-	// }
-	// time::delay_ms(DELAY_MS);
+	setup(nokia, {Mode::NO_CHANGE, true}, {Mode::XOR, true}, true);
+	nokia.set_fill_mode({Mode::NO_CHANGE, false});
+	nokia.set_draw_mode({Mode::COPY, true});
+	nokia.draw_rounded_rectangle({5, 5}, {78, 42}, 8);
+	nokia.update();
+	nokia.set_draw_mode({Mode::NO_CHANGE, true});
+	nokia.set_fill_mode({Mode::XOR, true});
+	for (uint8_t i = 0; i < 10; ++i)
+	{
+		nokia.draw_rounded_rectangle({5, 5}, {78, 42}, 8);
+		nokia.update();
+		time::delay_ms(BLINK_MS);
+	}
+	time::delay_ms(DELAY_MS);
 
-	// display_title(nokia, F("=> FIL CIRC <="));
-	// setup(nokia, {Mode::COPY, true}, {Mode::COPY, true});
-	// nokia.draw_circle({42, 24}, 20);
-	// nokia.update();
-	// time::delay_ms(DELAY_MS);
+	display_title(nokia, F("=> FIL CIRC <="));
+	setup(nokia, {Mode::COPY, true}, {Mode::COPY, true});
+	nokia.draw_circle({42, 24}, 20);
+	nokia.update();
+	time::delay_ms(DELAY_MS);
 
-	// setup(nokia, {Mode::NO_CHANGE, true}, {Mode::XOR, true}, true);
-	// nokia.set_draw_mode({Mode::COPY, true});
-	// nokia.set_fill_mode({Mode::NO_CHANGE});
-	// nokia.draw_circle({42, 24}, 20);
-	// nokia.update();
-	// nokia.set_draw_mode({Mode::NO_CHANGE});
-	// nokia.set_fill_mode({Mode::XOR, true});
-	// for (uint8_t i = 0; i < 10; ++i)
-	// {
-	// 	nokia.draw_circle({42, 24}, 20);
-	// 	nokia.update();
-	// 	time::delay_ms(BLINK_MS);
-	// }
-	// time::delay_ms(DELAY_MS);
+	setup(nokia, {Mode::NO_CHANGE, true}, {Mode::XOR, true}, true);
+	nokia.set_draw_mode({Mode::COPY, true});
+	nokia.set_fill_mode({Mode::NO_CHANGE});
+	nokia.draw_circle({42, 24}, 20);
+	nokia.update();
+	nokia.set_draw_mode({Mode::NO_CHANGE});
+	nokia.set_fill_mode({Mode::XOR, true});
+	for (uint8_t i = 0; i < 10; ++i)
+	{
+		nokia.draw_circle({42, 24}, 20);
+		nokia.update();
+		time::delay_ms(BLINK_MS);
+	}
+	time::delay_ms(DELAY_MS);
 
 	// Try Bitmap
 	display_title(nokia, F("==> BITMAP <=="));
