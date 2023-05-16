@@ -1,3 +1,9 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classi2c_1_1_abstract_i2_c_async_manager.html" title="Abstract asynchronous I2C Manager." alt="" coords="5,5,245,76"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,177,80,202"/>
+<area shape="rect" id="node2" href="$classdevices_1_1magneto_1_1_m_p_u6050_1_1_begin_future.html" title="Create a future to be used by asynchronous method begin(BeginFuture&amp;)." alt="" coords="139,5,347,45"/>
+<area shape="rect" id="node3" href="$classdevices_1_1magneto_1_1_m_p_u6050_1_1_fifo_begin_future.html" title="Create a future to be used by asynchronous method begin(FifoBeginFuture&amp;)." alt="" coords="129,69,357,109"/>
+<area shape="rect" id="node4" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_get_ram1_future.html" title="Create a future to be used by asynchronous method get_ram(GetRam1Future&amp;)." alt="" coords="128,133,357,173"/>
+<area shape="rect" id="node5" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_get_ram_future.html" title="Create a future to be used by asynchronous method get_ram(GetRamFuture&lt;SIZE&gt;&amp;)." alt="" coords="132,198,353,253"/>
+<area shape="rect" id="node6" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_set_ram1_future.html" title="Create a future to be used by asynchronous method set_ram(SetRam1Future&amp;)." alt="" coords="129,277,356,317"/>
+<area shape="rect" id="node7" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_set_ram_future.html" title="Create a future to be used by asynchronous method set_ram(SetRamFuture&lt;SIZE&gt;&amp;)." alt="" coords="133,342,352,397"/>
 </map>

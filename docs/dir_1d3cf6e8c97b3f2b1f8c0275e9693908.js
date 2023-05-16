@@ -5,29 +5,17 @@ var dir_1d3cf6e8c97b3f2b1f8c0275e9693908 =
     [ "tests", "dir_b40a074febbc692c438ce78e89631508.html", "dir_b40a074febbc692c438ce78e89631508" ],
     [ "abi.cpp", "abi_8cpp_source.html", null ],
     [ "analog_comparator.h", "analog__comparator_8h.html", "analog__comparator_8h" ],
-    [ "analog_input.h", "analog__input_8h.html", [
-      [ "AnalogInput", "classanalog_1_1_analog_input.html", "classanalog_1_1_analog_input" ],
-      [ "PowerVoltage", "classanalog_1_1_power_voltage.html", "classanalog_1_1_power_voltage" ]
-    ] ],
+    [ "analog_input.h", "analog__input_8h.html", "analog__input_8h" ],
     [ "array.h", "array_8h_source.html", null ],
     [ "bits.h", "bits_8h.html", "bits_8h" ],
     [ "defines.h", "defines_8h.html", "defines_8h" ],
     [ "dynamic_allocation.cpp", "dynamic__allocation_8cpp_source.html", null ],
     [ "eeprom.h", "eeprom_8h.html", "eeprom_8h" ],
-    [ "empty_streams.h", "empty__streams_8h.html", [
-      [ "null_ostream", "classstreams_1_1null__ostream.html", null ]
-    ] ],
+    [ "empty_streams.h", "empty__streams_8h.html", "empty__streams_8h" ],
     [ "errors.h", "errors_8h.html", "errors_8h" ],
     [ "events.h", "events_8h.html", "events_8h" ],
     [ "flash.h", "flash_8h.html", "flash_8h" ],
-    [ "functors.h", "functors_8h.html", [
-      [ "Identity", "classfunctor_1_1_identity.html", null ],
-      [ "Constant", "classfunctor_1_1_constant.html", null ],
-      [ "Cast", "classfunctor_1_1_cast.html", null ],
-      [ "Compose", "classfunctor_1_1_compose.html", null ],
-      [ "ChangeEndianness", "classfunctor_1_1_change_endianness.html", null ],
-      [ "Functor", "structfunctor_1_1_functor.html", null ]
-    ] ],
+    [ "functors.h", "functors_8h.html", "functors_8h" ],
     [ "future.h", "future_8h.html", "future_8h" ],
     [ "gpio.h", "gpio_8h.html", "gpio_8h" ],
     [ "i2c.h", "i2c_8h.html", "i2c_8h" ],
@@ -46,38 +34,25 @@ var dir_1d3cf6e8c97b3f2b1f8c0275e9693908 =
     [ "interrupts.h", "interrupts_8h.html", "interrupts_8h" ],
     [ "iomanip.h", "iomanip_8h.html", "iomanip_8h" ],
     [ "ios.h", "ios_8h.html", "ios_8h" ],
-    [ "iterator.h", "iterator_8h.html", [
-      [ "range", "classutils_1_1range.html", null ]
-    ] ],
+    [ "iterator.h", "iterator_8h.html", "iterator_8h" ],
     [ "linked_list.cpp", "linked__list_8cpp_source.html", null ],
-    [ "linked_list.h", "linked__list_8h.html", [
-      [ "LinkedList", "classcontainers_1_1_linked_list.html", "classcontainers_1_1_linked_list" ],
-      [ "Link", "classcontainers_1_1_link.html", "classcontainers_1_1_link" ],
-      [ "LinkWrapper", "classcontainers_1_1_link_wrapper.html", "classcontainers_1_1_link_wrapper" ]
-    ] ],
+    [ "linked_list.h", "linked__list_8h.html", "linked__list_8h" ],
     [ "main.cpp", "main_8cpp_source.html", null ],
     [ "memory.h", "memory_8h.html", "memory_8h" ],
     [ "move.h", "move_8h_source.html", null ],
     [ "pci.h", "pci_8h.html", "pci_8h" ],
     [ "power.cpp", "power_8cpp_source.html", null ],
-    [ "power.h", "power_8h.html", [
-      [ "Power", "classpower_1_1_power.html", "classpower_1_1_power" ]
-    ] ],
+    [ "power.h", "power_8h.html", "power_8h" ],
     [ "power_internals.cpp", "power__internals_8cpp_source.html", null ],
     [ "pulse_timer.h", "pulse__timer_8h.html", "pulse__timer_8h" ],
     [ "pwm.h", "pwm_8h.html", "pwm_8h" ],
     [ "queue.h", "queue_8h.html", "queue_8h" ],
     [ "realtime_timer.h", "realtime__timer_8h.html", "realtime__timer_8h" ],
-    [ "scheduler.h", "scheduler_8h.html", [
-      [ "Scheduler", "classevents_1_1_scheduler.html", "classevents_1_1_scheduler" ],
-      [ "Job", "classevents_1_1_job.html", "classevents_1_1_job" ]
-    ] ],
+    [ "scheduler.h", "scheduler_8h.html", "scheduler_8h" ],
     [ "soft_uart.h", "soft__uart_8h.html", "soft__uart_8h" ],
     [ "spi.cpp", "spi_8cpp_source.html", null ],
     [ "spi.h", "spi_8h.html", "spi_8h" ],
-    [ "square_wave.h", "square__wave_8h.html", [
-      [ "SquareWave", "classtimer_1_1_square_wave.html", "classtimer_1_1_square_wave" ]
-    ] ],
+    [ "square_wave.h", "square__wave_8h.html", "square__wave_8h" ],
     [ "streambuf.h", "streambuf_8h.html", "streambuf_8h" ],
     [ "streams.cpp", "streams_8cpp_source.html", null ],
     [ "streams.h", "streams_8h.html", "streams_8h" ],

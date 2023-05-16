@@ -1,5 +1,5 @@
 <map id="fastarduino/devices/common_magneto.h" name="fastarduino/devices/common_magneto.h">
-<area shape="rect" id="node1" title="Common types used by 3D sensors (e.g." alt="" coords="87,5,247,47"/>
-<area shape="rect" id="node2" href="$hmc5883l_8h.html" title="API to handle HMC5883L 3&#45;axis digital compass I2C chip." alt="" coords="5,95,156,136"/>
-<area shape="rect" id="node3" href="$mpu6050_8h.html" title="API to handle MPU6050 3&#45;axis gyroscope/accelerometer I2C chip." alt="" coords="180,95,331,136"/>
+<area shape="rect" id="node1" title="Common types used by 3D sensors (e.g." alt="" coords="87,5,247,45"/>
+<area shape="rect" id="node2" href="$hmc5883l_8h.html" title="API to handle HMC5883L 3&#45;axis digital compass I2C chip." alt="" coords="5,93,156,133"/>
+<area shape="rect" id="node3" href="$mpu6050_8h.html" title="API to handle MPU6050 3&#45;axis gyroscope/accelerometer I2C chip." alt="" coords="180,93,331,133"/>
 </map>

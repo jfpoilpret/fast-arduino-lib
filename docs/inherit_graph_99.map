@@ -1,3 +1,17 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classtimer_1_1_r_t_t_raw_time.html" title="Utility class to avoid costly instantiation of time::RTTTime from an interrupt routine." alt="" coords="5,5,193,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="188,77,304,102"/>
+<area shape="rect" id="node2" href="$classcontainers_1_1_linked_list.html" title=" " alt="" coords="408,5,621,45"/>
+<area shape="rect" id="node4" href="$classcontainers_1_1_linked_list.html" title=" " alt="" coords="433,69,596,109"/>
+<area shape="rect" id="node6" href="$classcontainers_1_1_linked_list.html" title="Linked list of type T_ items." alt="" coords="433,133,596,173"/>
+<area shape="rect" id="node3" href="$classevents_1_1_dispatcher.html" title="Utility to dispatch an event to a list of EventHandlers that are registered for its type." alt="" coords="673,5,817,45"/>
+<area shape="rect" id="node5" href="$classevents_1_1_scheduler.html" title="Schedule jobs at predefined periods of time." alt="" coords="669,191,820,231"/>
+<area shape="rect" id="node7" title=" " alt="" coords="5,319,84,345"/>
+<area shape="rect" id="node8" href="$classcontainers_1_1_link.html" title=" " alt="" coords="132,197,360,237"/>
+<area shape="rect" id="node10" href="$classcontainers_1_1_link.html" title=" " alt="" coords="159,262,333,287"/>
+<area shape="rect" id="node12" href="$classcontainers_1_1_link.html" title=" " alt="" coords="132,312,360,352"/>
+<area shape="rect" id="node13" href="$classcontainers_1_1_link.html" title="A wrapper for items stored in a LinkedList." alt="" coords="161,377,331,402"/>
+<area shape="rect" id="node15" href="$classcontainers_1_1_link_wrapper.html" title="A wrapper for items stored in a LinkedList." alt="" coords="156,427,336,467"/>
+<area shape="rect" id="node9" href="$classevents_1_1_event_handler.html" title="Abstract event handler, used by Dispatcher to get called back when an event of the expected type is d..." alt="" coords="433,197,596,237"/>
+<area shape="rect" id="node11" href="$classevents_1_1_job.html" title="Abstract class holding some action to be executed at given periods of time." alt="" coords="467,262,562,287"/>
+<area shape="rect" id="node14" href="$classevents_1_1_event_handler.html" title=" " alt="" coords="433,340,596,380"/>
 </map>

@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['timer_175',['Timer',['../namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bb',1,'board']]],
-  ['timer0_176',['TIMER0',['../namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bba3796280163770b0769e370ecb8cc0e1e',1,'board']]],
-  ['timer1_177',['TIMER1',['../namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bba348f042a61f1305861ca45be3e592054',1,'board']]],
-  ['timer2_178',['TIMER2',['../namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bbad57d6591c17265fd7be950b8dc43c2d0',1,'board']]],
-  ['timer3_179',['TIMER3',['../namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bba1ee05abb5a5ab9424239e62ec2f50f76',1,'board']]],
-  ['timer4_180',['TIMER4',['../namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bba725c4feacaa208155195f2be2d086398',1,'board']]],
-  ['timer5_181',['TIMER5',['../namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bbaf80d63020de684a031bd410fc607b319',1,'board']]]
+  ['timer_0',['Timer',['../namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bb',1,'board']]],
+  ['timer0_1',['TIMER0',['../namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bba3796280163770b0769e370ecb8cc0e1e',1,'board']]],
+  ['timer1_2',['TIMER1',['../namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bba348f042a61f1305861ca45be3e592054',1,'board']]],
+  ['timer2_3',['TIMER2',['../namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bbad57d6591c17265fd7be950b8dc43c2d0',1,'board']]],
+  ['timer3_4',['TIMER3',['../namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bba1ee05abb5a5ab9424239e62ec2f50f76',1,'board']]],
+  ['timer4_5',['TIMER4',['../namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bba725c4feacaa208155195f2be2d086398',1,'board']]],
+  ['timer5_6',['TIMER5',['../namespaceboard.html#aa6b4a447b2fccb95185367644c3f28bbaf80d63020de684a031bd410fc607b319',1,'board']]]
 ];

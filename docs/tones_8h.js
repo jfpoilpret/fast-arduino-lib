@@ -1,6 +1,6 @@
 var tones_8h =
 [
-    [ "ToneGenerator", "classdevices_1_1audio_1_1_tone_generator.html", "classdevices_1_1audio_1_1_tone_generator" ],
+    [ "devices::audio::ToneGenerator< NTIMER, OUTPUT >", "classdevices_1_1audio_1_1_tone_generator.html", "classdevices_1_1audio_1_1_tone_generator" ],
     [ "Tone", "tones_8h.html#ad5cef39b1f81f50bd23e0a4f4cf555aa", [
       [ "USER0", "tones_8h.html#ad5cef39b1f81f50bd23e0a4f4cf555aaa0f07a2cc3d1a55a392713b7682339263", null ],
       [ "USER1", "tones_8h.html#ad5cef39b1f81f50bd23e0a4f4cf555aaa9f693771ca12c43759045cdf4295e9f5", null ],

@@ -22,7 +22,7 @@ var classstreams_1_1ios__base =
     [ "width", "classstreams_1_1ios__base.html#a79ac9c6989af1fff3d9c0d5881d48c5c", null ],
     [ "precision", "classstreams_1_1ios__base.html#a0fc5c0affc56c5875138b7d709559f59", null ],
     [ "precision", "classstreams_1_1ios__base.html#a19275827f0fadef367261d4ac8cf0d09", null ],
-    [ "copyfmt", "classstreams_1_1ios__base.html#a5f9eb4a35402d3de9d17c4c9cc87dd5a", null ],
+    [ "copyfmt", "classstreams_1_1ios__base.html#a92401a13a562124b39227a17538d8ada", null ],
     [ "eofbit", "classstreams_1_1ios__base.html#a1bf5d3cf53901af8bd2a3739b8290a70", null ],
     [ "failbit", "classstreams_1_1ios__base.html#abf31341bed00d5096e93ed67d6808150", null ],
     [ "badbit", "classstreams_1_1ios__base.html#a9b83d04b2499acac14e212338fafc4ac", null ],

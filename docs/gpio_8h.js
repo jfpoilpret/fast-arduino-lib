@@ -1,9 +1,9 @@
 var gpio_8h =
 [
-    [ "FastPin", "classgpio_1_1_fast_pin.html", "classgpio_1_1_fast_pin" ],
-    [ "FastPort", "classgpio_1_1_fast_port.html", "classgpio_1_1_fast_port" ],
-    [ "FastMaskedPort", "classgpio_1_1_fast_masked_port.html", "classgpio_1_1_fast_masked_port" ],
-    [ "FastPinType", "classgpio_1_1_fast_pin_type.html", "classgpio_1_1_fast_pin_type" ],
+    [ "gpio::FastPin< PORT_, BIT_ >", "classgpio_1_1_fast_pin.html", "classgpio_1_1_fast_pin" ],
+    [ "gpio::FastPort< PORT_ >", "classgpio_1_1_fast_port.html", "classgpio_1_1_fast_port" ],
+    [ "gpio::FastMaskedPort< PORT_, MASK_ >", "classgpio_1_1_fast_masked_port.html", "classgpio_1_1_fast_masked_port" ],
+    [ "gpio::FastPinType< DPIN_ >", "classgpio_1_1_fast_pin_type.html", "classgpio_1_1_fast_pin_type" ],
     [ "FAST_PIN", "gpio_8h.html#a3cbdad86ced6494ca615a425b433fd57", null ],
     [ "FAST_INT_PIN", "gpio_8h.html#aaa6f9e5f023592cc0692da0bb37deccd", null ],
     [ "FAST_EXT_PIN", "gpio_8h.html#a78705a6beb0840892d7f8f52d0f32bec", null ],

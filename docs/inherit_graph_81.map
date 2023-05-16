@@ -1,3 +1,12 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classi2c_1_1status_1_1_i2_c_status_recorder.html" title="Class recording I2C status notifications for later output." alt="" coords="5,5,223,47"/>
+<area shape="rect" id="node1" href="$classi2c_1_1_abstract_i2_c_sync_manager.html" title="Abstract synchronous I2C Manager for all MCU architectures." alt="" coords="5,319,224,388"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="319,5,528,75"/>
+<area shape="rect" id="node3" href="$classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="319,99,528,168"/>
+<area shape="rect" id="node5" href="$classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="272,193,575,247"/>
+<area shape="rect" id="node6" href="$classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="319,272,528,341"/>
+<area shape="rect" id="node7" href="$classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="325,365,522,435"/>
+<area shape="rect" id="node8" href="$classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="325,459,522,528"/>
+<area shape="rect" id="node9" href="$classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="272,553,575,607"/>
+<area shape="rect" id="node10" href="$classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="321,632,525,701"/>
+<area shape="rect" id="node4" href="$classi2c_1_1_i2_c_sync_manager.html" title="Synchronous I2C Manager for ATmega architecture." alt="" coords="623,293,781,333"/>
 </map>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['z_2364',['z',['../structdevices_1_1magneto_1_1_sensor3_d.html#af0e8c534325fec5c0de4d009493ce6b9',1,'devices::magneto::Sensor3D']]]
+  ['y_0',['y',['../structdevices_1_1magneto_1_1_sensor3_d.html#a1b79be76b1afe9f4de3954ceeecec716',1,'devices::magneto::Sensor3D']]]
 ];

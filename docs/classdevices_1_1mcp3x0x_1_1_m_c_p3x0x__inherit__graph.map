@@ -1,5 +1,5 @@
 <map id="devices::mcp3x0x::MCP3x0x&lt; CS, CHANNEL_, MASK, RSHIFT, TYPE_ &gt;" name="devices::mcp3x0x::MCP3x0x&lt; CS, CHANNEL_, MASK, RSHIFT, TYPE_ &gt;">
-<area shape="rect" id="node1" title="Generic class to support (almost) any chip of the SPI&#45;based MicroChip ADC chips family (MCP3001&#45;2&#45;4&#45;8..." alt="" coords="552,20,789,76"/>
-<area shape="rect" id="node2" href="$classspi_1_1_s_p_i_device.html" title=" " alt="" coords="221,5,504,91"/>
-<area shape="rect" id="node3" href="$classspi_1_1_abstract_s_p_i_device.html" title="Contain general payload transfer API for an SPI device." alt="" coords="5,35,173,61"/>
+<area shape="rect" id="node1" title="Generic class to support (almost) any chip of the SPI&#45;based MicroChip ADC chips family (MCP3001&#45;2&#45;4&#45;8..." alt="" coords="552,20,789,75"/>
+<area shape="rect" id="node2" href="$classspi_1_1_s_p_i_device.html" title=" " alt="" coords="221,5,504,89"/>
+<area shape="rect" id="node3" href="$classspi_1_1_abstract_s_p_i_device.html" title="Contain general payload transfer API for an SPI device." alt="" coords="5,35,173,60"/>
 </map>

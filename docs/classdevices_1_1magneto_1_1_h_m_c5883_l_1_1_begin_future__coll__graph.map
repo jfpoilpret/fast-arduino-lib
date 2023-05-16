@@ -1,5 +1,5 @@
 <map id="devices::magneto::HMC5883L&lt; MANAGER &gt;::BeginFuture" name="devices::magneto::HMC5883L&lt; MANAGER &gt;::BeginFuture">
-<area shape="rect" id="node1" title="Create a future to be used by asynchronous method begin(BeginFuture&amp;)." alt="" coords="11,213,223,255"/>
-<area shape="rect" id="node2" href="$classi2c_1_1_t_write_multi_register_future.html" title="Generic Future that can be used to write to several I2C device registers." alt="" coords="5,109,229,165"/>
-<area shape="rect" id="node3" title=" " alt="" coords="11,5,224,61"/>
+<area shape="rect" id="node1" title="Create a future to be used by asynchronous method begin(BeginFuture&amp;)." alt="" coords="11,211,223,251"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_t_write_multi_register_future.html" title="Generic Future that can be used to write to several I2C device registers." alt="" coords="5,108,229,163"/>
+<area shape="rect" id="node3" title=" " alt="" coords="11,5,224,60"/>
 </map>

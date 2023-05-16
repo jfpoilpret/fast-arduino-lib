@@ -1,5 +1,5 @@
 <map id="i2c::debug::I2CDebugStatusRecorder&lt; SIZE_STATUS, SIZE_DEBUG &gt;" name="i2c::debug::I2CDebugStatusRecorder&lt; SIZE_STATUS, SIZE_DEBUG &gt;">
-<area shape="rect" id="node1" title="Class recording I2C debug and status notifications for later output." alt="" coords="272,31,473,87"/>
-<area shape="rect" id="node2" href="$classi2c_1_1status_1_1_i2_c_status_recorder.html" title=" " alt="" coords="6,5,223,47"/>
-<area shape="rect" id="node3" href="$classi2c_1_1debug_1_1_i2_c_debug_recorder.html" title=" " alt="" coords="5,71,224,112"/>
+<area shape="rect" id="node1" title="Class recording I2C debug and status notifications for later output." alt="" coords="272,30,473,85"/>
+<area shape="rect" id="node2" href="$classi2c_1_1status_1_1_i2_c_status_recorder.html" title=" " alt="" coords="6,5,223,45"/>
+<area shape="rect" id="node3" href="$classi2c_1_1debug_1_1_i2_c_debug_recorder.html" title=" " alt="" coords="5,69,224,109"/>
 </map>

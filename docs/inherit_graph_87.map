@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$structinterrupt_1_1_p_c_i_type.html" title="Helper class that easily converts a PIN into the right PCISignal." alt="" coords="5,5,143,47"/>
+<area shape="rect" id="node1" href="$classi2c_1_1debug_1_1_i2_c_debug_recorder.html" title=" " alt="" coords="5,5,224,45"/>
+<area shape="rect" id="node2" href="$classi2c_1_1debug_1_1_i2_c_debug_status_recorder.html" title="Class recording I2C debug and status notifications for later output." alt="" coords="272,30,473,85"/>
+<area shape="rect" id="node3" href="$classi2c_1_1status_1_1_i2_c_status_recorder.html" title=" " alt="" coords="6,69,223,109"/>
 </map>

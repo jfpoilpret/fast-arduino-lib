@@ -1,8 +1,8 @@
 <map id="fastarduino/devices/wiegand.h" name="fastarduino/devices/wiegand.h">
-<area shape="rect" id="node1" title="Common types used by 3D sensors (e.g." alt="" coords="97,5,247,47"/>
-<area shape="rect" id="node2" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="125,95,219,121"/>
-<area shape="rect" id="node3" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="5,169,88,196"/>
-<area shape="rect" id="node4" href="$board_8h_source.html" title=" " alt="" coords="113,169,231,196"/>
-<area shape="rect" id="node6" title=" " alt="" coords="256,169,360,196"/>
-<area shape="rect" id="node5" title=" " alt="" coords="137,244,207,271"/>
+<area shape="rect" id="node1" title="Common types used by 3D sensors (e.g." alt="" coords="97,5,247,45"/>
+<area shape="rect" id="node2" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="125,93,219,119"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="5,167,88,192"/>
+<area shape="rect" id="node4" href="$board_8h_source.html" title=" " alt="" coords="113,167,231,192"/>
+<area shape="rect" id="node6" title=" " alt="" coords="256,167,360,192"/>
+<area shape="rect" id="node5" title=" " alt="" coords="137,240,207,265"/>
 </map>

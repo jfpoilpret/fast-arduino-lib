@@ -1,5 +1,5 @@
 <map id="i2c::TReadRegisterFuture&lt; MANAGER, REGISTER, T, FUNCTOR &gt;" name="i2c::TReadRegisterFuture&lt; MANAGER, REGISTER, T, FUNCTOR &gt;">
-<area shape="rect" id="node1" title="Generic Future that can be used to read an I2C device register." alt="" coords="14,199,210,255"/>
-<area shape="rect" id="node2" href="$classi2c_1_1_read_register_future.html" title=" " alt="" coords="23,95,201,151"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,219,47"/>
+<area shape="rect" id="node1" title="Generic Future that can be used to read an I2C device register." alt="" coords="14,181,210,236"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_read_register_future.html" title="General Future that can be used to read an I2C device register." alt="" coords="9,93,215,133"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,219,45"/>
 </map>

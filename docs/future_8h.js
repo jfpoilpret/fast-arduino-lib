@@ -1,10 +1,10 @@
 var future_8h =
 [
-    [ "AbstractFuture", "classfuture_1_1_abstract_future.html", "classfuture_1_1_abstract_future" ],
-    [ "Future", "classfuture_1_1_future.html", "classfuture_1_1_future" ],
-    [ "AbstractFakeFuture", "classfuture_1_1_abstract_fake_future.html", "classfuture_1_1_abstract_fake_future" ],
-    [ "FakeFuture", "classfuture_1_1_fake_future.html", "classfuture_1_1_fake_future" ],
-    [ "AbstractFuturesGroup", "classfuture_1_1_abstract_futures_group.html", "classfuture_1_1_abstract_futures_group" ],
+    [ "future::AbstractFuture", "classfuture_1_1_abstract_future.html", "classfuture_1_1_abstract_future" ],
+    [ "future::Future< OUT_, IN_ >", "classfuture_1_1_future.html", "classfuture_1_1_future" ],
+    [ "future::AbstractFakeFuture", "classfuture_1_1_abstract_fake_future.html", null ],
+    [ "future::FakeFuture< OUT_, IN_ >", "classfuture_1_1_fake_future.html", null ],
+    [ "future::AbstractFuturesGroup< F >", "classfuture_1_1_abstract_futures_group.html", "classfuture_1_1_abstract_futures_group" ],
     [ "REGISTER_FUTURE_STATUS_LISTENERS", "future_8h.html#a7281d4ab1166cfa15b1ef930b883615e", null ],
     [ "REGISTER_FUTURE_STATUS_NO_LISTENERS", "future_8h.html#a17791fea608278a9f31e93ab2e8ae658", null ],
     [ "REGISTER_FUTURE_OUTPUT_LISTENERS", "future_8h.html#a07560a03dcdd34ae1a6ddc80c74ade6d", null ],

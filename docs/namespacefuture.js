@@ -1,10 +1,10 @@
 var namespacefuture =
 [
+    [ "AbstractFakeFuture", "classfuture_1_1_abstract_fake_future.html", null ],
     [ "AbstractFuture", "classfuture_1_1_abstract_future.html", "classfuture_1_1_abstract_future" ],
-    [ "Future", "classfuture_1_1_future.html", "classfuture_1_1_future" ],
-    [ "AbstractFakeFuture", "classfuture_1_1_abstract_fake_future.html", "classfuture_1_1_abstract_fake_future" ],
-    [ "FakeFuture", "classfuture_1_1_fake_future.html", "classfuture_1_1_fake_future" ],
     [ "AbstractFuturesGroup", "classfuture_1_1_abstract_futures_group.html", "classfuture_1_1_abstract_futures_group" ],
+    [ "FakeFuture", "classfuture_1_1_fake_future.html", null ],
+    [ "Future", "classfuture_1_1_future.html", "classfuture_1_1_future" ],
     [ "FutureStatus", "namespacefuture.html#a9f72173fcd5be9bfef028415665efbe4", [
       [ "NOT_READY", "namespacefuture.html#a9f72173fcd5be9bfef028415665efbe4a9455b42e74acb2ec1c7292e54d28aff2", null ],
       [ "READY", "namespacefuture.html#a9f72173fcd5be9bfef028415665efbe4a2baa69eafc7204f3bd8648eba580c489", null ],

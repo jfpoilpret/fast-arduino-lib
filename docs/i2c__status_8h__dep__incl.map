@@ -1,5 +1,5 @@
 <map id="fastarduino/i2c_status.h" name="fastarduino/i2c_status.h">
-<area shape="rect" id="node1" title="I2C status hook utilities." alt="" coords="13,5,191,32"/>
-<area shape="rect" id="node2" href="$i2c__debug_8h.html" title="I2C debugging utilities (useful when implementing support for new devices)." alt="" coords="13,80,191,107"/>
-<area shape="rect" id="node3" href="$i2c__debug_8cpp_source.html" title=" " alt="" coords="5,155,199,181"/>
+<area shape="rect" id="node1" title="I2C status hook utilities." alt="" coords="13,5,191,31"/>
+<area shape="rect" id="node2" href="$i2c__debug_8h.html" title="I2C debugging utilities (useful when implementing support for new devices)." alt="" coords="13,79,191,104"/>
+<area shape="rect" id="node3" href="$i2c__debug_8cpp_source.html" title=" " alt="" coords="5,152,199,177"/>
 </map>

@@ -1,6 +1,6 @@
 <map id="devices::rf::NRF24L01&lt; CSN, CE &gt;" name="devices::rf::NRF24L01&lt; CSN, CE &gt;">
-<area shape="rect" id="node1" title="SPI device driver for Nordic Semiconductor nRF24L01+ support, without IRQ support." alt="" coords="21,155,183,196"/>
-<area shape="rect" id="node4" href="$classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01.html" title="SPI device driver for Nordic Semiconductor nRF24L01+ support, with IRQ." alt="" coords="5,244,199,285"/>
-<area shape="rect" id="node2" href="$classspi_1_1_s_p_i_device.html" title=" " alt="" coords="17,80,187,107"/>
-<area shape="rect" id="node3" href="$classspi_1_1_abstract_s_p_i_device.html" title="Contain general payload transfer API for an SPI device." alt="" coords="18,5,186,32"/>
+<area shape="rect" id="node1" title="SPI device driver for Nordic Semiconductor nRF24L01+ support, without IRQ support." alt="" coords="21,152,183,192"/>
+<area shape="rect" id="node4" href="$classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01.html" title="SPI device driver for Nordic Semiconductor nRF24L01+ support, with IRQ." alt="" coords="5,240,199,280"/>
+<area shape="rect" id="node2" href="$classspi_1_1_s_p_i_device.html" title=" " alt="" coords="17,79,187,104"/>
+<area shape="rect" id="node3" href="$classspi_1_1_abstract_s_p_i_device.html" title="Contain general payload transfer API for an SPI device." alt="" coords="18,5,186,31"/>
 </map>

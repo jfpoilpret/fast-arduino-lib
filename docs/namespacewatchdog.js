@@ -1,8 +1,8 @@
 var namespacewatchdog =
 [
-    [ "WatchdogSignal", "classwatchdog_1_1_watchdog_signal.html", "classwatchdog_1_1_watchdog_signal" ],
-    [ "WatchdogRTT", "classwatchdog_1_1_watchdog_r_t_t.html", "classwatchdog_1_1_watchdog_r_t_t" ],
     [ "Watchdog", "classwatchdog_1_1_watchdog.html", "classwatchdog_1_1_watchdog" ],
+    [ "WatchdogRTT", "classwatchdog_1_1_watchdog_r_t_t.html", "classwatchdog_1_1_watchdog_r_t_t" ],
+    [ "WatchdogSignal", "classwatchdog_1_1_watchdog_signal.html", "classwatchdog_1_1_watchdog_signal" ],
     [ "TimeOut", "namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01b", [
       [ "TO_16ms", "namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01ba511365e7b9dbb67d36a5652065e21c9c", null ],
       [ "TO_32ms", "namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01ba5c127bc3e865ef5b3f22a5a89f088bfa", null ],

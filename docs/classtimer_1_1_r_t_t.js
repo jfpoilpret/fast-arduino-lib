@@ -16,7 +16,6 @@ var classtimer_1_1_r_t_t =
     [ "begin_", "classtimer_1_1_r_t_t.html#a6b23a2de5d3adb282bf69e76a21e1e44", null ],
     [ "end", "classtimer_1_1_r_t_t.html#a54d7b6121f3533023b7ecf132698d92e", null ],
     [ "end_", "classtimer_1_1_r_t_t.html#a71cf589caa0e50683ca48bbdca306e8f", null ],
-    [ "timer", "classtimer_1_1_r_t_t.html#a024ba8a84801b1200ca055adb5777cb3", null ],
-    [ "isr_handler_rtt", "classtimer_1_1_r_t_t.html#a859c9a33530adb9969b3ca793ed14f46", null ],
+    [ "timer", "classtimer_1_1_r_t_t.html#a34ad2efd75db56795c22c79e36614b4a", null ],
     [ "NTIMER", "classtimer_1_1_r_t_t.html#a7d04a60b659b5674c843cf23a5d82083", null ]
 ];

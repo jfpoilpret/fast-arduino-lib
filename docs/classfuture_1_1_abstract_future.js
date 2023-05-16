@@ -11,6 +11,5 @@ var classfuture_1_1_abstract_future =
     [ "set_future_value_", "classfuture_1_1_abstract_future.html#a09e8e39f9083490acc5e433da2c880af", null ],
     [ "set_future_value_", "classfuture_1_1_abstract_future.html#aef4fd708866c1c6741a350dbd59d3250", null ],
     [ "set_future_value_", "classfuture_1_1_abstract_future.html#a32b8f411b2d198f16ade17674ce221d1", null ],
-    [ "set_future_error_", "classfuture_1_1_abstract_future.html#a7b26e17dc0d78ed624de02a1885f06a7", null ],
-    [ "AbstractFuturesGroup", "classfuture_1_1_abstract_future.html#aa8cda1a5f7355572937b55e49c7e3cae", null ]
+    [ "set_future_error_", "classfuture_1_1_abstract_future.html#a7b26e17dc0d78ed624de02a1885f06a7", null ]
 ];

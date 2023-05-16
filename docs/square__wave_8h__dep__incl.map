@@ -1,5 +1,5 @@
 <map id="fastarduino/square_wave.h" name="fastarduino/square_wave.h">
-<area shape="rect" id="node1" title="SquareWave API, an API to generate square waves of any frequency." alt="" coords="9,5,153,47"/>
-<area shape="rect" id="node2" href="$tones_8h.html" title="API to handle tones (simple square waves) generation to a buzzer." alt="" coords="5,95,156,136"/>
-<area shape="rect" id="node3" href="$tone__player_8h.html" title="API to handle melody playing (tones as simple square waves) to a buzzer." alt="" coords="5,184,156,225"/>
+<area shape="rect" id="node1" title="SquareWave API, an API to generate square waves of any frequency." alt="" coords="9,5,153,45"/>
+<area shape="rect" id="node2" href="$tones_8h.html" title="API to handle tones (simple square waves) generation to a buzzer." alt="" coords="5,93,156,133"/>
+<area shape="rect" id="node3" href="$tone__player_8h.html" title="API to handle melody playing (tones as simple square waves) to a buzzer." alt="" coords="5,181,156,221"/>
 </map>

@@ -8,12 +8,12 @@ var namespacedevices_1_1audio =
       [ "SLUR", "namespacedevices_1_1audio_1_1_special_tone.html#a06daaae22209035c123e92935e2cdf5e", null ]
     ] ],
     [ "AbstractTonePlayer", "classdevices_1_1audio_1_1_abstract_tone_player.html", "classdevices_1_1audio_1_1_abstract_tone_player" ],
-    [ "TonePlay", "classdevices_1_1audio_1_1_tone_play.html", "classdevices_1_1audio_1_1_tone_play" ],
-    [ "QTonePlay", "classdevices_1_1audio_1_1_q_tone_play.html", "classdevices_1_1audio_1_1_q_tone_play" ],
-    [ "Beat", "classdevices_1_1audio_1_1_beat.html", null ],
-    [ "TonePlayer", "classdevices_1_1audio_1_1_tone_player.html", "classdevices_1_1audio_1_1_tone_player" ],
     [ "AsyncTonePlayer", "classdevices_1_1audio_1_1_async_tone_player.html", "classdevices_1_1audio_1_1_async_tone_player" ],
+    [ "Beat", "classdevices_1_1audio_1_1_beat.html", null ],
+    [ "QTonePlay", "classdevices_1_1audio_1_1_q_tone_play.html", "classdevices_1_1audio_1_1_q_tone_play" ],
     [ "ToneGenerator", "classdevices_1_1audio_1_1_tone_generator.html", "classdevices_1_1audio_1_1_tone_generator" ],
+    [ "TonePlay", "classdevices_1_1audio_1_1_tone_play.html", "classdevices_1_1audio_1_1_tone_play" ],
+    [ "TonePlayer", "classdevices_1_1audio_1_1_tone_player.html", "classdevices_1_1audio_1_1_tone_player" ],
     [ "Duration", "namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1ead", [
       [ "WHOLE", "namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eadaad772c40e87c4f01eec1e39727e96a69", null ],
       [ "HALF", "namespacedevices_1_1audio.html#a9ec897420c4939aebbe29ccdbe3d1eada87e955627b59c274ec4cbdd3a130f9bb", null ],

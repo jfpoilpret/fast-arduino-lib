@@ -1,8 +1,8 @@
 var time_8h =
 [
-    [ "RTTTime", "classtime_1_1_r_t_t_time.html", "classtime_1_1_r_t_t_time" ],
-    [ "auto_delay", "classtime_1_1auto__delay.html", "classtime_1_1auto__delay" ],
-    [ "auto_millis", "classtime_1_1auto__millis.html", "classtime_1_1auto__millis" ],
+    [ "time::RTTTime", "classtime_1_1_r_t_t_time.html", "classtime_1_1_r_t_t_time" ],
+    [ "time::auto_delay", "classtime_1_1auto__delay.html", "classtime_1_1auto__delay" ],
+    [ "time::auto_millis", "classtime_1_1auto__millis.html", "classtime_1_1auto__millis" ],
     [ "DELAY_PTR", "time_8h.html#a0980f7cbb448c562b0081484031f325e", null ],
     [ "MILLIS_PTR", "time_8h.html#a6beadc7ea06995818634b29b52433b80", null ],
     [ "operator-", "time_8h.html#a897dc67d09f077584bc6339cc1e1ce59", null ],

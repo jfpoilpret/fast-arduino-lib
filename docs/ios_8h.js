@@ -1,6 +1,6 @@
 var ios_8h =
 [
-    [ "ios_base", "classstreams_1_1ios__base.html", "classstreams_1_1ios__base" ],
+    [ "streams::ios_base", "classstreams_1_1ios__base.html", "classstreams_1_1ios__base" ],
     [ "ios", "ios_8h.html#a9666e4bfa7b60ffba7c8ee7d9fe95492", null ],
     [ "skipws", "ios_8h.html#a76316854cb7b9c0c7688d02c660ed369", null ],
     [ "noskipws", "ios_8h.html#a69896b602e1678789bbad7b9fa98e3a3", null ],

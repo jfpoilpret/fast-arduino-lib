@@ -1,4 +1,4 @@
 <map id="devices::magneto::HMC5883L&lt; MANAGER &gt;" name="devices::magneto::HMC5883L&lt; MANAGER &gt;">
-<area shape="rect" id="node1" title="I2C device driver for the HMC5883L compass chip." alt="" coords="7,80,216,121"/>
-<area shape="rect" id="node2" href="$classi2c_1_1_i2_c_device.html" title=" " alt="" coords="5,5,217,32"/>
+<area shape="rect" id="node1" title="I2C device driver for the HMC5883L compass chip." alt="" coords="7,79,216,119"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_i2_c_device.html" title=" " alt="" coords="5,5,217,31"/>
 </map>

@@ -1,5 +1,5 @@
 <map id="devices::mcp230xx::MCP23017&lt; MANAGER &gt;::ConfigureInterruptsFuture&lt; P_ &gt;" name="devices::mcp230xx::MCP23017&lt; MANAGER &gt;::ConfigureInterruptsFuture&lt; P_ &gt;">
-<area shape="rect" id="node1" title="Create a future to be used by asynchronous method configure_interrupts(ConfigureInterruptsFuture&lt;P_&gt;&amp;..." alt="" coords="5,213,248,269"/>
-<area shape="rect" id="node2" href="$classi2c_1_1_t_write_multi_register_future.html" title="Generic Future that can be used to write to several I2C device registers." alt="" coords="30,109,223,165"/>
-<area shape="rect" id="node3" title=" " alt="" coords="20,5,233,61"/>
+<area shape="rect" id="node1" title="Create a future to be used by asynchronous method configure_interrupts(ConfigureInterruptsFuture&lt;P_&gt;&amp;..." alt="" coords="5,211,248,265"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_t_write_multi_register_future.html" title="Generic Future that can be used to write to several I2C device registers." alt="" coords="30,108,223,163"/>
+<area shape="rect" id="node3" title=" " alt="" coords="20,5,233,60"/>
 </map>

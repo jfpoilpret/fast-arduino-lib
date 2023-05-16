@@ -6,7 +6,5 @@ var classi2c_1_1_abstract_i2_c_async_manager =
     [ "begin", "classi2c_1_1_abstract_i2_c_async_manager.html#a3ee61d109305242327fb681d9074f0c8", null ],
     [ "end", "classi2c_1_1_abstract_i2_c_async_manager.html#ac0c3fd9cc4187a06416a4ee39b708e46", null ],
     [ "begin_", "classi2c_1_1_abstract_i2_c_async_manager.html#a38db0dde264d5a3fd47d7ea035e25db4", null ],
-    [ "end_", "classi2c_1_1_abstract_i2_c_async_manager.html#ae54ddeb2de2518128da9e3f036acb263", null ],
-    [ "I2CDevice", "classi2c_1_1_abstract_i2_c_async_manager.html#a787499b46e8ad88439f896ceefe1da54", null ],
-    [ "isr_handler", "classi2c_1_1_abstract_i2_c_async_manager.html#a028eda424aae2c386a5fd6ed74c0cfff", null ]
+    [ "end_", "classi2c_1_1_abstract_i2_c_async_manager.html#ae54ddeb2de2518128da9e3f036acb263", null ]
 ];

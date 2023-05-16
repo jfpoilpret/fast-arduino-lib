@@ -1,31 +1,31 @@
 <map id="fastarduino/i2c_handler_attiny.h" name="fastarduino/i2c_handler_attiny.h">
-<area shape="rect" id="node1" title="ATtiny I2C Manager API." alt="" coords="361,5,535,47"/>
-<area shape="rect" id="node2" title=" " alt="" coords="345,543,481,569"/>
-<area shape="rect" id="node3" href="$i2c_8h.html" title="I2C API common definitions." alt="" coords="1132,169,1185,196"/>
-<area shape="rect" id="node18" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="844,543,927,569"/>
-<area shape="rect" id="node23" href="$future_8h.html" title="Utility API to handle the concept of futures." alt="" coords="371,244,445,271"/>
-<area shape="rect" id="node27" href="$bits_8h.html" title="Useful bits manipulation utilities." alt="" coords="5,169,64,196"/>
-<area shape="rect" id="node28" href="$i2c__handler__common_8h.html" title="Common I2C Manager API." alt="" coords="445,95,619,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="374,692,445,719"/>
-<area shape="rect" id="node5" href="$flash_8h.html" title="Flash memory utilities." alt="" coords="817,393,884,420"/>
-<area shape="rect" id="node9" href="$ios_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="780,244,833,271"/>
-<area shape="rect" id="node6" href="$io_8h_source.html" title=" " alt="" coords="530,543,625,569"/>
-<area shape="rect" id="node8" title=" " alt="" coords="813,468,939,495"/>
-<area shape="rect" id="node7" title=" " alt="" coords="542,617,613,644"/>
-<area shape="rect" id="node10" title=" " alt="" coords="914,319,982,345"/>
-<area shape="rect" id="node11" title=" " alt="" coords="284,468,359,495"/>
-<area shape="rect" id="node12" title=" " alt="" coords="1006,319,1077,345"/>
-<area shape="rect" id="node13" title=" " alt="" coords="490,319,561,345"/>
-<area shape="rect" id="node14" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="687,319,787,345"/>
-<area shape="rect" id="node15" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="499,393,597,420"/>
-<area shape="rect" id="node17" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="680,393,755,420"/>
-<area shape="rect" id="node16" title=" " alt="" coords="433,468,548,495"/>
-<area shape="rect" id="node22" href="$time_8h.html" title="Simple time utilities." alt="" coords="623,468,687,495"/>
-<area shape="rect" id="node19" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="844,617,927,644"/>
-<area shape="rect" id="node20" href="$board_8h_source.html" title=" " alt="" coords="701,617,819,644"/>
-<area shape="rect" id="node21" title=" " alt="" coords="951,617,1055,644"/>
-<area shape="rect" id="node24" href="$iterator_8h.html" title="Utilities to convert arrays into an iterable (usable if for x: list construct)." alt="" coords="135,319,217,345"/>
-<area shape="rect" id="node26" href="$errors_8h.html" title="Common errors definition." alt="" coords="292,319,364,345"/>
-<area shape="rect" id="node25" href="$initializer__list_8h_source.html" title=" " alt="" coords="185,393,308,420"/>
-<area shape="rect" id="node29" title=" " alt="" coords="452,169,612,196"/>
+<area shape="rect" id="node1" title="ATtiny I2C Manager API." alt="" coords="361,5,535,45"/>
+<area shape="rect" id="node2" title=" " alt="" coords="345,533,481,559"/>
+<area shape="rect" id="node3" href="$i2c_8h.html" title="I2C API common definitions." alt="" coords="1132,167,1185,192"/>
+<area shape="rect" id="node18" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="844,533,927,559"/>
+<area shape="rect" id="node23" href="$future_8h.html" title="Utility API to handle the concept of futures." alt="" coords="371,240,445,265"/>
+<area shape="rect" id="node27" href="$bits_8h.html" title="Useful bits manipulation utilities." alt="" coords="5,167,64,192"/>
+<area shape="rect" id="node28" href="$i2c__handler__common_8h.html" title="Common I2C Manager API." alt="" coords="445,93,619,119"/>
+<area shape="rect" id="node4" title=" " alt="" coords="374,680,445,705"/>
+<area shape="rect" id="node5" href="$flash_8h.html" title="Flash memory utilities." alt="" coords="817,387,884,412"/>
+<area shape="rect" id="node9" href="$ios_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="780,240,833,265"/>
+<area shape="rect" id="node6" href="$io_8h_source.html" title=" " alt="" coords="530,533,625,559"/>
+<area shape="rect" id="node8" title=" " alt="" coords="813,460,939,485"/>
+<area shape="rect" id="node7" title=" " alt="" coords="542,607,613,632"/>
+<area shape="rect" id="node10" title=" " alt="" coords="914,313,982,339"/>
+<area shape="rect" id="node11" title=" " alt="" coords="284,460,359,485"/>
+<area shape="rect" id="node12" title=" " alt="" coords="1006,313,1077,339"/>
+<area shape="rect" id="node13" title=" " alt="" coords="490,313,561,339"/>
+<area shape="rect" id="node14" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="687,313,787,339"/>
+<area shape="rect" id="node15" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="499,387,597,412"/>
+<area shape="rect" id="node17" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="680,387,755,412"/>
+<area shape="rect" id="node16" title=" " alt="" coords="433,460,548,485"/>
+<area shape="rect" id="node22" href="$time_8h.html" title="Simple time utilities." alt="" coords="623,460,687,485"/>
+<area shape="rect" id="node19" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="844,607,927,632"/>
+<area shape="rect" id="node20" href="$board_8h_source.html" title=" " alt="" coords="701,607,819,632"/>
+<area shape="rect" id="node21" title=" " alt="" coords="951,607,1055,632"/>
+<area shape="rect" id="node24" href="$iterator_8h.html" title="Utilities to convert arrays into an iterable (usable if for x: list construct)." alt="" coords="135,313,217,339"/>
+<area shape="rect" id="node26" href="$errors_8h.html" title="Common errors definition." alt="" coords="292,313,364,339"/>
+<area shape="rect" id="node25" href="$initializer__list_8h_source.html" title=" " alt="" coords="185,387,308,412"/>
+<area shape="rect" id="node29" title=" " alt="" coords="452,167,612,192"/>
 </map>

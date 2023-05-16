@@ -4,8 +4,6 @@ var classi2c_1_1_i2_c_device =
     [ "ABSTRACT_FUTURE", "classi2c_1_1_i2_c_device.html#ac2e7c57ed9de99169a280c189724af0a", null ],
     [ "FUTURE", "classi2c_1_1_i2_c_device.html#ad029f30f422ebd435b20e1d2138ff908", null ],
     [ "I2CDevice", "classi2c_1_1_i2_c_device.html#ac9dbb29fefbc1a66a6df687d9874fec4", null ],
-    [ "I2CDevice", "classi2c_1_1_i2_c_device.html#a42d97ba6a206ff561962c1be1644e2d6", null ],
-    [ "operator=", "classi2c_1_1_i2_c_device.html#aa3191ed189bb95f9d2c00638f3055123", null ],
     [ "set_device", "classi2c_1_1_i2_c_device.html#a1325f82f4aaf8290a2d4cc4c70dfe83b", null ],
     [ "read", "classi2c_1_1_i2_c_device.html#a75fe1fe6a563488eb06f86266e15c923", null ],
     [ "write", "classi2c_1_1_i2_c_device.html#a161423972dd35fbd4b32cd1e8048b5ad", null ],
@@ -15,6 +13,5 @@ var classi2c_1_1_i2_c_device =
     [ "async_write", "classi2c_1_1_i2_c_device.html#a3847f2712b7d623007e65dbfa5256428", null ],
     [ "async_multi_write", "classi2c_1_1_i2_c_device.html#a468e871cf020c937f885ac68897563bb", null ],
     [ "sync_write", "classi2c_1_1_i2_c_device.html#a5733ebd749415b43fbfab76cf6cfc234", null ],
-    [ "sync_write", "classi2c_1_1_i2_c_device.html#aad570da8ac6c407c7046b1f539fa5a8e", null ],
-    [ "I2CFutureHelper< MANAGER >", "classi2c_1_1_i2_c_device.html#a6c0a6305a70d35be0c04ba98a616b91f", null ]
+    [ "sync_write", "classi2c_1_1_i2_c_device.html#aad570da8ac6c407c7046b1f539fa5a8e", null ]
 ];

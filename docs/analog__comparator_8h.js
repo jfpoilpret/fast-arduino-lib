@@ -1,6 +1,6 @@
 var analog__comparator_8h =
 [
-    [ "AnalogComparator", "classanalog_1_1_analog_comparator.html", "classanalog_1_1_analog_comparator" ],
+    [ "analog::AnalogComparator", "classanalog_1_1_analog_comparator.html", "classanalog_1_1_analog_comparator" ],
     [ "REGISTER_ANALOG_COMPARE_ISR_FUNCTION", "analog__comparator_8h.html#ac6cd04df8124af40ca7c97ef64172017", null ],
     [ "REGISTER_ANALOG_COMPARE_ISR_METHOD", "analog__comparator_8h.html#a1051f30a755279b95ab656d0bca1f0bb", null ],
     [ "REGISTER_ANALOG_COMPARE_ISR_EMPTY", "analog__comparator_8h.html#a8f31fd98c300467deb35cd55ed5ad23d", null ],

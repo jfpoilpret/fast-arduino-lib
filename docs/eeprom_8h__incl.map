@@ -1,17 +1,17 @@
 <map id="fastarduino/eeprom.h" name="fastarduino/eeprom.h">
-<area shape="rect" id="node1" title="API to handle EEPROM access in read and write modes." alt="" coords="263,5,425,32"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,80,165,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="137,155,252,181"/>
-<area shape="rect" id="node4" title=" " alt="" coords="516,80,625,107"/>
-<area shape="rect" id="node5" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="241,80,338,107"/>
-<area shape="rect" id="node8" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="451,229,533,256"/>
-<area shape="rect" id="node13" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="363,80,437,107"/>
-<area shape="rect" id="node6" href="$io_8h_source.html" title=" " alt="" coords="121,229,215,256"/>
-<area shape="rect" id="node7" title=" " alt="" coords="133,304,203,331"/>
-<area shape="rect" id="node9" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="308,304,391,331"/>
-<area shape="rect" id="node10" href="$board_8h_source.html" title=" " alt="" coords="415,304,534,331"/>
-<area shape="rect" id="node12" title=" " alt="" coords="559,304,663,331"/>
-<area shape="rect" id="node11" title=" " alt="" coords="319,379,390,405"/>
-<area shape="rect" id="node14" href="$time_8h.html" title="Simple time utilities." alt="" coords="327,155,391,181"/>
-<area shape="rect" id="node15" title=" " alt="" coords="291,229,427,256"/>
+<area shape="rect" id="node1" title="API to handle EEPROM access in read and write modes." alt="" coords="263,5,425,31"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,79,165,104"/>
+<area shape="rect" id="node3" title=" " alt="" coords="137,152,252,177"/>
+<area shape="rect" id="node4" title=" " alt="" coords="516,79,625,104"/>
+<area shape="rect" id="node5" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="241,79,338,104"/>
+<area shape="rect" id="node8" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="451,225,533,251"/>
+<area shape="rect" id="node13" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="363,79,437,104"/>
+<area shape="rect" id="node6" href="$io_8h_source.html" title=" " alt="" coords="121,225,215,251"/>
+<area shape="rect" id="node7" title=" " alt="" coords="133,299,203,324"/>
+<area shape="rect" id="node9" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="308,299,391,324"/>
+<area shape="rect" id="node10" href="$board_8h_source.html" title=" " alt="" coords="415,299,534,324"/>
+<area shape="rect" id="node12" title=" " alt="" coords="559,299,663,324"/>
+<area shape="rect" id="node11" title=" " alt="" coords="319,372,390,397"/>
+<area shape="rect" id="node14" href="$time_8h.html" title="Simple time utilities." alt="" coords="327,152,391,177"/>
+<area shape="rect" id="node15" title=" " alt="" coords="291,225,427,251"/>
 </map>

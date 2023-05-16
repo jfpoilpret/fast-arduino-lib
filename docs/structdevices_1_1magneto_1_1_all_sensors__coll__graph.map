@@ -1,4 +1,4 @@
 <map id="devices::magneto::AllSensors" name="devices::magneto::AllSensors">
-<area shape="rect" id="node1" title="Structure to store all MPU6050 sensors data (3 axis gyroscope and accelerometer, chip temperature)." alt="" coords="5,109,220,136"/>
-<area shape="rect" id="node2" href="$structdevices_1_1magneto_1_1_sensor3_d.html" title="Structure to store 3 axis data for one sensor (gyroscope or accelerometer)." alt="" coords="9,5,217,32"/>
+<area shape="rect" id="node1" title="Structure to store all MPU6050 sensors data (3 axis gyroscope and accelerometer, chip temperature)." alt="" coords="5,108,220,133"/>
+<area shape="rect" id="node2" href="$structdevices_1_1magneto_1_1_sensor3_d.html" title="Structure to store 3 axis data for one sensor (gyroscope or accelerometer)." alt="" coords="9,5,217,31"/>
 </map>

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['wdt_5ftimer_2360',['WDT_TIMER',['../namespaceevents_1_1_type.html#a89956491c3bf31c616baf63fcd335405',1,'events::Type']]],
-  ['write_5fsize_2361',['WRITE_SIZE',['../classi2c_1_1_t_write_multi_register_future.html#a1987e36c2ddb3bdf5e1faede0a9d6d95',1,'i2c::TWriteMultiRegisterFuture']]]
+  ['vertical_0',['VERTICAL',['../classdevices_1_1display_1_1_font.html#a29094669cb1f3bd054edf031165e4904',1,'devices::display::Font']]],
+  ['vertical_5ffont_1',['VERTICAL_FONT',['../structdevices_1_1display_1_1_display_device_trait.html#aeb2e0bff959ebab631110b89fcf378e9',1,'devices::display::DisplayDeviceTrait']]]
 ];

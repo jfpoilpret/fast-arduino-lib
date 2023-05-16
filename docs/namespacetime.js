@@ -1,8 +1,8 @@
 var namespacetime =
 [
-    [ "RTTTime", "classtime_1_1_r_t_t_time.html", "classtime_1_1_r_t_t_time" ],
     [ "auto_delay", "classtime_1_1auto__delay.html", "classtime_1_1auto__delay" ],
     [ "auto_millis", "classtime_1_1auto__millis.html", "classtime_1_1auto__millis" ],
+    [ "RTTTime", "classtime_1_1_r_t_t_time.html", "classtime_1_1_r_t_t_time" ],
     [ "DELAY_PTR", "namespacetime.html#a0980f7cbb448c562b0081484031f325e", null ],
     [ "MILLIS_PTR", "namespacetime.html#a6beadc7ea06995818634b29b52433b80", null ],
     [ "operator-", "namespacetime.html#a897dc67d09f077584bc6339cc1e1ce59", null ],

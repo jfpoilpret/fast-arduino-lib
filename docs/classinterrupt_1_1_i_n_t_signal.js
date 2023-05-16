@@ -1,8 +1,6 @@
 var classinterrupt_1_1_i_n_t_signal =
 [
-    [ "INTSignal", "classinterrupt_1_1_i_n_t_signal.html#afbe3eae6056fbf649a7fc5288785de1c", null ],
     [ "INTSignal", "classinterrupt_1_1_i_n_t_signal.html#aa7e20eafa82f33a7d45a44effc9a938c", null ],
-    [ "operator=", "classinterrupt_1_1_i_n_t_signal.html#a98d0ebf293e5591753e27720c1766c29", null ],
     [ "set_trigger", "classinterrupt_1_1_i_n_t_signal.html#a83ab9525b830e5d7579266ca2f4de133", null ],
     [ "enable", "classinterrupt_1_1_i_n_t_signal.html#aba283975bf5d335fccc927f217305e85", null ],
     [ "disable", "classinterrupt_1_1_i_n_t_signal.html#aa82c53a2b7e445306670a71fe6127b0b", null ],

@@ -1,5 +1,5 @@
 <map id="events::Dispatcher&lt; EVENT &gt;" name="events::Dispatcher&lt; EVENT &gt;">
-<area shape="rect" id="node1" title="Utility to dispatch an event to a list of EventHandlers that are registered for its type." alt="" coords="40,169,184,211"/>
-<area shape="rect" id="node2" href="$classcontainers_1_1_linked_list.html" title=" " alt="" coords="5,80,219,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="54,5,170,32"/>
+<area shape="rect" id="node1" title="Utility to dispatch an event to a list of EventHandlers that are registered for its type." alt="" coords="40,167,184,207"/>
+<area shape="rect" id="node2" href="$classcontainers_1_1_linked_list.html" title=" " alt="" coords="5,79,219,119"/>
+<area shape="rect" id="node3" title=" " alt="" coords="54,5,170,31"/>
 </map>

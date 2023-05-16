@@ -1,22 +1,22 @@
 <map id="fastarduino/devices/mcp3002.h" name="fastarduino/devices/mcp3002.h">
-<area shape="rect" id="node1" title="API to handle MicroChip ADC chip MCP3002." alt="" coords="468,5,619,47"/>
-<area shape="rect" id="node2" href="$mcp3x0x_8h.html" title="API to handle SPI&#45;based MicroChip ADC chips family (MCP3001&#45;2&#45;4&#45;8, MCP3201&#45;2&#45;4&#45;8, MCP3301&#45;2&#45;4)." alt="" coords="496,95,591,121"/>
-<area shape="rect" id="node3" href="$spi_8h.html" title="SPI support for AVR MCU." alt="" coords="221,169,287,196"/>
-<area shape="rect" id="node13" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="419,393,502,420"/>
-<area shape="rect" id="node17" href="$time_8h.html" title="Simple time utilities." alt="" coords="556,319,632,345"/>
-<area shape="rect" id="node19" href="$types__traits_8h.html" title="Useful traits for common types." alt="" coords="817,393,939,420"/>
-<area shape="rect" id="node4" href="$board_8h_source.html" title=" " alt="" coords="5,468,124,495"/>
-<area shape="rect" id="node6" href="$gpio_8h.html" title="General Purpose (digital) Input Output API." alt="" coords="223,244,285,271"/>
-<area shape="rect" id="node5" title=" " alt="" coords="715,543,785,569"/>
-<area shape="rect" id="node7" title=" " alt="" coords="62,393,222,420"/>
-<area shape="rect" id="node8" href="$int_8h.html" title="General API for handling External Interrupt pins." alt="" coords="270,319,321,345"/>
-<area shape="rect" id="node16" href="$pci_8h.html" title="General API for handling Pin Change Interrupts." alt="" coords="186,319,239,345"/>
-<area shape="rect" id="node9" title=" " alt="" coords="238,468,353,495"/>
-<area shape="rect" id="node10" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="247,393,344,420"/>
-<area shape="rect" id="node11" href="$io_8h_source.html" title=" " alt="" coords="573,468,668,495"/>
-<area shape="rect" id="node12" title=" " alt="" coords="585,543,656,569"/>
-<area shape="rect" id="node14" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="787,468,870,495"/>
-<area shape="rect" id="node15" title=" " alt="" coords="409,468,513,495"/>
-<area shape="rect" id="node18" title=" " alt="" coords="526,393,662,420"/>
-<area shape="rect" id="node20" title=" " alt="" coords="945,468,1019,495"/>
+<area shape="rect" id="node1" title="API to handle MicroChip ADC chip MCP3002." alt="" coords="468,5,619,45"/>
+<area shape="rect" id="node2" href="$mcp3x0x_8h.html" title="API to handle SPI&#45;based MicroChip ADC chips family (MCP3001&#45;2&#45;4&#45;8, MCP3201&#45;2&#45;4&#45;8, MCP3301&#45;2&#45;4)." alt="" coords="496,93,591,119"/>
+<area shape="rect" id="node3" href="$spi_8h.html" title="SPI support for AVR MCU." alt="" coords="221,167,287,192"/>
+<area shape="rect" id="node13" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="419,387,502,412"/>
+<area shape="rect" id="node17" href="$time_8h.html" title="Simple time utilities." alt="" coords="556,313,632,339"/>
+<area shape="rect" id="node19" href="$types__traits_8h.html" title="Useful traits for common types." alt="" coords="817,387,939,412"/>
+<area shape="rect" id="node4" href="$board_8h_source.html" title=" " alt="" coords="5,460,124,485"/>
+<area shape="rect" id="node6" href="$gpio_8h.html" title="General Purpose (digital) Input Output API." alt="" coords="223,240,285,265"/>
+<area shape="rect" id="node5" title=" " alt="" coords="715,533,785,559"/>
+<area shape="rect" id="node7" title=" " alt="" coords="62,387,222,412"/>
+<area shape="rect" id="node8" href="$int_8h.html" title="General API for handling External Interrupt pins." alt="" coords="270,313,321,339"/>
+<area shape="rect" id="node16" href="$pci_8h.html" title="General API for handling Pin Change Interrupts." alt="" coords="186,313,239,339"/>
+<area shape="rect" id="node9" title=" " alt="" coords="238,460,353,485"/>
+<area shape="rect" id="node10" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="247,387,344,412"/>
+<area shape="rect" id="node11" href="$io_8h_source.html" title=" " alt="" coords="573,460,668,485"/>
+<area shape="rect" id="node12" title=" " alt="" coords="585,533,656,559"/>
+<area shape="rect" id="node14" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="787,460,870,485"/>
+<area shape="rect" id="node15" title=" " alt="" coords="409,460,513,485"/>
+<area shape="rect" id="node18" title=" " alt="" coords="526,387,662,412"/>
+<area shape="rect" id="node20" title=" " alt="" coords="945,460,1019,485"/>
 </map>

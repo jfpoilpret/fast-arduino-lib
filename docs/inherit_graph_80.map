@@ -1,3 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classi2c_1_1status_1_1_i2_c_latest_status_holder.html" title="Class holding the latest I2C status." alt="" coords="5,5,204,47"/>
+<area shape="rect" id="node1" href="$classi2c_1_1_abstract_i2_c_async_manager.html" title="Abstract asynchronous I2C Manager." alt="" coords="5,110,245,179"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_i2_c_async_debug_manager.html" title="Asynchronous I2C Manager for ATmega architecture with debug facility." alt="" coords="293,5,501,60"/>
+<area shape="rect" id="node3" href="$classi2c_1_1_i2_c_async_manager.html" title="Asynchronous I2C Manager for ATmega architecture." alt="" coords="314,85,481,125"/>
+<area shape="rect" id="node4" href="$classi2c_1_1_i2_c_async_status_debug_manager.html" title="Asynchronous I2C Manager for ATmega architecture with debug and status notification facilities." alt="" coords="300,149,495,218"/>
+<area shape="rect" id="node5" href="$classi2c_1_1_i2_c_async_status_manager.html" title="Asynchronous I2C Manager for ATmega architecture with status notification facility." alt="" coords="294,243,501,297"/>
 </map>

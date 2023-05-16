@@ -1,6 +1,6 @@
 <map id="fastarduino/boards/attiny_x5.h" name="fastarduino/boards/attiny_x5.h">
-<area shape="rect" id="node1" title="ATtinyX5 (25, 45, 85) specific features and pins." alt="" coords="51,5,195,47"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,95,52,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="76,95,171,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="195,95,289,121"/>
+<area shape="rect" id="node1" title="ATtinyX5 (25, 45, 85) specific features and pins." alt="" coords="51,5,195,45"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,93,52,119"/>
+<area shape="rect" id="node3" title=" " alt="" coords="76,93,171,119"/>
+<area shape="rect" id="node4" title=" " alt="" coords="195,93,289,119"/>
 </map>

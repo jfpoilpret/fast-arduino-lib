@@ -1,13 +1,13 @@
 var mpu6050_8h =
 [
-    [ "FIFOEnable", "classdevices_1_1magneto_1_1_f_i_f_o_enable.html", "classdevices_1_1magneto_1_1_f_i_f_o_enable" ],
-    [ "INTStatus", "classdevices_1_1magneto_1_1_i_n_t_status.html", "classdevices_1_1magneto_1_1_i_n_t_status" ],
-    [ "AllSensors", "structdevices_1_1magneto_1_1_all_sensors.html", "structdevices_1_1magneto_1_1_all_sensors" ],
-    [ "MPU6050", "classdevices_1_1magneto_1_1_m_p_u6050.html", "classdevices_1_1magneto_1_1_m_p_u6050" ],
-    [ "BeginFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_begin_future.html", null ],
-    [ "FifoBeginFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_fifo_begin_future.html", null ],
-    [ "EndFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_end_future.html", null ],
-    [ "ResetFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_reset_future.html", null ],
+    [ "devices::magneto::FIFOEnable", "classdevices_1_1magneto_1_1_f_i_f_o_enable.html", "classdevices_1_1magneto_1_1_f_i_f_o_enable" ],
+    [ "devices::magneto::INTStatus", "classdevices_1_1magneto_1_1_i_n_t_status.html", "classdevices_1_1magneto_1_1_i_n_t_status" ],
+    [ "devices::magneto::AllSensors", "structdevices_1_1magneto_1_1_all_sensors.html", "structdevices_1_1magneto_1_1_all_sensors" ],
+    [ "devices::magneto::MPU6050< MANAGER >", "classdevices_1_1magneto_1_1_m_p_u6050.html", "classdevices_1_1magneto_1_1_m_p_u6050" ],
+    [ "devices::magneto::MPU6050< MANAGER >::BeginFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_begin_future.html", null ],
+    [ "devices::magneto::MPU6050< MANAGER >::FifoBeginFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_fifo_begin_future.html", null ],
+    [ "devices::magneto::MPU6050< MANAGER >::EndFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_end_future.html", null ],
+    [ "devices::magneto::MPU6050< MANAGER >::ResetFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_reset_future.html", null ],
     [ "INTEnable", "mpu6050_8h.html#af1a3dfb463a3ed6edaa3d7dcbdd2352d", null ],
     [ "GyroRange", "mpu6050_8h.html#af1ab54980b0620a7f3c95ff2318604f4", [
       [ "RANGE_250", "mpu6050_8h.html#af1ab54980b0620a7f3c95ff2318604f4ae7e56984bb3dd29494cdd08eed1d3d16", null ],

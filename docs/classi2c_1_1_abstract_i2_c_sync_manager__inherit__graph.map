@@ -1,15 +1,12 @@
 <map id="i2c::AbstractI2CSyncManager&lt; ARCH_HANDLER_, MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt;" name="i2c::AbstractI2CSyncManager&lt; ARCH_HANDLER_, MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt;">
-<area shape="rect" id="node1" title="Abstract synchronous I2C Manager for all MCU architectures." alt="" coords="5,337,224,408"/>
-<area shape="rect" id="node2" href="$classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="319,5,528,76"/>
-<area shape="rect" id="node4" href="$classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="319,195,528,265"/>
-<area shape="rect" id="node6" href="$classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="319,384,528,455"/>
-<area shape="rect" id="node8" href="$classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="272,574,575,630"/>
-<area shape="rect" id="node10" href="$classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="325,100,522,171"/>
-<area shape="rect" id="node11" href="$classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="325,289,522,360"/>
-<area shape="rect" id="node12" href="$classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="321,479,525,549"/>
-<area shape="rect" id="node13" href="$classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="272,654,575,710"/>
-<area shape="rect" id="node3" href="$classi2c_1_1_i2_c_sync_debug_manager.html" title="Synchronous I2C Manager for ATmega architecture with debug facility." alt="" coords="679,68,885,109"/>
-<area shape="rect" id="node5" href="$classi2c_1_1_i2_c_sync_manager.html" title="Synchronous I2C Manager for ATmega architecture." alt="" coords="703,257,861,299"/>
-<area shape="rect" id="node7" href="$classi2c_1_1_i2_c_sync_status_manager.html" title="Synchronous I2C Manager for ATmega architecture wit status notification facility." alt="" coords="677,447,887,488"/>
-<area shape="rect" id="node9" href="$classi2c_1_1_i2_c_sync_status_debug_manager.html" title="Synchronous I2C Manager for ATmega architecture with status notification and debug facility." alt="" coords="623,621,941,663"/>
+<area shape="rect" id="node1" title="Abstract synchronous I2C Manager for all MCU architectures." alt="" coords="5,319,224,388"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="319,5,528,75"/>
+<area shape="rect" id="node3" href="$classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="319,99,528,168"/>
+<area shape="rect" id="node5" href="$classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="272,193,575,247"/>
+<area shape="rect" id="node6" href="$classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title=" " alt="" coords="319,272,528,341"/>
+<area shape="rect" id="node7" href="$classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="325,365,522,435"/>
+<area shape="rect" id="node8" href="$classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="325,459,522,528"/>
+<area shape="rect" id="node9" href="$classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="272,553,575,607"/>
+<area shape="rect" id="node10" href="$classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title=" " alt="" coords="321,632,525,701"/>
+<area shape="rect" id="node4" href="$classi2c_1_1_i2_c_sync_manager.html" title="Synchronous I2C Manager for ATmega architecture." alt="" coords="623,293,781,333"/>
 </map>

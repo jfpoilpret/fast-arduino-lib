@@ -1,12 +1,12 @@
 var vl53l0x__types_8h =
 [
-    [ "FixPoint9_7", "classdevices_1_1vl53l0x_1_1_fix_point9__7.html", "classdevices_1_1vl53l0x_1_1_fix_point9__7" ],
-    [ "DeviceStatus", "classdevices_1_1vl53l0x_1_1_device_status.html", "classdevices_1_1vl53l0x_1_1_device_status" ],
-    [ "GPIOSettings", "classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html", "classdevices_1_1vl53l0x_1_1_g_p_i_o_settings" ],
-    [ "SPADReference", "classdevices_1_1vl53l0x_1_1_s_p_a_d_reference.html", "classdevices_1_1vl53l0x_1_1_s_p_a_d_reference" ],
-    [ "SequenceSteps", "classdevices_1_1vl53l0x_1_1_sequence_steps.html", "classdevices_1_1vl53l0x_1_1_sequence_steps" ],
-    [ "SequenceStepsTimeout", "classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html", "classdevices_1_1vl53l0x_1_1_sequence_steps_timeout" ],
-    [ "SPADInfo", "classdevices_1_1vl53l0x_1_1_s_p_a_d_info.html", "classdevices_1_1vl53l0x_1_1_s_p_a_d_info" ],
+    [ "devices::vl53l0x::FixPoint9_7", "classdevices_1_1vl53l0x_1_1_fix_point9__7.html", "classdevices_1_1vl53l0x_1_1_fix_point9__7" ],
+    [ "devices::vl53l0x::DeviceStatus", "classdevices_1_1vl53l0x_1_1_device_status.html", "classdevices_1_1vl53l0x_1_1_device_status" ],
+    [ "devices::vl53l0x::GPIOSettings", "classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html", "classdevices_1_1vl53l0x_1_1_g_p_i_o_settings" ],
+    [ "devices::vl53l0x::SPADReference", "classdevices_1_1vl53l0x_1_1_s_p_a_d_reference.html", "classdevices_1_1vl53l0x_1_1_s_p_a_d_reference" ],
+    [ "devices::vl53l0x::SequenceSteps", "classdevices_1_1vl53l0x_1_1_sequence_steps.html", "classdevices_1_1vl53l0x_1_1_sequence_steps" ],
+    [ "devices::vl53l0x::SequenceStepsTimeout", "classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html", "classdevices_1_1vl53l0x_1_1_sequence_steps_timeout" ],
+    [ "devices::vl53l0x::SPADInfo", "classdevices_1_1vl53l0x_1_1_s_p_a_d_info.html", "classdevices_1_1vl53l0x_1_1_s_p_a_d_info" ],
     [ "DeviceError", "vl53l0x__types_8h.html#a9dd5b65f54eecca7c3cef80254c553d8", [
       [ "NONE", "vl53l0x__types_8h.html#a9dd5b65f54eecca7c3cef80254c553d8ab50339a10e1de285ac99d4c3990b8693", null ],
       [ "VCSEL_CONTINUITY_TEST_FAILURE", "vl53l0x__types_8h.html#a9dd5b65f54eecca7c3cef80254c553d8a2fdca11e64b06e09e764382ffa821acc", null ],

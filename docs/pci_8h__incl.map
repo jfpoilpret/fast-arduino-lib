@@ -1,13 +1,13 @@
 <map id="fastarduino/pci.h" name="fastarduino/pci.h">
-<area shape="rect" id="node1" title="General API for handling Pin Change Interrupts." alt="" coords="219,5,349,32"/>
-<area shape="rect" id="node2" href="$board_8h_source.html" title=" " alt="" coords="311,155,430,181"/>
-<area shape="rect" id="node4" title=" " alt="" coords="51,80,211,107"/>
-<area shape="rect" id="node5" title=" " alt="" coords="5,155,120,181"/>
-<area shape="rect" id="node6" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="235,80,333,107"/>
-<area shape="rect" id="node9" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="437,80,520,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="335,229,406,256"/>
-<area shape="rect" id="node7" href="$io_8h_source.html" title=" " alt="" coords="193,155,287,181"/>
-<area shape="rect" id="node8" title=" " alt="" coords="205,229,275,256"/>
-<area shape="rect" id="node10" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="583,155,665,181"/>
-<area shape="rect" id="node11" title=" " alt="" coords="455,155,559,181"/>
+<area shape="rect" id="node1" title="General API for handling Pin Change Interrupts." alt="" coords="219,5,349,31"/>
+<area shape="rect" id="node2" href="$board_8h_source.html" title=" " alt="" coords="311,152,430,177"/>
+<area shape="rect" id="node4" title=" " alt="" coords="51,79,211,104"/>
+<area shape="rect" id="node5" title=" " alt="" coords="5,152,120,177"/>
+<area shape="rect" id="node6" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="235,79,333,104"/>
+<area shape="rect" id="node9" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="437,79,520,104"/>
+<area shape="rect" id="node3" title=" " alt="" coords="335,225,406,251"/>
+<area shape="rect" id="node7" href="$io_8h_source.html" title=" " alt="" coords="193,152,287,177"/>
+<area shape="rect" id="node8" title=" " alt="" coords="205,225,275,251"/>
+<area shape="rect" id="node10" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="583,152,665,177"/>
+<area shape="rect" id="node11" title=" " alt="" coords="455,152,559,177"/>
 </map>

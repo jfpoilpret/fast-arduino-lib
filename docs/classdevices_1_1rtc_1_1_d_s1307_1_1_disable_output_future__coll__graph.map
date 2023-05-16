@@ -1,6 +1,6 @@
 <map id="devices::rtc::DS1307&lt; MANAGER &gt;::DisableOutputFuture" name="devices::rtc::DS1307&lt; MANAGER &gt;::DisableOutputFuture">
-<area shape="rect" id="node1" title="Create a future to be used by asynchronous method disable_output(DisableOutputFuture&amp;)." alt="" coords="21,303,283,344"/>
-<area shape="rect" id="node2" href="$classi2c_1_1_t_write_register_future.html" title="Generic Future that can be used to write to an I2C device register." alt="" coords="5,213,299,255"/>
-<area shape="rect" id="node3" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="61,109,243,165"/>
-<area shape="rect" id="node4" title=" " alt="" coords="45,5,259,61"/>
+<area shape="rect" id="node1" title="Create a future to be used by asynchronous method disable_output(DisableOutputFuture&amp;)." alt="" coords="21,284,283,324"/>
+<area shape="rect" id="node2" href="$classi2c_1_1_t_write_register_future.html" title="Generic Future that can be used to write to an I2C device register." alt="" coords="5,196,299,236"/>
+<area shape="rect" id="node3" href="$classi2c_1_1_write_register_future.html" title="General Future that can be used to write to an I2C device register." alt="" coords="49,108,255,148"/>
+<area shape="rect" id="node4" title=" " alt="" coords="45,5,259,60"/>
 </map>

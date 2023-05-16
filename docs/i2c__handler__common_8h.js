@@ -1,8 +1,8 @@
 var i2c__handler__common_8h =
 [
-    [ "I2CLightCommand", "classi2c_1_1_i2_c_light_command.html", "classi2c_1_1_i2_c_light_command" ],
-    [ "I2CCommand", "classi2c_1_1_i2_c_command.html", "classi2c_1_1_i2_c_command" ],
-    [ "AbstractI2CSyncManager", "classi2c_1_1_abstract_i2_c_sync_manager.html", "classi2c_1_1_abstract_i2_c_sync_manager" ],
+    [ "i2c::I2CLightCommand", "classi2c_1_1_i2_c_light_command.html", null ],
+    [ "i2c::I2CCommand< T >", "classi2c_1_1_i2_c_command.html", null ],
+    [ "i2c::AbstractI2CSyncManager< ARCH_HANDLER_, MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_sync_manager.html", "classi2c_1_1_abstract_i2_c_sync_manager" ],
     [ "I2C_DEBUG_HOOK", "i2c__handler__common_8h.html#a28595eabdfa2ce6a84220d6eb59233e0", null ],
     [ "I2C_STATUS_HOOK", "i2c__handler__common_8h.html#a0d00ac941e250c51b3cde59069e2fbec", null ],
     [ "DebugStatus", "i2c__handler__common_8h.html#a2572e0fde7ef325c8f5c1c974c2de720", [

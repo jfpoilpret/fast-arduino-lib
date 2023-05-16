@@ -1,7 +1,7 @@
 var timer_8h =
 [
-    [ "Calculator", "structtimer_1_1_calculator.html", "structtimer_1_1_calculator" ],
-    [ "Timer", "classtimer_1_1_timer.html", "classtimer_1_1_timer" ],
+    [ "timer::Calculator< NTIMER_ >", "structtimer_1_1_calculator.html", "structtimer_1_1_calculator" ],
+    [ "timer::Timer< NTIMER_ >", "classtimer_1_1_timer.html", "classtimer_1_1_timer" ],
     [ "REGISTER_TIMER_COMPARE_ISR_METHOD", "timer_8h.html#acfce0d4d6115510756da8d720409ed26", null ],
     [ "REGISTER_TIMER_COMPARE_ISR_FUNCTION", "timer_8h.html#a97efa79149bd7e075e9cff2473356cee", null ],
     [ "REGISTER_TIMER_COMPARE_ISR_EMPTY", "timer_8h.html#a0b8d4f090408ab7c6e7efc20da5d0056", null ],

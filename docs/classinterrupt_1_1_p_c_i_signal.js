@@ -1,7 +1,5 @@
 var classinterrupt_1_1_p_c_i_signal =
 [
-    [ "PCISignal", "classinterrupt_1_1_p_c_i_signal.html#a1249ae739569225fc45a70dced5edce4", null ],
-    [ "operator=", "classinterrupt_1_1_p_c_i_signal.html#ad0a50a13e7190952527ab4d85c958f0b", null ],
     [ "enable", "classinterrupt_1_1_p_c_i_signal.html#a1cbc89ca21a31546d8d52648bf5e6472", null ],
     [ "disable", "classinterrupt_1_1_p_c_i_signal.html#a94562c557597c2a06b780baa24bea57c", null ],
     [ "clear", "classinterrupt_1_1_p_c_i_signal.html#abea9f1b0e90228fe877ac0e491b477de", null ],

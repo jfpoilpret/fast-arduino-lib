@@ -1,6 +1,6 @@
 var int_8h =
 [
-    [ "INTSignal", "classinterrupt_1_1_i_n_t_signal.html", "classinterrupt_1_1_i_n_t_signal" ],
+    [ "interrupt::INTSignal< EXTPIN_ >", "classinterrupt_1_1_i_n_t_signal.html", "classinterrupt_1_1_i_n_t_signal" ],
     [ "REGISTER_INT_ISR_METHOD", "int_8h.html#a3e2a8c98468d29717612f7c694a17d59", null ],
     [ "REGISTER_INT_ISR_FUNCTION", "int_8h.html#ae9a69c986cdabeb7bc749701a74b71fa", null ],
     [ "REGISTER_INT_ISR_EMPTY", "int_8h.html#a797c88ca60edb14f5189217ad50a65cb", null ],

@@ -1,7 +1,7 @@
 var namespacedevices_1_1rtc =
 [
-    [ "tm", "structdevices_1_1rtc_1_1tm.html", "structdevices_1_1rtc_1_1tm" ],
     [ "DS1307", "classdevices_1_1rtc_1_1_d_s1307.html", "classdevices_1_1rtc_1_1_d_s1307" ],
+    [ "tm", "structdevices_1_1rtc_1_1tm.html", "structdevices_1_1rtc_1_1tm" ],
     [ "WeekDay", "namespacedevices_1_1rtc.html#a765e5fb8599fbfc007de3b47a81593b3", [
       [ "SUNDAY", "namespacedevices_1_1rtc.html#a765e5fb8599fbfc007de3b47a81593b3a95fa12cb2100ce7081b71f7c44bc12a5", null ],
       [ "MONDAY", "namespacedevices_1_1rtc.html#a765e5fb8599fbfc007de3b47a81593b3a98617021b249af0ace0f84ee92ccc7cd", null ],

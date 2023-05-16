@@ -17,6 +17,5 @@ var classdevices_1_1vl53l0x_1_1_sequence_steps =
     [ "is_dss", "classdevices_1_1vl53l0x_1_1_sequence_steps.html#af411fa73a8590ecdb1cb06724f6d12e0", null ],
     [ "is_msrc", "classdevices_1_1vl53l0x_1_1_sequence_steps.html#a1247c7623f7c60f303afd6fa01ba3b41", null ],
     [ "is_pre_range", "classdevices_1_1vl53l0x_1_1_sequence_steps.html#a7edccc422bafabf0229eaf0a47a7441d", null ],
-    [ "is_final_range", "classdevices_1_1vl53l0x_1_1_sequence_steps.html#a290189327186c83c8865c706e188343f", null ],
-    [ "VL53L0X", "classdevices_1_1vl53l0x_1_1_sequence_steps.html#a21936973d57477eb01d90b9441c3a394", null ]
+    [ "is_final_range", "classdevices_1_1vl53l0x_1_1_sequence_steps.html#a290189327186c83c8865c706e188343f", null ]
 ];

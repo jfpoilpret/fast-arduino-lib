@@ -1,9 +1,9 @@
 var sonar_8h =
 [
-    [ "AbstractSonar", "classdevices_1_1sonar_1_1_abstract_sonar.html", "classdevices_1_1sonar_1_1_abstract_sonar" ],
-    [ "HCSR04", "classdevices_1_1sonar_1_1_h_c_s_r04.html", "classdevices_1_1sonar_1_1_h_c_s_r04" ],
-    [ "SonarEvent", "structdevices_1_1sonar_1_1_sonar_event.html", "structdevices_1_1sonar_1_1_sonar_event" ],
-    [ "MultiHCSR04", "classdevices_1_1sonar_1_1_multi_h_c_s_r04.html", "classdevices_1_1sonar_1_1_multi_h_c_s_r04" ],
+    [ "devices::sonar::AbstractSonar< NTIMER_ >", "classdevices_1_1sonar_1_1_abstract_sonar.html", "classdevices_1_1sonar_1_1_abstract_sonar" ],
+    [ "devices::sonar::HCSR04< NTIMER_, TRIGGER_, ECHO_, SONAR_TYPE_ >", "classdevices_1_1sonar_1_1_h_c_s_r04.html", "classdevices_1_1sonar_1_1_h_c_s_r04" ],
+    [ "devices::sonar::SonarEvent< NTIMER_ >", "structdevices_1_1sonar_1_1_sonar_event.html", "structdevices_1_1sonar_1_1_sonar_event" ],
+    [ "devices::sonar::MultiHCSR04< NTIMER_, TRIGGER_, ECHO_PORT_, ECHO_MASK_ >", "classdevices_1_1sonar_1_1_multi_h_c_s_r04.html", "classdevices_1_1sonar_1_1_multi_h_c_s_r04" ],
     [ "REGISTER_HCSR04_INT_ISR", "sonar_8h.html#a669cf6b5ffc13aada097587cae9b2721", null ],
     [ "REGISTER_HCSR04_PCI_ISR", "sonar_8h.html#a5a25a16ab0d5dda23519eeb8f2a3fabe", null ],
     [ "SONAR_PINS", "sonar_8h.html#a17710e8c7b1d799fbe0561fca1bfd551", null ],

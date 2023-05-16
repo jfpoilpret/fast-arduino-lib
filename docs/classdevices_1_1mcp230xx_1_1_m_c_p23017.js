@@ -19,7 +19,7 @@ var classdevices_1_1mcp230xx_1_1_m_c_p23017 =
     [ "configure_gpio", "classdevices_1_1mcp230xx_1_1_m_c_p23017.html#a0fa6a527df0f25a704f0a5ff33199362", null ],
     [ "configure_interrupts", "classdevices_1_1mcp230xx_1_1_m_c_p23017.html#a3b60fa56273139226953584d33658bac", null ],
     [ "values", "classdevices_1_1mcp230xx_1_1_m_c_p23017.html#addda5355adf39ad5ed19f238ab06ed7e", null ],
-    [ "values", "classdevices_1_1mcp230xx_1_1_m_c_p23017.html#a0b4719f92c9eb2cee05ffe532e755a20", null ],
-    [ "interrupt_flags", "classdevices_1_1mcp230xx_1_1_m_c_p23017.html#a967bf0ba8071dd4ded913dcc300f6ef7", null ],
-    [ "captured_values", "classdevices_1_1mcp230xx_1_1_m_c_p23017.html#a00ff32ac9e824a3bf3b4c3063e890d24", null ]
+    [ "values", "classdevices_1_1mcp230xx_1_1_m_c_p23017.html#a20db401345a3412e092a06a4fa94485b", null ],
+    [ "interrupt_flags", "classdevices_1_1mcp230xx_1_1_m_c_p23017.html#ad8c90a437917f1f1f753e3f96bb6d780", null ],
+    [ "captured_values", "classdevices_1_1mcp230xx_1_1_m_c_p23017.html#a6ddb8ec68963bd344943b0740d338f7a", null ]
 ];

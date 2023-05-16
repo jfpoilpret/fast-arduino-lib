@@ -6,19 +6,16 @@ var hierarchy =
     [ "future::AbstractFuture", "classfuture_1_1_abstract_future.html", [
       [ "future::Future< OUT_, IN_ >", "classfuture_1_1_future.html", null ]
     ] ],
-    [ "i2c::AbstractI2CAsyncManager< MODE_, POLICY_, HAS_STATUS_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_async_manager.html", null ],
-    [ "i2c::AbstractI2CAsyncManager< MODE_, I2CErrorPolicy::CLEAR_ALL_COMMANDS, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_async_manager.html", [
-      [ "i2c::I2CAsyncManager< MODE_, POLICY_ >", "classi2c_1_1_i2_c_async_manager.html", null ]
-    ] ],
-    [ "i2c::AbstractI2CAsyncManager< MODE_, I2CErrorPolicy::CLEAR_ALL_COMMANDS, false, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_async_manager.html", [
-      [ "i2c::I2CAsyncDebugManager< MODE_, POLICY_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_async_debug_manager.html", null ]
-    ] ],
-    [ "i2c::AbstractI2CAsyncManager< MODE_, I2CErrorPolicy::CLEAR_ALL_COMMANDS, true, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_async_manager.html", [
+    [ "i2c::AbstractI2CAsyncManager< MODE_, POLICY_, HAS_STATUS_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_async_manager.html", [
+      [ "i2c::I2CAsyncDebugManager< MODE_, POLICY_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_async_debug_manager.html", null ],
+      [ "i2c::I2CAsyncManager< MODE_, POLICY_ >", "classi2c_1_1_i2_c_async_manager.html", null ],
+      [ "i2c::I2CAsyncStatusDebugManager< MODE_, POLICY_, STATUS_HOOK_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_async_status_debug_manager.html", null ],
       [ "i2c::I2CAsyncStatusManager< MODE_, POLICY_, STATUS_HOOK_ >", "classi2c_1_1_i2_c_async_status_manager.html", null ]
     ] ],
-    [ "i2c::AbstractI2CAsyncManager< MODE_, I2CErrorPolicy::CLEAR_ALL_COMMANDS, true, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_async_manager.html", [
-      [ "i2c::I2CAsyncStatusDebugManager< MODE_, POLICY_, STATUS_HOOK_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_async_status_debug_manager.html", null ]
-    ] ],
+    [ "i2c::AbstractI2CAsyncManager< MODE_, I2CErrorPolicy::CLEAR_ALL_COMMANDS, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_async_manager.html", null ],
+    [ "i2c::AbstractI2CAsyncManager< MODE_, I2CErrorPolicy::CLEAR_ALL_COMMANDS, false, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_async_manager.html", null ],
+    [ "i2c::AbstractI2CAsyncManager< MODE_, I2CErrorPolicy::CLEAR_ALL_COMMANDS, true, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_async_manager.html", null ],
+    [ "i2c::AbstractI2CAsyncManager< MODE_, I2CErrorPolicy::CLEAR_ALL_COMMANDS, true, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_async_manager.html", null ],
     [ "AbstractI2CFuturesGroup", null, [
       [ "i2c::I2CFuturesGroup< MANAGER >", "classi2c_1_1_i2_c_futures_group.html", [
         [ "devices::vl53l0x::VL53L0X< MANAGER >::GetGPIOSettingsFuture", "classdevices_1_1vl53l0x_1_1_v_l53_l0_x_1_1_get_g_p_i_o_settings_future.html", null ],
@@ -27,36 +24,34 @@ var hierarchy =
       [ "i2c::I2CSameFutureGroup< MANAGER >", "classi2c_1_1_i2_c_same_future_group.html", null ]
     ] ],
     [ "i2c::AbstractI2CSyncManager< ARCH_HANDLER_, MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_sync_manager.html", [
-      [ "i2c::AbstractI2CSyncATmegaManager< MODE_, false, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html", [
-        [ "i2c::I2CSyncDebugManager< MODE_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_sync_debug_manager.html", null ]
-      ] ],
+      [ "i2c::AbstractI2CSyncATmegaManager< MODE_, false, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html", null ],
       [ "i2c::AbstractI2CSyncATmegaManager< MODE_, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html", [
         [ "i2c::I2CSyncManager< MODE_ >", "classi2c_1_1_i2_c_sync_manager.html", null ]
       ] ],
-      [ "i2c::AbstractI2CSyncATmegaManager< MODE_, true, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html", [
-        [ "i2c::I2CSyncStatusManager< MODE_, STATUS_HOOK_ >", "classi2c_1_1_i2_c_sync_status_manager.html", null ]
-      ] ],
-      [ "i2c::AbstractI2CSyncATmegaManager< MODE_, true, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html", [
-        [ "i2c::I2CSyncStatusDebugManager< MODE_, STATUS_HOOK_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_sync_status_debug_manager.html", null ]
-      ] ],
-      [ "i2c::AbstractI2CSyncATtinyManager< MODE_, false, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", [
-        [ "i2c::I2CSyncDebugManager< MODE_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_sync_debug_manager.html", null ]
-      ] ],
+      [ "i2c::AbstractI2CSyncATmegaManager< MODE_, true, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html", null ],
+      [ "i2c::AbstractI2CSyncATmegaManager< MODE_, true, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html", null ],
+      [ "i2c::AbstractI2CSyncATtinyManager< MODE_, false, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", null ],
       [ "i2c::AbstractI2CSyncATtinyManager< MODE_, false, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", [
         [ "i2c::I2CSyncManager< MODE_ >", "classi2c_1_1_i2_c_sync_manager.html", null ]
       ] ],
-      [ "i2c::AbstractI2CSyncATtinyManager< MODE_, true, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", [
+      [ "i2c::AbstractI2CSyncATtinyManager< MODE_, true, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", null ],
+      [ "i2c::AbstractI2CSyncATtinyManager< MODE_, true, I2C_STATUS_HOOK, false, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", null ]
+    ] ],
+    [ "i2c::AbstractI2CSyncManager< ATmegaI2CSyncHandler< MODE_, HAS_STATUS_, I2C_STATUS_HOOK >, MODE_, I2C_STATUS_HOOK, HAS_DEBUG_, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_manager.html", null ],
+    [ "i2c::AbstractI2CSyncManager< ATmegaI2CSyncHandler< MODE_, HAS_STATUS_, STATUS_HOOK_ >, MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_sync_manager.html", [
+      [ "i2c::AbstractI2CSyncATmegaManager< MODE_, HAS_STATUS_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html", [
+        [ "i2c::I2CSyncDebugManager< MODE_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_sync_debug_manager.html", null ],
+        [ "i2c::I2CSyncStatusDebugManager< MODE_, STATUS_HOOK_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_sync_status_debug_manager.html", null ],
         [ "i2c::I2CSyncStatusManager< MODE_, STATUS_HOOK_ >", "classi2c_1_1_i2_c_sync_status_manager.html", null ]
-      ] ],
-      [ "i2c::AbstractI2CSyncATtinyManager< MODE_, true, I2C_STATUS_HOOK, true, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", [
-        [ "i2c::I2CSyncStatusDebugManager< MODE_, STATUS_HOOK_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_sync_status_debug_manager.html", null ]
       ] ]
     ] ],
-    [ "i2c::AbstractI2CSyncManager< ATmegaI2CSyncHandler< MODE_, HAS_STATUS_, STATUS_HOOK_ >, MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_sync_manager.html", [
-      [ "i2c::AbstractI2CSyncATmegaManager< MODE_, HAS_STATUS_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html", null ]
-    ] ],
+    [ "i2c::AbstractI2CSyncManager< ATtinyI2CSyncHandler< MODE_, HAS_STATUS_, I2C_STATUS_HOOK >, MODE_, I2C_STATUS_HOOK, HAS_DEBUG_, I2C_DEBUG_HOOK >", "classi2c_1_1_abstract_i2_c_sync_manager.html", null ],
     [ "i2c::AbstractI2CSyncManager< ATtinyI2CSyncHandler< MODE_, HAS_STATUS_, STATUS_HOOK_ >, MODE_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_sync_manager.html", [
-      [ "i2c::AbstractI2CSyncATtinyManager< MODE_, HAS_STATUS_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", null ]
+      [ "i2c::AbstractI2CSyncATtinyManager< MODE_, HAS_STATUS_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ >", "classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html", [
+        [ "i2c::I2CSyncDebugManager< MODE_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_sync_debug_manager.html", null ],
+        [ "i2c::I2CSyncStatusDebugManager< MODE_, STATUS_HOOK_, DEBUG_HOOK_ >", "classi2c_1_1_i2_c_sync_status_debug_manager.html", null ],
+        [ "i2c::I2CSyncStatusManager< MODE_, STATUS_HOOK_ >", "classi2c_1_1_i2_c_sync_status_manager.html", null ]
+      ] ]
     ] ],
     [ "devices::sonar::AbstractSonar< NTIMER_ >", "classdevices_1_1sonar_1_1_abstract_sonar.html", [
       [ "devices::sonar::HCSR04< NTIMER_, TRIGGER_, ECHO_, SONAR_TYPE_ >", "classdevices_1_1sonar_1_1_h_c_s_r04.html", null ]
@@ -65,21 +60,24 @@ var hierarchy =
       [ "spi::SPIDevice< CS, spi::ChipSelect::ACTIVE_LOW, spi::ClockRate::CLOCK_DIV_2 >", "classspi_1_1_s_p_i_device.html", [
         [ "devices::WinBond< CS >", "classdevices_1_1_win_bond.html", null ]
       ] ],
+      [ "spi::SPIDevice< SCE, spi::ChipSelect::ACTIVE_LOW, spi::compute_clockrate(4 '000 '000UL)>", "classspi_1_1_s_p_i_device.html", [
+        [ "devices::display::LCD5110< SCE, DC, RST >", "classdevices_1_1display_1_1_l_c_d5110.html", null ]
+      ] ],
+      [ "spi::SPIDevice< CS, spi::ChipSelect::ACTIVE_LOW, spi::compute_clockrate(3 '600 '000UL), spi::Mode::MODE_0, spi::DataOrder::MSB_FIRST >", "classspi_1_1_s_p_i_device.html", [
+        [ "devices::mcp3x0x::MCP3x0x< CS, CHANNEL_, MASK, RSHIFT, TYPE_ >", "classdevices_1_1mcp3x0x_1_1_m_c_p3x0x.html", null ]
+      ] ],
       [ "spi::SPIDevice< CSN >", "classspi_1_1_s_p_i_device.html", [
         [ "devices::rf::NRF24L01< CSN, CE >", "classdevices_1_1rf_1_1_n_r_f24_l01.html", [
           [ "devices::rf::IRQ_NRF24L01< CSN, CE, IRQ >", "classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01.html", null ]
         ] ]
       ] ],
-      [ "spi::SPIDevice< CS, spi::ChipSelect::ACTIVE_LOW, spi::compute_clockrate(3 '600 '000UL), spi::Mode::MODE_0, spi::DataOrder::MSB_FIRST >", "classspi_1_1_s_p_i_device.html", [
-        [ "devices::mcp3x0x::MCP3x0x< CS, CHANNEL_, MASK, RSHIFT, TYPE_ >", "classdevices_1_1mcp3x0x_1_1_m_c_p3x0x.html", null ]
-      ] ],
       [ "spi::SPIDevice< CS, CS_MODE, RATE, MODE, ORDER >", "classspi_1_1_s_p_i_device.html", null ]
     ] ],
-    [ "devices::audio::AbstractTonePlayer< NTIMER, OUTPUT, TONEPLAY >", "classdevices_1_1audio_1_1_abstract_tone_player.html", null ],
-    [ "devices::audio::AbstractTonePlayer< NTIMER, OUTPUT, QTonePlay< NTIMER, OUTPUT > >", "classdevices_1_1audio_1_1_abstract_tone_player.html", [
+    [ "devices::audio::AbstractTonePlayer< NTIMER, OUTPUT, TONEPLAY >", "classdevices_1_1audio_1_1_abstract_tone_player.html", [
       [ "devices::audio::AsyncTonePlayer< NTIMER, OUTPUT, TONEPLAY >", "classdevices_1_1audio_1_1_async_tone_player.html", null ],
       [ "devices::audio::TonePlayer< NTIMER, OUTPUT, TONEPLAY >", "classdevices_1_1audio_1_1_tone_player.html", null ]
     ] ],
+    [ "devices::audio::AbstractTonePlayer< NTIMER, OUTPUT, QTonePlay< NTIMER, OUTPUT > >", "classdevices_1_1audio_1_1_abstract_tone_player.html", null ],
     [ "AbstractUARX", null, [
       [ "serial::hard::UART< USART_ >", "classserial_1_1hard_1_1_u_a_r_t.html", null ],
       [ "serial::hard::UARX< USART_ >", "classserial_1_1hard_1_1_u_a_r_x.html", null ],
@@ -98,10 +96,10 @@ var hierarchy =
     [ "devices::rf::NRF24L01< CSN, CE >::addr_t", "structdevices_1_1rf_1_1_n_r_f24_l01_1_1addr__t.html", null ],
     [ "devices::magneto::AllSensors", "structdevices_1_1magneto_1_1_all_sensors.html", null ],
     [ "analog::AnalogComparator", "classanalog_1_1_analog_comparator.html", null ],
-    [ "analog::AnalogInput< APIN_, SAMPLE_TYPE_, AREF_, MAXFREQ_ >", "classanalog_1_1_analog_input.html", null ],
-    [ "analog::AnalogInput< board::AnalogPin::BANDGAP, uint16_t, board::AnalogReference::AVCC, board::AnalogClock::MAX_FREQ_50KHz >", "classanalog_1_1_analog_input.html", [
+    [ "analog::AnalogInput< APIN_, SAMPLE_TYPE_, AREF_, MAXFREQ_ >", "classanalog_1_1_analog_input.html", [
       [ "analog::PowerVoltage< BANDGAP_ >", "classanalog_1_1_power_voltage.html", null ]
     ] ],
+    [ "analog::AnalogInput< board::AnalogPin::BANDGAP, uint16_t, board::AnalogReference::AVCC, board::AnalogClock::MAX_FREQ_50KHz >", "classanalog_1_1_analog_input.html", null ],
     [ "containers::array< T_, N_ >", "classcontainers_1_1array.html", null ],
     [ "time::auto_delay", "classtime_1_1auto__delay.html", null ],
     [ "time::auto_millis", "classtime_1_1auto__millis.html", null ],
@@ -114,6 +112,15 @@ var hierarchy =
     [ "types_traits::derives_from< T, B >", "structtypes__traits_1_1derives__from.html", null ],
     [ "devices::WinBond< CS >::Device", "structdevices_1_1_win_bond_1_1_device.html", null ],
     [ "devices::vl53l0x::DeviceStatus", "classdevices_1_1vl53l0x_1_1_device_status.html", null ],
+    [ "DISPLAY_DEVICE", null, [
+      [ "devices::display::Display< DISPLAY_DEVICE >", "classdevices_1_1display_1_1_display.html", null ]
+    ] ],
+    [ "devices::display::DisplayDeviceTrait< DEVICE >", "structdevices_1_1display_1_1_display_device_trait.html", null ],
+    [ "devices::display::DisplayDeviceTrait_impl< COLOR_, WIDTH_, HEIGHT_, HAS_RASTER_, VERTICAL_FONT_ >", "structdevices_1_1display_1_1_display_device_trait__impl.html", null ],
+    [ "devices::display::DrawContext< COLOR, VERTICAL_FONT >", "classdevices_1_1display_1_1_draw_context.html", null ],
+    [ "devices::display::DrawContext< typename DISPLAY_TRAITS::COLOR, DISPLAY_TRAITS::VERTICAL_FONT >", "classdevices_1_1display_1_1_draw_context.html", null ],
+    [ "devices::display::DrawMode< COLOR >", "classdevices_1_1display_1_1_draw_mode.html", null ],
+    [ "devices::display::DrawMode< typename DISPLAY_TRAITS::COLOR >", "classdevices_1_1display_1_1_draw_mode.html", null ],
     [ "eeprom::EEPROM", "classeeprom_1_1_e_e_p_r_o_m.html", [
       [ "eeprom::QueuedWriter", "classeeprom_1_1_queued_writer.html", null ]
     ] ],
@@ -129,6 +136,12 @@ var hierarchy =
     [ "devices::rf::NRF24L01< CSN, CE >::fifo_status_t", "uniondevices_1_1rf_1_1_n_r_f24_l01_1_1fifo__status__t.html", null ],
     [ "devices::magneto::FIFOEnable", "classdevices_1_1magneto_1_1_f_i_f_o_enable.html", null ],
     [ "devices::vl53l0x::FixPoint9_7", "classdevices_1_1vl53l0x_1_1_fix_point9__7.html", null ],
+    [ "flash::FlashReader< T >", "classflash_1_1_flash_reader.html", null ],
+    [ "devices::display::Font< VERTICAL_ >", "classdevices_1_1display_1_1_font.html", null ],
+    [ "devices::display::Font< true >", "classdevices_1_1display_1_1_font.html", [
+      [ "devices::display::DefaultVerticalFont7x5", "classdevices_1_1display_1_1_default_vertical_font7x5.html", null ]
+    ] ],
+    [ "devices::display::Font< VERTICAL_FONT >", "classdevices_1_1display_1_1_font.html", null ],
     [ "functor::Functor< FUNCTOR >", "structfunctor_1_1_functor.html", null ],
     [ "FUTURE", null, [
       [ "devices::magneto::MPU6050< MANAGER >::BeginFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_begin_future.html", null ],
@@ -182,21 +195,22 @@ var hierarchy =
       [ "streams::ostream", "classstreams_1_1ostream.html", null ]
     ] ],
     [ "LinkedListImpl", null, [
-      [ "containers::LinkedList< Job >", "classcontainers_1_1_linked_list.html", [
-        [ "events::Scheduler< CLOCK_, EVENT_ >", "classevents_1_1_scheduler.html", null ]
-      ] ],
       [ "containers::LinkedList< EventHandler< EVENT > >", "classcontainers_1_1_linked_list.html", [
         [ "events::Dispatcher< EVENT >", "classevents_1_1_dispatcher.html", null ]
+      ] ],
+      [ "containers::LinkedList< Job >", "classcontainers_1_1_linked_list.html", [
+        [ "events::Scheduler< CLOCK_, EVENT_ >", "classevents_1_1_scheduler.html", null ]
       ] ],
       [ "containers::LinkedList< T_ >", "classcontainers_1_1_linked_list.html", null ]
     ] ],
     [ "LinkImpl", null, [
-      [ "containers::Link< Job >", "classcontainers_1_1_link.html", [
-        [ "events::Job", "classevents_1_1_job.html", null ]
-      ] ],
       [ "containers::Link< EventHandler< EVENT > >", "classcontainers_1_1_link.html", [
         [ "events::EventHandler< EVENT >", "classevents_1_1_event_handler.html", null ]
       ] ],
+      [ "containers::Link< Job >", "classcontainers_1_1_link.html", [
+        [ "events::Job", "classevents_1_1_job.html", null ]
+      ] ],
+      [ "containers::Link< EventHandler< EVENT_ > >", "classcontainers_1_1_link.html", null ],
       [ "containers::Link< T_ >", "classcontainers_1_1_link.html", [
         [ "events::EventHandler< EVENT_ >", "classevents_1_1_event_handler.html", [
           [ "events::Scheduler< CLOCK_, EVENT_ >", "classevents_1_1_scheduler.html", null ]
@@ -232,6 +246,7 @@ var hierarchy =
     [ "devices::vl53l0x::SequenceStepsTimeout", "classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html", null ],
     [ "devices::servo::Servo< TIMER_, PWMPIN_ >", "classdevices_1_1servo_1_1_servo.html", null ],
     [ "devices::SIPO< CLOCK_, LATCH_, DATA_ >", "classdevices_1_1_s_i_p_o.html", null ],
+    [ "types_traits::SmallestInt< VAL >", "structtypes__traits_1_1_smallest_int.html", null ],
     [ "devices::sonar::SonarEvent< NTIMER_ >", "structdevices_1_1sonar_1_1_sonar_event.html", null ],
     [ "devices::vl53l0x::SPADInfo", "classdevices_1_1vl53l0x_1_1_s_p_a_d_info.html", null ],
     [ "devices::vl53l0x::SPADReference", "classdevices_1_1vl53l0x_1_1_s_p_a_d_reference.html", null ],
@@ -241,25 +256,24 @@ var hierarchy =
     [ "devices::WinBond< CS >::Status", "structdevices_1_1_win_bond_1_1_status.html", null ],
     [ "devices::rf::NRF24L01< CSN, CE >::status_t", "uniondevices_1_1rf_1_1_n_r_f24_l01_1_1status__t.html", null ],
     [ "MANAGER::template FUTURE", null, [
-      [ "i2c::ReadRegisterFuture< MANAGER, T, functor::Identity< T > >", "classi2c_1_1_read_register_future.html", [
-        [ "i2c::TReadRegisterFuture< MANAGER, REGISTER, T, FUNCTOR >", "classi2c_1_1_t_read_register_future.html", null ]
-      ] ],
-      [ "i2c::WriteRegisterFuture< MANAGER, T, functor::Identity< T > >", "classi2c_1_1_write_register_future.html", [
-        [ "i2c::TWriteRegisterFuture< MANAGER, REGISTER, T, FUNCTOR >", "classi2c_1_1_t_write_register_future.html", [
-          [ "devices::magneto::MPU6050< MANAGER >::EndFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_end_future.html", null ],
-          [ "devices::magneto::MPU6050< MANAGER >::ResetFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_reset_future.html", null ],
-          [ "devices::mcp230xx::MCP23017< MANAGER >::BeginFuture", "classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_begin_future.html", null ],
-          [ "devices::rtc::DS1307< MANAGER >::DisableOutputFuture", "classdevices_1_1rtc_1_1_d_s1307_1_1_disable_output_future.html", null ],
-          [ "devices::rtc::DS1307< MANAGER >::EnableOutputFuture", "classdevices_1_1rtc_1_1_d_s1307_1_1_enable_output_future.html", null ],
-          [ "devices::rtc::DS1307< MANAGER >::HaltClockFuture", "classdevices_1_1rtc_1_1_d_s1307_1_1_halt_clock_future.html", null ]
-        ] ]
-      ] ],
+      [ "i2c::ReadRegisterFuture< MANAGER, T, functor::Identity< T > >", "classi2c_1_1_read_register_future.html", null ],
+      [ "i2c::ReadRegisterFuture< Register::SYSTEM_INTERRUPT_CONFIG_GPIO, T, functor::Identity< T > >", "classi2c_1_1_read_register_future.html", null ],
+      [ "i2c::ReadRegisterFuture< Register::GPIO_HV_MUX_ACTIVE_HIGH, T, functor::Identity< T > >", "classi2c_1_1_read_register_future.html", null ],
+      [ "i2c::ReadRegisterFuture< Register::SYSTEM_THRESH_LOW, T, functor::Identity< T > >", "classi2c_1_1_read_register_future.html", null ],
+      [ "i2c::ReadRegisterFuture< Register::SYSTEM_THRESH_HIGH, T, functor::Identity< T > >", "classi2c_1_1_read_register_future.html", null ],
+      [ "i2c::WriteRegisterFuture< MANAGER, T, functor::Identity< T > >", "classi2c_1_1_write_register_future.html", null ],
+      [ "i2c::WriteRegisterFuture< Register::SYSTEM_INTERRUPT_CONFIG_GPIO, T, functor::Identity< T > >", "classi2c_1_1_write_register_future.html", null ],
+      [ "i2c::WriteRegisterFuture< Register::GPIO_HV_MUX_ACTIVE_HIGH, T, functor::Identity< T > >", "classi2c_1_1_write_register_future.html", null ],
+      [ "i2c::WriteRegisterFuture< Register::SYSTEM_THRESH_LOW, T, functor::Identity< T > >", "classi2c_1_1_write_register_future.html", null ],
+      [ "i2c::WriteRegisterFuture< Register::SYSTEM_THRESH_HIGH, T, functor::Identity< T > >", "classi2c_1_1_write_register_future.html", null ],
+      [ "i2c::WriteRegisterFuture< Register::SYSTEM_INTERRUPT_CLEAR, T, functor::Identity< T > >", "classi2c_1_1_write_register_future.html", null ],
       [ "i2c::WriteRegisterFuture< MANAGER, uint8_t >", "classi2c_1_1_write_register_future.html", null ],
       [ "i2c::ReadRegisterFuture< MANAGER, T, FUNCTOR >", "classi2c_1_1_read_register_future.html", [
+        [ "i2c::TReadRegisterFuture< Register::SYSTEM_INTERRUPT_CONFIG_GPIO, vl53l0x::GPIOFunction >", "classi2c_1_1_t_read_register_future.html", null ],
         [ "i2c::TReadRegisterFuture< Register::GPIO_HV_MUX_ACTIVE_HIGH >", "classi2c_1_1_t_read_register_future.html", null ],
         [ "i2c::TReadRegisterFuture< Register::SYSTEM_THRESH_LOW, uint16_t >", "classi2c_1_1_t_read_register_future.html", null ],
-        [ "i2c::TReadRegisterFuture< Register::SYSTEM_INTERRUPT_CONFIG_GPIO, vl53l0x::GPIOFunction >", "classi2c_1_1_t_read_register_future.html", null ],
-        [ "i2c::TReadRegisterFuture< Register::SYSTEM_THRESH_HIGH, uint16_t >", "classi2c_1_1_t_read_register_future.html", null ]
+        [ "i2c::TReadRegisterFuture< Register::SYSTEM_THRESH_HIGH, uint16_t >", "classi2c_1_1_t_read_register_future.html", null ],
+        [ "i2c::TReadRegisterFuture< MANAGER, REGISTER, T, FUNCTOR >", "classi2c_1_1_t_read_register_future.html", null ]
       ] ],
       [ "i2c::TWriteMultiRegisterFuture< MANAGER, T, REGISTERS >", "classi2c_1_1_t_write_multi_register_future.html", [
         [ "devices::magneto::HMC5883L< MANAGER >::BeginFuture", "classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_begin_future.html", null ],
@@ -269,11 +283,19 @@ var hierarchy =
         [ "devices::mcp230xx::MCP23017< MANAGER >::ConfigureInterruptsFuture< P_ >", "classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_configure_interrupts_future.html", null ]
       ] ],
       [ "i2c::WriteRegisterFuture< MANAGER, T, FUNCTOR >", "classi2c_1_1_write_register_future.html", [
-        [ "i2c::TWriteRegisterFuture< Register::GPIO_HV_MUX_ACTIVE_HIGH >", "classi2c_1_1_t_write_register_future.html", null ],
-        [ "i2c::TWriteRegisterFuture< Register::SYSTEM_INTERRUPT_CLEAR >", "classi2c_1_1_t_write_register_future.html", null ],
-        [ "i2c::TWriteRegisterFuture< Register::SYSTEM_THRESH_LOW, uint16_t >", "classi2c_1_1_t_write_register_future.html", null ],
         [ "i2c::TWriteRegisterFuture< Register::SYSTEM_INTERRUPT_CONFIG_GPIO, vl53l0x::GPIOFunction >", "classi2c_1_1_t_write_register_future.html", null ],
-        [ "i2c::TWriteRegisterFuture< Register::SYSTEM_THRESH_HIGH, uint16_t >", "classi2c_1_1_t_write_register_future.html", null ]
+        [ "i2c::TWriteRegisterFuture< Register::GPIO_HV_MUX_ACTIVE_HIGH >", "classi2c_1_1_t_write_register_future.html", null ],
+        [ "i2c::TWriteRegisterFuture< Register::SYSTEM_THRESH_LOW, uint16_t >", "classi2c_1_1_t_write_register_future.html", null ],
+        [ "i2c::TWriteRegisterFuture< Register::SYSTEM_THRESH_HIGH, uint16_t >", "classi2c_1_1_t_write_register_future.html", null ],
+        [ "i2c::TWriteRegisterFuture< Register::SYSTEM_INTERRUPT_CLEAR >", "classi2c_1_1_t_write_register_future.html", null ],
+        [ "i2c::TWriteRegisterFuture< MANAGER, REGISTER, T, FUNCTOR >", "classi2c_1_1_t_write_register_future.html", [
+          [ "devices::magneto::MPU6050< MANAGER >::EndFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_end_future.html", null ],
+          [ "devices::magneto::MPU6050< MANAGER >::ResetFuture", "classdevices_1_1magneto_1_1_m_p_u6050_1_1_reset_future.html", null ],
+          [ "devices::mcp230xx::MCP23017< MANAGER >::BeginFuture", "classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_begin_future.html", null ],
+          [ "devices::rtc::DS1307< MANAGER >::DisableOutputFuture", "classdevices_1_1rtc_1_1_d_s1307_1_1_disable_output_future.html", null ],
+          [ "devices::rtc::DS1307< MANAGER >::EnableOutputFuture", "classdevices_1_1rtc_1_1_d_s1307_1_1_enable_output_future.html", null ],
+          [ "devices::rtc::DS1307< MANAGER >::HaltClockFuture", "classdevices_1_1rtc_1_1_d_s1307_1_1_halt_clock_future.html", null ]
+        ] ]
       ] ]
     ] ],
     [ "timer::Timer< NTIMER_ >", "classtimer_1_1_timer.html", [

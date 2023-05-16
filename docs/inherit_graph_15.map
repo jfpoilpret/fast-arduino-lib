@@ -1,3 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classdevices_1_1audio_1_1_beat.html" title="This embeds minimum duration (duration of a 32nd note), in milliseconds, for a given tempo (beats per..." alt="" coords="5,5,160,32"/>
+<area shape="rect" id="node1" href="$classdevices_1_1audio_1_1_abstract_tone_player.html" title="This low&#45;level API defines an abstract player of melodies (defined as a sequence of tones and duratio..." alt="" coords="5,41,231,96"/>
+<area shape="rect" id="node2" href="$classdevices_1_1audio_1_1_async_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations." alt="" coords="303,5,497,60"/>
+<area shape="rect" id="node3" href="$classdevices_1_1audio_1_1_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations." alt="" coords="279,85,521,125"/>
 </map>

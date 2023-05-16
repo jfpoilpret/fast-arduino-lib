@@ -1,5 +1,5 @@
 var classdevices_1_1vl53l0x_1_1_s_p_a_d_reference =
 [
-    [ "spad_refs", "classdevices_1_1vl53l0x_1_1_s_p_a_d_reference.html#abc34303925538e64effd760061ffea9a", null ],
-    [ "spad_refs", "classdevices_1_1vl53l0x_1_1_s_p_a_d_reference.html#a3289b954acf99d49f3870b1da0c65b01", null ]
+    [ "spad_refs", "classdevices_1_1vl53l0x_1_1_s_p_a_d_reference.html#a41c9979bd24ee3985cd5ed4d22bc8bcd", null ],
+    [ "spad_refs", "classdevices_1_1vl53l0x_1_1_s_p_a_d_reference.html#ae7b6fbb9262e01d990fc976cba7eaf44", null ]
 ];

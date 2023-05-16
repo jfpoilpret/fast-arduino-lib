@@ -1,6 +1,6 @@
 var uart__commons_8h =
 [
-    [ "UARTErrors", "classserial_1_1_u_a_r_t_errors.html", "classserial_1_1_u_a_r_t_errors" ],
+    [ "serial::UARTErrors", "classserial_1_1_u_a_r_t_errors.html", "classserial_1_1_u_a_r_t_errors" ],
     [ "Parity", "uart__commons_8h.html#a770c86bfde96ad529293b7b322422032", [
       [ "NONE", "uart__commons_8h.html#a770c86bfde96ad529293b7b322422032ab50339a10e1de285ac99d4c3990b8693", null ],
       [ "EVEN", "uart__commons_8h.html#a770c86bfde96ad529293b7b322422032a6634c67f28ba9a80efe941b9519aa106", null ],

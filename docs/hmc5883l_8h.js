@@ -1,8 +1,8 @@
 var hmc5883l_8h =
 [
-    [ "Status", "classdevices_1_1magneto_1_1_status.html", "classdevices_1_1magneto_1_1_status" ],
-    [ "HMC5883L", "classdevices_1_1magneto_1_1_h_m_c5883_l.html", "classdevices_1_1magneto_1_1_h_m_c5883_l" ],
-    [ "BeginFuture", "classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_begin_future.html", null ],
+    [ "devices::magneto::Status", "classdevices_1_1magneto_1_1_status.html", "classdevices_1_1magneto_1_1_status" ],
+    [ "devices::magneto::HMC5883L< MANAGER >", "classdevices_1_1magneto_1_1_h_m_c5883_l.html", "classdevices_1_1magneto_1_1_h_m_c5883_l" ],
+    [ "devices::magneto::HMC5883L< MANAGER >::BeginFuture", "classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_begin_future.html", null ],
     [ "SamplesAveraged", "hmc5883l_8h.html#a9e686e1825471f8625d03061992dc76e", [
       [ "ONE_SAMPLE", "hmc5883l_8h.html#a9e686e1825471f8625d03061992dc76ea68264f4e5c014b56cdeb80bb15c551b5", null ],
       [ "TWO_SAMPLES", "hmc5883l_8h.html#a9e686e1825471f8625d03061992dc76eae32b2be19150057a9a4e0edad6474311", null ],

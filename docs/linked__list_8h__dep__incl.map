@@ -1,10 +1,10 @@
 <map id="fastarduino/linked_list.h" name="fastarduino/linked_list.h">
-<area shape="rect" id="node1" title="Utility API to handle linked list containers." alt="" coords="423,5,546,47"/>
-<area shape="rect" id="node2" href="$events_8h.html" title="Support for events management." alt="" coords="290,102,429,129"/>
-<area shape="rect" id="node6" href="$scheduler_8h.html" title="Support for jobs scheduling." alt="" coords="425,191,582,218"/>
-<area shape="rect" id="node8" href="$linked__list_8cpp_source.html" title=" " alt="" coords="522,95,645,136"/>
-<area shape="rect" id="node3" href="$realtime__timer_8h.html" title="Real&#45;time Timer API." alt="" coords="83,184,219,225"/>
-<area shape="rect" id="node7" href="$watchdog_8h.html" title="Watchdog API." alt="" coords="244,191,400,218"/>
-<area shape="rect" id="node4" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04." alt="" coords="5,273,140,315"/>
-<area shape="rect" id="node5" href="$vl53l0x_8h.html" title="API to handle Time&#45;of&#45;Flight ranging sensor VL53L0X I2C chip." alt="" coords="164,273,299,315"/>
+<area shape="rect" id="node1" title="Utility API to handle linked list containers." alt="" coords="465,5,603,45"/>
+<area shape="rect" id="node2" href="$events_8h.html" title="Support for events management." alt="" coords="320,101,476,126"/>
+<area shape="rect" id="node6" href="$scheduler_8h.html" title="Support for jobs scheduling." alt="" coords="468,189,643,214"/>
+<area shape="rect" id="node8" href="$linked__list_8cpp_source.html" title=" " alt="" coords="571,93,710,133"/>
+<area shape="rect" id="node3" href="$realtime__timer_8h.html" title="Real&#45;time Timer API." alt="" coords="90,181,245,221"/>
+<area shape="rect" id="node7" href="$watchdog_8h.html" title="Watchdog API." alt="" coords="269,189,444,214"/>
+<area shape="rect" id="node4" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04." alt="" coords="5,269,156,309"/>
+<area shape="rect" id="node5" href="$vl53l0x_8h.html" title="API to handle Time&#45;of&#45;Flight ranging sensor VL53L0X I2C chip." alt="" coords="180,269,331,309"/>
 </map>

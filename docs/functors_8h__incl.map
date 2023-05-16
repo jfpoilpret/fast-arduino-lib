@@ -1,10 +1,10 @@
 <map id="fastarduino/functors.h" name="fastarduino/functors.h">
-<area shape="rect" id="node1" title="Useful functors that can be used as template arguments, particularly in I2C device utilities." alt="" coords="215,5,381,32"/>
-<area shape="rect" id="node2" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="197,80,279,107"/>
-<area shape="rect" id="node7" href="$types__traits_8h.html" title="Useful traits for common types." alt="" coords="323,80,433,107"/>
-<area shape="rect" id="node3" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="277,155,359,181"/>
-<area shape="rect" id="node4" href="$board_8h_source.html" title=" " alt="" coords="5,155,124,181"/>
-<area shape="rect" id="node6" title=" " alt="" coords="149,155,253,181"/>
-<area shape="rect" id="node5" title=" " alt="" coords="195,229,265,256"/>
-<area shape="rect" id="node8" title=" " alt="" coords="434,155,509,181"/>
+<area shape="rect" id="node1" title="Useful functors that can be used as template arguments, particularly in I2C device utilities." alt="" coords="215,5,381,31"/>
+<area shape="rect" id="node2" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="197,79,279,104"/>
+<area shape="rect" id="node7" href="$types__traits_8h.html" title="Useful traits for common types." alt="" coords="323,79,433,104"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="277,152,359,177"/>
+<area shape="rect" id="node4" href="$board_8h_source.html" title=" " alt="" coords="5,152,124,177"/>
+<area shape="rect" id="node6" title=" " alt="" coords="149,152,253,177"/>
+<area shape="rect" id="node5" title=" " alt="" coords="195,225,265,251"/>
+<area shape="rect" id="node8" title=" " alt="" coords="434,152,509,177"/>
 </map>

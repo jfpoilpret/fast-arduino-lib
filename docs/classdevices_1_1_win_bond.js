@@ -1,7 +1,7 @@
 var classdevices_1_1_win_bond =
 [
     [ "Device", "structdevices_1_1_win_bond_1_1_device.html", "structdevices_1_1_win_bond_1_1_device" ],
-    [ "Status", "structdevices_1_1_win_bond_1_1_status.html", "structdevices_1_1_win_bond_1_1_status" ],
+    [ "Status", "structdevices_1_1_win_bond_1_1_status.html", null ],
     [ "BlockProtect", "classdevices_1_1_win_bond.html#ad46d5ac3e447b751e0c17e07e143b342", [
       [ "BLOCK_NONE", "classdevices_1_1_win_bond.html#ad46d5ac3e447b751e0c17e07e143b342abfc77c786cb980717f8cf9f13ddf4cfa", null ],
       [ "BLOCK_UPPER_64KB", "classdevices_1_1_win_bond.html#ad46d5ac3e447b751e0c17e07e143b342a14973f4d57f3d69e686507ae093236c0", null ],

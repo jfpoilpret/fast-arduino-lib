@@ -1,7 +1,7 @@
 var spi_8h =
 [
-    [ "AbstractSPIDevice", "classspi_1_1_abstract_s_p_i_device.html", "classspi_1_1_abstract_s_p_i_device" ],
-    [ "SPIDevice", "classspi_1_1_s_p_i_device.html", "classspi_1_1_s_p_i_device" ],
+    [ "spi::AbstractSPIDevice", "classspi_1_1_abstract_s_p_i_device.html", "classspi_1_1_abstract_s_p_i_device" ],
+    [ "spi::SPIDevice< CS, CS_MODE, RATE, MODE, ORDER >", "classspi_1_1_s_p_i_device.html", "classspi_1_1_s_p_i_device" ],
     [ "ClockRate", "spi_8h.html#a030761907666e27c3a2236d68792a30b", [
       [ "CLOCK_DIV_4", "spi_8h.html#a030761907666e27c3a2236d68792a30ba1ec1561808cbb9c854ee0149f0e38d2b", null ],
       [ "CLOCK_DIV_16", "spi_8h.html#a030761907666e27c3a2236d68792a30ba7e5bd65e318a588a2ab88e4ae60d947e", null ],

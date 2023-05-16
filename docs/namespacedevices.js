@@ -1,6 +1,7 @@
 var namespacedevices =
 [
     [ "audio", "namespacedevices_1_1audio.html", "namespacedevices_1_1audio" ],
+    [ "display", "namespacedevices_1_1display.html", "namespacedevices_1_1display" ],
     [ "magneto", "namespacedevices_1_1magneto.html", "namespacedevices_1_1magneto" ],
     [ "mcp230xx", "namespacedevices_1_1mcp230xx.html", "namespacedevices_1_1mcp230xx" ],
     [ "mcp3x0x", "namespacedevices_1_1mcp3x0x.html", "namespacedevices_1_1mcp3x0x" ],

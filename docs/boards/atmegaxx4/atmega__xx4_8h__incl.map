@@ -1,6 +1,6 @@
 <map id="fastarduino/boards/atmega_xx4.h" name="fastarduino/boards/atmega_xx4.h">
-<area shape="rect" id="node1" title="ATmega644/1284 specific features and pins." alt="" coords="51,5,181,47"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,95,48,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="73,95,159,121"/>
-<area shape="rect" id="node4" title=" " alt="" coords="183,95,270,121"/>
+<area shape="rect" id="node1" title="ATmega644/1284 specific features and pins." alt="" coords="51,5,195,45"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,93,52,119"/>
+<area shape="rect" id="node3" title=" " alt="" coords="76,93,171,119"/>
+<area shape="rect" id="node4" title=" " alt="" coords="195,93,289,119"/>
 </map>

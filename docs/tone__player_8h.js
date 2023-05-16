@@ -1,11 +1,11 @@
 var tone__player_8h =
 [
-    [ "TonePlay", "classdevices_1_1audio_1_1_tone_play.html", "classdevices_1_1audio_1_1_tone_play" ],
-    [ "QTonePlay", "classdevices_1_1audio_1_1_q_tone_play.html", "classdevices_1_1audio_1_1_q_tone_play" ],
-    [ "Beat", "classdevices_1_1audio_1_1_beat.html", null ],
-    [ "AbstractTonePlayer", "classdevices_1_1audio_1_1_abstract_tone_player.html", "classdevices_1_1audio_1_1_abstract_tone_player" ],
-    [ "TonePlayer", "classdevices_1_1audio_1_1_tone_player.html", "classdevices_1_1audio_1_1_tone_player" ],
-    [ "AsyncTonePlayer", "classdevices_1_1audio_1_1_async_tone_player.html", "classdevices_1_1audio_1_1_async_tone_player" ],
+    [ "devices::audio::TonePlay", "classdevices_1_1audio_1_1_tone_play.html", "classdevices_1_1audio_1_1_tone_play" ],
+    [ "devices::audio::QTonePlay< NTIMER, OUTPUT >", "classdevices_1_1audio_1_1_q_tone_play.html", "classdevices_1_1audio_1_1_q_tone_play" ],
+    [ "devices::audio::Beat", "classdevices_1_1audio_1_1_beat.html", null ],
+    [ "devices::audio::AbstractTonePlayer< NTIMER, OUTPUT, TONEPLAY >", "classdevices_1_1audio_1_1_abstract_tone_player.html", "classdevices_1_1audio_1_1_abstract_tone_player" ],
+    [ "devices::audio::TonePlayer< NTIMER, OUTPUT, TONEPLAY >", "classdevices_1_1audio_1_1_tone_player.html", "classdevices_1_1audio_1_1_tone_player" ],
+    [ "devices::audio::AsyncTonePlayer< NTIMER, OUTPUT, TONEPLAY >", "classdevices_1_1audio_1_1_async_tone_player.html", "classdevices_1_1audio_1_1_async_tone_player" ],
     [ "Duration", "tone__player_8h.html#a9ec897420c4939aebbe29ccdbe3d1ead", [
       [ "WHOLE", "tone__player_8h.html#a9ec897420c4939aebbe29ccdbe3d1eadaad772c40e87c4f01eec1e39727e96a69", null ],
       [ "HALF", "tone__player_8h.html#a9ec897420c4939aebbe29ccdbe3d1eada87e955627b59c274ec4cbdd3a130f9bb", null ],

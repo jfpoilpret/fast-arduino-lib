@@ -1,10 +1,10 @@
 var soft__uart_8h =
 [
-    [ "UATX", "classserial_1_1soft_1_1_u_a_t_x.html", "classserial_1_1soft_1_1_u_a_t_x" ],
-    [ "UARX< board::ExternalInterruptPin, RX_ >", "classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_external_interrupt_pin_00_01_r_x___01_4.html", "classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_external_interrupt_pin_00_01_r_x___01_4" ],
-    [ "UART< board::ExternalInterruptPin, RX_, TX_ >", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_external_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_external_interrupt_pin_00_01_r_x___00_01_t_x___01_4" ],
-    [ "UARX< board::InterruptPin, RX_ >", "classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html", "classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4" ],
-    [ "UART< board::InterruptPin, RX_, TX_ >", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4" ],
+    [ "serial::soft::UATX< TX_ >", "classserial_1_1soft_1_1_u_a_t_x.html", "classserial_1_1soft_1_1_u_a_t_x" ],
+    [ "serial::soft::UARX< board::ExternalInterruptPin, RX_ >", "classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_external_interrupt_pin_00_01_r_x___01_4.html", "classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_external_interrupt_pin_00_01_r_x___01_4" ],
+    [ "serial::soft::UART< board::ExternalInterruptPin, RX_, TX_ >", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_external_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_external_interrupt_pin_00_01_r_x___00_01_t_x___01_4" ],
+    [ "serial::soft::UARX< board::InterruptPin, RX_ >", "classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html", "classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4" ],
+    [ "serial::soft::UART< board::InterruptPin, RX_, TX_ >", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html", "classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4" ],
     [ "REGISTER_UARX_PCI_ISR", "soft__uart_8h.html#ab265bfe0b99f589a37c678b6fe187ae9", null ],
     [ "REGISTER_UARX_INT_ISR", "soft__uart_8h.html#afadd51f6293440878945dba02035757e", null ],
     [ "REGISTER_UART_PCI_ISR", "soft__uart_8h.html#a410a4fbebe6a07a6564ea15a4a9fe82b", null ],

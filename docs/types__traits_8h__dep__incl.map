@@ -1,33 +1,35 @@
 <map id="fastarduino/types_traits.h" name="fastarduino/types_traits.h">
-<area shape="rect" id="node1" title="Useful traits for common types." alt="" coords="2245,5,2434,32"/>
-<area shape="rect" id="node2" href="$mcp3x0x_8h.html" title="API to handle SPI&#45;based MicroChip ADC chips family (MCP3001&#45;2&#45;4&#45;8, MCP3201&#45;2&#45;4&#45;8, MCP3301&#45;2&#45;4)." alt="" coords="967,80,1117,121"/>
-<area shape="rect" id="node14" href="$functors_8h.html" title="Useful functors that can be used as template arguments, particularly in I2C device utilities." alt="" coords="1927,177,2093,203"/>
-<area shape="rect" id="node22" href="$linked__list_8h.html" title="Utility API to handle linked list containers." alt="" coords="2270,80,2409,121"/>
-<area shape="rect" id="node29" href="$move_8h_source.html" title=" " alt="" coords="2433,87,2582,114"/>
-<area shape="rect" id="node30" href="$pulse__timer_8h.html" title="PulseTimer API." alt="" coords="2621,87,2810,114"/>
-<area shape="rect" id="node3" href="$mcp3001_8h.html" title="API to handle MicroChip ADC chip MCP3001." alt="" coords="1228,169,1379,211"/>
-<area shape="rect" id="node4" href="$mcp3002_8h.html" title="API to handle MicroChip ADC chip MCP3002." alt="" coords="1403,169,1553,211"/>
-<area shape="rect" id="node5" href="$mcp3004_8h.html" title="API to handle MicroChip ADC chip MCP3004." alt="" coords="1577,169,1728,211"/>
-<area shape="rect" id="node6" href="$mcp3008_8h.html" title="API to handle MicroChip ADC chip MCP3008." alt="" coords="1752,169,1903,211"/>
-<area shape="rect" id="node7" href="$mcp3201_8h.html" title="API to handle MicroChip ADC chip MCP3201." alt="" coords="5,169,156,211"/>
-<area shape="rect" id="node8" href="$mcp3202_8h.html" title="API to handle MicroChip ADC chip MCP3202." alt="" coords="180,169,331,211"/>
-<area shape="rect" id="node9" href="$mcp3204_8h.html" title="API to handle MicroChip ADC chip MCP3204." alt="" coords="355,169,505,211"/>
-<area shape="rect" id="node10" href="$mcp3208_8h.html" title="API to handle MicroChip ADC chip MCP3208." alt="" coords="529,169,680,211"/>
-<area shape="rect" id="node11" href="$mcp3301_8h.html" title="API to handle MicroChip ADC chip MCP3301." alt="" coords="704,169,855,211"/>
-<area shape="rect" id="node12" href="$mcp3302_8h.html" title="API to handle MicroChip ADC chip MCP3302." alt="" coords="879,169,1029,211"/>
-<area shape="rect" id="node13" href="$mcp3304_8h.html" title="API to handle MicroChip ADC chip MCP3304." alt="" coords="1053,169,1204,211"/>
-<area shape="rect" id="node15" href="$ds1307_8h.html" title="API to handle Real&#45;Time Clock DS1307 I2C chip." alt="" coords="1551,348,1701,389"/>
-<area shape="rect" id="node16" href="$hmc5883l_8h.html" title="API to handle HMC5883L 3&#45;axis digital compass I2C chip." alt="" coords="1725,348,1876,389"/>
-<area shape="rect" id="node17" href="$mcp23008_8h.html" title="API to handle the MCP23008 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="1900,348,2051,389"/>
-<area shape="rect" id="node18" href="$mcp23017_8h.html" title="API to handle the MCP23017 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="2075,348,2225,389"/>
-<area shape="rect" id="node19" href="$mpu6050_8h.html" title="API to handle MPU6050 3&#45;axis gyroscope/accelerometer I2C chip." alt="" coords="1376,348,1527,389"/>
-<area shape="rect" id="node20" href="$vl53l0x_8h.html" title="API to handle Time&#45;of&#45;Flight ranging sensor VL53L0X I2C chip." alt="" coords="2249,348,2400,389"/>
-<area shape="rect" id="node21" href="$i2c__device__utilities_8h.html" title="Various utilities to use for I2C Device support developers." alt="" coords="1803,259,1972,300"/>
-<area shape="rect" id="node23" href="$events_8h.html" title="Support for events management." alt="" coords="2253,177,2409,203"/>
-<area shape="rect" id="node26" href="$scheduler_8h.html" title="Support for jobs scheduling." alt="" coords="2528,266,2703,293"/>
-<area shape="rect" id="node28" href="$linked__list_8cpp_source.html" title=" " alt="" coords="2485,169,2623,211"/>
-<area shape="rect" id="node24" href="$realtime__timer_8h.html" title="Real&#45;time Timer API." alt="" coords="2349,259,2503,300"/>
-<area shape="rect" id="node27" href="$watchdog_8h.html" title="Watchdog API." alt="" coords="2149,266,2324,293"/>
-<area shape="rect" id="node25" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04." alt="" coords="2424,348,2575,389"/>
-<area shape="rect" id="node31" href="$servo_8h.html" title="API to handle servomotors." alt="" coords="2648,169,2799,211"/>
+<area shape="rect" id="node1" title="Useful traits for common types." alt="" coords="2231,5,2421,31"/>
+<area shape="rect" id="node2" href="$display_8h.html" title="Generic API to handle any display device (e.g." alt="" coords="443,79,593,119"/>
+<area shape="rect" id="node4" href="$mcp3x0x_8h.html" title="API to handle SPI&#45;based MicroChip ADC chips family (MCP3001&#45;2&#45;4&#45;8, MCP3201&#45;2&#45;4&#45;8, MCP3301&#45;2&#45;4)." alt="" coords="1141,79,1292,119"/>
+<area shape="rect" id="node16" href="$functors_8h.html" title="Useful functors that can be used as template arguments, particularly in I2C device utilities." alt="" coords="2102,174,2267,199"/>
+<area shape="rect" id="node24" href="$linked__list_8h.html" title="Utility API to handle linked list containers." alt="" coords="2321,79,2459,119"/>
+<area shape="rect" id="node31" href="$move_8h_source.html" title=" " alt="" coords="2483,86,2633,111"/>
+<area shape="rect" id="node32" href="$pulse__timer_8h.html" title="PulseTimer API." alt="" coords="2671,86,2861,111"/>
+<area shape="rect" id="node3" href="$lcd5110_8h.html" title="API to handle Nokia 5110 display through SPI interface (actually not really SPI as only MOSI,..." alt="" coords="5,167,156,207"/>
+<area shape="rect" id="node5" href="$mcp3001_8h.html" title="API to handle MicroChip ADC chip MCP3001." alt="" coords="879,167,1029,207"/>
+<area shape="rect" id="node6" href="$mcp3002_8h.html" title="API to handle MicroChip ADC chip MCP3002." alt="" coords="1053,167,1204,207"/>
+<area shape="rect" id="node7" href="$mcp3004_8h.html" title="API to handle MicroChip ADC chip MCP3004." alt="" coords="1228,167,1379,207"/>
+<area shape="rect" id="node8" href="$mcp3008_8h.html" title="API to handle MicroChip ADC chip MCP3008." alt="" coords="1403,167,1553,207"/>
+<area shape="rect" id="node9" href="$mcp3201_8h.html" title="API to handle MicroChip ADC chip MCP3201." alt="" coords="1577,167,1728,207"/>
+<area shape="rect" id="node10" href="$mcp3202_8h.html" title="API to handle MicroChip ADC chip MCP3202." alt="" coords="1752,167,1903,207"/>
+<area shape="rect" id="node11" href="$mcp3204_8h.html" title="API to handle MicroChip ADC chip MCP3204." alt="" coords="1927,167,2077,207"/>
+<area shape="rect" id="node12" href="$mcp3208_8h.html" title="API to handle MicroChip ADC chip MCP3208." alt="" coords="180,167,331,207"/>
+<area shape="rect" id="node13" href="$mcp3301_8h.html" title="API to handle MicroChip ADC chip MCP3301." alt="" coords="355,167,505,207"/>
+<area shape="rect" id="node14" href="$mcp3302_8h.html" title="API to handle MicroChip ADC chip MCP3302." alt="" coords="529,167,680,207"/>
+<area shape="rect" id="node15" href="$mcp3304_8h.html" title="API to handle MicroChip ADC chip MCP3304." alt="" coords="704,167,855,207"/>
+<area shape="rect" id="node17" href="$ds1307_8h.html" title="API to handle Real&#45;Time Clock DS1307 I2C chip." alt="" coords="1704,343,1855,383"/>
+<area shape="rect" id="node18" href="$hmc5883l_8h.html" title="API to handle HMC5883L 3&#45;axis digital compass I2C chip." alt="" coords="1879,343,2029,383"/>
+<area shape="rect" id="node19" href="$mcp23008_8h.html" title="API to handle the MCP23008 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="2053,343,2204,383"/>
+<area shape="rect" id="node20" href="$mcp23017_8h.html" title="API to handle the MCP23017 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="2228,343,2379,383"/>
+<area shape="rect" id="node21" href="$mpu6050_8h.html" title="API to handle MPU6050 3&#45;axis gyroscope/accelerometer I2C chip." alt="" coords="1529,343,1680,383"/>
+<area shape="rect" id="node22" href="$vl53l0x_8h.html" title="API to handle Time&#45;of&#45;Flight ranging sensor VL53L0X I2C chip." alt="" coords="2403,343,2553,383"/>
+<area shape="rect" id="node23" href="$i2c__device__utilities_8h.html" title="Various utilities to use for I2C Device support developers." alt="" coords="1956,255,2125,295"/>
+<area shape="rect" id="node25" href="$events_8h.html" title="Support for events management." alt="" coords="2312,174,2468,199"/>
+<area shape="rect" id="node28" href="$scheduler_8h.html" title="Support for jobs scheduling." alt="" coords="2681,262,2856,287"/>
+<area shape="rect" id="node30" href="$linked__list_8cpp_source.html" title=" " alt="" coords="2543,167,2682,207"/>
+<area shape="rect" id="node26" href="$realtime__timer_8h.html" title="Real&#45;time Timer API." alt="" coords="2502,255,2657,295"/>
+<area shape="rect" id="node29" href="$watchdog_8h.html" title="Watchdog API." alt="" coords="2303,262,2477,287"/>
+<area shape="rect" id="node27" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04." alt="" coords="2577,343,2728,383"/>
+<area shape="rect" id="node33" href="$servo_8h.html" title="API to handle servomotors." alt="" coords="2707,167,2857,207"/>
 </map>

@@ -1,9 +1,9 @@
 <map id="i2c::TWriteMultiRegisterFuture&lt; MANAGER, T, REGISTERS &gt;" name="i2c::TWriteMultiRegisterFuture&lt; MANAGER, T, REGISTERS &gt;">
-<area shape="rect" id="node1" title="Generic Future that can be used to write to several I2C device registers." alt="" coords="267,159,523,200"/>
-<area shape="rect" id="node3" href="$classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_begin_future.html" title="Create a future to be used by asynchronous method begin(BeginFuture&amp;)." alt="" coords="586,5,798,47"/>
-<area shape="rect" id="node4" href="$classdevices_1_1mcp230xx_1_1_m_c_p23008_1_1_configure_g_p_i_o_future.html" title="Create a future to be used by asynchronous method configure_gpio(ConfigureGPIOFuture&amp;)." alt="" coords="598,71,786,127"/>
-<area shape="rect" id="node5" href="$classdevices_1_1mcp230xx_1_1_m_c_p23008_1_1_configure_interrupts_future.html" title="Create a future to be used by asynchronous method configure_interrupts(ConfigureInterruptsFuture&amp;)." alt="" coords="593,151,791,207"/>
-<area shape="rect" id="node6" href="$classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_configure_g_p_i_o_future.html" title="Create a future to be used by asynchronous method configure_gpio(ConfigureGPIOFuture." alt="" coords="587,231,797,287"/>
-<area shape="rect" id="node7" href="$classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_configure_interrupts_future.html" title="Create a future to be used by asynchronous method configure_interrupts(ConfigureInterruptsFuture&lt;P_&gt;&amp;..." alt="" coords="571,311,813,367"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,151,219,207"/>
+<area shape="rect" id="node1" title="Generic Future that can be used to write to several I2C device registers." alt="" coords="267,156,523,196"/>
+<area shape="rect" id="node3" href="$classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_begin_future.html" title="Create a future to be used by asynchronous method begin(BeginFuture&amp;)." alt="" coords="586,5,798,45"/>
+<area shape="rect" id="node4" href="$classdevices_1_1mcp230xx_1_1_m_c_p23008_1_1_configure_g_p_i_o_future.html" title="Create a future to be used by asynchronous method configure_gpio(ConfigureGPIOFuture&amp;)." alt="" coords="598,70,786,125"/>
+<area shape="rect" id="node5" href="$classdevices_1_1mcp230xx_1_1_m_c_p23008_1_1_configure_interrupts_future.html" title="Create a future to be used by asynchronous method configure_interrupts(ConfigureInterruptsFuture&amp;)." alt="" coords="593,149,791,203"/>
+<area shape="rect" id="node6" href="$classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_configure_g_p_i_o_future.html" title="Create a future to be used by asynchronous method configure_gpio(ConfigureGPIOFuture." alt="" coords="587,227,797,282"/>
+<area shape="rect" id="node7" href="$classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_configure_interrupts_future.html" title="Create a future to be used by asynchronous method configure_interrupts(ConfigureInterruptsFuture&lt;P_&gt;&amp;..." alt="" coords="571,306,813,361"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,149,219,203"/>
 </map>

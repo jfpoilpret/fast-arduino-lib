@@ -1,25 +1,25 @@
 <map id="fastarduino/devices/vl53l0x_types.h" name="fastarduino/devices/vl53l0x_types.h">
-<area shape="rect" id="node1" title="API to handle Time&#45;of&#45;Flight ranging sensor VL53L0X I2C chip." alt="" coords="583,5,734,47"/>
-<area shape="rect" id="node2" href="$bits_8h.html" title="Useful bits manipulation utilities." alt="" coords="89,95,159,121"/>
-<area shape="rect" id="node4" href="$flash_8h.html" title="Flash memory utilities." alt="" coords="741,244,819,271"/>
-<area shape="rect" id="node8" href="$ios_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="626,95,691,121"/>
-<area shape="rect" id="node17" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="289,393,372,420"/>
-<area shape="rect" id="node23" href="$vl53l0x__registers_8h_source.html" title=" " alt="" coords="961,95,1108,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="67,543,138,569"/>
-<area shape="rect" id="node5" href="$io_8h_source.html" title=" " alt="" coords="633,393,727,420"/>
-<area shape="rect" id="node7" title=" " alt="" coords="731,319,858,345"/>
-<area shape="rect" id="node6" title=" " alt="" coords="645,468,715,495"/>
-<area shape="rect" id="node9" title=" " alt="" coords="818,169,886,196"/>
-<area shape="rect" id="node10" title=" " alt="" coords="477,169,552,196"/>
-<area shape="rect" id="node11" title=" " alt="" coords="577,169,647,196"/>
-<area shape="rect" id="node12" title=" " alt="" coords="671,169,742,196"/>
-<area shape="rect" id="node13" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="353,169,453,196"/>
-<area shape="rect" id="node14" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="499,244,597,271"/>
-<area shape="rect" id="node16" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="365,244,440,271"/>
-<area shape="rect" id="node15" title=" " alt="" coords="491,319,605,345"/>
-<area shape="rect" id="node21" href="$time_8h.html" title="Simple time utilities." alt="" coords="403,319,467,345"/>
-<area shape="rect" id="node18" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="187,468,269,495"/>
-<area shape="rect" id="node19" href="$board_8h_source.html" title=" " alt="" coords="43,468,162,495"/>
-<area shape="rect" id="node20" title=" " alt="" coords="293,468,397,495"/>
-<area shape="rect" id="node22" title=" " alt="" coords="472,393,608,420"/>
+<area shape="rect" id="node1" title="API to handle Time&#45;of&#45;Flight ranging sensor VL53L0X I2C chip." alt="" coords="583,5,734,45"/>
+<area shape="rect" id="node2" href="$bits_8h.html" title="Useful bits manipulation utilities." alt="" coords="89,93,159,119"/>
+<area shape="rect" id="node4" href="$flash_8h.html" title="Flash memory utilities." alt="" coords="741,240,819,265"/>
+<area shape="rect" id="node8" href="$ios_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="626,93,691,119"/>
+<area shape="rect" id="node17" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="289,387,372,412"/>
+<area shape="rect" id="node23" href="$vl53l0x__registers_8h_source.html" title=" " alt="" coords="961,93,1108,119"/>
+<area shape="rect" id="node3" title=" " alt="" coords="67,533,138,559"/>
+<area shape="rect" id="node5" href="$io_8h_source.html" title=" " alt="" coords="633,387,727,412"/>
+<area shape="rect" id="node7" title=" " alt="" coords="731,313,858,339"/>
+<area shape="rect" id="node6" title=" " alt="" coords="645,460,715,485"/>
+<area shape="rect" id="node9" title=" " alt="" coords="818,167,886,192"/>
+<area shape="rect" id="node10" title=" " alt="" coords="477,167,552,192"/>
+<area shape="rect" id="node11" title=" " alt="" coords="577,167,647,192"/>
+<area shape="rect" id="node12" title=" " alt="" coords="671,167,742,192"/>
+<area shape="rect" id="node13" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="353,167,453,192"/>
+<area shape="rect" id="node14" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="499,240,597,265"/>
+<area shape="rect" id="node16" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="365,240,440,265"/>
+<area shape="rect" id="node15" title=" " alt="" coords="491,313,605,339"/>
+<area shape="rect" id="node21" href="$time_8h.html" title="Simple time utilities." alt="" coords="403,313,467,339"/>
+<area shape="rect" id="node18" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="187,460,269,485"/>
+<area shape="rect" id="node19" href="$board_8h_source.html" title=" " alt="" coords="43,460,162,485"/>
+<area shape="rect" id="node20" title=" " alt="" coords="293,460,397,485"/>
+<area shape="rect" id="node22" title=" " alt="" coords="472,387,608,412"/>
 </map>

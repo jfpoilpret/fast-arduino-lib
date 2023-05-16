@@ -1,4 +1,4 @@
 <map id="streams::ostreambuf" name="streams::ostreambuf">
-<area shape="rect" id="node1" title="Output API based on a ring buffer." alt="" coords="5,95,164,121"/>
-<area shape="rect" id="node2" href="$classcontainers_1_1_queue.html" title=" " alt="" coords="9,5,160,47"/>
+<area shape="rect" id="node1" title="Output API based on a ring buffer." alt="" coords="5,93,164,119"/>
+<area shape="rect" id="node2" href="$classcontainers_1_1_queue.html" title=" " alt="" coords="9,5,160,45"/>
 </map>

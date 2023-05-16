@@ -1,4 +1,4 @@
 <map id="future::AbstractFuture" name="future::AbstractFuture">
-<area shape="rect" id="node1" title="Base class for all Futures." alt="" coords="5,5,169,32"/>
-<area shape="rect" id="node2" href="$classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future." alt="" coords="11,80,164,121"/>
+<area shape="rect" id="node1" title="Base class for all Futures." alt="" coords="5,5,169,31"/>
+<area shape="rect" id="node2" href="$classfuture_1_1_future.html" title="Represent a value to be obtained, in some asynchronous way, in the future." alt="" coords="11,79,164,119"/>
 </map>

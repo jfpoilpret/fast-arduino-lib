@@ -1,11 +1,11 @@
 var namespacestreams =
 [
-    [ "null_ostream", "classstreams_1_1null__ostream.html", null ],
     [ "ios_base", "classstreams_1_1ios__base.html", "classstreams_1_1ios__base" ],
-    [ "ostreambuf", "classstreams_1_1ostreambuf.html", "classstreams_1_1ostreambuf" ],
-    [ "istreambuf", "classstreams_1_1istreambuf.html", "classstreams_1_1istreambuf" ],
-    [ "ostream", "classstreams_1_1ostream.html", "classstreams_1_1ostream" ],
     [ "istream", "classstreams_1_1istream.html", "classstreams_1_1istream" ],
+    [ "istreambuf", "classstreams_1_1istreambuf.html", "classstreams_1_1istreambuf" ],
+    [ "null_ostream", "classstreams_1_1null__ostream.html", null ],
+    [ "ostream", "classstreams_1_1ostream.html", "classstreams_1_1ostream" ],
+    [ "ostreambuf", "classstreams_1_1ostreambuf.html", "classstreams_1_1ostreambuf" ],
     [ "ios", "namespacestreams.html#a9666e4bfa7b60ffba7c8ee7d9fe95492", null ],
     [ "setw", "namespacestreams.html#a7a0d6060f80c47ca76bce32ce26950d2", null ],
     [ "setprecision", "namespacestreams.html#a47b832c75cfff7d1d585f5c808f07d20", null ],

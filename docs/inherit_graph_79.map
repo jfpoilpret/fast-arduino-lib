@@ -1,31 +1,3 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" title=" " alt="" coords="5,383,219,410"/>
-<area shape="rect" id="node2" href="$classi2c_1_1_read_register_future.html" title=" " alt="" coords="306,106,483,162"/>
-<area shape="rect" id="node4" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="303,211,486,267"/>
-<area shape="rect" id="node12" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="305,343,484,384"/>
-<area shape="rect" id="node13" href="$classi2c_1_1_read_register_future.html" title="General Future that can be used to read an I2C device register." alt="" coords="291,408,498,449"/>
-<area shape="rect" id="node18" href="$classi2c_1_1_t_write_multi_register_future.html" title="Generic Future that can be used to write to several I2C device registers." alt="" coords="267,687,523,728"/>
-<area shape="rect" id="node24" href="$classi2c_1_1_write_register_future.html" title="General Future that can be used to write to an I2C device register." alt="" coords="291,1087,498,1128"/>
-<area shape="rect" id="node3" href="$classi2c_1_1_t_read_register_future.html" title="Generic Future that can be used to read an I2C device register." alt="" coords="615,93,811,149"/>
-<area shape="rect" id="node5" href="$classi2c_1_1_t_write_register_future.html" title="Generic Future that can be used to write to an I2C device register." alt="" coords="615,173,811,229"/>
-<area shape="rect" id="node6" href="$classdevices_1_1magneto_1_1_m_p_u6050_1_1_end_future.html" title="Create a future to be used by asynchronous method end(EndFuture&amp;)." alt="" coords="931,5,1139,47"/>
-<area shape="rect" id="node7" href="$classdevices_1_1magneto_1_1_m_p_u6050_1_1_reset_future.html" title="Create a future to be used by asynchronous method reset(ResetFuture&amp;)." alt="" coords="931,71,1139,112"/>
-<area shape="rect" id="node8" href="$classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_begin_future.html" title="Create a future to be used by asynchronous method begin(BeginFuture&amp;)." alt="" coords="941,137,1129,193"/>
-<area shape="rect" id="node9" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_disable_output_future.html" title="Create a future to be used by asynchronous method disable_output(DisableOutputFuture&amp;)." alt="" coords="904,217,1165,259"/>
-<area shape="rect" id="node10" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_enable_output_future.html" title="Create a future to be used by asynchronous method enable_output(EnableOutputFuture&amp;)." alt="" coords="907,283,1163,324"/>
-<area shape="rect" id="node11" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_halt_clock_future.html" title="Create a future to be used by asynchronous method halt_clock(HaltClockFuture&amp;)." alt="" coords="919,348,1150,389"/>
-<area shape="rect" id="node14" href="$classi2c_1_1_t_read_register_future.html" title=" " alt="" coords="616,253,811,309"/>
-<area shape="rect" id="node15" href="$classi2c_1_1_t_read_register_future.html" title=" " alt="" coords="608,333,819,389"/>
-<area shape="rect" id="node16" href="$classi2c_1_1_t_read_register_future.html" title=" " alt="" coords="571,413,856,469"/>
-<area shape="rect" id="node17" href="$classi2c_1_1_t_read_register_future.html" title=" " alt="" coords="608,493,819,549"/>
-<area shape="rect" id="node19" href="$classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_begin_future.html" title="Create a future to be used by asynchronous method begin(BeginFuture&amp;)." alt="" coords="607,573,819,615"/>
-<area shape="rect" id="node20" href="$classdevices_1_1mcp230xx_1_1_m_c_p23008_1_1_configure_g_p_i_o_future.html" title="Create a future to be used by asynchronous method configure_gpio(ConfigureGPIOFuture&amp;)." alt="" coords="619,639,807,695"/>
-<area shape="rect" id="node21" href="$classdevices_1_1mcp230xx_1_1_m_c_p23008_1_1_configure_interrupts_future.html" title="Create a future to be used by asynchronous method configure_interrupts(ConfigureInterruptsFuture&amp;)." alt="" coords="615,719,812,775"/>
-<area shape="rect" id="node22" href="$classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_configure_g_p_i_o_future.html" title="Create a future to be used by asynchronous method configure_gpio(ConfigureGPIOFuture." alt="" coords="608,799,819,855"/>
-<area shape="rect" id="node23" href="$classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_configure_interrupts_future.html" title="Create a future to be used by asynchronous method configure_interrupts(ConfigureInterruptsFuture&lt;P_&gt;&amp;..." alt="" coords="592,879,835,935"/>
-<area shape="rect" id="node25" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="616,959,811,1015"/>
-<area shape="rect" id="node26" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="597,1039,829,1095"/>
-<area shape="rect" id="node27" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="608,1119,819,1175"/>
-<area shape="rect" id="node28" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="571,1199,856,1255"/>
-<area shape="rect" id="node29" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="608,1279,819,1335"/>
+<area shape="rect" id="node1" href="$classi2c_1_1_abstract_i2_c_async_manager.html" title=" " alt="" coords="5,5,225,89"/>
 </map>

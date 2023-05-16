@@ -6,6 +6,5 @@ var structdevices_1_1sonar_1_1_sonar_event =
     [ "timeout", "structdevices_1_1sonar_1_1_sonar_event.html#a438cded47e35742f2da72fcbd1c2c3d6", null ],
     [ "started", "structdevices_1_1sonar_1_1_sonar_event.html#a45487c0872a470eb3a6e641963b384d2", null ],
     [ "ready", "structdevices_1_1sonar_1_1_sonar_event.html#aaa9fe430fd043ca3992f37ac66a24ec1", null ],
-    [ "time", "structdevices_1_1sonar_1_1_sonar_event.html#a686cdd819d7d4fb5f0f419b263196f65", null ],
-    [ "MultiHCSR04", "structdevices_1_1sonar_1_1_sonar_event.html#a63f29743ef7a523c2adfa6424b2efec7", null ]
+    [ "time", "structdevices_1_1sonar_1_1_sonar_event.html#a686cdd819d7d4fb5f0f419b263196f65", null ]
 ];

@@ -1,0 +1,4 @@
+<map id="analog::AnalogInput&lt; APIN_, SAMPLE_TYPE_, AREF_, MAXFREQ_ &gt;" name="analog::AnalogInput&lt; APIN_, SAMPLE_TYPE_, AREF_, MAXFREQ_ &gt;">
+<area shape="rect" id="node1" title="API that handles a given analog input pin of the target MCU." alt="" coords="5,5,180,60"/>
+<area shape="rect" id="node2" href="$classanalog_1_1_power_voltage.html" title="API that uses bandgap feature to calculate current voltage fed to the MCU." alt="" coords="11,108,175,148"/>
+</map>

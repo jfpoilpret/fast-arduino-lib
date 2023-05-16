@@ -7,6 +7,5 @@ var classdevices_1_1vl53l0x_1_1_sequence_steps_timeout =
     [ "final_range_mclks", "classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a4aa83c6bd3c44e38563db96a62a467df", null ],
     [ "msrc_dss_tcc_us", "classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a5cb56283ce7d3d1dc6ea532a36dcd583", null ],
     [ "pre_range_us", "classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a7c921771e50e001ab46e27004ec667ae", null ],
-    [ "final_range_us", "classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a44e56b5a53797d5c9c4bf4bf56b11f7d", null ],
-    [ "VL53L0X", "classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a21936973d57477eb01d90b9441c3a394", null ]
+    [ "final_range_us", "classdevices_1_1vl53l0x_1_1_sequence_steps_timeout.html#a44e56b5a53797d5c9c4bf4bf56b11f7d", null ]
 ];

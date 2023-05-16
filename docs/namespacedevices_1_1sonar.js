@@ -2,8 +2,8 @@ var namespacedevices_1_1sonar =
 [
     [ "AbstractSonar", "classdevices_1_1sonar_1_1_abstract_sonar.html", "classdevices_1_1sonar_1_1_abstract_sonar" ],
     [ "HCSR04", "classdevices_1_1sonar_1_1_h_c_s_r04.html", "classdevices_1_1sonar_1_1_h_c_s_r04" ],
-    [ "SonarEvent", "structdevices_1_1sonar_1_1_sonar_event.html", "structdevices_1_1sonar_1_1_sonar_event" ],
     [ "MultiHCSR04", "classdevices_1_1sonar_1_1_multi_h_c_s_r04.html", "classdevices_1_1sonar_1_1_multi_h_c_s_r04" ],
+    [ "SonarEvent", "structdevices_1_1sonar_1_1_sonar_event.html", "structdevices_1_1sonar_1_1_sonar_event" ],
     [ "BLOCKING_HCSR04", "namespacedevices_1_1sonar.html#a1609913f480a742890ace74e1882ac5e", null ],
     [ "ASYNC_INT_HCSR04", "namespacedevices_1_1sonar.html#a549182f59f1965da0341ffc4137f3a1e", null ],
     [ "ASYNC_PCINT_HCSR04", "namespacedevices_1_1sonar.html#a7bba9656cf69f00d94ab7b571be82457", null ],

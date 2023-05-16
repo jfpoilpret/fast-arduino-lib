@@ -1,12 +1,12 @@
 <map id="fastarduino/queue.h" name="fastarduino/queue.h">
-<area shape="rect" id="node1" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="277,5,429,32"/>
-<area shape="rect" id="node2" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="267,155,349,181"/>
-<area shape="rect" id="node7" href="$time_8h.html" title="Simple time utilities." alt="" coords="365,80,429,107"/>
-<area shape="rect" id="node3" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="5,229,88,256"/>
-<area shape="rect" id="node4" href="$board_8h_source.html" title=" " alt="" coords="113,229,231,256"/>
-<area shape="rect" id="node6" title=" " alt="" coords="256,229,360,256"/>
-<area shape="rect" id="node5" title=" " alt="" coords="249,304,319,331"/>
-<area shape="rect" id="node8" href="$io_8h_source.html" title=" " alt="" coords="435,155,530,181"/>
-<area shape="rect" id="node10" title=" " alt="" coords="555,155,691,181"/>
-<area shape="rect" id="node9" title=" " alt="" coords="447,229,518,256"/>
+<area shape="rect" id="node1" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="277,5,429,31"/>
+<area shape="rect" id="node2" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="267,152,349,177"/>
+<area shape="rect" id="node7" href="$time_8h.html" title="Simple time utilities." alt="" coords="365,79,429,104"/>
+<area shape="rect" id="node3" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="5,225,88,251"/>
+<area shape="rect" id="node4" href="$board_8h_source.html" title=" " alt="" coords="113,225,231,251"/>
+<area shape="rect" id="node6" title=" " alt="" coords="256,225,360,251"/>
+<area shape="rect" id="node5" title=" " alt="" coords="249,299,319,324"/>
+<area shape="rect" id="node8" href="$io_8h_source.html" title=" " alt="" coords="435,152,530,177"/>
+<area shape="rect" id="node10" title=" " alt="" coords="555,152,691,177"/>
+<area shape="rect" id="node9" title=" " alt="" coords="447,225,518,251"/>
 </map>

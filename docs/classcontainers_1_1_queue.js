@@ -2,9 +2,7 @@ var classcontainers_1_1_queue =
 [
     [ "T", "classcontainers_1_1_queue.html#a6611f442aefd7dac3184b146ce42631a", null ],
     [ "TREF", "classcontainers_1_1_queue.html#a58435f1392a29022e767c72f9c2a6278", null ],
-    [ "Queue", "classcontainers_1_1_queue.html#a1993dca806e6d98e3628870c37f4cfe1", null ],
     [ "Queue", "classcontainers_1_1_queue.html#a88c9b93c195d0e0d010e8c7ede8b707c", null ],
-    [ "operator=", "classcontainers_1_1_queue.html#abd8b03ba7c961b5005e87a4ea1fcbfa2", null ],
     [ "lock", "classcontainers_1_1_queue.html#a9502986798fafa55a8201cf4aad11946", null ],
     [ "unlock", "classcontainers_1_1_queue.html#ac9d85639dea318b57ff77760d109384e", null ],
     [ "is_locked", "classcontainers_1_1_queue.html#af880d9ab03a337b3edcebae6043f894c", null ],

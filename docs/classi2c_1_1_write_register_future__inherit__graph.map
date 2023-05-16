@@ -1,9 +1,16 @@
 <map id="i2c::WriteRegisterFuture&lt; MANAGER, T, FUNCTOR &gt;" name="i2c::WriteRegisterFuture&lt; MANAGER, T, FUNCTOR &gt;">
-<area shape="rect" id="node1" title="General Future that can be used to write to an I2C device register." alt="" coords="267,173,473,214"/>
-<area shape="rect" id="node3" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="567,5,761,61"/>
-<area shape="rect" id="node4" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="548,85,780,141"/>
-<area shape="rect" id="node5" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="559,165,769,221"/>
-<area shape="rect" id="node6" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="521,245,807,301"/>
-<area shape="rect" id="node7" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="559,325,769,381"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,165,219,221"/>
+<area shape="rect" id="node1" title="General Future that can be used to write to an I2C device register." alt="" coords="267,210,473,250"/>
+<area shape="rect" id="node3" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="521,5,807,60"/>
+<area shape="rect" id="node4" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="567,84,761,139"/>
+<area shape="rect" id="node5" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="559,163,769,217"/>
+<area shape="rect" id="node6" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="559,241,769,296"/>
+<area shape="rect" id="node7" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="548,320,780,375"/>
+<area shape="rect" id="node8" href="$classi2c_1_1_t_write_register_future.html" title="Generic Future that can be used to write to an I2C device register." alt="" coords="566,399,762,453"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,203,219,257"/>
+<area shape="rect" id="node9" href="$classdevices_1_1magneto_1_1_m_p_u6050_1_1_end_future.html" title="Create a future to be used by asynchronous method end(EndFuture&amp;)." alt="" coords="881,234,1089,274"/>
+<area shape="rect" id="node10" href="$classdevices_1_1magneto_1_1_m_p_u6050_1_1_reset_future.html" title="Create a future to be used by asynchronous method reset(ResetFuture&amp;)." alt="" coords="881,298,1089,338"/>
+<area shape="rect" id="node11" href="$classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_begin_future.html" title="Create a future to be used by asynchronous method begin(BeginFuture&amp;)." alt="" coords="891,363,1079,417"/>
+<area shape="rect" id="node12" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_disable_output_future.html" title="Create a future to be used by asynchronous method disable_output(DisableOutputFuture&amp;)." alt="" coords="855,442,1116,482"/>
+<area shape="rect" id="node13" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_enable_output_future.html" title="Create a future to be used by asynchronous method enable_output(EnableOutputFuture&amp;)." alt="" coords="857,506,1113,546"/>
+<area shape="rect" id="node14" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_halt_clock_future.html" title="Create a future to be used by asynchronous method halt_clock(HaltClockFuture&amp;)." alt="" coords="870,570,1101,610"/>
 </map>

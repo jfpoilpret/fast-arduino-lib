@@ -6,12 +6,8 @@ var classfuture_1_1_future =
     [ "reset_", "classfuture_1_1_future.html#a8993ab76018cb71ad98cb87c2e69c07f", null ],
     [ "reset_input_", "classfuture_1_1_future.html#a2d63a2bd2a1f9284c7d1b2c19897bf62", null ],
     [ "get", "classfuture_1_1_future.html#a790fe9b24ef1c4f26df490a4f22635f9", null ],
-    [ "get_input", "classfuture_1_1_future.html#a3c1c7f9d103e5fe0e3a83905d20ab3a1", null ],
-    [ "get_input", "classfuture_1_1_future.html#a8dc77d2524e2e8555269860b5252b2d8", null ],
+    [ "get_input", "classfuture_1_1_future.html#a60323422bc596ea938b14b4d9728ded5", null ],
+    [ "get_input", "classfuture_1_1_future.html#a11660c6ff8f73d8369ca5cbf9337f660", null ],
     [ "OUT_SIZE", "classfuture_1_1_future.html#a6f6f5f6800b717bbbb1c8448133b7f29", null ],
-    [ "IN_SIZE", "classfuture_1_1_future.html#a6def7d5ddf6a530259c19481a774956f", null ],
-    [ "output_", "classfuture_1_1_future.html#a84d1ca81828f2d5da50048dac3d79638", null ],
-    [ "output_buffer_", "classfuture_1_1_future.html#a0fb06a9e5324c3cc647218342036a554", null ],
-    [ "input_", "classfuture_1_1_future.html#a3d11a926b242624300e4bc1e3c2e81a3", null ],
-    [ "input_buffer_", "classfuture_1_1_future.html#a6098a893bfc43256afe6d96d237b4a1e", null ]
+    [ "IN_SIZE", "classfuture_1_1_future.html#a6def7d5ddf6a530259c19481a774956f", null ]
 ];

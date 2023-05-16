@@ -1,3 +1,13 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classtimer_1_1_timer.html" title=" " alt="" coords="5,5,188,32"/>
+<area shape="rect" id="node1" href="$classspi_1_1_abstract_s_p_i_device.html" title="Contain general payload transfer API for an SPI device." alt="" coords="5,222,173,247"/>
+<area shape="rect" id="node2" href="$classspi_1_1_s_p_i_device.html" title=" " alt="" coords="257,5,469,75"/>
+<area shape="rect" id="node4" href="$classspi_1_1_s_p_i_device.html" title=" " alt="" coords="253,99,472,168"/>
+<area shape="rect" id="node6" href="$classspi_1_1_s_p_i_device.html" title=" " alt="" coords="221,193,504,277"/>
+<area shape="rect" id="node8" href="$classspi_1_1_s_p_i_device.html" title=" " alt="" coords="277,301,448,326"/>
+<area shape="rect" id="node11" href="$classspi_1_1_s_p_i_device.html" title="Base class for any SPI slave device." alt="" coords="271,350,454,405"/>
+<area shape="rect" id="node3" href="$classdevices_1_1_win_bond.html" title="SPI device driver for WinBond flash memory chips, like W25Q80BV (8 Mbit flash)." alt="" coords="578,27,763,53"/>
+<area shape="rect" id="node5" href="$classdevices_1_1display_1_1_l_c_d5110.html" title="SPI device driver for Nokia 5110 display chip." alt="" coords="575,113,767,153"/>
+<area shape="rect" id="node7" href="$classdevices_1_1mcp3x0x_1_1_m_c_p3x0x.html" title="Generic class to support (almost) any chip of the SPI&#45;based MicroChip ADC chips family (MCP3001&#45;2&#45;4&#45;8..." alt="" coords="552,207,789,262"/>
+<area shape="rect" id="node9" href="$classdevices_1_1rf_1_1_n_r_f24_l01.html" title="SPI device driver for Nordic Semiconductor nRF24L01+ support, without IRQ support." alt="" coords="589,293,752,333"/>
+<area shape="rect" id="node10" href="$classdevices_1_1rf_1_1_i_r_q___n_r_f24_l01.html" title="SPI device driver for Nordic Semiconductor nRF24L01+ support, with IRQ." alt="" coords="837,293,1031,333"/>
 </map>
