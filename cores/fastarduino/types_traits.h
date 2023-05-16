@@ -123,6 +123,54 @@ namespace types_traits
 		using type = T;
 	};
 	/// @endcond
+
+	/// @cond notdocumented
+	// Find min number of bytes (as power of 2) needed to store value
+	constexpr uint8_t uint_size_in_val(uint64_t value)
+	{
+		return (value & 0xFFFF'FFFF'0000'0000ULL ? 8 :
+				value & 0x0000'0000'FFFF'0000ULL ? 4 :
+				value & 0x0000'0000'0000'FF00ULL ? 2 : 1);
+	}
+	template<uint8_t bytes> struct UnsignedInt
+	{
+		using UTYPE = void;
+		using STYPE = void;
+	};
+	template<> struct UnsignedInt<8>
+	{
+		using UTYPE = uint64_t;
+		using STYPE = int64_t;
+	};
+	template<> struct UnsignedInt<4>
+	{
+		using UTYPE = uint32_t;
+		using STYPE = int32_t;
+	};
+	template<> struct UnsignedInt<2>
+	{
+		using UTYPE = uint16_t;
+		using STYPE = int16_t;
+	};
+	template<> struct UnsignedInt<1>
+	{
+		using UTYPE = uint8_t;
+		using STYPE = int8_t;
+	};
+	/// @endcond
+
+	/**
+	 * Find the smallest integral types, signed and unsigned, tha can hold a given value.
+	 * 
+	 * @tparam VAL the integral value for which to find the smallest size integral types
+	 */
+	template<uint64_t VAL> struct SmallestInt
+	{
+		/** The smallest unsigned integral type that can hold @p VAL. */
+		using UNSIGNED_TYPE = typename UnsignedInt<uint_size_in_val(VAL)>::UTYPE;
+		/** The smallest signed integral type that can hold @p VAL. */
+		using SIGNED_TYPE = typename UnsignedInt<uint_size_in_val(VAL)>::STYPE;
+	};
 }
 
 #endif /* TYPES_TRAITS_HH */

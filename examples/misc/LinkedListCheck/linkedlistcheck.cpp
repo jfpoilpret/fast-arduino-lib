@@ -42,51 +42,6 @@ static const uint8_t BUFFER_SIZE = 10;
 using namespace streams;
 using namespace containers;
 
-// Generic assertion
-//===================
-template<typename T1, typename T2> void assert(ostream& out, const char* var, const T1& expected, const T2& actual)
-{
-	out << "    Comparing " << var;
-	if (expected == actual)
-		out << " OK: " << expected << endl;
-	else
-		out << " KO exp=" << expected << " act=" << actual << endl;
-}
-
-// Traveral class running assertions against expected content
-//============================================================
-template<typename ITEM> class TraversalAssert
-{
-public:
-	TraversalAssert(ostream& out)
-	: out{out}, index{}, expected{}, size{} {}
-
-	TraversalAssert(ostream& out, uint8_t size, ITEM** expected)
-	: out{out}, index{}, expected{expected}, size{size} {}
-
-	bool operator()(ITEM& item)
-	{
-		if (index < size)
-		{
-			char buf[] = "item[x]";
-			buf[5] = '0' + index;
-			assert(out, buf, *expected[index], item);
-		}
-		else
-		{
-			out << "    KO -> Too many items in list!" << endl;
-		}
-		++index;
-		return false;
-	}
-
-private:
-	ostream& out;
-	uint8_t index;
-	ITEM** expected;
-	uint8_t size;
-};
-
 // Link items classes
 //====================
 class Link1 : public Link<Link1>
@@ -141,6 +96,51 @@ bool operator==(const LINK3& item1, const LINK3& item2)
 {
 	return item1.item() == item2.item();
 }
+
+// Generic assertion
+//===================
+template<typename T1, typename T2> void assert(ostream& out, const char* var, const T1& expected, const T2& actual)
+{
+	out << "    Comparing " << var;
+	if (expected == actual)
+		out << " OK: " << expected << endl;
+	else
+		out << " KO exp=" << expected << " act=" << actual << endl;
+}
+
+// Traveral class running assertions against expected content
+//============================================================
+template<typename ITEM> class TraversalAssert
+{
+public:
+	TraversalAssert(ostream& out)
+	: out{out}, index{}, expected{}, size{} {}
+
+	TraversalAssert(ostream& out, uint8_t size, ITEM** expected)
+	: out{out}, index{}, expected{expected}, size{size} {}
+
+	bool operator()(ITEM& item)
+	{
+		if (index < size)
+		{
+			char buf[] = "item[x]";
+			buf[5] = '0' + index;
+			assert(out, buf, *expected[index], item);
+		}
+		else
+		{
+			out << "    KO -> Too many items in list!" << endl;
+		}
+		++index;
+		return false;
+	}
+
+private:
+	ostream& out;
+	uint8_t index;
+	ITEM** expected;
+	uint8_t size;
+};
 
 // Variables used in tests
 //=========================

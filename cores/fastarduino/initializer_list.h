@@ -35,7 +35,7 @@ namespace std
 	 * braced-init-list is used to list-initialize an object, where the 
 	 * corresponding constructor accepts an initializer_list parameter.
 	 * 
-	 * Using an initializer_ist argument is done through a standard C++ iterator loop:
+	 * Using an initializer_list argument is done through a standard C++ iterator loop:
 	 * @code
 	 * void f(initializer_list<int> list) {
 	 *     for (auto x : list)

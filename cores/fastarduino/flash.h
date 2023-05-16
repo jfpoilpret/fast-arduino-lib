@@ -101,6 +101,38 @@ namespace flash
 	{
 		return read_flash((uint16_t) address, item);
 	}
+
+	/**
+	 * Functor reading items from an address in AVR Flash memory (PROGMEM).
+	 * 
+	 * @tparam T the typ of items to read from Flash
+	 */
+	template<typename T> class FlashReader
+	{
+	public:
+		/**
+		 * Construct a FlashReader functor reading Flash from @p flash_buffer address.
+		 * 
+		 * @param flash_buffer a pointer to the first item in Flash memory
+		 */
+		FlashReader(const T* flash_buffer) : address_{uint16_t(flash_buffer)} {}
+
+		/**
+		 * Get the enxt item read from memory.
+		 * 
+		 * @return T the next read item from Flash
+		 */
+		T operator()()
+		{
+			T item;
+			read_flash(address_, item);
+			address_ += sizeof(T);
+			return item;
+		}
+
+	private:
+		uint16_t address_;
+	};
 }
 
 /**
