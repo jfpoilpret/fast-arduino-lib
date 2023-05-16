@@ -52,7 +52,11 @@ namespace devices
 	 * - provides additional 2D drawing primitives as `public` API
 	 * 
 	 * You can see a concrete example for `LCD5110` device:
-	 * TODO show example of Nokia classes inheritance picture
+	 * @image html classdevices_1_1display_1_1_l_c_d5110__inherit__graph.png
+	 * `LCD5110` is a usual `SPIDevice` subclass, since this device is based on SPI.
+	 * 
+	 * @image html classdevices_1_1display_1_1_display__inherit__graph.png
+	 * Then, actual use of `LCD5110` is performed through `Display<LCD5110<...>>`.
 	 * 
 	 * Display devices are:
 	 * - either based on a SRAM raster buffer they have to handle themselves (this
@@ -119,6 +123,15 @@ namespace devices::display
 	template<typename COLOR> class DrawMode
 	{
 	public:
+		/**
+		 * Construct a new DrawMode object, to be sued with `Display`.
+		 * 
+		 * @param mode pixel opertion mode 
+		 * @param color color to use for this `DrawMode`
+		 * 
+		 * @sa Display.set_draw_mode()
+		 * @sa Display.set_fill_mode()
+		 */
 		DrawMode(Mode mode = Mode::NO_CHANGE, COLOR color = COLOR{})
 			: mode_{mode}, color_{color} {}
 
