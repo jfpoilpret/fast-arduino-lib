@@ -15,14 +15,14 @@
 /// @cond api
 
 /**
- * @file TODO DOC
+ * @file
+ * Generic API to handle Character Fonts for any display device.
  */
 #ifndef FONT_HH
 #define FONT_HH
 
 #include <avr/pgmspace.h>
 
-//TODO explain how glyph bytes are must be ordered in glyph array! 
 namespace devices::display
 {
 	/**
