@@ -68,7 +68,7 @@ namespace devices
 	}
 }
 
-//TODO Add new 2D primitives e.g. bitmaps
+//TODO Add new 2D primitives e.g. color pixmaps
 //TODO Add pattern to DrawMode (to allow dotted lines or pseudo-grey)?
 //TODO Add thickness to DrawMode (to allow thick lines)?
 //TODO Use device traits to also determine what modes a device can handle!
@@ -595,7 +595,6 @@ namespace devices::display
 		 */
 		void draw_string(POINT point, const flash::FlashStorage* content)
 		{
-			//TODO draw_bitmap
 			//TODO factor out common code with 1st draw_string() [only 2 lines different!]
 			// Check one font is currently selected
 			if (!check_font()) return;
@@ -815,10 +814,11 @@ namespace devices::display
 			draw_lines(points, true);
 		}
 
-		//TODO DOC bitmap is BW (2 colors: draw and fill)
-		//TODO use functor for input streaming and define default functors (PROGMEM and others)
-		//TOD optimize according to vertical display (Nokia5110)?
-		void draw_bitmap(POINT origin, POINT size, const uint8_t* bitmap)
+		//TODO DOC 
+		// bitmap is BW (2 colors: draw and fill)
+		//TODO optimize according to vertical display (Nokia5110)?
+		template<typename F>
+		void draw_bitmap(POINT origin, POINT size, F input_streamer)
 		{
 			// Check origin and size are compatible with display device resolution
 			const XCOORD xorg = origin.x;
@@ -828,10 +828,9 @@ namespace devices::display
 			const YCOORD h = size.y;
 			if (!is_valid_xy(w, h)) return;
 			if (!is_valid_xy(xorg + w, yorg + h)) return;
-			//TODO refactor to have 2 loops, one for Black and one for White, with common method
+
 			if (context_.draw_ || context_.fill_)
 			{
-				uint16_t address = (uint16_t) bitmap;
 				const XCOORD cols = (w / 8) + (w % 8 ? 1 : 0);
 				XCOORD xcurrent;
 				YCOORD ycurrent;
@@ -840,7 +839,7 @@ namespace devices::display
 					xcurrent = xorg;
 					for (XCOORD col = 0; col < cols; ++col)
 					{
-						uint8_t value = pgm_read_byte(address++);
+						uint8_t value = input_streamer();
 						// Draw each pixel with draw or fill mode
 						for (uint8_t i = 0; i < 8; ++i)
 						{

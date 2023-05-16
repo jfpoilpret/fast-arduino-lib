@@ -54,6 +54,7 @@ using NOKIA = devices::display::LCD5110<CS, DC, RES>;
 using DISPLAY = devices::display::Display<NOKIA>;
 using DRAW_MODE = typename DISPLAY::DRAW_MODE;
 using devices::display::Mode;
+using BITMAP_STREAMER = flash::FlashReader<uint8_t>;
 
 // W16xH12 BITMAP
 static const uint8_t BITMAP[] PROGMEM = {
@@ -414,20 +415,23 @@ int main()
 	// Try Bitmap
 	display_title(nokia, F("==> BITMAP <=="));
 	setup(nokia, {Mode::COPY, true}, {Mode::COPY, false});
-	nokia.draw_bitmap({36, 18}, {16, 12}, BITMAP);
+	nokia.draw_bitmap({36, 18}, {16, 12}, BITMAP_STREAMER{BITMAP});
+	// nokia.draw_bitmap({36, 18}, {16, 12}, BITMAP);
 	nokia.update();
 	time::delay_ms(DELAY_MS);
 
 	setup(nokia, {Mode::XOR, true}, {Mode::XOR, true}, true);
 	nokia.set_draw_mode({Mode::COPY, true});
 	nokia.set_fill_mode({Mode::COPY, false});
-	nokia.draw_bitmap({36, 18}, {16, 12}, BITMAP);
+	nokia.draw_bitmap({36, 18}, {16, 12}, BITMAP_STREAMER{BITMAP});
+	// nokia.draw_bitmap({36, 18}, {16, 12}, BITMAP);
 	nokia.update();
 	nokia.set_draw_mode({Mode::XOR, true});
 	nokia.set_fill_mode({Mode::XOR, true});
 	for (uint8_t i = 0; i < 10; ++i)
 	{
-		nokia.draw_bitmap({36, 18}, {16, 12}, BITMAP);
+		nokia.draw_bitmap({36, 18}, {16, 12}, BITMAP_STREAMER{BITMAP});
+		// nokia.draw_bitmap({36, 18}, {16, 12}, BITMAP);
 		nokia.update();
 		time::delay_ms(BLINK_MS);
 	}
