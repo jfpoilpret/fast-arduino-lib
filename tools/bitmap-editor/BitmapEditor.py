@@ -19,9 +19,8 @@
 # This python mini-application allows creation of display bitmaps and creates CPP
 # header from created bitmap.
 
-#TODO export rework
-#TODO export to binary file (for use from Flash SD)
 from dataclasses import dataclass
+from io import BufferedWriter
 import pickle
 import re
 
@@ -134,20 +133,27 @@ class NewBitmapDialog(AbstractDialog):
 
 @dataclass(kw_only=True)
 class ExportConfig:
+	binary: bool = False
 	directory: str
 
 # Dialog displayed at export of current font
 class ExportDialog(AbstractDialog):
 	def __init__(self, master: Misc):
-		super().__init__(master=master, buttons_row=4, buttons_columnspan=2)
+		super().__init__(master=master, buttons_row=5, buttons_columnspan=2)
 		self.title("Export Settings")
 		self.result: ExportConfig | None = None
 		# These variables will get user input
+		self.binary = BooleanVar()
 		self.directory = StringVar()
-		# Add UI: font width and height, 1st char, last char
+		# Add UI: export format (C++ / Binary), output directory
+		ttk.Label(master=self, text="Format:").grid(row=1, column=1, sticky=(W))
+		ttk.Radiobutton(master=self, text="Binary", variable=self.binary, value=True).grid(
+			row=2, column=1, sticky=(W))
+		ttk.Radiobutton(master=self, text="C++ code", variable=self.binary, value=False).grid(
+			row=3, column=1, sticky=(W))
 		ttk.Button(master=self, text="Code Files Directory...", command=self.on_select_dir).grid(
-			row=3, column=1, padx=2, pady=2)
-		ttk.Label(master=self, textvariable=self.directory).grid(row=3, column=2, padx=2, pady=2)
+			row=4, column=1, padx=2, pady=2)
+		ttk.Label(master=self, textvariable=self.directory).grid(row=4, column=2, padx=2, pady=2)
 
 		self.show_modal()
 
@@ -165,7 +171,7 @@ class ExportDialog(AbstractDialog):
 			messagebox.showwarning(title="Warning", 
 				message="Please choose a directory to which source code files will be saved.")
 			return
-		self.result = ExportConfig(directory=self.directory.get())
+		self.result = ExportConfig(directory=self.directory.get(), binary=self.binary.get())
 		super().on_ok()
 
 # Dialog displayed when changing current bitmap size
@@ -204,7 +210,6 @@ class Pixel(ttk.Label):
 			self.configure(image=Pixel.WHITE)
 
 # Widget reprenting the thumbnail for a bitmap
-#TODO do we really need this pane, can't we directly use PhotoImage?
 class BitmapThumbnail(Frame):
 	PIX_SIZE = 2
 
@@ -488,11 +493,17 @@ class BitmapEditor(ttk.Frame):
 			# Perform export
 			directory = export_config.directory
 			filename = f"{directory}/{self.bitmap_state.name}"
-			# Generate regular source code (for specific program use)
-			source = generate_regular_code(filename, self.bitmap_state.name,
-				self.bitmap_state.width, self.bitmap_state.height, self.bitmap_state.bitmap)
-			with open(filename + '.h', 'wt') as output:
-				output.write(source)
+			if export_config.binary:
+				with open(filename + '.bin', 'wb') as output:
+					generate_binary(output=output, 
+		     			width=self.bitmap_state.width, height=self.bitmap_state.height,
+						bitmap=self.bitmap_state.bitmap)
+			else:
+				# Generate regular source code (for specific program use)
+				source = generate_regular_code(self.bitmap_state.name,
+					self.bitmap_state.width, self.bitmap_state.height, self.bitmap_state.bitmap)
+				with open(filename + '.h', 'wt') as output:
+					output.write(source)
 	
 	def on_quit(self, event = None):
 		# Check if save needed
@@ -515,8 +526,10 @@ class BitmapEditor(ttk.Frame):
 			self.is_dirty = True
 
 REGULAR_CODE_TEMPLATE = """
-#include <fastarduino/devices/font.h>
+#include <pgmspace.h>
 
+static constexpr uint8_t {bitmap_name}_WIDTH = {width}; 
+static constexpr uint8_t {bitmap_name}_HEIGHT = {height}; 
 static const uint8_t {bitmap_name}[] PROGMEM =
 {{
 {bitmap_content}}};
@@ -525,39 +538,46 @@ static const uint8_t {bitmap_name}[] PROGMEM =
 BITMAP_ROW_TEMPLATE = """	{bitmap_row}
 """
 
-def generate_glyph_rows(c: int, width: int, height: int, glyph: list[list[bool]]):
-	glyph_rows = ''
-	if vertical:
-		for row in range(int((height - 1) / 8 + 1)):
-			glyph_row = ''
-			for col in range(width):
-				mask = 1
-				byte = 0
-				for i in range(8):
-					if row * 8 + i == height:
-						break
-					# print(f"glyph[{row * 8 + i}][{col}]")
-					if glyph[row * 8 + i][col]:
-						byte |= mask
-					mask *= 2
-				glyph_row += f'0x{byte:02x}, '
-			# Ensure '\' character is not mis-interpreted by C pre-processor by adding a space afterneath
-			glyph_char = '\\ (backslash)' if chr(c) == '\\' else chr(c)
-			glyph_rows += BITMAP_ROW_TEMPLATE.format(glyph_row = glyph_row, glyph_code = c, glyph_char = glyph_char)
-	else:
-		#TODO
-		pass
-	return glyph_rows
+def generate_bitmap_rows(width: int, height: int, bitmap: list[list[bool]]):
+	bitmap_rows = ''
+	for row in range(height):
+		bitmap_row = ''
+		for col in range(int((width - 1) / 8 + 1)):
+			mask: int = 0x80
+			byte: int = 0
+			for i in range(8):
+				if col * 8 + i == width:
+					break
+				if bitmap[row][col * 8 + i]:
+					byte |= mask
+				mask = int(mask / 2)
+			bitmap_row += f'0x{byte:02x}, '
+		bitmap_rows += BITMAP_ROW_TEMPLATE.format(bitmap_row = bitmap_row)
+	return bitmap_rows
 
-def generate_regular_code(filename: str, font_name: str, width: int, height: int, 
+def generate_regular_code(bitmap_name: str, width: int, height: int, 
 	bitmap: list[list[bool]]) -> str:
 	# First generate all rows for bitmap definition
-	all_glyphs = generate_all_glyphs(width, height, bitmap)
+	all_rows = generate_bitmap_rows(width, height, bitmap)
 	return REGULAR_CODE_TEMPLATE.format(
-		font_name = font_name,
-		font_width = width,
-		font_height =  height,
-		font_glyphs = all_glyphs)
+		bitmap_name=bitmap_name.upper(), width=width, height=height, bitmap_content=all_rows)
+
+def generate_binary(output: BufferedWriter, width: int, height: int, 
+	bitmap: list[list[bool]]) -> None:
+	# Directly write binary to file
+	# - width: 2 bytes
+	# - height: 2 bytes
+	# - array size in bytes: 2 bytes (~(width * height / 8))
+	# - array of size bytes
+	# Use special header bytes for format and version
+	output.write(bytes("FA-BITMAP-1.0", "ASCII"))
+	#TODO how to ensure int size and AVR endianness?
+	#FIXME bytes() does not work as I thought it should
+	output.write(bytes(width))
+	output.write(bytes(height))
+	size = int(height * ((width  / 8) + (1 if (width % 8) > 0 else 0)))
+	output.write(bytes(size))
+	#TODO write each byte, row per row, column per column
 
 if __name__ == '__main__':
 	# Create Window
