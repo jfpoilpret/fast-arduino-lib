@@ -24,9 +24,13 @@ This release brings the following changes and improvements:
 	- 2D drawing primitives: point, line, polyline, polygon, rectange, circle, rounded rectangle
 	- Font support
 	- Bitmap support
+- Small tools (in Python) to edit fonts and bitmaps for display API
 - Support of well-known Nokia 5110 LCD
+- New functor `FlashReader` to read an array of items from Flash memory
 - Few utilities added (`max` and `min`)
-- Few traits added for integral types
+- Few traits utilities added to find shortest integral type to hold a given constant
+- A few fix or improvements of API documentation
+- Build is now using AVR-GCC 12.1.0 (tested on fedora 37 distribution)
 
 Known bugs and requests for enhancements: https://github.com/jfpoilpret/fast-arduino-lib/issues
 
