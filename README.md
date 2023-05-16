@@ -1,16 +1,10 @@
 Latest News
 ===========
 
-FastArduino v1.9 has been released on 25th September 2022.
-The implemented enhancements are listed [here](https://github.com/jfpoilpret/fast-arduino-lib/milestone/11?closed=1).
-Please note that this version breaks compatibility on the following API:
-- usage of `new` and ` delete` is now prohibited in programs using FastArduino
-- Lifecycle (API is removed as it was deemed useless and cumbersome)
-- UART (no more `virtual` on `ostreambuf` requires additional macro `REGISTER_XXX` call)
-- Future (no more `virtual` requires additional macros `REGISTER_XXX` calls)
-- I2C (no major API changes, but Future dependency impacts)
-- TonePlayer (small API change)
-as described in further detail in the [release notes](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.9).
+FastArduino v1.10 has been released on 16th May 2023.
+The implemented enhancements are listed [here](https://github.com/jfpoilpret/fast-arduino-lib/milestone/12?closed=1).
+Mainly this release brings generic support for display devices and concrete implementation for Nokia 5110 LCD display.
+More details are provided in the [release notes](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.10).
 
 FastArduino
 ===========
@@ -51,7 +45,7 @@ One easy way to start a new project using FastArduino is to checkout [this proje
 Limitations
 ===========
 
-As of version 1.9, FastArduino prevents usage of dynamic allocation (`new` and `delete`) because it is bad for AVR MCU with such limited amount of SRAM, as it may lead to heap fragmentation and ultimately program crash.
+Since version 1.9, FastArduino prevents usage of dynamic allocation (`new` and `delete`) because it is bad for AVR MCU with such limited amount of SRAM, as it may lead to heap fragmentation and ultimately program crash.
 
 FastArduino has always encouraged static allocation only, throughout its API and implementation.
 
@@ -61,7 +55,7 @@ Hence, we have decided to not define virtual destructors in such FastArduino cla
 Status
 ======
 
-Latest FastArduino release [**v1.9**](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.9) has been published on 25.09.2022.
+Latest FastArduino release [**v1.10**](https://github.com/jfpoilpret/fast-arduino-lib/releases/tag/v1.10) has been published on 16.05.2023.
 
 In the current version, the project covers almost all features; a few missing, less important, features will be released in future versions (see roadmap below); the API of current features is deemed stable and should not change in the future.
 
@@ -90,6 +84,7 @@ What the library has:
 - Watchdog timer
 - Power sleep
 - Power supply voltage measurement support
+- Generic support for display devices, integrating several drawing primitives, fonts...
 
 In addition, FastArduino brings support for the following devices:
 
@@ -107,6 +102,7 @@ In addition, FastArduino brings support for the following devices:
 - HC-SR04 sonar device support in synchronous and asynchronous modes
 - VL53L0X laser distance sensor device (I2C-based)
 - Grove 125KHz RFID reader (both UARX and Wiegand modes supported)
+- Nokia 5110 LCD device (SPI-based) 
 
 As of now, the following platforms are supported (and tested):
 
@@ -131,6 +127,7 @@ Project structure
 The project is organized according to the following structure:
 - `/`: root project directory
   - `cores/fastarduino`: FastArduino platform C++ source code
+  - `tools`: Provide simple tools to edit fonts and bitmaps, to be used with FastArduino Display class
   - `make`: utility makefiles and scripts to build FastArduino library, generate docs, and prepare releases
   - `examples`: source code of basic examples of all FastArduino features, gathered by categories
   - `.vscode`: project settings for Visual Studio Code
@@ -162,7 +159,7 @@ The roadmap of next activities and new supported features is the following:
 - [Milestone v1.7](https://github.com/jfpoilpret/fast-arduino-lib/milestone/9?closed=1) (released on 19.09.2021)
 - [Milestone v1.8](https://github.com/jfpoilpret/fast-arduino-lib/milestone/10?closed=1) (release on 10.10.2021)
 - [Milestone v1.9](https://github.com/jfpoilpret/fast-arduino-lib/milestone/11?closed=1) (release on 25.09.2022)
-- [Milestone v1.10](https://github.com/jfpoilpret/fast-arduino-lib/milestone/12) (to be released on 31.05.2023)
+- [Milestone v1.10](https://github.com/jfpoilpret/fast-arduino-lib/milestone/12?closed=1) (release on 16.05.2023)
 - [Milestone v1.11](https://github.com/jfpoilpret/fast-arduino-lib/milestone/13) (to be released on 31.07.2023)
 - [Milestone v1.12](https://github.com/jfpoilpret/fast-arduino-lib/milestone/14) (to be released on 30.09.2023)
 - [Milestone v2.0](https://github.com/jfpoilpret/fast-arduino-lib/milestone/3) (undefined date)
@@ -170,7 +167,7 @@ The roadmap of next activities and new supported features is the following:
 
 Documentation - no milestones
 -----------------------------
-- Document how to add support for other boards in Tutorial (1st half 2023)
+- Document how to add support for other boards in Tutorial (2nd half 2023)
 
 Milestones dates are "best effort" and may change based on contributors' availability.
 
