@@ -814,9 +814,29 @@ namespace devices::display
 			draw_lines(points, true);
 		}
 
-		//TODO DOC 
-		// bitmap is BW (2 colors: draw and fill)
-		//TODO optimize according to vertical display (Nokia5110)?
+		/**
+		 * Draw a bitmap onto the display device.
+		 * No clipping is performed, bitmap must be fully displayable at @p origin,
+		 * otherwise an error willl occur and nothing wil be drawn.
+		 * 
+		 * Bitmap content is made of a sequence of bytes, each byte representing
+		 * 8 horizontal pixels:
+		 * - each `1` pixel will be drawn with current outline mode, as set with 
+		 * `set_draw_mode()`
+		 * - each `0` pixel will be drawn with current filling mode, as set with 
+		 * `set_fill_mode()`
+		 * 
+		 * @tparam F Functor class which instance @p input_streamer will be used
+		 * to read bitmap byte after byte; class should be able to read bitmap bytes
+		 * wherever they are (Flash memore, SD card...)
+		 * @param origin the point at which the top left corner of the bitmap 
+		 * shall be displayed
+		 * @param size the size of the bitmap to diaply 
+		 * @param input_streamer a functor instance that will be called repeatedly
+		 * for each bitmap byte, from the first to the last
+		 * 
+		 * @sa flash::FlashReader
+		 */
 		template<typename F>
 		void draw_bitmap(POINT origin, POINT size, F input_streamer)
 		{
