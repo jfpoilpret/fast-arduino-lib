@@ -316,7 +316,10 @@ namespace spi
 	 * };
 	 * @endcode
 	 * 
-	 * @tparam CS the pin used to select the slave device
+	 * @tparam CS the pin used to select the slave device; this may be `DigitalPin::NONE`
+	 * if your device is alone on the SPI bus, its CS pin is forced low (always active),
+	 * and your device actually supports this way of working. Some devices do not like
+	 * having an always-0 CS pin!
 	 * @tparam CS_MODE the chip select active mode
 	 * @tparam RATE the SPI clock rate for this device
 	 * @tparam MODE the SPI mode used for this device
