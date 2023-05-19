@@ -488,6 +488,14 @@ namespace utils
 		uint8_t as_uint8_;
 	};
 
+	template<typename T> union ToUint16
+	{
+		static_assert(sizeof(T) == 2, "T must be a two-bytes size type");
+		explicit ToUint16(T value) : value_(value) {}
+		T value_;
+		uint16_t as_uint16_;
+	};
+
 	template<typename T> union ToArray
 	{
 		explicit ToArray(const T& value): value_{value} {}
@@ -506,6 +514,12 @@ namespace utils
 	template<typename T> constexpr uint8_t as_uint8_t(T input)
 	{
 		return ToUint8<T>(input).as_uint8_;
+	}
+
+	//TODO DOC
+	template<typename T> constexpr uint16_t as_uint16_t(T input)
+	{
+		return ToUint16<T>(input).as_uint16_;
 	}
 
 	/**
