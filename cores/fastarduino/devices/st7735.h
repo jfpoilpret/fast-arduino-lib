@@ -62,7 +62,7 @@ namespace devices::display
 		/// @cond notdocumented
 		// Forward declaration to allow traits definition
 		template<board::DigitalPin, board::DigitalPin, board::DigitalPin> class ST7735; 
-		struct RGB_565_COLOR;
+		class RGB_565_COLOR;
 		/// @endcond
 	}
 	/// @cond notdocumented
@@ -95,33 +95,55 @@ namespace devices::display::st7735
 		RESOLUTION_128X160,
 	};
 
-	struct RGB_444_COLOR
-	{
-		uint8_t red		: 4;
-		uint8_t green	: 4;
-		uint8_t blue	: 4;
-	};
-	struct RGB_565_COLOR
-	{
-		RGB_565_COLOR(uint8_t red, uint8_t green, uint8_t blue):
-			red(red), green(green), blue(blue) {}
+	//TODO Avoid bit fields!
+	// struct RGB_444_COLOR
+	// {
+	// 	uint8_t red		: 4;
+	// 	uint8_t green	: 4;
+	// 	uint8_t blue	: 4;
+	// };
 
-		uint16_t red	: 5;
-		uint16_t green	: 6;
-		uint16_t blue	: 5;
-	};
-	struct RGB_666_COLOR
+	class RGB_565_COLOR
 	{
-		RGB_666_COLOR(uint8_t red, uint8_t green, uint8_t blue):
-			red(red), green(green), blue(blue) {}
+	public:
+		//TODO DOC that only MSB are used (5,6,5) for each primary color
+		constexpr RGB_565_COLOR(uint16_t rgb): rgb_{rgb} {}
+		constexpr RGB_565_COLOR(uint8_t red, uint8_t green, uint8_t blue):
+			rgb_{rgb_to_color(red, green, blue)} {}
 
-		uint8_t red		: 6;
-		uint8_t			: 2;
-		uint8_t green	: 6;
-		uint8_t			: 2;
-		uint8_t blue	: 6;
-		uint8_t			: 2;
+		uint16_t color() const
+		{
+			return rgb_;
+		}
+
+	private:
+		static constexpr uint16_t MASK_RED		= 0b1111'1000'0000'0000;
+		static constexpr uint16_t MASK_GREEN	= 0b0000'0111'1110'0000;
+		static constexpr uint16_t MASK_BLUE		= 0b0000'0000'0001'1111;
+
+		static constexpr uint16_t rgb_to_color(uint8_t red, uint8_t green, uint8_t blue)
+		{
+			return	((uint16_t(red) << 8) & MASK_RED)		|
+					((uint16_t(green) << 3) & MASK_GREEN)	|
+					(uint16_t(blue) & MASK_BLUE);
+		}
+
+		uint16_t rgb_;
 	};
+
+	//TODO Avoid bit fields!
+	// struct RGB_666_COLOR
+	// {
+	// 	constexpr RGB_666_COLOR(uint8_t red, uint8_t green, uint8_t blue):
+	// 		red(red), green(green), blue(blue) {}
+
+	// 	uint8_t red		: 6;
+	// 	uint8_t			: 2;
+	// 	uint8_t green	: 6;
+	// 	uint8_t			: 2;
+	// 	uint8_t blue	: 6;
+	// 	uint8_t			: 2;
+	// };
 
 	enum class Gamma: uint8_t
 	{
@@ -374,13 +396,13 @@ namespace devices::display::st7735
 			if (sizeof(COLOR) == 2)
 			{
 				// RGB565
-				uint16_t value = utils::as_uint16_t(color);
+				uint16_t value = color.color();
 				send_data({utils::high_byte(value), utils::low_byte(value)});
 			}
 			else
 			{
 				// RGB666
-				send_data({color.red, color.green, color.blue});
+				// send_data({color.red, color.green, color.blue});
 			}
 		}
 		void stop_memory_write()
@@ -388,7 +410,7 @@ namespace devices::display::st7735
 			send_command(CMD_NOP);
 		}
 
-	// private:
+	private:
 		// Value to add to MADCTL (CMD_SET_ADDRESS_MODE) for Arduino LCD
 		// NOTE: this flag depends on the LCD screen
 		//TODO that should be part of a trait!

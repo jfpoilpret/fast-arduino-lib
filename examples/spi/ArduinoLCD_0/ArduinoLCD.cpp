@@ -70,41 +70,32 @@ int main()
 	tft.set_column_address(0x0000, 0x009F);
 	tft.set_row_address(0x0000, 0x007F);
 
-	// Display RED pixels
+	// Display 4 stripes of pixels of 4 distinct colors: black, red, blue, white
 
-	// constexpr RGB_565_COLOR red = {0xff, 0x00, 0x00};
-	// const uint16_t red16 = utils::as_uint16_t(red);
+	constexpr RGB_565_COLOR black = {0x00, 0x00, 0x00};
+	constexpr RGB_565_COLOR red = {0xFF, 0x00, 0x00};
+	// constexpr RGB_565_COLOR green = {0x00, 0xFF, 0x00};
+	constexpr RGB_565_COLOR blue = {0x00, 0x00, 0xFF};
+	constexpr RGB_565_COLOR white = {0xFF, 0xFF, 0xFF};
 	tft.start_memory_write();
 	for (uint8_t y = 0; y <= 0x7f; ++y)
+	{
 		for (uint8_t x = 0; x <= 0x9f; ++x)
 		{
 			if (y < 0x20)
-				tft.send_data({0x00, 0x00});	// black
+				tft.write_memory(black);
 			else if (y < 0x40)
-				tft.send_data({0xF0, 0x00});	// red
+				tft.write_memory(red);
 			else if (y < 0x60)
-				tft.send_data({0x00, 0x0F});	// blue
+				tft.write_memory(blue);
 			else
-				tft.send_data({0xFF, 0xFF});	// white
-			// tft.send_command(0x2C, {utils::high_byte(red16), utils::low_byte(red16)});
-			// tft.write_memory(red);
+				tft.write_memory(white);
 		}
+	}
 	tft.stop_memory_write();
 	time::delay_ms(1000);
 
-	// tft.set_row_address(0, 0x7f);
-	// tft.set_column_address(0, 0x9f);
-	// constexpr RGB_565_COLOR green = {0x00, 0xff, 0x00};
-	// for (uint8_t y = 0; y <= 0x7f; ++y)
-	// 	for (uint8_t x = 0; x <= 0x9f; ++x)
-	// 		tft.write_memory(green);
-	// time::delay_ms(1000);
+	//TODO Try display off/on
 
-	// tft.set_row_address(0, 0x7f);
-	// tft.set_column_address(0, 0x9f);
-	// constexpr RGB_565_COLOR blue = {0x00, 0x00, 0xff};
-	// for (uint8_t y = 0; y <= 0x7f; ++y)
-	// 	for (uint8_t x = 0; x <= 0x9f; ++x)
-	// 		tft.write_memory(blue);
-	// time::delay_ms(1000);
+	//TODO Try idle mode
 }
