@@ -49,9 +49,8 @@ class TFT : public ST7735<CS, DC, RES>
 // using devices::display::Mode;
 // using BITMAP_STREAMER = flash::FlashReader<uint8_t>;
 
-//TODO Open Points
-// - is there an required order for RASET and CASET?
-// - can we optimise start_transfer/end_transfer and dc_ set/clear?
+//TODO colors transformation
+//TODO check RGB in MADCTL command
 int main()
 {
 	board::init();
@@ -65,12 +64,9 @@ int main()
 	tft.soft_reset();
 	tft.sleep_out();
 	tft.set_color_model(ColorModel::RGB_565);
-	tft.normal_mode();
 	tft.display_on();
 
-	// tft.set_orientation(Orientation::LANDSCAPE);
-	tft.send_command(0x36, 0xA0);					// MY+MV
-	// tft.send_command(0x36, 0xA8);					// MY+MV+RGB
+	tft.set_orientation(Orientation::LANDSCAPE);
 	tft.set_column_address(0x0000, 0x009F);
 	tft.set_row_address(0x0000, 0x007F);
 
@@ -78,16 +74,22 @@ int main()
 
 	// constexpr RGB_565_COLOR red = {0xff, 0x00, 0x00};
 	// const uint16_t red16 = utils::as_uint16_t(red);
-	tft.send_command(0x2C);
-	tft.start_data();
+	tft.start_memory_write();
 	for (uint8_t y = 0; y <= 0x7f; ++y)
 		for (uint8_t x = 0; x <= 0x9f; ++x)
 		{
+			if (y < 0x20)
+				tft.send_data({0x00, 0x00});	// black
+			else if (y < 0x40)
+				tft.send_data({0xF0, 0x00});	// red
+			else if (y < 0x60)
+				tft.send_data({0x00, 0x0F});	// blue
+			else
+				tft.send_data({0xFF, 0xFF});	// white
 			// tft.send_command(0x2C, {utils::high_byte(red16), utils::low_byte(red16)});
-			tft.partial_data({0x00, 0x00});
 			// tft.write_memory(red);
 		}
-	tft.end_data();
+	tft.stop_memory_write();
 	time::delay_ms(1000);
 
 	// tft.set_row_address(0, 0x7f);

@@ -57,13 +57,15 @@
 namespace devices::display
 {
 	//TODO DOC
-	/// @cond notdocumented
 	namespace st7735
 	{
+		/// @cond notdocumented
 		// Forward declaration to allow traits definition
 		template<board::DigitalPin, board::DigitalPin, board::DigitalPin> class ST7735; 
 		struct RGB_565_COLOR;
+		/// @endcond
 	}
+	/// @cond notdocumented
 	// Traits for ST7735 display
 	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST>
 	struct DisplayDeviceTrait<st7735::ST7735<SCE, DC, RST>> : 
@@ -101,12 +103,18 @@ namespace devices::display::st7735
 	};
 	struct RGB_565_COLOR
 	{
+		RGB_565_COLOR(uint8_t red, uint8_t green, uint8_t blue):
+			red(red), green(green), blue(blue) {}
+
 		uint16_t red	: 5;
 		uint16_t green	: 6;
 		uint16_t blue	: 5;
 	};
 	struct RGB_666_COLOR
 	{
+		RGB_666_COLOR(uint8_t red, uint8_t green, uint8_t blue):
+			red(red), green(green), blue(blue) {}
+
 		uint8_t red		: 6;
 		uint8_t			: 2;
 		uint8_t green	: 6;
@@ -206,11 +214,12 @@ namespace devices::display::st7735
 		{
 			send_command(CMD_IDLE_OFF);
 		}
-		void partial_mode(uint8_t start_row, uint8_t end_row)
+		void partial_mode(uint16_t start_row, uint16_t end_row)
 		{
 			//TODO Check validity of args!
-			const uint8_t params[] = {0, start_row, 0, end_row};
-			send_command(CMD_PARTIAL_AREA, params, false);
+			send_command(CMD_PARTIAL_AREA, {
+				utils::high_byte(start_row), utils::low_byte(start_row),
+				utils::high_byte(end_row), utils::low_byte(end_row)});
 			send_command(CMD_PARTIAL_MODE);
 		}
 		void normal_mode()
@@ -235,22 +244,22 @@ namespace devices::display::st7735
 			send_command(CMD_DISPLAY_OFF);
 			time::delay_ms(120);
 		}
+
+		//NOTE most breakouts do not expose pin TE hence the followin method may not work
 		void tear_effect_on(bool vertical_blanking_only)
 		{
 			const uint8_t telom = (vertical_blanking_only ? 0 : 1);
 			send_command(CMD_TEAR_ON, telom);
 		}
+		//NOTE most breakouts do not expose pin TE hence the followin method may not work
 		void tear_effect_off()
 		{
 			send_command(CMD_TEAR_OFF);
 		}
+
 		void set_gamma(Gamma gamma_curve)
 		{
 			send_command(CMD_SET_GAMMA, uint8_t(gamma_curve));
-		}
-		void set_color_lookup()
-		{
-			//TODO datasheet is absolutely not clear!
 		}
 
 	protected:
@@ -333,7 +342,7 @@ namespace devices::display::st7735
 
 		void set_orientation(Orientation orientation)
 		{
-			send_command(CMD_SET_ADDRESS_MODE, uint8_t(orientation));
+			send_command(CMD_SET_ADDRESS_MODE, uint8_t(orientation) | RGB_ORDER);
 		}
 		void set_color_model(ColorModel model)
 		{
@@ -354,12 +363,36 @@ namespace devices::display::st7735
 				utils::high_byte(yend), utils::low_byte(yend)});
 		}
 
+		void start_memory_write()
+		{
+			send_command(CMD_WRITE_MEMORY);
+		}
 		void write_memory(COLOR color)
 		{
-			send_command(CMD_WRITE_MEMORY, (const uint8_t*) &color, sizeof(color));
+			//TODO 3 types for COLOR will require transform or not
+			// RGB444 Not supported yet TODO
+			if (sizeof(COLOR) == 2)
+			{
+				// RGB565
+				uint16_t value = utils::as_uint16_t(color);
+				send_data({utils::high_byte(value), utils::low_byte(value)});
+			}
+			else
+			{
+				// RGB666
+				send_data({color.red, color.green, color.blue});
+			}
+		}
+		void stop_memory_write()
+		{
+			send_command(CMD_NOP);
 		}
 
 	// private:
+		// Value to add to MADCTL (CMD_SET_ADDRESS_MODE) for Arduino LCD
+		// NOTE: this flag depends on the LCD screen
+		//TODO that should be part of a trait!
+		static constexpr uint8_t RGB_ORDER = 0x08;
 		// ST7735 commands (note: subset of ILI9163)
 		static constexpr uint8_t CMD_NOP				= 0x00;
 		static constexpr uint8_t CMD_SOFT_RESET			= 0x01;
@@ -393,56 +426,38 @@ namespace devices::display::st7735
 		// If data then DC is set, then data is transferred
 		void send_command(uint8_t command)
 		{
+			this->start_transfer();
 			dc_.clear();
-			this->start_transfer();
 			this->transfer(command);
-			this->end_transfer();
-		}
-
-		void start_data()
-		{
-			dc_.set();
-			this->start_transfer();
-		}
-
-		void partial_data(uint8_t data)
-		{
-			this->transfer(data);
-		}
-		void partial_data(std::initializer_list<uint8_t> data)
-		{
-			this->transfer(data.begin(), data.size());
-		}
-		
-		void end_data()
-		{
-			this->end_transfer();
-		}
-
-		void send_data(uint8_t data)
-		{
-			dc_.set();
-			this->start_transfer();
-			this->transfer(data);
 			this->end_transfer();
 		}
 
 		void send_command(uint8_t command, uint8_t data)
 		{
-			send_command(command);
-			send_data(data);
+			this->start_transfer();
+			dc_.clear();
+			this->transfer(command);
+			dc_.set();
+			this->transfer(data);
+			this->end_transfer();
 		}
 		
 		void send_command(uint8_t command, std::initializer_list<uint8_t> data)
 		{
-			send_command(command);
-			send_data(data);
+			this->start_transfer();
+			dc_.clear();
+			this->transfer(command);
+			dc_.set();
+			this->transfer(data.begin(), data.size());
+			this->end_transfer();
 		}
 
 		void send_data(std::initializer_list<uint8_t> data)
 		{
-			for (uint8_t value: data)
-				send_data(value);
+			this->start_transfer();
+			dc_.set();
+			this->transfer(data.begin(), data.size());
+			this->end_transfer();
 		}
 
 		// Pin to control data Vs command sending through SPI
