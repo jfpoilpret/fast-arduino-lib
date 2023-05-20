@@ -95,7 +95,17 @@ int main()
 	tft.stop_memory_write();
 	time::delay_ms(1000);
 
-	//TODO Try display off/on
+	// Try display inversion
+	tft.invert_on();
+	time::delay_ms(5000);
+	tft.invert_off();
 
-	//TODO Try idle mode
+	// Try idle mode
+	tft.idle_on();
+	time::delay_ms(5000);
+
+	// Try display off/on
+	tft.display_off();
+	time::delay_ms(5000);
+	tft.display_on();
 }
