@@ -61,22 +61,26 @@ int main()
 	
 	// Start Arduino LC device
 	TFT tft;
-	tft.soft_reset();
-	tft.sleep_out();
-	tft.set_color_model(ColorModel::RGB_565);
-	tft.display_on();
-
-	tft.set_orientation(Orientation::LANDSCAPE);
-	tft.set_column_address(0x0000, 0x009F);
-	tft.set_row_address(0x0000, 0x007F);
-
-	// Display 4 stripes of pixels of 4 distinct colors: black, red, blue, white
+	tft.begin();
 
 	constexpr RGB_565_COLOR black = {0x00, 0x00, 0x00};
 	constexpr RGB_565_COLOR red = {0xFF, 0x00, 0x00};
-	// constexpr RGB_565_COLOR green = {0x00, 0xFF, 0x00};
+	constexpr RGB_565_COLOR green = {0x00, 0xFF, 0x00};
 	constexpr RGB_565_COLOR blue = {0x00, 0x00, 0xFF};
 	constexpr RGB_565_COLOR white = {0xFF, 0xFF, 0xFF};
+
+	tft.fill_screen(black);
+	time::delay_ms(1000);
+	tft.fill_screen(red);
+	time::delay_ms(1000);
+	tft.fill_screen(green);
+	time::delay_ms(1000);
+	tft.fill_screen(blue);
+	time::delay_ms(1000);
+	tft.fill_screen(white);
+	time::delay_ms(1000);
+
+	// Display 4 stripes of pixels of 4 distinct colors: black, red, blue, white
 	tft.start_memory_write();
 	for (uint8_t y = 0; y <= 0x7f; ++y)
 	{

@@ -16,28 +16,31 @@
 
 /**
  * @file
- * TODO update doc
- * API to handle Nokia 5110 display through SPI interface (actually not really SPI 
+ * API to handle Arduino LCD display through SPI interface (actually not really SPI 
  * as only MOSI, not MISO, pin is used for data transfer).
  * 
- * Note that ST7735 chip used in Nokia 5110 is powered at 3.3V and does not 
- * bear 5V voltage from pins of most Arduino. Hence, all signals from Arduino
- * output pins must be converted from 5V to 3.3V, for this you will need a level
- * converter:
- * - this may be CD74HC4050 chip (up to 6 pins with level conversion)
- * - or you may use one of those common MOSFET-based converters breakouts
- * - or you may build your own
+ * It is not clear if Arduino LCD is driven by ST7735 or ILI9163 chip (both are
+ * very similar, ILI just seems to have more features: resolutions, scrolling...)
  * 
- * Example wiring for Arduino UNO (with CD74HC4050):
+ * Arduino LCD comes with level adapters hence you can freely power and drive
+ * Arduino LCD with 5V.
  * 
- * - pin 11 (PB3,MOSI) --I>-- DN
+ * Example wiring for Arduino UNO:
+ * 
+ * - pin 11 (PB3,MOSI) --I>-- MOSI
  * - pin 13 (PB5, SCK) --I>-- SCLK
  * - pin 10 (PB2, SS)  --I>-- SCE
  * - pin 9 (PB1)       --I>-- D/C
  * - pin 8 (PB0)       --I>-- RST
  * - 3.3V         --[=330=]-- LED
- * - 3.3V              ------ 3.3V
+ * - 5V                ------ 5VV
  * - GND               ------ GND
+ * 
+ * In the future, we shall decouple chip (ST7735, ILI9163) from actual LCD screen
+ * (through the use of settings or traits) so that an actual display breakout can
+ * be handled as a combination of both.
+ * 
+ * @sa https://docs.arduino.cc/retired/other/arduino-lcd-screen
  */
 #ifndef ST7735_HH
 #define ST7735_HH
@@ -57,6 +60,7 @@
 namespace devices::display
 {
 	//TODO DOC
+	//TODO rework to avoid this strange embedding of namespaces for the sake of traits definition
 	namespace st7735
 	{
 		/// @cond notdocumented
@@ -89,6 +93,7 @@ namespace devices::display::st7735
 		RGB_666 = bits::BV8(2, 1)
 	};
 
+	//TODO more resolutions supported by ILI9163 "brother" chip
 	enum class Resolution: uint8_t
 	{
 		RESOLUTION_132X162,
@@ -153,7 +158,6 @@ namespace devices::display::st7735
 		GC3 = 0x08
 	};
 
-
 	//TODO actually ILI9163 is near ST7735 (maybe more powerful, in terms or resolutions and more)
 	/**
 	 * SPI device driver for ST7735 display chip.
@@ -162,6 +166,8 @@ namespace devices::display::st7735
 	 * - display characters or strings
 	 * - display pixels
 	 * All drawing API is applied directly on the device (no raster buffer).
+	 * 
+	 * 
 	 * 
 	 * @warning This class shall be used along with `devices::display::Display` 
 	 * template class. It cannot be instantiated on its own.
@@ -172,28 +178,22 @@ namespace devices::display::st7735
 	 * Once Display has been instantiated for ST7735 driver, you should call
 	 * the following API before it can be used to display anything:
 	 * TODO update
-	 * 1. `reset()` device
-	 * 2. `set_display_bias()` to relevant value
-	 * 3. `set_display_contrast()` to relevant value
-	 * 4. `power_up()` device
-	 * 5. `set_color()` to define the pixel color (black or white) to use in all
-	 * subsequent drawing primitives
-	 * 6. `set_mode()` if you want to use a specific drawing mode, other than 
-	 * default `Mode::COPY`.
-	 * 7. `set_font()` if you intend to display text
+	 * 1. `hard_reset()`
+	 * 2. `soft_reset()`
+	 * 3. `sleep_out()`
+	 * 4. `display_on()`
 	 *
 	 * @tparam SCE the output pin used for Chip Selection of the ST7735 chip on
 	 * the SPI bus.
 	 * @tparam DC the output pin used to select Data (high) or Command (low) mode 
 	 * of ST7735 chip.
-	 * @tparam RST the output pin used to reset ILI9361 chip
+	 * @tparam RST the output pin used to reset ST7735 chip
 	 * 
 	 * @sa Display
 	 */
-	//TODO try 8MHz SPI
 	//TODO add template args for color model, resolution, orientation
 	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST>
-	class ST7735 : public spi::SPIDevice<SCE, spi::ChipSelect::ACTIVE_LOW, spi::compute_clockrate(4'000'000UL)>
+	class ST7735 : public spi::SPIDevice<SCE, spi::ChipSelect::ACTIVE_LOW, spi::compute_clockrate(8'000'000UL)>
 	{
 	private:
 		using TRAITS = DisplayDeviceTrait<ST7735<SCE, DC, RST>>;
@@ -203,6 +203,19 @@ namespace devices::display::st7735
 		using DRAW_CONTEXT = DrawContext<RGB_565_COLOR, false>;
 
 	public:
+		void begin(bool force_hard_reset = false)
+		{
+			if (force_hard_reset)
+				hard_reset();
+			soft_reset();
+			sleep_out();
+			set_color_model(ColorModel::RGB_565);
+			set_orientation(Orientation::LANDSCAPE);
+			set_column_address(0, WIDTH - 1);
+			set_row_address(0, HEIGHT - 1);
+			display_on();
+		}
+		
 		void hard_reset()
 		{
 			// Reset device according to datasheet
@@ -228,6 +241,7 @@ namespace devices::display::st7735
 			send_command(CMD_SLEEP_OUT);
 			time::delay_ms(120);
 		}
+
 		void idle_on()
 		{
 			send_command(CMD_IDLE_ON);
@@ -236,6 +250,7 @@ namespace devices::display::st7735
 		{
 			send_command(CMD_IDLE_OFF);
 		}
+
 		void partial_mode(uint16_t start_row, uint16_t end_row)
 		{
 			//TODO Check validity of args!
@@ -248,6 +263,7 @@ namespace devices::display::st7735
 		{
 			send_command(CMD_NORMAL_MODE);
 		}
+
 		void invert_on()
 		{
 			send_command(CMD_INVERT_ON);
@@ -256,6 +272,7 @@ namespace devices::display::st7735
 		{
 			send_command(CMD_INVERT_OFF);
 		}
+
 		void display_on()
 		{
 			send_command(CMD_DISPLAY_ON);
@@ -284,39 +301,33 @@ namespace devices::display::st7735
 			send_command(CMD_SET_GAMMA, uint8_t(gamma_curve));
 		}
 
+		void fill_screen(COLOR color)
+		{
+			set_column_address(0, WIDTH - 1);
+			set_row_address(0, HEIGHT - 1);
+			start_memory_write();
+			for (uint8_t x = 0; x < WIDTH; ++x)
+				for (uint8_t y = 0; y < HEIGHT; ++y)
+					write_memory(color);
+			stop_memory_write();
+		}
+
 	protected:
 		/// @cond notdocumented
 		ST7735()
 		{
 			//TODO minimum init code?
-			// include color setting
+			// include color setting, orientation...
 		}
 
 		// NOTE Coordinates must have been first verified by caller
 		bool set_pixel(uint8_t x, uint8_t y, const DRAW_CONTEXT& context)
 		{
-			// // Convert to (r,c)
-			// const uint8_t c = x;
-			// const uint8_t r = y / ROW_HEIGHT;
-			// const uint8_t offset = y % ROW_HEIGHT;
-			// uint8_t mask = bits::BV8(offset);
-			// // Get pointer to pixel byte
-			// uint8_t* pix_column = get_display(r, c);
-			// // Evaluate final pixel color based on color_ and mode_
-			// const bool current = (*pix_column & mask);
-			// const bool dest = context.draw_mode().pixel_op(current);
-
-			// // Based on calculated color, set pixel
-			// if (dest)
-			// {
-			// 	if (current) return false;
-			// 	*pix_column |= mask;
-			// }
-			// else
-			// {
-			// 	if (!current) return false;
-			// 	*pix_column &= uint8_t(~mask);
-			// }
+			set_column_address(x, x);
+			set_row_address(y , y);
+			start_memory_write();
+			write_memory(context.draw_mode().color());
+			stop_memory_write();
 			return true;
 		}
 
