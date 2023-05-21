@@ -27,13 +27,13 @@
  * 
  * Example wiring for Arduino UNO:
  * 
- * - pin 11 (PB3,MOSI) --I>-- MOSI
- * - pin 13 (PB5, SCK) --I>-- SCLK
- * - pin 10 (PB2, SS)  --I>-- SCE
- * - pin 9 (PB1)       --I>-- D/C
- * - pin 8 (PB0)       --I>-- RST
- * - 3.3V         --[=330=]-- LED
- * - 5V                ------ 5VV
+ * - pin 11 (PB3,MOSI) ------ MOSI
+ * - pin 13 (PB5, SCK) ------ SCK
+ * - pin 10 (PB2, SS)  ------ LCD CS
+ * - pin 9 (PB1)       ------ D/C
+ * - pin 8 (PB0)       ------ Reset
+ * - 5V            --[=1K=]-- BL (backlight LED)
+ * - 5V                ------ 5V
  * - GND               ------ GND
  * 
  * In the future, we shall decouple chip (ST7735, ILI9163) from actual LCD screen
