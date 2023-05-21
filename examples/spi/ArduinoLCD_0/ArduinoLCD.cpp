@@ -58,7 +58,7 @@ int main()
 	DISPLAY tft;
 	tft.begin();
 
-	devices::display::DefaultFont12x8 font{};
+	devices::display::SmallFont12x6 font{};
 	tft.set_font(font);
 
 	constexpr RGB_565_COLOR black = {0x00, 0x00, 0x00};

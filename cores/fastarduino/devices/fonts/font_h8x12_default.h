@@ -14,23 +14,22 @@
 
 /// @cond api
 
-#ifndef FONT_H8X12_DEFAULT_HH
-#define FONT_H8X12_DEFAULT_HH
+#ifndef SMALLFONT_H6X12_HH
+#define SMALLFONT_H6X12_HH
 
 #include "../font.h"
 
 namespace devices::display
 {
-	class DefaultFont12x8 : public Font<false>
+	class SmallFont12x6 : public Font<false>
 	{
 	public:
-		DefaultFont12x8() : Font{0x20, 0x7e, 6, 12, FONT} {}
-		// DefaultFont12x8() : Font{0x20, 0x7e, 8, 12, FONT} {}
+		SmallFont12x6() : Font{0x20, 0x7e, 6, 12, FONT} {}
 
 	private:
 		static const uint8_t FONT[] PROGMEM;
 	};
 }
-#endif /* FONT_H8X12_DEFAULT_HH */
+#endif /* SMALLFONT_H6X12_HH */
 
 /// @endcond

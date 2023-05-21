@@ -17,7 +17,8 @@
 // NOTE: this font comes from http://www.rinkydinkelectronics.com/r_fonts.php
 // This is the "SmallFont"
 // All fonts from this site are considered Public Domain, as mentioned on the site. 
-const uint8_t devices::display::DefaultFont12x8::FONT[] PROGMEM =
+// Note that I have reduce width to 6 pixels as 2 last pixels are always 0.
+const uint8_t devices::display::SmallFont12x6::FONT[] PROGMEM =
 {
 	0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,  // <space>
 	0x00,0x00,0x20,0x20,0x20,0x20,0x20,0x20,0x00,0x20,0x00,0x00,  // !
