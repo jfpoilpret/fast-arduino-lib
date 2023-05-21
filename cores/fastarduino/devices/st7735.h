@@ -373,11 +373,11 @@ namespace devices::display::st7735
 						write_memory(color);
 						mask >>= 1;
 					}
-					// add interspace if needed
-					if (add_interchar_space)
-					{
-						write_memory(bg);
-					}
+				}
+				// add interspace if needed
+				if (add_interchar_space)
+				{
+					write_memory(bg);
 				}
 			}
 			stop_memory_write();
