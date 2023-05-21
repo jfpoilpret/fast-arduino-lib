@@ -16,11 +16,11 @@
  * Prototype program to check implementation of ArduinoLCD display (ST7735 chip).
  * Wiring: 
  * - on ATmega328P based boards (including Arduino UNO):
- *   - D13 (SCK): connected to ArduinoLCD breakout SCLK pin
- *   - D11 (MOSI): connected to ArduinoLCD breakout DN pin
+ *   - D13 (SCK): connected to ArduinoLCD breakout SCK pin
+ *   - D11 (MOSI): connected to ArduinoLCD breakout MOSI pin
  *   - D10: connected to ArduinoLCD breakout D/C pin
- *   - D9: connected to ArduinoLCD breakout CS pin
- *   - D7: connected to ArduinoLCD breakout RST pin
+ *   - D9: connected to ArduinoLCD breakout LCD CS pin
+ *   - D7: connected to ArduinoLCD breakout Reset pin
  *   - ArduinoLCD breakout LED pin connected to 5V via 1K resistor
  */
 
