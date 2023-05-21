@@ -80,9 +80,9 @@ namespace devices::display::st7735
 {
 	enum class Orientation: uint8_t
 	{
-		LANDSCAPE = bits::BV8(5),
+		LANDSCAPE = bits::BV8(5, 7),
 		PORTRAIT = 0,
-		REVERSE_LANDSCAPE = bits::BV8(5, 6, 7),
+		REVERSE_LANDSCAPE = bits::BV8(5, 6),
 		REVERSE_PORTRAIT = bits::BV8(6, 7)
 	};
 
@@ -358,11 +358,13 @@ namespace devices::display::st7735
 			uint8_t glyph_index  = 0;
 			for (uint8_t glyph_row = 0; glyph_row < context.font().glyph_rows(); ++glyph_row)
 			{
+				// Counter of remaining width to draw (in pixels)
 				uint8_t row_width = width;
 				for (uint8_t glyph_col = 0; glyph_col < context.font().glyph_cols(); ++glyph_col)
 				{
 					uint8_t pixel_bar = context.font().get_char_glyph_byte(glyph_ref, glyph_index++);
 					uint8_t mask = 0x80;
+					// On last column, width may be less than 8!
 					const uint8_t current_width = (row_width > 8 ? 8 : row_width);
 					row_width -= 8;
 					for (uint8_t i = 0; i < current_width; ++i)
