@@ -24,7 +24,8 @@ namespace devices::display
 	class DefaultFont12x8 : public Font<false>
 	{
 	public:
-		DefaultFont12x8() : Font{0x20, 0x7e, 8, 12, FONT} {}
+		DefaultFont12x8() : Font{0x20, 0x7e, 6, 12, FONT} {}
+		// DefaultFont12x8() : Font{0x20, 0x7e, 8, 12, FONT} {}
 
 	private:
 		static const uint8_t FONT[] PROGMEM;
