@@ -100,7 +100,19 @@ int main()
 	//TODO Try font drawing
 	tft.set_draw_mode({Mode::COPY, black});
 	tft.set_fill_mode({Mode::COPY, white});
-	tft.draw_char({20, 20}, 'A');
+	const uint8_t FONT_WIDTH = font.width() + 1;
+	const uint8_t FONT_HEIGHT = font.height() + 1;
+	uint8_t xc = 0, yc = 0;
+	for (char c = font.first_char(); c <= font.last_char(); ++c)
+	{
+		tft.draw_char({xc, yc}, c);
+		xc += FONT_WIDTH;
+		if (xc > tft.WIDTH - FONT_WIDTH)
+		{
+			xc = 0;
+			yc += FONT_HEIGHT;
+		}
+	}
 
 	// // Try display inversion
 	// tft.invert_on();
