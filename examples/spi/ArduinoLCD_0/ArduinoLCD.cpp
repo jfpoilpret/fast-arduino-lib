@@ -24,6 +24,7 @@
  *   - ArduinoLCD breakout LED pin connected to 5V via 1K resistor
  */
 
+#include <fastarduino/devices/fonts/font_h8x12_default.h>
 #include <fastarduino/devices/st7735.h>
 #include <fastarduino/devices/display.h>
 #include <fastarduino/utilities.h>
@@ -39,14 +40,8 @@ static constexpr const board::DigitalPin CS = board::DigitalPin::D9_PB1;
 static constexpr const board::DigitalPin DC = board::DigitalPin::D10_PB2;
 static constexpr const board::DigitalPin RES = board::DigitalPin::D7_PD7;
 
-class TFT : public ST7735<CS, DC, RES>
-{
-	friend int main();
-};
-
-// using DISPLAY = devices::display::Display<TFT>;
-// using DRAW_MODE = typename DISPLAY::DRAW_MODE;
-// using devices::display::Mode;
+using DISPLAY = devices::display::Display<ST7735<CS, DC, RES>>;
+using devices::display::Mode;
 // using BITMAP_STREAMER = flash::FlashReader<uint8_t>;
 
 //TODO colors transformation
@@ -59,57 +54,65 @@ int main()
 	// Start SPI interface
 	spi::init();
 	
-	// Start Arduino LC device
-	TFT tft;
+	// Start Arduino LCD device
+	DISPLAY tft;
 	tft.begin();
 
+	devices::display::DefaultFont12x8 font{};
+	tft.set_font(font);
+
 	constexpr RGB_565_COLOR black = {0x00, 0x00, 0x00};
-	constexpr RGB_565_COLOR red = {0xFF, 0x00, 0x00};
-	constexpr RGB_565_COLOR green = {0x00, 0xFF, 0x00};
-	constexpr RGB_565_COLOR blue = {0x00, 0x00, 0xFF};
+	// constexpr RGB_565_COLOR red = {0xFF, 0x00, 0x00};
+	// constexpr RGB_565_COLOR green = {0x00, 0xFF, 0x00};
+	// constexpr RGB_565_COLOR blue = {0x00, 0x00, 0xFF};
 	constexpr RGB_565_COLOR white = {0xFF, 0xFF, 0xFF};
 
-	tft.fill_screen(black);
-	time::delay_ms(1000);
-	tft.fill_screen(red);
-	time::delay_ms(1000);
-	tft.fill_screen(green);
-	time::delay_ms(1000);
-	tft.fill_screen(blue);
-	time::delay_ms(1000);
+	// tft.fill_screen(black);
+	// time::delay_ms(1000);
+	// tft.fill_screen(red);
+	// time::delay_ms(1000);
+	// tft.fill_screen(green);
+	// time::delay_ms(1000);
+	// tft.fill_screen(blue);
+	// time::delay_ms(1000);
 	tft.fill_screen(white);
 	time::delay_ms(1000);
 
-	// Display 4 stripes of pixels of 4 distinct colors: black, red, blue, white
-	tft.start_memory_write();
-	for (uint8_t y = 0; y <= 0x7f; ++y)
-	{
-		for (uint8_t x = 0; x <= 0x9f; ++x)
-		{
-			if (y < 0x20)
-				tft.write_memory(black);
-			else if (y < 0x40)
-				tft.write_memory(red);
-			else if (y < 0x60)
-				tft.write_memory(blue);
-			else
-				tft.write_memory(white);
-		}
-	}
-	tft.stop_memory_write();
-	time::delay_ms(1000);
+	// tft.set_draw_mode({Mode::COPY, green});
+	// tft.set_fill_mode({Mode::COPY, green});
+	// tft.draw_circle({79, 63}, 50);
+	// time::delay_ms(1000);
 
-	// Try display inversion
-	tft.invert_on();
-	time::delay_ms(5000);
-	tft.invert_off();
+	// tft.set_draw_mode({Mode::COPY, black});
+	// tft.set_fill_mode({Mode::COPY, black});
+	// tft.draw_rounded_rectangle({0, 0}, {159, 31}, 10);
+	// tft.set_draw_mode({Mode::COPY, red});
+	// tft.set_fill_mode({Mode::COPY, red});
+	// tft.draw_rounded_rectangle({0, 32}, {159, 63}, 10);
+	// tft.set_draw_mode({Mode::COPY, blue});
+	// tft.set_fill_mode({Mode::COPY, blue});
+	// tft.draw_rounded_rectangle({0, 64}, {159, 95}, 10);
+	// tft.set_draw_mode({Mode::COPY, white});
+	// tft.set_fill_mode({Mode::COPY, white});
+	// tft.draw_rounded_rectangle({0, 96}, {159, 127}, 10);
+	// time::delay_ms(1000);
 
-	// Try idle mode
-	tft.idle_on();
-	time::delay_ms(5000);
+	//TODO Try font drawing
+	tft.set_draw_mode({Mode::COPY, black});
+	tft.set_fill_mode({Mode::COPY, white});
+	tft.draw_char({20, 20}, 'A');
 
-	// Try display off/on
-	tft.display_off();
-	time::delay_ms(5000);
-	tft.display_on();
+	// // Try display inversion
+	// tft.invert_on();
+	// time::delay_ms(5000);
+	// tft.invert_off();
+
+	// // Try idle mode
+	// tft.idle_on();
+	// time::delay_ms(5000);
+
+	// // Try display off/on
+	// tft.display_off();
+	// time::delay_ms(5000);
+	// tft.display_on();
 }
