@@ -25,6 +25,8 @@
  */
 
 #include <fastarduino/devices/fonts/smallfont_h6x12.h>
+#include <fastarduino/devices/fonts/arialfont_h16x16.h>
+#include <fastarduino/devices/fonts/retrofont_h8x16.h>
 #include <fastarduino/devices/st7735.h>
 #include <fastarduino/devices/display.h>
 #include <fastarduino/utilities.h>
@@ -58,7 +60,9 @@ int main()
 	DISPLAY tft;
 	tft.begin();
 
-	devices::display::SmallFont12x6 font{};
+	// devices::display::SmallFont12x6 font{};
+	// devices::display::ArialFont16x16 font{};
+	devices::display::RetroFont8x16 font{};
 	tft.set_font(font);
 
 	constexpr RGB_565_COLOR black = {0x00, 0x00, 0x00};
