@@ -24,7 +24,7 @@
  *   - ArduinoLCD breakout LED pin connected to 5V via 1K resistor
  */
 
-#include <fastarduino/devices/fonts/font_h8x12_default.h>
+#include <fastarduino/devices/fonts/smallfont_h6x12.h>
 #include <fastarduino/devices/st7735.h>
 #include <fastarduino/devices/display.h>
 #include <fastarduino/utilities.h>

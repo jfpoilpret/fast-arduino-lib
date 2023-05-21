@@ -12,7 +12,7 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 
-#include "font_h8x12_default.h"
+#include "smallfont_h6x12.h"
 
 // NOTE: this font comes from http://www.rinkydinkelectronics.com/r_fonts.php
 // This is the "SmallFont"
