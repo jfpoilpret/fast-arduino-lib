@@ -57,25 +57,6 @@
 #include "display.h"
 #include "font.h"
 
-namespace devices::display
-{
-	//TODO DOC
-	//TODO rework to avoid this strange embedding of namespaces for the sake of traits definition
-	namespace st7735
-	{
-		/// @cond notdocumented
-		// Forward declaration to allow traits definition
-		template<board::DigitalPin, board::DigitalPin, board::DigitalPin> class ST7735; 
-		class RGB_565_COLOR;
-		/// @endcond
-	}
-	/// @cond notdocumented
-	// Traits for ST7735 display
-	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST>
-	struct DisplayDeviceTrait<st7735::ST7735<SCE, DC, RST>> : 
-		DisplayDeviceTrait_impl<st7735::RGB_565_COLOR, 160, 128, false, false> {};
-	/// @endcond
-}
 namespace devices::display::st7735
 {
 	enum class Orientation: uint8_t
@@ -100,13 +81,33 @@ namespace devices::display::st7735
 		RESOLUTION_128X160,
 	};
 
-	//TODO Avoid bit fields!
-	// struct RGB_444_COLOR
-	// {
-	// 	uint8_t red		: 4;
-	// 	uint8_t green	: 4;
-	// 	uint8_t blue	: 4;
-	// };
+	class RGB_444_COLOR
+	{
+	public:
+		//TODO DOC that only MSB are used (5,6,5) for each primary color
+		constexpr RGB_444_COLOR(uint16_t rgb = 0): rgb_{rgb} {}
+		constexpr RGB_444_COLOR(uint8_t red, uint8_t green, uint8_t blue):
+			rgb_{rgb_to_color(red, green, blue)} {}
+
+		uint16_t color() const
+		{
+			return rgb_;
+		}
+
+	private:
+		static constexpr uint16_t MASK_RED		= 0b1111'0000'0000'0000;
+		static constexpr uint16_t MASK_GREEN	= 0b0000'1111'0000'0000;
+		static constexpr uint16_t MASK_BLUE		= 0b0000'0000'1111'0000;
+
+		static constexpr uint16_t rgb_to_color(uint8_t red, uint8_t green, uint8_t blue)
+		{
+			return	((uint16_t(red) << 12) & MASK_RED)		|
+					((uint16_t(green) << 8) & MASK_GREEN)	|
+					((uint16_t(blue) << 4) & MASK_BLUE);
+		}
+
+		uint16_t rgb_;
+	};
 
 	class RGB_565_COLOR
 	{
@@ -136,19 +137,37 @@ namespace devices::display::st7735
 		uint16_t rgb_;
 	};
 
-	//TODO Avoid bit fields!
-	// struct RGB_666_COLOR
-	// {
-	// 	constexpr RGB_666_COLOR(uint8_t red, uint8_t green, uint8_t blue):
-	// 		red(red), green(green), blue(blue) {}
+	//TODO DOC that only MSB are used (5,6,5) for each primary color
+	class RGB_666_COLOR
+	{
+	public:
+		constexpr RGB_666_COLOR()
+			:	red_{0}, green_{0}, blue_{0} {}
+		constexpr RGB_666_COLOR(uint8_t red, uint8_t green, uint8_t blue)
+			:	red_{uint8_t(red & MASK)}, green_{uint8_t(green & MASK)}, blue_{uint8_t(blue & MASK)} {}
+		
+		uint8_t red() const
+		{
+			return red_;
+		}
 
-	// 	uint8_t red		: 6;
-	// 	uint8_t			: 2;
-	// 	uint8_t green	: 6;
-	// 	uint8_t			: 2;
-	// 	uint8_t blue	: 6;
-	// 	uint8_t			: 2;
-	// };
+		uint8_t green() const
+		{
+			return green_;
+		}
+
+		uint8_t blue() const
+		{
+			return blue_;
+		}
+
+	private:
+		static constexpr uint8_t MASK = 0b1111'1100;
+
+		uint8_t red_;
+		uint8_t green_;
+		uint8_t blue_;
+	};
 
 	enum class Gamma: uint8_t
 	{
@@ -177,8 +196,7 @@ namespace devices::display::st7735
 	 * 
 	 * Once Display has been instantiated for ST7735 driver, you should call
 	 * the following API before it can be used to display anything:
-	 * TODO update
-	 * 1. `hard_reset()`
+	 * 1. `hard_reset()` [optional, but advised]
 	 * 2. `soft_reset()`
 	 * 3. `sleep_out()`
 	 * 4. `display_on()`
@@ -188,19 +206,21 @@ namespace devices::display::st7735
 	 * @tparam DC the output pin used to select Data (high) or Command (low) mode 
 	 * of ST7735 chip.
 	 * @tparam RST the output pin used to reset ST7735 chip
+	 * TODO other tparam here
 	 * 
 	 * @sa Display
 	 */
-	//TODO add template args for color model, resolution, orientation
-	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST>
+	//TODO add template args for resolution (or display settings)
+	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST,
+		ColorModel COLOR_MODEL, Orientation ORIENTATION>
 	class ST7735 : public spi::SPIDevice<SCE, spi::ChipSelect::ACTIVE_LOW, spi::compute_clockrate(8'000'000UL)>
 	{
 	private:
-		using TRAITS = DisplayDeviceTrait<ST7735<SCE, DC, RST>>;
+		using TRAITS = DisplayDeviceTrait<ST7735<SCE, DC, RST, COLOR_MODEL, ORIENTATION>>;
 		using COLOR = typename TRAITS::COLOR;
 		static constexpr uint8_t WIDTH = TRAITS::WIDTH;
 		static constexpr uint8_t HEIGHT = TRAITS::HEIGHT;
-		using DRAW_CONTEXT = DrawContext<RGB_565_COLOR, false>;
+		using DRAW_CONTEXT = DrawContext<COLOR, false>;
 
 	public:
 		void begin(bool force_hard_reset = false)
@@ -209,8 +229,8 @@ namespace devices::display::st7735
 				hard_reset();
 			soft_reset();
 			sleep_out();
-			set_color_model(ColorModel::RGB_565);
-			set_orientation(Orientation::LANDSCAPE);
+			set_color_model(COLOR_MODEL);
+			set_orientation(ORIENTATION);
 			set_column_address(0, WIDTH - 1);
 			set_row_address(0, HEIGHT - 1);
 			display_on();
@@ -314,11 +334,7 @@ namespace devices::display::st7735
 
 	protected:
 		/// @cond notdocumented
-		ST7735()
-		{
-			//TODO minimum init code?
-			// include color setting, orientation...
-		}
+		ST7735() = default;
 
 		void erase()
 		{
@@ -416,25 +432,16 @@ namespace devices::display::st7735
 		void start_memory_write()
 		{
 			send_command(CMD_WRITE_MEMORY);
+			pixel_index_ = 0;
 		}
 		void write_memory(COLOR color)
 		{
-			//TODO 3 types for COLOR will require transform or not
-			// RGB444 Not supported yet TODO
-			if (sizeof(COLOR) == 2)
-			{
-				// RGB565
-				uint16_t value = color.color();
-				send_data({utils::high_byte(value), utils::low_byte(value)});
-			}
-			else
-			{
-				// RGB666
-				// send_data({color.red, color.green, color.blue});
-			}
+			write_memory_(color);
 		}
 		void stop_memory_write()
 		{
+			if (pixel_index_ % 2)
+				send_data({utils::high_byte(first_444_color_), utils::low_byte(first_444_color_)});
 			send_command(CMD_NOP);
 		}
 
@@ -510,10 +517,67 @@ namespace devices::display::st7735
 			this->end_transfer();
 		}
 
+		void write_memory_(RGB_444_COLOR color)
+		{
+			if (pixel_index_ % 2)
+			{
+				// This is 2nd pixel, write 1st and 2nd pixels
+				const uint16_t value = color.color() >> 4;
+				send_data({
+					utils::high_byte(first_444_color_), 
+					uint8_t(utils::low_byte(first_444_color_) | utils::high_byte(value)),
+					utils::low_byte(value)});
+			}
+			else
+			{
+				// 1st pixel, do not write it now, store it for next call
+				first_444_color_ = color.color();
+			}
+			++pixel_index_;
+		}
+
+		void write_memory_(RGB_565_COLOR color)
+		{
+			uint16_t value = color.color();
+			send_data({utils::high_byte(value), utils::low_byte(value)});
+		}
+
+		void write_memory_(RGB_666_COLOR color)
+		{
+			send_data({color.red(), color.green(), color.blue()});
+		}
+
 		// Pin to control data Vs command sending through SPI
 		gpio::FAST_PIN<DC> dc_{gpio::PinMode::OUTPUT};
 		gpio::FAST_PIN<RST> rst_{gpio::PinMode::OUTPUT, true};
+
+		// counter of RGB444 pixels sent, used to properly combine pixel pairs in transmission
+		uint8_t pixel_index_ = 0;
+		uint16_t first_444_color_{};
 	};
+
+	//TODO add template alias types (per color model and orientation)?
+}
+
+// Add specific traits for ST7735 display chip
+namespace devices::display
+{
+	/// @cond notdocumented
+	//TODO more traits?
+	// Traits for ST7735 display
+	//TODO 160,128 should be template args per ST7735/ILI9163
+	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST, st7735::Orientation ORIENTATION>
+	struct DisplayDeviceTrait<st7735::ST7735<SCE, DC, RST, st7735::ColorModel::RGB_444, ORIENTATION>> : 
+		DisplayDeviceTrait_impl<st7735::RGB_444_COLOR, 160, 128, false, false> {};
+
+	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST, st7735::Orientation ORIENTATION>
+	struct DisplayDeviceTrait<st7735::ST7735<SCE, DC, RST, st7735::ColorModel::RGB_565, ORIENTATION>> : 
+		DisplayDeviceTrait_impl<st7735::RGB_565_COLOR, 160, 128, false, false> {};
+
+	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST, st7735::Orientation ORIENTATION>
+	struct DisplayDeviceTrait<st7735::ST7735<SCE, DC, RST, st7735::ColorModel::RGB_666, ORIENTATION>> : 
+		DisplayDeviceTrait_impl<st7735::RGB_666_COLOR, 160, 128, false, false> {};
+	/// @endcond
 }
 
 #endif /* ST7735_HH */
