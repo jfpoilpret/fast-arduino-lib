@@ -25,6 +25,7 @@
 
 namespace devices::display
 {
+	//TODO add more constructor args and fields: interchar space?
 	/**
 	 * Generic font support class.
 	 * 
