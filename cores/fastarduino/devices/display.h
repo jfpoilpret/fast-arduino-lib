@@ -177,7 +177,7 @@ namespace devices::display
 		 */
 		uint8_t bw_pixels_op(uint8_t source, uint8_t dest) const
 		{
-			// Invert source if colow is black
+			// Invert source if color is black
 			if (!color_)
 				source = ~source;
 			switch (mode_)
@@ -271,6 +271,26 @@ namespace devices::display
 		const Font<VERTICAL_FONT>& font() const
 		{
 			return *font_;
+		}
+
+		/**
+		 * Return the current color for outline drawing (foreground).
+		 * 
+		 * @return COLOR foreground color
+		 */
+		COLOR foreground() const
+		{
+			return draw_.color();
+		}
+		
+		/**
+		 * Return the current color for area filling (background).
+		 * 
+		 * @return COLOR background color
+		 */
+		COLOR background() const
+		{
+			return fill_.color();
 		}
 		
 	private:
