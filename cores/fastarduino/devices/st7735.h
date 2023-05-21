@@ -112,7 +112,7 @@ namespace devices::display::st7735
 	{
 	public:
 		//TODO DOC that only MSB are used (5,6,5) for each primary color
-		constexpr RGB_565_COLOR(uint16_t rgb): rgb_{rgb} {}
+		constexpr RGB_565_COLOR(uint16_t rgb = 0): rgb_{rgb} {}
 		constexpr RGB_565_COLOR(uint8_t red, uint8_t green, uint8_t blue):
 			rgb_{rgb_to_color(red, green, blue)} {}
 
@@ -215,7 +215,7 @@ namespace devices::display::st7735
 			set_row_address(0, HEIGHT - 1);
 			display_on();
 		}
-		
+
 		void hard_reset()
 		{
 			// Reset device according to datasheet
@@ -320,12 +320,18 @@ namespace devices::display::st7735
 			// include color setting, orientation...
 		}
 
+		void erase()
+		{
+			fill_screen(COLOR{});
+		}
+		
 		// NOTE Coordinates must have been first verified by caller
 		bool set_pixel(uint8_t x, uint8_t y, const DRAW_CONTEXT& context)
 		{
 			set_column_address(x, x);
 			set_row_address(y , y);
 			start_memory_write();
+			//TODO should use context.draw_mode().pixel_op() instead!
 			write_memory(context.draw_mode().color());
 			stop_memory_write();
 			return true;
@@ -339,34 +345,43 @@ namespace devices::display::st7735
 		// NOTE Coordinates must have been first verified by caller
 		uint8_t write_char(uint8_t x, uint8_t y, uint16_t glyph_ref, const DRAW_CONTEXT& context)
 		{
-			// // Check column and row not out of range for characters!
-			// const uint8_t width = context.font().width();
-			// uint8_t row = y / ROW_HEIGHT;
-			// const uint8_t col = x;
-			// bool add_interchar_space = ((col + width + 1) < WIDTH);
+			// Check column and row not out of range for characters!
+			const uint8_t width = context.font().width();
+			const uint8_t height = context.font().height();
+			const bool add_interchar_space = ((x + width + 1) < WIDTH);
+			const COLOR fg = context.foreground();
+			const COLOR bg = context.background();
 
-			// uint8_t glyph_index  = 0;
-			// for (uint8_t glyph_row = 0; glyph_row < context.font().glyph_rows(); ++glyph_row)
-			// {
-			// 	// Get pointer to first byte in row to write in display buffer
-			// 	uint8_t* display_ptr = get_display(row, col);
+			set_column_address(x, x + width - 1 + (add_interchar_space? 1 : 0));
+			set_row_address(y, y + height - 1);
+			start_memory_write();
+			uint8_t glyph_index  = 0;
+			for (uint8_t glyph_row = 0; glyph_row < context.font().glyph_rows(); ++glyph_row)
+			{
+				uint8_t row_width = width;
+				for (uint8_t glyph_col = 0; glyph_col < context.font().glyph_cols(); ++glyph_col)
+				{
+					uint8_t pixel_bar = context.font().get_char_glyph_byte(glyph_ref, glyph_index++);
+					uint8_t mask = 0x80;
+					const uint8_t current_width = (row_width > 8 ? 8 : row_width);
+					row_width -= 8;
+					for (uint8_t i = 0; i < current_width; ++i)
+					{
+						const COLOR& color = (pixel_bar & mask) ? fg : bg;
+						write_memory(color);
+						mask >>= 1;
+					}
+					// add interspace if needed
+					if (add_interchar_space)
+					{
+						write_memory(bg);
+					}
+				}
+			}
+			stop_memory_write();
 
-			// 	for (uint8_t i = 0; i <= width; ++i)
-			// 	{
-			// 		const bool space_column = (i == width);
-			// 		uint8_t pixel_bar = 0x00;
-			// 		if (!space_column)
-			// 			pixel_bar = context.font().get_char_glyph_byte(glyph_ref, glyph_index);
-			// 		if ((!space_column) || add_interchar_space)
-			// 			*display_ptr = context.draw_mode().bw_pixels_op(pixel_bar, *display_ptr);
-			// 		++display_ptr;
-			// 		++glyph_index;
-			// 	}
-			// 	++row;
-			// }
-
-			// // Return actual width writtent to display
-			// return width + (add_interchar_space ? 1 : 0);
+			// Return actual width written to display
+			return width + (add_interchar_space ? 1 : 0);
 		}
 
 		// No invalid region, so no update() operation in effect
