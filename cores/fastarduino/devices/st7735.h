@@ -348,11 +348,11 @@ namespace devices::display::st7735
 			// Check column and row not out of range for characters!
 			const uint8_t width = context.font().width();
 			const uint8_t height = context.font().height();
-			const bool add_interchar_space = ((x + width + 1) < WIDTH);
+			const uint8_t interchar_space = ((x + width + 1) < WIDTH) ? context.font().interchar_space() : 0;
 			const COLOR fg = context.foreground();
 			const COLOR bg = context.background();
 
-			set_column_address(x, x + width - 1 + (add_interchar_space? 1 : 0));
+			set_column_address(x, x + width - 1 + interchar_space);
 			set_row_address(y, y + height - 1);
 			start_memory_write();
 			uint8_t glyph_index  = 0;
@@ -375,7 +375,7 @@ namespace devices::display::st7735
 					}
 				}
 				// add interspace if needed
-				if (add_interchar_space)
+				for (uint8_t i = 0; i < interchar_space; ++i)
 				{
 					write_memory(bg);
 				}
@@ -383,7 +383,7 @@ namespace devices::display::st7735
 			stop_memory_write();
 
 			// Return actual width written to display
-			return width + (add_interchar_space ? 1 : 0);
+			return width + interchar_space;
 		}
 
 		// No invalid region, so no update() operation in effect

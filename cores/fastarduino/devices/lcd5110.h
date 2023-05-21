@@ -290,7 +290,7 @@ namespace devices::display
 			const uint8_t width = context.font().width();
 			uint8_t row = y / ROW_HEIGHT;
 			const uint8_t col = x;
-			bool add_interchar_space = ((col + width + 1) < WIDTH);
+			const uint8_t interchar_space = ((x + width + 1) < WIDTH) ? context.font().interchar_space() : 0;
 
 			uint8_t glyph_index  = 0;
 			for (uint8_t glyph_row = 0; glyph_row < context.font().glyph_rows(); ++glyph_row)
@@ -313,7 +313,7 @@ namespace devices::display
 			}
 
 			// Return actual width writtent to display
-			return width + (add_interchar_space ? 1 : 0);
+			return width + interchar_space;
 		}
 
 		// Copy invalidated rectangle of display map onto the device

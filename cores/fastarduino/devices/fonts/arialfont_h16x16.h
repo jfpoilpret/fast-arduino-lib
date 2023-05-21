@@ -24,7 +24,7 @@ namespace devices::display
 	class ArialFont16x16 : public Font<false>
 	{
 	public:
-		ArialFont16x16() : Font{0x20, 0x7e, 16, 16, FONT} {}
+		ArialFont16x16() : Font{0x20, 0x7e, 16, 16, 0, FONT} {}
 
 	private:
 		static const uint8_t FONT[] PROGMEM;

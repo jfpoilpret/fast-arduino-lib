@@ -24,7 +24,7 @@ namespace devices::display
 	class SmallFont12x6 : public Font<false>
 	{
 	public:
-		SmallFont12x6() : Font{0x20, 0x7e, 6, 12, FONT} {}
+		SmallFont12x6() : Font{0x20, 0x7e, 6, 12, 1, FONT} {}
 
 	private:
 		static const uint8_t FONT[] PROGMEM;

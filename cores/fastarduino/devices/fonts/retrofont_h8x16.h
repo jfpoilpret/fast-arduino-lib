@@ -24,7 +24,7 @@ namespace devices::display
 	class RetroFont8x16 : public Font<false>
 	{
 	public:
-		RetroFont8x16() : Font{0x20, 0x7e, 8, 16, FONT} {}
+		RetroFont8x16() : Font{0x20, 0x7e, 8, 16, 0, FONT} {}
 
 	private:
 		static const uint8_t FONT[] PROGMEM;

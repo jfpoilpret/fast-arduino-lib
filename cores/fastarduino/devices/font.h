@@ -25,7 +25,6 @@
 
 namespace devices::display
 {
-	//TODO add more constructor args and fields: interchar space?
 	/**
 	 * Generic font support class.
 	 * 
@@ -49,13 +48,17 @@ namespace devices::display
 		 * @param last_char code of last character mapped to a glyph
 		 * @param width width of a glyph in pixels 
 		 * @param height height of a glyph in pixels
+		 * @param interchar_space space, in pixels, to add between consecutive characters;
+		 * may be `0` if glyphs already include spacing.
 		 * @param glyphs pointer to an array of bytes containing all glyphs from 
 		 * @p first_char and @p last_char; this array must be stored in MCU flash
 		 * memory.
 		 */
-		constexpr Font(char first_char, char last_char, uint8_t width, uint8_t height, const uint8_t* glyphs)
+		constexpr Font(char first_char, char last_char, uint8_t width, uint8_t height, 
+			uint8_t interchar_space, const uint8_t* glyphs)
 			:	first_char_{uint8_t(first_char)}, last_char_{uint8_t(last_char)},
 				width_{width}, height_{height}, 
+				interchar_space_{interchar_space},
 				glyph_rows_{uint8_t(VERTICAL ? (height - 1) / 8 + 1 : height)},
 				glyph_cols_{uint8_t(VERTICAL ? width : (width - 1) / 8 + 1)},
 				glyph_size_{uint8_t(glyph_rows_ * glyph_cols_)},
@@ -71,6 +74,12 @@ namespace devices::display
 		uint8_t height() const
 		{
 			return height_;
+		}
+
+		/** Space, in pixels, to add between 2 consecutive characters. */
+		uint8_t interchar_space() const
+		{
+			return interchar_space_;
 		}
 
 		/** Code of first char supported by this Font. */
@@ -159,7 +168,6 @@ namespace devices::display
 		 * @sa glyph_size()
 		 * @sa VERTICAL
 		 */
-		//TODO rather have row and col as args no?
 		uint8_t get_char_glyph_byte(uint16_t glyph_ref, uint8_t index) const
 		{
 			if (index >= glyph_size()) return 0;
@@ -174,6 +182,7 @@ namespace devices::display
 		// Font size
 		const uint8_t width_;
 		const uint8_t height_;
+		const uint8_t interchar_space_;
 		// Glyph size in bytes: how many bytes for a row, how many bytes for a column
 		const uint8_t glyph_rows_;
 		const uint8_t glyph_cols_;
