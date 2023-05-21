@@ -42,7 +42,10 @@ static constexpr const board::DigitalPin CS = board::DigitalPin::D9_PB1;
 static constexpr const board::DigitalPin DC = board::DigitalPin::D10_PB2;
 static constexpr const board::DigitalPin RES = board::DigitalPin::D7_PD7;
 
-using DISPLAY = devices::display::Display<ST7735<CS, DC, RES>>;
+// using DISPLAY = devices::display::Display<ST7735<CS, DC, RES, ColorModel::RGB_565, Orientation::LANDSCAPE>>;
+// using DISPLAY = devices::display::Display<ST7735<CS, DC, RES, ColorModel::RGB_666, Orientation::LANDSCAPE>>;
+using DISPLAY = devices::display::Display<ST7735<CS, DC, RES, ColorModel::RGB_444, Orientation::LANDSCAPE>>;
+using COLOR = DISPLAY::COLOR;
 using devices::display::Mode;
 // using BITMAP_STREAMER = flash::FlashReader<uint8_t>;
 
@@ -65,43 +68,43 @@ int main()
 	devices::display::RetroFont8x16 font{};
 	tft.set_font(font);
 
-	constexpr RGB_565_COLOR black = {0x00, 0x00, 0x00};
-	// constexpr RGB_565_COLOR red = {0xFF, 0x00, 0x00};
-	// constexpr RGB_565_COLOR green = {0x00, 0xFF, 0x00};
-	// constexpr RGB_565_COLOR blue = {0x00, 0x00, 0xFF};
-	constexpr RGB_565_COLOR white = {0xFF, 0xFF, 0xFF};
+	constexpr COLOR black = {0x00, 0x00, 0x00};
+	constexpr COLOR red = {0xFF, 0x00, 0x00};
+	constexpr COLOR green = {0x00, 0xFF, 0x00};
+	constexpr COLOR blue = {0x00, 0x00, 0xFF};
+	constexpr COLOR white = {0xFF, 0xFF, 0xFF};
 
-	// tft.fill_screen(black);
-	// time::delay_ms(1000);
-	// tft.fill_screen(red);
-	// time::delay_ms(1000);
-	// tft.fill_screen(green);
-	// time::delay_ms(1000);
-	// tft.fill_screen(blue);
-	// time::delay_ms(1000);
+	tft.fill_screen(black);
+	time::delay_ms(1000);
+	tft.fill_screen(red);
+	time::delay_ms(1000);
+	tft.fill_screen(green);
+	time::delay_ms(1000);
+	tft.fill_screen(blue);
+	time::delay_ms(1000);
 	tft.fill_screen(white);
 	time::delay_ms(1000);
 
-	// tft.set_draw_mode({Mode::COPY, green});
-	// tft.set_fill_mode({Mode::COPY, green});
-	// tft.draw_circle({79, 63}, 50);
-	// time::delay_ms(1000);
+	tft.set_draw_mode({Mode::COPY, green});
+	tft.set_fill_mode({Mode::COPY, green});
+	tft.draw_circle({79, 63}, 50);
+	time::delay_ms(1000);
 
-	// tft.set_draw_mode({Mode::COPY, black});
-	// tft.set_fill_mode({Mode::COPY, black});
-	// tft.draw_rounded_rectangle({0, 0}, {159, 31}, 10);
-	// tft.set_draw_mode({Mode::COPY, red});
-	// tft.set_fill_mode({Mode::COPY, red});
-	// tft.draw_rounded_rectangle({0, 32}, {159, 63}, 10);
-	// tft.set_draw_mode({Mode::COPY, blue});
-	// tft.set_fill_mode({Mode::COPY, blue});
-	// tft.draw_rounded_rectangle({0, 64}, {159, 95}, 10);
-	// tft.set_draw_mode({Mode::COPY, white});
-	// tft.set_fill_mode({Mode::COPY, white});
-	// tft.draw_rounded_rectangle({0, 96}, {159, 127}, 10);
-	// time::delay_ms(1000);
+	tft.set_draw_mode({Mode::COPY, black});
+	tft.set_fill_mode({Mode::COPY, black});
+	tft.draw_rounded_rectangle({0, 0}, {159, 31}, 10);
+	tft.set_draw_mode({Mode::COPY, red});
+	tft.set_fill_mode({Mode::COPY, red});
+	tft.draw_rounded_rectangle({0, 32}, {159, 63}, 10);
+	tft.set_draw_mode({Mode::COPY, blue});
+	tft.set_fill_mode({Mode::COPY, blue});
+	tft.draw_rounded_rectangle({0, 64}, {159, 95}, 10);
+	tft.set_draw_mode({Mode::COPY, white});
+	tft.set_fill_mode({Mode::COPY, white});
+	tft.draw_rounded_rectangle({0, 96}, {159, 127}, 10);
+	time::delay_ms(1000);
 
-	//TODO Try font drawing
+	// Try font drawing
 	tft.set_draw_mode({Mode::COPY, black});
 	tft.set_fill_mode({Mode::COPY, white});
 	const uint8_t FONT_WIDTH = font.width() + 1;
@@ -117,18 +120,19 @@ int main()
 			yc += FONT_HEIGHT;
 		}
 	}
+	time::delay_ms(5000);
 
-	// // Try display inversion
-	// tft.invert_on();
-	// time::delay_ms(5000);
-	// tft.invert_off();
+	// Try display inversion
+	tft.invert_on();
+	time::delay_ms(5000);
+	tft.invert_off();
 
-	// // Try idle mode
-	// tft.idle_on();
-	// time::delay_ms(5000);
+	// Try idle mode
+	tft.idle_on();
+	time::delay_ms(5000);
 
-	// // Try display off/on
-	// tft.display_off();
-	// time::delay_ms(5000);
-	// tft.display_on();
+	// Try display off/on
+	tft.display_off();
+	time::delay_ms(5000);
+	tft.display_on();
 }
