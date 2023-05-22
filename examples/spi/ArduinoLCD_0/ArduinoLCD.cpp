@@ -49,8 +49,6 @@ using COLOR = DISPLAY::COLOR;
 using devices::display::Mode;
 // using BITMAP_STREAMER = flash::FlashReader<uint8_t>;
 
-//TODO colors transformation
-//TODO check RGB in MADCTL command
 int main()
 {
 	board::init();
