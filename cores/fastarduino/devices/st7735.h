@@ -57,7 +57,20 @@
 #include "display.h"
 #include "font.h"
 
-//TODO namespace DOC
+namespace devices::display
+{
+	/**
+	 * Defines API to handle ST7735 TFT controller/driver chip.
+	 * It contains all definitions specific to ST7735 display chip.
+	 * 
+	 * @note ILI9163 chip is very similar to ST7735 and should be supported
+	 * through `ST7735` class too.
+	 */
+	namespace st7735
+	{
+	}
+}
+
 namespace devices::display::st7735
 {
 	/** 
@@ -93,22 +106,57 @@ namespace devices::display::st7735
 		RGB_666 = bits::BV8(2, 1)
 	};
 
-	//TODO more resolutions supported by ILI9163 "brother" chip
+	/**
+	 * Resolutions supported by ST7735 and ILI9163 chips.
+	 * @warning ST7735 supports only the 2 first resolutions: 132x162 and 128x160.
+	 * Behavior is udnefined if you use other resolutions with ST7735 chip. 
+	 */
 	enum class Resolution: uint8_t
 	{
+		/** 132x162 resolution, common to ST7735 and ILI9163 chips. */
 		RESOLUTION_132X162,
+		/** 128x160 resolution, common to ST7735 and ILI9163 chips. */
 		RESOLUTION_128X160,
+		/** 128x128 resolution, specific to ILI9163 chip. */
+		RESOLUTION_128X128,
+		/** 130x130 resolution, specific to ILI9163 chip. */
+		RESOLUTION_130X130,
+		/** 132x132 resolution, specific to ILI9163 chip. */
+		RESOLUTION_132X132,
+		/** 120x160 resolution, specific to ILI9163 chip. */
+		RESOLUTION_120X160,
 	};
 
-	//TODO define template<ColorModel> for COLOR instead?
+	/**
+	 * Class encapsulating the color of a pixel in `ColorModel::RGB_444` model,
+	 * ie 4 bits per primary color, red, green, blue.
+	 * 
+	 * This is the most efficient `ColorModel` to use with ST7735 chip, but it is
+	 * much limited on colors nuances (4K distinct colors).
+	 * 
+	 * @sa ColorModel::RGB_444
+	 * @sa RGB_565_COLOR
+	 * @sa RGB_666_COLOR
+	 */
 	class RGB_444_COLOR
 	{
 	public:
-		//TODO DOC that only MSB are used (5,6,5) for each primary color
+		/**
+		 * Create an 444 RGB color directly from a 16-bits word, of which only
+		 * 12 MSB are used, 4 bits respectively for red, green and blue.
+		 */
 		constexpr RGB_444_COLOR(uint16_t rgb = 0): rgb_{rgb} {}
+
+		/**
+		 * Create an 444 RGB color from 3 primary colors, each defined as a byte,
+		 * of which only 4 MSB are used, ie 0xFF is the same 0xF0 for given value.
+		 */
 		constexpr RGB_444_COLOR(uint8_t red, uint8_t green, uint8_t blue):
 			rgb_{rgb_to_color(red, green, blue)} {}
 
+		/**
+		 * Return the color as a word, which only 12 MSB are significant.
+		 */
 		uint16_t color() const
 		{
 			return rgb_;
@@ -129,14 +177,35 @@ namespace devices::display::st7735
 		uint16_t rgb_;
 	};
 
+	/**
+	 * Class encapsulating the color of a pixel in `ColorModel::RGB_565` model,
+	 * ie 5 bits for red, 6 bits for green, and 5 bits for blue..
+	 * 
+	 * This is the best trade-off `ColorModel` to use with ST7735 chip, as it offers
+	 * wide scale of colors nuances (64K) but it is quite efficient.
+	 * 
+	 * @sa ColorModel::RGB_565
+	 * @sa RGB_444_COLOR
+	 * @sa RGB_666_COLOR
+	 */
 	class RGB_565_COLOR
 	{
 	public:
-		//TODO DOC that only MSB are used (5,6,5) for each primary color
+		/**
+		 * Create an 565 RGB color directly from a 16-bits word.
+		 */
 		constexpr RGB_565_COLOR(uint16_t rgb = 0): rgb_{rgb} {}
+
+		/**
+		 * Create an 565 RGB color from 3 primary colors, each defined as a byte,
+		 * of which only 5 MSB (for red and blue) or 6 MSB (for green) are used.
+		 */
 		constexpr RGB_565_COLOR(uint8_t red, uint8_t green, uint8_t blue):
 			rgb_{rgb_to_color(red, green, blue)} {}
 
+		/**
+		 * Return the color as a word, directly understood by ST7735 chip.
+		 */
 		uint16_t color() const
 		{
 			return rgb_;
@@ -157,25 +226,52 @@ namespace devices::display::st7735
 		uint16_t rgb_;
 	};
 
-	//TODO DOC that only MSB are used (5,6,5) for each primary color
+	/**
+	 * Class encapsulating the color of a pixel in `ColorModel::RGB_666` model,
+	 * ie 6 bits for each primary color.
+	 * 
+	 * This is the least efficient `ColorModel`, but it provides the most color 
+	 * nuances (256K), which you may need to display photographs, for instance.
+	 * 
+	 * @sa ColorModel::RGB_565
+	 * @sa RGB_444_COLOR
+	 * @sa RGB_666_COLOR
+	 */
 	class RGB_666_COLOR
 	{
 	public:
+		/**
+		 * Create a black 666 RGB color.
+		 */
 		constexpr RGB_666_COLOR()
 			:	red_{0}, green_{0}, blue_{0} {}
+
+		/**
+		 * Create an 666 RGB color from 3 primary colors, each defined as a byte,
+		 * of which only 6 MSB are used, ie 0xFC is the same as 0xFF.
+		 */
 		constexpr RGB_666_COLOR(uint8_t red, uint8_t green, uint8_t blue)
 			:	red_{uint8_t(red & MASK)}, green_{uint8_t(green & MASK)}, blue_{uint8_t(blue & MASK)} {}
 		
+		/**
+		 * Return the red compopnent of this color as a byte, which only 6 MSB are significant.
+		 */
 		uint8_t red() const
 		{
 			return red_;
 		}
 
+		/**
+		 * Return the green component of this color as a byte, which only 6 MSB are significant.
+		 */
 		uint8_t green() const
 		{
 			return green_;
 		}
 
+		/**
+		 * Return the blue component of this color as a byte, which only 6 MSB are significant.
+		 */
 		uint8_t blue() const
 		{
 			return blue_;
@@ -189,15 +285,23 @@ namespace devices::display::st7735
 		uint8_t blue_;
 	};
 
+	/** 
+	 * Gamma correction curve to apply to the display.
+	 * ST7735 (and ILI9163) provide 4 predefined gamma curves.
+	 * Actual definition of each curve depends on GS pin level (datasheet §10.1.16).
+	 */
 	enum class Gamma: uint8_t
 	{
+		/** Pre-edfined GC0 gamma curve. */
 		GC0 = 0x01,
+		/** Pre-edfined GC1 gamma curve. */
 		GC1 = 0x02,
+		/** Pre-edfined GC2 gamma curve. */
 		GC2 = 0x04,
+		/** Pre-edfined GC3 gamma curve. */
 		GC3 = 0x08
 	};
 
-	//TODO actually ILI9163 is near ST7735 (maybe more powerful, in terms or resolutions and more)
 	/**
 	 * SPI device driver for ST7735 display chip.
 	 * 
@@ -206,7 +310,10 @@ namespace devices::display::st7735
 	 * - display pixels
 	 * All drawing API is applied directly on the device (no raster buffer).
 	 * 
-	 * 
+	 * @note ST7735 chip is very similar to IL9163 (which is a bit more powerful,
+	 * in terms of supported resolutions and features, such as scrolling). Using
+	 * `ST7735` class to drive an `ILI9163` should work directly, but with reduced 
+	 * fonctionality.
 	 * 
 	 * @warning This class shall be used along with `devices::display::Display` 
 	 * template class. It cannot be instantiated on its own.
@@ -228,22 +335,39 @@ namespace devices::display::st7735
 	 * @tparam RST the output pin used to reset ST7735 chip
 	 * @tparam COLOR_MODEL the number of color bits per pixel, as supported by ST7735
 	 * @tparam ORIENTATION the display orientation, as seen by the end user
+	 * @tparam RESOLUTION the display resolution
+	 * @tparam RGB_BGR `true` if the display inverts RGB order of pixels
 	 * 
 	 * @sa Display
 	 */
-	//TODO add template args for resolution (or display settings)
 	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST,
-		ColorModel COLOR_MODEL, Orientation ORIENTATION>
+		ColorModel COLOR_MODEL, Orientation ORIENTATION, Resolution RESOLUTION, bool RGB_BGR>
 	class ST7735 : public spi::SPIDevice<SCE, spi::ChipSelect::ACTIVE_LOW, spi::compute_clockrate(8'000'000UL)>
 	{
 	private:
-		using TRAITS = DisplayDeviceTrait<ST7735<SCE, DC, RST, COLOR_MODEL, ORIENTATION>>;
+		using TRAITS = DisplayDeviceTrait<ST7735<SCE, DC, RST, COLOR_MODEL, ORIENTATION, RESOLUTION, RGB_BGR>>;
 		using COLOR = typename TRAITS::COLOR;
 		static constexpr uint8_t WIDTH = TRAITS::WIDTH;
 		static constexpr uint8_t HEIGHT = TRAITS::HEIGHT;
 		using DRAW_CONTEXT = DrawContext<COLOR, false>;
 
 	public:
+		/**
+		 * Start ST7735 chip before actual usage.
+		 * This handles chip reset, sleep mode leave, chip configuration and display
+		 * switch on.
+		 * 
+		 * @warning Calling this method is absolutely mandatory before any drawing 
+		 * primitive can be called.
+		 * 
+		 * @param force_hard_reset indicate whether hard reset (through `RST` pin)
+		 * is required; typically this is not needed at power on (a soft reset is enough).
+		 * 
+		 * @sa hard_reset()
+		 * @sa soft_reset()
+		 * @sa sleep_out()
+		 * @sa display_on()
+		 */
 		void begin(bool force_hard_reset = false)
 		{
 			if (force_hard_reset)
@@ -257,41 +381,98 @@ namespace devices::display::st7735
 			display_on();
 		}
 
+		/**
+		 * Perform a hard reset of the ST7735 chip, ie through the `RST` pin.
+		 * After this method is called, some reconfiguration may be needed; please
+		 * refer to chip datasheet for further information.
+		 * 
+		 * @sa soft_reset()
+		 */
 		void hard_reset()
 		{
-			// Reset device according to datasheet
+			// Reset device according to datasheet §9.12
 			rst_.clear();
 			time::delay_us(10);
 			rst_.set();
 			time::delay_ms(120);
 		}
 
+		/**
+		 * Perform a software reset of the ST7735 chip.
+		 * After this method is called, some reconfiguration may be needed; please
+		 * refer to chip datasheet for further information.
+		 * 
+		 * @sa hard_reset()
+		 */
 		void soft_reset()
 		{
 			send_command(CMD_SOFT_RESET);
 			time::delay_ms(50);
 		}
 
+		/**
+		 * Enter ST7735 into sleep mode.
+		 * In sleep mode, the chip consumes very little current but no display occurs,
+		 * however, it is possible tooerform drawing primitives that will affect 
+		 * ST7735 memory raster, and will display later when leaving sleep mode.
+		 * 
+		 * @sa sleep_out()
+		 */
 		void sleep_in()
 		{
 			send_command(CMD_SLEEP_IN);
 			time::delay_ms(120);
 		}
+
+		/**
+		 * Leave ST7735 from sleep mode.
+		 * After execution, the chip will display again its raster content to the LCD.
+		 * 
+		 * @sa sleep_in()
+		 */
 		void sleep_out()
 		{
 			send_command(CMD_SLEEP_OUT);
 			time::delay_ms(120);
 		}
 
+		/**
+		 * Enter ST7735 chip into idle mode.
+		 * In this mdoe, the chip consumes less current but display is still active,
+		 * only with lower resolution (8 bits only, which may be enough for simple
+		 * user interface or pure text display).
+		 * 
+		 * @sa idle_off()
+		 */
 		void idle_on()
 		{
 			send_command(CMD_IDLE_ON);
 		}
+
+		/**
+		 * Leave ST7735 from idle mode.
+		 * After execution, the chip displays pixels in 18-bit mode (even though
+		 * you may only use 444 or 565 `ColorModel`).
+		 * 
+		 * @sa idle_on()
+		 */
 		void idle_off()
 		{
 			send_command(CMD_IDLE_OFF);
 		}
 
+		/**
+		 * Enter ST7735 chip into partial mode, meaning that only a subset (rows)
+		 * of the display is used.
+		 * This may reduce current consumption, depending on how many rows are left active.
+		 * 
+		 * You leav epartial mode through `normal_mode()`.
+		 * 
+		 * @param start_row the index of first row to activate
+		 * @param end_row the index of last row to activate
+		 * 
+		 * @sa normal_mode()
+		 */
 		void partial_mode(uint16_t start_row, uint16_t end_row)
 		{
 			//TODO Check validity of args!
@@ -300,48 +481,108 @@ namespace devices::display::st7735
 				utils::high_byte(end_row), utils::low_byte(end_row)});
 			send_command(CMD_PARTIAL_MODE);
 		}
+
+		/**
+		 * Leave ST7735 from partial mode, back into normal mode.
+		 * In normal mode, the full display is active.
+		 * 
+		 * @sa partial_mode()
+		 */
 		void normal_mode()
 		{
 			send_command(CMD_NORMAL_MODE);
 		}
 
+		/**
+		 * Invert whole display.
+		 * 
+		 * @sa invert_off()
+		 */
 		void invert_on()
 		{
 			send_command(CMD_INVERT_ON);
 		}
+
+		/**
+		 * Leave inversion mode.
+		 * 
+		 * @sa invert_on()
+		 */
 		void invert_off()
 		{
 			send_command(CMD_INVERT_OFF);
 		}
 
-		void display_on()
-		{
-			send_command(CMD_DISPLAY_ON);
-			time::delay_ms(120);
-		}
+		/**
+		 * Blank full display.
+		 * Drawing primitvies can still be called but will not affect display, only
+		 * raster memory, so that they will become visible later, when `display_on()`
+		 * will be called.
+		 * 
+		 * @sa display_on()
+		 */
 		void display_off()
 		{
 			send_command(CMD_DISPLAY_OFF);
 			time::delay_ms(120);
 		}
 
-		//NOTE most breakouts do not expose pin TE hence the followin method may not work
+		/**
+		 * Recover from display off mode.
+		 * Once executed, LCD display will be refresshed from the chip raster memory.
+		 * 
+		 * @sa display_off()
+		 */
+		void display_on()
+		{
+			send_command(CMD_DISPLAY_ON);
+			time::delay_ms(120);
+		}
+
+		/**
+		 * Enable Tearing Effect line for ST7735 chip.
+		 * This allows synchronization of drawing commands with actual LCD display,
+		 * to avoid so-called "tearing effect" in the middle of an image.
+		 * 
+		 * @warning Most breakouts do not expose the TE signal line, hence this API is
+		 * useless with such breakouts.
+		 * 
+		 * @param vertical_blanking_only  
+		 * 
+		 * @sa tear_effect_off()
+		 */
 		void tear_effect_on(bool vertical_blanking_only)
 		{
 			const uint8_t telom = (vertical_blanking_only ? 0 : 1);
 			send_command(CMD_TEAR_ON, telom);
 		}
-		//NOTE most breakouts do not expose pin TE hence the followin method may not work
+
+		/**
+		 * Disable Tearing Effect line for ST7735 chip.
+		 * 
+		 * @sa tear_effect_on()
+		 */
 		void tear_effect_off()
 		{
 			send_command(CMD_TEAR_OFF);
 		}
 
+		/**
+		 * Set the gamma correction curve to use by the chip, among 4 pre-defined
+		 * curves.
+		 * 
+		 * @param gamma_curve the gamma curve the chip shall use now
+		 */
 		void set_gamma(Gamma gamma_curve)
 		{
 			send_command(CMD_SET_GAMMA, uint8_t(gamma_curve));
 		}
 
+		/**
+		 * Fill the entire display with @p color.
+		 * 
+		 * @param color the new color to fill the whole display with
+		 */
 		void fill_screen(COLOR color)
 		{
 			set_column_address(0, WIDTH - 1);
@@ -469,8 +710,7 @@ namespace devices::display::st7735
 	private:
 		// Value to add to MADCTL (CMD_SET_ADDRESS_MODE) for Arduino LCD
 		// NOTE: this flag depends on the LCD screen
-		//TODO that should be part of a trait!
-		static constexpr uint8_t RGB_ORDER = 0x08;
+		static constexpr uint8_t RGB_ORDER = (RGB_BGR ? 0x08 : 0x00);
 		// ST7735 commands (note: subset of ILI9163)
 		static constexpr uint8_t CMD_NOP				= 0x00;
 		static constexpr uint8_t CMD_SOFT_RESET			= 0x01;
@@ -577,27 +817,115 @@ namespace devices::display::st7735
 		uint16_t first_444_color_{};
 	};
 
-	//TODO add template alias types (per color model and orientation)?
+	/** 
+	 * Alias type for ST7735 with 128x160 resolution.
+	 * @sa ST7735
+	 */
+	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST, 
+		ColorModel COLOR_MODEL, Orientation ORIENTATION, bool RGB_BGR>
+	using ST7735_128X160 = ST7735<SCE, DC, RST, COLOR_MODEL, 
+		ORIENTATION, Resolution::RESOLUTION_128X160, RGB_BGR>;
+
+	/** 
+	 * Alias type for ARDUINO IDE (128x160 resolution).
+	 * @sa ST7735
+	 */
+	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST, 
+		ColorModel COLOR_MODEL, Orientation ORIENTATION>
+	using ARDUINO_IDE = ST7735<SCE, DC, RST, COLOR_MODEL, ORIENTATION, 
+		Resolution::RESOLUTION_128X160, true>;
+
+	/** 
+	 * Alias type for ST7735 with 132x162 resolution.
+	 * @sa ST7735
+	 */
+	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST, 
+		ColorModel COLOR_MODEL, Orientation ORIENTATION, bool RGB_BGR>
+	using ST7735_132X162 = ST7735<SCE, DC, RST, COLOR_MODEL, 
+		ORIENTATION, Resolution::RESOLUTION_132X162, RGB_BGR>;
+
+	/** 
+	 * Alias type for ILI9163 with 120x160 resolution.
+	 * @sa ST7735
+	 */
+	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST, 
+		ColorModel COLOR_MODEL, Orientation ORIENTATION, bool RGB_BGR>
+	using ILI9163_120X160 = ST7735<SCE, DC, RST, COLOR_MODEL, 
+		ORIENTATION, Resolution::RESOLUTION_120X160, RGB_BGR>;
+
+	/** 
+	 * Alias type for ILI9163 with 128x128 resolution.
+	 * @sa ST7735
+	 */
+	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST, 
+		ColorModel COLOR_MODEL, Orientation ORIENTATION, bool RGB_BGR>
+	using ILI9163_128X128 = ST7735<SCE, DC, RST, COLOR_MODEL, 
+		ORIENTATION, Resolution::RESOLUTION_128X128, RGB_BGR>;
+
+	/** 
+	 * Alias type for ILI9163 with 130x130 resolution.
+	 * @sa ST7735
+	 */
+	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST, 
+		ColorModel COLOR_MODEL, Orientation ORIENTATION, bool RGB_BGR>
+	using ILI9163_130X130 = ST7735<SCE, DC, RST, COLOR_MODEL, 
+		ORIENTATION, Resolution::RESOLUTION_130X130, RGB_BGR>;
+
+	/** 
+	 * Alias type for ILI9163 with 132x132 resolution.
+	 * @sa ST7735
+	 */
+	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST, 
+		ColorModel COLOR_MODEL, Orientation ORIENTATION, bool RGB_BGR>
+	using ILI9163_132X132 = ST7735<SCE, DC, RST, COLOR_MODEL, 
+		ORIENTATION, Resolution::RESOLUTION_132X132, RGB_BGR>;
 }
 
 // Add specific traits for ST7735 display chip
 namespace devices::display
 {
 	/// @cond notdocumented
-	//TODO more traits?
-	// Traits for ST7735 display
-	//TODO 160,128 should be template args per ST7735/ILI9163
-	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST, st7735::Orientation ORIENTATION>
-	struct DisplayDeviceTrait<st7735::ST7735<SCE, DC, RST, st7735::ColorModel::RGB_444, ORIENTATION>> : 
-		DisplayDeviceTrait_impl<st7735::RGB_444_COLOR, 160, 128, false, false> {};
+	using st7735::ST7735_128X160, st7735::ST7735_132X162;
+	using st7735::ILI9163_120X160, st7735::ILI9163_128X128, st7735::ILI9163_130X130, st7735::ILI9163_132X132;
+	using st7735::ColorModel;
+	using st7735::RGB_444_COLOR, st7735::RGB_565_COLOR, st7735::RGB_666_COLOR;
+	using st7735::Orientation;
 
-	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST, st7735::Orientation ORIENTATION>
-	struct DisplayDeviceTrait<st7735::ST7735<SCE, DC, RST, st7735::ColorModel::RGB_565, ORIENTATION>> : 
-		DisplayDeviceTrait_impl<st7735::RGB_565_COLOR, 160, 128, false, false> {};
+	// Temporary macros to define traits for plenty of different devices
+	#define ST7735_TRAIT(TYPE, COLOR, ORIENT, WIDTH, HEIGHT)											\
+	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST, bool RGB_BGR>			\
+	struct DisplayDeviceTrait<TYPE <SCE, DC, RST, ColorModel::COLOR, Orientation::ORIENT, RGB_BGR>> : 	\
+		DisplayDeviceTrait_impl<COLOR##_COLOR, WIDTH, HEIGHT, false, false> {};
 
-	template<board::DigitalPin SCE, board::DigitalPin DC, board::DigitalPin RST, st7735::Orientation ORIENTATION>
-	struct DisplayDeviceTrait<st7735::ST7735<SCE, DC, RST, st7735::ColorModel::RGB_666, ORIENTATION>> : 
-		DisplayDeviceTrait_impl<st7735::RGB_666_COLOR, 160, 128, false, false> {};
+	#define ST7735_TRAITS(TYPE, WIDTH, HEIGHT)						\
+	ST7735_TRAIT(TYPE, RGB_444, LANDSCAPE, WIDTH, HEIGHT)			\
+	ST7735_TRAIT(TYPE, RGB_565, LANDSCAPE, WIDTH, HEIGHT)			\
+	ST7735_TRAIT(TYPE, RGB_666, LANDSCAPE, WIDTH, HEIGHT)			\
+	ST7735_TRAIT(TYPE, RGB_444, REVERSE_LANDSCAPE, WIDTH, HEIGHT)	\
+	ST7735_TRAIT(TYPE, RGB_565, REVERSE_LANDSCAPE, WIDTH, HEIGHT)	\
+	ST7735_TRAIT(TYPE, RGB_666, REVERSE_LANDSCAPE, WIDTH, HEIGHT)	\
+	ST7735_TRAIT(TYPE, RGB_444, PORTRAIT, HEIGHT, WIDTH)			\
+	ST7735_TRAIT(TYPE, RGB_565, PORTRAIT, HEIGHT, WIDTH)			\
+	ST7735_TRAIT(TYPE, RGB_666, PORTRAIT, HEIGHT, WIDTH)			\
+	ST7735_TRAIT(TYPE, RGB_444, REVERSE_PORTRAIT, HEIGHT, WIDTH)	\
+	ST7735_TRAIT(TYPE, RGB_565, REVERSE_PORTRAIT, HEIGHT, WIDTH)	\
+	ST7735_TRAIT(TYPE, RGB_666, REVERSE_PORTRAIT, HEIGHT, WIDTH)
+
+	// Traits for 128x160 resolution devices
+	ST7735_TRAITS(ST7735_128X160, 160, 128)
+	// Traits for 132x162 resolution devices
+	ST7735_TRAITS(ST7735_132X162, 162, 132)
+	// Traits for 120x160 resolution devices
+	ST7735_TRAITS(ILI9163_120X160, 160, 120)
+	// Traits for 128x128 resolution devices
+	ST7735_TRAITS(ILI9163_128X128, 128, 128)
+	// Traits for 130x130 resolution devices
+	ST7735_TRAITS(ILI9163_130X130, 130, 130)
+	// Traits for 132x132 resolution devices
+	ST7735_TRAITS(ILI9163_132X132, 132, 132)
+	
+	#undef ST7735_TRAITS
+	#undef ST7735_TRAIT
 	/// @endcond
 }
 

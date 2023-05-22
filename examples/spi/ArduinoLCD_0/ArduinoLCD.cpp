@@ -42,10 +42,15 @@ static constexpr const board::DigitalPin CS = board::DigitalPin::D9_PB1;
 static constexpr const board::DigitalPin DC = board::DigitalPin::D10_PB2;
 static constexpr const board::DigitalPin RES = board::DigitalPin::D7_PD7;
 
-// using DISPLAY = devices::display::Display<ST7735<CS, DC, RES, ColorModel::RGB_565, Orientation::LANDSCAPE>>;
-// using DISPLAY = devices::display::Display<ST7735<CS, DC, RES, ColorModel::RGB_666, Orientation::LANDSCAPE>>;
-using DISPLAY = devices::display::Display<ST7735<CS, DC, RES, ColorModel::RGB_444, Orientation::LANDSCAPE>>;
+// using DISPLAY = devices::display::Display<ARDUINO_IDE<CS, DC, RES, ColorModel::RGB_565, Orientation::LANDSCAPE>>;
+using DISPLAY = devices::display::Display<ARDUINO_IDE<CS, DC, RES, ColorModel::RGB_666, Orientation::LANDSCAPE>>;
+// using DISPLAY = devices::display::Display<ARDUINO_IDE<CS, DC, RES, ColorModel::RGB_444, Orientation::LANDSCAPE>>;
+// using DISPLAY = devices::display::Display<ARDUINO_IDE<CS, DC, RES, ColorModel::RGB_444, Orientation::PORTRAIT>>;
+// using DISPLAY = devices::display::Display<ARDUINO_IDE<CS, DC, RES, ColorModel::RGB_444, Orientation::REVERSE_LANDSCAPE>>;
+// using DISPLAY = devices::display::Display<ARDUINO_IDE<CS, DC, RES, ColorModel::RGB_444, Orientation::REVERSE_PORTRAIT>>;
 using COLOR = DISPLAY::COLOR;
+static constexpr uint8_t WIDTH = DISPLAY::WIDTH;
+static constexpr uint8_t HEIGHT = DISPLAY::HEIGHT;
 using devices::display::Mode;
 // using BITMAP_STREAMER = flash::FlashReader<uint8_t>;
 
@@ -85,21 +90,21 @@ int main()
 
 	tft.set_draw_mode({Mode::COPY, green});
 	tft.set_fill_mode({Mode::COPY, green});
-	tft.draw_circle({79, 63}, 50);
+	tft.draw_circle({WIDTH / 2, HEIGHT / 2}, 50);
 	time::delay_ms(1000);
 
 	tft.set_draw_mode({Mode::COPY, black});
 	tft.set_fill_mode({Mode::COPY, black});
-	tft.draw_rounded_rectangle({0, 0}, {159, 31}, 10);
+	tft.draw_rounded_rectangle({0, 0}, {WIDTH - 1, HEIGHT / 4 - 1}, 10);
 	tft.set_draw_mode({Mode::COPY, red});
 	tft.set_fill_mode({Mode::COPY, red});
-	tft.draw_rounded_rectangle({0, 32}, {159, 63}, 10);
+	tft.draw_rounded_rectangle({0, HEIGHT / 4}, {WIDTH - 1, HEIGHT / 2 - 1}, 10);
 	tft.set_draw_mode({Mode::COPY, blue});
 	tft.set_fill_mode({Mode::COPY, blue});
-	tft.draw_rounded_rectangle({0, 64}, {159, 95}, 10);
+	tft.draw_rounded_rectangle({0, HEIGHT / 2}, {WIDTH - 1, 3 * HEIGHT / 4 - 1}, 10);
 	tft.set_draw_mode({Mode::COPY, white});
 	tft.set_fill_mode({Mode::COPY, white});
-	tft.draw_rounded_rectangle({0, 96}, {159, 127}, 10);
+	tft.draw_rounded_rectangle({0, 3 * HEIGHT / 4}, {WIDTH - 1, HEIGHT - 1}, 10);
 	time::delay_ms(1000);
 
 	// Try font drawing
@@ -112,7 +117,7 @@ int main()
 	{
 		tft.draw_char({xc, yc}, c);
 		xc += FONT_WIDTH;
-		if (xc > tft.WIDTH - FONT_WIDTH)
+		if (xc > WIDTH - FONT_WIDTH)
 		{
 			xc = 0;
 			yc += FONT_HEIGHT;
