@@ -57,20 +57,39 @@
 #include "display.h"
 #include "font.h"
 
+//TODO namespace DOC
 namespace devices::display::st7735
 {
+	/** 
+	 * LCD display orientation.
+	 * It shall fit the orientation of display "in real life" so that all drawings,
+	 * text in particular, are properly oriented for the end user.
+	 * @sa ST7735
+	 */
 	enum class Orientation: uint8_t
 	{
+		/** Landscape */
 		LANDSCAPE = bits::BV8(5, 7),
+		/** Portrait */
 		PORTRAIT = 0,
+		/** Landscape but reversed */
 		REVERSE_LANDSCAPE = bits::BV8(5, 6),
+		/** Portrait but reversed */
 		REVERSE_PORTRAIT = bits::BV8(6, 7)
 	};
 
+	/**
+	 * Color Model to use for the device.
+	 * Each model has its advantages and drawbacks (performance, number of colors).
+	 * @sa ST7735
+	 */
 	enum class ColorModel: uint8_t
 	{
+		/** 4 bits per primary color (12 bits per pixel). */
 		RGB_444 = bits::BV8(1, 0),
+		/** 16 bits per pixel (5 bits for red and blue, 6 bits for green). */
 		RGB_565 = bits::BV8(2, 0),
+		/** 6 bits per primary color (18 bits per pixel). */
 		RGB_666 = bits::BV8(2, 1)
 	};
 
@@ -81,6 +100,7 @@ namespace devices::display::st7735
 		RESOLUTION_128X160,
 	};
 
+	//TODO define template<ColorModel> for COLOR instead?
 	class RGB_444_COLOR
 	{
 	public:
@@ -206,7 +226,8 @@ namespace devices::display::st7735
 	 * @tparam DC the output pin used to select Data (high) or Command (low) mode 
 	 * of ST7735 chip.
 	 * @tparam RST the output pin used to reset ST7735 chip
-	 * TODO other tparam here
+	 * @tparam COLOR_MODEL the number of color bits per pixel, as supported by ST7735
+	 * @tparam ORIENTATION the display orientation, as seen by the end user
 	 * 
 	 * @sa Display
 	 */
@@ -404,7 +425,6 @@ namespace devices::display::st7735
 
 		// No invalid region, so no update() operation in effect
 		void update(UNUSED uint8_t x1, UNUSED uint8_t y1, UNUSED uint8_t x2, UNUSED uint8_t y2) {}
-		/// @endcond
 
 		void set_orientation(Orientation orientation)
 		{
@@ -444,6 +464,7 @@ namespace devices::display::st7735
 				send_data({utils::high_byte(first_444_color_), utils::low_byte(first_444_color_)});
 			send_command(CMD_NOP);
 		}
+		/// @endcond
 
 	private:
 		// Value to add to MADCTL (CMD_SET_ADDRESS_MODE) for Arduino LCD

@@ -516,7 +516,13 @@ namespace utils
 		return ToUint8<T>(input).as_uint8_;
 	}
 
-	//TODO DOC
+	/**
+	 * Cast a two-byte long bit-fields struct into a word.
+	 * Useful when dealing with devices registers (words) where each bit has a
+	 * specific meaning which you want to clarify through a bitfield struct.
+	 * @param input the bit field struct value to convert
+	 * @return @p input casted as a word
+	 */
 	template<typename T> constexpr uint16_t as_uint16_t(T input)
 	{
 		return ToUint16<T>(input).as_uint16_;
