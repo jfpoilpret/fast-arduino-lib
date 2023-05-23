@@ -250,6 +250,9 @@ namespace devices::display
 			memset(display_, 0, sizeof(display_));
 		}
 
+		void before_line(UNUSED uint8_t x1, UNUSED uint8_t y1, UNUSED uint8_t x2, UNUSED uint8_t y2) {}
+		void after_line(UNUSED uint8_t x1, UNUSED uint8_t y1, UNUSED uint8_t x2, UNUSED uint8_t y2) {}
+
 		// NOTE Coordinates must have been first verified by caller
 		bool set_pixel(uint8_t x, uint8_t y, const DRAW_CONTEXT& context)
 		{

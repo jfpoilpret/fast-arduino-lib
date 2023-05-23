@@ -465,17 +465,22 @@ namespace devices::display::st7735
 		 * Enter ST7735 chip into partial mode, meaning that only a subset (rows)
 		 * of the display is used.
 		 * This may reduce current consumption, depending on how many rows are left active.
+		 * You leave partial mode through `normal_mode()`.
 		 * 
-		 * You leav epartial mode through `normal_mode()`.
+		 * @note if @p start_row or @p end_row are not valid, then this method does
+		 * nothing.
 		 * 
-		 * @param start_row the index of first row to activate
-		 * @param end_row the index of last row to activate
+		 * @param start_row the index of first row to activate; must be less than 
+		 * @p end_row
+		 * @param end_row the index of last row to activate; must be strictly less
+		 * than display width
 		 * 
 		 * @sa normal_mode()
 		 */
 		void partial_mode(uint16_t start_row, uint16_t end_row)
 		{
-			//TODO Check validity of args!
+			if (start_row > end_row) return;
+			if (end_row >= HEIGHT) return;
 			send_command(CMD_PARTIAL_AREA, {
 				utils::high_byte(start_row), utils::low_byte(start_row),
 				utils::high_byte(end_row), utils::low_byte(end_row)});
@@ -602,16 +607,38 @@ namespace devices::display::st7735
 		{
 			fill_screen(COLOR{});
 		}
+
+		// Optimization callback, called by Display before drawing a horizontal 
+		// or vertical line
+		void before_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2)
+		{
+			line_optimization_on_ = true;
+			set_column_address(x1, x2);
+			set_row_address(y1, y2);
+			start_memory_write();
+		}
+		
+		void after_line(UNUSED uint8_t x1, UNUSED uint8_t y1, UNUSED uint8_t x2, UNUSED uint8_t y2)
+		{
+			stop_memory_write();
+			line_optimization_on_ = false;
+		}
 		
 		// NOTE Coordinates must have been first verified by caller
 		bool set_pixel(uint8_t x, uint8_t y, const DRAW_CONTEXT& context)
 		{
-			set_column_address(x, x);
-			set_row_address(y , y);
-			start_memory_write();
+			if (!line_optimization_on_)
+			{
+				set_column_address(x, x);
+				set_row_address(y , y);
+				start_memory_write();
+			}
 			//TODO should use context.draw_mode().pixel_op() instead!
 			write_memory(context.draw_mode().color());
-			stop_memory_write();
+			if (!line_optimization_on_)
+			{
+				stop_memory_write();
+			}
 			return true;
 		}
 
@@ -812,6 +839,8 @@ namespace devices::display::st7735
 		gpio::FAST_PIN<DC> dc_{gpio::PinMode::OUTPUT};
 		gpio::FAST_PIN<RST> rst_{gpio::PinMode::OUTPUT, true};
 
+		// flag indicating we are in the middle of drawing a H or V line
+		bool line_optimization_on_ = false;
 		// counter of RGB444 pixels sent, used to properly combine pixel pairs in transmission
 		uint8_t pixel_index_ = 0;
 		uint16_t first_444_color_{};

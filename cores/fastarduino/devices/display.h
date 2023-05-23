@@ -1065,15 +1065,19 @@ namespace devices::display
 		void draw_vline(XCOORD x1, YCOORD y1, YCOORD y2)
 		{
 			swap_to_sort(y1, y2);
+			DISPLAY_DEVICE::before_line(x1, y1, x1, y2);
 			for (YCOORD y = y1; y <= y2; ++y)
 				DISPLAY_DEVICE::set_pixel(x1, y, context_);
+			DISPLAY_DEVICE::after_line(x1, y1, x1, y2);
 		}
 		
 		void draw_hline(XCOORD x1, YCOORD y1, XCOORD x2)
 		{
 			swap_to_sort(x1, x2);
+			DISPLAY_DEVICE::before_line(x1, y1, x2, y1);
 			for (XCOORD x = x1; x <= x2; ++x)
 				DISPLAY_DEVICE::set_pixel(x, y1, context_);
+			DISPLAY_DEVICE::after_line(x1, y1, x2, y1);
 		}
 
 		// Draw a segment according to Bresenham algorithm
