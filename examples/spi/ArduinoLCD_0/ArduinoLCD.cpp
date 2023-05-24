@@ -31,6 +31,7 @@
 #include <fastarduino/devices/display.h>
 #include <fastarduino/utilities.h>
 #include <fastarduino/time.h>
+#include <fastarduino/flash.h>
 
 #ifndef ARDUINO_UNO
 #error "Current target is not supported!"
@@ -52,7 +53,48 @@ using COLOR = DISPLAY::COLOR;
 static constexpr uint8_t WIDTH = DISPLAY::WIDTH;
 static constexpr uint8_t HEIGHT = DISPLAY::HEIGHT;
 using devices::display::Mode;
-// using BITMAP_STREAMER = flash::FlashReader<uint8_t>;
+using BITMAP_STREAMER = flash::FlashReader<uint8_t>;
+using PIXMAP_STREAMER = flash::FlashReader<COLOR>;
+
+// W16xH12 BITMAP
+static const uint8_t BITMAP[] PROGMEM = {
+	0b00111100, 0b00111100,
+	0b01111110, 0b01111110,
+	0b11111111, 0b11111111,
+	0b11111111, 0b11111111,
+	0b01111111, 0b11111110,
+	0b00111111, 0b11111100,
+	0b00011111, 0b11111000,
+	0b00001111, 0b11110000,
+	0b00000111, 0b11100000,
+	0b00000011, 0b11000000,
+	0b00000001, 0b10000000,
+	0b00000001, 0b10000000,
+};
+
+static constexpr COLOR black = {0x00, 0x00, 0x00};
+static constexpr COLOR red = {0xFF, 0x00, 0x00};
+static constexpr COLOR green = {0x00, 0xFF, 0x00};
+static constexpr COLOR blue = {0x00, 0x00, 0xFF};
+static constexpr COLOR white = {0xFF, 0xFF, 0xFF};
+
+// W10x10 color pixmap
+static const COLOR PIXMAP[] PROGMEM = {
+	red,	red,	red,	red,	red,	red,	red,	red,	red,	red,
+	red,	red,	red,	red,	red,	red,	red,	red,	red,	red,
+
+	red,	red,	red,	red,	white,	white,	red,	red,	red,	red,
+	red,	red,	red,	red,	white,	white,	red,	red,	red,	red,
+
+	red,	red,	white,	white,	white,	white,	white,	white,	red,	red,
+	red,	red,	white,	white,	white,	white,	white,	white,	red,	red,
+
+	red,	red,	red,	red,	white,	white,	red,	red,	red,	red,
+	red,	red,	red,	red,	white,	white,	red,	red,	red,	red,
+
+	red,	red,	red,	red,	red,	red,	red,	red,	red,	red,
+	red,	red,	red,	red,	red,	red,	red,	red,	red,	red,
+};
 
 int main()
 {
@@ -70,12 +112,6 @@ int main()
 	// devices::display::ArialFont16x16 font{};
 	devices::display::RetroFont8x16 font{};
 	tft.set_font(font);
-
-	constexpr COLOR black = {0x00, 0x00, 0x00};
-	constexpr COLOR red = {0xFF, 0x00, 0x00};
-	constexpr COLOR green = {0x00, 0xFF, 0x00};
-	constexpr COLOR blue = {0x00, 0x00, 0xFF};
-	constexpr COLOR white = {0xFF, 0xFF, 0xFF};
 
 	tft.fill_screen(black);
 	time::delay_ms(1000);
@@ -123,19 +159,32 @@ int main()
 			yc += FONT_HEIGHT;
 		}
 	}
-	time::delay_ms(5000);
+	time::delay_ms(2000);
 
 	// Try display inversion
 	tft.invert_on();
-	time::delay_ms(5000);
+	time::delay_ms(2000);
 	tft.invert_off();
 
 	// Try idle mode
 	tft.idle_on();
-	time::delay_ms(5000);
+	time::delay_ms(2000);
 
 	// Try display off/on
 	tft.display_off();
-	time::delay_ms(5000);
+	time::delay_ms(2000);
 	tft.display_on();
+
+	// Try partial mode
+	// tft.partial_mode(20, 100);
+
+	tft.erase();
+	tft.set_draw_mode({Mode::COPY, red});
+	tft.set_fill_mode({Mode::NO_CHANGE});
+	tft.draw_bitmap({36, 18}, {16, 12}, BITMAP_STREAMER{BITMAP});
+	time::delay_ms(2000);
+
+	tft.erase();
+	tft.set_draw_mode({Mode::COPY, blue}); // Not used normally
+	tft.draw_pixmap({50, 50}, {10, 10}, PIXMAP_STREAMER{PIXMAP});
 }

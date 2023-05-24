@@ -884,6 +884,7 @@ namespace devices::display
 
 			if (context_.draw_ || context_.fill_)
 			{
+				DISPLAY_DEVICE::before_draw(xorg, yorg, xorg + w - 1, yorg + h - 1);
 				const XCOORD cols = (w / 8) + (w % 8 ? 1 : 0);
 				XCOORD xcurrent = 0;
 				YCOORD ycurrent;
@@ -911,9 +912,63 @@ namespace devices::display
 						}
 					}
 				}
+				DISPLAY_DEVICE::after_draw(xorg, yorg, xorg + w - 1, yorg + h - 1);
 				// Invalidate
 				invalidate(xorg, yorg, XCOORD(xcurrent - 1), YCOORD(ycurrent - 1));
 			}
+		}
+
+		/**
+		 * Draw a color pixmap onto the display device.
+		 * No clipping is performed, pixmap must be fully displayable at @p origin,
+		 * otherwise an error willl occur and nothing wil be drawn.
+		 * 
+		 * Pixmap content is made of a sequence of COLOR, each entry representing
+		 * one pixel, row after row, column after column.
+		 * 
+		 * @note pixmap drawing does not use fill mode or outline draw mode, as
+		 * exact colors ared defined in the pixmap itself.
+		 * 
+		 * @tparam F Functor class which instance @p input_streamer will be used
+		 * to read pixmap byte after byte; class should be able to read pixmap colors
+		 * wherever they are (Flash memore, SD card...)
+		 * @param origin the point at which the top left corner of the pixmap 
+		 * shall be displayed
+		 * @param size the size of the pixmap to diaply 
+		 * @param input_streamer a functor instance that will be called repeatedly
+		 * for each pixmap byte, from the first to the last
+		 * 
+		 * @sa flash::FlashReader
+		 */
+		template<typename F>
+		void draw_pixmap(POINT origin, POINT size, F input_streamer)
+		{
+			// Check origin and size are compatible with display device resolution
+			const XCOORD xorg = origin.x;
+			const YCOORD yorg = origin.y;
+			if (!is_valid_xy(xorg, yorg)) return;
+			const XCOORD w = size.x;
+			const YCOORD h = size.y;
+			if (!is_valid_xy(w, h)) return;
+			if (!is_valid_xy(xorg + w, yorg + h)) return;
+
+			DISPLAY_DEVICE::before_draw(xorg, yorg, xorg + w - 1, yorg + h - 1);
+			XCOORD xcurrent = 0;
+			YCOORD ycurrent;
+			DRAW_CONTEXT context{};
+			for (ycurrent = yorg; ycurrent < yorg + h; ++ycurrent)
+			{
+				for (xcurrent = xorg; xcurrent < xorg + w; ++xcurrent)
+				{
+					COLOR color = input_streamer();
+					context.draw_ = DRAW_MODE{Mode::COPY, color};
+					// Draw each pixel with defined color
+					DISPLAY_DEVICE::set_pixel(xcurrent, ycurrent, context);
+				}
+			}
+			DISPLAY_DEVICE::after_draw(xorg, yorg, xorg + w - 1, yorg + h - 1);
+			// Invalidate
+			invalidate(xorg, yorg, XCOORD(xcurrent - 1), YCOORD(ycurrent - 1));
 		}
 
 		/**
@@ -1065,19 +1120,19 @@ namespace devices::display
 		void draw_vline(XCOORD x1, YCOORD y1, YCOORD y2)
 		{
 			swap_to_sort(y1, y2);
-			DISPLAY_DEVICE::before_line(x1, y1, x1, y2);
+			DISPLAY_DEVICE::before_draw(x1, y1, x1, y2);
 			for (YCOORD y = y1; y <= y2; ++y)
 				DISPLAY_DEVICE::set_pixel(x1, y, context_);
-			DISPLAY_DEVICE::after_line(x1, y1, x1, y2);
+			DISPLAY_DEVICE::after_draw(x1, y1, x1, y2);
 		}
 		
 		void draw_hline(XCOORD x1, YCOORD y1, XCOORD x2)
 		{
 			swap_to_sort(x1, x2);
-			DISPLAY_DEVICE::before_line(x1, y1, x2, y1);
+			DISPLAY_DEVICE::before_draw(x1, y1, x2, y1);
 			for (XCOORD x = x1; x <= x2; ++x)
 				DISPLAY_DEVICE::set_pixel(x, y1, context_);
-			DISPLAY_DEVICE::after_line(x1, y1, x2, y1);
+			DISPLAY_DEVICE::after_draw(x1, y1, x2, y1);
 		}
 
 		// Draw a segment according to Bresenham algorithm

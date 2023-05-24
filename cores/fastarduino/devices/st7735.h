@@ -609,25 +609,25 @@ namespace devices::display::st7735
 		}
 
 		// Optimization callback, called by Display before drawing a horizontal 
-		// or vertical line
-		void before_line(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2)
+		// line, a vertical line, or a rectangle, pixel after pixel
+		void before_draw(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2)
 		{
-			line_optimization_on_ = true;
+			draw_optimization_on_ = true;
 			set_column_address(x1, x2);
 			set_row_address(y1, y2);
 			start_memory_write();
 		}
 		
-		void after_line(UNUSED uint8_t x1, UNUSED uint8_t y1, UNUSED uint8_t x2, UNUSED uint8_t y2)
+		void after_draw(UNUSED uint8_t x1, UNUSED uint8_t y1, UNUSED uint8_t x2, UNUSED uint8_t y2)
 		{
 			stop_memory_write();
-			line_optimization_on_ = false;
+			draw_optimization_on_ = false;
 		}
 		
 		// NOTE Coordinates must have been first verified by caller
 		bool set_pixel(uint8_t x, uint8_t y, const DRAW_CONTEXT& context)
 		{
-			if (!line_optimization_on_)
+			if (!draw_optimization_on_)
 			{
 				set_column_address(x, x);
 				set_row_address(y , y);
@@ -635,7 +635,7 @@ namespace devices::display::st7735
 			}
 			//TODO should use context.draw_mode().pixel_op() instead!
 			write_memory(context.draw_mode().color());
-			if (!line_optimization_on_)
+			if (!draw_optimization_on_)
 			{
 				stop_memory_write();
 			}
@@ -840,7 +840,7 @@ namespace devices::display::st7735
 		gpio::FAST_PIN<RST> rst_{gpio::PinMode::OUTPUT, true};
 
 		// flag indicating we are in the middle of drawing a H or V line
-		bool line_optimization_on_ = false;
+		bool draw_optimization_on_ = false;
 		// counter of RGB444 pixels sent, used to properly combine pixel pairs in transmission
 		uint8_t pixel_index_ = 0;
 		uint16_t first_444_color_{};
