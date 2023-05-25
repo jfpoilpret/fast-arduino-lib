@@ -808,6 +808,7 @@ const uint8_t devices::display::{font_name}::FONT[] PROGMEM =
 {font_glyphs}}};
 """
 
+#FIXME add constructor arg interchar_space (shall ask it in export dialog)
 REGULAR_CODE_TEMPLATE = """
 #include <fastarduino/devices/font.h>
 
@@ -825,7 +826,6 @@ const uint8_t {font_name}::FONT[] PROGMEM =
 {font_glyphs}}};
 """
 
-#FIXME if glyph_car is \ then it shall be escaped!
 GLYPH_TEMPLATE = """	{glyph_row}	// 0x{glyph_code:02x} {glyph_char}
 """
 
@@ -861,8 +861,20 @@ def generate_glyph_rows(c: int, width: int, height: int, vertical: bool, glyph: 
 			glyph_char = '\\ (backslash)' if chr(c) == '\\' else chr(c)
 			glyph_rows += GLYPH_TEMPLATE.format(glyph_row = glyph_row, glyph_code = c, glyph_char = glyph_char)
 	else:
-		#TODO
-		pass
+		glyph_row = ''
+		for row in range(height):
+			for col in range(int((width - 1) / 8 + 1)):
+				mask: int = 0x80
+				byte: int = 0
+				for i in range(8):
+					if col * 8 + i == width:
+						break
+					if glyph[row][col * 8 + i]:
+						byte |= mask
+					mask = int(mask / 2)
+				glyph_row += f'0x{byte:02x}, '
+		glyph_char = '\\ (backslash)' if chr(c) == '\\' else chr(c)
+		glyph_rows += GLYPH_TEMPLATE.format(glyph_row = glyph_row, glyph_code = c, glyph_char = glyph_char)
 	return glyph_rows
 
 def generate_all_glyphs(width: int, height: int, first_char: int, last_char: int, 
