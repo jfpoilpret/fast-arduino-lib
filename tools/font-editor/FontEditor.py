@@ -38,6 +38,9 @@ MIN_SIZE = 4
 DEFAULT_SIZE = 8
 MAX_SIZE = 64
 
+MIN_INTERCHAR=0
+MAX_INTERCHAR=20
+
 # Utility to trick events handling so that events pass through from a widget to a parent widget
 def pass_events_to_parent(widget: Widget, parent: Widget, events: list[str]):
 	bindtags = list(widget.bindtags())
@@ -185,17 +188,19 @@ class NewFontDialog(AbstractDialog):
 class ExportConfig:
 	fastarduino: bool = False
 	vertical: bool = False
+	interchar_space: int
 	directory: str
 
 # Dialog displayed at export of current font
 class ExportDialog(AbstractDialog):
 	def __init__(self, master: Misc):
-		super().__init__(master=master, buttons_row=4, buttons_columnspan=2)
+		super().__init__(master=master, buttons_row=5, buttons_columnspan=2)
 		self.title("Export Settings")
 		self.result: ExportConfig | None = None
 		# These variables will get user input
 		self.fastarduino = BooleanVar()
 		self.vertical = BooleanVar()
+		self.interchar_space = IntVar()
 		self.directory = StringVar()
 		# Add UI: font width and height, 1st char, last char
 		focus_entry = ttk.Checkbutton(master=self, text="FastArduino Font", variable=self.fastarduino)
@@ -203,9 +208,12 @@ class ExportDialog(AbstractDialog):
 		focus_entry.focus()
 		ttk.Checkbutton(master=self, text="Vertical Font", variable=self.vertical).grid(
 			row=2, column=1, columnspan=2, padx=2, pady=2, sticky="W")
+		ttk.Label(master=self, text="Space between characters:").grid(row=3, column=1, padx=2, pady=2, sticky="W")
+		ttk.Spinbox(master=self, from_=MIN_INTERCHAR, to=MAX_INTERCHAR, increment=1, 
+	    	textvariable=self.interchar_space).grid(row=3, column=2, padx=2, pady=2, sticky="W")
 		ttk.Button(master=self, text="Code Files Directory...", command=self.on_select_dir).grid(
-			row=3, column=1, padx=2, pady=2)
-		ttk.Label(master=self, textvariable=self.directory).grid(row=3, column=2, padx=2, pady=2)
+			row=4, column=1, padx=2, pady=2)
+		ttk.Label(master=self, textvariable=self.directory).grid(row=4, column=2, padx=2, pady=2)
 
 		self.show_modal()
 
@@ -224,7 +232,7 @@ class ExportDialog(AbstractDialog):
 				message="Please choose a directory to which source code files will be saved.")
 			return
 		self.result = ExportConfig(fastarduino=self.fastarduino.get(), vertical=self.vertical.get(),
-			directory=self.directory.get())
+			interchar_space=self.interchar_space.get(), directory=self.directory.get())
 		super().on_ok()
 
 # Dialog displayed when changing current font range
@@ -680,7 +688,8 @@ class FontEditor(ttk.Frame):
 				# Generate header file content
 				header = generate_fastarduino_header(self.font_state.name, self.font_state.name, 
 					self.font_state.width, self.font_state.height,
-					self.font_state.first, self.font_state.last, export_config.vertical)
+					self.font_state.first, self.font_state.last, 
+					export_config.vertical, export_config.interchar_space)
 				with open(filename + '.h', 'wt') as output:
 					output.write(header)
 				# Generate source file content
@@ -693,7 +702,7 @@ class FontEditor(ttk.Frame):
 				# Generate regular source code (for specific program use)
 				source = generate_regular_code(filename, self.font_state.name,
 					self.font_state.width, self.font_state.height, self.font_state.first, self.font_state.last,
-					export_config.vertical, self.font_state.glyphs)
+					export_config.vertical, export_config.interchar_space, self.font_state.glyphs)
 				with open(filename + '.h', 'wt') as output:
 					output.write(source)
 	
@@ -789,7 +798,7 @@ namespace devices::display
 	class {font_name} : public Font<{vertical}>
 	{{
 	public:
-		{font_name}() : Font{{0x{first_char:02x}, 0x{last_char:02x}, {font_width}, {font_height}, FONT}} {{}}
+		{font_name}() : Font{{0x{first_char:02x}, 0x{last_char:02x}, {font_width}, {font_height}, {interchar_space}, FONT}} {{}}
 
 	private:
 		static const uint8_t FONT[] PROGMEM;
@@ -808,14 +817,13 @@ const uint8_t devices::display::{font_name}::FONT[] PROGMEM =
 {font_glyphs}}};
 """
 
-#FIXME add constructor arg interchar_space (shall ask it in export dialog)
 REGULAR_CODE_TEMPLATE = """
 #include <fastarduino/devices/font.h>
 
 class {font_name} : public devices::display::Font<{vertical}>
 {{
 public:
-	{font_name}() : Font{{0x{first_char:02x}, 0x{last_char:02x}, {font_width}, {font_height}, FONT}} {{}}
+	{font_name}() : Font{{0x{first_char:02x}, 0x{last_char:02x}, {font_width}, {font_height}, {interchar_space}, FONT}} {{}}
 
 private:
 	static const uint8_t FONT[] PROGMEM;
@@ -830,7 +838,7 @@ GLYPH_TEMPLATE = """	{glyph_row}	// 0x{glyph_code:02x} {glyph_char}
 """
 
 def generate_fastarduino_header(filename: str, font_name: str, width: int, height: int, 
-	first_char: int, last_char: int, vertical: bool) -> str:
+	first_char: int, last_char: int, vertical: bool, interchar_space: int) -> str:
 	# generate header as string
 	return FASTARDUINO_HEADER_TEMPLATE.format(
 		font_header_define = filename.upper() + '_HH',
@@ -839,7 +847,8 @@ def generate_fastarduino_header(filename: str, font_name: str, width: int, heigh
 		first_char = first_char,
 		last_char = last_char,
 		font_width = width,
-		font_height =  height)
+		font_height =  height,
+		interchar_space = interchar_space)
 
 def generate_glyph_rows(c: int, width: int, height: int, vertical: bool, glyph: list[list[bool]]):
 	glyph_rows = ''
@@ -896,7 +905,8 @@ def generate_fastarduino_source(filename: str, font_name: str, width: int, heigh
 		font_glyphs = all_glyphs)
 
 def generate_regular_code(filename: str, font_name: str, width: int, height: int, 
-	first_char: int, last_char: int, vertical: bool, glyphs: dict[int, list[list[bool]]]) -> str:
+	first_char: int, last_char: int, vertical: bool, interchar_space: int,
+	glyphs: dict[int, list[list[bool]]]) -> str:
 	# First generate all rows for glyphs definition
 	all_glyphs = generate_all_glyphs(width, height, first_char, last_char, vertical, glyphs)
 	return REGULAR_CODE_TEMPLATE.format(
@@ -906,6 +916,7 @@ def generate_regular_code(filename: str, font_name: str, width: int, height: int
 		last_char = last_char,
 		font_width = width,
 		font_height =  height,
+		interchar_space=interchar_space,
 		font_glyphs = all_glyphs)
 
 if __name__ == '__main__':
