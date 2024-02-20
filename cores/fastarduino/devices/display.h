@@ -999,8 +999,9 @@ namespace devices::display
 			update();
 		}
 
-	protected:
+	// protected:
 		/// @cond notdocumented
+		// template<bool USED = true>
 		struct InvalidArea
 		{
 			InvalidArea() = default;
@@ -1030,7 +1031,7 @@ namespace devices::display
 				return *this;
 			}
 
-			static InvalidArea EMPTY;
+			// static InvalidArea EMPTY;
 
 			XCOORD x1 = 0;
 			YCOORD y1 = 0;
@@ -1039,8 +1040,15 @@ namespace devices::display
 			bool empty = true;
 		};
 
+		// using INVALID_AREA = InvalidArea<DISPLAY_TRAITS::HAS_RASTER>;
 		using INVALID_AREA = InvalidArea;
+		//DEBUG ONLY (TODO REMOVE AFTERWARDS)
+		const INVALID_AREA& invalid_area() const
+		{
+			return invalid_area_;
+		}
 
+	protected:
 		void invalidate(XCOORD x1, XCOORD y1,XCOORD x2, YCOORD y2, bool clear_error = true)
 		{
 			if (DISPLAY_TRAITS::HAS_RASTER)
@@ -1325,12 +1333,13 @@ namespace devices::display
 		Error last_error_ = Error::NO_ERROR;
 
 		// Minimal rectangle to update
-		INVALID_AREA invalid_area_ = INVALID_AREA::EMPTY;
+		// INVALID_AREA invalid_area_ = INVALID_AREA::EMPTY;
+		INVALID_AREA invalid_area_{};
 	};
 
 	/// @cond notdocumented
-	template<typename DISPLAY_DEVICE>
-	typename Display<DISPLAY_DEVICE>::InvalidArea Display<DISPLAY_DEVICE>::InvalidArea::EMPTY = InvalidArea{};
+	// template<typename DISPLAY_DEVICE>
+	// typename Display<DISPLAY_DEVICE>::InvalidArea Display<DISPLAY_DEVICE>::InvalidArea::EMPTY = InvalidArea{};
 	/// @endcond
 }
 

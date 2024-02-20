@@ -61,7 +61,7 @@ static constexpr uint16_t DELAY_MS = 2000;
 class VerticalFont15x7 : public devices::display::Font<true>
 {
 public:
-	VerticalFont15x7() : Font{0x41, 0x41, 7, 15, FONT} {}
+	VerticalFont15x7() : Font{0x41, 0x41, 7, 15, 1, FONT} {}
 
 private:
 	static const uint8_t FONT[] PROGMEM;
@@ -78,7 +78,7 @@ const uint8_t VerticalFont15x7::FONT[] PROGMEM =
 class VerticalFont7x15 : public devices::display::Font<true>
 {
 public:
-	VerticalFont7x15() : Font{0x41, 0x41, 15, 7, FONT} {}
+	VerticalFont7x15() : Font{0x41, 0x41, 15, 7, 1, FONT} {}
 
 private:
 	static const uint8_t FONT[] PROGMEM;

@@ -4,7 +4,7 @@
 class Font7x5 : public devices::display::Font<true>
 {
 public:
-	Font7x5() : Font{0x20, 0x7e, 5, 7, FONT} {}
+	Font7x5() : Font{0x20, 0x7e, 5, 7, 1, FONT} {}
 
 private:
 	static const uint8_t FONT[] PROGMEM;

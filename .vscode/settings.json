@@ -140,5 +140,6 @@
         "*.tcc": "cpp",
         "fstream": "cpp"
     },
-    "cSpell.enabled": false
+    "cSpell.enabled": false,
+    "cmake.configureOnOpen": false
 }

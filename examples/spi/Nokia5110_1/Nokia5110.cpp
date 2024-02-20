@@ -355,6 +355,7 @@ int main()
 	time::delay_ms(DELAY_MS);
 
 	setup(nokia, {Mode::NO_CHANGE, true}, {Mode::XOR, true}, true);
+	nokia.erase();	//ADDED for DEBUG
 	nokia.set_fill_mode({Mode::NO_CHANGE, false});
 	nokia.set_draw_mode({Mode::COPY, true});
 	nokia.draw_rectangle({30, 35}, {55, 45});
@@ -416,7 +417,6 @@ int main()
 	display_title(nokia, F("==> BITMAP <=="));
 	setup(nokia, {Mode::COPY, true}, {Mode::COPY, false});
 	nokia.draw_bitmap({36, 18}, {16, 12}, BITMAP_STREAMER{BITMAP});
-	// nokia.draw_bitmap({36, 18}, {16, 12}, BITMAP);
 	nokia.update();
 	time::delay_ms(DELAY_MS);
 
@@ -424,14 +424,12 @@ int main()
 	nokia.set_draw_mode({Mode::COPY, true});
 	nokia.set_fill_mode({Mode::COPY, false});
 	nokia.draw_bitmap({36, 18}, {16, 12}, BITMAP_STREAMER{BITMAP});
-	// nokia.draw_bitmap({36, 18}, {16, 12}, BITMAP);
 	nokia.update();
 	nokia.set_draw_mode({Mode::XOR, true});
 	nokia.set_fill_mode({Mode::XOR, true});
 	for (uint8_t i = 0; i < 10; ++i)
 	{
 		nokia.draw_bitmap({36, 18}, {16, 12}, BITMAP_STREAMER{BITMAP});
-		// nokia.draw_bitmap({36, 18}, {16, 12}, BITMAP);
 		nokia.update();
 		time::delay_ms(BLINK_MS);
 	}

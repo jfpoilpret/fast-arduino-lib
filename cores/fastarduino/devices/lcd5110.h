@@ -51,6 +51,7 @@
 #include "display.h"
 #include "font.h"
 
+//FIXME strange display in Nokia1 is that due to a buffer overflow?
 namespace devices::display
 {
 	/** Possible temperature coeeficient that can be set on Nokia5110 display. */
@@ -122,6 +123,12 @@ namespace devices::display
 		using DRAW_CONTEXT = DrawContext<bool, true>;
 
 	public:
+		//DEBUG ONLY (TODO REMOVE AFTERWARDS)
+		const uint8_t* raster() const
+		{
+			return display_;
+		}
+
 		/**
 		 * Reset PCD8544 chip and Nokia 5110 display.
 		 * This shall be called at launch time.
@@ -250,8 +257,8 @@ namespace devices::display
 			memset(display_, 0, sizeof(display_));
 		}
 
-		void before_line(UNUSED uint8_t x1, UNUSED uint8_t y1, UNUSED uint8_t x2, UNUSED uint8_t y2) {}
-		void after_line(UNUSED uint8_t x1, UNUSED uint8_t y1, UNUSED uint8_t x2, UNUSED uint8_t y2) {}
+		void before_draw(UNUSED uint8_t x1, UNUSED uint8_t y1, UNUSED uint8_t x2, UNUSED uint8_t y2) {}
+		void after_draw(UNUSED uint8_t x1, UNUSED uint8_t y1, UNUSED uint8_t x2, UNUSED uint8_t y2) {}
 
 		// NOTE Coordinates must have been first verified by caller
 		bool set_pixel(uint8_t x, uint8_t y, const DRAW_CONTEXT& context)
@@ -293,6 +300,7 @@ namespace devices::display
 			const uint8_t width = context.font().width();
 			uint8_t row = y / ROW_HEIGHT;
 			const uint8_t col = x;
+			//FIXME condition is incorrect actually (if context.font().interchar_space() > 1)
 			const uint8_t interchar_space = ((x + width + 1) < WIDTH) ? context.font().interchar_space() : 0;
 
 			uint8_t glyph_index  = 0;
@@ -301,21 +309,23 @@ namespace devices::display
 				// Get pointer to first byte in row to write in display buffer
 				uint8_t* display_ptr = get_display(row, col);
 
-				for (uint8_t i = 0; i <= width; ++i)
+				for (uint8_t i = 0; i < width; ++i)
 				{
-					const bool space_column = (i == width);
-					uint8_t pixel_bar = 0x00;
-					if (!space_column)
-						pixel_bar = context.font().get_char_glyph_byte(glyph_ref, glyph_index);
-					if ((!space_column) || add_interchar_space)
-						*display_ptr = context.draw_mode().bw_pixels_op(pixel_bar, *display_ptr);
+					uint8_t pixel_bar = context.font().get_char_glyph_byte(glyph_ref, glyph_index);
+					*display_ptr = context.draw_mode().bw_pixels_op(pixel_bar, *display_ptr);
 					++display_ptr;
 					++glyph_index;
+				}
+				// add interspace if needed
+				for (uint8_t i = 0; i < interchar_space; ++i)
+				{
+					*display_ptr = context.draw_mode().bw_pixels_op(0x00, *display_ptr);
+					++display_ptr;
 				}
 				++row;
 			}
 
-			// Return actual width writtent to display
+			// Return actual width written to display
 			return width + interchar_space;
 		}
 

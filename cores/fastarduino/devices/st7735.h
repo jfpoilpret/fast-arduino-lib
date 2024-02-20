@@ -653,6 +653,7 @@ namespace devices::display::st7735
 			// Check column and row not out of range for characters!
 			const uint8_t width = context.font().width();
 			const uint8_t height = context.font().height();
+			//FIXME condition is incorrect actually
 			const uint8_t interchar_space = ((x + width + 1) < WIDTH) ? context.font().interchar_space() : 0;
 			const COLOR fg = context.foreground();
 			const COLOR bg = context.background();
