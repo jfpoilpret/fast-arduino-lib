@@ -18,7 +18,7 @@ DOCDIR=$BASEDIR/basedoc
 
 cd $BASEDIR
 echo "Clean then build all examples for all targets"
-export TARGETS="UNO LEONARDO MEGA ATtiny84 ATtiny85 ATmega644 ATmega1284"
+export TARGETS="UNO NANO LEONARDO MEGA ATtiny84 ATtiny85 ATmega328 ATmega644 ATmega1284"
 for TARGET in $TARGETS
 do
 	echo "Target: $TARGET"
