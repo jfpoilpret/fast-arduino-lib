@@ -41,6 +41,12 @@
 #endif
 #define _SFR_MEM16(x) (x)
 
+// Force RAMPZ which is used by pgmspace.h
+#ifdef RAMPZ
+#undef RAMPZ
+#define RAMPZ (*((volatile uint8_t*) (0x3B + __SFR_OFFSET)))
+#endif
+
 // Force SREG which is used by <util/atomic.h>
 #ifdef SREG
 #undef SREG

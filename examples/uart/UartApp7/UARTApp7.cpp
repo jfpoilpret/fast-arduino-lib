@@ -30,7 +30,7 @@
 #include <fastarduino/soft_uart.h>
 #include <fastarduino/time.h>
 
-#if defined(ARDUINO_UNO)
+#if defined(ARDUINO_UNO) or defined(BREADBOARD_ATMEGA328P)
 constexpr const board::DigitalPin TX = board::DigitalPin::D1_PD1;
 #else
 #error "Current target is not yet supported!"
