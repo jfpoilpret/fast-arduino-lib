@@ -60,7 +60,6 @@ static constexpr const board::DigitalPin RESET = board::DigitalPin::D5_PD5;
 
 //TODO FINAL DESIGN
 //TODO - add istream/ostream for command/UATX/UARX?
-//TODO - detect OK or ERROR on AT commands
 //TODO - support data/command mode?
 //TODO - automatically add events support for everything (connect/disconnect, UART, GATT notifications...)
 //TODO		but dispatch conditionally (if callback registered or not)? HOW?
@@ -68,7 +67,11 @@ static constexpr const board::DigitalPin RESET = board::DigitalPin::D5_PD5;
 //TODO - use Futures and RTT (because this BLE device is incredibly sloooooooow!)
 
 //TODO POC
-// 1h	- detect OK/ERROR on AT command response
+// 15'	- fine tune timing for CS and 1st byte retry
+// 2h+	- add ISR for IRQ and Timer (CTC for 1st byte transmit retry)
+// 30'	- better error handling (enum class and specific error() method)
+// 2h+	- implement GATT API (how?) with callbacks: use Builder pattern?
+// 2h+	- implement UART API (to be inferred thoroughly first)
 // 1h	- implement "basic" commands (e.g. factory reset)
 // 1h	- add ostream for AT commands (how to trigger sending?)
 // 1h	- add istream for AT responses (how to trigger end of reception?)
@@ -82,13 +85,20 @@ class PublicDevice: public spi::SPIDevice<CS, CHIP_SELECT, CLOCK_RATE, MODE, DAT
 	static constexpr const uint8_t EVENT_UART_RX = 8;
 	  
 	// Time settings
+	//---------------
+	// Hardware reset
 	static constexpr const uint16_t DELAY_RESET_CLEAR_MS = 10;
 	static constexpr const uint16_t DELAY_AFTER_RESET_MS = 1000;
+
+	// Retry times in loops (for 1st byte OK and for IRQ wait)
 	static constexpr const uint16_t DELAY_BEFORE_CS_US = 60;
 	//TODO reduce (or remove) this extra delay as much as possible!
-	static constexpr const uint16_t DELAY_AFTER_CS_US = 10;
-	static constexpr const uint16_t TIMEOUT_DEVICE_READY_US = 1000;
+	// static constexpr const uint16_t DELAY_AFTER_CS_US = 10;
+	static constexpr const uint16_t DELAY_AFTER_CS_US = 0;
 	static constexpr const uint16_t DELAY_LOOP_IRQ_US = 10;
+
+	// Timeouts for aborting waits on 1st byte OK or received IRQ 
+	static constexpr const uint16_t TIMEOUT_DEVICE_READY_US = 1000;
 	static constexpr const uint16_t TIMEOUT_IRQ_WAIT_US = 10000;
 
 	//TODO Add flag when command sent and need to get a reply before any new command...
@@ -142,7 +152,8 @@ class PublicDevice: public spi::SPIDevice<CS, CHIP_SELECT, CLOCK_RATE, MODE, DAT
 		while (true)
 		{
 			start_transfer();
-			time::delay_us(DELAY_AFTER_CS_US);
+			if (DELAY_AFTER_CS_US != 0)
+				time::delay_us(DELAY_AFTER_CS_US);
 			uint8_t recv_type = transfer(sent_type);
 			bool ok = true;
 			switch (recv_type)
@@ -161,7 +172,8 @@ class PublicDevice: public spi::SPIDevice<CS, CHIP_SELECT, CLOCK_RATE, MODE, DAT
 			if (ok) return recv_type;
 			end_transfer();
 			if (--loop_count == 0) return recv_type;
-			time::delay_us(DELAY_BEFORE_CS_US);
+			if (DELAY_BEFORE_CS_US != 0)
+				time::delay_us(DELAY_BEFORE_CS_US);
 		}
 	}
 
