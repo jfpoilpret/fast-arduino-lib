@@ -21,6 +21,7 @@ void spi::init()
 {
 	synchronized
 	{
+		//TODO rework to ensure SS is high all the time
 		using board_traits::SPI_trait;
 		// Set MOSI and SCK as Output
 		// Set MISO as Input (high impedance)
