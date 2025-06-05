@@ -65,9 +65,12 @@ static constexpr const board::DigitalPin RESET = board::DigitalPin::D6_PD6;
 #define NTIMER 1
 static constexpr const board::Timer BLE_TIMER = board::Timer::TIMER1;
 
-//TODO POC
-// 2h+	- add ISR for IRQ and Timer (CTC for 1st byte transmit retry)
-// 15'	- better error handling (specific error() method)
+//TODO POC NEXT
+// 30'	- improve timing: 
+//			- start send_packet immediately (at_command)
+//			- start get packet immediately (on_irq
+// 1h+	- better error handling 
+//			- handling of bad message types, bad commands, size overflows...
 // 2h+	- implement GATT API (how?) with callbacks: use Builder pattern?
 // 2h+	- implement UART API (to be inferred thoroughly first)
 //			- support data/command mode?
@@ -103,15 +106,14 @@ private:
 	static constexpr const uint16_t DELAY_AFTER_RESET_MS = 1000;
 
 	// Retry times (in microseconds) in loops (for 1st byte OK and for IRQ wait)
-	static constexpr const uint16_t DELAY_BEFORE_CS_US = 60;
-	static constexpr const uint16_t DELAY_AFTER_CS_US = 0;
-	static constexpr const uint16_t DELAY_LOOP_IRQ_US = 10;
+	static constexpr const uint16_t DELAY_TIMER_US = 60;
+
+	// Retry times (in microseconds) in await loop
+	static constexpr const uint16_t DELAY_AWAIT_US = 500;
 
 	// Timeouts (in microseconds) for aborting waits on 1st byte OK or received IRQ 
 	static constexpr const uint16_t TIMEOUT_DEVICE_READY_US = 1000;
 	static constexpr const uint16_t TIMEOUT_IRQ_WAIT_US = 10000;
-
-	//TODO Add flag when command sent and need to get a reply before any new command...
 
 	// Possible values for type byte
 	// SDEP MessageType (1st header byte)
@@ -134,132 +136,151 @@ private:
 	enum class OperationStatus : uint8_t
 	{
 		NO_OP = 0,
-		SENDING_TYPE,
-		SENDING_ALL,
+		SENDING_PACKET,
 		WAITING_IRQ,
-		RECEIVING_TYPE,
-		RECEIVING_ALL
-	};
-
-	struct SDEPHeader
-	{
-		SDEPHeader() = default;
-		SDEPHeader(uint8_t type, uint16_t command, uint8_t size, bool more_data)
-			:	type{type}, 
-				command{command}, 
-				size{uint8_t((size & MASK_PAYLOAD_SIZE) | (more_data ? MASK_MORE_DATA : 0))} {}
-
-		uint8_t type;
-		uint16_t command;
-		uint8_t size;
+		RECEIVING_PACKET,
+		FINISHED
 	};
 
 	static constexpr const uint8_t SDEP_PAYLOAD_SIZE = 16;
-	struct SDEPPacket
+
+	// Enable CS, transfer 1st byte and check received byte is OK
+	// Return true if 1st bytes received is OK, then timer is suspended
+	// Return false if 1st byte received is not OK, then CS is disabled
+	// Return false also if iteration count is reached (then timer is suspended,
+	// and error_ is updated)
+	bool send_type(uint8_t& type, bool accept_no_data)
 	{
-		SDEPPacket() = default;
-		SDEPPacket(uint8_t type, uint16_t command, uint8_t size, bool more_data, const uint8_t* payload)
-			:	header{type, command, size, more_data}
-		{
-			memcpy(this->payload, payload, size & MASK_PAYLOAD_SIZE);
-		}
-
-		SDEPHeader header;
-		uint8_t payload[SDEP_PAYLOAD_SIZE];
-	};
-
-	uint8_t wait_for_type(uint8_t sent_type, uint16_t loop_count, bool accept_no_data)
-	{
-		while (true)
-		{
-			start_transfer();
-			if (DELAY_AFTER_CS_US != 0)
-				time::delay_us(DELAY_AFTER_CS_US);
-			uint8_t recv_type = transfer(sent_type);
-			bool ok = true;
-			switch (recv_type)
-			{
-				case DEVICE_NOT_READY:
-				ok = false;
-				break;
-
-				case DEVICE_NO_DATA:
-				ok = accept_no_data;
-				break;
-
-				default:
-				break;
-			}
-			if (ok) return recv_type;
-			end_transfer();
-			if (--loop_count == 0) return recv_type;
-			if (DELAY_BEFORE_CS_US != 0)
-				time::delay_us(DELAY_BEFORE_CS_US);
-		}
-	}
-
-	Error send_packet(const SDEPPacket& packet)
-	{
-		// Start SPI transfer, send message type and ensure we get a non error return byte (0xFE)
-		uint8_t type = wait_for_type(packet.header.type, loop_count_for_cs(TIMEOUT_DEVICE_READY_US), true);
-		if (type == DEVICE_NOT_READY)
-			return Error::TIMEOUT_DEVICE_NOT_READY;
-	
-		// Command ID
-		transfer(utils::low_byte(packet.header.command));
-		transfer(utils::high_byte(packet.header.command));
-
-		// Payload size
-		transfer(packet.header.size);
-
-		// Payload
-		transfer(packet.payload, packet.header.size & MASK_PAYLOAD_SIZE);
-	
-		end_transfer();
-		return Error::OK;
-	}
-
-	Error get_packet(SDEPPacket& packet)
-	{
-		// Start SPI transfer, send message type and ensure we get a non error return byte (0xFE)
-		uint8_t type = wait_for_type(0xFF, loop_count_for_cs(TIMEOUT_DEVICE_READY_US), false);
-		packet.header.type = type;
+		start_transfer();
+		type = transfer(type);
+		bool ok = true;
+		Error error;
 		switch (type)
 		{
 			case DEVICE_NOT_READY:
-			return Error::TIMEOUT_DEVICE_NOT_READY;
+			ok = false;
+			error = Error::TIMEOUT_DEVICE_NOT_READY;
+			break;
 
 			case DEVICE_NO_DATA:
-			return Error::TIMEOUT_DEVICE_NO_DATA;
-			
+			ok = accept_no_data;
+			error = Error::TIMEOUT_DEVICE_NO_DATA;
+			break;
+
 			default:
 			break;
 		}
+		if (!ok)
+		{
+			// Disable CS and let timer trigger another attempt in a few dozen us
+			end_transfer();
+			// Check if timeout reached
+			if (--wait_loop_count_ == 0)
+			{
+				error_ = error;
+				timer_.suspend_interrupts_();
+			}
+		}
+		return ok;
+	}
+
+	bool send_packet()
+	{
+		// Start SPI transfer, send message type and ensure we get a non error return byte (0xFE)
+		uint8_t type = TYPE_COMMAND;
+		if (!send_type(type, true))
+			return false;
 	
 		// Command ID
-		uint8_t low = transfer(0xFF);
-		uint8_t high = transfer(0xFF);
-		packet.header.command = utils::as_uint16_t(high, low);
+		transfer(utils::low_byte(COMMAND_AT));
+		transfer(utils::high_byte(COMMAND_AT));
 
 		// Payload size
-		uint8_t size = transfer(0xFF);
-		packet.header.size = size;
+		const uint8_t size = (size_ > SDEP_PAYLOAD_SIZE ? SDEP_PAYLOAD_SIZE : size_);
+		const uint8_t more_data = (size_ > SDEP_PAYLOAD_SIZE ? MASK_MORE_DATA : 0);
+		transfer(size | more_data);
 
 		// Payload
-		transfer(packet.payload, size & MASK_PAYLOAD_SIZE, 0xFF);
-	
+		transfer(current_, size);
+
+		// End SPI transfer
 		end_transfer();
-		return Error::OK;
+
+		// Was it the last packet to send?
+		if (more_data)
+		{
+			current_ += size;
+			size_ -= size;
+			wait_loop_count_ = loop_count_for_cs(TIMEOUT_DEVICE_READY_US);
+		}
+		else
+		{
+			// Update operation status
+			operation_ = OperationStatus::WAITING_IRQ;
+			current_ = buffer_;
+			wait_loop_count_ = loop_count_for_irq(TIMEOUT_IRQ_WAIT_US);
+			size_ = 0;
+			signal_.enable_();
+		}
+
+		return true;
+	}
+
+	bool get_packet()
+	{
+		// Start SPI transfer, send 0xFF and ensure we get a non error return byte (0xFE or 0xFF)
+		uint8_t type = 0xFF;
+		if (!send_type(type, false))
+			return false;
+	
+		// Command ID
+		UNUSED const uint8_t low = transfer(0xFF);
+		UNUSED const uint8_t high = transfer(0xFF);
+
+		// Payload size
+		const uint8_t size_byte = transfer(0xFF);
+		const uint8_t size = size_byte & MASK_PAYLOAD_SIZE;
+		const bool more_data = size_byte & MASK_MORE_DATA;
+
+		//TODO Check total size is not over buffer_ size! => Error!
+
+		// Payload
+		transfer(current_, size, 0xFF);
+	
+		// End SPI transfer
+		end_transfer();
+
+		// Was it the last packet to receive?
+		size_ += size;
+		if (more_data)
+		{
+			current_ += size;
+			wait_loop_count_ = loop_count_for_cs(TIMEOUT_DEVICE_READY_US);
+		}
+		else
+		{
+			// Update operation status
+			operation_ = OperationStatus::FINISHED;
+			timer_.suspend_interrupts_();
+		}
+
+		return true;
+	}
+
+	Error check_ok(const char* response)
+	{
+		char* found = strstr(response, "OK\r\n");
+		return (found != 0 ? Error::OK : Error::RESPONSE_WITH_ERROR);
 	}
 
 public:
 	static constexpr uint16_t loop_count_for_cs(uint16_t timeout_us)
 	{
-		return timeout_us / (DELAY_BEFORE_CS_US + DELAY_AFTER_CS_US);
+		return timeout_us / DELAY_TIMER_US;
 	}
 	static constexpr uint16_t loop_count_for_irq(uint16_t timeout_us)
 	{
-		return timeout_us / DELAY_LOOP_IRQ_US;
+		return timeout_us / DELAY_TIMER_US;
 	}
 
 	PublicDevice(): SPIDevice()
@@ -300,112 +321,157 @@ public:
 		time::delay_ms(DELAY_AFTER_RESET_MS);
 	}
 
+	//DEBUG ONLY (really?): simulate ISR with busy wait loops
 	Error await_at_command(const char* command)
 	{
-		static constexpr const uint8_t SIZE = 64;
-		char response[SIZE+1];
-		return await_at_command(command, response, SIZE);
+		char response[BUFFER_SIZE + 1];
+		return await_at_command(command, response, BUFFER_SIZE);
 	}
 
+	//DEBUG ONLY (really?): simulate ISR with busy wait loops
 	Error await_at_command(const char* command, char* response, uint8_t size)
 	{
-		Error error = send_command(command);
-		if (error != Error::OK)
-			return error;
-		// reduce size to keep final string 0
-		--size;
-		error = get_response((uint8_t*) response, size);
-		if (error != Error::OK) return error;
-		response[size] = 0;
-		return check_ok(response);
+		if (!at_command(command))
+			return Error::BUSY;
+		// // Busy loop for packet sending
+		// while (operation_ == OperationStatus::SENDING_PACKET)
+		// {
+		// 	on_timer_compare();
+		// 	if (error_ != Error::OK)
+		// 		return error_;
+		// 	time::delay_us(DELAY_TIMER_US);
+		// }
+		// // Busy loop to wait for IRQ
+		// while (operation_ == OperationStatus::WAITING_IRQ)
+		// {
+		// 	on_irq_high();
+		// 	on_timer_compare();
+		// 	if (error_ != Error::OK)
+		// 		return error_;
+		// 	time::delay_us(DELAY_TIMER_US);
+		// }
+		// // Busy loop for packet receiving
+		// while (operation_ == OperationStatus::RECEIVING_PACKET)
+		// {
+		// 	on_timer_compare();
+		// 	if (error_ != Error::OK)
+		// 		return error_;
+		// 	time::delay_us(DELAY_TIMER_US);
+		// }
+		// Normally here we have results
+		Error error = error_;
+		await_response(response, size, error);
+		return error;
 	}
 
-	Error send_command(const char* command)
+	// Launch AT command asnchronously
+	bool at_command(const char* command)
 	{
-		// Prepare count of packets
-		const uint8_t len = strlen(command);
-		const uint8_t last_packet_size = len % SDEP_PAYLOAD_SIZE;
-		const uint8_t count_packets = (len / SDEP_PAYLOAD_SIZE) + (last_packet_size ? 1 : 0);
-		const uint8_t* payload = (const uint8_t*) command;
-		// Transmit each packet
-		for (uint8_t num_packet = 0; num_packet < count_packets; ++num_packet)
+		// Ensure transfer operation can be started (no other operation is on going at the same time)
+		synchronized
 		{
-			const bool last = (num_packet == count_packets - 1);
-			const uint8_t packet_size = (last && (last_packet_size != 0) ? last_packet_size : SDEP_PAYLOAD_SIZE);
-			SDEPPacket packet{TYPE_COMMAND, COMMAND_AT, packet_size, !last, payload};
-			Error error = send_packet(packet);
-			if (error != Error::OK)
-				return error;
-			payload += packet_size;
+			if (operation_ != OperationStatus::NO_OP)
+				return false;
+			operation_ = OperationStatus::SENDING_PACKET;
 		}
-		return Error::OK;
+		// Setup operation extra data
+		error_ = Error::OK;
+		wait_loop_count_ = loop_count_for_cs(TIMEOUT_DEVICE_READY_US);
+		// Setup data to be transmitted
+		size_ = strlen(command);
+		memcpy(buffer_, command, size_);
+		current_ = buffer_;
+
+		//TODO Try to send 1st packet immediately!
+		// Start timer to send 1st byte of 1st packet
+		timer_.resume_interrupts();
+		return true;
 	}
 
-	Error wait_for_irq(uint16_t loop_count)
+	// Return false if there is nothing to await for (typically because method called twice for 1 exchange)
+	bool await_response(char* response, UNUSED uint8_t max_size, Error& error)
 	{
-		while (!irq_.value())
+		if (operation_ == OperationStatus::NO_OP)
+			return false;
+		while (operation_ != OperationStatus::FINISHED)
 		{
-			if (loop_count-- == 0)
-				return Error::TIMEOUT_IRQ;
-			time::delay_us(DELAY_LOOP_IRQ_US);
+			//FIXME wait timeout? to avoid infinite loop (even though it shall never happen... normally)
+			time::delay_us(DELAY_AWAIT_US);
 		}
-		return Error::OK;
+		// Calculate everything
+		operation_ = OperationStatus::NO_OP;
+		//TODO check size overflow!!!
+		memcpy(response, buffer_, size_);
+		response[size_] = 0;
+		// Check if OK in response
+		error = (error_ == Error::OK ? check_ok(response) : error_);
+		return true;
 	}
 
-	Error check_ok(const char* response)
-	{
-		char* found = strstr(response, "OK\r\n");
-		return (found != 0 ? Error::OK : Error::RESPONSE_WITH_ERROR);
-	}
-
-	//TODO add expected command value?
-	Error get_response(uint8_t* response, uint8_t& max_size)
-	{
-		Error error = wait_for_irq(loop_count_for_irq(TIMEOUT_IRQ_WAIT_US));
-		if (error != Error::OK)
-			return error;
-
-		// Read all packet until last one
-		uint8_t* current = response;
-		uint8_t total = 0;
-		while (true)
-		{
-			SDEPPacket packet;
-			error = get_packet(packet);
-			if (error != Error::OK)
-				return error;
-			// Copy payload part to response
-			uint8_t size = packet.header.size & MASK_PAYLOAD_SIZE;
-			if (total + size > max_size)
-				return Error::RESPONSE_SIZE_OVERFLOW;
-			memcpy(current, packet.payload, size);
-			current += size;
-			total += size;
-			// Is this last packet to receive?
-			if (!(packet.header.size & MASK_MORE_DATA))
-				break;
-		}
-		max_size = total;
-		return Error::OK;
-	}
-
+private:
 	void on_irq_high()
 	{
-		//TODO
+		// Double check IRQ level (you never know)
+		if (irq_.value())
+		{
+			operation_ = OperationStatus::RECEIVING_PACKET;
+			wait_loop_count_ = loop_count_for_cs(TIMEOUT_DEVICE_READY_US);
+			signal_.disable_();
+			//TODO Try to get 1st packet immediately?
+			timer_.resume_interrupts_();
+		}
 	}
 
 	void on_timer_compare()
 	{
-		//TODO
+		// First check current operation?
+		switch (operation_)
+		{
+			case OperationStatus::SENDING_PACKET:
+			send_packet();
+			break;
+
+			case OperationStatus::RECEIVING_PACKET:
+			get_packet();
+			break;
+
+			case OperationStatus::WAITING_IRQ:
+			// Check count loop IRQ
+			if (--wait_loop_count_ == 0)
+			{
+				error_ = Error::TIMEOUT_IRQ;
+				operation_ = OperationStatus::FINISHED;
+				timer_.suspend_interrupts_();
+			}
+			break;
+
+			default:
+			//TODO ERROR
+			return;
+		}
 	}
 
+	// Data for on going exchange operation
+	// Current operation phase
 	volatile OperationStatus operation_ = OperationStatus::NO_OP;
+	// Latest error occurred during operation
+	volatile Error error_ = Error::OK;
+	// Count of wait loops for acceptable 1st received byte
+	uint16_t wait_loop_count_;
+	// Buffer used both for sending command and received response
+	static constexpr const uint8_t BUFFER_SIZE = 64;
+	uint8_t buffer_[BUFFER_SIZE];
+	// For command sending: buffer size remaining to transfer
+	// For response receiving: response size received sofar
+	uint8_t size_;
+	// Pointer to next buffer_ byte to read/write
+	uint8_t* current_;
 
 	using TIMER = timer::Timer<BLE_TIMER>;
 	using CALC = TIMER::CALCULATOR;
-	static constexpr const TIMER::PRESCALER PRESCALER = CALC::CTC_prescaler(DELAY_BEFORE_CS_US);
-	static_assert(CALC::is_adequate_for_CTC(PRESCALER, DELAY_BEFORE_CS_US));
-	static constexpr const uint16_t COUNTER = CALC::CTC_counter(PRESCALER, DELAY_BEFORE_CS_US);
+	static constexpr const TIMER::PRESCALER PRESCALER = CALC::CTC_prescaler(DELAY_TIMER_US);
+	static_assert(CALC::is_adequate_for_CTC(PRESCALER, DELAY_TIMER_US));
+	static constexpr const uint16_t COUNTER = CALC::CTC_counter(PRESCALER, DELAY_TIMER_US);
 	TIMER timer_ = TIMER{timer::TimerMode::CTC, PRESCALER, timer::TimerInterrupt::OUTPUT_COMPARE_A};
 
 	gpio::FAST_EXT_PIN<IRQ> irq_ = gpio::FAST_EXT_PIN<IRQ>{gpio::PinMode::INPUT};
@@ -417,8 +483,8 @@ public:
 	friend int main();
 };
 
-// REGISTER_INT_ISR_METHOD(IRQ_PIN, IRQ, PublicDevice, &PublicDevice::on_irq_high)
-// REGISTER_TIMER_COMPARE_ISR_METHOD(NTIMER, PublicDevice, &PublicDevice::on_timer_compare)
+REGISTER_INT_ISR_METHOD(IRQ_PIN, IRQ, PublicDevice, &PublicDevice::on_irq_high)
+REGISTER_TIMER_COMPARE_ISR_METHOD(NTIMER, PublicDevice, &PublicDevice::on_timer_compare)
 
 using streams::endl;
 using streams::flush;
@@ -459,7 +525,7 @@ streams::ostream& operator<<(streams::ostream& o, Error error)
 		label = F("RESPONSE_WITH_ERROR");
 		break;
 	}
-	return o << label;
+	return o << label << flush;
 }
 
 int main()
@@ -480,27 +546,10 @@ int main()
 	device.reset();
 	out << F("SPI & device initialized") << endl;
 	
-	// // Try to send a minimal SDEP packet
-	// bool ok = device.send_command("ATZ");
-	// if (!ok)
-	// 	out << F("ERROR during send_command()") << endl;
-
-	// // Read response here
-	// uint8_t response[64];
-	// uint8_t size = 64;
-	// ok = device.get_response(response, size);
-	// if (!ok)
-	// 	out << F("ERROR during get_response()") << endl;
-
-	// out << F("Response (") << dec << size << ')' << endl;
-	// for (uint8_t i = 0; i < size; ++i)
-	// 	out << ' ' << hex << response[i];
-	// out << endl;
-
 	// Enable system events
 	Error error = device.await_at_command("AT+EVENTENABLE=0x3");
 	if (error != Error::OK)
-		out << F("ERROR during await_at_command('AT+EVENTENABLE=0x3'): ") << error << endl;
+		out << F("ERROR during await_at_command('AT+EVENTENABLE=0x3'): ") << endl << error << endl;
 	// Loop to check connect/disconnect events status
 	while (true)
 	{
@@ -509,8 +558,8 @@ int main()
 		char response[SIZE+1];
 		error = device.await_at_command("AT+EVENTSTATUS", response, SIZE);
 		if (error != Error::OK)
-			out << F("ERROR during await_at_command('AT+EVENTSTATUS'): ") << error << endl;
-		out << F("EVENTSTATUS = ") << response << flush;
+			out << F("ERROR during await_at_command('AT+EVENTSTATUS'): ") << endl << error << endl;
+		out << F("EVENTSTATUS = ") << response << endl;
 	}
 	// Stop SPI device if needed
 	// out << F("End") << endl;
