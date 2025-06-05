@@ -72,11 +72,12 @@ static constexpr const board::Timer BLE_TIMER = board::Timer::TIMER1;
 // 1h+	- better error handling 
 //			- handling of bad message types, bad commands, size overflows...
 // 2h+	- implement GATT API (how?) with callbacks: use Builder pattern?
-// 2h+	- implement UART API (to be inferred thoroughly first)
-//			- support data/command mode?
 // 1h	- implement "basic" commands (e.g. factory reset)
+// 1h	- do we need to call the init command? when? timing?
 // 1h	- add ostream for AT commands (how to trigger sending?)
 // 1h	- add istream for AT responses (how to trigger end of reception?)
+// 2h+	- implement UART API (to be inferred thoroughly first)
+//			- support data/command mode?
 
 // Subclass SPIDevice to make protected methods available from main()
 class PublicDevice: public spi::SPIDevice<CS, CHIP_SELECT, CLOCK_RATE, MODE, DATA_ORDER>
@@ -321,50 +322,24 @@ public:
 		time::delay_ms(DELAY_AFTER_RESET_MS);
 	}
 
-	//DEBUG ONLY (really?): simulate ISR with busy wait loops
+	// Launch AT command synchronously
 	Error await_at_command(const char* command)
 	{
 		char response[BUFFER_SIZE + 1];
 		return await_at_command(command, response, BUFFER_SIZE);
 	}
 
-	//DEBUG ONLY (really?): simulate ISR with busy wait loops
+	// Launch AT command synchronously
 	Error await_at_command(const char* command, char* response, uint8_t size)
 	{
 		if (!at_command(command))
 			return Error::BUSY;
-		// // Busy loop for packet sending
-		// while (operation_ == OperationStatus::SENDING_PACKET)
-		// {
-		// 	on_timer_compare();
-		// 	if (error_ != Error::OK)
-		// 		return error_;
-		// 	time::delay_us(DELAY_TIMER_US);
-		// }
-		// // Busy loop to wait for IRQ
-		// while (operation_ == OperationStatus::WAITING_IRQ)
-		// {
-		// 	on_irq_high();
-		// 	on_timer_compare();
-		// 	if (error_ != Error::OK)
-		// 		return error_;
-		// 	time::delay_us(DELAY_TIMER_US);
-		// }
-		// // Busy loop for packet receiving
-		// while (operation_ == OperationStatus::RECEIVING_PACKET)
-		// {
-		// 	on_timer_compare();
-		// 	if (error_ != Error::OK)
-		// 		return error_;
-		// 	time::delay_us(DELAY_TIMER_US);
-		// }
-		// Normally here we have results
 		Error error = error_;
 		await_response(response, size, error);
 		return error;
 	}
 
-	// Launch AT command asnchronously
+	// Launch AT command asynchronously
 	bool at_command(const char* command)
 	{
 		// Ensure transfer operation can be started (no other operation is on going at the same time)
