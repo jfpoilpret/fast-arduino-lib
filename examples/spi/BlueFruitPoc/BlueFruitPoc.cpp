@@ -69,15 +69,26 @@ static constexpr const board::Timer BLE_TIMER = board::Timer::TIMER1;
 // 30'	- improve timing: 
 //			- start send_packet immediately (at_command)
 //			- start get packet immediately (on_irq
-// 1h+	- better error handling 
-//			- handling of bad message types, bad commands, size overflows...
+
 // 2h+	- implement GATT API (how?) with callbacks: use Builder pattern?
+
 // 1h	- implement "basic" commands (e.g. factory reset)
 // 1h	- do we need to call the init command? when? timing?
+
 // 1h	- add ostream for AT commands (how to trigger sending?)
 // 1h	- add istream for AT responses (how to trigger end of reception?)
+
 // 2h+	- implement UART API (to be inferred thoroughly first)
 //			- support data/command mode?
+
+// 4h	- rework as real FastArduino device (same API as POC to start with)
+//			- implement basic example
+//			- implement example with LED blinking controlled by Android application
+// 16h	- then improve device to:
+//			- use Futures for all API
+//			- also define sync API based on async API
+//			- callback design with CRTP pattern
+//			- buffer size management? (normally at Future level no?)
 
 // Subclass SPIDevice to make protected methods available from main()
 class PublicDevice: public spi::SPIDevice<CS, CHIP_SELECT, CLOCK_RATE, MODE, DATA_ORDER>
@@ -92,9 +103,17 @@ public:
 		TIMEOUT_DEVICE_NO_DATA,
 		RESPONSE_WITH_ERROR,
 		RESPONSE_SIZE_OVERFLOW,
+		RESPONSE_TYPE_ALERT,
+		RESPONSE_TYPE_ERROR,
+		RESPONSE_TYPE_UNEXPECTED,
+		EXCHANGE_PHASE_OUT
 	};
 
 private:
+	using THIS = PublicDevice;
+
+	static constexpr const uint8_t BUFFER_SIZE = 64;
+
 	// Events bits for AT+EVENTENABLE and other event-related AT commands
 	static constexpr const uint8_t EVENT_CONNECT = 0;
 	static constexpr const uint8_t EVENT_DISCONNECT = 1;
@@ -110,7 +129,8 @@ private:
 	static constexpr const uint16_t DELAY_TIMER_US = 60;
 
 	// Retry times (in microseconds) in await loop
-	static constexpr const uint16_t DELAY_AWAIT_US = 500;
+	static constexpr const uint16_t DELAY_AWAIT_RESPONSE_US = 500;
+	static constexpr const uint16_t TIMEOUT_AWAIT_RESPONSE_US = 20000;
 
 	// Timeouts (in microseconds) for aborting waits on 1st byte OK or received IRQ 
 	static constexpr const uint16_t TIMEOUT_DEVICE_READY_US = 1000;
@@ -129,6 +149,15 @@ private:
 	static constexpr const uint16_t COMMAND_AT = 0x0A00;
 	static constexpr const uint16_t COMMAND_UART_TX = 0x0A01;
 	static constexpr const uint16_t COMMAND_UART_RX = 0x0A02;
+	// SDEP Alert IDs TODO replace with public enum class!
+	static constexpr const uint16_t ALERT_RESERVED = 0x0000;
+	static constexpr const uint16_t ALERT_SYSTEM_RESET = 0x0001;
+	static constexpr const uint16_t ALERT_BATTERY_LOW = 0x0002;
+	static constexpr const uint16_t ALERT_BATTERY_CRITICAL = 0x0003;
+	// SDEP Error IDs TODO replace with public enum class!
+	static constexpr const uint16_t ERROR_RESERVED = 0x0000;
+	static constexpr const uint16_t ERROR_INVALID_CMD_ID = 0x0001;
+	static constexpr const uint16_t ERROR_INVALID_PAYLOAD = 0x0003;
 	// SDEP payload size masks
 	static constexpr const uint8_t MASK_MORE_DATA = 0x80;
 	static constexpr const uint8_t MASK_PAYLOAD_SIZE = 0x1F;
@@ -235,25 +264,55 @@ private:
 			return false;
 	
 		// Command ID
-		UNUSED const uint8_t low = transfer(0xFF);
-		UNUSED const uint8_t high = transfer(0xFF);
+		const uint8_t low = transfer(0xFF);
+		const uint8_t high = transfer(0xFF);
+		message_id_ = utils::as_uint16_t(high, low);
 
 		// Payload size
 		const uint8_t size_byte = transfer(0xFF);
 		const uint8_t size = size_byte & MASK_PAYLOAD_SIZE;
 		const bool more_data = size_byte & MASK_MORE_DATA;
 
-		//TODO Check total size is not over buffer_ size! => Error!
+		// Check total size is not over buffer_ size!
+		if (size_ + size <= BUFFER_SIZE)
+		{
+			// Payload
+			transfer(current_, size, 0xFF);
+			size_ += size;
+		}
+		else
+		{
+			// Ensure packet is fully transferred even though we will not fill buffer
+			transfer(size, 0xFF);
+			// Report overflow error
+			error_ = Error::RESPONSE_SIZE_OVERFLOW;
+		}
 
-		// Payload
-		transfer(current_, size, 0xFF);
-	
 		// End SPI transfer
 		end_transfer();
 
+		// Check response type is expected
+		switch (type)
+		{
+			case TYPE_RESPONSE:
+			// passthrough
+			break;
+
+			case TYPE_ALERT:
+			error_ = Error::RESPONSE_TYPE_ALERT;
+			break;
+
+			case TYPE_ERROR:
+			error_ = Error::RESPONSE_TYPE_ERROR;
+			break;
+
+			default:
+			error_ = Error::RESPONSE_TYPE_UNEXPECTED;
+			break;
+		}
+
 		// Was it the last packet to receive?
-		size_ += size;
-		if (more_data)
+		if (error_ == Error::OK && more_data)
 		{
 			current_ += size;
 			wait_loop_count_ = loop_count_for_cs(TIMEOUT_DEVICE_READY_US);
@@ -275,6 +334,7 @@ private:
 	}
 
 public:
+	//TODO If we make these functions public, we shall have timeout argument in other API!
 	static constexpr uint16_t loop_count_for_cs(uint16_t timeout_us)
 	{
 		return timeout_us / DELAY_TIMER_US;
@@ -282,6 +342,10 @@ public:
 	static constexpr uint16_t loop_count_for_irq(uint16_t timeout_us)
 	{
 		return timeout_us / DELAY_TIMER_US;
+	}
+	static constexpr uint16_t loop_count_for_await_response(uint16_t timeout_us)
+	{
+		return timeout_us / DELAY_AWAIT_RESPONSE_US;
 	}
 
 	PublicDevice(): SPIDevice()
@@ -295,6 +359,75 @@ public:
 			timer_.suspend_interrupts_();
 		}
 	}
+
+	class Response
+	{
+	public:
+		Response() = default;
+		Response(const Response&) = default;
+		Response& operator=(const Response&) = default;
+
+		bool is_usable() const
+		{
+			return usable_;
+		}
+
+		bool is_successful() const
+		{
+			return usable_ && (error_ == Error::OK);
+		}
+
+		uint8_t response_size() const
+		{
+			return size_;
+		}
+
+		const char* response() const
+		{
+			return (is_successful() ? (const char*) response_ : 0);
+		}
+
+		Error error() const
+		{
+			return (usable_ ? error_ : Error::BUSY);
+		}
+
+		bool is_error() const
+		{
+			return usable_ && (error_ != Error::RESPONSE_TYPE_ERROR);
+		}
+
+		bool is_alert() const
+		{
+			return usable_ && (error_ == Error::RESPONSE_TYPE_ALERT);
+		}
+
+		uint16_t alert_id() const
+		{
+			return (is_alert() ? id_ : 0);
+		}
+
+		uint16_t error_id() const
+		{
+			return (is_error() ? id_ : 0);
+		}
+
+	private:
+		Response(Error error, uint16_t id, uint8_t size, const uint8_t* response)
+			:	usable_{true}, error_{error}, id_{id}, size_{size}
+		{
+			memcpy(response_, response, size);
+			response_[size] = 0;
+		}
+
+		bool usable_ = false;
+		Error error_;
+		uint16_t id_;
+		uint8_t size_;
+		uint8_t response_[THIS::BUFFER_SIZE + 1];
+
+		friend THIS;
+	};
 
 	// Functions for events handling
 	// void register_callbacks()
@@ -323,20 +456,14 @@ public:
 	}
 
 	// Launch AT command synchronously
-	Error await_at_command(const char* command)
-	{
-		char response[BUFFER_SIZE + 1];
-		return await_at_command(command, response, BUFFER_SIZE);
-	}
-
-	// Launch AT command synchronously
-	Error await_at_command(const char* command, char* response, uint8_t size)
+	bool await_at_command(const char* command, Response& response)
 	{
 		if (!at_command(command))
-			return Error::BUSY;
-		Error error = error_;
-		await_response(response, size, error);
-		return error;
+		{
+			response = Response();
+			return false;
+		}
+		return await_response(response);
 	}
 
 	// Launch AT command asynchronously
@@ -363,23 +490,36 @@ public:
 		return true;
 	}
 
+	bool is_response_ready() const
+	{
+		return operation_ == OperationStatus::FINISHED;
+	}
+
 	// Return false if there is nothing to await for (typically because method called twice for 1 exchange)
-	bool await_response(char* response, UNUSED uint8_t max_size, Error& error)
+	// Return false if timeout elapsed before end of transaction
+	bool await_response(Response& response, uint16_t loop_until_timout = 
+		loop_count_for_await_response(TIMEOUT_AWAIT_RESPONSE_US))
 	{
 		if (operation_ == OperationStatus::NO_OP)
+		{
+			response = Response();
 			return false;
+		}
 		while (operation_ != OperationStatus::FINISHED)
 		{
-			//FIXME wait timeout? to avoid infinite loop (even though it shall never happen... normally)
-			time::delay_us(DELAY_AWAIT_US);
+			time::delay_us(DELAY_AWAIT_RESPONSE_US);
+			if (--loop_until_timout == 0)
+			{
+				response = Response();
+				return false;
+			}
 		}
-		// Calculate everything
-		operation_ = OperationStatus::NO_OP;
-		//TODO check size overflow!!!
-		memcpy(response, buffer_, size_);
-		response[size_] = 0;
 		// Check if OK in response
-		error = (error_ == Error::OK ? check_ok(response) : error_);
+		buffer_[size_] = 0;
+		const Error error = (error_ == Error::OK ? check_ok((const char*) buffer_) : error_);
+		response = Response{error, message_id_, size_, buffer_};
+		// Now we can authorize new transactions again
+		operation_ = OperationStatus::NO_OP;
 		return true;
 	}
 
@@ -421,8 +561,11 @@ private:
 			break;
 
 			default:
-			//TODO ERROR
-			return;
+			// Unexpected operation status: phasing error?
+			error_ = Error::EXCHANGE_PHASE_OUT;
+			operation_ = OperationStatus::FINISHED;
+			timer_.suspend_interrupts_();
+			break;
 		}
 	}
 
@@ -431,10 +574,11 @@ private:
 	volatile OperationStatus operation_ = OperationStatus::NO_OP;
 	// Latest error occurred during operation
 	volatile Error error_ = Error::OK;
+	// Alert or Error ID if received
+	volatile uint16_t message_id_ = 0;
 	// Count of wait loops for acceptable 1st received byte
 	uint16_t wait_loop_count_;
 	// Buffer used both for sending command and received response
-	static constexpr const uint8_t BUFFER_SIZE = 64;
 	uint8_t buffer_[BUFFER_SIZE];
 	// For command sending: buffer size remaining to transfer
 	// For response receiving: response size received sofar
@@ -455,6 +599,8 @@ private:
 
 	DECL_TIMER_COMP_FRIENDS;
 	DECL_INT_ISR_FRIENDS;
+	friend class Response;
+
 	friend int main();
 };
 
@@ -469,7 +615,7 @@ using Error = PublicDevice::Error;
 
 streams::ostream& operator<<(streams::ostream& o, Error error)
 {
-	const flash::FlashStorage* label;
+	const flash::FlashStorage* label = 0;
 	switch (error)
 	{
 		case Error::OK:
@@ -499,6 +645,22 @@ streams::ostream& operator<<(streams::ostream& o, Error error)
 		case Error::RESPONSE_WITH_ERROR:
 		label = F("RESPONSE_WITH_ERROR");
 		break;
+
+		case Error::RESPONSE_TYPE_ALERT:
+		label = F("RESPONSE_TYPE_ALERT");
+		break;
+
+		case Error::RESPONSE_TYPE_ERROR:
+		label = F("RESPONSE_TYPE_ERROR");
+		break;
+
+		case Error::RESPONSE_TYPE_UNEXPECTED:
+		label = F("RESPONSE_TYPE_UNEXPECTED");
+		break;
+
+		case Error::EXCHANGE_PHASE_OUT:
+		label = F("EXCHANGE_PHASE_OUT");
+		break;
 	}
 	return o << label << flush;
 }
@@ -522,19 +684,19 @@ int main()
 	out << F("SPI & device initialized") << endl;
 	
 	// Enable system events
-	Error error = device.await_at_command("AT+EVENTENABLE=0x3");
-	if (error != Error::OK)
-		out << F("ERROR during await_at_command('AT+EVENTENABLE=0x3'): ") << endl << error << endl;
+	PublicDevice::Response response;
+	bool ok = device.await_at_command("AT+EVENTENABLE=0x3", response);
+	if (!ok)
+		out << F("ERROR during await_at_command('AT+EVENTENABLE=0x3')") << endl;
 	// Loop to check connect/disconnect events status
 	while (true)
 	{
 		time::delay_ms(1000);
-		static constexpr const uint8_t SIZE = 64;
-		char response[SIZE+1];
-		error = device.await_at_command("AT+EVENTSTATUS", response, SIZE);
-		if (error != Error::OK)
-			out << F("ERROR during await_at_command('AT+EVENTSTATUS'): ") << endl << error << endl;
-		out << F("EVENTSTATUS = ") << response << endl;
+		ok = device.await_at_command("AT+EVENTSTATUS", response);
+		if (!ok)
+			out << F("ERROR during await_at_command('AT+EVENTSTATUS'): ") << endl;
+		else
+			out << F("EVENTSTATUS = ") << response.response() << endl;
 	}
 	// Stop SPI device if needed
 	// out << F("End") << endl;
