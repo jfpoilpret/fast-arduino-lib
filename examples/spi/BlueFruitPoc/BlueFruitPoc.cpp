@@ -214,6 +214,10 @@ private:
 		return ok;
 	}
 
+	// Return true if packet successfully transmitted
+	// Return false if 1st byte received is not OK, then CS is disabled
+	// Return false also if iteration count is reached (then timer is suspended,
+	// and error_ is updated)
 	bool send_packet()
 	{
 		// Start SPI transfer, send message type and ensure we get a non error return byte (0xFE)
@@ -256,6 +260,11 @@ private:
 		return true;
 	}
 
+	// Return true if packet successfully received, even though a buffer overflow
+	// may have occurred (visible in error_ field)
+	// Return false if 1st byte received is not OK, then CS is disabled
+	// Return false also if iteration count is reached (then timer is suspended,
+	// and error_ is updated)
 	bool get_packet()
 	{
 		// Start SPI transfer, send 0xFF and ensure we get a non error return byte (0xFE or 0xFF)
@@ -327,6 +336,8 @@ private:
 		return true;
 	}
 
+	// Return Error::OK if response contains "OK\r\n"
+	// Return Error::RESPONSE_WITH_ERROR otherwise
 	Error check_ok(const char* response)
 	{
 		char* found = strstr(response, "OK\r\n");
@@ -360,6 +371,7 @@ public:
 		}
 	}
 
+	//TODO put outside class? But need to templatize then (buffer size)!
 	class Response
 	{
 	public:
@@ -447,6 +459,7 @@ public:
 	// 	// XX is for system events and YY for GATT events)
 	// }
 
+	//TODO rename hard_reset()? Add static_assert on RESET != NONE?
 	void reset()
 	{
 		reset_.clear();
@@ -456,14 +469,15 @@ public:
 	}
 
 	// Launch AT command synchronously
-	bool await_at_command(const char* command, Response& response)
+	bool await_at_command(const char* command, Response& response, uint16_t loop_until_timout = 
+		loop_count_for_await_response(TIMEOUT_AWAIT_RESPONSE_US))
 	{
 		if (!at_command(command))
 		{
 			response = Response();
 			return false;
 		}
-		return await_response(response);
+		return await_response(response, loop_until_timout);
 	}
 
 	// Launch AT command asynchronously
@@ -484,8 +498,9 @@ public:
 		memcpy(buffer_, command, size_);
 		current_ = buffer_;
 
-		//TODO Try to send 1st packet immediately!
-		// Start timer to send 1st byte of 1st packet
+		// Try to send 1st packet immediately
+		send_packet();
+		// Start timer to send next packets
 		timer_.resume_interrupts();
 		return true;
 	}
@@ -497,6 +512,7 @@ public:
 
 	// Return false if there is nothing to await for (typically because method called twice for 1 exchange)
 	// Return false if timeout elapsed before end of transaction
+	// Return true if response is available and usable (but that may include error situations!)
 	bool await_response(Response& response, uint16_t loop_until_timout = 
 		loop_count_for_await_response(TIMEOUT_AWAIT_RESPONSE_US))
 	{
@@ -532,8 +548,10 @@ private:
 			operation_ = OperationStatus::RECEIVING_PACKET;
 			wait_loop_count_ = loop_count_for_cs(TIMEOUT_DEVICE_READY_US);
 			signal_.disable_();
-			//TODO Try to get 1st packet immediately?
-			timer_.resume_interrupts_();
+			// Try to get 1st packet immediately
+			get_packet();
+			if (operation_ != OperationStatus::FINISHED)
+				timer_.resume_interrupts_();
 		}
 	}
 
