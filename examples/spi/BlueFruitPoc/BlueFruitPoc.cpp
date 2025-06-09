@@ -67,17 +67,14 @@ static constexpr const board::DigitalPin RESET = board::DigitalPin::D6_PD6;
 #define NTIMER 1
 static constexpr const board::Timer BLE_TIMER = board::Timer::TIMER1;
 
-//FIXME some transactions fail sometimes (e.g. advertise()) => DEBUG!
 //TODO POC NEXT
-// 2h	- implement simple event handling API and debug
-//			- register_event_callback, check_events
-// 2h	- rework example to use current Android app!
-
-// 1h	- do we need to call the special init command? in lieu of hard reset? when? timing?
+// 4h	- rework example to use current Android app!
+//FIXME	- some transactions fail sometimes (e.g. advertise()) => DEBUG!
 
 // 4h	- rework as real FastArduino device (same API as POC to start with)
 //			- implement basic example
 //			- implement example with LED blinking controlled by Android application
+// 1h	- do we need to call the special init command? in lieu of hard reset? when? timing?
 // 16h	- then improve device to:
 //			- use Futures for all API
 //			- also define sync API based on async API
@@ -130,8 +127,9 @@ static char* convert_hex(uint8_t byte, char* buffer, bool prefix = false, bool t
 }
 static char* convert_hex(uint16_t word, char* buffer, bool terminate = false)
 {
-	//FIXME endianness!
 	buffer = copy("0x", buffer);
+	// Change endianness
+	word = utils::change_endianness(word);
 	char buf[5];
 	utoa(word, buf, 16);
 	uint8_t padding = 4 - strlen(buf);
@@ -141,8 +139,9 @@ static char* convert_hex(uint16_t word, char* buffer, bool terminate = false)
 }
 static char* convert_hex(uint32_t dword, char* buffer, bool terminate = false)
 {
-	//FIXME endianness!
 	buffer = copy("0x", buffer);
+	// Change endianness
+	dword = utils::change_endianness(dword);
 	char buf[9];
 	ultoa(dword, buf, 16);
 	uint8_t padding = 8 - strlen(buf);
@@ -427,6 +426,7 @@ public:
 	// synchronously get GATT characteristic
 	bool get_GATT_characteristic(uint8_t index, char* value, uint8_t size)
 	{
+		//TODO use AT+GATTCHARRAW instead (more efficient?)
 		char cmd[128];
 		char* buf = copy(F("AT+GATTCHAR="), cmd);
 		buf = convert_int(index, buf, true);
@@ -436,7 +436,12 @@ public:
 		if (!response.is_successful())
 			return false;
 		// Get value and return as string (converted by caller)
-		strncpy(value, response.response(), size);
+		// Only keep first line
+		const char* result = response.response();
+		const uint8_t len = strchr(result, '\r') - result + 1;
+		strncpy(value, response.response(), utils::min(size, len) - 1);
+		// Ensure string is properly 0-terminated (not ensured by strncpy())
+		value[size - 1] = '\0';
 		return true;
 	}
 
@@ -492,7 +497,7 @@ public:
 		{
 			return global_events_ & 0x02;
 		}
-		bool is_GATT_characterisitc_event(uint8_t index)
+		bool is_GATT_characteristic_event(uint8_t index)
 		{
 			return gatt_events_ & bits::BV32(index);
 		}
@@ -1002,20 +1007,41 @@ streams::ostream& operator<<(streams::ostream& o, Error error)
 }
 
 // Service to control blink activity: 44013301-C3DA-4962-B6E5-AF262E392263
-static uint8_t BLINK_SERVICE_UUID[] = {
+static UUID128 BLINK_SERVICE_UUID = {
 	0x44, 0x01,   // service number: blink service
 	0x33, 0x01,   // 0x01 reserved for service
 	0xC3, 0xDA, 0x49, 0x62, 0xB6, 0xE5, 0xAF, 0x26, 0x2E, 0x39, 0x22, 0x63
 };
   
-  // Characteristic to control blink activity: R/W one byte (00/FF inactive/active)
-  // UUID 44013302-C3DA-4962-B6E5-AF262E392263
-static uint8_t BLINK_STATUS_CHAR_UUID[] = {
-	0x44, 0x01,   // service number: blink service
-	0x33, 0x02,   // blink activity characteristic
+// Characteristic to control blink activity: R/W one byte (00/FF inactive/active)
+static UUID16 BLINK_STATUS_CHAR_UUID = 0x0233;
+
+// Service to setup blink timing: 44023301-C3DA-4962-B6E5-AF262E392263
+static UUID128 CONFIG_SERVICE_UUID = {
+	0x44, 0x02,   // service number: blink timing setup
+	0x33, 0x01,   // 0x01 reserved for service
+	0xC3, 0xDA, 0x49, 0x62, 0xB6, 0xE5, 0xAF, 0x26, 0x2E, 0x39, 0x22, 0x63
+};
+
+// Characteristic to configure blinking timings: RW 4 bytes (2 UInt: low time ms, high time ms)
+// UUID 44023302-C3DA-4962-B6E5-AF262E392263
+static UUID16 BLINK_TIMINGS_CHAR_UUID = 0x0233;
+
+// Characteristic to load/dump timings to/from NVRAM (W 1byte: 0x0F load, 0xF0 dump)
+// UUID 44023303-C3DA-4962-B6E5-AF262E392263
+static UUID16 NVRAM_TIMINGS_CHAR_UUID = 0x0333;
+
+// Service to monitor blink LED status: 44033301-C3DA-4962-B6E5-AF262E392263
+static UUID128 MONITOR_SERVICE_UUID = {
+	0x44, 0x03,   // service number: blink LED status
+	0x33, 0x01,   // 0x01 reserved for service
 	0xC3, 0xDA, 0x49, 0x62, 0xB6, 0xE5, 0xAF, 0x26, 0x2E, 0x39, 0x22, 0x63
 };
   
+// Characteristic to monitor status: N 1 byte (00/FF off/on)
+// UUID: 44033302-C3DA-4962-B6E5-AF262E392263
+static UUID16 MONITOR_CHAR_UUID = 0x0233;
+	
 // Advertising record
 // NOTE: there seem to be many limitations in this record:
 // - size is limited (could not advertise more than one 128 bits UUID service!)
@@ -1029,6 +1055,40 @@ static uint8_t ADV[] = {
 	// 0x11, 0x06, 0x63, 0x22, 0x39, 0x2E, 0x26, 0xAF, 0xE5, 0xB6, 0x62, 0x49, 0xDA, 0xC3, 0x01, 0x33, 0x02, 0x44,
 	// 0x11, 0x06, 0x63, 0x22, 0x39, 0x2E, 0x26, 0xAF, 0xE5, 0xB6, 0x62, 0x49, 0xDA, 0xC3, 0x01, 0x33, 0x03, 0x44,
 };
+
+// Timing values for blinking
+struct BlinkTimings
+{
+  uint16_t high_time_ms = 500;
+  uint16_t low_time_ms = 500;
+};
+
+// Blinking status at runtime (internal)
+struct BlinkStatus
+{
+  uint32_t latest_change = 0;
+  bool current_level = false;
+};
+
+// Global variables (I know, it is ugly, but hey, this is only a POC here!)
+static bool blinkActive = false;
+static BlinkTimings blinkTimings = BlinkTimings();
+static BlinkStatus blinkStatus = BlinkStatus();
+
+static constexpr const board::DigitalPin LED = board::DigitalPin::D2_PD2;
+
+static void on_write_status(const char* value)
+{
+	//TODO
+}
+static void on_write_config(const char* value)
+{
+	//TODO
+}
+static void on_write_nvram(const char* value)
+{
+	//TODO
+}
   
 int main()
 {
@@ -1040,6 +1100,9 @@ int main()
 	uart.begin(115200);
 	streams::ostream out = uart.out();
 	out.width(2);
+
+	// Prepare LED pin
+	gpio::FAST_PIN<LED> led{gpio::PinMode::OUTPUT, false};
 
 	// Start SPI interface
 	//TODO Improve init() to reduce CS high/low
@@ -1055,17 +1118,43 @@ int main()
 	// Add services and characteristics
 	uint8_t index = device.add_GATT_service(BLINK_SERVICE_UUID);
 	if (index == 0)
-		out << F("ERROR during add_GATT_service()") << endl;
+		out << F("ERROR during add_GATT_service(BLINK_SERVICE_UUID)") << endl;
 	uint8_t idCharBlinkStatus = device.add_GATT_characteristic(
 		BLINK_STATUS_CHAR_UUID, 
 		GATTProperty::WriteWithoutResponse | GATTProperty::Read,
 		GattDataType::BYTEARRAY, 1, 1);
 	if (idCharBlinkStatus == 0)
-		out << F("ERROR during add_GATT_characteristic()") << endl;
-	//TODO Other services and characteristics
-
-	// Display id characteristics
+		out << F("ERROR during add_GATT_characteristic(BLINK_STATUS_CHAR_UUID)") << endl;
 	out << F("idCharBlinkStatus=") << idCharBlinkStatus << endl;
+
+	index = device.add_GATT_service(CONFIG_SERVICE_UUID);
+	if (index == 0)
+		out << F("ERROR during add_GATT_service(CONFIG_SERVICE_UUID)") << endl;
+	uint8_t idCharBlinkTiming = device.add_GATT_characteristic(
+		BLINK_TIMINGS_CHAR_UUID, 
+		GATTProperty::WriteWithoutResponse | GATTProperty::Read,
+		GattDataType::BYTEARRAY, 4, 4);
+	if (idCharBlinkTiming == 0)
+		out << F("ERROR during add_GATT_characteristic(BLINK_TIMINGS_CHAR_UUID)") << endl;
+	out << F("idCharBlinkTiming=") << idCharBlinkTiming << endl;
+	uint8_t idCharBlinkNVRAM = device.add_GATT_characteristic(
+		NVRAM_TIMINGS_CHAR_UUID, 
+		GATTProperty::WriteWithoutResponse,
+		GattDataType::BYTEARRAY, 1, 1);
+	if (idCharBlinkNVRAM == 0)
+		out << F("ERROR during add_GATT_characteristic(NVRAM_TIMINGS_CHAR_UUID)") << endl;
+	out << F("idCharBlinkNVRAM=") << idCharBlinkNVRAM << endl;
+
+	index = device.add_GATT_service(MONITOR_SERVICE_UUID);
+	if (index == 0)
+		out << F("ERROR during add_GATT_service(MONITOR_SERVICE_UUID)") << endl;
+	uint8_t idCharBlinkLED = device.add_GATT_characteristic(
+		MONITOR_CHAR_UUID, 
+		GATTProperty::Notify,
+		GattDataType::BYTEARRAY, 1, 1);
+	if (idCharBlinkLED == 0)
+		out << F("ERROR during add_GATT_characteristic(MONITOR_CHAR_UUID)") << endl;
+	out << F("idCharBlinkLED=") << idCharBlinkLED << endl;
 
 	// Change device name
 	PublicDevice::Response response;
@@ -1086,7 +1175,9 @@ int main()
 		out << F("ERROR during reset()") << endl;
 	
 	// Enable system events
-	ok = device.await_at_command("AT+EVENTENABLE=0x3,0x3", response);
+	//TODO Replace with register_events() and fix endianness if needed!
+	// ok = device.await_at_command("AT+EVENTENABLE=0x3,0x3", response);
+	ok = device.await_at_command("AT+EVENTENABLE=0x3,0xFFFF", response);
 	// ok = device.register_events(true, true, {idCharBlinkStatus});
 	if (!ok)
 		out << F("ERROR during register_events()") << endl;
@@ -1118,8 +1209,33 @@ int main()
 				out << F("CONNECTED!") << endl;
 			if (events.is_disconnected())
 				out << F("DISCONNECTED!") << endl;
-			if (events.is_GATT_characterisitc_event(idCharBlinkStatus))
+			if (events.is_GATT_characteristic_event(idCharBlinkStatus))
+			{
 				out << F("GATT idCharBlinkStatus write event!") << endl;
+				char value[3];
+				if (device.get_GATT_characteristic(idCharBlinkStatus, value, 3))
+					on_write_status(value);
+				else
+					out << F("ERROR during get_GATT_characteristic(idCharBlinkStatus)") << endl;
+			}
+			if (events.is_GATT_characteristic_event(idCharBlinkTiming))
+			{
+				out << F("GATT idCharBlinkTiming write event!") << endl;
+				char value[9];
+				if (device.get_GATT_characteristic(idCharBlinkTiming, value, 9))
+					on_write_config(value);
+				else
+					out << F("ERROR during get_GATT_characteristic(idCharBlinkTiming)") << endl;
+			}
+			if (events.is_GATT_characteristic_event(idCharBlinkNVRAM))
+			{
+				out << F("GATT idCharBlinkNVRAM write event!") << endl;
+				char value[3];
+				if (device.get_GATT_characteristic(idCharBlinkNVRAM, value, 3))
+					on_write_nvram(value);
+				else
+					out << F("ERROR during get_GATT_characteristic(idCharBlinkNVRAM)") << endl;
+			}
 		}
 	}
 	// Stop SPI device if needed
