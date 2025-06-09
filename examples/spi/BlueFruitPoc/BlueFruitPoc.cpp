@@ -29,7 +29,9 @@
  *   - direct USB access (traces output to console)
  */
 
+#include <fastarduino/bits.h>
 #include <fastarduino/gpio.h>
+#include <fastarduino/initializer_list.h>
 #include <fastarduino/int.h>
 #include <fastarduino/time.h>
 #include <fastarduino/timer.h>
@@ -65,21 +67,13 @@ static constexpr const board::DigitalPin RESET = board::DigitalPin::D6_PD6;
 #define NTIMER 1
 static constexpr const board::Timer BLE_TIMER = board::Timer::TIMER1;
 
+//FIXME some transactions fail sometimes (e.g. advertise()) => DEBUG!
 //TODO POC NEXT
-// 30'	- improve timing: 
-//			- start send_packet immediately (at_command)
-//			- start get packet immediately (on_irq
+// 2h	- implement simple event handling API and debug
+//			- register_event_callback, check_events
+// 2h	- rework example to use current Android app!
 
-// 2h+	- implement GATT API (how?) with callbacks: use Builder pattern?
-
-// 1h	- implement "basic" commands (e.g. factory reset)
-// 1h	- do we need to call the init command? when? timing?
-
-// 1h	- add ostream for AT commands (how to trigger sending?)
-// 1h	- add istream for AT responses (how to trigger end of reception?)
-
-// 2h+	- implement UART API (to be inferred thoroughly first)
-//			- support data/command mode?
+// 1h	- do we need to call the special init command? in lieu of hard reset? when? timing?
 
 // 4h	- rework as real FastArduino device (same API as POC to start with)
 //			- implement basic example
@@ -89,11 +83,460 @@ static constexpr const board::Timer BLE_TIMER = board::Timer::TIMER1;
 //			- also define sync API based on async API
 //			- callback design with CRTP pattern
 //			- buffer size management? (normally at Future level no?)
+// 4h+	- implement UART API (to be inferred thoroughly first)
+//			- support data/command mode?
+// 1h	- add ostream for AT commands (how to trigger sending?)
+// 1h	- add istream for AT responses (how to trigger end of reception?)
+
+using UUID16 = uint16_t;
+using UUID128 = uint8_t[16];
+
+//TODO gather all these utilities methods in a specific class and/or namespace
+// Conversion utilities
+static char* copy(const char* str, char* buffer, bool terminate = false)
+{
+	while (*str)
+		*buffer++ = *str++;
+	if (terminate)
+		*buffer = 0;
+	return buffer;
+}
+static char* copy(const flash::FlashStorage* str, char* buffer, bool terminate = false)
+{
+	uint16_t address = (uint16_t) str;
+	while (char value = pgm_read_byte(address++))
+		*buffer++ = value;
+	if (terminate)
+		*buffer = 0;
+	return buffer;
+}
+static char* convert_int(uint16_t value, char* buffer, bool terminate = false)
+{
+	utoa(value, buffer, 10);
+	buffer += strlen(buffer);
+	if (terminate)
+		*buffer = 0;
+	return buffer;
+}
+static char* convert_hex(uint8_t byte, char* buffer, bool prefix = false, bool terminate = false)
+{
+	if (prefix)
+		buffer = copy("0x", buffer);
+	char buf[3];
+	utoa(byte, buf, 16);
+	if (strlen(buf) == 1)
+		*buffer++ = '0';
+	return copy(buf, buffer, terminate);
+}
+static char* convert_hex(uint16_t word, char* buffer, bool terminate = false)
+{
+	//FIXME endianness!
+	buffer = copy("0x", buffer);
+	char buf[5];
+	utoa(word, buf, 16);
+	uint8_t padding = 4 - strlen(buf);
+	while (padding--)
+		*buffer++ = '0';
+	return copy(buf, buffer, terminate);
+}
+static char* convert_hex(uint32_t dword, char* buffer, bool terminate = false)
+{
+	//FIXME endianness!
+	buffer = copy("0x", buffer);
+	char buf[9];
+	ultoa(dword, buf, 16);
+	uint8_t padding = 8 - strlen(buf);
+	while (padding--)
+		*buffer++ = '0';
+	return copy(buf, buffer, terminate);
+}
+
+static char* convert_hex(const uint8_t byte_array[], uint8_t size, char* buffer, bool terminate = false)
+{
+	for (uint8_t i = 0; i < size; ++i)
+	{
+		if (i != 0)
+			*buffer++ = '-';
+		buffer = convert_hex(*byte_array++, buffer, false);
+	}
+	if (terminate)
+		*buffer = 0;
+	return buffer;
+}
+
+struct GATTProperty
+{
+	static constexpr uint8_t Broadcast = bits::BV8(0);
+	static constexpr uint8_t Read = bits::BV8(1);
+	static constexpr uint8_t WriteWithoutResponse = bits::BV8(2);
+	static constexpr uint8_t Write = bits::BV8(3);
+	static constexpr uint8_t Notify = bits::BV8(4);
+	static constexpr uint8_t Indicate = bits::BV8(5);
+};
+
+//TODO clarify range for integer (2 or 4 bytes)
+enum class GattDataType : uint8_t
+{
+	STRING = 1,
+	BYTEARRAY = 2,
+	INTEGER = 3
+};
 
 // Subclass SPIDevice to make protected methods available from main()
 class PublicDevice: public spi::SPIDevice<CS, CHIP_SELECT, CLOCK_RATE, MODE, DATA_ORDER>
 {
+private:
+	using THIS = PublicDevice;
+	static constexpr const uint8_t BUFFER_SIZE = 128;
+
 public:
+	PublicDevice(): SPIDevice()
+	{
+		// Register callback handlers
+		interrupt::register_handler(*this);
+		// Start timer but suspend interrupts
+		synchronized
+		{
+			timer_.begin_(COUNTER);
+			timer_.suspend_interrupts_();
+		}
+	}
+
+	//TODO Add static_assert on RESET != NONE?
+	void hard_reset(bool force_wait = true)
+	{
+		reset_.clear();
+		time::delay_ms(DELAY_RESET_CLEAR_MS);
+		reset_.set();
+		if (force_wait)
+			time::delay_ms(DELAY_AFTER_RESET_MS);
+	}
+
+	// Forward declaration
+	class Response;
+
+	bool reset(bool force_wait = true)
+	{
+		char cmd[32];
+		copy(F("ATZ"), cmd, true);
+		Response response;
+		if (!await_at_command(cmd, response))
+			return false;
+		if (response.is_successful())
+		{
+			if (force_wait)
+				time::delay_ms(DELAY_AFTER_RESET_MS);
+			return true;
+		}
+		return false;
+	}
+
+	bool factory_reset(bool force_wait = true)
+	{
+		char cmd[32];
+		copy(F("AT+FACTORYRESET"), cmd, true);
+		Response response;
+		if (!await_at_command(cmd, response))
+			return false;
+		if (response.is_successful())
+		{
+			if (force_wait)
+				time::delay_ms(DELAY_AFTER_RESET_MS);
+			return true;
+		}
+		return false;
+	}
+
+	// Launch AT command synchronously
+	bool await_at_command(const char* command, Response& response, uint16_t loop_until_timout = 
+		loop_count_for_await_response(TIMEOUT_AWAIT_RESPONSE_US))
+	{
+		if (!at_command(command))
+		{
+			response = Response();
+			return false;
+		}
+		return await_response(response, loop_until_timout);
+	}
+
+	// Launch AT command asynchronously
+	bool at_command(const char* command)
+	{
+		// Ensure transfer operation can be started (no other operation is on going at the same time)
+		synchronized
+		{
+			if (operation_ != OperationStatus::NO_OP)
+				return false;
+			operation_ = OperationStatus::SENDING_PACKET;
+		}
+		// Setup operation extra data
+		error_ = Error::OK;
+		wait_loop_count_ = loop_count_for_cs(TIMEOUT_DEVICE_READY_US);
+		// Setup data to be transmitted
+		size_ = strlen(command);
+		memcpy(buffer_, command, size_);
+		current_ = buffer_;
+
+		// Try to send 1st packet immediately
+		send_packet();
+		// Start timer to send next packets
+		timer_.resume_interrupts();
+		return true;
+	}
+
+	bool is_response_ready() const
+	{
+		return operation_ == OperationStatus::FINISHED;
+	}
+
+	// Return false if there is nothing to await for (typically because method called twice for 1 exchange)
+	// Return false if timeout elapsed before end of transaction
+	// Return true if response is available and usable (but that may include error situations!)
+	bool await_response(Response& response, uint16_t loop_until_timout = 
+		loop_count_for_await_response(TIMEOUT_AWAIT_RESPONSE_US))
+	{
+		if (operation_ == OperationStatus::NO_OP)
+		{
+			response = Response();
+			return false;
+		}
+		while (operation_ != OperationStatus::FINISHED)
+		{
+			time::delay_us(DELAY_AWAIT_RESPONSE_US);
+			if (--loop_until_timout == 0)
+			{
+				response = Response();
+				return false;
+			}
+		}
+		// Check if OK in response
+		buffer_[size_] = 0;
+		const Error error = (error_ == Error::OK ? check_ok((const char*) buffer_) : error_);
+		response = Response{error, message_id_, size_, buffer_};
+		// Now we can authorize new transactions again
+		operation_ = OperationStatus::NO_OP;
+		return true;
+	}
+
+	// synchronously clear all GATT configuration
+	bool clear_GATT()
+	{
+		char cmd[32];
+		copy(F("AT+GATTCLEAR"), cmd, true);
+		Response response;
+		if (!await_at_command(cmd, response))
+			return false;
+		return response.is_successful();
+	}
+
+	// synchronously add a new service
+	// Return 0 in case of failure
+	// Return >0 index to created service
+	uint8_t add_GATT_service(UUID128 uuid)
+	{
+		// Prepare AT command
+		char cmd[128];
+		char* buf = copy(F("AT+GATTADDSERVICE=UUID128="), cmd);
+		buf = convert_hex(uuid, sizeof(UUID128), buf, true);
+		//Execute AT command and await response
+		Response response;
+		if (!await_at_command(cmd, response))
+			return 0;
+		if (!response.is_successful())
+			return 0;
+		// Successfully created service, parse response to get index
+		return atoi(response.response());
+	}
+
+	// synchronously add a new characteristic
+	// Return 0 in case of failure
+	// Return >0 index to created characteristic (for later use in get/set)
+	uint8_t add_GATT_characteristic(UUID16 uuid, uint8_t properties, GattDataType type, uint8_t min_len, uint8_t max_len)
+	{
+		//TODO Check a service was added before!
+		// Prepare AT command
+		char cmd[128];
+		char *buf = copy(F("AT+GATTADDCHAR=UUID="), cmd);
+		buf = convert_hex(uuid, buf);
+		buf = copy(F(",PROPERTIES="), buf);
+		buf = convert_hex(properties, buf, true);
+		buf = copy(F(",MIN_LEN="), buf);
+		buf = convert_int(min_len, buf);
+		buf = copy(F(",MAX_LEN="), buf);
+		buf = convert_int(max_len, buf);
+		//TODO VALUE?
+		buf = copy(F(",DATATYPE="), buf);
+		buf = convert_int(uint8_t(type), buf, true);
+		//TODO DESCRIPTION?
+
+		//Execute AT command and await response
+		Response response;
+		if (!await_at_command(cmd, response))
+			return 0;
+		if (!response.is_successful())
+			return 0;
+		// Successfully created service, parse response to get index
+		return atoi(response.response());
+	}
+
+	// synchronously add a new characteristic
+	// Return 0 in case of failure
+	// Return >0 index to created characteristic (for later use in get/set)
+	// Refactor both add_GATT_characteristic() functions
+	uint8_t add_GATT_characteristic(UUID128 uuid, uint8_t properties, GattDataType type, uint8_t min_len, uint8_t max_len)
+	{
+		//TODO Check a service was added before!
+		// Prepare AT command
+		char cmd[128];
+		char *buf = copy(F("AT+GATTADDCHAR=UUID128="), cmd);
+		buf = convert_hex(uuid, sizeof(UUID128), buf);
+		buf = copy(F(",PROPERTIES="), buf);
+		buf = convert_hex(properties, buf, true);
+		buf = copy(F(",MIN_LEN="), buf);
+		buf = convert_int(min_len, buf);
+		buf = copy(F(",MAX_LEN="), buf);
+		buf = convert_int(max_len, buf);
+		//TODO VALUE?
+		buf = copy(F(",DATATYPE="), buf);
+		buf = convert_int(uint8_t(type), buf, true);
+
+		//Execute AT command and await response
+		Response response;
+		if (!await_at_command(cmd, response))
+			return 0;
+		if (!response.is_successful())
+			return 0;
+		// Successfully created service, parse response to get index
+		return atoi(response.response());
+	}
+
+	// synchronously set GATT characteristic
+	bool set_GATT_characteristic(uint8_t index, const char* value)
+	{
+		char cmd[128];
+		char* buf = copy(F("AT+GATTCHAR="), cmd);
+		buf = convert_int(index, buf);
+		*buf++ = ',';
+		buf = copy(value, buf, true);
+		Response response;
+		if (!await_at_command(cmd, response))
+			return false;
+		return response.is_successful();
+	}
+
+	// synchronously get GATT characteristic
+	bool get_GATT_characteristic(uint8_t index, char* value, uint8_t size)
+	{
+		char cmd[128];
+		char* buf = copy(F("AT+GATTCHAR="), cmd);
+		buf = convert_int(index, buf, true);
+		Response response;
+		if (!await_at_command(cmd, response))
+			return false;
+		if (!response.is_successful())
+			return false;
+		// Get value and return as string (converted by caller)
+		strncpy(value, response.response(), size);
+		return true;
+	}
+
+	// synchronously set BLE GAP Advertise data
+	bool advertise(const uint8_t* data, uint8_t size)
+	{
+		char cmd[128];
+		char* buf = copy(F("AT+GAPSETADVDATA="), cmd);
+		buf = convert_hex(data, size, buf, true);
+		Response response;
+		if (!await_at_command(cmd, response))
+			return false;
+		return response.is_successful();
+	}
+
+	// Functions for events handling
+	//-------------------------------
+	// snchronously register events
+	bool register_events(bool connect, bool disconnect, std::initializer_list<uint8_t> characteristics)
+	{
+		const uint8_t global_events = (connect ? 0x01 : 0) | (disconnect ? 0x02 : 0);
+		uint32_t gatt_events = 0;
+		for (uint8_t index: characteristics)
+			gatt_events |= bits::BV32(index - 1);
+		char cmd[128];
+		char* buf = copy(F("AT+EVENTENABLE="), cmd);
+		buf = convert_hex(global_events, buf, true);
+		*buf++ = ',';
+		buf = convert_hex(gatt_events, buf, true);
+
+		Response response;
+		if (!await_at_command(cmd, response))
+			return false;
+		return response.is_successful();
+	}
+
+	class Events
+	{
+	public:
+		Events() = default;
+		Events(const Events&) = default;
+		Events& operator=(const Events&) = default;
+
+		bool has_events() const
+		{
+			return (global_events_ != 0) || (gatt_events_ != 0);
+		}
+		bool is_connected() const
+		{
+			return global_events_ & 0x01;
+		}
+		bool is_disconnected() const
+		{
+			return global_events_ & 0x02;
+		}
+		bool is_GATT_characterisitc_event(uint8_t index)
+		{
+			return gatt_events_ & bits::BV32(index);
+		}
+	private:
+		Events(uint8_t global_events, uint32_t gatt_events)
+			: global_events_{global_events}, gatt_events_{gatt_events} {}
+
+		uint8_t global_events_ = 0;
+		uint32_t gatt_events_ = 0;
+
+		friend THIS;
+	};
+
+	bool check_events(Events& events)
+	{
+		Response response;
+		if (!await_at_command("AT+EVENTSTATUS", response))
+			return false;
+		if (!response.is_successful())
+			return false;
+		// First line contains 0xXX,0xYY (2 hex numbers that are bitfields, 
+		// XX is for system events and YY for GATT events)
+		const char* buf = response.response();
+		char* buf2;
+		uint8_t global_events = strtoul(buf, &buf2, 16);
+		uint32_t gatt_events = strtoul(++buf2, 0, 16);
+		events = Events(global_events, gatt_events);
+		return true;
+	}
+
+	//TODO If we make these functions public, we shall have timeout argument in other API!
+	static constexpr uint16_t loop_count_for_cs(uint16_t timeout_us)
+	{
+		return timeout_us / DELAY_TIMER_US;
+	}
+	static constexpr uint16_t loop_count_for_irq(uint16_t timeout_us)
+	{
+		return timeout_us / DELAY_TIMER_US;
+	}
+	static constexpr uint16_t loop_count_for_await_response(uint16_t timeout_us)
+	{
+		return timeout_us / DELAY_AWAIT_RESPONSE_US;
+	}
+
 	enum class Error : uint8_t
 	{
 		OK = 0,
@@ -109,11 +552,77 @@ public:
 		EXCHANGE_PHASE_OUT
 	};
 
+	//TODO put outside class? But need to templatize then (buffer size)!
+	class Response
+	{
+	public:
+		Response() = default;
+		Response(const Response&) = default;
+		Response& operator=(const Response&) = default;
+
+		bool is_usable() const
+		{
+			return usable_;
+		}
+
+		bool is_successful() const
+		{
+			return usable_ && (error_ == Error::OK);
+		}
+
+		uint8_t response_size() const
+		{
+			return size_;
+		}
+
+		const char* response() const
+		{
+			return (is_successful() ? (const char*) response_ : 0);
+		}
+
+		Error error() const
+		{
+			return (usable_ ? error_ : Error::BUSY);
+		}
+
+		bool is_error() const
+		{
+			return usable_ && (error_ != Error::RESPONSE_TYPE_ERROR);
+		}
+
+		bool is_alert() const
+		{
+			return usable_ && (error_ == Error::RESPONSE_TYPE_ALERT);
+		}
+
+		uint16_t alert_id() const
+		{
+			return (is_alert() ? id_ : 0);
+		}
+
+		uint16_t error_id() const
+		{
+			return (is_error() ? id_ : 0);
+		}
+
+	private:
+		Response(Error error, uint16_t id, uint8_t size, const uint8_t* response)
+			:	usable_{true}, error_{error}, id_{id}, size_{size}
+		{
+			memcpy(response_, response, size);
+			response_[size] = 0;
+		}
+
+		bool usable_ = false;
+		Error error_;
+		uint16_t id_;
+		uint8_t size_;
+		uint8_t response_[THIS::BUFFER_SIZE + 1];
+
+		friend THIS;
+	};
+
 private:
-	using THIS = PublicDevice;
-
-	static constexpr const uint8_t BUFFER_SIZE = 64;
-
 	// Events bits for AT+EVENTENABLE and other event-related AT commands
 	static constexpr const uint8_t EVENT_CONNECT = 0;
 	static constexpr const uint8_t EVENT_DISCONNECT = 1;
@@ -130,11 +639,11 @@ private:
 
 	// Retry times (in microseconds) in await loop
 	static constexpr const uint16_t DELAY_AWAIT_RESPONSE_US = 500;
-	static constexpr const uint16_t TIMEOUT_AWAIT_RESPONSE_US = 20000;
+	static constexpr const uint16_t TIMEOUT_AWAIT_RESPONSE_US = 40000;
 
 	// Timeouts (in microseconds) for aborting waits on 1st byte OK or received IRQ 
 	static constexpr const uint16_t TIMEOUT_DEVICE_READY_US = 1000;
-	static constexpr const uint16_t TIMEOUT_IRQ_WAIT_US = 10000;
+	static constexpr const uint16_t TIMEOUT_IRQ_WAIT_US = 30000;
 
 	// Possible values for type byte
 	// SDEP MessageType (1st header byte)
@@ -344,202 +853,8 @@ private:
 		return (found != 0 ? Error::OK : Error::RESPONSE_WITH_ERROR);
 	}
 
-public:
-	//TODO If we make these functions public, we shall have timeout argument in other API!
-	static constexpr uint16_t loop_count_for_cs(uint16_t timeout_us)
-	{
-		return timeout_us / DELAY_TIMER_US;
-	}
-	static constexpr uint16_t loop_count_for_irq(uint16_t timeout_us)
-	{
-		return timeout_us / DELAY_TIMER_US;
-	}
-	static constexpr uint16_t loop_count_for_await_response(uint16_t timeout_us)
-	{
-		return timeout_us / DELAY_AWAIT_RESPONSE_US;
-	}
-
-	PublicDevice(): SPIDevice()
-	{
-		// Register callback handlers
-		interrupt::register_handler(*this);
-		// Start timer but suspend interrupts
-		synchronized
-		{
-			timer_.begin_(COUNTER);
-			timer_.suspend_interrupts_();
-		}
-	}
-
-	//TODO put outside class? But need to templatize then (buffer size)!
-	class Response
-	{
-	public:
-		Response() = default;
-		Response(const Response&) = default;
-		Response& operator=(const Response&) = default;
-
-		bool is_usable() const
-		{
-			return usable_;
-		}
-
-		bool is_successful() const
-		{
-			return usable_ && (error_ == Error::OK);
-		}
-
-		uint8_t response_size() const
-		{
-			return size_;
-		}
-
-		const char* response() const
-		{
-			return (is_successful() ? (const char*) response_ : 0);
-		}
-
-		Error error() const
-		{
-			return (usable_ ? error_ : Error::BUSY);
-		}
-
-		bool is_error() const
-		{
-			return usable_ && (error_ != Error::RESPONSE_TYPE_ERROR);
-		}
-
-		bool is_alert() const
-		{
-			return usable_ && (error_ == Error::RESPONSE_TYPE_ALERT);
-		}
-
-		uint16_t alert_id() const
-		{
-			return (is_alert() ? id_ : 0);
-		}
-
-		uint16_t error_id() const
-		{
-			return (is_error() ? id_ : 0);
-		}
-
-	private:
-		Response(Error error, uint16_t id, uint8_t size, const uint8_t* response)
-			:	usable_{true}, error_{error}, id_{id}, size_{size}
-		{
-			memcpy(response_, response, size);
-			response_[size] = 0;
-		}
-
-		bool usable_ = false;
-		Error error_;
-		uint16_t id_;
-		uint8_t size_;
-		uint8_t response_[THIS::BUFFER_SIZE + 1];
-
-		friend THIS;
-	};
-
-	// Functions for events handling
-	// void register_callbacks()
-	// {
-	// 	// Register events connect/disconnect
-	// 	await_at_command("AT+EVENTENABLE=0x3");
-	// }
-
-	// bool check_events()
-	// {
-	// 	static constexpr const uint8_t SIZE = 64;
-	// 	char response[SIZE+1];
-	// 	bool ok = await_at_command("AT+EVENTSTATUS", response, SIZE);
-	// 	if (!ok) return false;
-	// 	//TODO Need to get response and check if event is present
-	// 	// First line contains XX,YY (2 hex numbers that are bitfields, 
-	// 	// XX is for system events and YY for GATT events)
-	// }
-
-	//TODO rename hard_reset()? Add static_assert on RESET != NONE?
-	void reset()
-	{
-		reset_.clear();
-		time::delay_ms(DELAY_RESET_CLEAR_MS);
-		reset_.set();
-		time::delay_ms(DELAY_AFTER_RESET_MS);
-	}
-
-	// Launch AT command synchronously
-	bool await_at_command(const char* command, Response& response, uint16_t loop_until_timout = 
-		loop_count_for_await_response(TIMEOUT_AWAIT_RESPONSE_US))
-	{
-		if (!at_command(command))
-		{
-			response = Response();
-			return false;
-		}
-		return await_response(response, loop_until_timout);
-	}
-
-	// Launch AT command asynchronously
-	bool at_command(const char* command)
-	{
-		// Ensure transfer operation can be started (no other operation is on going at the same time)
-		synchronized
-		{
-			if (operation_ != OperationStatus::NO_OP)
-				return false;
-			operation_ = OperationStatus::SENDING_PACKET;
-		}
-		// Setup operation extra data
-		error_ = Error::OK;
-		wait_loop_count_ = loop_count_for_cs(TIMEOUT_DEVICE_READY_US);
-		// Setup data to be transmitted
-		size_ = strlen(command);
-		memcpy(buffer_, command, size_);
-		current_ = buffer_;
-
-		// Try to send 1st packet immediately
-		send_packet();
-		// Start timer to send next packets
-		timer_.resume_interrupts();
-		return true;
-	}
-
-	bool is_response_ready() const
-	{
-		return operation_ == OperationStatus::FINISHED;
-	}
-
-	// Return false if there is nothing to await for (typically because method called twice for 1 exchange)
-	// Return false if timeout elapsed before end of transaction
-	// Return true if response is available and usable (but that may include error situations!)
-	bool await_response(Response& response, uint16_t loop_until_timout = 
-		loop_count_for_await_response(TIMEOUT_AWAIT_RESPONSE_US))
-	{
-		if (operation_ == OperationStatus::NO_OP)
-		{
-			response = Response();
-			return false;
-		}
-		while (operation_ != OperationStatus::FINISHED)
-		{
-			time::delay_us(DELAY_AWAIT_RESPONSE_US);
-			if (--loop_until_timout == 0)
-			{
-				response = Response();
-				return false;
-			}
-		}
-		// Check if OK in response
-		buffer_[size_] = 0;
-		const Error error = (error_ == Error::OK ? check_ok((const char*) buffer_) : error_);
-		response = Response{error, message_id_, size_, buffer_};
-		// Now we can authorize new transactions again
-		operation_ = OperationStatus::NO_OP;
-		return true;
-	}
-
-private:
+	// ISR callbacks
+	//---------------
 	void on_irq_high()
 	{
 		// Double check IRQ level (you never know)
@@ -587,6 +902,8 @@ private:
 		}
 	}
 
+	// Data members
+	//--------------
 	// Data for on going exchange operation
 	// Current operation phase
 	volatile OperationStatus operation_ = OperationStatus::NO_OP;
@@ -618,6 +935,7 @@ private:
 	DECL_TIMER_COMP_FRIENDS;
 	DECL_INT_ISR_FRIENDS;
 	friend class Response;
+	friend class Events;
 
 	friend int main();
 };
@@ -683,6 +1001,35 @@ streams::ostream& operator<<(streams::ostream& o, Error error)
 	return o << label << flush;
 }
 
+// Service to control blink activity: 44013301-C3DA-4962-B6E5-AF262E392263
+static uint8_t BLINK_SERVICE_UUID[] = {
+	0x44, 0x01,   // service number: blink service
+	0x33, 0x01,   // 0x01 reserved for service
+	0xC3, 0xDA, 0x49, 0x62, 0xB6, 0xE5, 0xAF, 0x26, 0x2E, 0x39, 0x22, 0x63
+};
+  
+  // Characteristic to control blink activity: R/W one byte (00/FF inactive/active)
+  // UUID 44013302-C3DA-4962-B6E5-AF262E392263
+static uint8_t BLINK_STATUS_CHAR_UUID[] = {
+	0x44, 0x01,   // service number: blink service
+	0x33, 0x02,   // blink activity characteristic
+	0xC3, 0xDA, 0x49, 0x62, 0xB6, 0xE5, 0xAF, 0x26, 0x2E, 0x39, 0x22, 0x63
+};
+  
+// Advertising record
+// NOTE: there seem to be many limitations in this record:
+// - size is limited (could not advertise more than one 128 bits UUID service!)
+// - only one call allowed (next calls fully override previous records!)
+static uint8_t ADV[] = {
+	0x02, 0x01, 0x06,   // Flags: do not change
+	0x02, 0x0A, 0x00,   // TX Power level (0dBm): do not change
+	// Incomplete list of 128 bits UUID services: UART service (to be changed)
+	// Service to control blink activity: 44013301-C3DA-4962-B6E5-AF262E392263 (must be reversed...)
+	0x11, 0x06, 0x63, 0x22, 0x39, 0x2E, 0x26, 0xAF, 0xE5, 0xB6, 0x62, 0x49, 0xDA, 0xC3, 0x01, 0x33, 0x01, 0x44,
+	// 0x11, 0x06, 0x63, 0x22, 0x39, 0x2E, 0x26, 0xAF, 0xE5, 0xB6, 0x62, 0x49, 0xDA, 0xC3, 0x01, 0x33, 0x02, 0x44,
+	// 0x11, 0x06, 0x63, 0x22, 0x39, 0x2E, 0x26, 0xAF, 0xE5, 0xB6, 0x62, 0x49, 0xDA, 0xC3, 0x01, 0x33, 0x03, 0x44,
+};
+  
 int main()
 {
 	board::init();
@@ -698,23 +1045,82 @@ int main()
 	//TODO Improve init() to reduce CS high/low
 	spi::init();
 	PublicDevice device;
-	device.reset();
+	device.hard_reset();
 	out << F("SPI & device initialized") << endl;
+
+	bool ok = device.factory_reset();
+	if (!ok)
+		out << F("ERROR during factory_reset()") << endl;
+
+	// Add services and characteristics
+	uint8_t index = device.add_GATT_service(BLINK_SERVICE_UUID);
+	if (index == 0)
+		out << F("ERROR during add_GATT_service()") << endl;
+	uint8_t idCharBlinkStatus = device.add_GATT_characteristic(
+		BLINK_STATUS_CHAR_UUID, 
+		GATTProperty::WriteWithoutResponse | GATTProperty::Read,
+		GattDataType::BYTEARRAY, 1, 1);
+	if (idCharBlinkStatus == 0)
+		out << F("ERROR during add_GATT_characteristic()") << endl;
+	//TODO Other services and characteristics
+
+	// Display id characteristics
+	out << F("idCharBlinkStatus=") << idCharBlinkStatus << endl;
+
+	// Change device name
+	PublicDevice::Response response;
+	ok = device.await_at_command("AT+GAPDEVNAME=Vader Sr One", response);
+	if (!ok)
+		out << F("ERROR during await_at_command('AT+GAPDEVNAME=...')") << endl;
+	if (!response.is_successful())
+		out << F("Reponse ERROR during await_at_command('AT+GAPDEVNAME=...')") << endl;
+
+	// Ensure new UUID services get advertised!
+	ok = device.advertise(ADV, sizeof(ADV));
+	if (!ok)
+		out << F("ERROR during advertise()") << endl;
+
+	// Reset device to ensure accounting for latest config changes
+	ok = device.reset();
+	if (!ok)
+		out << F("ERROR during reset()") << endl;
 	
 	// Enable system events
-	PublicDevice::Response response;
-	bool ok = device.await_at_command("AT+EVENTENABLE=0x3", response);
+	ok = device.await_at_command("AT+EVENTENABLE=0x3,0x3", response);
+	// ok = device.register_events(true, true, {idCharBlinkStatus});
 	if (!ok)
-		out << F("ERROR during await_at_command('AT+EVENTENABLE=0x3')") << endl;
+		out << F("ERROR during register_events()") << endl;
+	if (!response.is_successful())
+	{
+		out << F("ERROR response during register_events():") << endl;
+		out << response.error() << endl;
+		out << response.response() << endl;
+	}
+
 	// Loop to check connect/disconnect events status
 	while (true)
 	{
 		time::delay_ms(1000);
-		ok = device.await_at_command("AT+EVENTSTATUS", response);
+		out << '.' << flush;
+		PublicDevice::Events events;
+		ok = device.check_events(events);
 		if (!ok)
-			out << F("ERROR during await_at_command('AT+EVENTSTATUS'): ") << endl;
+		{
+			out << endl;
+			out << F("ERROR during check_events()") << endl;
+		}
 		else
-			out << F("EVENTSTATUS = ") << response.response() << endl;
+		{
+			if (events.has_events())
+				out << endl;
+			// Display events
+			if (events.is_connected())
+				out << F("CONNECTED!") << endl;
+			if (events.is_disconnected())
+				out << F("DISCONNECTED!") << endl;
+			if (events.is_GATT_characterisitc_event(idCharBlinkStatus))
+				out << F("GATT idCharBlinkStatus write event!") << endl;
+		}
 	}
 	// Stop SPI device if needed
 	// out << F("End") << endl;

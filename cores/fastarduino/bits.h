@@ -247,6 +247,17 @@ namespace bits
 	}
 
 	/**
+	 * Create a `uint32_t` bitmask for the given @p bit number.
+	 * Concretely, this is simply the `1 << bit` expression.
+	 * @param bit the bit number for which to produce a bitmask, should be between
+	 * `0` and `31`.
+	 */
+	static constexpr uint32_t BV32(uint8_t bit)
+	{
+		return uint32_t(1 << bit);
+	}
+
+	/**
 	 * Return the `uint8_t` 2-complement of a byte.
 	 * Concretely, this is simply the `~value` expression.
 	 */
