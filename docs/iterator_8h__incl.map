@@ -1,6 +1,10 @@
 <map id="fastarduino/iterator.h" name="fastarduino/iterator.h">
-<area shape="rect" id="node1" title="Utilities to convert arrays into an iterable (usable if for x: list construct)." alt="" coords="5,5,165,31"/>
-<area shape="rect" id="node2" title=" " alt="" coords="72,152,147,177"/>
-<area shape="rect" id="node3" title=" " alt="" coords="50,79,121,104"/>
-<area shape="rect" id="node4" href="$initializer__list_8h_source.html" title=" " alt="" coords="145,79,268,104"/>
+<area shape="rect" id="Node000001" title="Utilities to convert arrays into an iterable (usable if for x: list construct)." alt="" coords="5,5,164,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="71,152,146,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="72,33,57,47,44,65,37,84,39,103,55,125,77,143,73,147,51,129,34,105,31,83,39,62,53,44,68,29"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="49,79,120,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="87,31,87,65,82,65,82,31"/>
+<area shape="rect" id="Node000004" href="$initializer__list_8h_source.html" title=" " alt="" coords="145,79,267,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="106,28,176,69,173,74,103,33"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="192,106,137,146,134,141,189,102"/>
 </map>

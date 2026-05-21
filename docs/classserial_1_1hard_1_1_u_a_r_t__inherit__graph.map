@@ -1,6 +1,9 @@
 <map id="serial::hard::UART&lt; USART_ &gt;" name="serial::hard::UART&lt; USART_ &gt;">
-<area shape="rect" id="node1" title="Hardware serial receiver/transceiver API." alt="" coords="130,79,269,119"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,119,31"/>
-<area shape="rect" id="node3" title=" " alt="" coords="143,5,255,31"/>
-<area shape="rect" id="node4" href="$classserial_1_1_u_a_r_t_errors.html" title="Holder of latest UART errors." alt="" coords="280,5,420,31"/>
+<area shape="rect" id="Node000001" title="Hardware serial receiver/transceiver API." alt="" coords="129,79,267,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,119,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,35,167,76,164,81,92,40"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="143,5,253,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="201,44,201,79,195,79,195,44"/>
+<area shape="rect" id="Node000004" href="$classserial_1_1_u_a_r_t_errors.html" title="Holder of latest UART errors." alt="" coords="278,5,417,31"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="314,40,235,81,233,76,312,35"/>
 </map>

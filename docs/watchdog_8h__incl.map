@@ -1,20 +1,46 @@
 <map id="fastarduino/watchdog.h" name="fastarduino/watchdog.h">
-<area shape="rect" id="node1" title="Watchdog API." alt="" coords="609,5,783,31"/>
-<area shape="rect" id="node2" href="$board_8h_source.html" title=" " alt="" coords="390,372,509,397"/>
-<area shape="rect" id="node4" title=" " alt="" coords="807,79,967,104"/>
-<area shape="rect" id="node5" title=" " alt="" coords="617,152,732,177"/>
-<area shape="rect" id="node6" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="561,79,658,104"/>
-<area shape="rect" id="node9" href="$events_8h.html" title="Support for events management." alt="" coords="266,79,345,104"/>
-<area shape="rect" id="node3" title=" " alt="" coords="414,445,485,471"/>
-<area shape="rect" id="node7" href="$io_8h_source.html" title=" " alt="" coords="637,299,731,324"/>
-<area shape="rect" id="node8" title=" " alt="" coords="649,372,719,397"/>
-<area shape="rect" id="node10" title=" " alt="" coords="5,372,80,397"/>
-<area shape="rect" id="node11" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="308,152,383,177"/>
-<area shape="rect" id="node17" href="$linked__list_8h.html" title="Utility API to handle linked list containers." alt="" coords="207,225,307,251"/>
-<area shape="rect" id="node12" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="280,299,363,324"/>
-<area shape="rect" id="node15" href="$time_8h.html" title="Simple time utilities." alt="" coords="407,225,471,251"/>
-<area shape="rect" id="node13" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="155,372,237,397"/>
-<area shape="rect" id="node14" title=" " alt="" coords="261,372,365,397"/>
-<area shape="rect" id="node16" title=" " alt="" coords="476,299,612,324"/>
-<area shape="rect" id="node18" href="$types__traits_8h.html" title="Useful traits for common types." alt="" coords="131,299,242,324"/>
+<area shape="rect" id="Node000001" title="Watchdog API." alt="" coords="609,5,783,31"/>
+<area shape="rect" id="Node000002" href="$board_8h_source.html" title=" " alt="" coords="390,372,509,397"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="709,29,727,52,748,84,765,122,772,163,772,239,770,287,762,307,746,326,730,337,708,346,650,361,523,380,522,375,649,356,706,341,727,332,742,322,758,304,765,286,767,239,767,164,760,124,743,87,723,55,705,33"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="807,79,967,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="728,28,844,71,842,76,726,33"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="617,152,732,177"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="697,32,681,139,676,138,692,31"/>
+<area shape="rect" id="Node000006" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="561,79,658,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="684,33,636,72,632,68,680,29"/>
+<area shape="rect" id="Node000009" href="$events_8h.html" title="Support for events management." alt="" coords="266,79,345,104"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="634,33,359,83,358,78,633,28"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="414,445,485,471"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="452,398,452,432,447,432,447,398"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="622,103,657,140,653,144,618,106"/>
+<area shape="rect" id="Node000007" href="$io_8h_source.html" title=" " alt="" coords="637,299,731,324"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="609,105,605,138,608,177,619,208,635,238,668,287,664,290,630,241,615,210,603,178,599,138,604,104"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="649,372,719,397"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="687,324,687,358,681,358,681,324"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="5,372,80,397"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="297,106,121,300,64,364,60,360,117,297,293,102"/>
+<area shape="rect" id="Node000011" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="308,152,383,177"/>
+<area shape="poly" id="edge11_Node000009_Node000011" title=" " alt="" coords="314,103,334,139,330,141,310,106"/>
+<area shape="rect" id="Node000017" href="$linked__list_8h.html" title="Utility API to handle linked list containers." alt="" coords="207,225,307,251"/>
+<area shape="poly" id="edge21_Node000009_Node000017" title=" " alt="" coords="304,105,268,213,263,211,299,104"/>
+<area shape="rect" id="Node000012" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="280,299,363,324"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="346,178,328,285,323,285,341,177"/>
+<area shape="rect" id="Node000015" href="$time_8h.html" title="Simple time utilities." alt="" coords="407,225,471,251"/>
+<area shape="poly" id="edge16_Node000011_Node000015" title=" " alt="" coords="362,175,414,215,411,219,359,179"/>
+<area shape="poly" id="edge14_Node000012_Node000002" title=" " alt="" coords="343,322,417,363,415,367,341,326"/>
+<area shape="rect" id="Node000013" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="155,372,237,397"/>
+<area shape="poly" id="edge13_Node000012_Node000013" title=" " alt="" coords="303,326,230,367,227,363,300,322"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="261,372,365,397"/>
+<area shape="poly" id="edge15_Node000012_Node000014" title=" " alt="" coords="323,325,319,359,313,358,317,324"/>
+<area shape="poly" id="edge17_Node000015_Node000003" title=" " alt="" coords="443,251,450,285,466,323,480,337,496,345,511,354,524,371,527,391,518,410,503,427,485,440,481,436,499,423,514,407,521,391,519,373,507,358,493,349,477,341,462,325,445,286,437,252"/>
+<area shape="poly" id="edge18_Node000015_Node000007" title=" " alt="" coords="471,246,632,292,631,297,470,251"/>
+<area shape="poly" id="edge20_Node000015_Node000012" title=" " alt="" coords="421,253,354,294,351,289,418,248"/>
+<area shape="rect" id="Node000016" title=" " alt="" coords="476,299,612,324"/>
+<area shape="poly" id="edge19_Node000015_Node000016" title=" " alt="" coords="457,248,517,289,514,293,454,253"/>
+<area shape="poly" id="edge22_Node000017_Node000012" title=" " alt="" coords="270,249,304,287,300,290,266,253"/>
+<area shape="rect" id="Node000018" href="$types__traits_8h.html" title="Useful traits for common types." alt="" coords="131,299,242,324"/>
+<area shape="poly" id="edge23_Node000017_Node000018" title=" " alt="" coords="248,253,210,291,206,287,244,249"/>
+<area shape="poly" id="edge25_Node000018_Node000003" title=" " alt="" coords="174,326,159,342,146,360,139,379,140,388,145,396,161,408,186,420,255,436,332,446,400,452,400,457,331,452,254,441,185,425,158,413,141,399,135,389,134,378,141,358,155,338,170,323"/>
+<area shape="poly" id="edge24_Node000018_Node000010" title=" " alt="" coords="165,326,80,368,77,363,162,322"/>
+<area shape="poly" id="edge26_Node000018_Node000013" title=" " alt="" coords="191,324,195,358,190,359,186,325"/>
 </map>

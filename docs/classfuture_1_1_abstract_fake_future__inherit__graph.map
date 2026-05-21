@@ -1,4 +1,5 @@
 <map id="future::AbstractFakeFuture" name="future::AbstractFakeFuture">
-<area shape="rect" id="node1" title="Base class for all FakeFutures." alt="" coords="5,5,200,31"/>
-<area shape="rect" id="node2" href="$classfuture_1_1_fake_future.html" title="Actual FakeFuture, it has the exact same API as Future and can be used in lieu of Future." alt="" coords="33,79,173,119"/>
+<area shape="rect" id="Node000001" title="Base class for all FakeFutures." alt="" coords="5,5,199,31"/>
+<area shape="rect" id="Node000002" href="$classfuture_1_1_fake_future.html" title="Actual FakeFuture, it has the exact same API as Future and can be used in lieu of Future." alt="" coords="33,79,171,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="105,44,105,79,99,79,99,44"/>
 </map>

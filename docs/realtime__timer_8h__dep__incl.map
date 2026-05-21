@@ -1,5 +1,7 @@
 <map id="fastarduino/realtime_timer.h" name="fastarduino/realtime_timer.h">
-<area shape="rect" id="node1" title="Real&#45;time Timer API." alt="" coords="90,5,245,45"/>
-<area shape="rect" id="node2" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04." alt="" coords="5,93,156,133"/>
-<area shape="rect" id="node3" href="$vl53l0x_8h.html" title="API to handle Time&#45;of&#45;Flight ranging sensor VL53L0X I2C chip." alt="" coords="180,93,331,133"/>
+<area shape="rect" id="Node000001" title="Real&#45;time Timer API." alt="" coords="90,5,245,45"/>
+<area shape="rect" id="Node000002" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04." alt="" coords="5,93,156,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="140,57,102,95,98,91,137,53"/>
+<area shape="rect" id="Node000003" href="$vl53l0x_8h.html" title="API to handle Time&#45;of&#45;Flight ranging sensor VL53L0X I2C chip." alt="" coords="180,93,331,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="199,53,238,91,234,95,195,57"/>
 </map>

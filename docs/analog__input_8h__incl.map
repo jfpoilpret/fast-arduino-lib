@@ -1,13 +1,24 @@
 <map id="fastarduino/analog_input.h" name="fastarduino/analog_input.h">
-<area shape="rect" id="node1" title="Analog Input API." alt="" coords="81,5,225,45"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,93,165,119"/>
-<area shape="rect" id="node3" href="$time_8h.html" title="Simple time utilities." alt="" coords="189,93,253,119"/>
-<area shape="rect" id="node4" title=" " alt="" coords="187,313,258,339"/>
-<area shape="rect" id="node5" href="$io_8h_source.html" title=" " alt="" coords="105,167,199,192"/>
-<area shape="rect" id="node7" title=" " alt="" coords="224,167,360,192"/>
-<area shape="rect" id="node8" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="384,167,467,192"/>
-<area shape="rect" id="node6" title=" " alt="" coords="117,240,187,265"/>
-<area shape="rect" id="node9" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="235,240,317,265"/>
-<area shape="rect" id="node10" href="$board_8h_source.html" title=" " alt="" coords="342,240,461,265"/>
-<area shape="rect" id="node11" title=" " alt="" coords="485,240,589,265"/>
+<area shape="rect" id="Node000001" title="Analog Input API." alt="" coords="81,5,225,45"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,93,165,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="139,47,106,84,102,81,135,44"/>
+<area shape="rect" id="Node000003" href="$time_8h.html" title="Simple time utilities." alt="" coords="189,93,253,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="172,44,204,81,200,84,168,47"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="186,313,257,339"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="190,120,133,143,108,156,94,168,88,187,88,213,94,240,106,264,120,279,137,291,174,309,172,314,134,296,117,283,102,267,89,242,83,214,83,186,90,165,105,151,130,138,188,115"/>
+<area shape="rect" id="Node000005" href="$io_8h_source.html" title=" " alt="" coords="105,167,199,192"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="212,121,175,159,171,155,208,117"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="224,167,360,192"/>
+<area shape="poly" id="edge6_Node000003_Node000007" title=" " alt="" coords="235,117,273,155,269,159,231,121"/>
+<area shape="rect" id="Node000008" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="384,167,467,192"/>
+<area shape="poly" id="edge7_Node000003_Node000008" title=" " alt="" coords="255,116,381,160,379,165,253,121"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="117,240,187,265"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="155,192,155,226,149,226,149,192"/>
+<area shape="rect" id="Node000009" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="235,240,317,265"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="402,194,314,236,312,232,400,190"/>
+<area shape="rect" id="Node000010" href="$board_8h_source.html" title=" " alt="" coords="341,240,459,265"/>
+<area shape="poly" id="edge9_Node000008_Node000010" title=" " alt="" coords="424,193,411,228,406,226,419,191"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="484,240,588,265"/>
+<area shape="poly" id="edge11_Node000008_Node000011" title=" " alt="" coords="445,190,508,230,505,235,442,194"/>
+<area shape="poly" id="edge10_Node000010_Node000004" title=" " alt="" coords="372,268,264,311,262,306,370,263"/>
 </map>

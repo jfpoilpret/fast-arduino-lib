@@ -1,5 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classi2c_1_1debug_1_1_i2_c_debug_live_logger.html" title="Class tracing I2C debug notifications live to out." alt="" coords="5,5,192,45"/>
-<area shape="rect" id="node2" href="$classi2c_1_1debug_1_1_i2_c_debug_status_live_logger.html" title="Class tracing I2C status and debug notifications live to out." alt="" coords="240,37,441,77"/>
-<area shape="rect" id="node3" href="$classi2c_1_1status_1_1_i2_c_status_live_logger.html" title="Class tracing I2C status notifications live to out." alt="" coords="5,69,192,109"/>
+<area shape="rect" id="Node000000" href="$classi2c_1_1debug_1_1_i2_c_debug_live_logger.html" title="Class tracing I2C debug notifications live to out." alt="" coords="5,5,192,45"/>
+<area shape="rect" id="Node000001" href="$classi2c_1_1debug_1_1_i2_c_debug_status_live_logger.html" title="Class tracing I2C status and debug notifications live to out." alt="" coords="240,37,441,77"/>
+<area shape="poly" id="edge64_Node000000_Node000001" title=" " alt="" coords="206,37,240,41,239,47,205,42"/>
+<area shape="rect" id="Node000002" href="$classi2c_1_1status_1_1_i2_c_status_live_logger.html" title="Class tracing I2C status notifications live to out." alt="" coords="5,69,192,109"/>
+<area shape="poly" id="edge65_Node000002_Node000001" title=" " alt="" coords="205,73,239,68,240,73,206,78"/>
 </map>

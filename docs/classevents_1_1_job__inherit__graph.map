@@ -1,5 +1,7 @@
 <map id="events::Job" name="events::Job">
-<area shape="rect" id="node1" title="Abstract class holding some action to be executed at given periods of time." alt="" coords="45,152,140,177"/>
-<area shape="rect" id="node2" href="$classcontainers_1_1_link.html" title=" " alt="" coords="5,79,180,104"/>
-<area shape="rect" id="node3" title=" " alt="" coords="53,5,132,31"/>
+<area shape="rect" id="Node000001" title="Abstract class holding some action to be executed at given periods of time." alt="" coords="45,152,140,177"/>
+<area shape="rect" id="Node000002" href="$classcontainers_1_1_link.html" title=" " alt="" coords="5,79,180,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="95,118,95,152,90,152,90,118"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="53,5,132,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="95,44,95,79,90,79,90,44"/>
 </map>

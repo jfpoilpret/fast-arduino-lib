@@ -1,6 +1,9 @@
 <map id="i2c::I2CFuturesGroup&lt; MANAGER &gt;" name="i2c::I2CFuturesGroup&lt; MANAGER &gt;">
-<area shape="rect" id="node1" title="Abstract class to allow aggregation of several futures in relation to I2C transactions." alt="" coords="237,53,395,93"/>
-<area shape="rect" id="node3" href="$classdevices_1_1vl53l0x_1_1_v_l53_l0_x_1_1_get_g_p_i_o_settings_future.html" title="Future to get device current GPIO settings." alt="" coords="443,5,687,60"/>
-<area shape="rect" id="node4" href="$classdevices_1_1vl53l0x_1_1_v_l53_l0_x_1_1_set_g_p_i_o_settings_future.html" title="Future to set device GPIO settings." alt="" coords="443,84,686,139"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,53,189,93"/>
+<area shape="rect" id="Node000001" title="Abstract class to allow aggregation of several futures in relation to I2C transactions." alt="" coords="237,53,395,93"/>
+<area shape="rect" id="Node000003" href="$classdevices_1_1vl53l0x_1_1_v_l53_l0_x_1_1_get_g_p_i_o_settings_future.html" title="Future to get device current GPIO settings." alt="" coords="443,5,687,60"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="408,55,442,50,443,55,409,61"/>
+<area shape="rect" id="Node000004" href="$classdevices_1_1vl53l0x_1_1_v_l53_l0_x_1_1_set_g_p_i_o_settings_future.html" title="Future to set device GPIO settings." alt="" coords="443,84,686,139"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="408,84,443,90,443,95,408,90"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,53,189,93"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="203,70,237,70,237,75,203,75"/>
 </map>

@@ -1,4 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,44,31"/>
-<area shape="rect" id="node2" href="$classfuture_1_1_abstract_futures_group.html" title="Abstract class to allow aggregation of several futures." alt="" coords="92,5,340,31"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,5,44,31"/>
+<area shape="rect" id="Node000001" href="$classfuture_1_1_abstract_futures_group.html" title="Abstract class to allow aggregation of several futures." alt="" coords="92,5,340,31"/>
+<area shape="poly" id="edge33_Node000000_Node000001" title=" " alt="" coords="57,15,92,15,92,21,57,21"/>
 </map>

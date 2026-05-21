@@ -1,9 +1,15 @@
 <map id="fastarduino/i2c_device_utilities.h" name="fastarduino/i2c_device_utilities.h">
-<area shape="rect" id="node1" title="Various utilities to use for I2C Device support developers." alt="" coords="432,5,601,45"/>
-<area shape="rect" id="node2" href="$ds1307_8h.html" title="API to handle Real&#45;Time Clock DS1307 I2C chip." alt="" coords="5,93,156,133"/>
-<area shape="rect" id="node3" href="$hmc5883l_8h.html" title="API to handle HMC5883L 3&#45;axis digital compass I2C chip." alt="" coords="180,93,331,133"/>
-<area shape="rect" id="node4" href="$mcp23008_8h.html" title="API to handle the MCP23008 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="355,93,505,133"/>
-<area shape="rect" id="node5" href="$mcp23017_8h.html" title="API to handle the MCP23017 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="529,93,680,133"/>
-<area shape="rect" id="node6" href="$mpu6050_8h.html" title="API to handle MPU6050 3&#45;axis gyroscope/accelerometer I2C chip." alt="" coords="704,93,855,133"/>
-<area shape="rect" id="node7" href="$vl53l0x_8h.html" title="API to handle Time&#45;of&#45;Flight ranging sensor VL53L0X I2C chip." alt="" coords="879,93,1029,133"/>
+<area shape="rect" id="Node000001" title="Various utilities to use for I2C Device support developers." alt="" coords="432,5,601,45"/>
+<area shape="rect" id="Node000002" href="$ds1307_8h.html" title="API to handle Real&#45;Time Clock DS1307 I2C chip." alt="" coords="5,93,156,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="419,47,168,96,157,98,156,93,167,91,418,42"/>
+<area shape="rect" id="Node000003" href="$hmc5883l_8h.html" title="API to handle HMC5883L 3&#45;axis digital compass I2C chip." alt="" coords="180,93,331,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="447,52,313,96,312,91,445,47"/>
+<area shape="rect" id="Node000004" href="$mcp23008_8h.html" title="API to handle the MCP23008 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="355,93,505,133"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="490,57,451,95,447,91,486,53"/>
+<area shape="rect" id="Node000005" href="$mcp23017_8h.html" title="API to handle the MCP23017 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="529,93,680,133"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="548,53,587,91,583,95,544,57"/>
+<area shape="rect" id="Node000006" href="$mpu6050_8h.html" title="API to handle MPU6050 3&#45;axis gyroscope/accelerometer I2C chip." alt="" coords="704,93,855,133"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="588,47,723,91,721,96,586,52"/>
+<area shape="rect" id="Node000007" href="$vl53l0x_8h.html" title="API to handle Time&#45;of&#45;Flight ranging sensor VL53L0X I2C chip." alt="" coords="879,93,1029,133"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="615,42,868,91,879,93,878,98,867,96,614,47"/>
 </map>

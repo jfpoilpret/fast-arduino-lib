@@ -14,7 +14,7 @@ var searchData=
   ['to_5f500ms_11',['TO_500ms',['../namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01bafb811591cc29f5e01ef24eeb560868b1',1,'watchdog']]],
   ['to_5f64ms_12',['TO_64ms',['../namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01baa242d79167431204d86c7aa65a03c14a',1,'watchdog']]],
   ['to_5f8s_13',['TO_8s',['../namespacewatchdog.html#ae2234bf414f2a2e1b774538e7cecd01ba20bf5a68c13809216a5ec3d321a7a7b2',1,'watchdog']]],
-  ['toggle_14',['TOGGLE',['../namespaceanalog.html#aa6b91d833875b3e4f6b2c7293f21a81ea1252c45651289c0b553a30d27bb5ae9b',1,'analog::TOGGLE()'],['../namespacetimer.html#a17d2af2848409a47612cd961ea27b5a0a1252c45651289c0b553a30d27bb5ae9b',1,'timer::TOGGLE()']]],
+  ['toggle_14',['toggle',['../namespaceanalog.html#aa6b91d833875b3e4f6b2c7293f21a81ea1252c45651289c0b553a30d27bb5ae9b',1,'analog::TOGGLE'],['../namespacetimer.html#a17d2af2848409a47612cd961ea27b5a0a1252c45651289c0b553a30d27bb5ae9b',1,'timer::TOGGLE']]],
   ['trace_5fall_15',['TRACE_ALL',['../namespacei2c_1_1status.html#a8e07f8d34f9f155ed73d199716ec173fa8a67b6d1dc62f9f440b48bb756f8f4c6',1,'i2c::status']]],
   ['trace_5ferror_16',['TRACE_ERROR',['../namespacei2c_1_1status.html#a8e07f8d34f9f155ed73d199716ec173fa3b0ecf56176942a81ec8148a69ad6b5b',1,'i2c::status']]],
   ['two_17',['TWO',['../namespaceserial.html#a1cc0a59518594157f23ddf16842243b3a0f82d86afa0f5dc965c5c15aca58dcfb',1,'serial']]],

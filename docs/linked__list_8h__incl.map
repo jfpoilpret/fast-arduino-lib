@@ -1,10 +1,19 @@
 <map id="fastarduino/linked_list.h" name="fastarduino/linked_list.h">
-<area shape="rect" id="node1" title="Utility API to handle linked list containers." alt="" coords="229,5,367,45"/>
-<area shape="rect" id="node2" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="197,93,279,119"/>
-<area shape="rect" id="node7" href="$types__traits_8h.html" title="Useful traits for common types." alt="" coords="323,93,433,119"/>
-<area shape="rect" id="node3" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="277,167,359,192"/>
-<area shape="rect" id="node4" href="$board_8h_source.html" title=" " alt="" coords="5,167,124,192"/>
-<area shape="rect" id="node6" title=" " alt="" coords="149,167,253,192"/>
-<area shape="rect" id="node5" title=" " alt="" coords="195,240,265,265"/>
-<area shape="rect" id="node8" title=" " alt="" coords="434,167,509,192"/>
+<area shape="rect" id="Node000001" title="Utility API to handle linked list containers." alt="" coords="229,5,367,45"/>
+<area shape="rect" id="Node000002" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="197,93,279,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="286,47,257,84,253,81,281,44"/>
+<area shape="rect" id="Node000007" href="$types__traits_8h.html" title="Useful traits for common types." alt="" coords="323,93,433,119"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="319,44,358,82,354,85,316,47"/>
+<area shape="rect" id="Node000003" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="277,167,359,192"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="253,117,297,156,293,160,249,121"/>
+<area shape="rect" id="Node000004" href="$board_8h_source.html" title=" " alt="" coords="5,167,124,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="211,121,107,164,105,159,209,116"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="149,167,253,192"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="234,120,215,156,211,153,229,118"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="195,240,265,265"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="92,190,192,232,189,237,90,194"/>
+<area shape="poly" id="edge9_Node000007_Node000003" title=" " alt="" coords="370,121,339,158,334,154,366,117"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="383,119,386,154,382,175,374,194,354,214,330,229,279,247,278,242,328,224,351,210,369,190,377,173,380,154,378,119"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="434,167,509,192"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="395,117,447,156,444,160,391,121"/>
 </map>

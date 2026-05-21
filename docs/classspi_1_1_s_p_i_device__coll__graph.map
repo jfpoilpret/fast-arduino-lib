@@ -1,4 +1,5 @@
 <map id="spi::SPIDevice&lt; CS, CS_MODE, RATE, MODE, ORDER &gt;" name="spi::SPIDevice&lt; CS, CS_MODE, RATE, MODE, ORDER &gt;">
-<area shape="rect" id="node1" title="Base class for any SPI slave device." alt="" coords="5,79,188,133"/>
-<area shape="rect" id="node2" href="$classspi_1_1_abstract_s_p_i_device.html" title="Contain general payload transfer API for an SPI device." alt="" coords="13,5,181,31"/>
+<area shape="rect" id="Node000001" title="Base class for any SPI slave device." alt="" coords="5,79,188,133"/>
+<area shape="rect" id="Node000002" href="$classspi_1_1_abstract_s_p_i_device.html" title="Contain general payload transfer API for an SPI device." alt="" coords="13,5,181,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,44,99,79,94,79,94,44"/>
 </map>

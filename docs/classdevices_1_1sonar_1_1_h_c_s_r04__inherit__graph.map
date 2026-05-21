@@ -1,4 +1,5 @@
 <map id="devices::sonar::HCSR04&lt; NTIMER_, TRIGGER_, ECHO_, SONAR_TYPE_ &gt;" name="devices::sonar::HCSR04&lt; NTIMER_, TRIGGER_, ECHO_, SONAR_TYPE_ &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="5,93,219,148"/>
-<area shape="rect" id="node2" href="$classdevices_1_1sonar_1_1_abstract_sonar.html" title="An abstract base class for some sonar classes defined as part of this API." alt="" coords="23,5,201,45"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,93,219,148"/>
+<area shape="rect" id="Node000002" href="$classdevices_1_1sonar_1_1_abstract_sonar.html" title="An abstract base class for some sonar classes defined as part of this API." alt="" coords="23,5,201,45"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,59,115,93,109,93,109,59"/>
 </map>

@@ -6,7 +6,7 @@ var searchData=
   ['vcselperiodtype_3',['VcselPeriodType',['../namespacedevices_1_1vl53l0x.html#a07eefbde97029a7493093997fd81c57a',1,'devices::vl53l0x']]],
   ['vertical_4',['VERTICAL',['../classdevices_1_1display_1_1_font.html#a29094669cb1f3bd054edf031165e4904',1,'devices::display::Font']]],
   ['vertical_5ffont_5',['VERTICAL_FONT',['../structdevices_1_1display_1_1_display_device_trait.html#aeb2e0bff959ebab631110b89fcf378e9',1,'devices::display::DisplayDeviceTrait']]],
-  ['vl53l0x_6',['VL53L0X',['../classdevices_1_1vl53l0x_1_1_v_l53_l0_x.html',1,'devices::vl53l0x::VL53L0X&lt; MANAGER &gt;'],['../classdevices_1_1vl53l0x_1_1_v_l53_l0_x.html#ae262ba2d39353efb8ff1964d64c30cd3',1,'devices::vl53l0x::VL53L0X::VL53L0X()']]],
+  ['vl53l0x_6',['vl53l0x',['../classdevices_1_1vl53l0x_1_1_v_l53_l0_x.html#ae262ba2d39353efb8ff1964d64c30cd3',1,'devices::vl53l0x::VL53L0X::VL53L0X()'],['../classdevices_1_1vl53l0x_1_1_v_l53_l0_x.html',1,'devices::vl53l0x::VL53L0X&lt; MANAGER &gt;']]],
   ['vl53l0x_2eh_7',['vl53l0x.h',['../vl53l0x_8h.html',1,'']]],
   ['vl53l0x_5ftypes_2eh_8',['vl53l0x_types.h',['../vl53l0x__types_8h.html',1,'']]],
   ['voltage_5fmv_9',['voltage_mV',['../classanalog_1_1_power_voltage.html#a7c25d861edbac1cb0abd39060663bc8b',1,'analog::PowerVoltage']]]

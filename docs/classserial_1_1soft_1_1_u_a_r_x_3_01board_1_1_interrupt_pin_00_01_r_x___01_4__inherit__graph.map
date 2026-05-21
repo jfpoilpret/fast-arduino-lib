@@ -1,5 +1,7 @@
 <map id="serial::soft::UARX&lt; board::InterruptPin, RX_ &gt;" name="serial::soft::UARX&lt; board::InterruptPin, RX_ &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="55,79,218,133"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,119,31"/>
-<area shape="rect" id="node3" href="$classserial_1_1_u_a_r_t_errors.html" title="Holder of latest UART errors." alt="" coords="143,5,283,31"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="55,79,218,133"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,119,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="83,39,116,77,112,80,79,43"/>
+<area shape="rect" id="Node000003" href="$classserial_1_1_u_a_r_t_errors.html" title="Holder of latest UART errors." alt="" coords="143,5,282,31"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="195,43,162,80,158,77,192,39"/>
 </map>

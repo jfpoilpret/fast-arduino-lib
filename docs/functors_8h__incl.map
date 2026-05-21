@@ -1,10 +1,19 @@
 <map id="fastarduino/functors.h" name="fastarduino/functors.h">
-<area shape="rect" id="node1" title="Useful functors that can be used as template arguments, particularly in I2C device utilities." alt="" coords="215,5,381,31"/>
-<area shape="rect" id="node2" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="197,79,279,104"/>
-<area shape="rect" id="node7" href="$types__traits_8h.html" title="Useful traits for common types." alt="" coords="323,79,433,104"/>
-<area shape="rect" id="node3" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="277,152,359,177"/>
-<area shape="rect" id="node4" href="$board_8h_source.html" title=" " alt="" coords="5,152,124,177"/>
-<area shape="rect" id="node6" title=" " alt="" coords="149,152,253,177"/>
-<area shape="rect" id="node5" title=" " alt="" coords="195,225,265,251"/>
-<area shape="rect" id="node8" title=" " alt="" coords="434,152,509,177"/>
+<area shape="rect" id="Node000001" title="Useful functors that can be used as template arguments, particularly in I2C device utilities." alt="" coords="215,5,381,31"/>
+<area shape="rect" id="Node000002" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="197,79,279,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="290,33,259,70,254,66,286,29"/>
+<area shape="rect" id="Node000007" href="$types__traits_8h.html" title="Useful traits for common types." alt="" coords="323,79,433,104"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="313,29,357,68,353,72,309,33"/>
+<area shape="rect" id="Node000003" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="277,152,359,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="253,102,297,141,293,145,249,106"/>
+<area shape="rect" id="Node000004" href="$board_8h_source.html" title=" " alt="" coords="5,152,124,177"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="211,106,107,149,105,144,209,102"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="149,152,253,177"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="234,106,215,141,211,139,229,103"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="195,225,265,251"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="92,175,192,217,189,222,90,180"/>
+<area shape="poly" id="edge9_Node000007_Node000003" title=" " alt="" coords="370,106,339,143,334,140,366,103"/>
+<area shape="poly" id="edge8_Node000007_Node000005" title=" " alt="" coords="383,104,386,139,382,160,374,179,354,199,330,214,279,232,278,227,328,209,351,195,369,176,377,158,380,139,378,105"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="434,152,509,177"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="395,102,447,141,444,146,391,106"/>
 </map>

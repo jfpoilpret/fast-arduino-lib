@@ -1,4 +1,5 @@
 <map id="devices::display::Display&lt; DISPLAY_DEVICE &gt;" name="devices::display::Display&lt; DISPLAY_DEVICE &gt;">
-<area shape="rect" id="node1" title="Class handling drawing primitives on any display device." alt="" coords="5,79,188,119"/>
-<area shape="rect" id="node2" title=" " alt="" coords="31,5,163,31"/>
+<area shape="rect" id="Node000001" title="Class handling drawing primitives on any display device." alt="" coords="5,79,188,119"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="31,5,162,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,44,99,79,94,79,94,44"/>
 </map>

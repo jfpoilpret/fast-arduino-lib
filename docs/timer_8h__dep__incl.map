@@ -1,12 +1,23 @@
 <map id="fastarduino/timer.h" name="fastarduino/timer.h">
-<area shape="rect" id="node1" title="Timer API." alt="" coords="272,5,419,31"/>
-<area shape="rect" id="node2" href="$pulse__timer_8h.html" title="PulseTimer API." alt="" coords="5,86,195,111"/>
-<area shape="rect" id="node4" href="$pwm_8h.html" title="PWM API." alt="" coords="219,86,363,111"/>
-<area shape="rect" id="node5" href="$square__wave_8h.html" title="SquareWave API, an API to generate square waves of any frequency." alt="" coords="232,167,376,207"/>
-<area shape="rect" id="node8" href="$realtime__timer_8h.html" title="Real&#45;time Timer API." alt="" coords="437,79,592,119"/>
-<area shape="rect" id="node3" href="$servo_8h.html" title="API to handle servomotors." alt="" coords="47,167,198,207"/>
-<area shape="rect" id="node6" href="$tones_8h.html" title="API to handle tones (simple square waves) generation to a buzzer." alt="" coords="229,255,379,295"/>
-<area shape="rect" id="node7" href="$tone__player_8h.html" title="API to handle melody playing (tones as simple square waves) to a buzzer." alt="" coords="229,343,379,383"/>
-<area shape="rect" id="node9" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04." alt="" coords="426,167,577,207"/>
-<area shape="rect" id="node10" href="$vl53l0x_8h.html" title="API to handle Time&#45;of&#45;Flight ranging sensor VL53L0X I2C chip." alt="" coords="601,167,751,207"/>
+<area shape="rect" id="Node000001" title="Timer API." alt="" coords="271,5,418,31"/>
+<area shape="rect" id="Node000002" href="$pulse__timer_8h.html" title="PulseTimer API." alt="" coords="5,86,193,111"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="297,37,136,89,134,83,295,32"/>
+<area shape="rect" id="Node000004" href="$pwm_8h.html" title="PWM API." alt="" coords="218,86,362,111"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="331,43,300,87,296,84,327,40"/>
+<area shape="rect" id="Node000005" href="$square__wave_8h.html" title="SquareWave API, an API to generate square waves of any frequency." alt="" coords="231,167,375,207"/>
+<area shape="poly" id="edge11_Node000001_Node000005" title=" " alt="" coords="363,42,378,78,381,99,376,120,358,147,334,169,331,165,354,144,372,118,375,99,373,80,358,44"/>
+<area shape="rect" id="Node000008" href="$realtime__timer_8h.html" title="Real&#45;time Timer API." alt="" coords="437,79,591,119"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="383,34,474,76,472,81,381,39"/>
+<area shape="rect" id="Node000003" href="$servo_8h.html" title="API to handle servomotors." alt="" coords="47,167,197,207"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="108,124,119,166,114,167,103,125"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="257,120,160,169,158,164,254,115"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="297,124,303,166,298,167,291,125"/>
+<area shape="rect" id="Node000006" href="$tones_8h.html" title="API to handle tones (simple square waves) generation to a buzzer." alt="" coords="228,255,379,295"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="306,221,306,254,301,254,301,221"/>
+<area shape="rect" id="Node000007" href="$tone__player_8h.html" title="API to handle melody playing (tones as simple square waves) to a buzzer." alt="" coords="228,343,379,383"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="306,309,306,342,301,342,301,309"/>
+<area shape="rect" id="Node000009" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04." alt="" coords="425,167,576,207"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="512,133,506,167,501,166,506,132"/>
+<area shape="rect" id="Node000010" href="$vl53l0x_8h.html" title="API to handle Time&#45;of&#45;Flight ranging sensor VL53L0X I2C chip." alt="" coords="600,167,751,207"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="563,123,641,164,639,169,560,127"/>
 </map>

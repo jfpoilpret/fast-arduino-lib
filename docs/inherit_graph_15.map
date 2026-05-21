@@ -1,5 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classdevices_1_1audio_1_1_abstract_tone_player.html" title="This low&#45;level API defines an abstract player of melodies (defined as a sequence of tones and duratio..." alt="" coords="5,41,231,96"/>
-<area shape="rect" id="node2" href="$classdevices_1_1audio_1_1_async_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations." alt="" coords="303,5,497,60"/>
-<area shape="rect" id="node3" href="$classdevices_1_1audio_1_1_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations." alt="" coords="279,85,521,125"/>
+<area shape="rect" id="Node000000" href="$classdevices_1_1audio_1_1_abstract_tone_player.html" title="This low&#45;level API defines an abstract player of melodies (defined as a sequence of tones and duratio..." alt="" coords="5,41,231,96"/>
+<area shape="rect" id="Node000001" href="$classdevices_1_1audio_1_1_async_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations." alt="" coords="302,5,497,60"/>
+<area shape="poly" id="edge27_Node000000_Node000001" title=" " alt="" coords="244,50,301,42,302,48,244,55"/>
+<area shape="rect" id="Node000002" href="$classdevices_1_1audio_1_1_tone_player.html" title="This API defines a player of melodies, defined as a sequence of tones and durations." alt="" coords="279,85,520,125"/>
+<area shape="poly" id="edge28_Node000000_Node000002" title=" " alt="" coords="244,82,279,87,278,92,244,87"/>
 </map>

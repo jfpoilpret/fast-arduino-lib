@@ -1,4 +1,5 @@
 <map id="fastarduino/uart_commons.h" name="fastarduino/uart_commons.h">
-<area shape="rect" id="node1" title="Common definitions for serial API." alt="" coords="5,5,215,31"/>
-<area shape="rect" id="node2" title=" " alt="" coords="75,79,145,104"/>
+<area shape="rect" id="Node000001" title="Common definitions for serial API." alt="" coords="5,5,215,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="75,79,145,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="113,31,113,65,107,65,107,31"/>
 </map>

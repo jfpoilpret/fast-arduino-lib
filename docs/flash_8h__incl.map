@@ -1,6 +1,9 @@
 <map id="fastarduino/flash.h" name="fastarduino/flash.h">
-<area shape="rect" id="node1" title="Flash memory utilities." alt="" coords="47,5,191,31"/>
-<area shape="rect" id="node2" href="$io_8h_source.html" title=" " alt="" coords="5,79,100,104"/>
-<area shape="rect" id="node4" title=" " alt="" coords="124,79,251,104"/>
-<area shape="rect" id="node3" title=" " alt="" coords="17,152,88,177"/>
+<area shape="rect" id="Node000001" title="Flash memory utilities." alt="" coords="48,5,191,31"/>
+<area shape="rect" id="Node000002" href="$io_8h_source.html" title=" " alt="" coords="5,79,100,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,33,75,70,71,67,106,29"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="124,79,251,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="132,29,169,67,165,70,129,33"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="17,152,88,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="55,104,55,138,50,138,50,104"/>
 </map>

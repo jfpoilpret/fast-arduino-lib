@@ -1,6 +1,9 @@
 <map id="containers::Link&lt; T_ &gt;" name="containers::Link&lt; T_ &gt;">
-<area shape="rect" id="node1" title="A wrapper for items stored in a LinkedList." alt="" coords="5,79,176,104"/>
-<area shape="rect" id="node3" href="$classevents_1_1_event_handler.html" title=" " alt="" coords="9,152,172,192"/>
-<area shape="rect" id="node2" title=" " alt="" coords="51,5,130,31"/>
-<area shape="rect" id="node4" href="$classevents_1_1_scheduler.html" title="Schedule jobs at predefined periods of time." alt="" coords="15,240,166,280"/>
+<area shape="rect" id="Node000001" title="A wrapper for items stored in a LinkedList." alt="" coords="5,79,176,104"/>
+<area shape="rect" id="Node000003" href="$classevents_1_1_event_handler.html" title=" " alt="" coords="9,152,172,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="93,118,93,152,88,152,88,118"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="51,5,130,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,44,93,79,88,79,88,44"/>
+<area shape="rect" id="Node000004" href="$classevents_1_1_scheduler.html" title="Schedule jobs at predefined periods of time." alt="" coords="15,240,166,280"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="93,206,93,240,88,240,88,206"/>
 </map>

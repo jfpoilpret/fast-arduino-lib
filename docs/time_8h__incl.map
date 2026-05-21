@@ -1,11 +1,20 @@
 <map id="fastarduino/time.h" name="fastarduino/time.h">
-<area shape="rect" id="node1" title="Simple time utilities." alt="" coords="71,5,214,31"/>
-<area shape="rect" id="node2" title=" " alt="" coords="108,225,179,251"/>
-<area shape="rect" id="node3" href="$io_8h_source.html" title=" " alt="" coords="26,79,120,104"/>
-<area shape="rect" id="node5" title=" " alt="" coords="145,79,281,104"/>
-<area shape="rect" id="node6" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="305,79,388,104"/>
-<area shape="rect" id="node4" title=" " alt="" coords="38,152,108,177"/>
-<area shape="rect" id="node7" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="156,152,238,177"/>
-<area shape="rect" id="node8" href="$board_8h_source.html" title=" " alt="" coords="263,152,382,177"/>
-<area shape="rect" id="node9" title=" " alt="" coords="406,152,510,177"/>
+<area shape="rect" id="Node000001" title="Simple time utilities." alt="" coords="71,5,214,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="107,225,178,251"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="86,33,46,51,29,64,15,80,9,99,9,125,15,152,27,176,41,191,58,203,95,221,93,226,55,208,37,195,23,179,10,154,4,126,4,98,11,77,25,60,43,46,84,28"/>
+<area shape="rect" id="Node000003" href="$io_8h_source.html" title=" " alt="" coords="26,79,120,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="133,33,95,71,92,67,129,29"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="145,79,281,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="156,29,194,67,190,71,152,33"/>
+<area shape="rect" id="Node000006" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="305,79,388,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="176,28,301,72,299,77,174,33"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="38,152,108,177"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="76,104,76,138,70,138,70,104"/>
+<area shape="rect" id="Node000007" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="156,152,238,177"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="323,106,235,148,232,144,321,102"/>
+<area shape="rect" id="Node000008" href="$board_8h_source.html" title=" " alt="" coords="262,152,380,177"/>
+<area shape="poly" id="edge7_Node000006_Node000008" title=" " alt="" coords="345,105,332,140,327,138,339,103"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="405,152,509,177"/>
+<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="365,102,429,142,426,147,363,106"/>
+<area shape="poly" id="edge8_Node000008_Node000002" title=" " alt="" coords="293,180,185,223,183,218,291,175"/>
 </map>

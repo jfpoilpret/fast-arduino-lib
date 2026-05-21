@@ -1,4 +1,5 @@
 <map id="devices::mcp230xx::MCP23008&lt; MANAGER &gt;" name="devices::mcp230xx::MCP23008&lt; MANAGER &gt;">
-<area shape="rect" id="node1" title="I2C device driver for Microchip MCP23008 support." alt="" coords="17,79,205,119"/>
-<area shape="rect" id="node2" href="$classi2c_1_1_i2_c_device.html" title=" " alt="" coords="5,5,217,31"/>
+<area shape="rect" id="Node000001" title="I2C device driver for Microchip MCP23008 support." alt="" coords="17,79,205,119"/>
+<area shape="rect" id="Node000002" href="$classi2c_1_1_i2_c_device.html" title=" " alt="" coords="5,5,217,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,44,114,79,109,79,109,44"/>
 </map>

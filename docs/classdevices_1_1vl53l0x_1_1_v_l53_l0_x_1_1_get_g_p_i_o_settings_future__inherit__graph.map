@@ -1,5 +1,7 @@
 <map id="devices::vl53l0x::VL53L0X&lt; MANAGER &gt;::GetGPIOSettingsFuture" name="devices::vl53l0x::VL53L0X&lt; MANAGER &gt;::GetGPIOSettingsFuture">
-<area shape="rect" id="node1" title="Future to get device current GPIO settings." alt="" coords="5,167,249,221"/>
-<area shape="rect" id="node2" href="$classi2c_1_1_i2_c_futures_group.html" title="Abstract class to allow aggregation of several futures in relation to I2C transactions." alt="" coords="62,93,193,119"/>
-<area shape="rect" id="node3" title=" " alt="" coords="35,5,219,45"/>
+<area shape="rect" id="Node000001" title="Future to get device current GPIO settings." alt="" coords="5,167,249,221"/>
+<area shape="rect" id="Node000002" href="$classi2c_1_1_i2_c_futures_group.html" title="Abstract class to allow aggregation of several futures in relation to I2C transactions." alt="" coords="62,93,193,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="130,132,130,167,125,167,125,132"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="35,5,219,45"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="130,59,130,93,125,93,125,59"/>
 </map>

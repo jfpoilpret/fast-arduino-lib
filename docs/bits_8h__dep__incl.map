@@ -1,22 +1,56 @@
 <map id="fastarduino/bits.h" name="fastarduino/bits.h">
-<area shape="rect" id="node1" title="Useful bits manipulation utilities." alt="" coords="799,5,935,31"/>
-<area shape="rect" id="node2" href="$ds1307_8h.html" title="API to handle Real&#45;Time Clock DS1307 I2C chip." alt="" coords="5,489,156,529"/>
-<area shape="rect" id="node3" href="$grove__rfid__reader_8h.html" title="API to handle Grove 125KHz RFID Reader." alt="" coords="1261,79,1415,119"/>
-<area shape="rect" id="node4" href="$hmc5883l_8h.html" title="API to handle HMC5883L 3&#45;axis digital compass I2C chip." alt="" coords="180,489,331,529"/>
-<area shape="rect" id="node5" href="$lcd5110_8h.html" title="API to handle Nokia 5110 display through SPI interface (actually not really SPI as only MOSI,..." alt="" coords="1439,79,1589,119"/>
-<area shape="rect" id="node6" href="$mcp23017_8h.html" title="API to handle the MCP23017 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="355,489,505,529"/>
-<area shape="rect" id="node7" href="$mpu6050_8h.html" title="API to handle MPU6050 3&#45;axis gyroscope/accelerometer I2C chip." alt="" coords="704,489,855,529"/>
-<area shape="rect" id="node8" href="$vl53l0x__types_8h.html" title="API to handle Time&#45;of&#45;Flight ranging sensor VL53L0X I2C chip." alt="" coords="829,401,980,441"/>
-<area shape="rect" id="node10" href="$i2c__handler__atmega_8h.html" title="ATmega I2C Manager API." alt="" coords="880,167,1055,207"/>
-<area shape="rect" id="node15" href="$i2c__handler__attiny_8h.html" title="ATtiny I2C Manager API." alt="" coords="1079,167,1253,207"/>
-<area shape="rect" id="node16" href="$i2c__handler__common_8h.html" title="Common I2C Manager API." alt="" coords="1063,79,1237,119"/>
-<area shape="rect" id="node9" href="$vl53l0x_8h.html" title="API to handle Time&#45;of&#45;Flight ranging sensor VL53L0X I2C chip." alt="" coords="879,489,1029,529"/>
-<area shape="rect" id="node11" href="$i2c__handler_8h.html" title="Common I2C Manager API." alt="" coords="879,255,1066,280"/>
-<area shape="rect" id="node12" href="$i2c__device_8h.html" title="I2C Device API." alt="" coords="487,328,669,353"/>
-<area shape="rect" id="node13" href="$mcp23008_8h.html" title="API to handle the MCP23008 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="529,489,680,529"/>
-<area shape="rect" id="node14" href="$i2c__device__utilities_8h.html" title="Various utilities to use for I2C Device support developers." alt="" coords="432,401,601,441"/>
-<area shape="rect" id="node17" href="$i2c__debug_8h.html" title="I2C debugging utilities (useful when implementing support for new devices)." alt="" coords="1441,255,1619,280"/>
-<area shape="rect" id="node19" href="$i2c__handler__common_8cpp_source.html" title=" " alt="" coords="1481,167,1656,207"/>
-<area shape="rect" id="node20" href="$i2c__status_8h.html" title="I2C status hook utilities." alt="" coords="1278,174,1457,199"/>
-<area shape="rect" id="node18" href="$i2c__debug_8cpp_source.html" title=" " alt="" coords="1433,328,1627,353"/>
+<area shape="rect" id="Node000001" title="Useful bits manipulation utilities." alt="" coords="799,5,935,31"/>
+<area shape="rect" id="Node000002" href="$ds1307_8h.html" title="API to handle Real&#45;Time Clock DS1307 I2C chip." alt="" coords="5,489,156,529"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="786,23,596,31,484,40,372,55,269,76,184,104,152,121,128,141,113,162,107,186,107,342,100,425,88,490,83,489,95,424,102,342,102,185,108,160,124,137,149,117,182,99,268,71,371,50,483,35,596,25,786,17"/>
+<area shape="rect" id="Node000003" href="$grove__rfid__reader_8h.html" title="API to handle Grove 125KHz RFID Reader." alt="" coords="1261,79,1412,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="950,28,1250,76,1262,78,1261,83,1250,81,949,33"/>
+<area shape="rect" id="Node000004" href="$hmc5883l_8h.html" title="API to handle HMC5883L 3&#45;axis digital compass I2C chip." alt="" coords="180,489,331,529"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="786,25,674,31,548,41,430,58,383,68,348,81,307,101,274,120,262,132,252,146,247,163,245,185,245,342,249,424,255,489,250,489,243,424,239,342,239,185,241,162,248,144,257,128,271,116,304,96,346,76,382,63,429,53,547,36,674,25,785,19"/>
+<area shape="rect" id="Node000005" href="$lcd5110_8h.html" title="API to handle Nokia 5110 display through SPI interface (actually not really SPI as only MOSI,..." alt="" coords="1436,79,1587,119"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="949,23,1165,42,1425,76,1436,78,1435,83,1424,81,1164,48,949,28"/>
+<area shape="rect" id="Node000006" href="$mcp23017_8h.html" title="API to handle the MCP23017 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="355,489,505,529"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="786,28,642,45,561,59,480,76,408,97,349,122,326,136,309,152,299,168,295,186,295,342,298,366,306,388,333,429,367,462,400,487,397,491,363,466,328,432,301,390,293,367,290,342,290,185,294,166,305,148,323,132,346,117,406,92,479,71,560,53,641,40,785,23"/>
+<area shape="rect" id="Node000007" href="$mpu6050_8h.html" title="API to handle MPU6050 3&#45;axis gyroscope/accelerometer I2C chip." alt="" coords="704,489,855,529"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="852,43,833,71,814,105,800,144,794,186,794,342,790,424,784,489,779,489,785,424,789,342,789,185,795,143,810,103,829,68,847,40"/>
+<area shape="rect" id="Node000008" href="$vl53l0x__types_8h.html" title="API to handle Time&#45;of&#45;Flight ranging sensor VL53L0X I2C chip." alt="" coords="829,401,980,441"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="864,45,851,108,845,185,845,268,850,306,862,342,893,400,889,402,857,345,844,308,839,269,839,185,846,108,859,44"/>
+<area shape="rect" id="Node000010" href="$i2c__handler__atmega_8h.html" title="ATmega I2C Manager API." alt="" coords="880,167,1055,207"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="883,41,958,165,954,168,879,44"/>
+<area shape="rect" id="Node000015" href="$i2c__handler__attiny_8h.html" title="ATtiny I2C Manager API." alt="" coords="1079,167,1253,207"/>
+<area shape="poly" id="edge26_Node000001_Node000015" title=" " alt="" coords="901,35,1133,164,1131,169,898,40"/>
+<area shape="rect" id="Node000016" href="$i2c__handler__common_8h.html" title="Common I2C Manager API." alt="" coords="1063,79,1237,119"/>
+<area shape="poly" id="edge27_Node000001_Node000016" title=" " alt="" coords="922,32,1083,76,1081,81,921,37"/>
+<area shape="rect" id="Node000009" href="$vl53l0x_8h.html" title="API to handle Time&#45;of&#45;Flight ranging sensor VL53L0X I2C chip." alt="" coords="879,489,1029,529"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="925,452,945,488,941,490,920,455"/>
+<area shape="rect" id="Node000011" href="$i2c__handler_8h.html" title="Common I2C Manager API." alt="" coords="879,255,1066,280"/>
+<area shape="poly" id="edge10_Node000010_Node000011" title=" " alt="" coords="972,220,975,254,969,254,967,221"/>
+<area shape="poly" id="edge11_Node000011_Node000009" title=" " alt="" coords="984,293,999,360,1001,401,995,442,985,468,971,490,967,487,980,466,990,441,996,401,993,361,979,294"/>
+<area shape="rect" id="Node000012" href="$i2c__device_8h.html" title="I2C Device API." alt="" coords="487,328,669,353"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="896,285,642,331,641,325,895,280"/>
+<area shape="poly" id="edge13_Node000012_Node000002" title=" " alt="" coords="508,359,425,378,336,404,218,449,121,492,119,487,216,444,334,399,424,373,507,354"/>
+<area shape="poly" id="edge14_Node000012_Node000004" title=" " alt="" coords="521,360,464,378,406,404,335,448,279,491,276,487,332,444,403,399,462,373,519,355"/>
+<area shape="poly" id="edge16_Node000012_Node000006" title=" " alt="" coords="483,360,449,377,422,403,413,423,413,446,424,489,419,490,407,447,408,422,417,400,446,372,481,355"/>
+<area shape="poly" id="edge17_Node000012_Node000007" title=" " alt="" coords="604,360,758,487,755,491,601,364"/>
+<area shape="poly" id="edge18_Node000012_Node000009" title=" " alt="" coords="617,356,912,487,910,492,615,361"/>
+<area shape="rect" id="Node000013" href="$mcp23008_8h.html" title="API to handle the MCP23008 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="529,489,680,529"/>
+<area shape="poly" id="edge15_Node000012_Node000013" title=" " alt="" coords="597,363,615,401,619,424,619,449,612,490,607,489,614,448,614,425,610,402,593,366"/>
+<area shape="rect" id="Node000014" href="$i2c__device__utilities_8h.html" title="Various utilities to use for I2C Device support developers." alt="" coords="432,401,601,441"/>
+<area shape="poly" id="edge19_Node000012_Node000014" title=" " alt="" coords="563,366,534,403,529,400,558,363"/>
+<area shape="poly" id="edge20_Node000014_Node000002" title=" " alt="" coords="419,443,168,492,157,494,156,489,167,487,418,438"/>
+<area shape="poly" id="edge21_Node000014_Node000004" title=" " alt="" coords="447,448,313,492,312,487,445,443"/>
+<area shape="poly" id="edge23_Node000014_Node000006" title=" " alt="" coords="490,453,451,491,447,487,486,449"/>
+<area shape="poly" id="edge24_Node000014_Node000007" title=" " alt="" coords="588,443,723,487,721,492,586,448"/>
+<area shape="poly" id="edge25_Node000014_Node000009" title=" " alt="" coords="615,438,868,487,879,489,878,494,867,492,614,443"/>
+<area shape="poly" id="edge22_Node000014_Node000013" title=" " alt="" coords="548,449,587,487,583,491,544,453"/>
+<area shape="poly" id="edge30_Node000016_Node000010" title=" " alt="" coords="1099,127,1008,169,1006,164,1096,122"/>
+<area shape="poly" id="edge31_Node000016_Node000015" title=" " alt="" coords="1159,132,1165,166,1160,167,1153,133"/>
+<area shape="rect" id="Node000017" href="$i2c__debug_8h.html" title="I2C debugging utilities (useful when implementing support for new devices)." alt="" coords="1441,255,1619,280"/>
+<area shape="poly" id="edge28_Node000016_Node000017" title=" " alt="" coords="1251,116,1355,119,1480,119,1540,122,1595,130,1639,143,1657,153,1671,165,1678,175,1679,186,1671,208,1656,225,1637,239,1596,257,1594,252,1635,235,1652,222,1666,205,1674,186,1673,177,1667,168,1654,157,1637,148,1593,135,1540,128,1479,124,1355,124,1251,121"/>
+<area shape="rect" id="Node000019" href="$i2c__handler__common_8cpp_source.html" title=" " alt="" coords="1481,167,1656,207"/>
+<area shape="poly" id="edge32_Node000016_Node000019" title=" " alt="" coords="1252,118,1482,165,1480,170,1251,123"/>
+<area shape="rect" id="Node000020" href="$i2c__status_8h.html" title="I2C status hook utilities." alt="" coords="1278,174,1457,199"/>
+<area shape="poly" id="edge33_Node000016_Node000020" title=" " alt="" coords="1211,121,1339,171,1337,176,1209,126"/>
+<area shape="rect" id="Node000018" href="$i2c__debug_8cpp_source.html" title=" " alt="" coords="1433,328,1627,353"/>
+<area shape="poly" id="edge29_Node000017_Node000018" title=" " alt="" coords="1533,294,1533,328,1527,328,1527,294"/>
+<area shape="poly" id="edge34_Node000020_Node000017" title=" " alt="" coords="1404,203,1507,252,1505,257,1402,208"/>
 </map>

@@ -1,4 +1,5 @@
 <map id="i2c::WriteRegisterFuture&lt; MANAGER, T, FUNCTOR &gt;" name="i2c::WriteRegisterFuture&lt; MANAGER, T, FUNCTOR &gt;">
-<area shape="rect" id="node1" title="General Future that can be used to write to an I2C device register." alt="" coords="9,108,215,148"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,219,60"/>
+<area shape="rect" id="Node000001" title="General Future that can be used to write to an I2C device register." alt="" coords="9,108,215,148"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,5,219,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,74,115,108,109,108,109,74"/>
 </map>

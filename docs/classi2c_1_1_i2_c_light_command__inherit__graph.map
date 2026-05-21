@@ -1,5 +1,7 @@
 <map id="i2c::I2CLightCommand" name="i2c::I2CLightCommand">
-<area shape="rect" id="node1" title="Light atomic I2C command as prepared by an I2C device." alt="" coords="142,5,311,31"/>
-<area shape="rect" id="node2" href="$classi2c_1_1_i2_c_command.html" title=" " alt="" coords="5,79,227,119"/>
-<area shape="rect" id="node3" href="$classi2c_1_1_i2_c_command.html" title="Atomic I2C command as used internally by an asynchronous I2C Manager." alt="" coords="251,86,426,111"/>
+<area shape="rect" id="Node000001" title="Light atomic I2C command as prepared by an I2C device." alt="" coords="142,5,311,31"/>
+<area shape="rect" id="Node000002" href="$classi2c_1_1_i2_c_command.html" title=" " alt="" coords="5,79,227,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="201,41,144,81,141,76,198,36"/>
+<area shape="rect" id="Node000003" href="$classi2c_1_1_i2_c_command.html" title="Atomic I2C command as used internally by an asynchronous I2C Manager." alt="" coords="251,86,426,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="256,37,324,84,321,88,253,41"/>
 </map>

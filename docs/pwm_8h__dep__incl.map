@@ -1,7 +1,11 @@
 <map id="fastarduino/pwm.h" name="fastarduino/pwm.h">
-<area shape="rect" id="node1" title="PWM API." alt="" coords="94,5,238,31"/>
-<area shape="rect" id="node2" href="$servo_8h.html" title="API to handle servomotors." alt="" coords="5,79,156,119"/>
-<area shape="rect" id="node3" href="$square__wave_8h.html" title="SquareWave API, an API to generate square waves of any frequency." alt="" coords="181,79,325,119"/>
-<area shape="rect" id="node4" href="$tones_8h.html" title="API to handle tones (simple square waves) generation to a buzzer." alt="" coords="177,167,328,207"/>
-<area shape="rect" id="node5" href="$tone__player_8h.html" title="API to handle melody playing (tones as simple square waves) to a buzzer." alt="" coords="177,255,328,295"/>
+<area shape="rect" id="Node000001" title="PWM API." alt="" coords="94,5,238,31"/>
+<area shape="rect" id="Node000002" href="$servo_8h.html" title="API to handle servomotors." alt="" coords="5,79,156,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="145,42,103,80,99,77,142,38"/>
+<area shape="rect" id="Node000003" href="$square__wave_8h.html" title="SquareWave API, an API to generate square waves of any frequency." alt="" coords="181,79,325,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="191,38,234,77,230,80,187,42"/>
+<area shape="rect" id="Node000004" href="$tones_8h.html" title="API to handle tones (simple square waves) generation to a buzzer." alt="" coords="177,167,328,207"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="255,133,255,166,250,166,250,133"/>
+<area shape="rect" id="Node000005" href="$tone__player_8h.html" title="API to handle melody playing (tones as simple square waves) to a buzzer." alt="" coords="177,255,328,295"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="255,221,255,254,250,254,250,221"/>
 </map>

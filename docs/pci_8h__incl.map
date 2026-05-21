@@ -1,13 +1,25 @@
 <map id="fastarduino/pci.h" name="fastarduino/pci.h">
-<area shape="rect" id="node1" title="General API for handling Pin Change Interrupts." alt="" coords="219,5,349,31"/>
-<area shape="rect" id="node2" href="$board_8h_source.html" title=" " alt="" coords="311,152,430,177"/>
-<area shape="rect" id="node4" title=" " alt="" coords="51,79,211,104"/>
-<area shape="rect" id="node5" title=" " alt="" coords="5,152,120,177"/>
-<area shape="rect" id="node6" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="235,79,333,104"/>
-<area shape="rect" id="node9" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="437,79,520,104"/>
-<area shape="rect" id="node3" title=" " alt="" coords="335,225,406,251"/>
-<area shape="rect" id="node7" href="$io_8h_source.html" title=" " alt="" coords="193,152,287,177"/>
-<area shape="rect" id="node8" title=" " alt="" coords="205,225,275,251"/>
-<area shape="rect" id="node10" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="583,152,665,177"/>
-<area shape="rect" id="node11" title=" " alt="" coords="455,152,559,177"/>
+<area shape="rect" id="Node000001" title="General API for handling Pin Change Interrupts." alt="" coords="219,5,349,31"/>
+<area shape="rect" id="Node000002" href="$board_8h_source.html" title=" " alt="" coords="311,152,430,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="302,29,325,50,348,77,361,108,369,138,364,139,356,110,343,80,321,53,298,33"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="51,79,211,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="260,33,169,75,167,70,258,28"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,152,120,177"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="219,29,113,48,68,62,52,71,41,80,35,94,36,109,48,139,44,141,30,110,30,93,37,77,49,67,66,57,112,42,218,23"/>
+<area shape="rect" id="Node000006" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="235,79,333,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="287,31,287,65,281,65,281,31"/>
+<area shape="rect" id="Node000009" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="437,79,520,104"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="316,28,435,71,433,76,314,33"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="335,225,406,251"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="373,178,373,212,368,212,368,178"/>
+<area shape="poly" id="edge8_Node000006_Node000005" title=" " alt="" coords="249,107,112,150,110,145,248,101"/>
+<area shape="rect" id="Node000007" href="$io_8h_source.html" title=" " alt="" coords="193,152,287,177"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="279,106,257,142,252,139,274,103"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="205,225,275,251"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="243,178,243,212,237,212,237,178"/>
+<area shape="poly" id="edge11_Node000009_Node000002" title=" " alt="" coords="463,106,401,147,398,142,460,102"/>
+<area shape="rect" id="Node000010" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="583,152,665,177"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="503,102,589,144,587,148,501,106"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="455,152,559,177"/>
+<area shape="poly" id="edge12_Node000009_Node000011" title=" " alt="" coords="486,103,500,138,495,140,481,105"/>
 </map>

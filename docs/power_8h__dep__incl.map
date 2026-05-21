@@ -1,5 +1,7 @@
 <map id="fastarduino/power.h" name="fastarduino/power.h">
-<area shape="rect" id="node1" title="Simple power support for AVR MCU." alt="" coords="106,5,258,31"/>
-<area shape="rect" id="node2" href="$power_8cpp_source.html" title=" " alt="" coords="5,79,172,104"/>
-<area shape="rect" id="node3" href="$time_8cpp_source.html" title=" " alt="" coords="197,79,354,104"/>
+<area shape="rect" id="Node000001" title="Simple power support for AVR MCU." alt="" coords="107,5,257,31"/>
+<area shape="rect" id="Node000002" href="$power_8cpp_source.html" title=" " alt="" coords="5,79,172,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="158,41,106,81,102,76,155,37"/>
+<area shape="rect" id="Node000003" href="$time_8cpp_source.html" title=" " alt="" coords="197,79,354,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="209,37,262,76,258,81,206,41"/>
 </map>

@@ -1,7 +1,11 @@
 <map id="i2c::AbstractI2CAsyncManager&lt; MODE_, POLICY_, HAS_STATUS_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt;" name="i2c::AbstractI2CAsyncManager&lt; MODE_, POLICY_, HAS_STATUS_, STATUS_HOOK_, HAS_DEBUG_, DEBUG_HOOK_ &gt;">
-<area shape="rect" id="node1" title="Abstract asynchronous I2C Manager." alt="" coords="5,110,245,179"/>
-<area shape="rect" id="node2" href="$classi2c_1_1_i2_c_async_debug_manager.html" title="Asynchronous I2C Manager for ATmega architecture with debug facility." alt="" coords="293,5,501,60"/>
-<area shape="rect" id="node3" href="$classi2c_1_1_i2_c_async_manager.html" title="Asynchronous I2C Manager for ATmega architecture." alt="" coords="314,85,481,125"/>
-<area shape="rect" id="node4" href="$classi2c_1_1_i2_c_async_status_debug_manager.html" title="Asynchronous I2C Manager for ATmega architecture with debug and status notification facilities." alt="" coords="300,149,495,218"/>
-<area shape="rect" id="node5" href="$classi2c_1_1_i2_c_async_status_manager.html" title="Asynchronous I2C Manager for ATmega architecture with status notification facility." alt="" coords="294,243,501,297"/>
+<area shape="rect" id="Node000001" title="Abstract asynchronous I2C Manager." alt="" coords="5,110,244,179"/>
+<area shape="rect" id="Node000002" href="$classi2c_1_1_i2_c_async_debug_manager.html" title="Asynchronous I2C Manager for ATmega architecture with debug facility." alt="" coords="292,5,500,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="216,102,291,70,322,58,324,63,293,75,218,107"/>
+<area shape="rect" id="Node000003" href="$classi2c_1_1_i2_c_async_manager.html" title="Asynchronous I2C Manager for ATmega architecture." alt="" coords="313,85,479,125"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="257,122,312,114,313,120,258,128"/>
+<area shape="rect" id="Node000004" href="$classi2c_1_1_i2_c_async_status_debug_manager.html" title="Asynchronous I2C Manager for ATmega architecture with debug and status notification facilities." alt="" coords="299,149,493,218"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="258,161,299,167,298,172,257,166"/>
+<area shape="rect" id="Node000005" href="$classi2c_1_1_i2_c_async_status_manager.html" title="Asynchronous I2C Manager for ATmega architecture with status notification facility." alt="" coords="293,243,499,297"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="203,183,293,228,322,240,320,245,291,232,201,188"/>
 </map>

@@ -1,12 +1,23 @@
 <map id="fastarduino/queue.h" name="fastarduino/queue.h">
-<area shape="rect" id="node1" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="277,5,429,31"/>
-<area shape="rect" id="node2" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="267,152,349,177"/>
-<area shape="rect" id="node7" href="$time_8h.html" title="Simple time utilities." alt="" coords="365,79,429,104"/>
-<area shape="rect" id="node3" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="5,225,88,251"/>
-<area shape="rect" id="node4" href="$board_8h_source.html" title=" " alt="" coords="113,225,231,251"/>
-<area shape="rect" id="node6" title=" " alt="" coords="256,225,360,251"/>
-<area shape="rect" id="node5" title=" " alt="" coords="249,299,319,324"/>
-<area shape="rect" id="node8" href="$io_8h_source.html" title=" " alt="" coords="435,152,530,177"/>
-<area shape="rect" id="node10" title=" " alt="" coords="555,152,691,177"/>
-<area shape="rect" id="node9" title=" " alt="" coords="447,225,518,251"/>
+<area shape="rect" id="Node000001" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="275,5,427,31"/>
+<area shape="rect" id="Node000002" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="265,152,347,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="350,32,316,140,311,138,345,30"/>
+<area shape="rect" id="Node000007" href="$time_8h.html" title="Simple time utilities." alt="" coords="363,79,427,104"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="361,30,383,66,379,68,356,32"/>
+<area shape="rect" id="Node000003" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="5,225,87,251"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="265,180,101,225,99,219,264,175"/>
+<area shape="rect" id="Node000004" href="$board_8h_source.html" title=" " alt="" coords="111,225,229,251"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="285,180,205,221,203,217,283,175"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="254,225,358,251"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="309,178,309,212,303,212,303,178"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="247,299,317,324"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="189,248,253,289,250,293,187,253"/>
+<area shape="poly" id="edge11_Node000007_Node000002" title=" " alt="" coords="383,106,333,145,330,141,379,102"/>
+<area shape="poly" id="edge7_Node000007_Node000005" title=" " alt="" coords="399,104,398,170,390,212,372,252,350,276,324,294,321,290,347,272,368,249,385,211,393,170,394,104"/>
+<area shape="rect" id="Node000008" href="$io_8h_source.html" title=" " alt="" coords="433,152,528,177"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="411,102,458,141,455,145,407,106"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="553,152,689,177"/>
+<area shape="poly" id="edge10_Node000007_Node000010" title=" " alt="" coords="428,100,572,145,571,150,427,105"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="445,225,516,251"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="483,178,483,212,478,212,478,178"/>
 </map>

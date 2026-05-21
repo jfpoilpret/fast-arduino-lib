@@ -1,13 +1,32 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" title=" " alt="" coords="19,203,132,229"/>
-<area shape="rect" id="node2" href="$classserial_1_1hard_1_1_u_a_r_t.html" title="Hardware serial receiver/transceiver API." alt="" coords="220,307,359,347"/>
-<area shape="rect" id="node3" href="$classserial_1_1hard_1_1_u_a_r_x.html" title="Hardware serial receiver API." alt="" coords="219,5,359,45"/>
-<area shape="rect" id="node4" href="$classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_external_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html" title=" " alt="" coords="193,371,385,426"/>
-<area shape="rect" id="node5" href="$classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html" title=" " alt="" coords="208,227,371,282"/>
-<area shape="rect" id="node6" href="$classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_external_interrupt_pin_00_01_r_x___01_4.html" title=" " alt="" coords="193,70,385,125"/>
-<area shape="rect" id="node7" href="$classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html" title=" " alt="" coords="208,149,371,203"/>
-<area shape="rect" id="node8" title=" " alt="" coords="19,386,131,411"/>
-<area shape="rect" id="node9" href="$classserial_1_1hard_1_1_u_a_t_x.html" title="Hardware serial transmitter API." alt="" coords="220,451,359,491"/>
-<area shape="rect" id="node10" href="$classserial_1_1soft_1_1_u_a_t_x.html" title="Software&#45;emulated serial transmitter API." alt="" coords="222,515,357,555"/>
-<area shape="rect" id="node11" href="$classserial_1_1_u_a_r_t_errors.html" title="Holder of latest UART errors." alt="" coords="5,303,145,329"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="18,203,131,229"/>
+<area shape="rect" id="Node000001" href="$classserial_1_1hard_1_1_u_a_r_t.html" title="Hardware serial receiver/transceiver API." alt="" coords="219,307,357,347"/>
+<area shape="poly" id="edge5_Node000000_Node000001" title=" " alt="" coords="105,235,146,263,193,291,224,304,222,309,191,296,143,268,102,239"/>
+<area shape="rect" id="Node000005" href="$classserial_1_1hard_1_1_u_a_r_x.html" title="Hardware serial receiver API." alt="" coords="218,5,358,45"/>
+<area shape="poly" id="edge6_Node000000_Node000005" title=" " alt="" coords="86,190,126,123,156,87,190,55,217,41,219,45,194,60,160,90,131,126,90,192"/>
+<area shape="rect" id="Node000006" href="$classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_external_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html" title=" " alt="" coords="192,371,384,426"/>
+<area shape="poly" id="edge7_Node000000_Node000006" title=" " alt="" coords="100,237,146,289,168,325,178,341,194,357,212,369,209,373,190,361,174,344,164,328,142,292,96,241"/>
+<area shape="rect" id="Node000007" href="$classserial_1_1soft_1_1_u_a_r_t_3_01board_1_1_interrupt_pin_00_01_r_x___00_01_t_x___01_4.html" title=" " alt="" coords="207,227,369,282"/>
+<area shape="poly" id="edge8_Node000000_Node000007" title=" " alt="" coords="145,226,207,237,206,243,144,231"/>
+<area shape="rect" id="Node000008" href="$classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_external_interrupt_pin_00_01_r_x___01_4.html" title=" " alt="" coords="192,70,384,125"/>
+<area shape="poly" id="edge9_Node000000_Node000008" title=" " alt="" coords="101,193,143,163,191,134,213,122,216,127,193,138,146,168,105,197"/>
+<area shape="rect" id="Node000009" href="$classserial_1_1soft_1_1_u_a_r_x_3_01board_1_1_interrupt_pin_00_01_r_x___01_4.html" title=" " alt="" coords="207,149,369,203"/>
+<area shape="poly" id="edge10_Node000000_Node000009" title=" " alt="" coords="144,200,206,189,207,194,145,206"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="19,386,130,411"/>
+<area shape="poly" id="edge11_Node000002_Node000001" title=" " alt="" coords="125,379,191,356,226,344,228,349,193,361,126,384"/>
+<area shape="poly" id="edge13_Node000002_Node000006" title=" " alt="" coords="144,396,192,396,192,401,144,401"/>
+<area shape="poly" id="edge14_Node000002_Node000007" title=" " alt="" coords="100,375,142,338,165,314,190,292,213,280,215,285,194,297,169,318,146,342,103,379"/>
+<area shape="rect" id="Node000003" href="$classserial_1_1hard_1_1_u_a_t_x.html" title="Hardware serial transmitter API." alt="" coords="219,451,357,491"/>
+<area shape="poly" id="edge12_Node000002_Node000003" title=" " alt="" coords="127,413,229,448,227,453,125,418"/>
+<area shape="rect" id="Node000010" href="$classserial_1_1soft_1_1_u_a_t_x.html" title="Software&#45;emulated serial transmitter API." alt="" coords="221,515,355,555"/>
+<area shape="poly" id="edge15_Node000002_Node000010" title=" " alt="" coords="98,420,140,461,193,500,222,514,220,519,191,505,136,465,94,424"/>
+<area shape="rect" id="Node000004" href="$classserial_1_1_u_a_r_t_errors.html" title="Holder of latest UART errors." alt="" coords="5,303,144,329"/>
+<area shape="poly" id="edge16_Node000004_Node000001" title=" " alt="" coords="158,317,219,321,218,326,158,323"/>
+<area shape="poly" id="edge17_Node000004_Node000005" title=" " alt="" coords="99,292,122,268,142,239,153,213,158,189,159,144,163,101,173,78,190,55,216,37,219,42,194,59,177,81,169,102,164,144,163,189,158,214,146,241,126,271,103,296"/>
+<area shape="poly" id="edge19_Node000004_Node000006" title=" " alt="" coords="122,331,218,369,216,374,120,336"/>
+<area shape="poly" id="edge20_Node000004_Node000007" title=" " alt="" coords="132,297,206,275,207,281,133,302"/>
+<area shape="poly" id="edge21_Node000004_Node000008" title=" " alt="" coords="97,292,142,239,156,210,162,184,171,160,190,134,205,123,208,127,194,138,175,162,167,186,161,212,146,241,101,295"/>
+<area shape="poly" id="edge22_Node000004_Node000009" title=" " alt="" coords="96,291,138,252,191,212,211,201,214,206,193,217,141,256,99,295"/>
+<area shape="poly" id="edge18_Node000004_Node000003" title=" " alt="" coords="106,335,146,372,160,390,169,406,178,420,194,435,220,450,217,455,190,439,174,424,164,408,156,393,142,375,102,339"/>
+<area shape="poly" id="edge23_Node000004_Node000010" title=" " alt="" coords="109,335,129,352,146,372,157,390,163,408,167,440,173,471,181,485,194,501,223,519,220,523,190,505,177,488,168,472,162,441,158,409,152,393,142,375,125,355,105,339"/>
 </map>

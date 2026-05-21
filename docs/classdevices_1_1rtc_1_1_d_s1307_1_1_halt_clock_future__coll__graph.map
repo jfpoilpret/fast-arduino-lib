@@ -1,6 +1,9 @@
 <map id="devices::rtc::DS1307&lt; MANAGER &gt;::HaltClockFuture" name="devices::rtc::DS1307&lt; MANAGER &gt;::HaltClockFuture">
-<area shape="rect" id="node1" title="Create a future to be used by asynchronous method halt_clock(HaltClockFuture&amp;)." alt="" coords="5,284,236,324"/>
-<area shape="rect" id="node2" href="$classi2c_1_1_t_write_register_future.html" title="Generic Future that can be used to write to an I2C device register." alt="" coords="41,196,201,236"/>
-<area shape="rect" id="node3" href="$classi2c_1_1_write_register_future.html" title="General Future that can be used to write to an I2C device register." alt="" coords="17,108,224,148"/>
-<area shape="rect" id="node4" title=" " alt="" coords="14,5,227,60"/>
+<area shape="rect" id="Node000001" title="Create a future to be used by asynchronous method halt_clock(HaltClockFuture&amp;)." alt="" coords="5,284,236,324"/>
+<area shape="rect" id="Node000002" href="$classi2c_1_1_t_write_register_future.html" title="Generic Future that can be used to write to an I2C device register." alt="" coords="41,196,201,236"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="123,250,123,284,118,284,118,250"/>
+<area shape="rect" id="Node000003" href="$classi2c_1_1_write_register_future.html" title="General Future that can be used to write to an I2C device register." alt="" coords="17,108,224,148"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="123,162,123,196,118,196,118,162"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="14,5,227,60"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="123,74,123,108,118,108,118,74"/>
 </map>

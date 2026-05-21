@@ -1,9 +1,15 @@
 <map id="i2c::ReadRegisterFuture&lt; MANAGER, T, FUNCTOR &gt;" name="i2c::ReadRegisterFuture&lt; MANAGER, T, FUNCTOR &gt;">
-<area shape="rect" id="node1" title="General Future that can be used to read an I2C device register." alt="" coords="267,170,473,210"/>
-<area shape="rect" id="node3" href="$classi2c_1_1_t_read_register_future.html" title=" " alt="" coords="521,5,807,60"/>
-<area shape="rect" id="node4" href="$classi2c_1_1_t_read_register_future.html" title=" " alt="" coords="567,84,761,139"/>
-<area shape="rect" id="node5" href="$classi2c_1_1_t_read_register_future.html" title=" " alt="" coords="559,163,769,217"/>
-<area shape="rect" id="node6" href="$classi2c_1_1_t_read_register_future.html" title=" " alt="" coords="559,241,769,296"/>
-<area shape="rect" id="node7" href="$classi2c_1_1_t_read_register_future.html" title="Generic Future that can be used to read an I2C device register." alt="" coords="566,320,762,375"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,170,219,210"/>
+<area shape="rect" id="Node000001" title="General Future that can be used to read an I2C device register." alt="" coords="267,170,473,210"/>
+<area shape="rect" id="Node000003" href="$classi2c_1_1_t_read_register_future.html" title=" " alt="" coords="521,5,807,60"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="399,158,453,112,486,89,520,69,546,58,548,63,523,74,489,94,456,117,403,162"/>
+<area shape="rect" id="Node000004" href="$classi2c_1_1_t_read_register_future.html" title=" " alt="" coords="567,84,761,139"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="458,164,566,135,567,140,460,169"/>
+<area shape="rect" id="Node000005" href="$classi2c_1_1_t_read_register_future.html" title=" " alt="" coords="559,163,769,217"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="487,187,559,187,559,193,487,193"/>
+<area shape="rect" id="Node000006" href="$classi2c_1_1_t_read_register_future.html" title=" " alt="" coords="559,241,769,296"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="459,211,562,239,560,244,458,216"/>
+<area shape="rect" id="Node000007" href="$classi2c_1_1_t_read_register_future.html" title="Generic Future that can be used to read an I2C device register." alt="" coords="566,320,762,375"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="403,218,456,263,489,286,523,306,567,324,565,329,520,311,486,291,453,268,399,222"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,170,219,210"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="233,187,266,187,266,193,233,193"/>
 </map>

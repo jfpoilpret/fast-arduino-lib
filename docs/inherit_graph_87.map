@@ -1,5 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classi2c_1_1debug_1_1_i2_c_debug_recorder.html" title=" " alt="" coords="5,5,224,45"/>
-<area shape="rect" id="node2" href="$classi2c_1_1debug_1_1_i2_c_debug_status_recorder.html" title="Class recording I2C debug and status notifications for later output." alt="" coords="272,30,473,85"/>
-<area shape="rect" id="node3" href="$classi2c_1_1status_1_1_i2_c_status_recorder.html" title=" " alt="" coords="6,69,223,109"/>
+<area shape="rect" id="Node000000" href="$classi2c_1_1debug_1_1_i2_c_debug_recorder.html" title=" " alt="" coords="5,5,224,45"/>
+<area shape="rect" id="Node000001" href="$classi2c_1_1debug_1_1_i2_c_debug_status_recorder.html" title="Class recording I2C debug and status notifications for later output." alt="" coords="272,30,473,85"/>
+<area shape="poly" id="edge66_Node000000_Node000001" title=" " alt="" coords="238,38,272,42,271,48,237,43"/>
+<area shape="rect" id="Node000002" href="$classi2c_1_1status_1_1_i2_c_status_recorder.html" title=" " alt="" coords="6,69,223,109"/>
+<area shape="poly" id="edge67_Node000002_Node000001" title=" " alt="" coords="237,72,271,67,272,72,237,77"/>
 </map>

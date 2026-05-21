@@ -1,7 +1,11 @@
 <map id="fastarduino/streams.h" name="fastarduino/streams.h">
-<area shape="rect" id="node1" title="C++&#45;like std::iostream facilities." alt="" coords="286,5,451,31"/>
-<area shape="rect" id="node2" href="$grove__rfid__reader_8h.html" title="API to handle Grove 125KHz RFID Reader." alt="" coords="5,79,159,119"/>
-<area shape="rect" id="node3" href="$soft__uart_8h.html" title="Software&#45;emulated serial API." alt="" coords="183,86,354,111"/>
-<area shape="rect" id="node4" href="$streams_8cpp_source.html" title=" " alt="" coords="379,86,559,111"/>
-<area shape="rect" id="node5" href="$uart_8h.html" title="Hardware serial API." alt="" coords="583,86,722,111"/>
+<area shape="rect" id="Node000001" title="C++&#45;like std::iostream facilities." alt="" coords="281,5,446,31"/>
+<area shape="rect" id="Node000002" href="$grove__rfid__reader_8h.html" title="API to handle Grove 125KHz RFID Reader." alt="" coords="5,79,156,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="310,37,149,81,148,76,309,32"/>
+<area shape="rect" id="Node000003" href="$soft__uart_8h.html" title="Software&#45;emulated serial API." alt="" coords="180,86,349,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="340,41,281,88,278,84,336,37"/>
+<area shape="rect" id="Node000004" href="$streams_8cpp_source.html" title=" " alt="" coords="373,86,553,111"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="391,37,450,84,447,88,387,41"/>
+<area shape="rect" id="Node000005" href="$uart_8h.html" title="Hardware serial API." alt="" coords="578,86,717,111"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="418,32,607,83,605,89,417,37"/>
 </map>

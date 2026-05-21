@@ -1,10 +1,18 @@
 <map id="fastarduino/linked_list.h" name="fastarduino/linked_list.h">
-<area shape="rect" id="node1" title="Utility API to handle linked list containers." alt="" coords="465,5,603,45"/>
-<area shape="rect" id="node2" href="$events_8h.html" title="Support for events management." alt="" coords="320,101,476,126"/>
-<area shape="rect" id="node6" href="$scheduler_8h.html" title="Support for jobs scheduling." alt="" coords="468,189,643,214"/>
-<area shape="rect" id="node8" href="$linked__list_8cpp_source.html" title=" " alt="" coords="571,93,710,133"/>
-<area shape="rect" id="node3" href="$realtime__timer_8h.html" title="Real&#45;time Timer API." alt="" coords="90,181,245,221"/>
-<area shape="rect" id="node7" href="$watchdog_8h.html" title="Watchdog API." alt="" coords="269,189,444,214"/>
-<area shape="rect" id="node4" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04." alt="" coords="5,269,156,309"/>
-<area shape="rect" id="node5" href="$vl53l0x_8h.html" title="API to handle Time&#45;of&#45;Flight ranging sensor VL53L0X I2C chip." alt="" coords="180,269,331,309"/>
+<area shape="rect" id="Node000001" title="Utility API to handle linked list containers." alt="" coords="465,5,603,45"/>
+<area shape="rect" id="Node000002" href="$events_8h.html" title="Support for events management." alt="" coords="320,101,476,126"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="494,55,418,103,415,98,491,50"/>
+<area shape="rect" id="Node000006" href="$scheduler_8h.html" title="Support for jobs scheduling." alt="" coords="468,189,643,214"/>
+<area shape="poly" id="edge8_Node000001_Node000006" title=" " alt="" coords="541,59,557,188,551,189,535,60"/>
+<area shape="rect" id="Node000008" href="$linked__list_8cpp_source.html" title=" " alt="" coords="571,93,710,133"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="570,52,619,91,615,95,567,56"/>
+<area shape="rect" id="Node000003" href="$realtime__timer_8h.html" title="Real&#45;time Timer API." alt="" coords="90,181,245,221"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="355,133,219,184,217,179,353,128"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="432,130,535,186,533,191,430,135"/>
+<area shape="rect" id="Node000007" href="$watchdog_8h.html" title="Watchdog API." alt="" coords="269,189,444,214"/>
+<area shape="poly" id="edge6_Node000002_Node000007" title=" " alt="" coords="389,140,365,189,360,187,384,137"/>
+<area shape="rect" id="Node000004" href="$sonar_8h.html" title="API to handle ultrasonic distance rangers (aka &quot;sonar&quot;) such as the HC&#45;SR04." alt="" coords="5,269,156,309"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="140,233,102,271,98,267,137,229"/>
+<area shape="rect" id="Node000005" href="$vl53l0x_8h.html" title="API to handle Time&#45;of&#45;Flight ranging sensor VL53L0X I2C chip." alt="" coords="180,269,331,309"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="199,229,238,267,234,271,195,233"/>
 </map>

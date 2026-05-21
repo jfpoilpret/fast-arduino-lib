@@ -1,5 +1,7 @@
 <map id="fastarduino/devices/mcp230xx.h" name="fastarduino/devices/mcp230xx.h">
-<area shape="rect" id="node1" title="API to handle the MCP23008/23017 chips (8 &amp; 16&#45;Bit I/O Expanders with I2C interface)." alt="" coords="92,5,243,45"/>
-<area shape="rect" id="node2" href="$mcp23008_8h.html" title="API to handle the MCP23008 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="5,93,156,133"/>
-<area shape="rect" id="node3" href="$mcp23017_8h.html" title="API to handle the MCP23017 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="180,93,331,133"/>
+<area shape="rect" id="Node000001" title="API to handle the MCP23008/23017 chips (8 &amp; 16&#45;Bit I/O Expanders with I2C interface)." alt="" coords="92,5,243,45"/>
+<area shape="rect" id="Node000002" href="$mcp23008_8h.html" title="API to handle the MCP23008 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="5,93,156,133"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="140,57,102,95,98,91,137,53"/>
+<area shape="rect" id="Node000003" href="$mcp23017_8h.html" title="API to handle the MCP23017 chip (16&#45;Bit I/O Expander with I2C interface)." alt="" coords="180,93,331,133"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="199,53,238,91,234,95,195,57"/>
 </map>

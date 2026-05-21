@@ -1,9 +1,9 @@
 var searchData=
 [
   ['fail_0',['fail',['../classstreams_1_1ios__base.html#a2ec964b9c5a25ea0ca744517379cb7be',1,'streams::ios_base']]],
-  ['fastmaskedport_1',['FastMaskedPort',['../classgpio_1_1_fast_masked_port.html#a0b5ee349119e508866c10203f719c197',1,'gpio::FastMaskedPort::FastMaskedPort()=default'],['../classgpio_1_1_fast_masked_port.html#a1c9f03f61a8279b5f2a6fda9c9dd0809',1,'gpio::FastMaskedPort::FastMaskedPort(uint8_t ddr, uint8_t port=0)']]],
-  ['fastpin_2',['FastPin',['../classgpio_1_1_fast_pin.html#a51a984d640ee2e0dd5ebfec39fa5a8f2',1,'gpio::FastPin::FastPin() INLINE'],['../classgpio_1_1_fast_pin.html#af8ae56f7842e4fe6abe5ed87b96635af',1,'gpio::FastPin::FastPin(PinMode mode, bool value=false) INLINE']]],
-  ['fastport_3',['FastPort',['../classgpio_1_1_fast_port.html#a0d98e19d71a9e1df8e7d635b8c767c7f',1,'gpio::FastPort::FastPort()=default'],['../classgpio_1_1_fast_port.html#ac8b0daa4b4e74425e6c11d0a1af1c2f2',1,'gpio::FastPort::FastPort(uint8_t ddr, uint8_t port=0) INLINE']]],
+  ['fastmaskedport_1',['fastmaskedport',['../classgpio_1_1_fast_masked_port.html#a0b5ee349119e508866c10203f719c197',1,'gpio::FastMaskedPort::FastMaskedPort()=default'],['../classgpio_1_1_fast_masked_port.html#a1c9f03f61a8279b5f2a6fda9c9dd0809',1,'gpio::FastMaskedPort::FastMaskedPort(uint8_t ddr, uint8_t port=0)']]],
+  ['fastpin_2',['fastpin',['../classgpio_1_1_fast_pin.html#a51a984d640ee2e0dd5ebfec39fa5a8f2',1,'gpio::FastPin::FastPin() INLINE'],['../classgpio_1_1_fast_pin.html#af8ae56f7842e4fe6abe5ed87b96635af',1,'gpio::FastPin::FastPin(PinMode mode, bool value=false) INLINE']]],
+  ['fastport_3',['fastport',['../classgpio_1_1_fast_port.html#a0d98e19d71a9e1df8e7d635b8c767c7f',1,'gpio::FastPort::FastPort()=default'],['../classgpio_1_1_fast_port.html#ac8b0daa4b4e74425e6c11d0a1af1c2f2',1,'gpio::FastPort::FastPort(uint8_t ddr, uint8_t port=0) INLINE']]],
   ['fastpwm_5ffrequency_4',['FastPWM_frequency',['../structtimer_1_1_calculator.html#ab25ea1fa8d73227cdac44b75ae130161',1,'timer::Calculator']]],
   ['fastpwm_5fprescaler_5',['FastPWM_prescaler',['../structtimer_1_1_calculator.html#a4c53597343b9f3f8094d90a6618e7507',1,'timer::Calculator']]],
   ['fifo_5fcount_6',['fifo_count',['../classdevices_1_1magneto_1_1_m_p_u6050.html#a0521b6a631e2f0106fc0dd3ca81c32c2',1,'devices::magneto::MPU6050::fifo_count(FifoCountFuture &amp;future)'],['../classdevices_1_1magneto_1_1_m_p_u6050.html#a3cd3606f07b8a3196713bd3e268849b3',1,'devices::magneto::MPU6050::fifo_count()']]],
@@ -21,15 +21,14 @@ var searchData=
   ['flags_18',['flags',['../classstreams_1_1ios__base.html#add086b182c64ba94b96dc65c21cbe536',1,'streams::ios_base::flags(fmtflags flags)'],['../classstreams_1_1ios__base.html#a019e59cdd074e87a2c3924a8714207a2',1,'streams::ios_base::flags() const']]],
   ['flashreader_19',['FlashReader',['../classflash_1_1_flash_reader.html#ad190041b62199449aed3b671a4c96d78',1,'flash::FlashReader']]],
   ['flush_20',['flush',['../classstreams_1_1ostream.html#a00f6c7bdce1520b119c31cd7dde80ac2',1,'streams::ostream::flush()'],['../namespacestreams.html#a155684415ba442e665f551819429b3a0',1,'streams::flush()']]],
-  ['font_21',['Font',['../classdevices_1_1display_1_1_font.html#a238907f3aaa7d41e4250e8eca5d45490',1,'devices::display::Font']]],
-  ['font_22',['font',['../classdevices_1_1display_1_1_draw_context.html#a8a30f55a9e8ee2585bdfbf8ad34f0972',1,'devices::display::DrawContext']]],
-  ['force_5fupdate_23',['force_update',['../classdevices_1_1display_1_1_display.html#abd265335bf4008e9e453c1757e1c726e',1,'devices::display::Display']]],
-  ['frame_5ferror_24',['frame_error',['../classserial_1_1_u_a_r_t_errors.html#a1a5d69e593b1484a6196d16fbae83cc7',1,'serial::UARTErrors']]],
-  ['free_25',['free',['../classcontainers_1_1_queue.html#aad3c8f009898e3b10976ae2c7b650308',1,'containers::Queue']]],
-  ['free_5f_26',['free_',['../classcontainers_1_1_queue.html#ab561b57e48848788f3ed6c429df9920f',1,'containers::Queue']]],
-  ['free_5fmem_27',['free_mem',['../namespacememory.html#a57314fc1095a7d8029772179e56d94aa',1,'memory']]],
-  ['full_28',['full',['../classcontainers_1_1_queue.html#a9325c329a5241b3b53655bf7cfced0fc',1,'containers::Queue::full()'],['../classdevices_1_1display_1_1_l_c_d5110.html#a6635dc2ac53c84496ed10dab565fab9a',1,'devices::display::LCD5110::full()']]],
-  ['full_5f_29',['full_',['../classcontainers_1_1_queue.html#ae11324e5034406bd864a2b9bb1d3470b',1,'containers::Queue']]],
-  ['function_30',['function',['../classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#af787e2f90d47221599a6332b4cc7060f',1,'devices::vl53l0x::GPIOSettings']]],
-  ['future_31',['Future',['../classfuture_1_1_future.html#aad693ec0851c9d63ce095a8b7618a655',1,'future::Future']]]
+  ['font_21',['font',['../classdevices_1_1display_1_1_font.html#a238907f3aaa7d41e4250e8eca5d45490',1,'devices::display::Font::Font()'],['../classdevices_1_1display_1_1_draw_context.html#a8a30f55a9e8ee2585bdfbf8ad34f0972',1,'devices::display::DrawContext::font()']]],
+  ['force_5fupdate_22',['force_update',['../classdevices_1_1display_1_1_display.html#abd265335bf4008e9e453c1757e1c726e',1,'devices::display::Display']]],
+  ['frame_5ferror_23',['frame_error',['../classserial_1_1_u_a_r_t_errors.html#a1a5d69e593b1484a6196d16fbae83cc7',1,'serial::UARTErrors']]],
+  ['free_24',['free',['../classcontainers_1_1_queue.html#aad3c8f009898e3b10976ae2c7b650308',1,'containers::Queue']]],
+  ['free_5f_25',['free_',['../classcontainers_1_1_queue.html#ab561b57e48848788f3ed6c429df9920f',1,'containers::Queue']]],
+  ['free_5fmem_26',['free_mem',['../namespacememory.html#a57314fc1095a7d8029772179e56d94aa',1,'memory']]],
+  ['full_27',['full',['../classcontainers_1_1_queue.html#a9325c329a5241b3b53655bf7cfced0fc',1,'containers::Queue::full()'],['../classdevices_1_1display_1_1_l_c_d5110.html#a6635dc2ac53c84496ed10dab565fab9a',1,'devices::display::LCD5110::full()']]],
+  ['full_5f_28',['full_',['../classcontainers_1_1_queue.html#ae11324e5034406bd864a2b9bb1d3470b',1,'containers::Queue']]],
+  ['function_29',['function',['../classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#af787e2f90d47221599a6332b4cc7060f',1,'devices::vl53l0x::GPIOSettings']]],
+  ['future_30',['Future',['../classfuture_1_1_future.html#aad693ec0851c9d63ce095a8b7618a655',1,'future::Future']]]
 ];

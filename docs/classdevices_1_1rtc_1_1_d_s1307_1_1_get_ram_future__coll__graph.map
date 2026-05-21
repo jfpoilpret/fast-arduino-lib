@@ -1,4 +1,5 @@
 <map id="devices::rtc::DS1307&lt; MANAGER &gt;::GetRamFuture&lt; SIZE_ &gt;" name="devices::rtc::DS1307&lt; MANAGER &gt;::GetRamFuture&lt; SIZE_ &gt;">
-<area shape="rect" id="node1" title="Create a future to be used by asynchronous method get_ram(GetRamFuture&lt;SIZE&gt;&amp;)." alt="" coords="5,108,227,163"/>
-<area shape="rect" id="node2" title=" " alt="" coords="35,5,197,60"/>
+<area shape="rect" id="Node000001" title="Create a future to be used by asynchronous method get_ram(GetRamFuture&lt;SIZE&gt;&amp;)." alt="" coords="5,108,227,163"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="35,5,197,60"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,74,119,108,113,108,113,74"/>
 </map>

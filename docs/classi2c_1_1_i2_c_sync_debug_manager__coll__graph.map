@@ -1,7 +1,11 @@
 <map id="i2c::I2CSyncDebugManager&lt; MODE_, DEBUG_HOOK_ &gt;" name="i2c::I2CSyncDebugManager&lt; MODE_, DEBUG_HOOK_ &gt;">
-<area shape="rect" id="node1" title="Synchronous I2C Manager for ATmega architecture with debug facility." alt="" coords="584,82,791,122"/>
-<area shape="rect" id="node2" href="$classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title="Abstract synchronous I2C Manager for ATmega architecture." alt="" coords="303,17,536,86"/>
-<area shape="rect" id="node3" href="$classi2c_1_1_abstract_i2_c_sync_manager.html" title=" " alt="" coords="5,5,255,89"/>
-<area shape="rect" id="node4" href="$classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title="Abstract synchronous I2C Manager for ATtiny architecture." alt="" coords="303,114,536,183"/>
-<area shape="rect" id="node5" href="$classi2c_1_1_abstract_i2_c_sync_manager.html" title=" " alt="" coords="5,113,255,197"/>
+<area shape="rect" id="Node000001" title="Synchronous I2C Manager for ATmega architecture with debug facility." alt="" coords="581,82,788,122"/>
+<area shape="rect" id="Node000002" href="$classi2c_1_1_abstract_i2_c_sync_a_tmega_manager.html" title="Abstract synchronous I2C Manager for ATmega architecture." alt="" coords="301,17,533,86"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="547,73,581,80,580,85,546,79"/>
+<area shape="rect" id="Node000003" href="$classi2c_1_1_abstract_i2_c_sync_manager.html" title=" " alt="" coords="5,5,253,89"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="267,47,301,47,301,52,267,52"/>
+<area shape="rect" id="Node000004" href="$classi2c_1_1_abstract_i2_c_sync_a_ttiny_manager.html" title="Abstract synchronous I2C Manager for ATtiny architecture." alt="" coords="301,114,533,183"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="546,123,581,117,581,123,547,129"/>
+<area shape="rect" id="Node000005" href="$classi2c_1_1_abstract_i2_c_sync_manager.html" title=" " alt="" coords="5,113,253,197"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="267,149,301,149,301,154,267,155"/>
 </map>

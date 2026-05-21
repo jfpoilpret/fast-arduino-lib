@@ -1,24 +1,51 @@
 <map id="fastarduino/iomanip.h" name="fastarduino/iomanip.h">
-<area shape="rect" id="node1" title="C++&#45;like std::iostream facilities." alt="" coords="31,5,197,31"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,79,76,104"/>
-<area shape="rect" id="node3" title=" " alt="" coords="23,152,98,177"/>
-<area shape="rect" id="node4" href="$ios_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="205,79,258,104"/>
-<area shape="rect" id="node5" title=" " alt="" coords="393,152,461,177"/>
-<area shape="rect" id="node6" title=" " alt="" coords="485,152,556,177"/>
-<area shape="rect" id="node7" title=" " alt="" coords="123,152,193,177"/>
-<area shape="rect" id="node8" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="269,152,369,177"/>
-<area shape="rect" id="node9" href="$flash_8h.html" title="Flash memory utilities." alt="" coords="189,225,255,251"/>
-<area shape="rect" id="node13" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="280,225,377,251"/>
-<area shape="rect" id="node15" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="443,225,518,251"/>
-<area shape="rect" id="node10" href="$io_8h_source.html" title=" " alt="" coords="225,372,320,397"/>
-<area shape="rect" id="node12" title=" " alt="" coords="57,299,184,324"/>
-<area shape="rect" id="node11" title=" " alt="" coords="237,445,308,471"/>
-<area shape="rect" id="node14" title=" " alt="" coords="310,299,425,324"/>
-<area shape="rect" id="node16" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="563,372,646,397"/>
-<area shape="rect" id="node21" href="$time_8h.html" title="Simple time utilities." alt="" coords="449,299,513,324"/>
-<area shape="rect" id="node17" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="547,445,630,471"/>
-<area shape="rect" id="node18" href="$board_8h_source.html" title=" " alt="" coords="655,445,773,471"/>
-<area shape="rect" id="node20" title=" " alt="" coords="419,445,523,471"/>
-<area shape="rect" id="node19" title=" " alt="" coords="496,519,567,544"/>
-<area shape="rect" id="node22" title=" " alt="" coords="403,372,539,397"/>
+<area shape="rect" id="Node000001" title="C++&#45;like std::iostream facilities." alt="" coords="31,5,197,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,76,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,33,64,71,61,67,100,29"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="23,152,98,177"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="113,32,90,105,75,141,70,138,85,103,108,30"/>
+<area shape="rect" id="Node000004" href="$ios_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="205,79,258,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="134,28,202,69,199,74,131,33"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="205,106,102,149,100,144,203,101"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="393,152,461,177"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="259,100,384,145,382,150,257,105"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="485,152,556,177"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="259,97,473,149,471,154,257,102"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="123,152,193,177"/>
+<area shape="poly" id="edge7_Node000004_Node000007" title=" " alt="" coords="221,106,182,144,178,140,217,102"/>
+<area shape="rect" id="Node000008" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="269,152,369,177"/>
+<area shape="poly" id="edge8_Node000004_Node000008" title=" " alt="" coords="247,102,296,141,293,145,244,106"/>
+<area shape="rect" id="Node000009" href="$flash_8h.html" title="Flash memory utilities." alt="" coords="189,225,255,251"/>
+<area shape="poly" id="edge27_Node000004_Node000009" title=" " alt="" coords="233,105,226,212,221,211,228,104"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="305,180,251,219,248,215,302,175"/>
+<area shape="rect" id="Node000013" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="279,225,376,251"/>
+<area shape="poly" id="edge13_Node000008_Node000013" title=" " alt="" coords="323,177,327,212,322,212,318,178"/>
+<area shape="rect" id="Node000015" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="443,225,518,251"/>
+<area shape="poly" id="edge16_Node000008_Node000015" title=" " alt="" coords="346,175,443,217,441,222,344,180"/>
+<area shape="rect" id="Node000010" href="$io_8h_source.html" title=" " alt="" coords="225,372,320,397"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="229,250,267,358,262,360,224,252"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="57,299,184,324"/>
+<area shape="poly" id="edge12_Node000009_Node000012" title=" " alt="" coords="207,253,150,293,147,288,204,248"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="237,445,308,471"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="275,398,275,432,270,432,270,398"/>
+<area shape="poly" id="edge14_Node000013_Node000010" title=" " alt="" coords="323,252,300,300,281,359,276,358,296,298,318,250"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="310,299,425,324"/>
+<area shape="poly" id="edge15_Node000013_Node000014" title=" " alt="" coords="336,250,356,285,352,288,332,252"/>
+<area shape="rect" id="Node000016" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="563,372,646,397"/>
+<area shape="poly" id="edge17_Node000015_Node000016" title=" " alt="" coords="493,249,588,360,584,363,489,253"/>
+<area shape="rect" id="Node000021" href="$time_8h.html" title="Simple time utilities." alt="" coords="449,299,513,324"/>
+<area shape="poly" id="edge22_Node000015_Node000021" title=" " alt="" coords="483,251,483,285,478,285,478,251"/>
+<area shape="rect" id="Node000017" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="548,445,629,471"/>
+<area shape="poly" id="edge18_Node000016_Node000017" title=" " alt="" coords="605,398,597,433,592,432,599,397"/>
+<area shape="rect" id="Node000018" href="$board_8h_source.html" title=" " alt="" coords="653,445,772,471"/>
+<area shape="poly" id="edge19_Node000016_Node000018" title=" " alt="" coords="623,395,685,435,682,440,621,400"/>
+<area shape="rect" id="Node000020" title=" " alt="" coords="419,445,523,471"/>
+<area shape="poly" id="edge21_Node000016_Node000020" title=" " alt="" coords="584,400,506,441,504,436,582,395"/>
+<area shape="rect" id="Node000019" title=" " alt="" coords="496,519,567,544"/>
+<area shape="poly" id="edge20_Node000018_Node000019" title=" " alt="" coords="685,473,575,516,573,511,683,468"/>
+<area shape="poly" id="edge24_Node000021_Node000010" title=" " alt="" coords="449,326,320,370,318,365,448,321"/>
+<area shape="poly" id="edge26_Node000021_Node000016" title=" " alt="" coords="502,322,574,363,571,367,499,326"/>
+<area shape="poly" id="edge23_Node000021_Node000019" title=" " alt="" coords="451,326,419,345,405,358,394,373,389,395,392,423,399,450,409,469,425,485,444,498,484,516,482,520,441,502,422,489,405,472,394,452,386,424,384,395,389,371,401,354,416,341,449,322"/>
+<area shape="rect" id="Node000022" title=" " alt="" coords="403,372,539,397"/>
+<area shape="poly" id="edge25_Node000021_Node000022" title=" " alt="" coords="482,325,477,359,472,358,476,324"/>
 </map>

@@ -1,4 +1,5 @@
 <map id="eeprom::QueuedWriter" name="eeprom::QueuedWriter">
-<area shape="rect" id="node1" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data..." alt="" coords="5,79,176,104"/>
-<area shape="rect" id="node2" href="$classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM." alt="" coords="23,5,158,31"/>
+<area shape="rect" id="Node000001" title="API that allows asynchronous writing to EEPROM; this can be useful when you have large amount of data..." alt="" coords="5,79,176,104"/>
+<area shape="rect" id="Node000002" href="$classeeprom_1_1_e_e_p_r_o_m.html" title="Collection of static methods to read or write the AVR EEPROM." alt="" coords="23,5,158,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,44,93,79,88,79,88,44"/>
 </map>

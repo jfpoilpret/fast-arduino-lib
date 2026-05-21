@@ -1,5 +1,7 @@
 <map id="devices::WinBond&lt; CS &gt;" name="devices::WinBond&lt; CS &gt;">
-<area shape="rect" id="node1" title="SPI device driver for WinBond flash memory chips, like W25Q80BV (8 Mbit flash)." alt="" coords="19,196,204,221"/>
-<area shape="rect" id="node2" href="$classspi_1_1_s_p_i_device.html" title=" " alt="" coords="5,79,217,148"/>
-<area shape="rect" id="node3" href="$classspi_1_1_abstract_s_p_i_device.html" title="Contain general payload transfer API for an SPI device." alt="" coords="27,5,195,31"/>
+<area shape="rect" id="Node000001" title="SPI device driver for WinBond flash memory chips, like W25Q80BV (8 Mbit flash)." alt="" coords="19,196,204,221"/>
+<area shape="rect" id="Node000002" href="$classspi_1_1_s_p_i_device.html" title=" " alt="" coords="5,79,217,148"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,162,114,196,109,196,109,162"/>
+<area shape="rect" id="Node000003" href="$classspi_1_1_abstract_s_p_i_device.html" title="Contain general payload transfer API for an SPI device." alt="" coords="27,5,195,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="114,44,114,79,109,79,109,44"/>
 </map>

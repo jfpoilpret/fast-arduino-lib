@@ -9,7 +9,6 @@ var searchData=
   ['left_6',['left',['../namespacestreams.html#afb89b6e537b1e019ca94f5fcb6ce9993',1,'streams']]],
   ['linkwrapper_7',['LinkWrapper',['../classcontainers_1_1_link_wrapper.html#ab73ec02a8144d6cc3991bcf138171e7b',1,'containers::LinkWrapper']]],
   ['lock_8',['lock',['../classdevices_1_1magneto_1_1_status.html#a195b34e2472da305d15ff0df07b1cf72',1,'devices::magneto::Status::lock()'],['../classcontainers_1_1_queue.html#a9502986798fafa55a8201cf4aad11946',1,'containers::Queue::lock()']]],
-  ['low_5fbyte_9',['low_byte',['../namespaceutils.html#ad5f19301125b8e9dc9e89ea50da962fa',1,'utils']]],
-  ['low_5fbyte_10',['LOW_BYTE',['../namespacebits.html#aa2e0d50727d964c50b3e444018cce593',1,'bits']]],
-  ['low_5fthreshold_11',['low_threshold',['../classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#ae81149b5b8cbb599fdcb8218fdad5afb',1,'devices::vl53l0x::GPIOSettings::low_threshold(uint16_t threshold, bool high_polarity=false)'],['../classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7466877a047139383b1664a7c834eaf9',1,'devices::vl53l0x::GPIOSettings::low_threshold() const']]]
+  ['low_5fbyte_9',['low_byte',['../namespaceutils.html#ad5f19301125b8e9dc9e89ea50da962fa',1,'utils::low_byte()'],['../namespacebits.html#aa2e0d50727d964c50b3e444018cce593',1,'bits::LOW_BYTE()']]],
+  ['low_5fthreshold_10',['low_threshold',['../classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#ae81149b5b8cbb599fdcb8218fdad5afb',1,'devices::vl53l0x::GPIOSettings::low_threshold(uint16_t threshold, bool high_polarity=false)'],['../classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7466877a047139383b1664a7c834eaf9',1,'devices::vl53l0x::GPIOSettings::low_threshold() const']]]
 ];

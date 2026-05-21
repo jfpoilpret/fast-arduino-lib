@@ -2,7 +2,7 @@ var searchData=
 [
   ['magneticfieldsfuture_0',['MagneticFieldsFuture',['../classdevices_1_1magneto_1_1_h_m_c5883_l.html#a2b85b67b2476a040de0783ccd18de0f1',1,'devices::magneto::HMC5883L']]],
   ['manager_1',['MANAGER',['../classi2c_1_1_i2_c_device.html#a7b3f6509519292904a636f4262b404ae',1,'i2c::I2CDevice']]],
-  ['manipulator_2',['MANIPULATOR',['../classstreams_1_1ostream.html#ae7d6a7f02cc8a544b1dfc36beede06e0',1,'streams::ostream::MANIPULATOR()'],['../classstreams_1_1istream.html#a568331967220c86381c78f6bd61d5ea2',1,'streams::istream::MANIPULATOR()']]],
+  ['manipulator_2',['manipulator',['../classstreams_1_1ostream.html#ae7d6a7f02cc8a544b1dfc36beede06e0',1,'streams::ostream::MANIPULATOR'],['../classstreams_1_1istream.html#a568331967220c86381c78f6bd61d5ea2',1,'streams::istream::MANIPULATOR']]],
   ['mcp3001_3',['MCP3001',['../namespacedevices_1_1mcp3x0x.html#ac78ddf195aed86b629aaaebeadaca512',1,'devices::mcp3x0x']]],
   ['mcp3002_4',['MCP3002',['../namespacedevices_1_1mcp3x0x.html#aceb3eab6eecf4e26907f4902e0db800b',1,'devices::mcp3x0x']]],
   ['mcp3004_5',['MCP3004',['../namespacedevices_1_1mcp3x0x.html#a5474807b3c7c0a372eefeb6cd6f515e9',1,'devices::mcp3x0x']]],

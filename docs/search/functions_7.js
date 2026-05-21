@@ -7,9 +7,8 @@ var searchData=
   ['hcsr04_4',['HCSR04',['../classdevices_1_1sonar_1_1_h_c_s_r04.html#a941b39cf6e4fc8e3f20789211e76da85',1,'devices::sonar::HCSR04']]],
   ['height_5',['height',['../classdevices_1_1display_1_1_font.html#af2d15ce0630283d29155591c8485b69d',1,'devices::display::Font']]],
   ['hex_6',['hex',['../namespacestreams.html#a91675bd61b31e7382e8655930606f62f',1,'streams']]],
-  ['high_5fbyte_7',['high_byte',['../namespaceutils.html#a84e5a79013cf3cf3c46a09b2c4861d37',1,'utils']]],
-  ['high_5fbyte_8',['HIGH_BYTE',['../namespacebits.html#a17afee8fb8f509dbda0a5944d7a1ba31',1,'bits']]],
-  ['high_5fpolarity_9',['high_polarity',['../classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7a9559cdb4ff3ac4c3b8e15a26983091',1,'devices::vl53l0x::GPIOSettings']]],
-  ['high_5fthreshold_10',['high_threshold',['../classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#af413631057b7592b03bf9d32cc156d21',1,'devices::vl53l0x::GPIOSettings::high_threshold(uint16_t threshold, bool high_polarity=false)'],['../classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a9f832e6f9e1e7fff73cd8a6fa81f3ca6',1,'devices::vl53l0x::GPIOSettings::high_threshold() const']]],
-  ['hmc5883l_11',['HMC5883L',['../classdevices_1_1magneto_1_1_h_m_c5883_l.html#af906ae6a559cf9a656c02b6cc7853105',1,'devices::magneto::HMC5883L']]]
+  ['high_5fbyte_7',['high_byte',['../namespaceutils.html#a84e5a79013cf3cf3c46a09b2c4861d37',1,'utils::high_byte()'],['../namespacebits.html#a17afee8fb8f509dbda0a5944d7a1ba31',1,'bits::HIGH_BYTE()']]],
+  ['high_5fpolarity_8',['high_polarity',['../classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a7a9559cdb4ff3ac4c3b8e15a26983091',1,'devices::vl53l0x::GPIOSettings']]],
+  ['high_5fthreshold_9',['high_threshold',['../classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#af413631057b7592b03bf9d32cc156d21',1,'devices::vl53l0x::GPIOSettings::high_threshold(uint16_t threshold, bool high_polarity=false)'],['../classdevices_1_1vl53l0x_1_1_g_p_i_o_settings.html#a9f832e6f9e1e7fff73cd8a6fa81f3ca6',1,'devices::vl53l0x::GPIOSettings::high_threshold() const']]],
+  ['hmc5883l_10',['HMC5883L',['../classdevices_1_1magneto_1_1_h_m_c5883_l.html#af906ae6a559cf9a656c02b6cc7853105',1,'devices::magneto::HMC5883L']]]
 ];

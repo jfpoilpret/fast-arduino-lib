@@ -1,40 +1,77 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" title=" " alt="" coords="5,609,219,635"/>
-<area shape="rect" id="node2" href="$classi2c_1_1_read_register_future.html" title=" " alt="" coords="328,5,505,60"/>
-<area shape="rect" id="node3" href="$classi2c_1_1_read_register_future.html" title=" " alt="" coords="301,85,533,154"/>
-<area shape="rect" id="node4" href="$classi2c_1_1_read_register_future.html" title=" " alt="" coords="319,178,514,247"/>
-<area shape="rect" id="node5" href="$classi2c_1_1_read_register_future.html" title=" " alt="" coords="297,272,537,327"/>
-<area shape="rect" id="node6" href="$classi2c_1_1_read_register_future.html" title=" " alt="" coords="295,351,539,405"/>
-<area shape="rect" id="node7" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="325,429,508,484"/>
-<area shape="rect" id="node8" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="267,508,567,563"/>
-<area shape="rect" id="node9" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="319,587,514,657"/>
-<area shape="rect" id="node10" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="297,681,537,736"/>
-<area shape="rect" id="node11" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="295,760,539,815"/>
-<area shape="rect" id="node12" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="291,839,543,893"/>
-<area shape="rect" id="node13" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="327,918,506,958"/>
-<area shape="rect" id="node14" href="$classi2c_1_1_read_register_future.html" title="General Future that can be used to read an I2C device register." alt="" coords="313,982,520,1022"/>
-<area shape="rect" id="node20" href="$classi2c_1_1_t_write_multi_register_future.html" title="Generic Future that can be used to write to several I2C device registers." alt="" coords="289,1245,545,1285"/>
-<area shape="rect" id="node26" href="$classi2c_1_1_write_register_future.html" title="General Future that can be used to write to an I2C device register." alt="" coords="313,1677,520,1717"/>
-<area shape="rect" id="node15" href="$classi2c_1_1_t_read_register_future.html" title=" " alt="" coords="615,739,900,793"/>
-<area shape="rect" id="node16" href="$classi2c_1_1_t_read_register_future.html" title=" " alt="" coords="660,817,855,872"/>
-<area shape="rect" id="node17" href="$classi2c_1_1_t_read_register_future.html" title=" " alt="" coords="652,896,863,951"/>
-<area shape="rect" id="node18" href="$classi2c_1_1_t_read_register_future.html" title=" " alt="" coords="652,975,863,1029"/>
-<area shape="rect" id="node19" href="$classi2c_1_1_t_read_register_future.html" title="Generic Future that can be used to read an I2C device register." alt="" coords="659,1053,855,1108"/>
-<area shape="rect" id="node21" href="$classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_begin_future.html" title="Create a future to be used by asynchronous method begin(BeginFuture&amp;)." alt="" coords="651,1133,863,1173"/>
-<area shape="rect" id="node22" href="$classdevices_1_1mcp230xx_1_1_m_c_p23008_1_1_configure_g_p_i_o_future.html" title="Create a future to be used by asynchronous method configure_gpio(ConfigureGPIOFuture&amp;)." alt="" coords="663,1197,851,1252"/>
-<area shape="rect" id="node23" href="$classdevices_1_1mcp230xx_1_1_m_c_p23008_1_1_configure_interrupts_future.html" title="Create a future to be used by asynchronous method configure_interrupts(ConfigureInterruptsFuture&amp;)." alt="" coords="659,1276,856,1331"/>
-<area shape="rect" id="node24" href="$classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_configure_g_p_i_o_future.html" title="Create a future to be used by asynchronous method configure_gpio(ConfigureGPIOFuture." alt="" coords="652,1355,863,1409"/>
-<area shape="rect" id="node25" href="$classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_configure_interrupts_future.html" title="Create a future to be used by asynchronous method configure_interrupts(ConfigureInterruptsFuture&lt;P_&gt;&amp;..." alt="" coords="636,1433,879,1488"/>
-<area shape="rect" id="node27" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="615,1512,900,1567"/>
-<area shape="rect" id="node28" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="660,1591,855,1645"/>
-<area shape="rect" id="node29" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="652,1669,863,1724"/>
-<area shape="rect" id="node30" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="652,1748,863,1803"/>
-<area shape="rect" id="node31" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="641,1827,873,1881"/>
-<area shape="rect" id="node32" href="$classi2c_1_1_t_write_register_future.html" title="Generic Future that can be used to write to an I2C device register." alt="" coords="659,1905,855,1960"/>
-<area shape="rect" id="node33" href="$classdevices_1_1magneto_1_1_m_p_u6050_1_1_end_future.html" title="Create a future to be used by asynchronous method end(EndFuture&amp;)." alt="" coords="975,1741,1183,1781"/>
-<area shape="rect" id="node34" href="$classdevices_1_1magneto_1_1_m_p_u6050_1_1_reset_future.html" title="Create a future to be used by asynchronous method reset(ResetFuture&amp;)." alt="" coords="975,1805,1183,1845"/>
-<area shape="rect" id="node35" href="$classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_begin_future.html" title="Create a future to be used by asynchronous method begin(BeginFuture&amp;)." alt="" coords="985,1869,1173,1924"/>
-<area shape="rect" id="node36" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_disable_output_future.html" title="Create a future to be used by asynchronous method disable_output(DisableOutputFuture&amp;)." alt="" coords="948,1949,1209,1989"/>
-<area shape="rect" id="node37" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_enable_output_future.html" title="Create a future to be used by asynchronous method enable_output(EnableOutputFuture&amp;)." alt="" coords="951,2013,1207,2053"/>
-<area shape="rect" id="node38" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_halt_clock_future.html" title="Create a future to be used by asynchronous method halt_clock(HaltClockFuture&amp;)." alt="" coords="963,2077,1194,2117"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,609,219,635"/>
+<area shape="rect" id="Node000001" href="$classi2c_1_1_read_register_future.html" title=" " alt="" coords="328,5,505,60"/>
+<area shape="poly" id="edge90_Node000000_Node000001" title=" " alt="" coords="115,595,133,482,166,325,187,245,210,172,236,112,265,71,294,50,327,38,329,43,296,55,269,75,241,114,215,173,192,246,171,326,139,483,120,596"/>
+<area shape="rect" id="Node000002" href="$classi2c_1_1_read_register_future.html" title=" " alt="" coords="301,85,533,154"/>
+<area shape="poly" id="edge91_Node000000_Node000002" title=" " alt="" coords="112,595,119,513,129,457,142,397,162,335,188,273,222,215,265,164,299,141,302,145,268,168,226,218,193,275,167,336,147,399,134,459,125,513,117,596"/>
+<area shape="rect" id="Node000003" href="$classi2c_1_1_read_register_future.html" title=" " alt="" coords="319,178,514,247"/>
+<area shape="poly" id="edge92_Node000000_Node000003" title=" " alt="" coords="114,595,127,528,154,437,174,389,199,341,229,296,265,257,290,240,318,227,320,232,293,244,268,261,233,300,203,344,179,391,159,439,133,529,119,596"/>
+<area shape="rect" id="Node000004" href="$classi2c_1_1_read_register_future.html" title=" " alt="" coords="297,272,537,327"/>
+<area shape="poly" id="edge93_Node000000_Node000004" title=" " alt="" coords="117,595,135,540,164,470,207,398,234,365,265,336,295,318,298,323,268,340,238,368,211,401,169,473,140,542,122,596"/>
+<area shape="rect" id="Node000005" href="$classi2c_1_1_read_register_future.html" title=" " alt="" coords="295,351,539,405"/>
+<area shape="poly" id="edge94_Node000000_Node000005" title=" " alt="" coords="123,595,144,555,176,506,216,457,265,414,293,399,296,404,268,419,220,460,180,509,149,558,127,598"/>
+<area shape="rect" id="Node000006" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="325,429,508,484"/>
+<area shape="poly" id="edge95_Node000000_Node000006" title=" " alt="" coords="133,597,189,545,226,517,266,493,324,471,326,476,268,498,229,521,193,549,136,601"/>
+<area shape="rect" id="Node000007" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="267,508,567,563"/>
+<area shape="poly" id="edge96_Node000000_Node000007" title=" " alt="" coords="166,603,266,573,311,560,312,565,267,578,168,608"/>
+<area shape="rect" id="Node000008" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="319,587,514,657"/>
+<area shape="poly" id="edge97_Node000000_Node000008" title=" " alt="" coords="232,619,319,619,319,625,232,625"/>
+<area shape="rect" id="Node000009" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="297,681,537,736"/>
+<area shape="poly" id="edge98_Node000000_Node000009" title=" " alt="" coords="168,636,267,666,312,679,311,684,266,671,166,641"/>
+<area shape="rect" id="Node000010" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="295,760,539,815"/>
+<area shape="poly" id="edge99_Node000000_Node000010" title=" " alt="" coords="136,642,193,694,229,722,268,745,297,758,295,762,265,750,226,726,190,698,133,646"/>
+<area shape="rect" id="Node000011" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="291,839,543,893"/>
+<area shape="poly" id="edge100_Node000000_Node000011" title=" " alt="" coords="128,646,149,686,180,734,220,783,268,824,292,837,289,842,265,828,217,786,176,737,144,688,123,649"/>
+<area shape="rect" id="Node000012" href="$classi2c_1_1_write_register_future.html" title=" " alt="" coords="327,918,506,958"/>
+<area shape="poly" id="edge101_Node000000_Node000012" title=" " alt="" coords="122,648,139,702,168,772,188,808,211,843,238,875,268,903,296,918,328,928,326,933,294,923,265,907,234,879,206,846,183,811,163,774,134,704,117,649"/>
+<area shape="rect" id="Node000013" href="$classi2c_1_1_read_register_future.html" title="General Future that can be used to read an I2C device register." alt="" coords="313,982,520,1022"/>
+<area shape="poly" id="edge102_Node000000_Node000013" title=" " alt="" coords="119,648,132,713,159,801,178,847,203,891,233,933,268,968,290,982,314,991,312,996,287,986,265,972,229,936,198,894,173,849,154,802,127,715,114,649"/>
+<area shape="rect" id="Node000019" href="$classi2c_1_1_t_write_multi_register_future.html" title="Generic Future that can be used to write to several I2C device registers." alt="" coords="289,1245,545,1285"/>
+<area shape="poly" id="edge108_Node000000_Node000019" title=" " alt="" coords="123,647,177,812,220,923,269,1033,303,1095,340,1154,402,1243,398,1246,336,1157,299,1097,264,1035,215,925,172,814,118,649"/>
+<area shape="rect" id="Node000025" href="$classi2c_1_1_write_register_future.html" title="General Future that can be used to write to an I2C device register." alt="" coords="313,1677,520,1717"/>
+<area shape="poly" id="edge114_Node000000_Node000025" title=" " alt="" coords="121,648,173,913,217,1103,269,1296,306,1410,347,1520,409,1676,404,1678,342,1522,301,1411,264,1297,212,1104,168,914,115,649"/>
+<area shape="rect" id="Node000014" href="$classi2c_1_1_t_read_register_future.html" title=" " alt="" coords="615,739,900,793"/>
+<area shape="poly" id="edge103_Node000013_Node000014" title=" " alt="" coords="532,988,565,968,580,949,587,929,589,888,589,845,597,824,613,803,627,792,630,796,617,807,602,826,595,846,594,888,593,930,585,951,568,972,534,993"/>
+<area shape="rect" id="Node000015" href="$classi2c_1_1_t_read_register_future.html" title=" " alt="" coords="660,817,855,872"/>
+<area shape="poly" id="edge104_Node000013_Node000015" title=" " alt="" coords="532,986,565,968,582,948,588,926,595,903,613,881,635,867,659,857,661,862,637,872,616,885,600,906,593,928,587,950,568,972,534,990"/>
+<area shape="rect" id="Node000016" href="$classi2c_1_1_t_read_register_future.html" title=" " alt="" coords="652,896,863,951"/>
+<area shape="poly" id="edge105_Node000013_Node000016" title=" " alt="" coords="526,976,566,967,651,947,653,952,567,973,527,982"/>
+<area shape="rect" id="Node000017" href="$classi2c_1_1_t_read_register_future.html" title=" " alt="" coords="652,975,863,1029"/>
+<area shape="poly" id="edge106_Node000013_Node000017" title=" " alt="" coords="534,999,652,999,652,1005,534,1005"/>
+<area shape="rect" id="Node000018" href="$classi2c_1_1_t_read_register_future.html" title="Generic Future that can be used to read an I2C device register." alt="" coords="659,1053,855,1108"/>
+<area shape="poly" id="edge107_Node000013_Node000018" title=" " alt="" coords="518,1022,660,1056,659,1061,517,1028"/>
+<area shape="rect" id="Node000020" href="$classdevices_1_1magneto_1_1_h_m_c5883_l_1_1_begin_future.html" title="Create a future to be used by asynchronous method begin(BeginFuture&amp;)." alt="" coords="651,1133,863,1173"/>
+<area shape="poly" id="edge109_Node000019_Node000020" title=" " alt="" coords="473,1237,540,1209,614,1182,657,1170,658,1175,615,1187,542,1214,475,1241"/>
+<area shape="rect" id="Node000021" href="$classdevices_1_1mcp230xx_1_1_m_c_p23008_1_1_configure_g_p_i_o_future.html" title="Create a future to be used by asynchronous method configure_gpio(ConfigureGPIOFuture&amp;)." alt="" coords="663,1197,851,1252"/>
+<area shape="poly" id="edge110_Node000019_Node000021" title=" " alt="" coords="558,1245,663,1233,664,1238,559,1251"/>
+<area shape="rect" id="Node000022" href="$classdevices_1_1mcp230xx_1_1_m_c_p23008_1_1_configure_interrupts_future.html" title="Create a future to be used by asynchronous method configure_interrupts(ConfigureInterruptsFuture&amp;)." alt="" coords="659,1276,855,1331"/>
+<area shape="poly" id="edge111_Node000019_Node000022" title=" " alt="" coords="559,1278,659,1290,659,1295,558,1283"/>
+<area shape="rect" id="Node000023" href="$classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_configure_g_p_i_o_future.html" title="Create a future to be used by asynchronous method configure_gpio(ConfigureGPIOFuture." alt="" coords="652,1355,863,1409"/>
+<area shape="poly" id="edge112_Node000019_Node000023" title=" " alt="" coords="479,1287,616,1339,655,1352,654,1357,614,1345,477,1292"/>
+<area shape="rect" id="Node000024" href="$classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_configure_interrupts_future.html" title="Create a future to be used by asynchronous method configure_interrupts(ConfigureInterruptsFuture&lt;P_&gt;&amp;..." alt="" coords="637,1433,878,1488"/>
+<area shape="poly" id="edge113_Node000019_Node000024" title=" " alt="" coords="450,1293,522,1356,567,1389,616,1418,644,1431,642,1436,613,1423,565,1394,519,1360,446,1297"/>
+<area shape="rect" id="Node000026" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="615,1512,900,1567"/>
+<area shape="poly" id="edge115_Node000025_Node000026" title=" " alt="" coords="456,1666,527,1620,614,1576,643,1564,645,1569,616,1580,530,1625,459,1671"/>
+<area shape="rect" id="Node000027" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="660,1591,855,1645"/>
+<area shape="poly" id="edge116_Node000025_Node000027" title=" " alt="" coords="517,1671,659,1638,660,1643,518,1676"/>
+<area shape="rect" id="Node000028" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="652,1669,863,1724"/>
+<area shape="poly" id="edge117_Node000025_Node000028" title=" " alt="" coords="534,1694,652,1694,652,1699,534,1699"/>
+<area shape="rect" id="Node000029" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="652,1748,863,1803"/>
+<area shape="poly" id="edge118_Node000025_Node000029" title=" " alt="" coords="518,1717,653,1749,651,1754,517,1722"/>
+<area shape="rect" id="Node000030" href="$classi2c_1_1_t_write_register_future.html" title=" " alt="" coords="641,1827,873,1881"/>
+<area shape="poly" id="edge119_Node000025_Node000030" title=" " alt="" coords="459,1723,531,1768,616,1812,649,1824,647,1829,614,1816,528,1772,457,1727"/>
+<area shape="rect" id="Node000031" href="$classi2c_1_1_t_write_register_future.html" title="Generic Future that can be used to write to an I2C device register." alt="" coords="659,1905,855,1960"/>
+<area shape="poly" id="edge120_Node000025_Node000031" title=" " alt="" coords="443,1726,474,1764,514,1808,563,1853,616,1890,660,1910,658,1915,613,1895,559,1857,511,1812,470,1768,439,1730"/>
+<area shape="rect" id="Node000032" href="$classdevices_1_1magneto_1_1_m_p_u6050_1_1_end_future.html" title="Create a future to be used by asynchronous method end(EndFuture&amp;)." alt="" coords="975,1741,1183,1781"/>
+<area shape="poly" id="edge121_Node000031_Node000032" title=" " alt="" coords="867,1910,898,1891,909,1879,916,1867,921,1842,927,1816,934,1803,946,1791,973,1775,976,1779,950,1795,939,1806,932,1818,926,1843,921,1869,913,1882,902,1895,869,1914"/>
+<area shape="rect" id="Node000033" href="$classdevices_1_1magneto_1_1_m_p_u6050_1_1_reset_future.html" title="Create a future to be used by asynchronous method reset(ResetFuture&amp;)." alt="" coords="975,1805,1183,1845"/>
+<area shape="poly" id="edge122_Node000031_Node000033" title=" " alt="" coords="867,1904,899,1890,922,1872,947,1854,977,1842,979,1847,949,1859,926,1877,901,1895,869,1908"/>
+<area shape="rect" id="Node000034" href="$classdevices_1_1mcp230xx_1_1_m_c_p23017_1_1_begin_future.html" title="Create a future to be used by asynchronous method begin(BeginFuture&amp;)." alt="" coords="985,1869,1173,1924"/>
+<area shape="poly" id="edge123_Node000031_Node000034" title=" " alt="" coords="869,1918,984,1905,984,1910,869,1923"/>
+<area shape="rect" id="Node000035" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_disable_output_future.html" title="Create a future to be used by asynchronous method disable_output(DisableOutputFuture&amp;)." alt="" coords="948,1949,1209,1989"/>
+<area shape="poly" id="edge124_Node000031_Node000035" title=" " alt="" coords="869,1942,948,1951,948,1957,869,1948"/>
+<area shape="rect" id="Node000036" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_enable_output_future.html" title="Create a future to be used by asynchronous method enable_output(EnableOutputFuture&amp;)." alt="" coords="951,2013,1207,2053"/>
+<area shape="poly" id="edge125_Node000031_Node000036" title=" " alt="" coords="843,1962,949,1998,992,2010,990,2015,947,2003,841,1967"/>
+<area shape="rect" id="Node000037" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_halt_clock_future.html" title="Create a future to be used by asynchronous method halt_clock(HaltClockFuture&amp;)." alt="" coords="963,2077,1194,2117"/>
+<area shape="poly" id="edge126_Node000031_Node000037" title=" " alt="" coords="803,1967,869,2017,909,2041,949,2062,981,2074,979,2079,947,2067,906,2046,866,2021,800,1971"/>
 </map>

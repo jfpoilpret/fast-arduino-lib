@@ -1,22 +1,46 @@
 <map id="fastarduino/ios.h" name="fastarduino/ios.h">
-<area shape="rect" id="node1" title="C++&#45;like std::iostream facilities." alt="" coords="214,5,345,31"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,79,73,104"/>
-<area shape="rect" id="node3" title=" " alt="" coords="98,79,173,104"/>
-<area shape="rect" id="node4" title=" " alt="" coords="197,79,268,104"/>
-<area shape="rect" id="node5" title=" " alt="" coords="292,79,363,104"/>
-<area shape="rect" id="node6" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="448,79,548,104"/>
-<area shape="rect" id="node7" href="$flash_8h.html" title="Flash memory utilities." alt="" coords="362,152,429,177"/>
-<area shape="rect" id="node11" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="453,152,551,177"/>
-<area shape="rect" id="node13" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="617,152,691,177"/>
-<area shape="rect" id="node8" href="$io_8h_source.html" title=" " alt="" coords="399,299,493,324"/>
-<area shape="rect" id="node10" title=" " alt="" coords="231,225,357,251"/>
-<area shape="rect" id="node9" title=" " alt="" coords="411,372,481,397"/>
-<area shape="rect" id="node12" title=" " alt="" coords="483,225,598,251"/>
-<area shape="rect" id="node14" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="737,299,819,324"/>
-<area shape="rect" id="node19" href="$time_8h.html" title="Simple time utilities." alt="" coords="622,225,686,251"/>
-<area shape="rect" id="node15" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="721,372,803,397"/>
-<area shape="rect" id="node16" href="$board_8h_source.html" title=" " alt="" coords="828,372,947,397"/>
-<area shape="rect" id="node18" title=" " alt="" coords="593,372,697,397"/>
-<area shape="rect" id="node17" title=" " alt="" coords="669,445,740,471"/>
-<area shape="rect" id="node20" title=" " alt="" coords="577,299,713,324"/>
+<area shape="rect" id="Node000001" title="C++&#45;like std::iostream facilities." alt="" coords="214,5,345,31"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,79,73,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="242,33,88,79,86,73,240,28"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="98,79,173,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="257,33,172,75,170,70,255,28"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="197,79,268,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="274,32,250,69,246,66,269,30"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="292,79,363,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="289,30,314,66,310,69,285,33"/>
+<area shape="rect" id="Node000006" href="$streambuf_8h.html" title="C++&#45;like std::iostream facilities." alt="" coords="447,79,547,104"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="315,28,449,72,448,77,313,33"/>
+<area shape="rect" id="Node000007" href="$flash_8h.html" title="Flash memory utilities." alt="" coords="363,152,428,177"/>
+<area shape="poly" id="edge24_Node000001_Node000007" title=" " alt="" coords="310,28,345,48,376,77,390,107,397,138,391,139,385,109,372,80,342,52,308,33"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="482,106,425,146,422,142,479,102"/>
+<area shape="rect" id="Node000011" href="$interrupts_8h.html" title="General API for handling AVR interrupt vectors." alt="" coords="452,152,549,177"/>
+<area shape="poly" id="edge10_Node000006_Node000011" title=" " alt="" coords="500,104,502,138,497,139,495,104"/>
+<area shape="rect" id="Node000013" href="$queue_8h.html" title="Utility API to handle ring&#45;buffer queue containers." alt="" coords="617,152,691,177"/>
+<area shape="poly" id="edge13_Node000006_Node000013" title=" " alt="" coords="523,102,617,144,615,149,521,106"/>
+<area shape="rect" id="Node000008" href="$io_8h_source.html" title=" " alt="" coords="399,299,493,324"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="402,177,440,285,435,287,397,179"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="231,225,357,251"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="381,180,323,219,320,215,378,175"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="411,372,481,397"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="449,324,449,358,443,358,443,324"/>
+<area shape="poly" id="edge11_Node000011_Node000008" title=" " alt="" coords="497,179,474,226,455,286,450,284,469,224,492,176"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="483,225,598,251"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="510,176,530,212,525,215,505,179"/>
+<area shape="rect" id="Node000014" href="$utilities_8h.html" title="General utilities API that have broad application in programs." alt="" coords="737,299,819,324"/>
+<area shape="poly" id="edge14_Node000013_Node000014" title=" " alt="" coords="666,176,761,287,757,290,662,180"/>
+<area shape="rect" id="Node000019" href="$time_8h.html" title="Simple time utilities." alt="" coords="622,225,686,251"/>
+<area shape="poly" id="edge19_Node000013_Node000019" title=" " alt="" coords="657,178,657,212,651,212,651,178"/>
+<area shape="rect" id="Node000015" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="721,372,803,397"/>
+<area shape="poly" id="edge15_Node000014_Node000015" title=" " alt="" coords="778,325,770,359,765,358,773,324"/>
+<area shape="rect" id="Node000016" href="$board_8h_source.html" title=" " alt="" coords="827,372,945,397"/>
+<area shape="poly" id="edge16_Node000014_Node000016" title=" " alt="" coords="797,322,858,362,855,367,794,326"/>
+<area shape="rect" id="Node000018" title=" " alt="" coords="593,372,697,397"/>
+<area shape="poly" id="edge18_Node000014_Node000018" title=" " alt="" coords="758,326,680,368,677,363,755,322"/>
+<area shape="rect" id="Node000017" title=" " alt="" coords="669,445,740,471"/>
+<area shape="poly" id="edge17_Node000016_Node000017" title=" " alt="" coords="858,400,748,443,746,438,856,395"/>
+<area shape="poly" id="edge21_Node000019_Node000008" title=" " alt="" coords="623,253,493,297,491,292,621,248"/>
+<area shape="poly" id="edge23_Node000019_Node000014" title=" " alt="" coords="675,248,747,289,745,294,673,253"/>
+<area shape="poly" id="edge20_Node000019_Node000017" title=" " alt="" coords="625,253,592,272,578,285,567,300,562,322,565,350,573,377,583,396,598,411,617,424,657,442,655,447,614,429,595,416,579,399,568,378,560,351,557,322,562,298,574,281,589,267,622,248"/>
+<area shape="rect" id="Node000020" title=" " alt="" coords="577,299,713,324"/>
+<area shape="poly" id="edge22_Node000019_Node000020" title=" " alt="" coords="655,251,651,286,645,285,650,251"/>
 </map>

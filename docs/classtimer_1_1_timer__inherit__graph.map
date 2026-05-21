@@ -1,5 +1,7 @@
 <map id="timer::Timer&lt; NTIMER_ &gt;" name="timer::Timer&lt; NTIMER_ &gt;">
-<area shape="rect" id="node1" title="General API to handle an AVR timer." alt="" coords="121,5,311,31"/>
-<area shape="rect" id="node2" href="$classtimer_1_1_pulse_timer.html" title="Special kind of timer::Timer, specialized in emitting pulses with accurate width, according to a slow..." alt="" coords="5,79,211,119"/>
-<area shape="rect" id="node3" href="$classtimer_1_1_r_t_t.html" title="API to handle a real&#45;time timer." alt="" coords="235,86,413,111"/>
+<area shape="rect" id="Node000001" title="General API to handle an AVR timer." alt="" coords="121,5,311,31"/>
+<area shape="rect" id="Node000002" href="$classtimer_1_1_pulse_timer.html" title="Special kind of timer::Timer, specialized in emitting pulses with accurate width, according to a slow..." alt="" coords="5,79,211,119"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="190,41,136,81,132,76,187,37"/>
+<area shape="rect" id="Node000003" href="$classtimer_1_1_r_t_t.html" title="API to handle a real&#45;time timer." alt="" coords="235,86,413,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="245,37,310,84,306,88,241,41"/>
 </map>

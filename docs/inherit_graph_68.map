@@ -1,9 +1,15 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" title=" " alt="" coords="5,177,80,202"/>
-<area shape="rect" id="node2" href="$classdevices_1_1magneto_1_1_m_p_u6050_1_1_begin_future.html" title="Create a future to be used by asynchronous method begin(BeginFuture&amp;)." alt="" coords="139,5,347,45"/>
-<area shape="rect" id="node3" href="$classdevices_1_1magneto_1_1_m_p_u6050_1_1_fifo_begin_future.html" title="Create a future to be used by asynchronous method begin(FifoBeginFuture&amp;)." alt="" coords="129,69,357,109"/>
-<area shape="rect" id="node4" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_get_ram1_future.html" title="Create a future to be used by asynchronous method get_ram(GetRam1Future&amp;)." alt="" coords="128,133,357,173"/>
-<area shape="rect" id="node5" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_get_ram_future.html" title="Create a future to be used by asynchronous method get_ram(GetRamFuture&lt;SIZE&gt;&amp;)." alt="" coords="132,198,353,253"/>
-<area shape="rect" id="node6" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_set_ram1_future.html" title="Create a future to be used by asynchronous method set_ram(SetRam1Future&amp;)." alt="" coords="129,277,356,317"/>
-<area shape="rect" id="node7" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_set_ram_future.html" title="Create a future to be used by asynchronous method set_ram(SetRamFuture&lt;SIZE&gt;&amp;)." alt="" coords="133,342,352,397"/>
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,177,80,202"/>
+<area shape="rect" id="Node000001" href="$classdevices_1_1magneto_1_1_m_p_u6050_1_1_begin_future.html" title="Create a future to be used by asynchronous method begin(BeginFuture&amp;)." alt="" coords="139,5,347,45"/>
+<area shape="poly" id="edge34_Node000000_Node000001" title=" " alt="" coords="51,163,79,108,100,80,126,55,147,43,150,48,130,59,104,83,84,111,56,165"/>
+<area shape="rect" id="Node000002" href="$classdevices_1_1magneto_1_1_m_p_u6050_1_1_fifo_begin_future.html" title="Create a future to be used by asynchronous method begin(FifoBeginFuture&amp;)." alt="" coords="128,69,357,109"/>
+<area shape="poly" id="edge35_Node000000_Node000002" title=" " alt="" coords="65,165,93,141,127,119,155,107,157,112,129,124,96,145,68,169"/>
+<area shape="rect" id="Node000003" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_get_ram1_future.html" title="Create a future to be used by asynchronous method get_ram(GetRam1Future&amp;)." alt="" coords="128,133,357,173"/>
+<area shape="poly" id="edge36_Node000000_Node000003" title=" " alt="" coords="93,178,131,171,132,176,94,183"/>
+<area shape="rect" id="Node000004" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_get_ram_future.html" title="Create a future to be used by asynchronous method get_ram(GetRamFuture&lt;SIZE&gt;&amp;)." alt="" coords="132,198,353,253"/>
+<area shape="poly" id="edge37_Node000000_Node000004" title=" " alt="" coords="94,196,132,203,131,208,93,201"/>
+<area shape="rect" id="Node000005" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_set_ram1_future.html" title="Create a future to be used by asynchronous method set_ram(SetRam1Future&amp;)." alt="" coords="129,277,356,317"/>
+<area shape="poly" id="edge38_Node000000_Node000005" title=" " alt="" coords="66,210,95,237,129,262,158,275,156,280,127,266,91,241,63,214"/>
+<area shape="rect" id="Node000006" href="$classdevices_1_1rtc_1_1_d_s1307_1_1_set_ram_future.html" title="Create a future to be used by asynchronous method set_ram(SetRamFuture&lt;SIZE&gt;&amp;)." alt="" coords="133,342,352,397"/>
+<area shape="poly" id="edge39_Node000000_Node000006" title=" " alt="" coords="55,214,83,271,104,301,130,327,148,339,145,344,126,331,100,305,79,274,51,216"/>
 </map>

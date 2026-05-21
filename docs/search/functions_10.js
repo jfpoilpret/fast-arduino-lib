@@ -33,5 +33,5 @@ var searchData=
   ['rtt_30',['RTT',['../classtimer_1_1_r_t_t.html#aa75448a1d268c8c5aaec4111230c3d70',1,'timer::RTT']]],
   ['rtteventcallback_31',['RTTEventCallback',['../classtimer_1_1_r_t_t_event_callback.html#a41ca339f4780aae1b793dd16ad9701a9',1,'timer::RTTEventCallback']]],
   ['rttrawtime_32',['RTTRawTime',['../classtimer_1_1_r_t_t_raw_time.html#a272a897e13e597aec2eb7da6f919943d',1,'timer::RTTRawTime']]],
-  ['rtttime_33',['RTTTime',['../classtime_1_1_r_t_t_time.html#a037345112c94343780bb9efd42cdf42e',1,'time::RTTTime::RTTTime(uint32_t millis, uint16_t micros)'],['../classtime_1_1_r_t_t_time.html#a66a2c129d92d6a867e581efab4a881bd',1,'time::RTTTime::RTTTime(const RTTTime &amp;that)'],['../classtime_1_1_r_t_t_time.html#a3ce11fdbe3da158b9c3c1d7d4a0d80cb',1,'time::RTTTime::RTTTime(uint32_t micros=0UL)']]]
+  ['rtttime_33',['rtttime',['../classtime_1_1_r_t_t_time.html#a037345112c94343780bb9efd42cdf42e',1,'time::RTTTime::RTTTime(uint32_t millis, uint16_t micros)'],['../classtime_1_1_r_t_t_time.html#a66a2c129d92d6a867e581efab4a881bd',1,'time::RTTTime::RTTTime(const RTTTime &amp;that)'],['../classtime_1_1_r_t_t_time.html#a3ce11fdbe3da158b9c3c1d7d4a0d80cb',1,'time::RTTTime::RTTTime(uint32_t micros=0UL)']]]
 ];

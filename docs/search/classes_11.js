@@ -20,6 +20,6 @@ var searchData=
   ['spidevice_3c_20sce_2c_20spi_3a_3achipselect_3a_3aactive_5flow_2c_20spi_3a_3acompute_5fclockrate_284_20_27000_20_27000ul_29_3e_17',['SPIDevice&lt; SCE, spi::ChipSelect::ACTIVE_LOW, spi::compute_clockrate(4 &apos;000 &apos;000UL)&gt;',['../classspi_1_1_s_p_i_device.html',1,'spi']]],
   ['squarewave_18',['SquareWave',['../classtimer_1_1_square_wave.html',1,'timer']]],
   ['squarewave_3c_20ntimer_2c_20output_20_3e_19',['SquareWave&lt; NTIMER, OUTPUT &gt;',['../classtimer_1_1_square_wave.html',1,'timer']]],
-  ['status_20',['Status',['../classdevices_1_1magneto_1_1_status.html',1,'devices::magneto::Status'],['../structdevices_1_1_win_bond_1_1_status.html',1,'devices::WinBond&lt; CS &gt;::Status']]],
+  ['status_20',['status',['../classdevices_1_1magneto_1_1_status.html',1,'devices::magneto::Status'],['../structdevices_1_1_win_bond_1_1_status.html',1,'devices::WinBond&lt; CS &gt;::Status']]],
   ['status_5ft_21',['status_t',['../uniondevices_1_1rf_1_1_n_r_f24_l01_1_1status__t.html',1,'devices::rf::NRF24L01']]]
 ];

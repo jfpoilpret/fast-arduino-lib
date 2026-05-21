@@ -13,5 +13,5 @@ var searchData=
   ['mcp3302channel_10',['MCP3302Channel',['../namespacedevices_1_1mcp3x0x.html#ab1fdbe18670c6873e2cd498fa3f2b351',1,'devices::mcp3x0x']]],
   ['mcp3304channel_11',['MCP3304Channel',['../namespacedevices_1_1mcp3x0x.html#a7b06f5b297ce9a8af7267e4d89b5330d',1,'devices::mcp3x0x']]],
   ['measurementmode_12',['MeasurementMode',['../namespacedevices_1_1magneto.html#a73e5a83c3a0209228c48c115f21c01bc',1,'devices::magneto']]],
-  ['mode_13',['Mode',['../namespacedevices_1_1display.html#afe358ca5700dcd2685b9704ac8828bef',1,'devices::display::Mode()'],['../namespacespi.html#afad82e7a839263bc0851445fdcced0bb',1,'spi::Mode()']]]
+  ['mode_13',['mode',['../namespacedevices_1_1display.html#afe358ca5700dcd2685b9704ac8828bef',1,'devices::display::Mode'],['../namespacespi.html#afad82e7a839263bc0851445fdcced0bb',1,'spi::Mode']]]
 ];

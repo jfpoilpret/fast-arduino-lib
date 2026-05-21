@@ -7,7 +7,7 @@ var searchData=
   ['or_4',['OR',['../namespacedevices_1_1display.html#afe358ca5700dcd2685b9704ac8828befa1d00e7dce692e8dc3f6877f035e3a616',1,'devices::display']]],
   ['out_5fof_5fdisplay_5',['OUT_OF_DISPLAY',['../namespacedevices_1_1display.html#ad0409a4e8c33e23f5070b035c4ffef56a91225775f5e0676cfbf3c450e9752439',1,'devices::display']]],
   ['out_5fof_5fwindow_6',['OUT_OF_WINDOW',['../namespacedevices_1_1vl53l0x.html#a6779d407b6c38c353138058714af81cba099a3250abb34c13f9304364ca48fd75',1,'devices::vl53l0x']]],
-  ['output_7',['OUTPUT',['../namespacefuture.html#add2f32719a897ef408be1bd9e270b337a50a87f0d71f7221582dad4bf507a0f34',1,'future::OUTPUT()'],['../namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041a50a87f0d71f7221582dad4bf507a0f34',1,'gpio::OUTPUT()']]],
+  ['output_7',['output',['../namespacefuture.html#add2f32719a897ef408be1bd9e270b337a50a87f0d71f7221582dad4bf507a0f34',1,'future::OUTPUT'],['../namespacegpio.html#ae18fafd08668ee17aa5dd415ee3b6041a50a87f0d71f7221582dad4bf507a0f34',1,'gpio::OUTPUT']]],
   ['output_5fcompare_5fa_8',['OUTPUT_COMPARE_A',['../namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7a1aac1f38fe13831901945888f2a3998d',1,'timer']]],
   ['output_5fcompare_5fb_9',['OUTPUT_COMPARE_B',['../namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7a2ec54b766f810d959b45fe0149db994c',1,'timer']]],
   ['output_5fcompare_5fc_10',['OUTPUT_COMPARE_C',['../namespacetimer.html#a98b209585f558b1b52fb14d14f50bdc7a152b06238f6e18dc172a755417314a5a',1,'timer']]],

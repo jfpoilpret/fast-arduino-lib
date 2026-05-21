@@ -1,5 +1,7 @@
 <map id="watchdog::WatchdogRTT" name="watchdog::WatchdogRTT">
-<area shape="rect" id="node1" title="Simple API to use watchdog timer as a real&#45;time clock." alt="" coords="13,79,196,104"/>
-<area shape="rect" id="node3" href="$classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation." alt="" coords="25,152,184,192"/>
-<area shape="rect" id="node2" href="$classwatchdog_1_1_watchdog_signal.html" title="Simple API to handle watchdog signals." alt="" coords="5,5,204,31"/>
+<area shape="rect" id="Node000001" title="Simple API to use watchdog timer as a real&#45;time clock." alt="" coords="13,79,195,104"/>
+<area shape="rect" id="Node000003" href="$classwatchdog_1_1_watchdog.html" title="Simple API to use watchdog timer as a clock for events generation." alt="" coords="25,152,183,192"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="107,118,107,152,101,152,101,118"/>
+<area shape="rect" id="Node000002" href="$classwatchdog_1_1_watchdog_signal.html" title="Simple API to handle watchdog signals." alt="" coords="5,5,203,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,44,107,79,101,79,101,44"/>
 </map>

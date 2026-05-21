@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['supported_20mcu_20and_20arduino_20boards_0',['Supported MCU and Arduino boards',['../supportedboards.html',1,'']]]
+  ['device_0',['device',['../i2cdevices.html',1,'Adding support for an I2C device'],['../spidevices.html',1,'Adding support for an SPI device']]],
+  ['documentation_1',['FastArduino Documentation',['../index.html',1,'']]]
 ];

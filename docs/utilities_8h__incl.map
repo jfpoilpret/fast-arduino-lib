@@ -1,7 +1,11 @@
 <map id="fastarduino/utilities.h" name="fastarduino/utilities.h">
-<area shape="rect" id="node1" title="General utilities API that have broad application in programs." alt="" coords="91,5,253,31"/>
-<area shape="rect" id="node2" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="5,79,88,104"/>
-<area shape="rect" id="node3" href="$board_8h_source.html" title=" " alt="" coords="113,79,231,104"/>
-<area shape="rect" id="node5" title=" " alt="" coords="256,79,360,104"/>
-<area shape="rect" id="node4" title=" " alt="" coords="137,152,207,177"/>
+<area shape="rect" id="Node000001" title="General utilities API that have broad application in programs." alt="" coords="89,5,251,31"/>
+<area shape="rect" id="Node000002" href="$defines_8h.html" title="Useful defines GCC specific attributes." alt="" coords="5,79,87,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="151,33,79,74,77,69,149,28"/>
+<area shape="rect" id="Node000003" href="$board_8h_source.html" title=" " alt="" coords="111,79,229,104"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="173,31,173,65,167,65,167,31"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="254,79,358,104"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="193,28,273,70,271,75,191,33"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="135,152,205,177"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="173,104,173,138,167,138,167,104"/>
 </map>

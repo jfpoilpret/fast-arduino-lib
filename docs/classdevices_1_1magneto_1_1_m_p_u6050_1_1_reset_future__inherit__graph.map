@@ -1,6 +1,9 @@
 <map id="devices::magneto::MPU6050&lt; MANAGER &gt;::ResetFuture" name="devices::magneto::MPU6050&lt; MANAGER &gt;::ResetFuture">
-<area shape="rect" id="node1" title="Create a future to be used by asynchronous method reset(ResetFuture&amp;)." alt="" coords="8,269,216,309"/>
-<area shape="rect" id="node2" href="$classi2c_1_1_t_write_register_future.html" title="Generic Future that can be used to write to an I2C device register." alt="" coords="17,196,207,221"/>
-<area shape="rect" id="node3" href="$classi2c_1_1_write_register_future.html" title="General Future that can be used to write to an I2C device register." alt="" coords="9,108,215,148"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,5,219,60"/>
+<area shape="rect" id="Node000001" title="Create a future to be used by asynchronous method reset(ResetFuture&amp;)." alt="" coords="8,269,216,309"/>
+<area shape="rect" id="Node000002" href="$classi2c_1_1_t_write_register_future.html" title="Generic Future that can be used to write to an I2C device register." alt="" coords="17,196,207,221"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,235,115,269,109,269,109,235"/>
+<area shape="rect" id="Node000003" href="$classi2c_1_1_write_register_future.html" title="General Future that can be used to write to an I2C device register." alt="" coords="9,108,215,148"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="115,162,115,196,109,196,109,162"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,5,219,60"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="115,74,115,108,109,108,109,74"/>
 </map>
