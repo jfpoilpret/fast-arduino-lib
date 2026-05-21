@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # encoding: utf-8
 
 # This script generates a sheet (ready for LibreOffice import as tab-delimited)
@@ -52,7 +52,9 @@ def create_tables(config, sizes, output):
                 tag = TAG % data[0].strip()
 
                 labels = [cell.strip() for i, cell in enumerate(data[1:]) if i % 2 == 0]
+                print(labels)
                 programs = [cell.strip() for i, cell in enumerate(data[1:]) if i % 2 == 1]
+                print(programs)
 
                 code_sizes = [sizes[p]['code'] for p in programs]
                 data_sizes = [sizes[p]['data'] for p in programs]
@@ -83,6 +85,8 @@ if __name__ == "__main__":
     # Read sizes data for each platform
     sizes = {}
     read_sizes(args.platform1, sizes)
+    print(sizes)
     read_sizes(args.platform2, sizes)
+    print(sizes)
     # Finally create tables from all collected info
     create_tables(args.config, sizes, args.output)

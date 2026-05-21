@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # encoding: utf-8
 
 # In order to use this script from shell:
@@ -9,23 +9,29 @@ from __future__ import with_statement
 import argparse, re, sys
 
 def filter(args):
-    bytes_extractor = re.compile(r"([0-9]+) bytes")
+    bytes_extractor = re.compile(r" ([0-9]+) ")
     with args.output:
         with args.input:
+            text = data = bss = 0
             for line in args.input:
-                if line.find("Building... ") >= 0:
+                if line.find("avr-size") >= 0:
                     # Find example name (everything after last /)
-                    example = line[line.rfind(" ") + 1:-1]
-                elif line.startswith("Program:"):
+                    example = line[line.rfind("/") + 1:-1]
+                elif line.startswith(".text"):
                     # Find number of bytes of flash
                     matcher = bytes_extractor.search(line)
-                    program = matcher.group(1)
-                elif line.startswith("Data:"):
+                    text = int(matcher.group(1))
+                elif line.startswith(".data"):
                     # Find number of bytes of SRAM
                     matcher = bytes_extractor.search(line)
-                    data = matcher.group(1)
+                    data = int(matcher.group(1))
+                elif line.startswith(".bss"):
+                    # Find number of bytes of SRAM
+                    matcher = bytes_extractor.search(line)
+                    bss = int(matcher.group(1))
+                elif line.startswith("Total"):
                     # Write new line to output
-                    args.output.write("%s\t%s\t%s\n" % (example, program, data))
+                    args.output.write("%s.cpp\t%d\t%d\n" % (example, text + bss, data + bss))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description = 'XXXXXXXX')

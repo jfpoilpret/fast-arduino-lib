@@ -31,7 +31,8 @@ $(target): $(objects) $(libs)
 	$(objcopy) -j .eeprom --change-section-lma .eeprom=0 -O ihex $@ $@.eep
 	$(nm) --synthetic -S -C --size-sort $@ >$@.nm
 	$(objdump) -m $(ARCH) -x -d -C $@ >$@.dump
-	$(objsize) -C --mcu=$(MCU) $@
+	$(objsize) -A --mcu=$(MCU) $@
+#	$(objsize) -C --mcu=$(MCU) $@
 
 # Upload Targets
 .PHONY: .upload-check

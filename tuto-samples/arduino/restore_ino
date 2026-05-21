@@ -1,0 +1,10 @@
+#!/bin/bash
+
+export INO_LIST=`ls *.ino.tmp`
+
+# Restore extension of all ino files
+for INO in $INO_LIST
+do
+	mv "$INO" "${INO%.tmp}";
+done
+

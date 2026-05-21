@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # encoding: utf-8
 
 # This script generates a sheet (ready for LibreOffice import as tab-delimited)

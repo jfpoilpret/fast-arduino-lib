@@ -20,10 +20,9 @@ done
 # Build each individual ino file
 for INO in $INO_LIST
 do
-	mv $INO.tmp $INO
+	cp $INO.tmp arduino.ino
 	echo "Building... $INO"
-	arduino-cli compile -b arduino:avr:uno $INO
-	mv $INO $INO.tmp
+	arduino-cli compile -b arduino:avr:uno arduino.ino
 done
 # Restore extension of all ino files
 for INO in $INO_LIST
@@ -32,4 +31,6 @@ do
 done
 
 # Remove all generated files (useless)
-rm *.elf *.hex
+rm arduino.ino
+# Note: in latest arduino-cli versions elf and hex seem generated somewhere else (where? I don't know yet)
+#rm *.elf *.hex
